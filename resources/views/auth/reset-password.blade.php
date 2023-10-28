@@ -1,6 +1,6 @@
 @extends('layouts.auth_app')
 @section('title')
-    Reset Password
+    Reiniciar contraseña
 @endsection
 @section('content')
     <div class="card card-primary">

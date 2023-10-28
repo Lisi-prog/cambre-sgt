@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>@yield('title') | {{ config('app.name') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- General CSS Files -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
@@ -23,10 +23,10 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <div class="login-brand">
+                    {{-- <div class="login-brand">
                         <img src="{{ asset('img/logo.png') }}" alt="logo" width="100"
                              class="shadow-light">
-                    </div>
+                    </div> --}}
                     @yield('content')
                     <div class="simple-footer">
 {{--                        Copyright &copy; {{ getSettingValue('application_name') }}  {{ date('Y') }}--}}

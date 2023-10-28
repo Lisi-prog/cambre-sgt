@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <title>@yield('title') | {{ config('app.name') }}</title>
+    <title>{{ config('app.name') }}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 4.1.1 -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
@@ -40,7 +40,7 @@
         <div class="main-content">
             @yield('content')
         </div>
-        <footer class="main-footer">
+        <footer class="main-footer" style="background-color: #8e2d30">
             @include('layouts.footer')
         </footer>
     </div>

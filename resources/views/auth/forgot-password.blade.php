@@ -1,10 +1,10 @@
 @extends('layouts.auth_app')
-@section('title')
+{{-- @section('title')
     Forgot Password
-@endsection
+@endsection --}}
 @section('content')
     <div class="card card-primary">
-        <div class="card-header"><h4>Reset Password</h4></div>
+        <div class="card-header"><h4>Recuperar Contraseña</h4></div>
 
         <div class="card-body">
             @if (session('status'))
@@ -24,7 +24,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                        Send Reset Link
+                        Enviar link
                     </button>
                 </div>
             </form>
