@@ -45,13 +45,13 @@
         </li>
 
         <li>
-            <a class="nav-link" href="" title="Permisos">
+            <a class="nav-link" href="{{route('permisos.index')}}" title="Permisos">
                 <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Permisos</span>
             </a>
         </li>
 
         <li>
-            <a class="nav-link" href="" title="Roles">
+            <a class="nav-link" href="{{route('roles.index')}}" title="Roles">
                 <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Roles</span>
             </a>
         </li>
