@@ -87,40 +87,33 @@ $(function() {
     if($(".main-sidebar").length) {
       $(".main-sidebar").niceScroll(sidebar_nicescroll_opts);
       sidebar_nicescroll = $(".main-sidebar").getNiceScroll();
-
       $(".main-sidebar .sidebar-menu li a.has-dropdown").off('click').on('click', function() {
-        var me     = $(this);
-        var active = false;
-        if(me.parent().hasClass("active")){
-          active = true;
+        var me = $(this);
+        var parentLi = me.parent();
+        var parentUl = parentLi.parent();
+        if(!parentLi.hasClass('active')){
+                parentLi.addClass('active');
+                $(parentUl).find('li.active > .dropdown-menu').not(me).slideUp(300, function() {
+                    $(parentUl).find('li.active').not(parentLi).removeClass('active');  
+                        me.parent().find('> .dropdown-menu').slideDown(300, function() {
+                      return false;
+                    });
+                    return false;
+                });
+                update_sidebar_nicescroll();
         }
-        
-        $('.main-sidebar .sidebar-menu li.active > .dropdown-menu').slideUp(500, function() {
-          update_sidebar_nicescroll();          
-          return false;
-        });
-        
-        $('.main-sidebar .sidebar-menu li.active').removeClass('active');
-
-        if(active==true) {
-          me.parent().removeClass('active');          
-          me.parent().find('> .dropdown-menu').slideUp(500, function() {            
+        else{
+            parentLi.removeClass('active');
+            parentLi.find('> .dropdown-menu').slideUp(300, function() {
+              return false;
+            });
             update_sidebar_nicescroll();
-            return false;
-          });
-        }else{
-          me.parent().addClass('active');          
-          me.parent().find('> .dropdown-menu').slideDown(500, function() {            
-            update_sidebar_nicescroll();
-            return false;
-          });
         }
-
         return false;
       });
 
       $('.main-sidebar .sidebar-menu li.active > .dropdown-menu').slideDown(500, function() {
-        update_sidebar_nicescroll();        
+        update_sidebar_nicescroll();
         return false;
       });
     }

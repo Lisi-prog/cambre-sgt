@@ -13,3 +13,31 @@
         @include('layouts.menu')
     </ul>
 </aside>
+
+<script>
+    const mutationObserver = new MutationObserver(mutationsList => {
+      mutationsList.forEach(mutation => {
+		if (mutation.attributeName === 'class') {
+			// classes have changed
+            if( $('#body').hasClass('sidebar-mini') )
+            {
+                $('.borde-menu').addClass('border border-primary border-2')
+            }else{
+                $('.borde-menu').removeClass('border border-primary border-2');
+            }  
+		}
+	});
+});
+
+mutationObserver.observe(
+	// a document object you want to watch. some examples of document objects:
+	 document.getElementById('body')
+	// document.getElementsByClassName('class')[5]
+	// document.querySelector('[query=selector]')
+	// etc
+	,{ attributes: true }
+)
+
+// when you wanr to remove the listener
+//mutationObserver.disconnect();
+</script>
