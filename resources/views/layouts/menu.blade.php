@@ -75,8 +75,8 @@
         </li>
 
         <li>
-            <a class="nav-link" href="" title="Permisos">
-                <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Permisos</span>
+            <a class="nav-link" href="" title="Tareas">
+                <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Tareas</span>
             </a>
         </li>
 
