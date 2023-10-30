@@ -76,6 +76,7 @@ class RolController extends Controller
     
     public function create(Request $request)
     {
+        return view('Informatica.GestionUsuarios.roles.crear');
         $name = $request->query->get('name');
 
         if ($name =='') {
@@ -95,24 +96,11 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
+            'name' => 'required',
         ]);
     
         $role = Role::create(['name' => strtoupper($request->input('name'))]);
-        if ($request->input('permission')!='') {
-            
-            foreach ($request->input('permission') as $valor) {
-                
-                $permiso = Permission::find($valor);
-                $model = new Grant_rolesxpermisos;
-                $model->permission_id = $permiso->id;
-                $model->role_id = $role->id;
-                $model->save();
-                
-            }
-
-        }
+        
         return redirect()->route('roles.index')->with('mensaje','Rol '.strtoupper($request->input('name')). ' creado con éxito!.');                       
     }
     
@@ -122,65 +110,41 @@ class RolController extends Controller
     
     public function edit(Request $request, $id)
     {
-        $name = $request->query->get('name');
-
-        if ($name =='') {
-            $role = Role::find($id);
-            $permission = Permission::orderBy('updated_at', 'desc')->get();
-            $rolePermissions = DB::table("grant_rolesxpermisos")->where("grant_rolesxpermisos.role_id",$id)
-            ->pluck('grant_rolesxpermisos.permission_id','grant_rolesxpermisos.permission_id')
-            ->all();            
-        } else {
-            $name = strtoupper($name);
-            $role = Role::find($id);
-            $permission = Permission::where('name', 'like', '%' .$name . '%')->orderBy('updated_at', 'DESC')->get();
-            $rolePermissions = DB::table("grant_rolesxpermisos")->where("grant_rolesxpermisos.role_id",$id)
-            ->pluck('grant_rolesxpermisos.permission_id','grant_rolesxpermisos.permission_id')
-            ->all(); 
-        }    
-        return view('Coordinacion.Informatica.GestionUsuarios.roles.editar',compact('role','permission','rolePermissions'));
+        $rol = Role::find($id);
+        return view('Informatica.GestionUsuarios.roles.editar',compact('rol'));
     }
     
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'required',
-            'permission' => 'required',
         ]);
     
         $role = Role::find($id);
-        $role->name = strtoupper($request->input('name'));
-        $role->save();
+        $role->update([
+            'name' => strtoupper($request->input('name')),
+        ]);
     
-        DB::table('grant_rolesxpermisos')->where('role_id',$role->id)->delete();
-
-        if ($request->input('permission')!='') {
-            
-            foreach ($request->input('permission') as $valor) {
-                
-                $permiso = Permission::find($valor);
-                $model = new Grant_rolesxpermisos;
-                $model->permission_id = $permiso->id;
-                $model->role_id = $role->id;
-                $model->save();
-                
-            }
-
-        }
-    
-        return redirect()->route('roles.index');                        
+        return redirect()->route('roles.index')->with('mensaje','Rol '.strtoupper($request->input('name')). ' editado con éxito!.');                       
     }
     
     public function destroy($id)
-    {
-        //DB::table("roles")->where('id',$id)->delete();
-        
+    {   
         $rol = Role::findOrFail($id);
 
         Role::destroy($id);
         return redirect()->route('roles.index')->with('mensaje','Rol'.$rol->name.' borrado con éxito!.');    
         
     }
+
+    public function verPermisosxRol(){
+
+    }
+
+    public function guardarPermisosxRol(){
+
+    }
+
     public function creargrupo(Request $request)
     {
         $arbol=MenuM::menus(2);

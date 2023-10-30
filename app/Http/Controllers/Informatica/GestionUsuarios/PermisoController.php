@@ -17,14 +17,16 @@ class PermisoController extends Controller
     function __construct()
     {
         $this->middleware('auth');
-         $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
-         $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
-         $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
-         $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
+        //  $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
+        //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
+        //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
+        //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
     }
     
     public function index(Request $request)
     {        
+        $permisos = Permission::orderBy('name', 'asc')->get();
+        return view('Informatica.GestionUsuarios.permisos.index',compact('permisos'));
         return 'hola';
         $name = $request->query->get('name');
 
@@ -53,34 +55,28 @@ class PermisoController extends Controller
 
     public function create()
     {
-        return view('Coordinacion.Informatica.GestionUsuarios.permisos.crear');
+        return view('Informatica.GestionUsuarios.permisos.crear');
     }
 
     public function store(Request $request)
     {
-        $campos = [
-            'name' => 'required|string|max:189|unique:permissions,name',
-            
-        ];
-        $mensaje=[
-            'required'=>'El :attribute es requerido'
-        ];
+        $this->validate($request, [
+            'name' => 'required|string|max:189|unique:permissions,name'
+        ], [
+            'name.required' => 'El campo nombre del permiso es obligatorio.',
+            'name.unique' => 'El permiso ya existe.',
+            'name.max' => 'El maximo de caracteres es de 190.'
+        ]);
 
-        $this->validate($request,$campos,$mensaje);
-
-        $name = $request->input('name');
-        $name = strtoupper($name);
-
-        $permiso =  Permission::create(['name'=>$name]); 
-
+        $permiso =  Permission::create([
+                        'name' => strtoupper($request->input('name'))
+                    ]); 
 
         $role = Role::where('name','ADMIN')->first();
-        $model = new Grant_rolesxpermisos;
-        $model->permission_id = $permiso->id;
-        $model->role_id = $role->id;
-        $model->save();
-        
-        return redirect()->route('permisos.create')->with('mensaje',$name.' creado exitosamente.');                       
+
+        $role->givePermissionTo(strtoupper($request->input('name')));
+
+        return redirect()->route('permisos.index')->with('mensaje', 'Permiso creado exitosamente.');                      
     }
     
     public function show($id)
@@ -91,7 +87,7 @@ class PermisoController extends Controller
     {
         $permiso = Permission::findOrFail($id);
     
-        return view('Coordinacion.Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
+        return view('Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
     }
     
     public function update(Request $request, $id)
@@ -101,8 +97,10 @@ class PermisoController extends Controller
         ]);
     
         $permiso = Permission::find($id);
-        $permiso->name = strtoupper($request->input('name'));
-        $permiso->save();
+
+        $permiso->update([
+            'name' => strtoupper($request->input('name'))
+        ]);
     
         return redirect()->route('permisos.index')->with('mensaje',$permiso->name.' editado exitosamente.');                        
     }
@@ -112,8 +110,7 @@ class PermisoController extends Controller
         $permiso = Permission::findOrFail($id);
 
         Permission::destroy($id);
-        DB::table('grant_rolesxpermisos')->where('permission_id',$permiso->id)->delete();
 
-        return redirect()->route('permisos.index');               
+        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
     }
 }
