@@ -2,6 +2,12 @@
 @section('title')
     Admin Login
 @endsection
+<style>
+    body {
+        background-image: url("img/fondo-prueba2.png");
+        background-size:cover;
+    }
+</style>
 @section('content')
     <div class="card card-primary">
         <div class="card-header"><h4>Inicio - Sistema Cambre</h4></div>

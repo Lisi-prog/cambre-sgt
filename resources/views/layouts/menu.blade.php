@@ -57,7 +57,7 @@
         </li>
 
         <li>
-            <a class="nav-link" href="" title="Usuarios">
+            <a class="nav-link" href="{{route('usuarios.index')}}" title="Usuarios">
                 <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Usuarios</span>
             </a>
         </li>

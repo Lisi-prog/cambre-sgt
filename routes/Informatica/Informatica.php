@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Informatica\GestionUsuarios\PermisoController;
 use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
+use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 
 //Gestion de usuario
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS']], function () {
@@ -15,6 +16,7 @@ use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
 
 Route::resource('roles', RolController::class);
 Route::resource('permisos', PermisoController::class);
+Route::resource('usuarios', UsuarioController::class);
 
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-VISTAS']], function () {
 //     Route::get('/vistas/buscarvista', [VistaController::class, 'buscarvista']);
