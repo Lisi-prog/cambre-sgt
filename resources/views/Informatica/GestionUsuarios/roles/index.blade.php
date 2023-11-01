@@ -74,11 +74,11 @@
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
 
-                                                    {{-- @can('AGREGAR-PERMISOS')
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['rubros.edit', $rubro->id], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info mr-2']) !!}
+                                                    {{-- @can('AGREGAR-PERMISOS')--}}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['roles.permisos', $rol->id], 'style' => 'display:inline']) !!}
+                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info ml-2']) !!}
                                                         {!! Form::close() !!}
-                                                    @endcan --}}
+                                                    {{-- @endcan  --}}
                                                 </div>
                                             </td>
                                         </tr>

@@ -46,6 +46,7 @@
                                 <thead style="height:50px;">
                                     <th class='ml-3 text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Usuario</th>
+                                    <th class='text-center' style="color:#fff;">Email</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
@@ -54,6 +55,8 @@
                                             <td class='text-center'>{{$usuario->id}}</td>
 
                                             <td class='text-center'>{{$usuario->name}}</td>
+
+                                            <td class='text-center'>{{$usuario->email}}</td>
 
                                             <td>
                                                 <div class="d-flex justify-content-center">

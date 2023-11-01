@@ -111,11 +111,20 @@ class UsuarioController extends Controller
     public function edit(Request $request, $id)
     {
         $user = User::find($id);
-        return view('Informatica.GestionUsuarios.usuarios.editar',compact('user'));
+        $userPermisos = $user->getDirectPermissions();
+        $roles = Role::orderBy('name', 'asc')->get();
+        $userRoles = $user->getRoleNames();
+        // return $userRoles;
+        return view('Informatica.GestionUsuarios.usuarios.editar',compact('user', 'roles', 'userPermisos', 'userRoles'));
     }
     
     public function update(Request $request, $id)
     {
+        return $request;
+        $user = User::find($id);
+        // $user->syncPermissions(['VER-INDICE']);
+        $user->assignRole(['ADMIN']);
+        return redirect()->route('usuarios.index')->with('mensaje','El usuario '.$user->name. ' editado con éxito!.');
         $this->validate($request, [
             'name' => 'required',
         ]);
