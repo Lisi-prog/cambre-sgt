@@ -113,4 +113,8 @@ class PermisoController extends Controller
 
         return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
     }
+
+    public function buscarpermisospornombre($nombre){
+        return Permission::where('name', 'like', '%'.$nombre.'%')->get();
+    }
 }

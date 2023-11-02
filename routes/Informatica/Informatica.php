@@ -21,6 +21,7 @@ Route::resource('usuarios', UsuarioController::class);
 Route::get('usuario/permisos/{id}', [RolController::class, 'verPermisosxRol'])->name('roles.permisos');
 Route::post('usuario/permisos/{id}/guardar', [RolController::class, 'guardarPermisosxRol'])->name('roles.guardarpermisos');
 Route::post('/usuarios/buscarpermisosdelrol', [RolController::class, 'buscarpermisosdelrol']);
+Route::post('/permisos/buscar/{name}', [PermisoController::class, 'buscarpermisospornombre']);
 
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-VISTAS']], function () {
 //     Route::get('/vistas/buscarvista', [VistaController::class, 'buscarvista']);

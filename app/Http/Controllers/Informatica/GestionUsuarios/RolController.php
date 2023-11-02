@@ -176,7 +176,7 @@ class RolController extends Controller
 
 
         $rol = Role::find($id);
-        $permisos = $role->permissions;
+        $permisos = $rol->permissions;
         
         //Role::where('airline_id', '')->orderBy('name', 'asc')->paginate(5);
         return $permisos;

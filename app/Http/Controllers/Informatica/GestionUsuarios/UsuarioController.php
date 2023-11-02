@@ -12,6 +12,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 
 class UsuarioController extends Controller
@@ -120,21 +122,36 @@ class UsuarioController extends Controller
     
     public function update(Request $request, $id)
     {
-        return $request;
+
+        $input = $request->all();
+        if(!empty($input['password'])){ 
+            $input['password'] = Hash::make($input['password']);
+        }else{
+            $input = Arr::except($input,array('password'));    
+        }
+
         $user = User::find($id);
-        // $user->syncPermissions(['VER-INDICE']);
-        $user->assignRole(['ADMIN']);
-        return redirect()->route('usuarios.index')->with('mensaje','El usuario '.$user->name. ' editado con éxito!.');
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-    
-        $role = Role::find($id);
-        $role->update([
-            'name' => strtoupper($request->input('name')),
-        ]);
-    
-        return redirect()->route('roles.index')->with('mensaje','Rol '.strtoupper($request->input('name')). ' editado con éxito!.');                       
+        $user->update($input);
+
+        $permisos = $request->input("permisos");
+        $roles = $request->input("roles");
+
+        try {
+            $permisoAsig = Permission::whereIn('id', $permisos)->get();
+        } catch (\Throwable $th) {
+            $permisoAsig = [];
+        }
+
+        try {
+            $rolesAsig = Role::whereIn('id', $roles)->get();
+        } catch (\Throwable $th) {
+            $rolesAsig = [];
+        }
+
+        $user->assignRole($rolesAsig);
+        $user->syncPermissions($permisoAsig);
+
+        return redirect()->route('usuarios.index')->with('mensaje','El usuario '.$user->name. ' editado con éxito!.');                     
     }
     
     public function destroy($id)

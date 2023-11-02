@@ -25,7 +25,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                     {!! Form::label('email', 'E-mail :') !!}
-                                    {!! Form::text('emailnew', $user->email, ['class' => 'form-control']) !!}
+                                    {!! Form::text('email', $user->email, ['class' => 'form-control']) !!}
                                 </div>
                             </div>
 
@@ -42,84 +42,6 @@
                                 </div>
                             </div>
                             
-                            
-                            {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="card border border-3 border-danger border-opacity-75 rounded">
-                                    <div class="d-flex flex-row align-items-center justify-content-around ">
-                                        <div>
-                                            <h5 class="card-header m-0 p-0 ms-4">Roles</h5>
-                                        </div>
-                                        <div
-                                            class="d-flex flex-row col-xs-10 col-sm-8 col-md-10 align-items-center justify-content-end">
-                                            {!! Form::text('name2', old('name'), [
-                                                'placeholder' => 'Buscar',
-                                                'class' => 'form-control col-sm-8 mr-2',
-                                                'style' => 'text-transform:uppercase;',
-                                                'onkeypress' => 'buscarroles(1)',
-                                                'id' => 'name2',
-                                            ]) !!}
-                                            {!! Form::button('Buscar', ['onclick' => 'buscarroles(1)', 'class' => 'btn btn-secondary']) !!}
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <h6 class="ms-3 card-title mb-0">Seleccione los roles que va a tener la persona:
-                                    </h6>
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
-                                            <div class="card-body " id="lista_roles">
-                                                <div id="rolles">
-                                                    @php
-                                                        $bandera = false;
-                                                    @endphp
-                                                    <table >
-                                                        <tbody id="radio" class="d-flex flex-column overflow-auto" style="height: 200px;width:200px">
-                                                            @foreach ($roles as $val)
-                                                                <tr id="trradio{{ $val->id }}">
-                                                                    <td style="width: 90%"><label>
-                                                                            {{ Form::radio('roless', $val->id, false, ['onclick' => 'buscarpermisos(' . $val->id . ');handleRadioClick(this)', 'id' => 'rr' . $val->id, 'class' => 'name ']) }}
-                                                                            {{ $val->name }}</label></td>
-                                                                    <td>
-                                                                @foreach ($userRoles as $rol)
-                                                                    @if ($val->name == $rol->name)
-                                                                        {{ Form::checkbox('roles[]', $val->id, true, ['id' => 'r' . $val->id, 'onclick' => '', 'class' => 'name']) }}
-                                                                        @php
-                                                                            $bandera = true;
-                                                                        @endphp
-                                                                        @break
-                                                                    @endif
-                                                                @endforeach
-                                                                @if (!$bandera)
-                                                                    {{ Form::checkbox('roles[]', $val->id, false, ['id' => 'r' . $val->id, 'disabled' => 'disabled', 'onclick' => '', 'class' => 'name']) }}
-                                                                @endif
-                                                                @php
-                                                                    $bandera = false;
-                                                                @endphp
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                            <div class="card mx-2  mt-3 "  style="background-color: rgb(255, 255, 255); height: 225px; width:98% ">
-                                                <div class="ms-auto d-flex align-items-center me-3 mt-3">
-                                                    {{ Form::checkbox('checkpermisosrol', null, false, ['id' => 'checkpermisosrol','onclick' => 'seleccionarpermisos()', 'class' => 'me-2 name']) }}
-                                                    <div>Selec All</div></div>
-
-                                                <h6 class="card-title ms-4 ">Permisos</h6>
-                                                <div class="overflow-auto ">
-                                                    <div class="card-body m-0 p-0" id="lista_permisos" >
-                                                        <div id="permisos" >
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <button type="submit" class="btn btn-success mr-2">Guardar</button>
                                 <a href="{{ route('usuarios.index') }}"class="btn btn-danger fo">Volver</a>
@@ -154,13 +76,14 @@
                                         </div>
                                         <div
                                             class="d-flex flex-row col-xs-10 col-sm-8 col-md-10 align-items-center justify-content-end">
-                                            {!! Form::text('name2', old('name'), [
+                                                <input id="buscarpermiso" name="name" type="text" class="form-control" placeholder="Buscar Permiso" aria-label="Recipient's username" aria-describedby="button-addon2" style ='text-transform:uppercase;' onkeyup = 'javascript:this.value=this.value.toUpperCase()'>
+                                            {{-- {!! Form::text('nameper', null, [
                                                 'placeholder' => 'Buscar',
                                                 'class' => 'form-control col-sm-8 mr-2',
                                                 'style' => 'text-transform:uppercase;',
-                                                'onkeypress' => 'buscarroles(1)',
-                                                'id' => 'name2',
-                                            ]) !!}
+                                                'onkeypress' => 'buscarpermisosnombre()',
+                                                'id' => 'nameper',
+                                            ]) !!} --}}
                                             {{-- {!! Form::button('Buscar', ['onclick' => 'buscarroles(1)', 'class' => 'btn btn-secondary']) !!} --}}
                                         </div>
                                     </div>
@@ -180,7 +103,6 @@
                                                         id="2{{ $value->name }}">{{ Form::checkbox('permisos10[]', $value->id, false, ['onclick' => 'agregarpermiso(' . $value->id . ',"' . $value->name . '",2)', 'class' => 'name permisos10 permisoscheck'.$value->id]) }}
                                                         {{ $value->name }}</label>
                                                 @endforeach --}}
-
                                             </div>
                                         </div>
 
@@ -217,7 +139,7 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <h6 class="ms-3 card-title mb-0">Seleccione los roles que va a tener la persona:
+                                    <h6 class="ms-3 card-title mb-0 ml-3">Seleccione los roles que va a tener la persona:
                                     </h6>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
@@ -284,8 +206,4 @@
         {!! Form::close() !!}
         <script src="{{ asset('js/Informatica/GestionUsuarios/Usuario/editar-usuario.js') }}"></script>
     </section>
-@endsection
-
-@section('js')
-    <script src="{{ asset('js/Informatica/GestionUsuarios/Usuario/editar-usuario.js') }}"></script>
 @endsection
