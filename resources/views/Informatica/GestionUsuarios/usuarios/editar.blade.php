@@ -18,7 +18,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
 
-                                    {!! Form::label('name', 'Nombre :') !!}
+                                    {!! Form::label('Nombre :') !!}
                                     {!! Form::text('name', $user->name, ['type' => 'text', 'class' => 'form-control', 'placeholder' => '']) !!}
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                         </div>
                                         <div
                                             class="d-flex flex-row col-xs-10 col-sm-8 col-md-10 align-items-center justify-content-end">
-                                                <input id="buscarpermiso" name="name" type="text" class="form-control" placeholder="Buscar Permiso" aria-label="Recipient's username" aria-describedby="button-addon2" style ='text-transform:uppercase;' onkeyup = 'javascript:this.value=this.value.toUpperCase()'>
+                                                <input id="buscarpermiso" type="text" class="form-control" placeholder="Buscar Permiso" aria-label="Recipient's username" aria-describedby="button-addon2" style ='text-transform:uppercase;' onkeyup = 'javascript:this.value=this.value.toUpperCase()'>
                                             {{-- {!! Form::text('nameper', null, [
                                                 'placeholder' => 'Buscar',
                                                 'class' => 'form-control col-sm-8 mr-2',
@@ -128,12 +128,12 @@
                                         </div>
                                         <div
                                             class="d-flex flex-row col-xs-10 col-sm-8 col-md-10 align-items-center justify-content-end">
-                                            {!! Form::text('name2', old('name'), [
-                                                'placeholder' => 'Buscar',
+                                            {!! Form::text('namerol', null, [
+                                                'placeholder' => 'Buscar rol',
                                                 'class' => 'form-control col-sm-8 mr-2',
                                                 'style' => 'text-transform:uppercase;',
                                                 'onkeypress' => 'buscarroles(1)',
-                                                'id' => 'name2',
+                                                'id' => 'namerol',
                                             ]) !!}
                                             {{-- {!! Form::button('Buscar', ['onclick' => 'buscarroles(1)', 'class' => 'btn btn-secondary']) !!} --}}
                                         </div>

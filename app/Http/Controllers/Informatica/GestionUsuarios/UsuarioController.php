@@ -122,7 +122,7 @@ class UsuarioController extends Controller
     
     public function update(Request $request, $id)
     {
-
+        
         $input = $request->all();
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
