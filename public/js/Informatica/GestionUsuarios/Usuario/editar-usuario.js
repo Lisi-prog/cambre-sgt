@@ -49,41 +49,18 @@ $(function(){
 //     }
 //   }
 
-  function agregarpermiso(id,name,i) {
-     if (i == 1) {
-         if ($('.radiocheck'+id).is(':checked')) {
-             html='<label id='+name+'><input checked onclick="eliminar('+id+',\''+name+'\')" class="name me-2 permisoscheckgrabar'+id+'" name="permisos[]" type="checkbox" value="'+id+'">'+name+'</label>';
-             $('#'+name).remove();
-             $("#lista_permisos2").prepend(html);
-             $('.radiocheck'+id).prop("checked", true);
-             $('.permisoscheck'+id).prop("checked", true);
-         } else {
-             $('.radiocheck'+id).prop("checked", false);
-             $('.permisoscheck'+id).prop("checked", false);
-             $('#'+name).remove();
-         }
-         //$('#li'+name).remove();
-     } else {
-         if ($('.permisoscheck'+id).is(':checked')) {
-             html='<label id='+name+'><input checked onclick="eliminar('+id+',\''+name+'\')" class="name me-2 permisoscheckgrabar'+id+'" name="permisos[]" type="checkbox" value="'+id+'">'+name+'</label>';
-             $('#'+name).remove();
-             $("#lista_permisos2").prepend(html);
-             $('.radiocheck'+id).prop("checked", true);
-             $('.permisoscheck'+id).prop("checked", true);
-         } else {
-             $('.radiocheck'+id).prop("checked", false);
-             $('.permisoscheck'+id).prop("checked", false);
-            $('#'+name).remove();
-        }
-        //$('#2'+name).remove();
-     }
-    
-    
-}
+    function agregarOquitarpermiso(id,name,i) {
+        if ($('.pcheck'+id).is(':checked')) {
+            eliminarPermiso(id,name);
+        } else {
+            html='<label id=p'+id+'><input checked onclick="eliminarPermiso('+id+',\''+name+'\')" class="name me-2 pcheck'+id+'" name="permisos[]" type="checkbox" value="'+id+'">'+name+'</label>';
+            $("#lista_permisos2").prepend(html);
+        } 
+    }
 
-function eliminar(id,name) {
-     $('#'+name).remove();
-     $('.radiocheck'+id).prop("checked", false);
+function eliminarPermiso(id,name) {
+     $('#p'+id).remove();
+     $('.pcheck'+id).prop("checked", false);
      $('.permisoscheck'+id).prop("checked", false);
 }
 
@@ -97,7 +74,21 @@ function buscarpermisosnombre(){
             name: name
         },
         success: function (response) {
-            console.log(response);
+            $("#view-permisos-s").empty();
+            try {
+                response.forEach(element => {
+                    if($('#p'+element.id).length){
+                        html='<label id="2'+element.name+'"><input checked onclick="agregarOquitarpermiso('+element.id+',\''+element.name+'\','+1+')" class="name permisos10  permisoscheck'+element.id+'" name="permisos10[]" type="checkbox" value="'+element.id+'"> '+element.name+'</label>';
+                    }else{
+                        html='<label id="2'+element.name+'"><input onclick="agregarOquitarpermiso('+element.id+',\''+element.name+'\','+1+')" class="name permisos10  permisoscheck'+element.id+'" name="permisos10[]" type="checkbox" value="'+element.id+'"> '+element.name+'</label>';
+                    }
+                    $("#view-permisos-s").append(html);
+                });
+            } catch (error) {
+                html = '';
+                $("#view-permisos-s").append(html);
+            }
+            
         },
         error: function (error) {
             console.log(error);

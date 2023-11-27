@@ -93,11 +93,13 @@
                                     </h6>
                                     <div class="d-flex flex-row align-items-start justify-content-around mb-3">
                                         <div class="card-body ms-2 d-flex flex-column" id="lista_roles" style="height: 250px;width:50%">
-                                            <div class="ms-auto d-flex align-items-center">
+                                            {{-- <div class="ms-auto d-flex align-items pb-3">
                                                 {{ Form::checkbox('checkpermisos', null, false, ['id' => 'checkpermisos','onclick' => 'seleccionarpermisostodos()', 'class' => 'me-2 name']) }}
-                                                <div>Selec All</div></div>
-                                            <div id="permisos2" class="d-flex flex-column overflow-auto"
+                                                <div>  Selec All</div>
+                                            </div> --}}
+                                            <div id="view-permisos-s" class="d-flex flex-column overflow-auto"
                                                 style="height: 225px;">
+                                                <br>
                                                 {{-- @foreach ($permisos as $value)
                                                     <label
                                                         id="2{{ $value->name }}">{{ Form::checkbox('permisos10[]', $value->id, false, ['onclick' => 'agregarpermiso(' . $value->id . ',"' . $value->name . '",2)', 'class' => 'name permisos10 permisoscheck'.$value->id]) }}
@@ -111,7 +113,7 @@
                                             <div class="overflow-auto">
                                                 <div class="card-body d-flex flex-column pt-0" id="lista_permisos2">
                                                     @foreach ($userPermisos as $value)
-                                                    <label id="{{ $value->name }}"><input checked onclick="eliminar({{ $value->id }},'{{ $value->name }}')" class="name me-2 permisoscheckgrabar{{ $value->id }}" name="permisos[]" type="checkbox" value="{{ $value->id }}">{{ $value->name }}</label>
+                                                        <label id="p{{ $value->id}}"><input checked onclick="eliminarPermiso({{ $value->id }},'{{ $value->name }}')" class="name me-2 pcheck{{ $value->id }}" name="permisos[]" type="checkbox" value="{{ $value->id }}"> {{ $value->name }}</label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -181,9 +183,9 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                             <div class="card mx-2  mt-3 "  style="background-color: rgb(255, 255, 255); height: 225px; width:98% ">
-                                                <div class="ms-auto d-flex align-items-center me-3 mt-3">
+                                                {{-- <div class="ms-auto d-flex align-items-center me-3 mt-3">
                                                     {{ Form::checkbox('checkpermisosrol', null, false, ['id' => 'checkpermisosrol','onclick' => 'seleccionarpermisos()', 'class' => 'me-2 name']) }}
-                                                    <div> Selec All</div></div>
+                                                    <div> Selec All</div></div> --}}
 
                                                 <h6 class="card-title ms-4 ">Permisos</h6>
                                                 <div class="overflow-auto ">
