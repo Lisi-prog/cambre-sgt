@@ -98,7 +98,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="" title="Propuesta de mejora">
+                        <a class="nav-link" href="{{route('p_m.index')}}" title="Propuesta de mejora">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>P.M.</span>
                         </a>
                     </li>
