@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models\Cambre;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+
+class Sector extends Model
+{
+    use HasFactory;
+    
+    public $timestamps = false;
+    
+    protected $table = 'sector';
+
+    protected $primaryKey = 'id_sector';
+
+    public $incrementing = false;
+
+    protected $fillable = [ 
+        'nombre_sector'
+    ];
+
+    public function getRequerimientoIngenieria()
+    {
+        return $this->hasMany(Requerimiento_de_ingenieria::class, 'id_sector');
+    }
+}

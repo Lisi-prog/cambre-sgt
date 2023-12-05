@@ -68,19 +68,95 @@
 @can('VER-MENU-PLANTA')
     <li class="dropdown ">
         <a href="" class="nav-link has-dropdown ">
-            <i class="fas fa-home"></i><span>Planta</span>
+            <i class="fas fa-home"></i><span>Ingenieria</span>
         </a>
 
-        <ul class="dropdown-menu border border-primary border-2 borde-menu m-0" style="display: none;">
+        <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
             <li class="dropdown-title pt-3">
-                Planta
+                Ingenieria
+            </li>
+
+            <li class="dropdown ">
+                <a href="" class="nav-link has-dropdown ">
+                    <i class="fas fa-home"></i><span>Solicitudes</span>
+                </a>
+                
+                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none; margin-left: -2vh;">
+                    <li class="dropdown-title">
+                        Solicitudes
+                    </li>
+                
+                    <li>
+                        <a class="nav-link" href="" title="Requerimientos de servicios de mantenimiento">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
+                        </a>
+                    </li>
+            
+                    <li>
+                        <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>S.S.I.</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="" title="Propuesta de mejora">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>P.M.</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="{{route('r_i.index')}}" title="Requerimiento de ingenieria">
+                            <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>R.I.</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown ">
+                <a href="" class="nav-link has-dropdown ">
+                    <i class="fas fa-home"></i><span>Servicios</span>
+                </a>
+                
+                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none; margin-left: -2vh;">
+                    <li class="dropdown-title pt-3">
+                        Servicios
+                    </li>
+                
+                    <li>
+                        <a class="nav-link" href="" title="Requerimientos de servicios de mantenimiento">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
+                        </a>
+                    </li>
+            
+                    <li>
+                        <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>S.S.I.</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="" title="Propuesta de mejora">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>P.M.</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="" title="Requerimiento de ingenieria">
+                            <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>R.I.</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- <li>
+                <a class="nav-link" href="{{route('proyectos.index')}}" title="Proyectos">
+                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Proyectos</span>
+                </a>
             </li>
 
             <li>
                 <a class="nav-link" href="" title="Tareas">
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Tareas</span>
                 </a>
-            </li>
+            </li> --}}
 
         </ul>
     </li>
