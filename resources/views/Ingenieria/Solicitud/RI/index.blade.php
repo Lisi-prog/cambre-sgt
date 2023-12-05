@@ -66,7 +66,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ri->getSector->nombre_sector}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getEmpleado->nombre_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getEmpleado->nombre_empleado ?? 'no asignado'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->descripcion_solicitud}}</td>
                                             
