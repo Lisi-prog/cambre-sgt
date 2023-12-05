@@ -27,7 +27,7 @@ class Empleado extends Model
 
     public function getRequerimientoIngenieria()
     {
-        return $this->belongsTo(Requerimiento_de_ingenieria::class, 'id_empleado');
+        return $this->hasMany(Requerimiento_de_ingenieria::class, 'id_empleado');
     }
 
     public function getProyectos()

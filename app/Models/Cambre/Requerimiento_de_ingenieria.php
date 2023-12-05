@@ -31,7 +31,7 @@ class Requerimiento_de_ingenieria extends Model
 
     public function getEmpleado()
     {
-        return $this->hasOne(Empleado::class, 'id_empleado');
+        return $this->belongsTo(Empleado::class, 'id_empleado');
     }
 
     public function getSector()

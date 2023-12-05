@@ -17,6 +17,7 @@ use App\Models\Cambre\Estado_solicitud;
 use App\Models\Cambre\Solicitud;
 use App\Models\Cambre\Requerimiento_de_ingenieria;
 use App\Models\Cambre\Sector;
+use App\Models\Cambre\Empleado;
 
 class RequerimientoDeIngenieriaController extends Controller
 {
@@ -59,7 +60,7 @@ class RequerimientoDeIngenieriaController extends Controller
         $sector = $request->input('id_sector');
         $prioridad = $request->input('id_prioridad');
         $fecha_requerida = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
-        return $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $estado = Estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
    
         
@@ -92,6 +93,12 @@ class RequerimientoDeIngenieriaController extends Controller
         return redirect()->route('permisos.index')->with('mensaje', 'Permiso creado exitosamente.');
     }
     
+    public function evaluar($id){
+        $Req_ing = Requerimiento_de_ingenieria::find($id);
+        $Empleados = Empleado::pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing', 'Empleados'));
+    }
+
     public function buscarPermisos(Request $request)
     {        
          //Con paginación

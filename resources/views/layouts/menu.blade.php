@@ -4,7 +4,7 @@
     </a>
 </li>
 
-@can('VER-MENU-INFORMATICA')
+{{-- @can('VER-MENU-INFORMATICA') --}}
     <li class="dropdown ">
         <a href="" class="nav-link has-dropdown ">
             <i class="fas fa-home"></i><span>Informatica</span>
@@ -63,9 +63,9 @@
             </li>
         </ul>
     </li>
-@endcan
+{{-- @endcan --}}
 
-@can('VER-MENU-PLANTA')
+{{-- @can('VER-MENU-PLANTA') --}}
     <li class="dropdown ">
         <a href="" class="nav-link has-dropdown ">
             <i class="fas fa-home"></i><span>Ingenieria</span>
@@ -160,5 +160,5 @@
 
         </ul>
     </li>
-@endcan
+{{-- @endcan --}}
 

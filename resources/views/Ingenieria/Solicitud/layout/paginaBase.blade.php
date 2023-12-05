@@ -26,7 +26,7 @@
     @yield('css')
 </head>
 
-<body style="background-color: #d1ddf2">
+<body style="background-color: #89a1c9">
     <div class="">
         @yield('contenido')
     </div>

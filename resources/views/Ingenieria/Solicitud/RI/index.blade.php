@@ -77,7 +77,7 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud}}</td>
 
                                             <td>
-                                                {!! Form::open(['method' => 'GET', 'route' => ['home'], 'style' => 'display:inline']) !!}
+                                                {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
                                                 {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
                                                 {!! Form::close() !!}
                                             </td>
