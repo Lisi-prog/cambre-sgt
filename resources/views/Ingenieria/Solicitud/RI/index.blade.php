@@ -5,8 +5,17 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    <div class="section-header">
-        <h3 class="page__heading">Requerimiento de ingenieria</h3>
+    <div class="section-header d-flex">
+        <div class="">
+            <h4 class="titulo page__heading my-auto">Requerimientos de ingenieria</h4>
+        </div>
+        <div class="ms-auto">
+            {{-- @can('CREAR-RI') --}}
+                {!! Form::open(['method' => 'GET', 'route' => ['r_i.create'], 'class' => 'd-flex justify-content-end']) !!}
+                    {!! Form::submit('Nueva', ['class' => 'btn btn-success my-1']) !!}
+                {!! Form::close() !!}
+            {{-- @endcan --}}
+        </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
@@ -77,9 +86,19 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud}}</td>
 
                                             <td>
-                                                {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
-                                                {!! Form::close() !!}
+                                                <div class="row">
+                                                    <div class="col">{!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                        {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                    <div class="col">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                                
+                                                
                                             </td>
                                             {{--@if (!is_null($obra->id_loc))
                                                 <td class='text-center' style="vertical-align: middle;">{{$obra->getLocalidad->nom_loc}}</td>

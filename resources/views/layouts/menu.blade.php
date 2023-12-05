@@ -86,11 +86,11 @@
                         Solicitudes
                     </li>
                 
-                    <li>
+                    {{-- <li>
                         <a class="nav-link" href="" title="Requerimientos de servicios de mantenimiento">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
                         </a>
-                    </li>
+                    </li> --}}
             
                     <li>
                         <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">

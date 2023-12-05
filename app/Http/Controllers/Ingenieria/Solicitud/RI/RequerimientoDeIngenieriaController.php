@@ -109,7 +109,8 @@ class RequerimientoDeIngenieriaController extends Controller
 
     public function create()
     {
-        return view('Informatica.GestionUsuarios.permisos.crear');
+        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        return view('Ingenieria.Solicitud.RI.Crear', compact('Prioridades'));
     }
 
     public function store(Request $request)
