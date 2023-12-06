@@ -341,6 +341,12 @@ VALUES
     ('Aceptado'),
     ('Rechazado');
 
+INSERT INTO puesto_empleado (titulo_puesto_empleado, costo_hora)
+VALUES
+    ('Diseñador de producto', 13.45),
+    ('Asistente de ingenieria', 45.98);
+
+
 DROP TABLE parte_mantenimiento;
 DROP TABLE orden_mantenimiento;
 DROP TABLE parte_mecanizado;

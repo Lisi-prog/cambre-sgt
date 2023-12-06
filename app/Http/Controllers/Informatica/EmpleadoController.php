@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 //agregamos
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
+use App\Models\User;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Puesto_empleado;
@@ -39,6 +41,7 @@ class EmpleadoController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $this->validate($request, [
             'name' => 'required|string|max:189|unique:permissions,name'
         ], [

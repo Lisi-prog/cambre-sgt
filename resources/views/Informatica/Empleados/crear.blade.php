@@ -16,48 +16,97 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('selected-prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        {!! Form::label('nom_comp', 'Nombre completo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('id_prioridad', $sectores, null, [
+                                        {!! Form::text('nombre_completo', null, [
+                                            'class' => 'form-control',
+                                            'required' => 'required',
+                                            'id' => 'nom_comp'
+                                        ]) !!}
+                                    </div>
+                                </div>
+
+                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div> --}}
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                        {!! Form::label('puesto', 'Puesto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('puesto', $puestos, null, [
                                             'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select',
-                                            'id' => 'selected-prioridad',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'puesto',
                                             'required'
                                         ]) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2" id="fecha_req">
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                        {!! Form::label('user_wb', '¿Crear usuario web?', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         <span class="obligatorio">*</span>
-                                        {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
-                                            'min' => '2023-01-01',
-                                            'max' => \Carbon\Carbon::now()->year . '-12',
-                                            'id' => 'fec_req',
-                                            'class' => 'form-control'
+                                        {!! Form::select('user_wb', [0 => 'NO', 1 => 'SI'], 1, [
+                                            'class' => 'form-select form-control',
+                                            'id' => 'user_wb',
+                                            'required'
                                         ]) !!}
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('descrip', 'Descripcion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::label('email', 'Email:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
-                                        <textarea name='descripcion' id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" required></textarea>
+                                        {!! Form::text('email', null, [
+                                            'class' => 'form-control',
+                                            'required' => 'required',
+                                            'id' => 'email'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div> --}}
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                        {!! Form::label('sector', 'Sector:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('sector', $sectores, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'sector',
+                                            'required'
+                                        ]) !!}
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" id='descrip_urgencia'>
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('descrip', 'Descripcion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                        {!! Form::label('pass', 'Contraseña:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         <span class="obligatorio">*</span>
-                                        <textarea name='descripcion' id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh"></textarea>
-                                    </div> --}}
+                                        <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" placeholder="Ingrese la contraseña" name="password" tabindex="2" required>
+                                    </div>
                                 </div>
                             </div>
 
-                           
+                           <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                    <div class="form-group">
+                                        {!! Form::label('telefono', 'Telefono:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::text('telefono', null, [
+                                            'class' => 'form-control',
+                                            'required' => 'required',
+                                            'id' => 'telefono'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>
 
                             
                             
