@@ -3,12 +3,27 @@ $(function(){
 });
 
 function agregarUrgencia(){
-    let prioridad = $(this).val();
+    let prioridad = Number($(this).val());
     let des = document.getElementById("descrip_urgencia");
-    if (prioridad == 4) { //id de URGENTE
-        html = '<div class="row" id="descrip_urgencia"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> <div class="form-group"> <label for="desc_urg" class="control-label fs-7" style="white-space: nowrap; ">Descripcion urgencia</label> <span class="obligatorio">*</span> <textarea id="desc_urg" name="descripcion_urgencia" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh"></textarea> </div> </div> </div>';
-        des.innerHTML = html;
-    } else {
-        des.innerHTML = '';
+    let fec = document.getElementById("fecha_req");
+    switch (prioridad) {
+        case 1:
+            fec.innerHTML = '';
+            des.innerHTML = '';
+            break;
+        case 2:
+            html_fecha = '<div class="form-group"> <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label> <span class="obligatorio">*</span> <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control" name="fecha_req" type="date" value="2023-12-05" required> </div>';
+            fec.innerHTML = html_fecha;
+            des.innerHTML = '';
+            break;
+        case 4:
+            html = '<div class="form-group"> <label for="descrip" class="control-label fs-7" style="white-space: nowrap; ">Descripcion de la urgencia:</label> <span class="obligatorio">*</span> <textarea name="descripcion_urgencia" id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" required></textarea> </div>';
+            des.innerHTML = html;
+            break;
+         
+        default:
+            fec.innerHTML = '';
+            des.innerHTML = '';
+            break;
     }
 }

@@ -16,12 +16,14 @@ class Empleado extends Model
 
     protected $primaryKey = 'id_empleado';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_empleado',
         'email_empleado',
         'telefono_empleado',
+        'id_puesto_empleado',
+        'id_sector',
         'user_id'
     ];
 
@@ -33,5 +35,15 @@ class Empleado extends Model
     public function getProyectos()
     {
         return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+    }
+
+    public function getPuestoEmpleado()
+    {
+        return $this->belongsTo(Puesto_empleado::class, 'id_puesto_empleado');
+    }
+
+    public function getSector()
+    {
+        return $this->belongsTo(Sector::class, 'id_sector');
     }
 }

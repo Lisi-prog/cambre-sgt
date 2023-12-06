@@ -26,4 +26,9 @@ class Sector extends Model
     {
         return $this->hasMany(Requerimiento_de_ingenieria::class, 'id_sector');
     }
+
+    public function getEmpleados()
+    {
+        return $this->hasMany(Empleado::class, 'id_sector');
+    }
 }

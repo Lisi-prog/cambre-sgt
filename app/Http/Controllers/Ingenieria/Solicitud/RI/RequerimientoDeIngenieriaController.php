@@ -115,21 +115,47 @@ class RequerimientoDeIngenieriaController extends Controller
 
     public function store(Request $request)
     {
+        return $request;
         $this->validate($request, [
-            'name' => 'required|string|max:189|unique:permissions,name'
-        ], [
-            'name.required' => 'El campo nombre del permiso es obligatorio.',
-            'name.unique' => 'El permiso ya existe.',
-            'name.max' => 'El maximo de caracteres es de 190.'
+            'id_prioridad' => 'required',
+            'descripcion' => 'required|string|max:500'
+
         ]);
 
-        $permiso =  Permission::create([
-                        'name' => strtoupper($request->input('name'))
-                    ]); 
+        $nombre = $request->input('nombre_completo');
+        $descrip = $request->input('descripcion');
+        $sector = $request->input('id_sector');
+        $prioridad = $request->input('id_prioridad');
+        $fecha_requerida = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $estado = Estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
+   
+        
+        $Solicitud = Solicitud::create([
+            'id_prioridad_solicitud' => $prioridad,
+            'id_estado_solicitud' => $estado,
+            'nombre_solicitante' => $nombre,
+            'descripcion_solicitud' => $descrip,
+            'fecha_carga' => $fecha_carga,
+            'fecha_requerida' => $fecha_requerida
+        ]);
 
-        $role = Role::where('name','ADMIN')->first();
+        if($request->input('descripcion_urgencia')){
+            $Solicitud->update([
+                'descripcion_urgencia' => $request->input('descripcion_urgencia')
+            ]);
+        }
 
-        $role->givePermissionTo(strtoupper($request->input('name')));
+        $Req_ing = Requerimiento_de_ingenieria::create([
+            'id_solicitud' => $Solicitud->id_solicitud,
+            'id_empleado' => 1,
+            'id_sector' => $sector
+        ]);
+
+        //return $Solicitud;
+        //$permisos = Permission::orderBy('name', 'asc')->get();
+        //$Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
+        return 'Creado con exito!';
 
         return redirect()->route('permisos.index')->with('mensaje', 'Permiso creado exitosamente.');                      
     }

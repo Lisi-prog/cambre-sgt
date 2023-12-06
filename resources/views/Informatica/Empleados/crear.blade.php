@@ -1,18 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    .obligatorio {
-        color: red;
-    }
-</style>
+
     <section class="section">
         <div class="section-header">
-            <div class="titulo py-1">Nueva solicitud de requerimiento de ingenieria</div>
+            <div class="titulo py-1">Nuevo empleado</div>
         </div>
         <div class="section-body">
             <div class="row">
-                {!! Form::open(['route' => 'r_i.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                {!! Form::open(['route' => 'empleados.store', 'method' => 'POST', 'class' => 'formulario']) !!}
                 @include('layouts.modal.mensajes')
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
@@ -22,7 +18,7 @@
                                     <div class="form-group">
                                         {!! Form::label('selected-prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('id_prioridad', $Prioridades, null, [
+                                        {!! Form::select('id_prioridad', $sectores, null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select',
                                             'id' => 'selected-prioridad',

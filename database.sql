@@ -78,10 +78,10 @@ CREATE TABLE `propuesta_de_mejora` (
   `beneficio_propuesta` varchar(500) DEFAULT NULL,
   `problema_propuesta` varchar(500) DEFAULT NULL,
   `evaluacion_propuesta` varchar(500) DEFAULT NULL,
-  `fecha_carga` date,
+  `fecha_carga` datetime,
   PRIMARY KEY (`id_propuesta_de_mejora`)
 );
-----------------------------------------------------
+-- --------------------------------------------------
 
 CREATE TABLE `tipo_servicio` (
   `id_tipo_servicio` int NOT NULL AUTO_INCREMENT,
@@ -126,9 +126,11 @@ CREATE TABLE `empleado` (
   `email_empleado` varchar(50),
   `telefono_empleado` varchar(50),
   `id_puesto_empleado` int,
+  `id_sector` int,
   `user_id` bigInt,
   PRIMARY KEY (`id_empleado`),
   CONSTRAINT `pk_id_empleado_x_puesto` FOREIGN KEY (`id_puesto_empleado`) REFERENCES `puesto_empleado`(`id_puesto_empleado`),
+  CONSTRAINT `pk_id_empleado_x_sector` FOREIGN KEY (`id_sector`) REFERENCES `sector`(`id_sector`)
 );
 
 CREATE TABLE `rol_empleado` (
@@ -146,11 +148,11 @@ CREATE TABLE `responsabilidad` (
   CONSTRAINT `pk_id_rol_empleado` FOREIGN KEY (`id_rol_empleado`) REFERENCES `rol_empleado`(`id_rol_empleado`)
 );
 
---revisar
-CREATE TABLE `proyecto` (
-  `id_proyecto` int NOT NULL AUTO_INCREMENT,
-  `codigo_proyecto` varchar(50) DEFAULT NULL,
-  `nombre_proyecto` varchar(50) DEFAULT NULL,
+-- revisar
+CREATE TABLE `servicio` (
+  `id_servicio` int NOT NULL AUTO_INCREMENT,
+  `codigo_servicio` varchar(50) DEFAULT NULL,
+  `nombre_servicio` varchar(50) DEFAULT NULL,
   `fecha_inicio` date,
   `fecha_limite` date,
   `id_responsabilidad` int,
@@ -158,14 +160,14 @@ CREATE TABLE `proyecto` (
   `id_tipo_servicio` int,
   `id_tipo_proyecto` int,
   `id_prioridad` int,
-  PRIMARY KEY (`id_proyecto`),
-  CONSTRAINT `pk_id_proyecto_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
-  CONSTRAINT `pk_id_proyecto_x_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
-  CONSTRAINT `pk_id_proyecto_x_tipo_servicio` FOREIGN KEY (`id_tipo_servicio`) REFERENCES `tipo_servicio`(`id_tipo_servicio`),
-  CONSTRAINT `pk_id_proyecto_x_tipo_proyecto` FOREIGN KEY (`id_tipo_proyecto`) REFERENCES `tipo_proyecto`(`id_tipo_proyecto`),
-  CONSTRAINT `pk_id_proyecto_x_prioridad` FOREIGN KEY (`id_prioridad`) REFERENCES `prioridad`(`id_prioridad`)
+  PRIMARY KEY (`id_servicio`),
+  CONSTRAINT `pk_id_servicio_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
+  CONSTRAINT `pk_id_servicio_x_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
+  CONSTRAINT `pk_id_servicio_x_tipo_servicio` FOREIGN KEY (`id_tipo_servicio`) REFERENCES `tipo_servicio`(`id_tipo_servicio`),
+  CONSTRAINT `pk_id_servicio_x_tipo_proyecto` FOREIGN KEY (`id_tipo_proyecto`) REFERENCES `tipo_proyecto`(`id_tipo_proyecto`),
+  CONSTRAINT `pk_id_servicio_x_prioridad` FOREIGN KEY (`id_prioridad`) REFERENCES `prioridad`(`id_prioridad`)
 );
--------------------------//
+-- -----------------------//
 
 CREATE TABLE `actualizacion` (
   `id_actualizacion` int NOT NULL AUTO_INCREMENT,
@@ -194,13 +196,13 @@ CREATE TABLE `etapa` (
   `descripcion_etapa` varchar(50) DEFAULT NULL,
   `fecha_inicio` date,
   `fecha_limite` date,
-  `id_proyecto` int,
+  `id_servicio` int,
   `id_responsabilidad` int,
   `id_estado` int,
   `id_tipo_etapa` int,
   `id_actualizacion` int,
   PRIMARY KEY (`id_etapa`),
-  CONSTRAINT `pk_id_etapaxpy_proyecto` FOREIGN KEY (`id_proyecto`) REFERENCES `proyecto`(`id_proyecto`),
+  CONSTRAINT `pk_id_etapaxpy_servicio` FOREIGN KEY (`id_servicio`) REFERENCES `servicio`(`id_servicio`),
   CONSTRAINT `pk_id_etapaxres_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_etapaxest_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
   CONSTRAINT `pk_id_etapaxte_tipo_etapa` FOREIGN KEY (`id_tipo_etapa`) REFERENCES `tipo_etapa`(`id_tipo_etapa`),
@@ -299,11 +301,11 @@ CREATE TABLE `orden_mantenimiento` (
   PRIMARY KEY (`id_orden_mantenimiento`),
   CONSTRAINT `pk_id_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
-  CONSTRAINT `pk_id_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`),
+  CONSTRAINT `pk_id_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`)
 );
 
 CREATE TABLE `parte_mantenimiento` (
-  `id_parte_mecanizado` int NOT NULL AUTO_INCREMENT,
+  `id_parte_mantenimiento` int NOT NULL AUTO_INCREMENT,
   `observacion` varchar(500) DEFAULT NULL,
   `fecha` date,
   `fecha_limite` date,
@@ -314,9 +316,9 @@ CREATE TABLE `parte_mantenimiento` (
   `id_orden_mantenimiento` int,
   `id_responsabilidad` int,
   PRIMARY KEY (`id_parte_mantenimiento`),
-  CONSTRAINT `pk_id_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
-  CONSTRAINT `pk_id_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
-  CONSTRAINT `pk_id_orden_mantenimiento` FOREIGN KEY (`id_orden_mantenimiento`) REFERENCES `orden_mantenimiento`(`id_orden_mantenimiento`)
+  CONSTRAINT `pk_id_pm_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
+  CONSTRAINT `pk_id_pm_x_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
+  CONSTRAINT `pk_id_pm_x_orden_mantenimiento` FOREIGN KEY (`id_orden_mantenimiento`) REFERENCES `orden_mantenimiento`(`id_orden_mantenimiento`)
 );
 
 --------------------------------------------------
@@ -331,7 +333,6 @@ INSERT INTO prioridad_solicitud (nombre_prioridad_solicitud)
 VALUES
     ('Baja'),
     ('Programable'),
-    ('Alta'),
     ('Urgente');
 
 INSERT INTO estado_solicitud (nombre_estado_solicitud)
@@ -339,3 +340,35 @@ VALUES
     ('En espera'),
     ('Aceptado'),
     ('Rechazado');
+
+DROP TABLE parte_mantenimiento;
+DROP TABLE orden_mantenimiento;
+DROP TABLE parte_mecanizado;
+DROP TABLE orden_mecanizado;
+DROP TABLE orden_manufactura;
+DROP TABLE parte_trabajo;
+DROP TABLE orden_trabajo;
+DROP TABLE etapa;
+DROP TABLE tipo_etapa;
+DROP TABLE maquinaria;
+DROP TABLE actualizacion;
+DROP TABLE servicio;
+DROP TABLE responsabilidad;
+DROP TABLE rol_empleado;
+DROP TABLE empleado;
+DROP TABLE puesto_empleado;
+DROP TABLE estado;
+DROP TABLE estado_mecanizado;
+DROP TABLE prioridad;
+DROP TABLE tipo_proyecto;
+DROP TABLE tipo_servicio;
+DROP TABLE propuesta_de_mejora;
+DROP TABLE requerimiento_de_ingenieria;
+DROP TABLE servicio_de_ingenieria;
+DROP TABLE sector;
+DROP TABLE servicio_de_mantenimiento;
+DROP TABLE activo;
+DROP TABLE servicio_requerido;
+DROP TABLE solicitud;
+DROP TABLE estado_solicitud;
+DROP TABLE prioridad_solicitud;
