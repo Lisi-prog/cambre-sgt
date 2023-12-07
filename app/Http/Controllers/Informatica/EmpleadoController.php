@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 //agregamos
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 use App\Models\User;
 use App\Models\Cambre\Empleado;
@@ -36,29 +37,71 @@ class EmpleadoController extends Controller
     {
         $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
         $puestos = Puesto_empleado::orderBy('titulo_puesto_empleado')->pluck('titulo_puesto_empleado', 'id_puesto_empleado');
-        return view('Informatica.Empleados.crear',compact('sectores', 'puestos'));
+        $roles = Role::orderBy('name')->pluck('name', 'id');
+        return view('Informatica.Empleados.crear',compact('sectores', 'puestos', 'roles'));
     }
 
     public function store(Request $request)
     {
-        return $request;
+        // return $request;
         $this->validate($request, [
-            'name' => 'required|string|max:189|unique:permissions,name'
-        ], [
-            'name.required' => 'El campo nombre del permiso es obligatorio.',
-            'name.unique' => 'El permiso ya existe.',
-            'name.max' => 'El maximo de caracteres es de 190.'
+            'nombre_completo' => 'required',
+            'email' => 'required',
+            'puesto' => 'required',
+            'sector' => 'required',
+            'user_wb' => 'required'
         ]);
 
-        $permiso =  Permission::create([
-                        'name' => strtoupper($request->input('name'))
-                    ]); 
+        $nombre = $request->input('nombre_completo');
+        $email = $request->input('email');
+        $puesto = $request->input('puesto');
+        $sector = $request->input('sector');
+        if ($request->input('telefono')) {
+            $telefono = $request->input('telefono');
+        }else{
+            $telefono = null;
+        }
 
-        $role = Role::where('name','ADMIN')->first();
+        $opcion = $request->input('user_wb');
+        switch ($opcion) {
+            case 0:
+                Empleado::create([
+                    'nombre_empleado' => $nombre,
+                    'email_empleado' => $email,
+                    'telefono_empleado' => $telefono,
+                    'id_puesto_empleado' => $puesto,
+                    'id_sector' => $sector 
+                ]);
+                break;
+            
+            case 1:
+                $this->validate($request, [
+                    'password' => 'required',
+                    'rol' => 'required'
+                ]);
 
-        $role->givePermissionTo(strtoupper($request->input('name')));
+                $rol = $request->input('rol');
 
-        return redirect()->route('permisos.index')->with('mensaje', 'Permiso creado exitosamente.');                      
+                $usuario = User::create([
+                    'name' => $nombre,
+                    'email' => $email,
+                    'password' => Hash::make($request->input('password'))
+                ]);
+
+                $usuario->assignRole(Role::find($rol));
+
+                Empleado::create([
+                    'nombre_empleado' => $nombre,
+                    'email_empleado' => $email,
+                    'telefono_empleado' => $telefono,
+                    'id_puesto_empleado' => $puesto,
+                    'id_sector' => $sector,
+                    'user_id' => $usuario->id
+                ]);
+
+                break;
+        }
+        return redirect()->route('empleados.index')->with('mensaje', 'Empleado creado exitosamente.');                     
     }
     
     public function show($id)
@@ -89,11 +132,10 @@ class EmpleadoController extends Controller
     
     public function destroy($id)
     {
-        $permiso = Permission::findOrFail($id);
-
-        Permission::destroy($id);
-
-        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
+        $empleado = Empleado::find($id);
+        Empleado::destroy($id);
+        User::destroy($empleado->user_id);
+        return redirect()->route('empleados.index')->with('mensaje', 'El empleado se elimino exitosamente.');               
     }
 
     public function buscarpermisospornombre($nombre){

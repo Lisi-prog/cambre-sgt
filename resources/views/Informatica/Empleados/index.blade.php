@@ -19,7 +19,6 @@
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -28,8 +27,8 @@
                         </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead style="height:50px;">
-                                    <th class='ml-3 text-center' style="color:#fff;">Codigo</th>
+                                <thead>
+                                    <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Email</th>
                                     <th class='text-center' style="color:#fff;">Telefono</th>
@@ -39,7 +38,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($empleados as $empleado)
-                                        <tr>
+                                        <tr class="my-auto">
                                             <td class='text-center'>{{$empleado->id_empleado}}</td>
 
                                             <td class='text-center'>{{$empleado->nombre_empleado}}</td>
@@ -67,7 +66,7 @@
                                                             'route' => ['empleados.destroy', $empleado->id_empleado],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger','onclick' => "return confirm('¿Está seguro que desea ELIMINAR el empleado?'"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
 

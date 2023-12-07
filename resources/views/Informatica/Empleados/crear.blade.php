@@ -60,7 +60,7 @@
                                     <div class="form-group">
                                         {!! Form::label('email', 'Email:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
-                                        {!! Form::text('email', null, [
+                                        {!! Form::email('email', null, [
                                             'class' => 'form-control',
                                             'required' => 'required',
                                             'id' => 'email'
@@ -89,7 +89,7 @@
                                     <div class="form-group">
                                         {!! Form::label('pass', 'Contraseña:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         <span class="obligatorio">*</span>
-                                        <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" placeholder="Ingrese la contraseña" name="password" tabindex="2" required>
+                                        <input id='pass-input' type="password" class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" placeholder="Ingrese la contraseña" name="password" tabindex="2" required>
                                     </div>
                                 </div>
                             </div>
@@ -98,17 +98,30 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
                                         {!! Form::label('telefono', 'Telefono:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                        <span class="obligatorio">*</span>
+                                        {{-- <span class="obligatorio">*</span> --}}
                                         {!! Form::text('telefono', null, [
                                             'class' => 'form-control',
-                                            'required' => 'required',
                                             'id' => 'telefono'
                                         ]) !!}
                                     </div>
                                 </div>
-                            </div>
 
-                            
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                        {!! Form::label('categoria', 'Categoria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('rol', $roles, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'categoria-input',
+                                            'required'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>                            
                             
                             
                     
@@ -136,5 +149,5 @@
             </div>
         </div>
     </section>
-    <script src="{{ asset('js/Ingenieria/Solicitud/crear-rssi-no-au.js') }}"></script>
+    <script src="{{ asset('js/Informatica/Empleados/crear-empleado.js') }}"></script>
 @endsection
