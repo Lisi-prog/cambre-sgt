@@ -59,31 +59,33 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    <div class="form-group">
-                                        {!! Form::label('fecha_req', "Fecha requerida:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_req',\Carbon\Carbon::parse($Req_ing->getSolicitud->fecha_requerida)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
+                                    @if (!is_null($Req_ing->getSolicitud->fecha_requerida))
+                                        <div class="form-group">
+                                            {!! Form::label('fecha_req', "Fecha requerida:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            {!! Form::text('fecha_req',\Carbon\Carbon::parse($Req_ing->getSolicitud->fecha_requerida)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-                                    
-                                </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('prioridad', "Prioridad:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                         {!! Form::text('prioridad',$Req_ing->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                    
+                                </div>
 
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    <div class="form-group">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                    {{-- <div class="form-group">
                                         {!! Form::label('empleado', "Empleado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                         {!! Form::select('id_empleado', $Empleados, $Req_ing->getEmpleado->id_empleado, [
                                             'class' => 'form-select form-control',
                                             'required',
                                         ]) !!}
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="row">
@@ -91,10 +93,13 @@
                                     {!! Form::label('descrip', "Descripcion de la solicitud:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <textarea id='descrip' class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" readonly>{{$Req_ing->getSolicitud->descripcion_solicitud}}</textarea>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                    {!! Form::label('descrip_urg', "Descripcion urgencia:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                    <textarea id='descrip_urg' class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" readonly>{{$Req_ing->getSolicitud->descripcion_urgencia ?? ''}}</textarea>
-                                </div>
+                                @if (!is_null($Req_ing->getSolicitud->descripcion_urgencia))
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                        {!! Form::label('descrip_urg', "Descripcion urgencia:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        <textarea id='descrip_urg' class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" readonly>{{$Req_ing->getSolicitud->descripcion_urgencia ?? ''}}</textarea>
+                                    </div>
+                                @endif
+                                
                             </div>
                             {{-- <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">

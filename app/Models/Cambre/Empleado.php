@@ -4,6 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 
 class Empleado extends Model
@@ -45,5 +46,10 @@ class Empleado extends Model
     public function getSector()
     {
         return $this->belongsTo(Sector::class, 'id_sector');
+    }
+
+    public function getUser()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

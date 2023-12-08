@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 //agregamos
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 use Spatie\Permission\Models\Permission;
@@ -95,8 +96,7 @@ class RequerimientoDeIngenieriaController extends Controller
     
     public function evaluar($id){
         $Req_ing = Requerimiento_de_ingenieria::find($id);
-        $Empleados = Empleado::pluck('nombre_empleado', 'id_empleado');
-        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing', 'Empleados'));
+        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing'));
     }
 
     public function buscarPermisos(Request $request)
@@ -115,18 +115,22 @@ class RequerimientoDeIngenieriaController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        // return Auth::user()->getEmpleado;
         $this->validate($request, [
             'id_prioridad' => 'required',
             'descripcion' => 'required|string|max:500'
-
         ]);
 
-        $nombre = $request->input('nombre_completo');
+        $nombre = Auth::user()->getEmpleado->nombre_empleado;
         $descrip = $request->input('descripcion');
-        $sector = $request->input('id_sector');
         $prioridad = $request->input('id_prioridad');
-        $fecha_requerida = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+
+        if($request->input('fecha_req')){
+            $fecha_requerida = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        }else{
+            $fecha_requerida = null;
+        }
+        
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $estado = Estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
    
@@ -148,16 +152,11 @@ class RequerimientoDeIngenieriaController extends Controller
 
         $Req_ing = Requerimiento_de_ingenieria::create([
             'id_solicitud' => $Solicitud->id_solicitud,
-            'id_empleado' => 1,
-            'id_sector' => $sector
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
         ]);
 
-        //return $Solicitud;
-        //$permisos = Permission::orderBy('name', 'asc')->get();
-        //$Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
-        return 'Creado con exito!';
-
-        return redirect()->route('permisos.index')->with('mensaje', 'Permiso creado exitosamente.');                      
+        return redirect()->route('r_i.index')->with('mensaje', 'Solicitud de requerimiento de ingenieria creado con exito.');                      
     }
     
     public function show($id)

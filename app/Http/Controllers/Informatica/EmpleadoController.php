@@ -110,24 +110,41 @@ class EmpleadoController extends Controller
     
     public function edit($id)
     {
-        $permiso = Permission::findOrFail($id);
-    
-        return view('Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
+        $empleado = Empleado::find($id);
+        $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
+        $puestos = Puesto_empleado::orderBy('titulo_puesto_empleado')->pluck('titulo_puesto_empleado', 'id_puesto_empleado');
+        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos'));
     }
     
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'nombre_completo' => 'required',
+            'email' => 'required',
+            'puesto' => 'required',
+            'sector' => 'required'
         ]);
-    
-        $permiso = Permission::find($id);
 
-        $permiso->update([
-            'name' => strtoupper($request->input('name'))
+        $nombre = $request->input('nombre_completo');
+        $email = $request->input('email');
+        $puesto = $request->input('puesto');
+        $sector = $request->input('sector');
+        if ($request->input('telefono')) {
+            $telefono = $request->input('telefono');
+        }else{
+            $telefono = null;
+        }
+        $empleado = Empleado::find($id);
+
+        $empleado->update([
+            'nombre_empleado' => $nombre,
+            'email_empleado' => $email,
+            'telefono_empleado' => $telefono,
+            'id_puesto_empleado' => $puesto,
+            'id_sector' => $sector
         ]);
     
-        return redirect()->route('permisos.index')->with('mensaje',$permiso->name.' editado exitosamente.');                        
+        return redirect()->route('empleados.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        
     }
     
     public function destroy($id)

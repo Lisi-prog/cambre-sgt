@@ -4,6 +4,7 @@ $(function(){
 
 function agregarUrgencia(){
     let prioridad = Number($(this).val());
+    console.log(prioridad);
     let des = document.getElementById("descrip_urgencia");
     let fec = document.getElementById("fecha_req");
     switch (prioridad) {
@@ -16,7 +17,7 @@ function agregarUrgencia(){
             fec.innerHTML = html_fecha;
             des.innerHTML = '';
             break;
-        case 4:
+        case 3:
             html = '<div class="form-group"> <label for="descrip" class="control-label fs-7" style="white-space: nowrap; ">Descripcion de la urgencia:</label> <span class="obligatorio">*</span> <textarea name="descripcion_urgencia" id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" required></textarea> </div>';
             des.innerHTML = html;
             break;
