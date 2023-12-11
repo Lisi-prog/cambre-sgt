@@ -57,7 +57,7 @@
                                     {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                     <th class='ml-3 text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Tipo servicio</th>
+                                    <th class='text-center' style="color:#fff;">Tipo proyecto</th>
                                     {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
                                     <th class='text-center' style="color:#fff;">Lider</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
@@ -74,7 +74,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->getTipoServicio->getSubTipos}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSubTipoServicio->nombre_subtipo_servicio}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$proyecto->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
 

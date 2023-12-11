@@ -24,13 +24,13 @@ class Servicio extends Model
         'fecha_inicio',
         'fecha_limite',
         'id_responsabilidad',
-        'id_tipo_servicio',
+        'id_subtipo_servicio',
         'id_prioridad'
     ];
 
-    public function getTipoServicio()
+    public function getSubTipoServicio()
     {
-        return $this->belongsTo(Tipo_servicio::class, 'id_tipo_servicio');
+        return $this->belongsTo(Subtipo_servicio::class, 'id_subtipo_servicio');
     }
 
     public function getResponsabilidad()

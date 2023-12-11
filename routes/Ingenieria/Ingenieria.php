@@ -11,17 +11,17 @@ use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimi
 use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 
 //Gestion de proyectos
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
+// Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
     Route::resource('proyectos', ProyectoController::class);
-});
+// });
 
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
+// Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
     Route::resource('r_i', RequerimientoDeIngenieriaController::class);
     Route::resource('p_m', PropuestaDeMejoraController::class);
     Route::resource('proyectos', ProyectoController::class);
-});
+// });
 
 Route::get('no_au/solicitud_servicio_ingenieria', [ServicioDeIngenieriaController::class, 'crearAlt'])->name('ssi.sa.crear');
 Route::post('no_au/solicitud_servicio_ingenieria/guardar', [ServicioDeIngenieriaController::class, 'guardarAlt'])->name('ssi.sa.guardar');

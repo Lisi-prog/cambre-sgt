@@ -47,7 +47,13 @@ class ProyectoController extends Controller
     {        
         //$permisos = Permission::orderBy('name', 'asc')->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
-        $proyectos = Servicio::where('id_subtipo_servicio', $tipo_servicio->id_tipo_servicio)->get();
+
+        foreach ($tipo_servicio->getSubTipos as $subTipo) {
+            $id_subtipos[] = $subTipo->id_subtipo_servicio;
+        }
+
+        $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
+
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos'));
     }
 
@@ -74,7 +80,7 @@ class ProyectoController extends Controller
             'fecha_req' => 'required',
             'prioridad' => 'required'
         ]);
-
+        return $request;
         $codigo_proyecto = $request->input('codigo_proyecto');
         $nombre_proyecto = $request->input('nombre_proyecto');
         $tipo_proyecto = $request->input('id_tipo_proyecto');
@@ -85,8 +91,9 @@ class ProyectoController extends Controller
     
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
         $estado = Estado::where('nombre_estado', 'espera')->first();
-        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
-        
+        // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
+        $tipo_servicio = $request->input('id_tipo_proyecto');
+
         $responsabilidad = Responsabilidad::create([
             // 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
             'id_empleado' => $lider,
@@ -96,7 +103,7 @@ class ProyectoController extends Controller
         $proyecto = Servicio::create([
             'codigo_servicio' => $codigo_proyecto,
             'nombre_servicio' => $nombre_proyecto,
-            'id_subtipo_servicio' => $tipo_servicio->id_tipo_servicio,
+            'id_subtipo_servicio' => $tipo_servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'fecha_inicio' => $fecha_ini,
             'id_prioridad' => $prioridad
@@ -138,6 +145,8 @@ class ProyectoController extends Controller
     
     public function show($id)
     {
+        $proyecto = Servicio::find($id);
+        return view('Ingenieria.Servicios.Proyectos.show',compact('proyecto'));
     }
     
     public function edit($id)

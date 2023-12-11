@@ -23,7 +23,7 @@ class Subtipo_servicio extends Model
         'id_tipo_servicio'
     ];
 
-    public function getSubTipos()
+    public function getTipoServicio()
     {
         return $this->belongsTo(Tipo_servicio::class, 'id_tipo_servicio');
     }
