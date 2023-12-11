@@ -16,14 +16,14 @@ class Estado extends Model
 
     protected $primaryKey = 'id_estado';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_estado',
     ];
 
-    public function getProyectos()
+    public function getSolicitudes()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->hasMany(Solicitud::class, 'id_estado');
     }
 }

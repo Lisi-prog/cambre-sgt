@@ -16,10 +16,12 @@ class Actualizacion extends Model
 
     protected $primaryKey = 'id_actualizacion';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'descripcion',
+        'fecha_limite',
+        'id_estado',
         'id_responsabilidad'
     ];
 

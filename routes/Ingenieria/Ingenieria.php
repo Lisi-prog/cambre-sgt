@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Informatica\GestionUsuarios\PermisoController;
 use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
 use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
-use App\Http\Controllers\Ingenieria\Proyectos\ProyectoController;
+use App\Http\Controllers\Ingenieria\Servicios\Proyectos\ProyectoController;
 use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RI\RequerimientoDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimientoController;
@@ -15,11 +15,12 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () 
     Route::resource('proyectos', ProyectoController::class);
 });
 
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
     Route::resource('r_i', RequerimientoDeIngenieriaController::class);
     Route::resource('p_m', PropuestaDeMejoraController::class);
+    Route::resource('proyectos', ProyectoController::class);
 });
 
 Route::get('no_au/solicitud_servicio_ingenieria', [ServicioDeIngenieriaController::class, 'crearAlt'])->name('ssi.sa.crear');

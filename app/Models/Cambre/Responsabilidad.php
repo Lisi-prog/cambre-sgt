@@ -16,12 +16,22 @@ class Responsabilidad extends Model
 
     protected $primaryKey = 'id_responsabilidad';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'id_empleado',
         'id_rol_empleado'
     ];
+
+    public function getServicios()
+    {
+        return $this->hasMany(Servicio::class, 'id_responsabilidad');
+    }
+
+    public function getEmpleado()
+    {
+        return $this->belongsTo(Empleado::class, 'id_empleado');
+    }
 
     public function getProyectos()
     {

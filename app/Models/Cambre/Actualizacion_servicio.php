@@ -6,24 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Etapa extends Model
+class Actualizacion_servicio extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'etapa';
+    protected $table = 'actualizacion_servicio';
 
-    protected $primaryKey = 'id_etapa';
+    protected $primaryKey = 'id_actualizacion_servicio';
 
     public $incrementing = true;
 
     protected $fillable = [ 
-        'nombre_etapa',
-        'descripcion_etapa',
-        'fecha_inicio',
-        'id_servicio',
-        'id_responsabilidad'
+        'id_actualizacion',
+        'id_servicio'
     ];
 
     public function getProyectos()

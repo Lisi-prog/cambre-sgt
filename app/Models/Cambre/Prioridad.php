@@ -16,14 +16,14 @@ class Prioridad extends Model
 
     protected $primaryKey = 'id_prioridad';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_prioridad',
     ];
 
-    public function getProyectos()
+    public function getSolicitudes()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->hasMany(Servicio::class, 'id_prioridad');
     }
 }

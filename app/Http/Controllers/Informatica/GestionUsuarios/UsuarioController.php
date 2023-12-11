@@ -156,10 +156,10 @@ class UsuarioController extends Controller
     
     public function destroy($id)
     {   
-        $rol = Role::findOrFail($id);
+        $user = User::findOrFail($id);
+        User::destroy($id);
 
-        Role::destroy($id);
-        return redirect()->route('roles.index')->with('mensaje','Rol'.$rol->name.' borrado con éxito!.');    
+        return redirect()->route('usuarios.index')->with('mensaje','El usuario '.$user->name.' borrado con éxito!.');    
         
     }
 

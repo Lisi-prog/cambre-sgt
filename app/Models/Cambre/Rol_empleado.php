@@ -12,7 +12,7 @@ class Rol_empleado extends Model
     
     public $timestamps = false;
     
-    protected $table = 'empleado';
+    protected $table = 'rol_empleado';
 
     protected $primaryKey = 'id_rol_empleado';
 

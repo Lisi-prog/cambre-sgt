@@ -16,14 +16,19 @@ class Tipo_servicio extends Model
 
     protected $primaryKey = 'id_tipo_servicio';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_tipo_servicio',
     ];
 
-    public function getProyectos()
+    public function getSubTipos()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->hasMany(Subtipo_servicio::class, 'id_tipo_servicio');
+    }
+
+    public function getSolicitudes()
+    {
+        return $this->hasMany(Solicitud::class, 'id_tipo_servicio');
     }
 }
