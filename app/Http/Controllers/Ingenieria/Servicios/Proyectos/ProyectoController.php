@@ -80,7 +80,7 @@ class ProyectoController extends Controller
             'fecha_req' => 'required',
             'prioridad' => 'required'
         ]);
-        return $request;
+        
         $codigo_proyecto = $request->input('codigo_proyecto');
         $nombre_proyecto = $request->input('nombre_proyecto');
         $tipo_proyecto = $request->input('id_tipo_proyecto');
