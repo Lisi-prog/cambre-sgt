@@ -23,8 +23,13 @@ class Actualizacion_servicio extends Model
         'id_servicio'
     ];
 
-    public function getProyectos()
+    public function getActualizacion()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Actualizacion::class, 'id_actualizacion');
+    }
+
+    public function getServicio()
+    {
+        return $this->belongsTo(Servicio::class, 'id_servicio');
     }
 }

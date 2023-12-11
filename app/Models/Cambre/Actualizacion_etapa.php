@@ -27,4 +27,9 @@ class Actualizacion_etapa extends Model
     {
         return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
     }
+
+    public function getActualizacion()
+    {
+        return $this->belongsTo(Actualizacion::class, 'id_actualizacion');
+    }
 }

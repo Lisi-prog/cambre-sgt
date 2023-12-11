@@ -21,6 +21,7 @@ class Actualizacion extends Model
     protected $fillable = [ 
         'descripcion',
         'fecha_limite',
+        'fecha_carga',
         'id_estado',
         'id_responsabilidad'
     ];
@@ -28,5 +29,10 @@ class Actualizacion extends Model
     public function getProyectos()
     {
         return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+    }
+
+    public function getEstado()
+    {
+        return $this->belongsTo(Estado::class, 'id_estado');
     }
 }

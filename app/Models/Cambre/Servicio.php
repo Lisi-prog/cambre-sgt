@@ -42,4 +42,19 @@ class Servicio extends Model
     {
         return $this->belongsTo(Prioridad::class, 'id_prioridad');
     }
+
+    public function getActualizaciones()
+    {
+        return $this->hasMany(Actualizacion_servicio::class, 'id_servicio');
+    }
+
+    public function getUltimaActualizacion()
+    {
+        return $this->hasMany(Actualizacion_servicio::class, 'id_servicio')->first();
+    }
+
+    public function getEtapas()
+    {
+        return $this->hasMany(Etapa::class, 'id_etapa');
+    }
 }

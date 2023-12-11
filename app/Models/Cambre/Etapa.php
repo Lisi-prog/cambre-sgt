@@ -30,4 +30,19 @@ class Etapa extends Model
     {
         return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
     }
+
+    public function getServicio()
+    {
+        return $this->belongsTo(Servicio::class, 'id_etapa');
+    }
+
+    public function getActualizaciones()
+    {
+        return $this->hasMany(Actualizacion_etapa::class, 'id_etapa');
+    }
+
+    public function getResponsable()
+    {
+        return $this->hasMany(Responsabilidad::class, 'id_responsabilidad');
+    }
 }
