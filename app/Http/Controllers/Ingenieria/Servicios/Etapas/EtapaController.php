@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ingenieria\Servicios\Proyectos;
+namespace App\Http\Controllers\Ingenieria\Servicios\Etapas;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -32,7 +32,7 @@ use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 
-class ProyectoController extends Controller
+class EtapaController extends Controller
 {
     function __construct()
     {
@@ -53,7 +53,7 @@ class ProyectoController extends Controller
         }
 
         $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
-        
+
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos'));
     }
 
@@ -70,67 +70,37 @@ class ProyectoController extends Controller
 
     public function store(Request $request)
     {
-        
+                             
         $this->validate($request, [
-            'codigo_proyecto' => 'required',
-            'nombre_proyecto' => 'required',
-            'id_tipo_proyecto' => 'required',
-            'lider' => 'required',
+            'nom_etapa' => 'required',
+            'responsable' => 'required',
             'fecha_ini' => 'required',
-            'fecha_req' => 'required',
-            'prioridad' => 'required'
+            'id_servicio' => 'required'
         ]);
         
-        $codigo_proyecto = $request->input('codigo_proyecto');
-        $nombre_proyecto = $request->input('nombre_proyecto');
-        $tipo_proyecto = $request->input('id_tipo_proyecto');
-        $lider = $request->input('lider');
+        $nombre_etapa = $request->input('nom_etapa');
+        $responsable = $request->input('responsable');
+        $servicio = $request->input('id_servicio');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
-        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
-        $prioridad = $request->input('prioridad');
-    
-        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
+         
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $estado = Estado::where('nombre_estado', 'espera')->first();
-        // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
-        $tipo_servicio = $request->input('id_tipo_proyecto');
 
         $responsabilidad = Responsabilidad::create([
-            // 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-            'id_empleado' => $lider,
+            'id_empleado' => $responsable,
             'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        ]);
-        
-        $proyecto = Servicio::create([
-            'codigo_servicio' => $codigo_proyecto,
-            'nombre_servicio' => $nombre_proyecto,
-            'id_subtipo_servicio' => $tipo_servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-            'fecha_inicio' => $fecha_ini,
-            'id_prioridad' => $prioridad
-        ]);
-
-        $actualizacionServicio = Actualizacion::create([
-            'descripcion' => 'Creacion de proyecto.',
-            'fecha_limite' => $fecha_req,
-            'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacion_servicio = Actualizacion_servicio::create([
-            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
-            'id_servicio' => $proyecto->id_servicio
         ]);
 
         $etapa = Etapa::create([
-            'descripcion_etapa' => 'Creacion de etapa.',
+            'descripcion_etapa' => $nombre_etapa,
             'fecha_inicio' => $fecha_ini,
-            'id_servicio' => $proyecto->id_servicio,
+            'id_servicio' => $servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);
 
         $actualizacionEtapa = Actualizacion::create([
             'descripcion' => 'Creacion de etapa.',
-            'fecha_limite' => $fecha_req,
+            'fecha_limite' => $fecha_ini,
             'id_estado' => $estado->id_estado,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);
@@ -140,7 +110,7 @@ class ProyectoController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
-        return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');                      
+        return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La etapa se ha creado con exito.');                      
     }
     
     public function show($id)
@@ -183,8 +153,7 @@ class ProyectoController extends Controller
     public function gestionar($id)
     {
         $proyecto = Servicio::find($id);
-        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto'));
     }
 
 }

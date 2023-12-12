@@ -25,7 +25,7 @@
     <section class="section">
         <div class="section-header d-flex">
             <div class="">
-                <div class="titulo page__heading py-1 fs-5">Ver Proyecto</div>
+                <div class="titulo page__heading py-1 fs-5">Gestionar Proyecto</div>
             </div>
         </div>
         <div class="section-body">
@@ -164,6 +164,153 @@
                                     {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
                                     {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
                                     {!! Form::close() !!} --}}
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
+                                        Nueva
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- <br>
+                            <div class="text-center"><h5>Viviendas</h5></div>                         --}}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div>
+                                <table id="example" class="table table-hover mt-2" class="display">
+                                    <thead style="">
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Etapa</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha fin real</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Ultima actualizacion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($proyecto->getEtapas as $etapa)
+                                            <tr>    
+                                                <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
+                                                
+                                                <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
+
+                                                <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
+
+                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
+
+                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
+
+                                                <td class= 'text-center'>+late</td>
+
+                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
+
+                                                <td class='text-center'>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
+                                                            {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="col-6">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
+                                                            {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- ------------- --}}
+
+                {{-- Ordenes del proyecto --}}
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-head">
+                            <br>
+                            <div class="row m-auto">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                    <h5 class="text-center">Ordenes</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
+                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
+                                    {!! Form::close() !!} --}}
+                                </div>
+                            </div>
+                            {{-- <br>
+                            <div class="text-center"><h5>Viviendas</h5></div>                         --}}
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div>
+                                <table id="example" class="table table-hover mt-2" class="display">
+                                    <thead style="">
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Orden</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Estado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Supervisa</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha fin real</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Ultimo parte</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
+                                    </thead>
+                                    <tbody>
+                                        {{-- @foreach ($proyecto->getEtapas as $etapa)
+                                            <tr>    
+                                                <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
+                                                
+                                                <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
+
+                                                <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
+
+                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
+
+                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
+
+                                                <td class= 'text-center'>+late</td>
+
+                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
+
+                                                <td>
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
+                                                    {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
+                                                    {!! Form::close() !!}
+                                                </td>
+                                            </tr>
+                                        @endforeach --}}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- ------------- --}}
+
+                {{-- Partes del proyecto --}}
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-head">
+                            <br>
+                            <div class="row m-auto">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                    <h5 class="text-center">Partes</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
+                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
+                                    {!! Form::close() !!} --}}
                                 </div>
                             </div>
                             {{-- <br>
@@ -214,7 +361,8 @@
                         </div>
                     </div>
                 </div>
-                 {{-- ------------- --}}
+                {{-- ------------- --}}
+
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
@@ -238,6 +386,7 @@
             </div>
         </div>
     </section>
+    @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection
 

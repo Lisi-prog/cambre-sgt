@@ -97,6 +97,13 @@
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-12">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::submit('Gestionar', ['class' => 'btn btn-primary w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
                                             </td>
 {{--
                                             @if (is_null($Ri->getSolicitud->fecha_requerida))

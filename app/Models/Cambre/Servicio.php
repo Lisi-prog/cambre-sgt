@@ -55,6 +55,6 @@ class Servicio extends Model
 
     public function getEtapas()
     {
-        return $this->hasMany(Etapa::class, 'id_etapa');
+        return $this->hasMany(Etapa::class, 'id_servicio');
     }
 }

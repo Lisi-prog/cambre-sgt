@@ -33,7 +33,7 @@ class Etapa extends Model
 
     public function getServicio()
     {
-        return $this->belongsTo(Servicio::class, 'id_etapa');
+        return $this->belongsTo(Servicio::class, 'id_servicio');
     }
 
     public function getActualizaciones()
