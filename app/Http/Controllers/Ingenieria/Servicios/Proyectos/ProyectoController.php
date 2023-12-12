@@ -88,7 +88,8 @@ class ProyectoController extends Controller
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $prioridad = $request->input('prioridad');
-    
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
         $estado = Estado::where('nombre_estado', 'espera')->first();
         // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
@@ -112,6 +113,7 @@ class ProyectoController extends Controller
         $actualizacionServicio = Actualizacion::create([
             'descripcion' => 'Creacion de proyecto.',
             'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
             'id_estado' => $estado->id_estado,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);
@@ -131,6 +133,7 @@ class ProyectoController extends Controller
         $actualizacionEtapa = Actualizacion::create([
             'descripcion' => 'Creacion de etapa.',
             'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
             'id_estado' => $estado->id_estado,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);

@@ -211,7 +211,7 @@
                                                             {!! Form::close() !!}
                                                         </div>
                                                         <div class="col-6">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
+                                                            {!! Form::open(['method' => 'DELETE', 'route' => ['etapas.destroy', $etapa->id_etapa], 'style' => '']) !!}
                                                             {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100']) !!}
                                                             {!! Form::close() !!}
                                                         </div>

@@ -61,6 +61,11 @@
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Usuarios</span>
                 </a>
             </li>
+            <li>
+                <a class="nav-link" href="{{route('empleados.index')}}" title="Empleados">
+                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Empleados</span>
+                </a>
+            </li>
         </ul>
     </li>
 {{-- @endcan --}}
@@ -122,6 +127,11 @@
                     </li>
                 
                     <li>
+                        <a class="nav-link" href="{{route('proyectos.index')}}" title="Proyectos">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Proyectos</span>
+                        </a>
+                    </li>
+                    {{-- <li>
                         <a class="nav-link" href="" title="Requerimientos de servicios de mantenimiento">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
                         </a>
@@ -142,7 +152,7 @@
                         <a class="nav-link" href="" title="Requerimiento de ingenieria">
                             <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>R.I.</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
 

@@ -82,7 +82,8 @@ class EtapaController extends Controller
         $responsable = $request->input('responsable');
         $servicio = $request->input('id_servicio');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
-         
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $estado = Estado::where('nombre_estado', 'espera')->first();
 
@@ -95,12 +96,13 @@ class EtapaController extends Controller
             'descripcion_etapa' => $nombre_etapa,
             'fecha_inicio' => $fecha_ini,
             'id_servicio' => $servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
         ]);
 
         $actualizacionEtapa = Actualizacion::create([
             'descripcion' => 'Creacion de etapa.',
             'fecha_limite' => $fecha_ini,
+            'fecha_carga' => $fecha_carga,
             'id_estado' => $estado->id_estado,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);
@@ -143,11 +145,21 @@ class EtapaController extends Controller
     
     public function destroy($id)
     {
-        $permiso = Permission::findOrFail($id);
+        $permiso = Etapa::findOrFail($id);
 
-        Permission::destroy($id);
+        $servicio = $permiso->id_servicio;
 
-        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
+        $act_etapa = Actualizacion_etapa::where('id_etapa', $id)->get();
+        
+        foreach ($act_etapa as $una_act_etapa) {
+            $id_actualizacion = $una_act_etapa->id_actualizacion;
+            Actualizacion_etapa::destroy($una_act_etapa->id_actualizacion_etapa);
+            Actualizacion::destroy($id_actualizacion);
+        }
+
+        Etapa::destroy($id);
+
+        return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La etapa se ha eliminado con exito.');               
     }
 
     public function gestionar($id)
