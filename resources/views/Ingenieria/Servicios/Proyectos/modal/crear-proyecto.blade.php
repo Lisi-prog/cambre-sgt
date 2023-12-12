@@ -9,29 +9,65 @@
             {!! Form::open(['route' => 'proyectos.store', 'method' => 'POST', 'class' => 'formulario']) !!}
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
-                            {!! Form::label('nom_proyecto', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('codigo_proyecto', 'Codigo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nom_proyecto', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('codigo_proyecto', null, [
+                                'class' => 'form-control',
+                                'required' => 'required',
+                                'id' => 'codigo_proyecto'
+                            ]) !!}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('id_tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="obligatorio">*</span>
+                            {!! Form::select('id_tipo_proyecto', $Tipos_servicios, null, [
+                                'placeholder' => 'Seleccionar',
+                                'class' => 'form-select',
+                                'id' => 'id_tipo_proyecto',
+                                'required'
+                            ]) !!}
                         </div>
                     </div>
                 </div>
+
+
+                <div class="form-group">
+                    {!! Form::label('nom_proyecto', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                    <span class="obligatorio">*</span>
+                    {!! Form::text('nom_proyecto', null, ['class' => 'form-control']) !!}
+                </div>
+
+
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
                             <div class="form-group">
-                                {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 <span class="obligatorio">*</span>
-                                {!! Form::select('responsable', $empleados, null, [
+                                {!! Form::select('lider', $empleados, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select',
-                                    'id' => 'responsable'
+                                    'id' => 'lider'
                                 ]) !!}
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="obligatorio">*</span>
+                            {!! Form::select('prioridad', $prioridades, null, [
+                                'placeholder' => 'Seleccionar',
+                                'class' => 'form-select',
+                                'id' => 'prioridad',
+                                'required'
+                            ]) !!}
+                        </div>
+                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
                             {!! Form::label('fec_ini', 'Fecha inicio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
@@ -45,6 +81,19 @@
                         </div>
                         <div class="" hidden>
                             {!! Form::text('id_servicio', $proyecto->id_servicio, ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="obligatorio">*</span>
+                            {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
+                                'min' => '2023-01-01',
+                                'max' => \Carbon\Carbon::now()->year . '-12',
+                                'id' => 'fec_req',
+                                'class' => 'form-control'
+                            ]) !!}
                         </div>
                     </div>
                 </div>

@@ -53,11 +53,10 @@
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Tipo orden</th>
                                     {{-- <th class='text-center' style="color:#fff;">Tipo orden</th> --}}
-                                    <th class='text-center' style="color:#fff;">Lider</th>
+                                    <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Fecha inicio</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
-                                    <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
                                     {{--@foreach ($ordenes as $orden)

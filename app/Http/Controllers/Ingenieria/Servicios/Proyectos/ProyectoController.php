@@ -51,10 +51,12 @@ class ProyectoController extends Controller
         foreach ($tipo_servicio->getSubTipos as $subTipo) {
             $id_subtipos[] = $subTipo->id_subtipo_servicio;
         }
-
         $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
-        
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos'));
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridades'));
     }
 
     public function create()
@@ -189,5 +191,4 @@ class ProyectoController extends Controller
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados'));
     }
-
 }

@@ -177,5 +177,5 @@
         });
     });
 </script>
-
+@include('Ingenieria.Servicios.Proyectos.modal.crear-proyecto')
 @endsection
