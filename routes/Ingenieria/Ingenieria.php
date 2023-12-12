@@ -6,6 +6,7 @@ use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
 use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 use App\Http\Controllers\Ingenieria\Servicios\Proyectos\ProyectoController;
 use App\Http\Controllers\Ingenieria\Servicios\Etapas\EtapaController;
+use App\Http\Controllers\Ingenieria\Servicios\Ordenes\OrdenController;
 use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RI\RequerimientoDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimientoController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('etapas', EtapaController::class);
+    Route::resource('ordenes', OrdenController::class);
 // });
 
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {

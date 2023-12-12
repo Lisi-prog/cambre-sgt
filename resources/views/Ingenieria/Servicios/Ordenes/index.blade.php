@@ -8,22 +8,7 @@
     
     <div class="section-header d-flex">
         <div class="">
-            <h4 class="titulo page__heading my-auto">Proyectos</h4>
-        </div>
-        <div class="ms-auto">
-            {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['proyectos.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!}
-            {{-- @endcan --}}
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                {!! Form::close() !!} --}}
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
-                    Nuevo "modal"
-                </button>
-            </div>
+            <h4 class="titulo page__heading my-auto">Ordenes</h4>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -66,8 +51,8 @@
                                     {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                     <th class='ml-3 text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Tipo proyecto</th>
-                                    {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
+                                    <th class='text-center' style="color:#fff;">Tipo orden</th>
+                                    {{-- <th class='text-center' style="color:#fff;">Tipo orden</th> --}}
                                     <th class='text-center' style="color:#fff;">Lider</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Fecha inicio</th>
@@ -75,45 +60,46 @@
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($proyectos as $proyecto)
+                                    {{--@foreach ($ordenes as $orden)
                                         <tr>
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{ $proyecto->getEstado->nombre_estado}}</td> --}}
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{ $orden->getEstado->nombre_estado}}</td> --}}
+                                        {{--    
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->codigo_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getSubTipoServicio->nombre_subtipo_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSubTipoServicio->nombre_subtipo_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getPrioridad->nombre_prioridad}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->getPrioridad->nombre_prioridad}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPrioridad->fecha_inicio)->format('d-m-Y')}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getPrioridad->fecha_inicio)->format('d-m-Y')}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getPrioridad->fecha_limite)->format('d-m-Y')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPrioridad->fecha_limite)->format('d-m-Y')}}</td>
 
                                             <td>
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.show', $orden->id_servicio], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Ver', ['class' => 'btn btn-danger w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.show', $orden->id_servicio], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.gestionar', $orden->id_servicio], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Gestionar', ['class' => 'btn btn-primary w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>
                                             </td>
+                                            --}}
 {{--
                                             @if (is_null($Ri->getSolicitud->fecha_requerida))
                                             <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
@@ -140,7 +126,7 @@
                                                 </div>
                                             </td> --}}
                                         </tr>
-                                    @endforeach
+                                    {{--@endforeach--}}
                                 </tbody>
                             </table>
                         </div>
