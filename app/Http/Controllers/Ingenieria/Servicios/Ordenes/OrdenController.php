@@ -31,6 +31,8 @@ use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
+use App\Models\Cambre\Orden_trabajo;
+use App\Models\Cambre\Parte_trabajo;
 
 class OrdenController extends Controller
 {
@@ -190,4 +192,62 @@ class OrdenController extends Controller
         return view('Ingenieria.Servicios.Ordenes.gestionar',compact('orden', 'empleados'));
     }
 
+    public function crearOrden(Request $request)
+    {
+        // return $request;
+        $tipo_orden = $request->input('tipo_orden');
+        $servicio = $request->input('id_servicio');
+        switch ($tipo_orden) {
+            case 1:
+                # Crear orden de trabajo
+                $this->validate($request, [
+                    'num_etapa' => 'required',
+                    'nom_orden' => 'required',
+                    'tipo_orden_trabajo' => 'required',
+                    'responsable' => 'required',
+                    'fecha_ini' => 'required',
+                    'fecha_req' => 'required'
+                ]);
+
+                $id_etapa = $request->input('num_etapa');
+                $nombre_orden = $request->input('nom_orden');
+                $tipo_orden_trabajo = $request->input('tipo_orden_trabajo');
+                $id_responsable = $request->input('responsable');
+                $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+                $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+                $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+                $estado = Estado::where('nombre_estado', 'en proceso')->first();
+
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => $id_responsable,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $orden_trabajo = Orden_trabajo::create([
+                    'nombre_orden_trabajo' => $nombre_orden,
+                    'id_etapa' => $id_etapa,
+                    'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
+                    'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                ]);
+
+                Parte_trabajo::create([
+                    'observacion' => 'Generacion de orden de trabajo',
+                    'fecha' => $fecha_carga,
+                    'fecha_limite' => $fecha_req,
+                    'fecha_carga' => $fecha_carga,
+                    'horas' => '00:00',
+                    'id_estado' => $estado->id_estado,
+                    'id_orden_trabajo' => $orden_trabajo->id_orden_trabajo,
+                    'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                ]);
+                return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de trabajo y el parte de trabajo se ha creado con exito.'); 
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    }
 }

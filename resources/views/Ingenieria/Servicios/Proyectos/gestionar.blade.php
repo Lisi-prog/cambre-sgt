@@ -261,6 +261,29 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
+                                        @foreach ($proyecto->getEtapas as $etapa)
+                                            @foreach ($etapa->getOrdenTrabajo as $ordenTrabajo)
+                                                <tr>
+                                                    <td class= 'text-center'> {{$ordenTrabajo->nombre_orden_trabajo}}</td>
+                                                    <td class= 'text-center'> Orden de trabajo</td>
+                                                    <td>
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
+                                                        {!! Form::submit('Ver parte', ['class' => 'btn btn-warning w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                        {{-- @foreach ($proyecto->getEtapas as $lasEtapas)
+                                            @foreach ($lasEtapas as $unaEtapa)
+                                            {{$unaEtapa}}
+                                                 @foreach ($unaEtapa->getOrdenesTrabajo as $ordenes)
+                                                    <tr>
+                                                        <td class= 'text-center'> {{$orden->nombre_orden_trabajo}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endforeach
+                                        @endforeach --}}
                                         {{-- @foreach ($proyecto->getEtapas as $etapa)
                                             <tr>    
                                                 <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>

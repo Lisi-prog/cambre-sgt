@@ -15,6 +15,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 //Gestion de proyectos
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
+    Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('etapas', EtapaController::class);
     Route::resource('ordenes', OrdenController::class);

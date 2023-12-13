@@ -20,13 +20,13 @@ class Orden_trabajo extends Model
 
     protected $fillable = [ 
         'nombre_orden_trabajo',
-        'id_estado',
+        'id_tipo_orden_trabajo',
         'id_etapa',
         'id_responsabilidad'
     ];
 
-    public function getProyectos()
+    public function getEtapa()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Etapa::class, 'id_etapa');
     }
 }

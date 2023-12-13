@@ -45,4 +45,9 @@ class Etapa extends Model
     {
         return $this->hasMany(Responsabilidad::class, 'id_responsabilidad');
     }
+
+    public function getOrdenTrabajo()
+    {
+        return $this->hasMany(Orden_trabajo::class, 'id_etapa');
+    }
 }

@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Orden</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'etapas.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => 'ordenes.crear', 'method' => 'POST', 'class' => 'formulario']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -16,7 +16,8 @@
                             {!! Form::select('tipo_orden', [1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 5 => 'Orden de mecanizado',4 => 'Orden de mantenimiento'], null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
-                                    'id' => 'selected-tipo-orden'
+                                    'id' => 'selected-tipo-orden',
+                                    'required'
                                 ]) !!}
                         </div>
                     </div>
@@ -30,6 +31,7 @@
                             {!! Form::select('num_etapa', $etapas, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
+                                    'required',
                                     'id' => 'num_etapa'
                                 ]) !!}
                         </div>
