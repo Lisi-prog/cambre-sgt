@@ -11,17 +11,12 @@
             <h4 class="titulo page__heading my-auto">Proyectos</h4>
         </div>
         <div class="ms-auto">
-            {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['proyectos.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!}
-            {{-- @endcan --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                 {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
                 {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
                 {!! Form::close() !!} --}}
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
-                    Nuevo "modal"
+                    Nuevo   
                 </button>
             </div>
         </div>
@@ -62,7 +57,7 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
-                                    {{-- <th class='text-center' style="color:#fff;">Prioridad</th> --}}
+                                    <th class='text-center' style="color:#fff;">Prioridad</th>
                                     {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                     <th class='ml-3 text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
@@ -78,6 +73,7 @@
                                     @foreach ($proyectos as $proyecto)
                                         <tr>
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{ $proyecto->getEstado->nombre_estado}}</td> --}}
+                                            <td></td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
 
@@ -87,11 +83,11 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$proyecto->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->getPrioridad->nombre_prioridad}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getPrioridad->fecha_inicio)->format('d-m-Y')}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getPrioridad->fecha_limite)->format('d-m-Y')}}</td>
+                                            <td class= 'text-center'style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y')}}</td>
+                                            
+                                            <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
                                             <td>
                                                 <div class="row">

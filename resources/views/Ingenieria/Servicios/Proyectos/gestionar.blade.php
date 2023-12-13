@@ -405,6 +405,9 @@
                 </div>
             </div>
         </div>
+        <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
+            
+        </script>
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')

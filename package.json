@@ -7,7 +7,8 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "type": "module"
     },
     "devDependencies": {
         "axios": "^0.21",
@@ -31,4 +32,5 @@
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.12"
     }
+
 }

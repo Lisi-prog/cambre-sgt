@@ -36,9 +36,9 @@
 
 
                 <div class="form-group">
-                    {!! Form::label('nom_proyecto', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                    {!! Form::label('nombre', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                     <span class="obligatorio">*</span>
-                    {!! Form::text('nom_proyecto', null, ['class' => 'form-control']) !!}
+                    {!! Form::text('nombre_proyecto', null, ['class' => 'form-control']) !!}
                 </div>
 
 
@@ -78,9 +78,6 @@
                                 'id' => 'fec_ini',
                                 'class' => 'form-control'
                             ]) !!}
-                        </div>
-                        <div class="" hidden>
-                            {!! Form::text('id_servicio', $proyecto->id_servicio, ['class' => 'form-control']) !!}
                         </div>
                     </div>
                     

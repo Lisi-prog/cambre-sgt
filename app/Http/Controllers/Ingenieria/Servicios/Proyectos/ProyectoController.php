@@ -73,15 +73,14 @@ class ProyectoController extends Controller
 
     public function store(Request $request)
     {
-        
         $this->validate($request, [
             'codigo_proyecto' => 'required',
             'nombre_proyecto' => 'required',
             'id_tipo_proyecto' => 'required',
             'lider' => 'required',
+            'prioridad' => 'required',
             'fecha_ini' => 'required',
-            'fecha_req' => 'required',
-            'prioridad' => 'required'
+            'fecha_req' => 'required'
         ]);
         
         $codigo_proyecto = $request->input('codigo_proyecto');
