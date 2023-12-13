@@ -25,7 +25,7 @@
                                 <span class="obligatorio">*</span>
                                 {!! Form::select('responsable', $empleados, null, [
                                     'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
+                                    'class' => 'form-select form-group',
                                     'id' => 'responsable'
                                 ]) !!}
                             </div>
@@ -57,3 +57,4 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>

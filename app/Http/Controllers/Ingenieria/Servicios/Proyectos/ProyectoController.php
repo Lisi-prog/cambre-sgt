@@ -31,6 +31,7 @@ use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
+use App\Models\Cambre\Tipo_orden_trabajo;
 
 class ProyectoController extends Controller
 {
@@ -188,7 +189,9 @@ class ProyectoController extends Controller
     public function gestionar($id)
     {
         $proyecto = Servicio::find($id);
+        $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados'));
+        $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden'));
     }
 }

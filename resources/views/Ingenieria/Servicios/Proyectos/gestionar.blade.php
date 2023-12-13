@@ -240,6 +240,9 @@
                                     <h5 class="text-center">Ordenes</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
+                                        Nueva
+                                    </button>
                                     {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
                                     {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
                                     {!! Form::close() !!} --}}
@@ -254,13 +257,7 @@
                                 <table id="example" class="table table-hover mt-2" class="display">
                                     <thead style="">
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Orden</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Supervisa</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha fin real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Ultimo parte</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Tipo orden</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
@@ -387,6 +384,8 @@
         </div>
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
+    @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
+
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection
 
