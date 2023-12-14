@@ -278,4 +278,24 @@ class OrdenController extends Controller
         
         return $orden_trabajo_arr;
     }
+
+    public function obtenerPartesDeTrabajo($id)
+    {
+        $ordenTrabajo = Orden_trabajo::find($id);
+        $partes_de_trabajo_arr = array();
+
+        foreach ($ordenTrabajo->getPartes as $parte_trabajo) {
+            array_push($partes_de_trabajo_arr, (object)[
+                'fecha_carga' => Carbon::parse($parte_trabajo->fecha_carga)->format('d-m-Y H:i'),
+                'estado' => $parte_trabajo->getEstado->nombre_estado,
+                'observaciones' => $parte_trabajo->observacion,
+                'fecha' => Carbon::parse($parte_trabajo->fecha)->format('d-m-Y'),
+                'fecha_limite' => Carbon::parse($parte_trabajo->fecha_limite)->format('d-m-Y'),
+                'horas' => Carbon::parse($parte_trabajo->horas)->format('H:i'),
+                'responsable' => $parte_trabajo->getResponsable->getEmpleado->nombre_empleado,
+                'supervisor' => $parte_trabajo->getOrden->getResponsable->getEmpleado->nombre_empleado,
+            ]);
+        }
+        return $partes_de_trabajo_arr;
+    }
 }

@@ -38,4 +38,9 @@ class Parte_trabajo extends Model
     {
         return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
+
+    public function getOrden()
+    {
+        return $this->belongsTo(Orden_trabajo::class, 'id_orden_trabajo');
+    }
 }

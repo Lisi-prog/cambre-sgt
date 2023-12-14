@@ -18,6 +18,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
     Route::post('/orden/obtener-una-orden-etapa/{id}',[OrdenController::class, 'ObtenerOrdenTrabajo']);
+    Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('etapas', EtapaController::class);
     Route::resource('ordenes', OrdenController::class);

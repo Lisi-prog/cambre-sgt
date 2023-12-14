@@ -148,7 +148,7 @@
                     </div>
                 </div>
                 {{-- ------------- --}}
-
+                
                 {{-- Etapas del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="card">
@@ -240,7 +240,7 @@
 
                 {{-- Ordenes del proyecto --}}
                 
-                    <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes' hidden>
                         <div class="card">
                             <div class="card-head">
                                 <br>
@@ -435,7 +435,7 @@
             {{-- ------------- --}}
 
                 {{-- Partes del proyecto --}}
-                <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-12 col-sm-12 col-md-12" id='parte_de_trabajo' hidden>
                     <div class="card">
                         <div class="card-head">
                             <br>
@@ -459,39 +459,17 @@
                                 <div>
                                 <table id="example" class="table table-hover mt-2" class="display">
                                     <thead style="">
-                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Etapa</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Fecha carga</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Observaciones</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha fin real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Ultima actualizacion</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Horas</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Supervisor</th>                                                           
                                     </thead>
-                                    <tbody>
-                                        @foreach ($proyecto->getEtapas as $etapa)
-                                            <tr>    
-                                                <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-                                                
-                                                <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
-
-                                                <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
-
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
-
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
-
-                                                <td class= 'text-center'>+late</td>
-
-                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
-
-                                                <td>
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                    {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
-                                                    {!! Form::close() !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                    <tbody id="renglones_parte">
+                                        
                                     </tbody>
                                 </table>
                                 </div>
@@ -553,6 +531,7 @@
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
+    @include('Ingenieria.Servicios.Proyectos.modal.ver-orden')
 
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection
