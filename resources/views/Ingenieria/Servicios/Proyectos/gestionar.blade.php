@@ -443,7 +443,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
-                                    <h5 class="text-center">Partes</h5>
+                                    <h5 class="text-center">Parte de trabajo</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
