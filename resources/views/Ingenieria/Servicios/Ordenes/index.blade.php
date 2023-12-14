@@ -47,13 +47,13 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
-                                    <th class='ml-3 text-center' style="color:#fff;">Proyecto</th>
+                                    <th class='text-center' style="color:#fff;">Prioridad</th>
+                                    <th class='text-center' style="color:#fff;">Proyecto</th>
+                                    <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
                                     <th class='text-center' style="color:#fff;">Tipo de orden</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Responsable</th>
-                                    <th class='text-center' style="color:#fff;">Prioridad</th>
-                                    <th class='text-center' style="color:#fff;">Fecha inicio</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
@@ -61,21 +61,21 @@
                                     
                                     @foreach ($ordenes_trabajo as $orden_trabajo)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->id_prioridad}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->descripcion_etapa}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->nombre_orden_trabajo}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getTipoOrden()}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->getEstado->nombre_estado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->getEstado->nombre_estado ?? ''}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getResponsable->getEmpleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">*Prioridad*</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha)->format('d-m-Y')}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite)->format('d-m-Y')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">

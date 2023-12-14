@@ -198,6 +198,7 @@ class OrdenController extends Controller
                     'tipo_orden_trabajo' => 'required',
                     'responsable' => 'required',
                     'fecha_ini' => 'required',
+                    'id_estado' => 'required',
                     'fecha_req' => 'required'
                 ]);
 
@@ -207,10 +208,11 @@ class OrdenController extends Controller
                 $id_responsable = $request->input('responsable');
                 $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
                 $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+                $id_estado = $request->input('id_estado');
                 $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
 
                 $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                $estado = Estado::where('nombre_estado', 'en proceso')->first();
+                $estado = Estado::where('id_estado', $id_estado)->first();
 
                 $responsabilidad = Responsabilidad::create([
                     'id_empleado' => $id_responsable,

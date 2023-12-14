@@ -278,13 +278,11 @@ CREATE TABLE `orden_mecanizado` (
   `fecha_requerida` date,
   `ruta_plano` varchar(500) DEFAULT NULL,
   `observaciones` varchar(100) DEFAULT NULL,
-  `id_prioridad` int,
   `id_orden_manufactura` int,
   `id_responsabilidad` int,
   PRIMARY KEY (`id_orden_mecanizado`),
   CONSTRAINT `pk_id_orden_mecanizado_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
-  CONSTRAINT `pk_id_orden_mecanizado_x_orden_manufactura` FOREIGN KEY (`id_orden_manufactura`) REFERENCES `orden_manufactura`(`id_orden_manufactura`),
-  CONSTRAINT `pk_id_orden_mecanizado_x_prioridad` FOREIGN KEY (`id_prioridad`) REFERENCES `prioridad`(`id_prioridad`)
+  CONSTRAINT `pk_id_orden_mecanizado_x_orden_manufactura` FOREIGN KEY (`id_orden_manufactura`) REFERENCES `orden_manufactura`(`id_orden_manufactura`)
 );
 
 CREATE TABLE `parte_mecanizado` (
