@@ -218,7 +218,7 @@
                                                     </div>
                                                     <div class="row my-2">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" onclick="crearCuadrOrdenes({{$etapa->id_etapa}})">
+                                                            <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
                                                                 Ordenes
                                                             </button>
                                                             {{-- {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
@@ -501,10 +501,17 @@
                 </div>
             </div>
         </div>
+
+        <script type="module"> 
+            import {crearCuadrOrdenes, cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+            window.crearCuadrOrdenes = crearCuadrOrdenes;
+            window.cargarModalVerOrden = cargarModalVerOrden;
+        </script>
+
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
             
         </script>
-        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script>
+        {{-- <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script> --}}
 
         <script>
             $(document).ready(function () {
