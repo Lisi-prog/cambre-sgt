@@ -283,7 +283,7 @@ class OrdenController extends Controller
     {
         $ordenTrabajo = Orden_trabajo::find($id);
         $partes_de_trabajo_arr = array();
-
+        
         foreach ($ordenTrabajo->getPartes as $parte_trabajo) {
             array_push($partes_de_trabajo_arr, (object)[
                 'fecha_carga' => Carbon::parse($parte_trabajo->fecha_carga)->format('d-m-Y H:i'),

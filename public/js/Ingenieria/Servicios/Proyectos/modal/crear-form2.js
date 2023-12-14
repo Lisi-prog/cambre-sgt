@@ -31,7 +31,7 @@ function crearCuadrOrdenes(id_etapa){
                                             </button>
                                         </div>
                                         <div class="col"> 
-                                            <button type="button" class="btn btn-warning" onclick="obtenerPartes('+element.id_orden+')">Partes</button> 
+                                            <button type="button" class="btn btn-warning" onclick="obtenerPartes(`+element.id_orden+`)">Partes</button> 
                                         </div> 
                                     </div> 
                                 </td> 
@@ -169,19 +169,19 @@ function obtenerPartes(id_orden){
         },
     success: function (response) {
         console.log(response);
-        response.forEach(element => {
-            html_parte += `<tr>
+         response.forEach(element => {
+             html_parte += `<tr>
                                 <td class="text-center">`+element.fecha_carga+`</td>
-                                <td class="text-center">`+element.estado+`</td>
-                                <td class="text-center">`+element.observaciones+`</td>
-                                <td class="text-center">`+element.fecha+`</td>
-                                <td class="text-center">`+element.fecha_limite+`</td>
-                                <td class="text-center">`+element.horas+`</td>
-                                <td class="text-center">`+element.responsable+`</td>
-                                <td class="text-center">`+element.supervisor+`</td>
-                            </tr>`
-        });
-        div_cuadro_parte.innerHTML = html_parte;
+                                 <td class="text-center">`+element.estado+`</td>
+                                 <td class="text-center">`+element.observaciones+`</td>
+                                 <td class="text-center">`+element.fecha+`</td>
+                                 <td class="text-center">`+element.fecha_limite+`</td>
+                                 <td class="text-center">`+element.horas+`</td>
+                                 <td class="text-center">`+element.responsable+`</td>
+                                 <td class="text-center">`+element.supervisor+`</td>
+                             </tr>`
+         });
+         div_cuadro_parte.innerHTML = html_parte;
     },
     error: function (error) {
         console.log(error);
