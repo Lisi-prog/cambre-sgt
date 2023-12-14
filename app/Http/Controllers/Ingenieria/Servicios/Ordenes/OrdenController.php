@@ -226,8 +226,8 @@ class OrdenController extends Controller
 
                 Parte_trabajo::create([
                     'observacion' => 'Generacion de orden de trabajo',
-                    'fecha' => $fecha_carga,
-                    'fecha_limite' => $fecha_ini,
+                    'fecha' => $fecha_ini,
+                    'fecha_limite' => $fecha_req,
                     'fecha_carga' => $fecha_carga,
                     'horas' => '00:00',
                     'id_estado' => $estado->id_estado,
