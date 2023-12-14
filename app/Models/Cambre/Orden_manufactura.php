@@ -34,4 +34,9 @@ class Orden_manufactura extends Model
     {
         return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
     }
+
+    public function getTipoOrden()
+    {
+        return 'Manufactura';
+    }
 }

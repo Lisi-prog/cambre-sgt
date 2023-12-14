@@ -47,16 +47,8 @@ class OrdenController extends Controller
     
     public function index(Request $request)
     {        
-        //$permisos = Permission::orderBy('name', 'asc')->get();
-        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'orden')->first();
-        /*
-        foreach ($tipo_servicio->getSubTipos as $subTipo) {
-            $id_subtipos[] = $subTipo->id_subtipo_servicio;
-        }
-        */
-        //$ordenes = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
-        
-        return view('Ingenieria.Servicios.Ordenes.index');
+        $ordenes_trabajo = Orden_trabajo::orderBy('id_orden_trabajo')->get();
+        return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
     }
 
     public function create()

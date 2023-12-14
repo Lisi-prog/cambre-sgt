@@ -35,4 +35,9 @@ class Orden_mecanizado extends Model
     {
         return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
     }
+
+    public function getTipoOrden()
+    {
+        return 'Mecanizado';
+    }
 }

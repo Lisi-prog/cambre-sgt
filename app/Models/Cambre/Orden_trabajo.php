@@ -30,7 +30,7 @@ class Orden_trabajo extends Model
         return $this->belongsTo(Etapa::class, 'id_etapa');
     }
 
-    public function getParteTrabajo()
+    public function getPartes()
     {
         return $this->hasMany(Parte_trabajo::class, 'id_orden_trabajo');
     }
@@ -43,5 +43,10 @@ class Orden_trabajo extends Model
     public function getResponsable()
     {
         return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
+    }
+
+    public function getTipoOrden()
+    {
+        return 'Trabajo';
     }
 }

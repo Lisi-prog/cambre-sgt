@@ -47,85 +47,59 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
-                                    {{-- <th class='text-center' style="color:#fff;">Prioridad</th> --}}
-                                    {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
-                                    <th class='ml-3 text-center' style="color:#fff;">ID</th>
-                                    <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Tipo orden</th>
-                                    {{-- <th class='text-center' style="color:#fff;">Tipo orden</th> --}}
-                                    <th class='text-center' style="color:#fff;">Responsable</th>
+                                    <th class='ml-3 text-center' style="color:#fff;">Proyecto</th>
+                                    <th class='text-center' style="color:#fff;">Orden</th>
+                                    <th class='text-center' style="color:#fff;">Tipo de orden</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
+                                    <th class='text-center' style="color:#fff;">Responsable</th>
+                                    <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color:#fff;">Fecha inicio</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
+                                    <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
-                                    {{--@foreach ($ordenes as $orden)
+                                    
+                                    @foreach ($ordenes_trabajo as $orden_trabajo)
                                         <tr>
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{ $orden->getEstado->nombre_estado}}</td> --}}
-                                        {{--    
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->codigo_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->nombre_orden_trabajo}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getSubTipoServicio->nombre_subtipo_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getTipoOrden()}}</td>
+                                            
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->getEstado->nombre_estado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getResponsable->getEmpleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getPrioridad->nombre_prioridad}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">*Prioridad*</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPrioridad->fecha_inicio)->format('d-m-Y')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha)->format('d-m-Y')}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPrioridad->fecha_limite)->format('d-m-Y')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite)->format('d-m-Y')}}</td>
 
                                             <td>
-                                                <div class="row">
+                                                {{-- <div class="row">
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.show', $orden->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes_trabajo.show', $ordenes_trabajo->id_servicio], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Ver', ['class' => 'btn btn-danger w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.show', $orden->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes_trabajo.show', $ordenes_trabajo->id_servicio], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.gestionar', $orden->id_servicio], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes_trabajo.gestionar', $orden->id_servicio], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Gestionar', ['class' => 'btn btn-primary w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </td>
-                                            --}}
-{{--
-                                            @if (is_null($Ri->getSolicitud->fecha_requerida))
-                                            <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
-                                            @else
-                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_requerida)->format('d-m-Y')}}</td>
-                                            @endif
-                                            
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud}}</td>
-
-                                            <td>
-                                                <div class="row">
-                                                    <div class="col-6">{!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                    <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                </div>
-                                            </td> --}}
                                         </tr>
-                                    {{--@endforeach--}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
