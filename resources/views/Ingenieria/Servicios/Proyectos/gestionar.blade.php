@@ -503,9 +503,10 @@
         </div>
 
         <script type="module"> 
-            import {crearCuadrOrdenes, cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+            import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
             window.crearCuadrOrdenes = crearCuadrOrdenes;
             window.cargarModalVerOrden = cargarModalVerOrden;
+            window.obtenerPartes = obtenerPartes;
         </script>
 
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">

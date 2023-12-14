@@ -171,3 +171,40 @@ function verOrdenTrabajo(id_orden){
     }
     }));
 }
+export function obtenerPartes(id_orden){
+    let cuadro_oculto_de_partes = document.getElementById("parte_de_trabajo");
+    let html_parte = '';
+    let div_cuadro_parte = document.getElementById("renglones_parte");
+    if ($('#parte_de_trabajo').is(":hidden")) {
+        cuadro_oculto_de_partes.hidden = false;
+    }else{
+        cuadro_oculto_de_partes.hidden = true;
+    }
+
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-partes-orden/'+id_orden, 
+        data: {
+            id_orden: id_orden,
+        },
+    success: function (response) {
+        console.log(response);
+         response.forEach(element => {
+             html_parte += `<tr>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                 <td class="text-center">`+element.estado+`</td>
+                                 <td class="text-center">`+element.observaciones+`</td>
+                                 <td class="text-center">`+element.fecha+`</td>
+                                 <td class="text-center">`+element.fecha_limite+`</td>
+                                 <td class="text-center">`+element.horas+`</td>
+                                 <td class="text-center">`+element.responsable+`</td>
+                                 <td class="text-center">`+element.supervisor+`</td>
+                             </tr>`
+         });
+         div_cuadro_parte.innerHTML = html_parte;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
