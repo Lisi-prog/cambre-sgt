@@ -266,12 +266,12 @@ class OrdenController extends Controller
             'tipo' => $orden_trabajo->getTipoOrdenTrabajo->nombre_tipo_orden_trabajo,
             'estado' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->getEstado->nombre_estado,
             'responsable' => $orden_trabajo->getResponsable->getEmpleado->nombre_empleado,
-            'fecha_inicio' => $orden_trabajo->getParteTrabajo->sortBy('id_parte_trabajo')->first()->fecha,
-            'fecha_limire' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->fecha_limite,
+            'fecha_inicio' => Carbon::parse($orden_trabajo->getParteTrabajo->sortBy('id_parte_trabajo')->first()->fecha)->format('d-m-Y'),
+            'fecha_limite' => Carbon::parse($orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->fecha_limite)->format('d-m-Y'),
             'fecha_fin_real' => '+late',
-            'duracion_estima' => '00:00',
+            'duracion_estimada' => '00:00',
             'duracion_real' => '00:00',
-            'fecha_ultimo_parte' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->fecha_carga,
+            'fecha_ultimo_parte' => Carbon::parse($orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->fecha_carga)->format('d-m-Y'),
             'descripcion_ultimo_parte' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->observacion,
             'supervisa' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->getResponsable->getEmpleado->nombre_empleado
             ]);

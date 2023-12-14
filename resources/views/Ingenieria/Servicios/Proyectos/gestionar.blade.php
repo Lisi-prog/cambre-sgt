@@ -331,7 +331,7 @@
 
                 {{-- Orden de trabajo del proyecto --}}
                 
-                <div id='cuadro-orden-de-trabajo' class="col-xs-12 col-sm-12 col-md-12">
+                <div id='cuadro-orden-de-trabajo' class="col-xs-12 col-sm-12 col-md-12" hidden>
                     <div class="card">
                         <div class="card-head">
                             <br>
@@ -356,13 +356,13 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <div>
-                                <table id="example" class="table table-hover mt-2" class="display">
+                                <table class="table table-hover mt-2" class="display">
                                     <thead style="">
                                         <tr>
                                             <th class="text-center" scope="col" style="color:#fff; border: 1px solid #fff;" colspan="9">Orden</th>
                                             <th class="text-center" scope="col" style="color:#fff; border: 1px solid #fff;" colspan="3">Ultimo parte</th>
                                         </tr>
-                                        <th class="text-center" scope="col" style="color:#fff;">Orden</th>
+                                        <th class="text-center" scope="col" style="color:#fff; width: 50%;">Orden</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Tipo orden</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
@@ -372,9 +372,10 @@
                                         <th class="text-center" scope="col" style="color:#fff;">Duracion estimada</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Duracion real</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width: 50%;">Descripcion</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Supervisa</th>                                                              
                                     </thead>
+                                    
                                     <tbody id="cuadro-ordenes-trabajo">
                                         {{-- @foreach ($proyecto->getEtapas as $etapa)
                                             @foreach ($etapa->getOrdenTrabajo as $ordenTrabajo)
@@ -525,6 +526,30 @@
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
             
         </script>
+        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#exampless').DataTable({
+                    language: {
+                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                            zeroRecords: 'No se ha encontrado registros',
+                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                            infoEmpty: 'No se ha encontrado registros',
+                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                            search: 'Buscar',
+                            paginate:{
+                                first:"Prim.",
+                                last: "Ult.",
+                                previous: 'Ant.',
+                                next: 'Sig.',
+                            },
+                        },
+                        "aaSorting": []
+                });
+            });
+        </script>
+
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
