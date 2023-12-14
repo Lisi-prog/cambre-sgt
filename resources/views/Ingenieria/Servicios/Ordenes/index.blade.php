@@ -77,26 +77,19 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite)->format('d-m-Y')}}</td>
 
-                                            <td>
-                                                {{-- <div class="row">
+                                            <td class='text-center' style="vertical-align: middle;">
+                                                <div class="row">
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes_trabajo.show', $ordenes_trabajo->id_servicio], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Ver', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden_trabajo}})">
+                                                            ver orden
+                                                        </button>
                                                     </div>
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes_trabajo.show', $ordenes_trabajo->id_servicio], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                        <button type="button" class="btn 'btn btn-warning w-100'" data-bs-toggle="modal" data-bs-target="#verOrdenModal">
+                                                            parte
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div class="row mt-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes_trabajo.gestionar', $orden->id_servicio], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Gestionar', ['class' => 'btn btn-primary w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                </div> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -108,12 +101,11 @@
             </div>
         </div>
     </div>
-    
+    <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script>
 </section>
-    {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
-{{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
-{{-- <script src="{{ asset('js/modal/success.js') }}"></script> --}}
+@include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
+
 
 <script>
     $(document).ready(function () {

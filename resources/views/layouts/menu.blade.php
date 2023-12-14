@@ -131,6 +131,11 @@
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Proyectos</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{route('ordenes.index')}}" title="Ordenes">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Ordenes</span>
+                        </a>
+                    </li>
                     {{-- <li>
                         <a class="nav-link" href="" title="Requerimientos de servicios de mantenimiento">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
