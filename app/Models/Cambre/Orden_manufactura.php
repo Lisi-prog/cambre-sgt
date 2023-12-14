@@ -16,7 +16,7 @@ class Orden_manufactura extends Model
 
     protected $primaryKey = 'id_orden_manufactura';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'revision',

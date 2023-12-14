@@ -16,7 +16,7 @@ class Estado_solicitud extends Model
 
     protected $primaryKey = 'id_estado_solicitud';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_estado_solicitud'

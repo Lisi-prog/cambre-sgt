@@ -16,7 +16,7 @@ class Rol_empleado extends Model
 
     protected $primaryKey = 'id_rol_empleado';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_rol_empleado'

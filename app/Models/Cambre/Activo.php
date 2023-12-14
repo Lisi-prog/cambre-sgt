@@ -16,7 +16,7 @@ class Activo extends Model
 
     protected $primaryKey = 'id_activo';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_activo'

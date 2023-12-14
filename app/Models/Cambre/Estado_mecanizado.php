@@ -16,7 +16,7 @@ class Estado_mecanizado extends Model
 
     protected $primaryKey = 'id_estado_mecanizado';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_estado_mecanizado',

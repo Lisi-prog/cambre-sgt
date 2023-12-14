@@ -16,7 +16,7 @@ class Orden_mecanizado extends Model
 
     protected $primaryKey = 'id_orden_mecanizado';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'revision',

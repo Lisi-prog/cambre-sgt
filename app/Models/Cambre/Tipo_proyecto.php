@@ -16,7 +16,7 @@ class Tipo_proyecto extends Model
 
     protected $primaryKey = 'id_tipo_proyecto';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_tipo_proyecto',

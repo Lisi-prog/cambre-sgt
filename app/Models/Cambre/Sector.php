@@ -16,7 +16,7 @@ class Sector extends Model
 
     protected $primaryKey = 'id_sector';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_sector'

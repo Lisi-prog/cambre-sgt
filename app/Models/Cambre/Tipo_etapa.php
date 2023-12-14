@@ -16,7 +16,7 @@ class Tipo_etapa extends Model
 
     protected $primaryKey = 'id_tipo_etapa';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_tipo_etapa'

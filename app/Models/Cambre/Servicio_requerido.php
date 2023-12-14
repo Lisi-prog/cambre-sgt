@@ -16,7 +16,7 @@ class Servicio_requerido extends Model
 
     protected $primaryKey = 'id_servicio_requerido';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_servicio_requerido'

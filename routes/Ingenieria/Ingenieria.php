@@ -16,6 +16,8 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
+    Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
+    Route::post('/orden/obtener-una-orden-etapa/{id}',[OrdenController::class, 'ObtenerOrdenTrabajo']);
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('etapas', EtapaController::class);
     Route::resource('ordenes', OrdenController::class);

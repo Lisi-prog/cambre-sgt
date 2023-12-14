@@ -16,7 +16,7 @@ class Tipo_orden_trabajo extends Model
 
     protected $primaryKey = 'id_tipo_orden_trabajo';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_tipo_orden_trabajo',

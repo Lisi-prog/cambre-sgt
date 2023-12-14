@@ -16,7 +16,7 @@ class parte_mecanizado extends Model
 
     protected $primaryKey = 'id_parte_mecanizado';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'observacion',

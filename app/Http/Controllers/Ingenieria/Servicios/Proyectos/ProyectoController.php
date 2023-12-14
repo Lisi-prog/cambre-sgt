@@ -80,9 +80,18 @@ class ProyectoController extends Controller
             'lider' => 'required',
             'prioridad' => 'required',
             'fecha_ini' => 'required',
-            'fecha_req' => 'required'
+            'fecha_req' => 'required',
+            'prioridad' => 'required'
+        ],
+        [
+            'codigo_proyecto.required' => 'Se necesita el codigo del proyecto',
+            'nombre_proyecto.required' => 'Se necesita el nombre del proyecto',
+            'id_tipo_proyeto.required' => 'Se necesita el tipo del proyecto',
+            'lider.required' => 'Se necesita el nombre del proyecto',
+            'fecha_ini.required' => 'Se necesita la fecha de inicio',
+            'fecha_req.required' => 'Se necesita la fecha requerida',
+            'prioridad.required' => 'Se necesita la prioridad'
         ]);
-        
         $codigo_proyecto = $request->input('codigo_proyecto');
         $nombre_proyecto = $request->input('nombre_proyecto');
         $tipo_proyecto = $request->input('id_tipo_proyecto');

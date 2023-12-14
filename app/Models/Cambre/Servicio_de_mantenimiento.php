@@ -16,7 +16,7 @@ class Servicio_de_mantenimiento extends Model
 
     protected $primaryKey = 'id_servicio_de_mantenimiento';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'id_solicitud',

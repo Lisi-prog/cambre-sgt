@@ -250,4 +250,40 @@ class OrdenController extends Controller
                 break;
         }
     }
+
+    public function obtenerOrdenesDeUnaEtapa($id){
+        $etapa = Etapa::find($id);
+        $ordenes = array();
+
+        foreach ($etapa->getOrdenTrabajo as $orden_trabajo) {
+            array_push($ordenes, (object)[
+                'id_orden' => $orden_trabajo->id_orden_trabajo,
+                'orden' => $orden_trabajo->nombre_orden_trabajo,
+                'tipo' => 'Orden de trabajo',]);
+        }
+        return $ordenes;
+    }
+
+    public function ObtenerOrdenTrabajo($id){
+        $orden_trabajo = Orden_trabajo::find($id);
+        $orden_trabajo_arr = array();
+
+        array_push($orden_trabajo_arr, (object)[
+            'id_orden' => $orden_trabajo->id_orden_trabajo,
+            'orden' => $orden_trabajo->nombre_orden_trabajo,
+            'tipo' => $orden_trabajo->getTipoOrdenTrabajo->nombre_tipo_orden_trabajo,
+            'estado' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->getEstado->nombre_estado,
+            'responsable' => $orden_trabajo->getResponsable->getEmpleado->nombre_empleado,
+            'fecha_inicio' => $orden_trabajo->getParteTrabajo->sortBy('id_parte_trabajo')->first()->fecha,
+            'fecha_limire' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->fecha_limite,
+            'fecha_fin_real' => '+late',
+            'duracion_estima' => '00:00',
+            'duracion_real' => '00:00',
+            'fecha_ultimo_parte' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->fecha_carga,
+            'descripcion_ultimo_parte' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->observacion,
+            'supervisa' => $orden_trabajo->getParteTrabajo->sortByDesc('id_parte_trabajo')->first()->getResponsable->getEmpleado->nombre_empleado
+            ]);
+        
+        return $orden_trabajo_arr;
+    }
 }

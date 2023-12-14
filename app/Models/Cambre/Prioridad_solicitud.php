@@ -16,7 +16,7 @@ class Prioridad_solicitud extends Model
 
     protected $primaryKey = 'id_prioridad_solicitud';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_prioridad_solicitud'

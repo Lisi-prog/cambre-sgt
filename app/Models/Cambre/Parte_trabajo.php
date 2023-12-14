@@ -16,7 +16,7 @@ class Parte_trabajo extends Model
 
     protected $primaryKey = 'id_parte_trabajo';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'observacion',
@@ -29,8 +29,13 @@ class Parte_trabajo extends Model
         'id_responsabilidad'
     ];
 
-    public function getProyectos()
+    public function getEstado()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Estado::class, 'id_estado');
+    }
+
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 }

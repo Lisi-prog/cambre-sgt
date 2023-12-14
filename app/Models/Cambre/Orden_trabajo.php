@@ -16,7 +16,7 @@ class Orden_trabajo extends Model
 
     protected $primaryKey = 'id_orden_trabajo';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_orden_trabajo',
@@ -28,5 +28,20 @@ class Orden_trabajo extends Model
     public function getEtapa()
     {
         return $this->belongsTo(Etapa::class, 'id_etapa');
+    }
+
+    public function getParteTrabajo()
+    {
+        return $this->hasMany(Parte_trabajo::class, 'id_orden_trabajo');
+    }
+
+    public function getTipoOrdenTrabajo()
+    {
+        return $this->belongsTo(Tipo_orden_trabajo::class, 'id_tipo_orden_trabajo');
+    }
+    
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 }

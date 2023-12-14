@@ -16,7 +16,7 @@ class Maquinaria extends Model
 
     protected $primaryKey = 'id_maquinaria';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'codigo_maquinaria',

@@ -16,7 +16,7 @@ class Subtipo_servicio extends Model
 
     protected $primaryKey = 'id_subtipo_servicio';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [ 
         'nombre_subtipo_servicio',
