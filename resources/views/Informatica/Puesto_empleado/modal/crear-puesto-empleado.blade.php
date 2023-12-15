@@ -31,7 +31,7 @@
                             <span class="obligatorio">*</span>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="text" class="form-control" name="costo_hora" required>
+                                <input type="text" class="form-control" name="costo_hora" required data-type="currency">
                             </div>
                             {{-- {!! Form::text('costo_hora', null, ['class' => 'form-control']) !!} --}}
                         </div>
