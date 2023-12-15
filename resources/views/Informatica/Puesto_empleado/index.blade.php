@@ -2,26 +2,24 @@
 
 @section('content')
 
+@include('layouts.modal.delete', ['modo' => 'Agregar'])
+
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h4 class="titulo page__heading my-auto mr-5">Empleados</h4>
+            <h4 class="titulo page__heading my-auto">Puesto empleado</h4>
         </div>
-        {!! Form::open(['method' => 'GET', 'route' => ['puesto_empleado.index'], 'class' => 'd-flex justify-content-end']) !!}
-            {!! Form::submit('Puesto de empleado', ['class' => 'btn btn-success my-1']) !!}
-        {!! Form::close() !!}
         <div class="ms-auto">
-            {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['empleados.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!}
-            {{-- @endcan --}}
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearPuestoEmpleadoModal">
+                Nuevo puesto
+            </button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -30,54 +28,40 @@
                         </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead>
-                                    <th class='text-center' style="color:#fff;">Codigo</th>
-                                    <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Email</th>
-                                    <th class='text-center' style="color:#fff;">Telefono</th>
-                                    <th class='text-center' style="color:#fff;">Puesto</th>
-                                    <th class='text-center' style="color:#fff;">Sector</th>
+                                <thead style="height:50px;">
+                                    <th class='ml-3 text-center' style="color:#fff;">Puesto</th>
+                                    <th class='text-center' style="color:#fff;">Costo hora</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($empleados as $empleado)
-                                        <tr class="my-auto">
-                                            <td class='text-center'>{{$empleado->id_empleado}}</td>
+                                    @foreach ($puestos_empleados as $puesto_empleado)
+                                        <tr>
+                                            <td class='text-center'>{{$puesto_empleado->titulo_puesto_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->nombre_empleado}}</td>
-
-                                            <td class='text-center'>{{$empleado->email_empleado}}</td>
-
-                                            <td class='text-center'>{{$empleado->telefono}}</td>
-
-                                            <td class='text-center'>{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
-
-                                            <td class='text-center'>{{$empleado->getSector->nombre_sector}}</td>
+                                            <td class='text-center'>{{'$ ' . number_format($puesto_empleado->costo_hora, 2, ',', '.')}}</td>
 
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
+                                                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarPuestoEmpleadoModal" onclick="cargarModalEditar({{$puesto_empleado->id_puesto_empleado}}, this)">
+                                                        Editar
+                                                    </button>
+                                                        {{-- {!! Form::open(['method' => 'GET', 'route' => ['puesto_empleado.edit', $puesto_empleado->id_puesto_empleado], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
-                                                        {!! Form::close() !!}
+                                                        {!! Form::close() !!} --}}
                                                     {{-- @endcan --}}
 
                                                     {{-- @can('BORRAR-ROL') --}}
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['empleados.destroy', $empleado->id_empleado],
+                                                            'route' => ['puesto_empleado.destroy', $puesto_empleado->id_puesto_empleado],
+                                                            'onclick' => "return confirm('Estas seguro que desea ELIMINAR el puesto empleado?",
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger','onclick' => "return confirm('¿Está seguro que desea ELIMINAR el empleado?'"]) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
-
-                                                    {{-- @can('AGREGAR-PERMISOS')
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['rubros.edit', $rubro->id], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    @endcan --}}
                                                 </div>
                                             </td>
                                         </tr>
@@ -90,12 +74,34 @@
             </div>
         </div>
     </div>
+    {{-- <script src="{{ asset('js/input-number-two-decimal.js') }}"></script> --}}
 </section>
+@include('Informatica.Puesto_empleado.modal.crear-puesto-empleado')
+@include('Informatica.Puesto_empleado.modal.editar-puesto-empleado')
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/input-number-two-decimal.js') }}"></script> --}}
+    <script src="{{ asset('js/input-number-two-decimal.js') }}"></script>
+{{-- <script srck="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
 
-{{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
 {{-- <script src="{{ asset('js/modal/success.js') }}"></script> --}}
+<script>
+    function cargarModalEditar(id, b){
+        let input_puesto = document.getElementById('input_puesto');
+        let costo_hora = document.getElementById('input-costo_hora');
+        let id_puesto = document.getElementById('input_id_puesto');
 
+        // console.log(id);
+        // console.log(b.parentNode.parentNode.parentNode.children[0].innerText);
+        // console.log(b.parentNode.parentNode.parentNode.children[1].innerText);
+        let nombre_puesto = b.parentNode.parentNode.parentNode.children[0].innerText;
+        let precio_hora = b.parentNode.parentNode.parentNode.children[1].innerText;
+
+        input_puesto.value = nombre_puesto;
+        costo_hora.value = precio_hora.replace('$ ', '').replace('.', '').replace(',', '.');
+        id_puesto.value = id;
+    }
+    
+</script>
 <script>
     $(document).ready(function () {
         $('#example').DataTable({

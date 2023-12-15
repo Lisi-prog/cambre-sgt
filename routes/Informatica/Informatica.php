@@ -5,6 +5,7 @@ use App\Http\Controllers\Informatica\GestionUsuarios\PermisoController;
 use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
 use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 use App\Http\Controllers\Informatica\EmpleadoController;
+use App\Http\Controllers\Informatica\PuestoEmpleadoController;
 
 //Gestion de usuario
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER-USUARIOS|VER-ROLES']], function () {
@@ -14,8 +15,10 @@ use App\Http\Controllers\Informatica\EmpleadoController;
     Route::get('usuario/permisos/{id}', [RolController::class, 'verPermisosxRol'])->name('roles.permisos');
     Route::post('usuario/permisos/{id}/guardar', [RolController::class, 'guardarPermisosxRol'])->name('roles.guardarpermisos');
     Route::post('/usuarios/buscarpermisosdelrol', [RolController::class, 'buscarpermisosdelrol']);
+    Route::get('/puesto_empleado/editar-modal', [PuestoEmpleadoController::class, 'updateOrden'])->name('puesto_empleado.editar');
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('empleados', EmpleadoController::class);
+    Route::resource('puesto_empleado', PuestoEmpleadoController::class);
 // });
 
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-ROLES']], function () {

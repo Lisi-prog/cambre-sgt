@@ -28,7 +28,7 @@
 </head>
 
 <body id="body" class="sidebar-mini">
-    
+    <script src="{{ asset('js/jquery3.6.0.js') }}"></script>
 
 <div id="app">
     <style>
