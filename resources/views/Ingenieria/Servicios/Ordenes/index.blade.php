@@ -48,7 +48,7 @@
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
                                     <th class='text-center' style="color:#fff;">Prioridad</th>
-                                    <th class='text-center' style="color:#fff;">Proyecto</th>
+                                    <th class='text-center' style="color:#fff; width:20vh">Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
                                     <th class='text-center' style="color:#fff;">Tipo de orden</th>
@@ -62,8 +62,10 @@
                                     @foreach ($ordenes_trabajo as $orden_trabajo)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->id_prioridad}}</td>
+                                            
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}" style="text-decoration:none; font-variant: none;">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}} <i class="fas fa-eye"></i></abbr></td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;" title="{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->descripcion_etapa}}</td>
 
@@ -81,7 +83,7 @@
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden_trabajo}})">
-                                                            ver orden
+                                                            ver
                                                         </button>
                                                     </div>
                                                     <div class="col-6">
@@ -102,6 +104,13 @@
         </div>
     </div>
     <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script>
+    <script src="{{ asset('js/change-td-color.js') }}"></script>
+    {{-- <script>
+        window.addEventListener("load", myInitFunction);
+        function myInitFunction(){
+            console.log('hola')
+        }
+    </script> --}}
 </section>
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
