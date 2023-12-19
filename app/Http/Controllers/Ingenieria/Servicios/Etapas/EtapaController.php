@@ -45,16 +45,8 @@ class EtapaController extends Controller
     
     public function index(Request $request)
     {        
-        //$permisos = Permission::orderBy('name', 'asc')->get();
-        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
-
-        foreach ($tipo_servicio->getSubTipos as $subTipo) {
-            $id_subtipos[] = $subTipo->id_subtipo_servicio;
-        }
-
-        $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
-
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos'));
+        $etapas = Etapa::orderBy('id_etapa')->get();
+        return view('Ingenieria.Servicios.Etapas.index', compact('etapas'));
     }
 
     public function create()
