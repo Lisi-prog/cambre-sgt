@@ -30,6 +30,7 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
+                                    <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color:#fff;">Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Lider</th>
@@ -40,13 +41,15 @@
                                 <tbody>
                                     @foreach ($etapas as $etapa)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$etapa->getServicio->codigo_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$etapa->getServicio->prioridad_servicio}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$etapa->getServicio->nombre_servicio}}" style="text-decoration:none; font-variant: none;">{{$etapa->getServicio->codigo_servicio}} <i class="fas fa-eye"></i></abbr></td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->descripcion_etapa}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->getResponsable->getEmpleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{'trello'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
@@ -75,7 +78,7 @@
         </div>
     </div>
 </section>
-
+<script src="{{ asset('js/change-td-color.js') }}"></script>
 <script>
     $(document).ready(function () {
         $('#example').DataTable({

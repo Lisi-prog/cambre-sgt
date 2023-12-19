@@ -61,7 +61,7 @@
                                     
                                     @foreach ($ordenes_trabajo as $orden_trabajo)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->id_prioridad}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->getServicio->prioridad_servicio}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}" style="text-decoration:none; font-variant: none;">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}} <i class="fas fa-eye"></i></abbr></td>
 

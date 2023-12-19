@@ -73,7 +73,7 @@
                                     @foreach ($proyectos as $proyecto)
                                         <tr>
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{ $proyecto->getEstado->nombre_estado}}</td> --}}
-                                            <td></td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
 
