@@ -33,6 +33,7 @@ use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Orden_trabajo;
 use App\Models\Cambre\Parte_trabajo;
+use App\Models\Cambre\Tipo_orden_trabajo;
 
 class OrdenController extends Controller
 {
@@ -299,5 +300,17 @@ class OrdenController extends Controller
             ]);
         }
         return $partes_de_trabajo_arr;
+    }
+
+    public function obtenerTipoTrabajo(){
+        return Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->get();
+    }
+
+    public function obtenerEmpleados(){
+        return Empleado::orderBy('nombre_empleado')->get();
+    }
+
+    public function obtenerEstados(){
+        return Estado::orderBy('nombre_estado')->get();
     }
 }

@@ -145,7 +145,7 @@
             </div>
         </div>
     </div>
-    
+    <script src="{{ asset('js/change-td-color.js') }}"></script>
 </section>
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 

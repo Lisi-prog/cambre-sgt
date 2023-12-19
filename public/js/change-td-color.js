@@ -51,5 +51,52 @@ function changeTdColor() {
         }
     }
     //--------------------------------
+    calcularDiferenciaFechas();
+}
+
+function calcularDiferenciaFechas(){
+    let fecha_hoy = new Date();
+    let mes = fecha_hoy.getMonth() + 1;
+    let str_fechahoy = fecha_hoy.getFullYear()+'-'+mes+'-'+fecha_hoy.getDate();
+    str_fechahoy = str_fechahoy.toString();
+
+    var fechaInicio = new Date(str_fechahoy).getTime();
+
+    const values = document.querySelectorAll("tr");
+    
+    var text_var = "Fecha limite"
+    var elem = $('th').filter(function() {
+        return $(this).text().trim() == text_var;
+        });
+    var row_index_first = elem.index();
+
+    //Colores de los distintos estado
+    for (let i = 1; i < values.length; i++) { // iterate all thorugh td
+        values[i].children[row_index_first].style.color = "#fff";
+        fechaFin    = new Date(castDate(values[i].children[row_index_first].innerHTML)).getTime();
+        diff = fechaFin - fechaInicio;
+        diasDife = diff/(1000*60*60*24);
+
+        if (diasDife >= 10) {
+            values[i].children[row_index_first].style.backgroundColor = "#109E09";
+        }
+
+        if (diasDife < 10) {
+            values[i].children[row_index_first].style.backgroundColor = "#E46B11";
+        }
+
+        if (diasDife <= 5) {
+            values[i].children[row_index_first].style.backgroundColor = "#E41111";
+        }
+    }
+    //--------------------------------
+}
+
+function castDate(str_fecha){
+        str_fecha = str_fecha.replaceAll('-','');
+        let dia = str_fecha.substring(0, 2);
+        let mes = str_fecha.substring(2, 4);
+        let anio = str_fecha.substring(4, 8);
+        return anio+'-'+mes+'-'+dia;
 }
 

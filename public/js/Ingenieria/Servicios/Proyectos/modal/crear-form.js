@@ -12,7 +12,9 @@ function modificarFormulario(){
         //var html = '<div class="row"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> <div class="form-group"> <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de trabajo:</label> <span class="obligatorio">*</span> <input class="form-control" name="nom_orden" type="text" id="nom_orden" required> </div> </div> </div> <div class="row"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> <div class="form-group"> <div class="form-group"> <label for="tipo_orden_trabajo" class="control-label fs-7" style="white-space: nowrap;">Tipo de orden trabajo:</label> <span class="obligatorio">*</span> <select class="form-select form-group" id="tipo_orden_trabajo" name="tipo_orden_trabajo" required><option selected="selected" value="">Seleccionar</option><option value="5">Externo</option><option value="4">Gestion</option><option value="2">Herramental</option><option value="3">Procesos</option><option value="1">Producto</option></select> </div> </div> </div> </div> <div class="row"> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> <div class="form-group"> <div class="form-group"> <label for="responsable" class="control-label fs-7" style="white-space: nowrap;">Responsable:</label> <span class="obligatorio">*</span> <select class="form-select form-group" id="responsable" name="responsable" required><option selected="selected" value="">Seleccionar</option><option value="1">Alejandro Virgillo</option></select> </div> </div> </div> <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> <div class="form-group"> <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label> <span class="obligatorio">*</span> <input min="2023-01-01" max="2023-12" id="fec_ini" class="form-control" name="fecha_ini" type="date" value="2023-12-12" required> </div> </div></div>';
         let html = opcion1
         formulario.innerHTML += html;
-
+        cargarTipoOrdenTrabajo();
+        cargarEmpleados();
+        cargarEstados();
         break;
     case 2:
         formulario.innerHTML = '';
@@ -50,7 +52,6 @@ export function crearCuadrOrdenes(id_etapa){
             id_etapa: id_etapa,
         },
     success: function (response) {
-        console.log(response);
         response.forEach(element => {
             html_orden += `<tr>
                                 <td class= "text-center"> `+element.orden+`</td> 
@@ -78,8 +79,6 @@ export function crearCuadrOrdenes(id_etapa){
     }));
 }
 export function cargarModalVerOrden(id_orden){
-    console.log('jajajamodal');
-
     let input_orden = document.getElementById("input-orden");
     let input_tipo = document.getElementById("input-tipo");
     let input_estado = document.getElementById("input-estado");
@@ -100,7 +99,6 @@ export function cargarModalVerOrden(id_orden){
             id_orden: id_orden,
         },
     success: function (response) {
-        console.log(response);
         response.forEach(element => {
             input_orden.value = element.orden;
             input_tipo.value = element.tipo;
@@ -146,8 +144,6 @@ function verOrdenTrabajo(id_orden){
             id_orden: id_orden,
         },
     success: function (response) {
-        console.log(response);
-        console.log('hola');
         response.forEach(element => {
             var html_odt = `<tr>
                             <td class="text-center"></td>
@@ -188,7 +184,6 @@ export function obtenerPartes(id_orden){
             id_orden: id_orden,
         },
     success: function (response) {
-        console.log(response);
          response.forEach(element => {
              html_parte += `<tr>
                                 <td class="text-center">`+element.fecha_carga+`</td>
@@ -202,6 +197,79 @@ export function obtenerPartes(id_orden){
                              </tr>`
          });
          div_cuadro_parte.innerHTML = html_parte;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+
+function cargarTipoOrdenTrabajo(){
+    let c_bx_tipo_orden = document.getElementById("tipo_orden_trabajo");
+    let html_tipo_orden = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-tipo-orden', 
+        data: {
+            
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_tipo_orden += `
+                                <option value="`+element.id_tipo_orden_trabajo+`">`+element.nombre_tipo_orden_trabajo
+                                +`</option> 
+                                `
+        });
+        c_bx_tipo_orden.innerHTML += html_tipo_orden;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarEmpleados(){
+    let c_bx_empleados = document.getElementById("cbx_responsable");
+    let html_empleados = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-empleados', 
+        data: {
+            
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_empleados += `
+                                <option value="`+element.id_empleado+`">`+element.nombre_empleado
+                                +`</option> 
+                                `
+        });
+        c_bx_empleados.innerHTML += html_empleados;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarEstados(){
+    let c_bx_estados = document.getElementById("cbx_estado");
+    let html_estados = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-estados', 
+        data: {
+            
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_estados += `
+                                <option value="`+element.id_estado+`">`+element.nombre_estado
+                                +`</option> 
+                                `
+        });
+        c_bx_estados.innerHTML += html_estados;
     },
     error: function (error) {
         console.log(error);

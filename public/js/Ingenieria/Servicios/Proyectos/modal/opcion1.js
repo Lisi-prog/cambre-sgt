@@ -15,11 +15,6 @@ export default `<div class="row">
             <span class="obligatorio">*</span> 
             <select class="form-select form-group" id="tipo_orden_trabajo" name="tipo_orden_trabajo" required> 
                 <option selected="selected" value="">Seleccionar</option> 
-                <option value="5">Externo</option> 
-                <option value="4">Gestion</option> 
-                <option value="2">Herramental</option>
-                <option value="3">Procesos</option>
-                <option value="1">Producto</option>
             </select> 
         </div> 
     </div> 
@@ -31,9 +26,8 @@ export default `<div class="row">
         <div class="form-group"> 
             <label for="responsable" class="control-label fs-7" style="white-space: nowrap;">Responsable:</label> 
             <span class="obligatorio">*</span> 
-            <select class="form-select form-group" id="responsable" name="responsable" required>
+            <select class="form-select form-group" id="cbx_responsable" name="responsable" required>
                 <option selected="selected" value="">Seleccionar</option>
-                <option value="1">Alejandro Virgillo</option>
             </select>
         </div>
     </div>
@@ -49,17 +43,8 @@ export default `<div class="row">
     <div class="form-group"> 
         <label for="estado" class="control-label fs-7" style="white-space: nowrap;">Estado:</label> 
         <span class="obligatorio">*</span> 
-        <select class="form-select form-group" id="estado" name="id_estado" required>
+        <select class="form-select form-group" id="cbx_estado" name="id_estado" required>
             <option selected="selected" value="">Seleccionar</option>
-            <option value="1">Cancelado</option>
-            <option value="2">Completo</option>
-            <option value="3">Continua</option>
-            <option value="4">En proceso</option>
-            <option value="5">Externo</option>
-            <option value="6">Espera</option>
-            <option value="7">Revisar</option>
-            <option value="8">Pausa</option>
-            <option value="9">Problema</option>
         </select>
     </div>
 </div>
