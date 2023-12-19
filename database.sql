@@ -440,11 +440,11 @@ VALUES
   ('Responsable'),
   ('Supervisor');
 
-INSERT INTO prioridad(nombre_prioridad)
-VALUES
-  ('Baja'),
-  ('Media'),
-  ('Alta');
+-- INSERT INTO prioridad(nombre_prioridad)
+-- VALUES
+--  ('Baja'),
+--  ('Media'),
+--  ('Alta');
 
 INSERT INTO estado(nombre_estado)
 VALUES

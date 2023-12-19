@@ -25,7 +25,7 @@ class Servicio extends Model
         'fecha_limite',
         'id_responsabilidad',
         'id_subtipo_servicio',
-        'id_prioridad'
+        'prioridad_servicio'
     ];
 
     public function getSubTipoServicio()

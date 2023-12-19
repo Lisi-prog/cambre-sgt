@@ -49,14 +49,34 @@ class ProyectoController extends Controller
         //$permisos = Permission::orderBy('name', 'asc')->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
 
-        foreach ($tipo_servicio->getSubTipos as $subTipo) {
-            $id_subtipos[] = $subTipo->id_subtipo_servicio;
+        if($tipo_servicio){
+            foreach ($tipo_servicio->getSubTipos as $subTipo) {
+                $id_subtipos[] = $subTipo->id_subtipo_servicio;
+            }
+            $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
+        }else{
+            $proyectos = [];
         }
-        $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
+        
+        
+        
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
+        // $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        // $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
+        $prioridades = [];
+        
+        if(Servicio::max('prioridad_servicio')){
+            $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+
+            for ($i=1; $i <= $prioridadMax; $i++) { 
+                $prioridades += [$i => $i];
+            }
+
+        }else{
+            $prioridades = ["1" => "1"];
+        }
+        
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridades'));
     }
 
@@ -106,6 +126,10 @@ class ProyectoController extends Controller
         // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $tipo_servicio = $request->input('id_tipo_proyecto');
 
+        if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
+            $this->actualizarPrioridades($prioridad);
+        }
+
         $responsabilidad = Responsabilidad::create([
             // 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
             'id_empleado' => $lider,
@@ -118,7 +142,7 @@ class ProyectoController extends Controller
             'id_subtipo_servicio' => $tipo_servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'fecha_inicio' => $fecha_ini,
-            'id_prioridad' => $prioridad
+            'prioridad_servicio' => $prioridad
         ]);
 
         $actualizacionServicio = Actualizacion::create([
@@ -155,6 +179,10 @@ class ProyectoController extends Controller
         ]);
 
         return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');                      
+    }
+
+    public function actualizarPrioridades($prioridad){
+        DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio + 1 WHERE prioridad_servicio >= ?', [$prioridad]);
     }
     
     public function show($id)
