@@ -9,17 +9,24 @@ export default
 </div> 
 </div> 
 <div class="row"> 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
-    <div class="form-group">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
         <div class="form-group"> 
             <label for="tipo_orden_trabajo" class="control-label fs-7" style="white-space: nowrap;">Tipo de orden trabajo:</label> 
             <span class="obligatorio">*</span> 
             <select class="form-select form-group" id="tipo_orden_trabajo" name="tipo_orden_trabajo" required> 
                 <option selected="selected" value="">Seleccionar</option> 
             </select> 
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+        <div class="form-group input-group"> 
+            <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
+            <span class="obligatorio">*</span> 
+            <input class="form-control form-group" name="horas_estimadas" type="number" min="0" value="00" id="horas_estimadas" required>
+            <span class="input-group-text">:</span>
+            <input class="form-control form-group" name="minutos_estimados" type="number" min="0" max="59" value="00" id="minutos_estimados" required>
         </div> 
-    </div> 
-</div> 
+    </div>  
 </div>
 <div class="row">
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">

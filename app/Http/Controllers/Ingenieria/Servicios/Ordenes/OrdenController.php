@@ -52,95 +52,6 @@ class OrdenController extends Controller
         return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
     }
 
-    public function create()
-    {
-        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-
-        $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
-        // return User::role('SUPERVISOR')->get();
-        return view('Ingenieria.Servicios.Proyectos.crear', compact('Prioridades', 'Tipos_servicios', 'empleados', 'prioridades'));
-    }
-
-    public function store(Request $request)
-    {
-        
-        $this->validate($request, [
-            'codigo_orden' => 'required',
-            'nombre_orden' => 'required',
-            'id_tipo_orden' => 'required',
-            'lider' => 'required',
-            'fecha_ini' => 'required',
-            'fecha_req' => 'required',
-            'prioridad' => 'required'
-        ]);
-        
-        $codigo_orden = $request->input('codigo_orden');
-        $nombre_orden = $request->input('nombre_orden');
-        $tipo_orden = $request->input('id_tipo_orden');
-        $lider = $request->input('lider');
-        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
-        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
-        $prioridad = $request->input('prioridad');
-        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-        
-        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
-        $estado = Estado::where('nombre_estado', 'espera')->first();
-        // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'orden')->first();
-        $tipo_servicio = $request->input('id_tipo_orden');
-
-        $responsabilidad = Responsabilidad::create([
-            // 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-            'id_empleado' => $lider,
-            'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        ]);
-        
-        $orden = Servicio::create([
-            'codigo_servicio' => $codigo_orden,
-            'nombre_servicio' => $nombre_orden,
-            'id_subtipo_servicio' => $tipo_servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-            'fecha_inicio' => $fecha_ini,
-            'id_prioridad' => $prioridad
-        ]);
-
-        $actualizacionServicio = Actualizacion::create([
-            'descripcion' => 'Creacion de orden.',
-            'fecha_limite' => $fecha_req,
-            'fecha_carga' => $fecha_carga,
-            'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacion_servicio = Actualizacion_servicio::create([
-            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
-            'id_servicio' => $orden->id_servicio
-        ]);
-
-        $etapa = Etapa::create([
-            'descripcion_etapa' => 'Creacion de etapa.',
-            'fecha_inicio' => $fecha_ini,
-            'id_servicio' => $orden->id_servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacionEtapa = Actualizacion::create([
-            'descripcion' => 'Creacion de etapa.',
-            'fecha_limite' => $fecha_req,
-            'fecha_carga' => $fecha_carga,
-            'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacion_etapa = Actualizacion_etapa::create([
-            'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
-            'id_etapa' => $etapa->id_etapa
-        ]);
-
-        return redirect()->route('ordenes.index')->with('mensaje', 'La orden se ha creado con exito.');                      
-    }
-    
     public function show($id)
     {
         $orden = Servicio::find($id);
@@ -196,15 +107,19 @@ class OrdenController extends Controller
                 $this->validate($request, [
                     'num_etapa' => 'required',
                     'nom_orden' => 'required',
+                    'horas_estimadas' => 'required',
+                    'minutos_estimados' => 'required',
                     'tipo_orden_trabajo' => 'required',
                     'responsable' => 'required',
                     'fecha_ini' => 'required',
                     'id_estado' => 'required',
                     'fecha_req' => 'required'
-                ]);
+                ], 
+            ['horas_estimadas.required' => 'Faltan las horas estimadas']);
 
                 $id_etapa = $request->input('num_etapa');
                 $nombre_orden = $request->input('nom_orden');
+                $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
                 $tipo_orden_trabajo = $request->input('tipo_orden_trabajo');
                 $id_responsable = $request->input('responsable');
                 $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
@@ -222,6 +137,7 @@ class OrdenController extends Controller
 
                 $orden_trabajo = Orden_trabajo::create([
                     'nombre_orden_trabajo' => $nombre_orden,
+                    'duracion_estimada' => $duracion_estimada,
                     'id_etapa' => $id_etapa,
                     'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
                     'id_responsabilidad' => $responsabilidad->id_responsabilidad
