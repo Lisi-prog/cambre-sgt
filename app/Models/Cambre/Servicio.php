@@ -22,7 +22,6 @@ class Servicio extends Model
         'codigo_servicio',
         'nombre_servicio',
         'fecha_inicio',
-        'fecha_limite',
         'id_responsabilidad',
         'id_subtipo_servicio',
         'prioridad_servicio'
