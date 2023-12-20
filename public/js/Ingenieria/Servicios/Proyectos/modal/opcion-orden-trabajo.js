@@ -1,4 +1,5 @@
-export default `<div class="row"> 
+export default 
+`<div class="row"> 
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
     <div class="form-group"> 
         <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de trabajo:</label> 

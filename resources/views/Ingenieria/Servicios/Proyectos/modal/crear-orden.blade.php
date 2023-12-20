@@ -13,7 +13,7 @@
                         <div class="form-group">
                             {!! Form::label('tipo_orden', "Tipo orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::select('tipo_orden', [1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 5 => 'Orden de mecanizado',4 => 'Orden de mantenimiento'], null, [
+                            {!! Form::select('tipo_orden', [1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 3 => 'Orden de mecanizado',4 => 'Orden de mantenimiento'], null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
                                     'id' => 'selected-tipo-orden',
