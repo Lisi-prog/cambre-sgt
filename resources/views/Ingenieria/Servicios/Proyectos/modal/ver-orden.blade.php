@@ -15,7 +15,6 @@
                             {!! Form::label('orden', "Orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('nom_orden', null, ['class' => 'form-control', 'id' => 'input-orden', 'readonly']) !!}
-                            {{-- <input class="form-control" name="nom_orden" type="text"> --}}
                         </div>
                     </div>
                 </div>

@@ -188,13 +188,12 @@ class OrdenController extends Controller
             'fecha_inicio' => Carbon::parse($orden_trabajo->getPartes->sortBy('id_parte_trabajo')->first()->fecha)->format('d-m-Y'),
             'fecha_limite' => Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->fecha_limite)->format('d-m-Y'),
             'fecha_fin_real' => '+late',
-            'duracion_estimada' => '00:00',
+            'duracion_estimada' => $orden_trabajo->duracion_estimada,
             'duracion_real' => '00:00',
             'fecha_ultimo_parte' => Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->fecha_carga)->format('d-m-Y'),
             'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->observacion,
             'supervisa' => $orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->getResponsable->getEmpleado->nombre_empleado
             ]);
-        
         return $orden_trabajo_arr;
     }
 
