@@ -23,9 +23,10 @@ class Orden_manufactura extends Model
         'cantidad',
         'fecha_inicio',
         'fecha_requerida',
-        'ruta_plano',
+        'ruta_pieza',
         'observaciones',
-        'id_estado',
+        'duracion_estimada',
+        'id_orden_mecanizado',
         'id_etapa',
         'id_responsabilidad'
     ];

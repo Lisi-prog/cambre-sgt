@@ -25,7 +25,7 @@ class parte_mecanizado extends Model
         'fecha_carga',
         'horas',
         'horas_maquina',
-        'id_estado',
+        'id_estado_mecanizado',
         'id_orden_mecanizado',
         'id_responsabilidad',
         'id_maquinaria'

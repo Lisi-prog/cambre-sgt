@@ -20,6 +20,7 @@ class Orden_trabajo extends Model
 
     protected $fillable = [ 
         'nombre_orden_trabajo',
+        'duracion_estimada',
         'id_tipo_orden_trabajo',
         'id_etapa',
         'id_responsabilidad'
