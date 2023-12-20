@@ -19,12 +19,14 @@ export default
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-        <div class="form-group input-group"> 
+        <div class="form-group"> 
             <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
             <span class="obligatorio">*</span> 
-            <input class="form-control form-group" name="horas_estimadas" type="number" min="0" value="00" id="horas_estimadas" required>
-            <span class="input-group-text">:</span>
-            <input class="form-control form-group" name="minutos_estimados" type="number" min="0" max="59" value="00" id="minutos_estimados" required>
+            <div class= "input-group">
+                <input class="form-control" name="horas_estimadas" type="number" min="0" value="00" id="horas_estimadas" required>
+                <span class="input-group-text">:</span>
+                <input class="form-control" name="minutos_estimados" type="number" min="0" max="59" value="00" id="minutos_estimados" required>
+            </div>
         </div> 
     </div>  
 </div>
