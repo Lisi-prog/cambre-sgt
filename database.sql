@@ -221,6 +221,15 @@ CREATE TABLE `actualizacion_etapa` (
   CONSTRAINT `pk_id_actualizacion_etapa_x_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`)
 );
 
+CREATE TABLE `Orden`(
+  `id_orden` int NOT NULL AUTO_INCREMENT,
+  `nombre_orden` varchar(50),
+  `fecha_inicio` date,
+  `duracion_estimada` time,
+  `id_etapa` int,
+  CONSTRAINT `pk_id_orden_x_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`)
+);
+
 CREATE TABLE `tipo_orden_trabajo` (
   `id_tipo_orden_trabajo` int NOT NULL AUTO_INCREMENT,
   `nombre_tipo_orden_trabajo` varchar(150) DEFAULT NULL,
@@ -267,7 +276,6 @@ CREATE TABLE `orden_manufactura` (
   `duracion_estimada` time,
   `id_etapa` int,
   `id_responsabilidad` int,
-  `id_orden_mecanizado` int,
   PRIMARY KEY (`id_orden_manufactura`),
   CONSTRAINT `pk_id_orden_manufactura_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_orden_manufactura_x_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`)
@@ -295,6 +303,7 @@ CREATE TABLE `orden_mecanizado` (
   `cantidad` int,
   `fecha_inicio` date,
   `fecha_requerida` date,
+  `id_orden_manufactura` int,
   `ruta_plano` varchar(500) DEFAULT NULL,
   `observaciones` varchar(100) DEFAULT NULL,
   `duracion_estimada` time,
