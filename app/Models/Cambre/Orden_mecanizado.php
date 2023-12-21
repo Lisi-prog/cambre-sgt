@@ -30,14 +30,19 @@ class Orden_mecanizado extends Model
         'id_responsabilidad'
     ];
 
-    public function getProyectos()
-    {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
-    }
-
     public function getEtapa()
     {
         return $this->belongsTo(Etapa::class, 'id_etapa');
+    }
+
+    public function getPartes()
+    {
+        return $this->hasMany(Parte_mecanizado::class, 'id_orden_mecanizado');
+    }
+
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 
     public function getTipoOrden()

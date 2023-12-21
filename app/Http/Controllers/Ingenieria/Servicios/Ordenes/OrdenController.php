@@ -27,6 +27,7 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Tipo_servicio;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Estado_mecanizado;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
@@ -34,6 +35,8 @@ use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Orden_trabajo;
 use App\Models\Cambre\Parte_trabajo;
 use App\Models\Cambre\Tipo_orden_trabajo;
+use App\Models\Cambre\Orden_mecanizado;
+use App\Models\Cambre\Parte_mecanizado;
 
 class OrdenController extends Controller
 {
@@ -114,52 +117,131 @@ class OrdenController extends Controller
                     'fecha_ini' => 'required',
                     'id_estado' => 'required',
                     'fecha_req' => 'required'
-                ], 
-            ['horas_estimadas.required' => 'Faltan las horas estimadas']);
-
-                $id_etapa = $request->input('num_etapa');
-                $nombre_orden = $request->input('nom_orden');
-                $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
-                $tipo_orden_trabajo = $request->input('tipo_orden_trabajo');
-                $id_responsable = $request->input('responsable');
-                $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
-                $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
-                $id_estado = $request->input('id_estado');
-                $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-
-                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                $estado = Estado::where('id_estado', $id_estado)->first();
-
-                $responsabilidad = Responsabilidad::create([
-                    'id_empleado' => $id_responsable,
-                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ], [
+                    'horas_estimadas.required' => 'Faltan las horas estimadas'
                 ]);
 
-                $orden_trabajo = Orden_trabajo::create([
-                    'nombre_orden_trabajo' => $nombre_orden,
-                    'duracion_estimada' => $duracion_estimada,
-                    'id_etapa' => $id_etapa,
-                    'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
-                    'id_responsabilidad' => $responsabilidad->id_responsabilidad
-                ]);
-
-                Parte_trabajo::create([
-                    'observacion' => 'Generacion de orden de trabajo',
-                    'fecha' => $fecha_ini,
-                    'fecha_limite' => $fecha_req,
-                    'fecha_carga' => $fecha_carga,
-                    'horas' => '00:00',
-                    'id_estado' => $estado->id_estado,
-                    'id_orden_trabajo' => $orden_trabajo->id_orden_trabajo,
-                    'id_responsabilidad' => $responsabilidad->id_responsabilidad
-                ]);
+                $this->crearOrdenTrabajo($request);
+                
                 return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de trabajo y el parte de trabajo se ha creado con exito.'); 
+                break;
+            case 3:
+                # Crear orden de mecanizado
+                $this->validate($request, [
+                    'num_etapa' => 'required',
+                    'nom_orden' => 'required',
+                    'horas_estimadas' => 'required',
+                    'minutos_estimados' => 'required',
+                    'responsable' => 'required',
+                    'fecha_ini' => 'required',
+                    'estado_mecanizado' => 'required',
+                    'fecha_req' => 'required',
+                    'ruta_plano' => 'required'
+                ], [
+                    'num_etapa.required' => 'Seleccione una etapa.',
+                    'nom_orden.required' => 'Falta el nombre de la orden.',
+                    'horas_estimadas.required' => 'Faltan las horas estimadas.',
+                    'minutos_estimados.required' => 'Faltan los minutos estimados.',
+                    'responsable.required' => 'Seleccione un responsable',
+                    'fecha_ini.required' => 'Seleccione una fecha de inicio.',
+                    'estado_mecanizado.required' => 'Seleccione una etapa.',
+                    'fecha_req.required' => 'Seleccione una fecha limite.',
+                    'ruta_plano.required' => 'Falta la ruta del plano.'
+                ]);
+
+                $this->crearOrdenMecanizado($request);
+
+                return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de mecanizado y el parte de mecanizado se ha creado con exito.'); 
                 break;
             
             default:
                 # code...
                 break;
         }
+    }
+
+    public function crearOrdenTrabajo($request){
+        $id_etapa = $request->input('num_etapa');
+        $nombre_orden = $request->input('nom_orden');
+        $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
+        $tipo_orden_trabajo = $request->input('tipo_orden_trabajo');
+        $id_responsable = $request->input('responsable');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $id_estado = $request->input('id_estado');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $estado = Estado::where('id_estado', $id_estado)->first();
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $id_responsable,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+
+        $orden_trabajo = Orden_trabajo::create([
+            'nombre_orden_trabajo' => $nombre_orden,
+            'duracion_estimada' => $duracion_estimada,
+            'id_etapa' => $id_etapa,
+            'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        Parte_trabajo::create([
+            'observacion' => 'Generacion de orden de trabajo',
+            'fecha' => $fecha_ini,
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'horas' => '00:00',
+            'id_estado' => $estado->id_estado,
+            'id_orden_trabajo' => $orden_trabajo->id_orden_trabajo,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+    }
+
+    public function crearOrdenMecanizado($request){
+        $id_etapa = $request->input('num_etapa');
+        $nombre_orden = $request->input('nom_orden');
+        $revision = $request->input('revision');
+        $cantidad = $request->input('cantidad');
+        $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
+        $id_responsable = $request->input('responsable');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $id_estado_mec = $request->input('estado_mecanizado');
+        $ruta_plano = $request->input('ruta_plano');
+        $observaciones = $request->input('observaciones');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $id_responsable,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+
+        $orden_mecanizado = Orden_mecanizado::create([
+            'revision' => $revision,
+            'cantidad' => $cantidad,
+            'fecha_inicio' => $fecha_ini,
+            'fecha_requerida' => $fecha_req,
+            'ruta_plano' =>  $ruta_plano,
+            'observaciones' => $observaciones,
+            'duracion_estimada' => $duracion_estimada,
+            'id_etapa' => $id_etapa,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        Parte_mecanizado::create([
+            'observacion' => 'Generacion de orden mecanizado',
+            'fecha' => $fecha_ini,
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'horas' => '00:00',
+            'id_estado_mecanizado' => $id_estado_mec,
+            'id_orden_mecanizado' => $orden_mecanizado->id_orden_mecanizado,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
     }
 
     public function obtenerOrdenesDeUnaEtapa($id){
@@ -170,8 +252,20 @@ class OrdenController extends Controller
             array_push($ordenes, (object)[
                 'id_orden' => $orden_trabajo->id_orden_trabajo,
                 'orden' => $orden_trabajo->nombre_orden_trabajo,
-                'tipo' => 'Orden de trabajo',]);
+                'tipo' => 'Orden de trabajo',
+                'numero_tipo' => 1
+            ]);
         }
+
+        foreach ($etapa->getOrdenMecanizado as $orden_mecanizado) {
+            array_push($ordenes, (object)[
+                'id_orden' => $orden_mecanizado->id_orden_mecanizado,
+                'orden' => $orden_mecanizado->observaciones,
+                'tipo' => 'Orden de mecanizado',
+                'numero_tipo' => 3
+            ]);
+        }
+
         return $ordenes;
     }
 
@@ -195,6 +289,31 @@ class OrdenController extends Controller
             'supervisa' => $orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->getResponsable->getEmpleado->nombre_empleado
             ]);
         return $orden_trabajo_arr;
+    }
+
+    public function ObtenerOrdenMecanizado($id){
+        $orden_mecanizado = Orden_mecanizado::find($id);
+        $orden_mecanizado_arr = array();
+
+        array_push($orden_mecanizado_arr, (object)[
+            'id_orden' => $orden_mecanizado->id_orden_mecanizado,
+            // 'orden' => $orden_mecanizado->nombre_orden_trabajo,
+            'revision' => $orden_mecanizado->revision,
+            'cantidad' => $orden_mecanizado->cantidad,
+            'ruta_plano' => $orden_mecanizado->ruta_plano,
+            'observaciones' => $orden_mecanizado->observaciones,
+            'estado_mecanizado' => $orden_mecanizado->getPartes->sortByDesc('id_parte_mecanizado')->first()->getEstadoMecanizado->nombre_estado_mecanizado,
+            'responsable' => $orden_mecanizado->getResponsable->getEmpleado->nombre_empleado,
+            'fecha_inicio' => Carbon::parse($orden_mecanizado->fecha_inicio)->format('d-m-Y'),
+            'fecha_limite' => Carbon::parse($orden_mecanizado->getPartes->sortByDesc('id_parte_mecanizado')->first()->fecha_limite)->format('d-m-Y'),
+            'fecha_fin_real' => '+late',
+            'duracion_estimada' => $orden_mecanizado->duracion_estimada,
+            'duracion_real' => '00:00',
+            'fecha_ultimo_parte' => Carbon::parse($orden_mecanizado->getPartes->sortByDesc('id_parte_mecanizado')->first()->fecha_carga)->format('d-m-Y'),
+            'descripcion_ultimo_parte' => $orden_mecanizado->getPartes->sortByDesc('id_parte_mecanizado')->first()->observacion,
+            'supervisa' => $orden_mecanizado->getPartes->sortByDesc('id_parte_mecanizado')->first()->getResponsable->getEmpleado->nombre_empleado
+            ]);
+        return $orden_mecanizado_arr;
     }
 
     public function obtenerPartesDeTrabajo($id)
@@ -227,5 +346,9 @@ class OrdenController extends Controller
 
     public function obtenerEstados(){
         return Estado::orderBy('nombre_estado')->get();
+    }
+
+    public function obtenerEstadosMecanizados(){
+        return Estado_mecanizado::orderBy('nombre_estado_mecanizado')->get();
     }
 }

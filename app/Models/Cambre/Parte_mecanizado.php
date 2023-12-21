@@ -24,15 +24,23 @@ class parte_mecanizado extends Model
         'fecha_limite',
         'fecha_carga',
         'horas',
-        'horas_maquina',
         'id_estado_mecanizado',
         'id_orden_mecanizado',
-        'id_responsabilidad',
-        'id_maquinaria'
+        'id_responsabilidad'
     ];
 
-    public function getProyectos()
+    public function getEstadoMecanizado()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Estado_mecanizado::class, 'id_estado_mecanizado');
+    }
+
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
+    }
+
+    public function getOrden()
+    {
+        return $this->belongsTo(Orden_mecanizado::class, 'id_orden_mecanizado');
     }
 }

@@ -312,16 +312,23 @@ CREATE TABLE `parte_mecanizado` (
   `fecha_limite` date,
   `fecha_carga` datetime,
   `horas` time,
-  `horas_maquina` time,
   `id_estado_mecanizado` int,
   `id_orden_mecanizado` int,
   `id_responsabilidad` int,
-  `id_maquinaria` int,
   PRIMARY KEY (`id_parte_mecanizado`),
   CONSTRAINT `pk_id_parte_mecanizado_x_estado_mecanizado` FOREIGN KEY (`id_estado_mecanizado`) REFERENCES `estado_mecanizado`(`id_estado_mecanizado`),
   CONSTRAINT `pk_id_parte_mecanizado_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
-  CONSTRAINT `pk_id_parte_mecanizado_x_orden_mecanizado` FOREIGN KEY (`id_orden_mecanizado`) REFERENCES `orden_mecanizado`(`id_orden_mecanizado`),
-  CONSTRAINT `pk_id_parte_mecanizado_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`)
+  CONSTRAINT `pk_id_parte_mecanizado_x_orden_mecanizado` FOREIGN KEY (`id_orden_mecanizado`) REFERENCES `orden_mecanizado`(`id_orden_mecanizado`)
+);
+
+CREATE TABLE `parte_mecanizado_x_maquinaria`(
+  `id_parte_mecanizado_x_maquinaria` int NOT NULL AUTO_INCREMENT,
+  `id_parte_mecanizado` int,
+  `id_maquinaria` int,
+  `horas_maquina` time,
+  PRIMARY KEY(`id_parte_mecanizado_x_maquinaria`),
+  CONSTRAINT `pk_id_parte_mec_maq_x_parte_mecanizado` FOREIGN KEY (`id_parte_mecanizado`) REFERENCES `parte_mecanizado`(`id_parte_mecanizado`),
+  CONSTRAINT `pk_id_parte_mec_maq_x_parte_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`)
 );
 
 CREATE TABLE `tipo_orden_mantenimiento` (
@@ -457,6 +464,16 @@ VALUES
   ('Revisar'),
   ('Pausa'),
   ('Problema');
+
+INSERT INTO estado_mecanizado(nombre_estado_mecanizado)
+VALUES
+  ('Cancelado'),
+  ('Material encargado'),
+  ('Material preparado'),
+  ('Mecanizado completo'),
+  ('Pieza finalizada'),
+  ('Planos entregados'),
+  ('Temple');
 
 
 

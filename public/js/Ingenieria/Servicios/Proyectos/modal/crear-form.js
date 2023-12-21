@@ -1,5 +1,7 @@
 import opcion1 from './opcion-orden-trabajo.js';
 import opcion3 from './opcion-orden-mecanizado.js';
+import bodyModalOrdenTrabajo from './ver-orden-trabajo.js';
+import bodyModalOrdenMecanizado from './ver-orden-mecanizado.js';
 
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
@@ -24,9 +26,8 @@ function modificarFormulario(){
         formulario.innerHTML = '';
         html = opcion3
         formulario.innerHTML += html;
-        cargarTipoOrdenTrabajo();
         cargarEmpleados();
-        cargarEstados();
+        cargarEstadosMecanizados();
         break;
     case 4:
         formulario.innerHTML = '';
@@ -57,27 +58,26 @@ export function crearCuadrOrdenes(id_etapa){
         data: {
             id_etapa: id_etapa,
         },
-    success: function (response) {
-        response.forEach(element => {
-            html_orden += `<tr>
-                                <td class= "text-center"> `+element.orden+`</td> 
-                                <td class= "text-center">`+element.tipo+`</td> 
-                                <td>
-                                    <div class="row"> 
-                                        <div class="col"> 
-                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(`+element.id_orden+`)">
-                                                Ver
-                                            </button>
-                                        </div>
-                                        <div class="col"> 
-                                            <button type="button" class="btn btn-warning" onclick="window.obtenerPartes(`+element.id_orden+`)">Partes</button> 
+        success: function (response) {
+            response.forEach(element => {
+                html_orden += `<tr>
+                                    <td class= "text-center"> `+element.orden+`</td> 
+                                    <td class= "text-center">`+element.tipo+`</td> 
+                                    <td>
+                                        <div class="row"> 
+                                            <div class="col"> 
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(`+element.id_orden+`,`+element.numero_tipo+`)">
+                                                    Ver
+                                                </button>
+                                            </div>
+                                            <div class="col"> 
+                                                <button type="button" class="btn btn-warning" onclick="window.obtenerPartes(`+element.id_orden+`)">Partes</button> 
+                                            </div> 
                                         </div> 
-                                    </div> 
-                                </td> 
-                            </tr>`;
-        });
-        div_cuadro_orden.innerHTML = html_orden;
-        
+                                    </td> 
+                                </tr>`;
+            });
+            div_cuadro_orden.innerHTML = html_orden;
     },
     error: function (error) {
         console.log(error);
@@ -118,7 +118,26 @@ export function cargarModalVerEtapa(id_etapa){
     }));
 }
 
-export function cargarModalVerOrden(id_orden){
+export function cargarModalVerOrden(id_orden, tipo){
+    let body_modal_ver_orden = document.getElementById('modal-body-ver-orden');
+    
+    body_modal_ver_orden.innerHTML = '';
+    switch (tipo) {
+        case 1:
+            body_modal_ver_orden.innerHTML = bodyModalOrdenTrabajo;
+            cargarModalVerOrdenTrabajo(id_orden);
+            break;
+            
+        case 3:
+            body_modal_ver_orden.innerHTML = bodyModalOrdenMecanizado;
+            cargarModalVerOrdenMecanizado(id_orden);
+            break;
+        default:
+            break;
+    }
+}
+
+function cargarModalVerOrdenTrabajo(id_orden){
     let input_orden = document.getElementById("input-orden");
     let input_tipo = document.getElementById("input-tipo");
     let input_estado = document.getElementById("input-estado");
@@ -159,6 +178,62 @@ export function cargarModalVerOrden(id_orden){
     }
     }));
 }
+
+function cargarModalVerOrdenMecanizado(id_orden){
+    // let input_orden = document.getElementById("input-orden");
+    let input_revision = document.getElementById("input-revision");
+    let input_cantidad = document.getElementById("input-cantidad");
+    let input_responsable = document.getElementById("input-responsable");
+    let input_duracion_estimada = document.getElementById("input-duracion_estimada");
+    let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_fecha_inicio = document.getElementById("input-fec_ini");
+    let input_fecha_limite = document.getElementById("input-fec_req");
+    let input_fecha_fin = document.getElementById("input_fecha_fin");
+    let input_estado_mecanizado = document.getElementById("input-estado_mecanizado");
+    let input_ruta_plano = document.getElementById("input-ruta_plano");
+    let input_observaciones = document.getElementById("input-observaciones");
+    /* let input_fecha_fin = document.getElementById("input-fec_fin");
+    let input_duracion_estimada = document.getElementById("input-duracion_estimada");
+    let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_fecha_ultimo_parte = document.getElementById("input-fecha_ultimo_parte");
+    let input_observacion = document.getElementById("input-observacion");
+    let input_supervisor = document.getElementById("input-supervisor");*/
+
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-una-orden-mecanizado-etapa/'+id_orden, 
+        data: {
+            id_orden: id_orden,
+        },
+    success: function (response) {
+        console.log(response)
+        console.log(input_estado_mecanizado)
+        response.forEach(element => {
+            // input_orden.value = '';
+            input_revision.value = element.revision;
+            input_cantidad.value = element.cantidad;
+            input_duracion_estimada.value = element.duracion_estimada;
+            input_duracion_real.value = element.duracion_real;
+            input_responsable.value = element.responsable;
+            input_fecha_inicio.value = element.fecha_inicio;
+            input_fecha_limite.value = element.fecha_limite;
+            input_ruta_plano.value = element.ruta_plano;
+            input_observaciones.value = element.observaciones;
+            input_fecha_fin.value = element.fecha_fin_real;
+            input_estado_mecanizado.value = element.estado_mecanizado;
+            /*input_duracion_estimada.value = element.duracion_estimada;
+            input_duracion_real.value = element.duracion_real;
+            input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
+            input_observacion.value = element.descripcion_ultimo_parte;
+            input_supervisor.value = element.supervisa;*/
+        });
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
 function verOrdenTrabajo(id_orden){
     let div_cuadro_orden_trabajo = document.getElementById("cuadro-ordenes-trabajo");
     let html_odt = '';
@@ -295,6 +370,30 @@ function cargarEstados(){
                                 `
         });
         c_bx_estados.innerHTML += html_estados;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarEstadosMecanizados(){
+    let c_bx_estados_mec = document.getElementById("cbx_estado_mec");
+    let html_estados_mec = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-estados-mecanizados', 
+        data: {
+            
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_estados_mec += `
+                                <option value="`+element.id_estado_mecanizado+`">`+element.nombre_estado_mecanizado
+                                +`</option> 
+                                `
+        });
+        c_bx_estados_mec.innerHTML += html_estados_mec;
     },
     error: function (error) {
         console.log(error);
