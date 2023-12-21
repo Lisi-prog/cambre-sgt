@@ -101,7 +101,7 @@ export function cargarModalVerEtapa(id_etapa){
             id_etapa: id_etapa,
         },
     success: function (response) {
-        console.log(response)
+        console.log(response.input_fecha_ultima_actualizacion)
             input_etapa.value = response.descripcion_etapa;
             input_estado.value = response.estado;
             input_responsable.value = response.responsable;
@@ -110,7 +110,7 @@ export function cargarModalVerEtapa(id_etapa){
             input_fecha_fin.value = response.fecha_fin_real;
             input_duracion_estimada.value = response.duracion_estimada;
             input_duracion_real.value = response.duracion_real;
-            input_fecha_ultima_actualizacion.value = response.input_fecha_ultima_actualizacion;
+            input_fecha_ultima_actualizacion.value = response.fecha_ultima_actualizacion; //.substring(0, 10)
     },
     error: function (error) {
         console.log(error);

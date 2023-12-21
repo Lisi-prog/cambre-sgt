@@ -81,20 +81,13 @@
                 </div>
 
                 <div class="row">
-                    {!! Form::label('ultimo_parte', "Ultimo parte:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                    <div class="col-3">
+                    {!! Form::label('fecha_ultima_actualizacion', "Ultima actualización:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                    <div class="col-8">
                         <div class="form-group">
                             {!! Form::label('fecha_ultima_actualizacion', "Fecha:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('fecha_ultima_actualizacion', null, ['class' => 'form-control', 'id' => 'input-fecha_ultima_actualizacion', 'readonly']) !!}
                         </div> 
-                    </div>
-                    <div class="col-9">
-                        {{-- <div class="form-group">
-                            {!! Form::label('observacion', "Observacion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            <span class="obligatorio">*</span>
-                            {!! Form::text('observacion', null, ['class' => 'form-control', 'id' => 'input-observacion', 'readonly']) !!}
-                        </div>  --}}
                     </div>
                 </div>
             </div>
