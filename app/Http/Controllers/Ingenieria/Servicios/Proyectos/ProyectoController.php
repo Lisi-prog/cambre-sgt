@@ -66,18 +66,19 @@ class ProyectoController extends Controller
         // $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
         $prioridades = [];
         
-        if(Servicio::max('prioridad_servicio')){
-            $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        // if(Servicio::max('prioridad_servicio')){
+        //     $prioridadMax = Servicio::max('prioridad_servicio') + 1;
 
-            for ($i=1; $i <= $prioridadMax; $i++) { 
-                $prioridades += [$i => $i];
-            }
+        //     for ($i=1; $i <= $prioridadMax; $i++) { 
+        //         $prioridades += [$i => $i];
+        //     }
 
-        }else{
-            $prioridades = ["1" => "1"];
-        }
+        // }else{
+        //     $prioridades = ["1" => "1"];
+        // }
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridades'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax'));
     }
 
     public function create()
@@ -118,9 +119,9 @@ class ProyectoController extends Controller
         $lider = $request->input('lider');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
-        $prioridad = $request->input('prioridad');
+        // $prioridad = $request->input('prioridad');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-        
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
         $estado = Estado::where('nombre_estado', 'espera')->first();
         // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
@@ -142,7 +143,7 @@ class ProyectoController extends Controller
             'id_subtipo_servicio' => $tipo_servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'fecha_inicio' => $fecha_ini,
-            'prioridad_servicio' => $prioridad
+            'prioridad_servicio' => $prioridadMax
         ]);
 
         $actualizacionServicio = Actualizacion::create([

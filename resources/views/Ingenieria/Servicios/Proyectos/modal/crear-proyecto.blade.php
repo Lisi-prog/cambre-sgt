@@ -60,12 +60,15 @@
                         <div class="form-group">
                             {!! Form::label('prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::select('prioridad', $prioridades, null, [
+                            
+                            {!! Form::text('prioridad', $prioridadMax, ['class' => 'form-control', 'readonly']) !!}
+
+                            {{-- {!! Form::select('prioridad', $prioridades, null, [
                                 'placeholder' => 'Seleccionar',
                                 'class' => 'form-select',
                                 'id' => 'prioridad',
                                 'required'
-                            ]) !!}
+                            ]) !!} --}}
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">

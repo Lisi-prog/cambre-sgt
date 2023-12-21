@@ -1,7 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .tableFixHead {
+       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+       height: 300px; /* gives an initial height of 200px to the table */
+     }
+     .tableFixHead thead th {
+       position: sticky; /* make the table heads sticky */
+       top: 0px; /* table head will be placed from the top of the table and sticks to it */
+     }
+     #viv table {
+       border-collapse: collapse; /* make the table borders collapse to each other */
+       width: 100%;
+     }
+     /* #viv th,
+     #viv td {
+       padding: 8px 16px;
+       border: 1px solid #ccc;
+     }*/
+     #viv th {
+       background: #ee9b27;
+     } 
 
+    #example thead input {
+        width: 100%;
+    }
+</style>
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
@@ -86,7 +111,7 @@
     import {cargarModalVerEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
     window.cargarModalVerEtapa = cargarModalVerEtapa;
 </script>
-<script>
+{{-- <script>
     $(document).ready(function () {
         $('#example').DataTable({
             language: {
@@ -105,6 +130,70 @@
                 },
                 order: [[ 0, 'asc' ]],
                 "aaSorting": []
+        });
+    });
+</script> --}}
+
+<script>
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#example thead tr')
+            .clone(true)
+            .addClass('filters')
+            .appendTo('#example thead');
+    
+        var table = $('#example').DataTable({
+            orderCellsTop: true,
+            fixedHeader: true,
+            initComplete: function () {
+                var api = this.api();
+    
+                // For each column
+                api
+                    .columns()
+                    .eq(0)
+                    .each(function (colIdx) {
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+                        var title = $(cell).text();
+                        $(cell).html('<input type="text" placeholder="' + title + '" />');
+    
+                        // On every keypress in this input
+                        $(
+                            'input',
+                            $('.filters th').eq($(api.column(colIdx).header()).index())
+                        )
+                            .off('keyup change')
+                            .on('change', function (e) {
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+    
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+                            })
+                            .on('keyup', function (e) {
+                                e.stopPropagation();
+    
+                                $(this).trigger('change');
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+                    });
+            },
         });
     });
 </script>
