@@ -53,17 +53,17 @@
 
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
-                                            <td>
+                                            <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['etapas.show', $etapa->id_etapa], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Ver', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">
+                                                            ver
+                                                        </button>
                                                     </div>
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['etapas.show', $etapa->id_etapa], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                        <button type="button" class="btn 'btn btn-warning w-100'" data-bs-toggle="modal" data-bs-target="#verEtapaModal">
+                                                            parte
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -78,7 +78,14 @@
         </div>
     </div>
 </section>
+
+@include('Ingenieria.Servicios.Etapas.modal.ver-etapa')
+<script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
+<script type="module"> 
+    import {cargarModalVerEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+    window.cargarModalVerEtapa = cargarModalVerEtapa;
+</script>
 <script>
     $(document).ready(function () {
         $('#example').DataTable({

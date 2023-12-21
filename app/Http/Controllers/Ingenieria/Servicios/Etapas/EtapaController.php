@@ -160,4 +160,47 @@ class EtapaController extends Controller
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto'));
     }
 
+    public function obtenerUnaEtapa($id){
+        $etapa = Etapa::find($id);
+        $etapaEspecial = (object)[
+            'descripcion_etapa' => $etapa->descripcion_etapa,
+            'estado' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->getEstado->nombre_estado,
+            'responsable' => $etapa->getResponsable->getEmpleado->nombre_empleado,
+            'fecha_inicio' => $etapa->fecha_inicio,
+            'fecha_limite' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_limite,
+            'fecha_fin_real' => '+late',
+            'duracion_estimada' => $this->calcularHorasEstimadas($etapa->getOrdenTrabajo),
+            'duracion_real' => '+late',
+            'fecha_ultima_actualizacion' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_carga,
+        ];
+        return $etapaEspecial;
+    }
+
+    function calcularHorasEstimadas($ordenes)
+    {
+        if($ordenes){
+            $horas_estimadas = 0;
+            $minutos_estimados = 0;
+            foreach ($ordenes as $orden){
+                $horas_estimadas += substr($orden->duracion_estimada, 0, 2);
+                $minutos_estimados += substr($orden->duracion_estimada, 3, 2);
+                if($minutos_estimados >= 60){
+                    $minutos_estimados -= 60;
+                    $horas_estimadas += 1;
+                }
+            }
+            if(strlen($horas_estimadas) < 2){
+                $horas_estimadas = '0'. $horas_estimadas;
+            }
+            if(strlen($minutos_estimados) < 2){
+                $minutos_estimados = '0'. $minutos_estimados;
+            }
+            $duracion_estimada = $horas_estimadas . ':' . $minutos_estimados;
+            return $duracion_estimada;
+        }else{
+            return '00:00';
+        }
+        
+    }
+
 }

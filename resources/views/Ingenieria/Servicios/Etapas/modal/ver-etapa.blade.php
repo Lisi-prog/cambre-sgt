@@ -14,20 +14,13 @@
                         <div class="form-group">
                             {!! Form::label('etapa', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nombre_etapa', null, ['class' => 'form-control', 'id' => 'input-etapa', 'readonly']) !!}
+                            {!! Form::text('etapa', null, ['class' => 'form-control', 'id' => 'input-etapa', 'readonly']) !!}
                             {{-- <input class="form-control" name="nom_orden" type="text"> --}}
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-3">
-                        <div class="form-group">
-                            {!! Form::label('tipo', "Tipo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            <span class="obligatorio">*</span>
-                            {!! Form::text('tipo', null, ['class' => 'form-control', 'id' => 'input-tipo', 'readonly']) !!}
-                        </div>
-                    </div>
                     <div class="col-3">
                         <div class="form-group">
                             {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
@@ -49,32 +42,27 @@
                         <div class="form-group">
                             {!! Form::label('fecha_inicio', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('fecha_inicio', null, ['class' => 'form-control', 'id' => 'input-fec_ini', 'readonly']) !!}
+                            {!! Form::text('fecha_inicio', null, ['class' => 'form-control', 'id' => 'input-fecha_inicio', 'readonly']) !!}
                         </div>                        
                     </div>
                     <div class="col-4">
                         <div class="form-group">
                             {!! Form::label('fecha_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('fecha_limite', null, ['class' => 'form-control', 'id' => 'input-fec_limite', 'readonly']) !!}
+                            {!! Form::text('fecha_limite', null, ['class' => 'form-control', 'id' => 'input-fecha_limite', 'readonly']) !!}
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
                             {!! Form::label('fecha_fin_real', "Fecha fin:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('fecha_inicio', null, ['class' => 'form-control', 'id' => 'input-fec_fin', 'readonly']) !!}
+                            {!! Form::text('fecha_inicio', null, ['class' => 'form-control', 'id' => 'input-fecha_fin_real', 'readonly']) !!}
                         </div> 
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-4">
-                        {{-- <div class="form-group">
-                            {!! Form::label('fecha_inicio', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            <span class="obligatorio">*</span>
-                            {!! Form::text('fecha_inicio', null, ['class' => 'form-control', 'id' => 'input-fec_ini', 'readonly']) !!}
-                        </div>                         --}}
                     </div>
                     <div class="col-4">
                         <div class="form-group">
@@ -96,26 +84,18 @@
                     {!! Form::label('ultimo_parte', "Ultimo parte:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                     <div class="col-3">
                         <div class="form-group">
-                            {!! Form::label('fecha_ultimo_parte', "Fecha:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('fecha_ultima_actualizacion', "Fecha:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('fecha_ultimo_parte', null, ['class' => 'form-control', 'id' => 'input-fecha_ultimo_parte', 'readonly']) !!}
+                            {!! Form::text('fecha_ultima_actualizacion', null, ['class' => 'form-control', 'id' => 'input-fecha_ultima_actualizacion', 'readonly']) !!}
                         </div> 
                     </div>
                     <div class="col-9">
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             {!! Form::label('observacion', "Observacion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('observacion', null, ['class' => 'form-control', 'id' => 'input-observacion', 'readonly']) !!}
-                        </div> 
+                        </div>  --}}
                     </div>
-
-                    <div class="col-4">
-                        <div class="form-group">
-                            {!! Form::label('supervisor', "Supervisor:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            <span class="obligatorio">*</span>
-                            {!! Form::text('supervisor', null, ['class' => 'form-control', 'id' => 'input-supervisor', 'readonly']) !!}
-                        </div> 
-                    </div> 
                 </div>
             </div>
             <div class="modal-footer">

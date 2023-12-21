@@ -84,6 +84,40 @@ export function crearCuadrOrdenes(id_etapa){
     }
     }));
 }
+export function cargarModalVerEtapa(id_etapa){
+    let input_etapa = document.getElementById("input-etapa");
+    let input_estado = document.getElementById("input-estado");
+    let input_responsable = document.getElementById("input-responsable");
+    let input_fecha_inicio = document.getElementById("input-fecha_inicio");
+    let input_fecha_limite = document.getElementById("input-fecha_limite");
+    let input_fecha_fin = document.getElementById("input-fecha_fin_real");
+    let input_duracion_estimada = document.getElementById("input-duracion_estimada");
+    let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_fecha_ultima_actualizacion = document.getElementById("input-fecha_ultima_actualizacion");
+    $.when($.ajax({
+        type: "post",
+        url: '/etapa/obtener-una-etapa/'+id_etapa, 
+        data: {
+            id_etapa: id_etapa,
+        },
+    success: function (response) {
+        console.log(response)
+            input_etapa.value = response.descripcion_etapa;
+            input_estado.value = response.estado;
+            input_responsable.value = response.responsable;
+            input_fecha_inicio.value = response.fecha_inicio;
+            input_fecha_limite.value = response.fecha_limite;
+            input_fecha_fin.value = response.fecha_fin_real;
+            input_duracion_estimada.value = response.duracion_estimada;
+            input_duracion_real.value = response.duracion_real;
+            input_fecha_ultima_actualizacion.value = response.input_fecha_ultima_actualizacion;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
 export function cargarModalVerOrden(id_orden){
     let input_orden = document.getElementById("input-orden");
     let input_tipo = document.getElementById("input-tipo");
@@ -118,22 +152,7 @@ export function cargarModalVerOrden(id_orden){
             input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
             input_observacion.value = element.descripcion_ultimo_parte;
             input_supervisor.value = element.supervisa;
-            // html_odt = `<tr>
-            //                 <td class="text-center">`+element.orden+`</td>
-            //                 <td class="text-center">`+element.tipo+`</td>
-            //                 <td class="text-center">`+element.estado+`</td>
-            //                 <td class="text-center">`+element.responsable+`</td>
-            //                 <td class="text-center">`+element.fecha_inicio+`</td>
-            //                 <td class="text-center">`+element.fecha_limite+`</td>
-            //                 <td class="text-center">`+element.fecha_fin_real+`</td>
-            //                 <td class="text-center">`+element.duracion_estimada+`</td>
-            //                 <td class="text-center">`+element.duracion_real+`</td>
-            //                 <td class="text-center">`+element.fecha_ultimo_parte+`</td>
-            //                 <td class="text-center">`+element.descripcion_ultimo_parte+`</td>
-            //                 <td class="text-center">`+element.supervisa+`</td>
-            //             </tr>`
         });
-        // div_cuadro_orden_trabajo.innerHTML = html_odt;
     },
     error: function (error) {
         console.log(error);

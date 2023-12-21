@@ -103,14 +103,14 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script>
+    <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
-    {{-- <script>
-        window.addEventListener("load", myInitFunction);
-        function myInitFunction(){
-            console.log('hola')
-        }
-    </script> --}}
+    <script type="module"> 
+        import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        window.crearCuadrOrdenes = crearCuadrOrdenes;
+        window.cargarModalVerOrden = cargarModalVerOrden;
+        window.obtenerPartes = obtenerPartes;
+    </script>
 </section>
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
