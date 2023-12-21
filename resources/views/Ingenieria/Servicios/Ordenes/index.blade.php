@@ -65,13 +65,11 @@
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}" style="text-decoration:none; font-variant: none;">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}} <i class="fas fa-eye"></i></abbr></td>
 
-                                            {{-- <td class='text-center' style="vertical-align: middle;" title="{{$orden_trabajo->getEtapa->getServicio->nombre_servicio}}">{{$orden_trabajo->getEtapa->getServicio->codigo_servicio}}</td> --}}
-
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->descripcion_etapa}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->nombre_orden_trabajo}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getTipoOrden()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getNombreTipoOrden()}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte_trabajo')->first()->getEstado->nombre_estado ?? ''}}</td>
 
@@ -82,7 +80,7 @@
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden_trabajo}})">
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden_trabajo}}, {{$orden_trabajo->getTipoOrden()}})">
                                                             ver
                                                         </button>
                                                     </div>
