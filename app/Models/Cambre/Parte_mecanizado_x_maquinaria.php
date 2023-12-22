@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class parte_mecanizado_x_maquinaria extends Model
+class Parte_mecanizado_x_maquinaria extends Model
 {
     use HasFactory;
     

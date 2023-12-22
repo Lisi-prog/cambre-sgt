@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Orden_mecanizado extends Model
+class Orden_mantenimiento extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'orden_mecanizado';
+    protected $table = 'orden_mantenimiento';
 
-    protected $primaryKey = 'id_orden_mecanizado';
+    protected $primaryKey = 'id_orden_mantenimiento';
 
     public $incrementing = true;
 
     protected $fillable = [ 
-        'revision',
-        'cantidad',
-        'ruta_pieza',
+        'id_tipo_orden_mantenimiento',
         'id_orden'
     ];
 
@@ -30,8 +28,13 @@ class Orden_mecanizado extends Model
         return $this->belongsTo(Orden::class, 'id_orden');
     }
 
+    public function getTipoOrdenMantenimiento()
+    {
+        return $this->belongsTo(Tipo_orden_mantenimiento::class, 'id_tipo_orden_mantenimiento');
+    }
+
     public function getTipoOrden()
     {
-        return 'Mecanizado';
+        return 'Manufactura';
     }
 }

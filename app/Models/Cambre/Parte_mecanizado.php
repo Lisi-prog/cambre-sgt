@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class parte_mecanizado extends Model
+class Parte_mecanizado extends Model
 {
     use HasFactory;
     
@@ -19,13 +19,8 @@ class parte_mecanizado extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'observacion',
-        'fecha',
-        'fecha_limite',
-        'fecha_carga',
-        'horas',
         'id_estado_mecanizado',
-        'id_orden_mecanizado',
+        'id_parte',
         'id_responsabilidad'
     ];
 
@@ -39,8 +34,8 @@ class parte_mecanizado extends Model
         return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 
-    public function getOrden()
+    public function getParte()
     {
-        return $this->belongsTo(Orden_mecanizado::class, 'id_orden_mecanizado');
+        return $this->belongsTo(Parte::class, 'id_parte');
     }
 }

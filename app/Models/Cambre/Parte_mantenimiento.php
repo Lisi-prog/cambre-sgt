@@ -6,22 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Parte_trabajo extends Model
+class Parte_mantenimiento extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'parte_trabajo';
+    protected $table = 'parte_matenimiento';
 
-    protected $primaryKey = 'id_parte_trabajo';
+    protected $primaryKey = 'id_parte_mantenimiento';
 
     public $incrementing = true;
 
-    protected $fillable = [
+    protected $fillable = [ 
+        'engase',
+        'prueba_de_agua',
+        'prueba_electrica',
+        'id_parte',
         'id_estado',
-        'id_responsabilidad',
-        'id_parte' 
+        'id_responsabilidad'
     ];
 
     public function getEstado()

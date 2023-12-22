@@ -18,18 +18,10 @@ class Orden_trabajo extends Model
 
     public $incrementing = true;
 
-    protected $fillable = [ 
-        'nombre_orden_trabajo',
-        'duracion_estimada',
+    protected $fillable = [
         'id_tipo_orden_trabajo',
-        'id_etapa',
-        'id_responsabilidad'
+        'id_orden'
     ];
-
-    public function getEtapa()
-    {
-        return $this->belongsTo(Etapa::class, 'id_etapa');
-    }
 
     public function getPartes()
     {
@@ -41,9 +33,9 @@ class Orden_trabajo extends Model
         return $this->belongsTo(Tipo_orden_trabajo::class, 'id_tipo_orden_trabajo');
     }
     
-    public function getResponsable()
+    public function getOrden()
     {
-        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
+        return $this->belongsTo(Orden::class, 'id_orden');
     }
 //Estas dos funciones probablemente se podrian unir en una sola que devuelva un objeto con ambas propiedades
 //pero me parece que asi es mas comodo 

@@ -21,19 +21,13 @@ class Orden_manufactura extends Model
     protected $fillable = [ 
         'revision',
         'cantidad',
-        'fecha_inicio',
-        'fecha_requerida',
-        'ruta_pieza',
-        'observaciones',
-        'duracion_estimada',
-        'id_orden_mecanizado',
-        'id_etapa',
-        'id_responsabilidad'
+        'ruta_plano',
+        'id_orden'
     ];
 
-    public function getProyectos()
+    public function getOrden()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Orden::class, 'id_orden');
     }
 
     public function getTipoOrden()

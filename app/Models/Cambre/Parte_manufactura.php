@@ -6,27 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Parte_trabajo extends Model
+class Parte_manufactura extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'parte_trabajo';
+    protected $table = 'parte_manufactura';
 
-    protected $primaryKey = 'id_parte_trabajo';
+    protected $primaryKey = 'id_parte_manufactura';
 
     public $incrementing = true;
 
-    protected $fillable = [
-        'id_estado',
-        'id_responsabilidad',
-        'id_parte' 
+    protected $fillable = [ 
+        'id_parte',
+        'id_estado_manufactura',
+        'id_responsabilidad'
     ];
 
-    public function getEstado()
+    public function getEstadoManufactura()
     {
-        return $this->belongsTo(Estado::class, 'id_estado');
+        return $this->belongsTo(Estado_manufactura::class, 'id_estado_manufactura');
     }
 
     public function getResponsable()
