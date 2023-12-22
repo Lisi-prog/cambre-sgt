@@ -20,18 +20,12 @@ class Parte_mecanizado extends Model
 
     protected $fillable = [ 
         'id_estado_mecanizado',
-        'id_parte',
-        'id_responsabilidad'
+        'id_parte'
     ];
 
     public function getEstadoMecanizado()
     {
         return $this->belongsTo(Estado_mecanizado::class, 'id_estado_mecanizado');
-    }
-
-    public function getResponsable()
-    {
-        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 
     public function getParte()

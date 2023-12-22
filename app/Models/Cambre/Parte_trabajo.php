@@ -20,18 +20,12 @@ class Parte_trabajo extends Model
 
     protected $fillable = [
         'id_estado',
-        'id_responsabilidad',
         'id_parte' 
     ];
 
     public function getEstado()
     {
         return $this->belongsTo(Estado::class, 'id_estado');
-    }
-
-    public function getResponsable()
-    {
-        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 
     public function getParte()

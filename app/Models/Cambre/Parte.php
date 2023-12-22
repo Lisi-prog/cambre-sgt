@@ -24,7 +24,8 @@ class Parte extends Model
         'fecha_limite',
         'fecha_carga',
         'horas',
-        'id_orden'
+        'id_orden',
+        'id_responsabilidad'
     ];
 
     public function getEstado()

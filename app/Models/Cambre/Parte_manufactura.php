@@ -20,18 +20,12 @@ class Parte_manufactura extends Model
 
     protected $fillable = [ 
         'id_parte',
-        'id_estado_manufactura',
-        'id_responsabilidad'
+        'id_estado_manufactura'
     ];
 
     public function getEstadoManufactura()
     {
         return $this->belongsTo(Estado_manufactura::class, 'id_estado_manufactura');
-    }
-
-    public function getResponsable()
-    {
-        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 
     public function getParte()

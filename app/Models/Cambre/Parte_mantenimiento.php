@@ -23,18 +23,12 @@ class Parte_mantenimiento extends Model
         'prueba_de_agua',
         'prueba_electrica',
         'id_parte',
-        'id_estado',
-        'id_responsabilidad'
+        'id_estado'
     ];
 
     public function getEstado()
     {
         return $this->belongsTo(Estado::class, 'id_estado');
-    }
-
-    public function getResponsable()
-    {
-        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 
     public function getParte()

@@ -254,7 +254,9 @@ CREATE TABLE `parte`(
   `fecha_carga` datetime NOT NULL,
   `horas` time NOT NULL,
   `id_orden` int,
+  `id_responsabilidad` int,
   PRIMARY KEY(`id_parte`),
+  CONSTRAINT `pk_id_parte_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_parte_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
 );
 
@@ -277,9 +279,7 @@ CREATE TABLE `parte_trabajo` (
   `id_parte_trabajo` int NOT NULL AUTO_INCREMENT,
   `id_estado` int,
   `id_parte` int,
-  `id_responsabilidad` int,
   PRIMARY KEY (`id_parte_trabajo`),
-  CONSTRAINT `pk_id_parte_trabajo_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_parte_trabajo_x_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
   CONSTRAINT `pk_id_parte_trabajo_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
@@ -298,9 +298,7 @@ CREATE TABLE `parte_manufactura` (
   `id_parte_manufactura` int NOT NULL AUTO_INCREMENT,
   `id_estado_manufactura` int,
   `id_parte` int,
-  `id_responsabilidad` int,
   PRIMARY KEY (`id_parte_manufactura`),
-  CONSTRAINT `pk_id_parte_manufactura_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_parte_manufactura_x_estado_manufactura` FOREIGN KEY (`id_estado_manufactura`) REFERENCES `estado_manufactura`(`id_estado_manufactura`),
   CONSTRAINT `pk_id_parte_manufactura_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
@@ -320,10 +318,8 @@ CREATE TABLE `parte_mecanizado` (
   `id_parte_mecanizado` int NOT NULL AUTO_INCREMENT,
   `id_estado_mecanizado` int,
   `id_parte` int,
-  `id_responsabilidad` int,
   PRIMARY KEY (`id_parte_mecanizado`),
   CONSTRAINT `pk_id_parte_mecanizado_x_estado_mecanizado` FOREIGN KEY (`id_estado_mecanizado`) REFERENCES `estado_mecanizado`(`id_estado_mecanizado`),
-  CONSTRAINT `pk_id_parte_mecanizado_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_parte_mecanizado_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
 
@@ -359,9 +355,7 @@ CREATE TABLE `parte_mantenimiento` (
   `prueba_electrica` boolean,
   `id_estado` int,
   `id_parte` int,
-  `id_responsabilidad` int,
   PRIMARY KEY (`id_parte_mantenimiento`),
-  CONSTRAINT `pk_id_pm_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_pm_x_estado` FOREIGN KEY (`id_estado`) REFERENCES `estado`(`id_estado`),
   CONSTRAINT `pk_id_pm_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
