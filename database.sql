@@ -360,20 +360,20 @@ CREATE TABLE `parte_mantenimiento` (
   CONSTRAINT `pk_id_pm_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
 
-CREATE TABLE `parte_mecanizado_x_maquinaria` (
-  `id_parte_mec_x_maq` int NOT NULL AUTO_INCREMENT,
-  `id_parte_mecanizado` int,
-  `id_maquinaria` boolean,
-  `horas_maquina` time,
-  PRIMARY KEY (`id_parte_mec_x_maq`),
-  CONSTRAINT `pk_id_parte_mec_x_maq_x_parte_mec` FOREIGN KEY (`id_parte_mecanizado`) REFERENCES `parte_mecanizado`(`id_parte_mecanizado`),
-  CONSTRAINT `pk_id_parte_mec_x_maq_x_maq` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`)
-);
+-- CREATE TABLE `parte_mecanizado_x_maquinaria` (
+--  `id_parte_mec_x_maq` int NOT NULL AUTO_INCREMENT,
+--  `id_parte_mecanizado` int,
+--  `id_maquinaria` boolean,
+--  `horas_maquina` time,
+--  PRIMARY KEY (`id_parte_mec_x_maq`),
+--  CONSTRAINT `pk_id_parte_mec_x_maq_x_parte_mec` FOREIGN KEY (`id_parte_mecanizado`) REFERENCES `parte_mecanizado`(`id_parte_mecanizado`),
+--  CONSTRAINT `pk_id_parte_mec_x_maq_x_maq` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`)
+-- );
 
 CREATE TABLE `parte_mantenimiento_x_maquinaria` (
   `id_parte_man_x_maq` int NOT NULL AUTO_INCREMENT,
   `id_parte_mantenimiento` int,
-  `id_maquinaria` boolean,
+  `id_maquinaria` int,
   `horas_maquina` time,
   PRIMARY KEY (`id_parte_man_x_maq`),
   CONSTRAINT `pk_id_parte_man_x_maq_x_parte_man` FOREIGN KEY (`id_parte_mantenimiento`) REFERENCES `parte_mantenimiento`(`id_parte_mantenimiento`),
@@ -491,8 +491,10 @@ VALUES
 
 DROP TABLE parte_mantenimiento;
 DROP TABLE orden_mantenimiento;
+DROP TABLE parte_mecanizado_x_maquinaria;
 DROP TABLE parte_mecanizado;
 DROP TABLE orden_mecanizado;
+DROP TABLE parte_manufactura;
 DROP TABLE orden_manufactura;
 DROP TABLE parte_trabajo;
 DROP TABLE orden_trabajo;

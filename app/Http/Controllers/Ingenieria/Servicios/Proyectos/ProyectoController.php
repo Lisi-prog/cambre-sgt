@@ -127,9 +127,9 @@ class ProyectoController extends Controller
         // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $tipo_servicio = $request->input('id_tipo_proyecto');
 
-        if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
-            $this->actualizarPrioridades($prioridad);
-        }
+        // if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
+        //     $this->actualizarPrioridades($prioridad);
+        // }
 
         $responsabilidad = Responsabilidad::create([
             // 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
