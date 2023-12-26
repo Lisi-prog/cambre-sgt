@@ -64,4 +64,5 @@ class Orden extends Model
         }
         return $responsable;
     }
+
 }
