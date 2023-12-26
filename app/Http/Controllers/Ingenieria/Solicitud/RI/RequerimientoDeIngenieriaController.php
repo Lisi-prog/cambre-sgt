@@ -35,7 +35,8 @@ class RequerimientoDeIngenieriaController extends Controller
     {        
         //$permisos = Permission::orderBy('name', 'asc')->get();
         $ListaRI = Requerimiento_de_ingenieria::get();
-        return view('Ingenieria.Solicitud.RI.index', compact('ListaRI'));
+        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        return view('Ingenieria.Solicitud.RI.index', compact('ListaRI', 'Prioridades'));
     }
 
     public function crearAlt(Request $request)

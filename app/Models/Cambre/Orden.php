@@ -37,6 +37,11 @@ class Orden extends Model
     
     public function getResponsabilidaOrden()
     {
-        return $this->belongsTo(Responsabilidad_orden::class, 'id_orden');
+        return $this->hasMany(Responsabilidad_orden::class, 'id_orden');
+    }
+
+    public function getOrdenTrabajo()
+    {
+        return $this->hasOne(Orden_trabajo::class, 'id_orden');
     }
 }

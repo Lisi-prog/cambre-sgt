@@ -33,8 +33,8 @@ class Responsabilidad extends Model
         return $this->belongsTo(Empleado::class, 'id_empleado');
     }
 
-    public function getProyectos()
+    public function getRol()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Rol_empleado::class, 'id_rol_empleado');
     }
 }

@@ -42,4 +42,9 @@ class Parte extends Model
     {
         return $this->belongsTo(Orden::class, 'id_orden');
     }
+
+    public function getParteTrabajo()
+    {
+        return $this->hasOne(Parte_trabajo::class, 'id_parte');
+    }
 }

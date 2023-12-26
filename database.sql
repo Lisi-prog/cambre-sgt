@@ -238,7 +238,7 @@ CREATE TABLE `orden`(
 );
 
 CREATE TABLE `responsabilidad_orden`(
-  `id_responsabilidad_orden` int,
+  `id_responsabilidad_orden` int NOT NULL AUTO_INCREMENT,
   `id_responsabilidad` int,
   `id_orden` int,
   PRIMARY KEY(`id_responsabilidad_orden`),

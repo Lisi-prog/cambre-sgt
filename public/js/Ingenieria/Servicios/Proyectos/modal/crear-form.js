@@ -6,6 +6,7 @@ import bodyModalOrdenMecanizado from './ver-orden-mecanizado.js';
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
 });
+
 function modificarFormulario(){
    let tipo_orden = Number($(this).val());
    let formulario = document.getElementById("formulario");
@@ -16,6 +17,7 @@ function modificarFormulario(){
         html = opcion1
         formulario.innerHTML += html;
         cargarTipoOrdenTrabajo();
+        cargarSupervisores()
         cargarEmpleados();
         cargarEstados();
         break;
@@ -50,8 +52,10 @@ export function crearCuadrOrdenes(id_etapa){
     }else{
         cuadro_oculto_de_ordenes.hidden = true;
     }
+
     let div_cuadro_orden = document.getElementById("cuadro-ordenes");
     let html_orden = '';
+
     $.when($.ajax({
         type: "post",
         url: '/orden/obtener-orden-etapa/'+id_etapa, 
@@ -206,8 +210,6 @@ function cargarModalVerOrdenMecanizado(id_orden){
             id_orden: id_orden,
         },
     success: function (response) {
-        console.log(response)
-        console.log(input_estado_mecanizado)
         response.forEach(element => {
             // input_orden.value = '';
             input_revision.value = element.revision;
@@ -346,6 +348,31 @@ function cargarEmpleados(){
                                 `
         });
         c_bx_empleados.innerHTML += html_empleados;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarSupervisores(){
+    let c_bx_supervisores = document.getElementById("cbx_supervisor");
+    let html_supervisores = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-supervisores', 
+        data: {
+            
+        },
+    success: function (response) {
+        console.log(response)
+        response.forEach(element => {
+            html_supervisores += `
+                                <option value="`+element.id_empleado+`">`+element.nombre_empleado
+                                +`</option> 
+                                `
+        });
+        c_bx_supervisores.innerHTML += html_supervisores;
     },
     error: function (error) {
         console.log(error);

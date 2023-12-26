@@ -11,9 +11,12 @@
         </div>
         <div class="ms-auto">
             {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['r_i.create'], 'class' => 'd-flex justify-content-end']) !!}
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRIModal">
+                Nuevo   
+            </button>
+                {{-- {!! Form::open(['method' => 'GET', 'route' => ['r_i.create'], 'class' => 'd-flex justify-content-end']) !!}
                     {!! Form::submit('Nueva', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!}
+                {!! Form::close() !!} --}}
             {{-- @endcan --}}
         </div>
     </div>
@@ -156,8 +159,9 @@
             </div>
         </div>
     </div>
-    
 </section>
+@include('Ingenieria.Solicitud.RI.modal.m-crear')
+
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
 {{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}

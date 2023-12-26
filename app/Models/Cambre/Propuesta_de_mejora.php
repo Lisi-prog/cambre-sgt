@@ -33,6 +33,11 @@ class Propuesta_de_mejora extends Model
         'fecha_carga'
     ];
 
+    public function getSolicitud()
+    {
+        return $this->hasOne(Solicitud::class, 'id_solicitud');
+    }
+    
     public function getEmpleado()
     {
         return $this->belongsTo(Empleado::class, 'id_empleado');

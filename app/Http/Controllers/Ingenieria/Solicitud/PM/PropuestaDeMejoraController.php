@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 //agregamos
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 use Spatie\Permission\Models\Permission;
@@ -18,6 +19,8 @@ use App\Models\Cambre\Solicitud;
 use App\Models\Cambre\Propuesta_de_mejora;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
+use App\Models\Cambre\Rol_empleado;
+use App\Models\Cambre\Responsabilidad;
 
 class PropuestaDeMejoraController extends Controller
 {
@@ -34,7 +37,8 @@ class PropuestaDeMejoraController extends Controller
     {        
         //$permisos = Permission::orderBy('name', 'asc')->get();
         $ListaPM = Propuesta_de_mejora::get();
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM'));
+        $supervisores = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores'));
     }
 
     public function crearAlt(Request $request)
@@ -113,23 +117,53 @@ class PropuestaDeMejoraController extends Controller
 
     public function store(Request $request)
     {
+
         $this->validate($request, [
-            'name' => 'required|string|max:189|unique:permissions,name'
+            'titulo-propuesta' => 'required',
+            'id_lider' => 'required',
+            'obj-propuesta' => 'required',
+            'desc-propuesta' => 'required',
+            'an-i-propuesta' => 'required',
+            'bene-propuesta' => 'required',
+            'prob-propuesta' => 'required',
+            'eva-propuesta' => 'required',
         ], [
-            'name.required' => 'El campo nombre del permiso es obligatorio.',
-            'name.unique' => 'El permiso ya existe.',
-            'name.max' => 'El maximo de caracteres es de 190.'
+            'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
+            'id_lider.required' => 'Seleccione un lider.',
+            'obj-propuesta.required' => 'El objetivo de la propuesta no puede estar vacio.'
         ]);
 
-        $permiso =  Permission::create([
-                        'name' => strtoupper($request->input('name'))
-                    ]); 
+        $titulo = $request->input('titulo-propuesta');
+        $lider = $request->input('id_lider');
+        $objetivo = $request->input('obj-propuesta');
+        $descripcion = $request->input('desc-propuesta');
+        $analisis = $request->input('en-i-propuesta');
+        $beneficio = $request->input('bene-propuesta');
+        $problema = $request->input('prob-propuesta');
+        $evaluacion = $request->input('eva-propuesta');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
 
-        $role = Role::where('name','ADMIN')->first();
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
 
-        $role->givePermissionTo(strtoupper($request->input('name')));
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $lider,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
 
-        return redirect()->route('permisos.index')->with('mensaje', 'Permiso creado exitosamente.');                      
+        $propuestaMejora =  Propuesta_de_mejora::create([
+                                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                                'titulo_propuesta' => $titulo,
+                                'objetivo_propuesta' => $objetivo,
+                                'descripcion_propuesta' => $descripcion,
+                                'analisis_propuesta' => $analisis,
+                                'beneficio_propuesta' => $beneficio,
+                                'problema_propuesta' => $problema,
+                                'evaluacion_propuesta' => $evaluacion,
+                                'fecha_carga' => $fecha_carga
+                            ]); 
+
+        return redirect()->route('p_m.index')->with('mensaje', 'Propuesta de mejora creado exitosamente.');                      
     }
     
     public function show($id)

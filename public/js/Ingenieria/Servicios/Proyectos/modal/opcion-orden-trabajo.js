@@ -1,12 +1,21 @@
 export default 
 `<div class="row"> 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
-    <div class="form-group"> 
-        <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de trabajo:</label> 
-        <span class="obligatorio">*</span> 
-        <input class="form-control" name="nom_orden" type="text" id="nom_orden" required> 
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
+        <div class="form-group"> 
+            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de trabajo:</label> 
+            <span class="obligatorio">*</span> 
+            <input class="form-control" name="nom_orden" type="text" id="nom_orden" required> 
+        </div> 
     </div> 
-</div> 
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+        <div class="form-group">
+            <label for="supervisor" class="control-label fs-7" style="white-space: nowrap;">Supervisor:</label> 
+            <span class="obligatorio">*</span> 
+            <select class="form-select form-group" id="cbx_supervisor" name="supervisor" required>
+                <option selected="selected" value="">Seleccionar</option>
+            </select>
+        </div>
+    </div>
 </div> 
 <div class="row"> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 

@@ -7,13 +7,16 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h4 class="titulo page__heading my-auto">Propuestas de Mejora</h4>
+            <h4 class="titulo page__heading my-auto">Propuesta de mejora</h4>
         </div>
         <div class="ms-auto">
             {{-- @can('CREAR-PM') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['p_m.create'], 'class' => 'd-flex justify-content-end']) !!}
+                {{-- {!! Form::open(['method' => 'GET', 'route' => ['p_m.create'], 'class' => 'd-flex justify-content-end']) !!}
                     {!! Form::submit('Nueva', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!}
+                {!! Form::close() !!} --}}
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearPMModal">
+                    Nuevo   
+                </button>
             {{-- @endcan --}}
         </div>
     </div>
@@ -73,7 +76,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Pm->getSolicitud->nombre_solicitante}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Pm->getSector->nombre_sector}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Pm->getSector->nombre_sector ?? ''}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Pm->getEmpleado->nombre_empleado ?? 'no asignado'}}</td>
 
@@ -155,6 +158,7 @@
         </div>
     </div>
 </section>
+@include('Ingenieria.Solicitud.PM.modal.m-crear')
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
 {{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}

@@ -19,6 +19,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::post('/orden/obtener-tipo-orden',[OrdenController::class, 'obtenerTipoTrabajo']);
     Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleados']);
     Route::post('/orden/obtener-estados',[OrdenController::class, 'obtenerEstados']);
+    Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
     Route::post('/orden/obtener-estados-mecanizados',[OrdenController::class, 'obtenerEstadosMecanizados']);
     Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
 
@@ -35,6 +36,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
+    Route::get('p_m/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('pm.evaluar');
     Route::resource('r_i', RequerimientoDeIngenieriaController::class);
     Route::resource('p_m', PropuestaDeMejoraController::class);
     Route::resource('proyectos', ProyectoController::class);
