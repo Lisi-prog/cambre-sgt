@@ -47,7 +47,7 @@ function changeTdColor() {
             values[i].children[row_index_first].style.backgroundColor = "#FF160B"; // if matches, change color
         }
         if (values[i].children[row_index_first].innerHTML == "Revisar") { // check if td has desired value
-            values[i].children[row_index_first].style.backgroundColor = "#CFFF0B"; // if matches, change color
+            values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
         }
     }
     //--------------------------------

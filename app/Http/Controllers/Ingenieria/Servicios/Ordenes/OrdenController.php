@@ -58,7 +58,7 @@ class OrdenController extends Controller
             $ordenes_trabajo = Orden::orderBy('id_orden')->get();
             return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
         } else {
-            return $ordenes_trabajo = Orden::orderBy('id_orden')->get();
+            $ordenes_trabajo = Orden::orderBy('id_orden')->get();
             return view('Ingenieria.Servicios.Ordenes.index-emp', compact('ordenes_trabajo'));
         }   
     }
