@@ -40,29 +40,6 @@
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {{-- <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Rol" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -76,7 +53,6 @@
                                     <th class='text-center' style="color:#fff; width:20vh">Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
-                                    <th class='text-center' style="color:#fff;">Tipo de orden</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
@@ -93,12 +69,10 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getEtapa->descripcion_etapa}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->nombre_orden}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getOrdenTrabajo->getNombreTipoOrden()}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado ?? ''}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getSupervisor()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getNombreResponsable()}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 

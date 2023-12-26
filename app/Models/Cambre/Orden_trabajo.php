@@ -37,6 +37,8 @@ class Orden_trabajo extends Model
     {
         return $this->belongsTo(Orden::class, 'id_orden');
     }
+
+    
 //Estas dos funciones probablemente se podrian unir en una sola que devuelva un objeto con ambas propiedades
 //pero me parece que asi es mas comodo 
     public function getTipoOrden()

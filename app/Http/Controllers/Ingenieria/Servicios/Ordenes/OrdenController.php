@@ -54,8 +54,13 @@ class OrdenController extends Controller
     
     public function index(Request $request)
     {        
-        $ordenes_trabajo = Orden_trabajo::orderBy('id_orden_trabajo')->get();
-        return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
+        if (Auth::user()->hasRole('SUPERVISOR')) {
+            $ordenes_trabajo = Orden::orderBy('id_orden')->get();
+            return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
+        } else {
+            return $ordenes_trabajo = Orden::orderBy('id_orden')->get();
+            return view('Ingenieria.Servicios.Ordenes.index-emp', compact('ordenes_trabajo'));
+        }   
     }
 
     public function show($id)

@@ -119,19 +119,19 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Ver', ['class' => 'btn btn-danger w-100']) !!}
+                                                            {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                             {!! Form::close() !!}
                                                         </div>
                                                         <div class="col-6">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
+                                                            {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
                                                             {!! Form::close() !!}
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2">
                                                         <div class="col-12">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Gestionar', ['class' => 'btn btn-primary w-100']) !!}
+                                                            {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
                                                             {!! Form::close() !!}
                                                         </div>
                                                     </div>
