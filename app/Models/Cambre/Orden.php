@@ -45,6 +45,10 @@ class Orden extends Model
         return $this->hasOne(Orden_trabajo::class, 'id_orden');
     }
 
+    public function getFechaLimite(){
+        return $this->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite;
+    }
+
     public function getSupervisor(){
         $supervisor = '';
         foreach ($this->getResponsabilidaOrden as $resp_orden) {
@@ -120,6 +124,25 @@ class Orden extends Model
             return ($dia . '-' . $mes . '-' . $año);
         }else{
             return '__-__-____';
+
+    public function getOrdenDe(){
+        // return $this->hasOne(Parte_manufactura::class, 'id_parte');
+        // return count(Orden_trabajo::where('id_orden', $this->id_orden)->get());
+
+        if (count(Orden_trabajo::where('id_orden', $this->id_orden)->get()) == 1) {
+            return $this->hasOne(Orden_trabajo::class, 'id_orden');
+        }
+
+        if (count(Orden_mecanizado::where('id_orden', $this->id_orden)->get()) == 1) {
+            return $this->hasOne(Orden_mecanizado::class, 'id_orden');
+        }
+
+        if (count(Orden_manufactura::where('id_orden', $this->id_orden)->get()) == 1) {
+            return $this->hasOne(Orden_manufactura::class, 'id_parte');
+        }
+
+        if (count(Orden_mantenimiento::where('id_orden', $this->id_orden)->get()) == 1) {
+            return $this->hasOne(Orden_mantenimiento::class, 'id_orden');
         }
     }
 }

@@ -30,8 +30,16 @@ class Orden_mecanizado extends Model
         return $this->belongsTo(Orden::class, 'id_orden');
     }
 
+    public function getPartes()
+    {
+        return $this->hasMany(Parte_mecanizado::class, 'id_orden_mecanizado');
+    }
+
     public function getTipoOrden()
     {
+        return 3;
+    }
+    public function getNombreTipoOrden(){
         return 'Mecanizado';
     }
 }

@@ -48,4 +48,5 @@ class Orden_trabajo extends Model
     public function getNombreTipoOrden(){
         return 'Trabajo';
     }
+
 }

@@ -32,6 +32,9 @@ class Orden_manufactura extends Model
 
     public function getTipoOrden()
     {
+        return 2;
+    }
+    public function getNombreTipoOrden(){
         return 'Manufactura';
     }
 }

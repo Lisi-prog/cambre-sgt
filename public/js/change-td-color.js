@@ -49,6 +49,9 @@ function changeTdColor() {
         if (values[i].children[row_index_first].innerHTML == "Revisar") { // check if td has desired value
             values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
         }
+        if (values[i].children[row_index_first].innerHTML == "Planos entregados") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
+        }
     }
     //--------------------------------
     calcularDiferenciaFechas();

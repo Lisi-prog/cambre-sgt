@@ -96,9 +96,20 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->nombre_orden}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getOrdenTrabajo->getNombreTipoOrden()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getOrdenDe->getNombreTipoOrden()}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado ?? ''}}</td>
+                                            @switch($orden_trabajo->getOrdenDe->getTipoOrden())
+                                                @case(1)
+                                                    <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado ?? ''}}</td>
+                                                    @break
+                                                @case(3)
+                                                    <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteMecanizado->getEstadoMecanizado->nombre_estado_mecanizado ?? ''}}</td>
+                                                    @break
+                                                @default
+                                                    
+                                            @endswitch
+
+                                            
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getSupervisor()}}</td>
 
@@ -109,14 +120,14 @@
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden}}, {{$orden_trabajo->getOrdenTrabajo->getTipoOrden()}})">
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden}}, {{$orden_trabajo->getOrdenDe->getTipoOrden()}})">
                                                             ver
                                                         </button>
                                                     </div>
                                                     <div class="col-6">
-                                                        <button type="button" class="btn 'btn btn-warning w-100'" data-bs-toggle="modal" data-bs-target="#verOrdenModal">
-                                                            parte
-                                                        </button>
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', $orden_trabajo->id_orden], 'style' => 'display:inline']) !!}
+                                                            {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
+                                                        {!! Form::close() !!}
                                                     </div>
                                                 </div>
                                             </td>
