@@ -58,9 +58,27 @@ class OrdenController extends Controller
             $ordenes_trabajo = Orden::orderBy('id_orden')->get();
             return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
         } else {
-            $ordenes_trabajo = Orden::orderBy('id_orden')->get();
+            $listaOrden = $this->listaOrdenEmp();
+            $ordenes_trabajo = Orden::whereIn('id_orden', $listaOrden)->orderBy('id_orden')->get();
             return view('Ingenieria.Servicios.Ordenes.index-emp', compact('ordenes_trabajo'));
         }   
+    }
+
+    public function listaOrdenEmp(){
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first()->id_rol_empleado;
+        $responsabilidades = Responsabilidad::where('id_rol_empleado', $rol_empleado)->where('id_empleado', Auth::user()->getEmpleado->id_empleado)->get();
+
+        foreach ($responsabilidades as $responsabilidad) {
+            $id_resp[] = $responsabilidad->id_responsabilidad;
+        }
+
+        $responsabilidades_orden = Responsabilidad_orden::whereIn('id_responsabilidad', $id_resp)->get();
+
+        foreach ($responsabilidades_orden as $responsabilidad_orden) {
+            $id_ordenes[] = $responsabilidad_orden->id_orden;
+        }
+
+        return $id_ordenes;
     }
 
     public function show($id)
