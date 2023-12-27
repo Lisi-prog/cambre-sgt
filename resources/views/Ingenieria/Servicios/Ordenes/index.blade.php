@@ -80,8 +80,10 @@
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
+                                    <th class='text-center' style="color:#fff;">Fecha finalizacion</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
+                                
                                 <tbody>
                                     
                                     @foreach ($ordenes_trabajo as $orden_trabajo)
@@ -112,6 +114,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getSupervisor()}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getFechaFinalizacion()}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
