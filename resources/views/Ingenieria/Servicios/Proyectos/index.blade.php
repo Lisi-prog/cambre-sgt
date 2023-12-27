@@ -123,9 +123,9 @@
                                                             {!! Form::close() !!}
                                                         </div>
                                                         <div class="col-6">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal">
+                                                                Prioridad  
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2">
@@ -241,4 +241,5 @@
 </script>
 
 @include('Ingenieria.Servicios.Proyectos.modal.crear-proyecto')
+@include('Ingenieria.Servicios.Proyectos.modal.modificar-prioridad')
 @endsection

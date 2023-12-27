@@ -102,7 +102,7 @@ class Orden extends Model
     {   
         $estado = '';
         //return $parte = $this->hasMany(Parte::class, 'id_orden')->orderBy('id_parte', 'desc')->first();
-        $parte = Parte::where('id_orden', $this->id_orden)->first();
+        $parte = Parte::where('id_orden', $this->id_orden)->orderBy('id_parte', 'desc')->first();
 
         $parte_trabajo = Parte_trabajo::where('id_parte', $parte->id_parte)->first();
         $parte_mecanizado = Parte_mecanizado::where('id_parte', $parte->id_parte)->first();
@@ -119,9 +119,9 @@ class Orden extends Model
             $estado = $parte_mantenimiento->getEstado;
         }
         if($estado == 'Completo' || $estado == 'Pieza finalizada' ){
-            $año = substr($parte->fecha_carga, 0, 4);
-            $mes = substr($parte->fecha_carga, 5, 2);
-            $dia = substr($parte->fecha_carga, 8, 2);
+            $año = substr($parte->fecha, 0, 4);
+            $mes = substr($parte->fecha, 5, 2);
+            $dia = substr($parte->fecha, 8, 2);
             return ($dia . '-' . $mes . '-' . $año);
         }else{
             return '__-__-____';
