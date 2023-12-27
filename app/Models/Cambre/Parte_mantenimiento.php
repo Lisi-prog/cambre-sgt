@@ -12,7 +12,7 @@ class Parte_mantenimiento extends Model
     
     public $timestamps = false;
     
-    protected $table = 'parte_matenimiento';
+    protected $table = 'parte_mantenimiento';
 
     protected $primaryKey = 'id_parte_mantenimiento';
 

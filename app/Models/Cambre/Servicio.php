@@ -56,4 +56,8 @@ class Servicio extends Model
     {
         return $this->hasMany(Etapa::class, 'id_servicio');
     }
+
+    public function getEstado(){
+        return $this->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado;
+    }
 }

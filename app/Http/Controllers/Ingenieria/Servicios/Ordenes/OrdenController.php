@@ -58,7 +58,13 @@ class OrdenController extends Controller
             $ordenes_trabajo = Orden::orderBy('id_orden')->get();
             return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
         } else {
-            $listaOrden = $this->listaOrdenEmp();
+
+            try {
+                $listaOrden = $this->listaOrdenEmp();
+            } catch (\Throwable $th) {
+                $listaOrden = [];
+            }
+            
             $ordenes_trabajo = Orden::whereIn('id_orden', $listaOrden)->orderBy('id_orden')->get();
             return view('Ingenieria.Servicios.Ordenes.index-emp', compact('ordenes_trabajo'));
         }   
@@ -266,33 +272,56 @@ class OrdenController extends Controller
         $observaciones = $request->input('observaciones');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
+        $id_supervisor = 1;//$request->input('supervisor');
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $id_responsable,
             'id_rol_empleado' => $rol_empleado->id_rol_empleado
         ]);
 
-        $orden_mecanizado = Orden_mecanizado::create([
-            'revision' => $revision,
-            'cantidad' => $cantidad,
-            'fecha_inicio' => $fecha_ini,
-            'fecha_requerida' => $fecha_req,
-            'ruta_plano' =>  $ruta_plano,
-            'observaciones' => $observaciones,
-            'duracion_estimada' => $duracion_estimada,
-            'id_etapa' => $id_etapa,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        $responsabilidad_supervisor = Responsabilidad::create([
+            'id_empleado' => $id_supervisor,
+            'id_rol_empleado' => $rol_empleado_supervisor->id_rol_empleado
         ]);
 
-        Parte_mecanizado::create([
-            'observacion' => 'Generacion de orden mecanizado',
+        $orden = Orden::create([
+                    'nombre_orden' => $nombre_orden,
+                    'duracion_estimada' => $duracion_estimada,
+                    'fecha_inicio' => $fecha_ini,
+                    'id_etapa' => $id_etapa
+                ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        Orden_mecanizado::create([
+            'revision' => $revision,
+            'cantidad' => $cantidad,
+            'ruta_pieza' => $ruta_plano,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        $parte = Parte::create([
+            'observaciones' => 'Generacion de orden de trabajo',
             'fecha' => $fecha_ini,
             'fecha_limite' => $fecha_req,
             'fecha_carga' => $fecha_carga,
             'horas' => '00:00',
-            'id_estado_mecanizado' => $id_estado_mec,
-            'id_orden_mecanizado' => $orden_mecanizado->id_orden_mecanizado,
+            'id_orden' => $orden->id_orden,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        Parte_mecanizado::create([
+            'id_estado_mecanizado' => $id_estado_mec,
+            'id_parte' => $parte->id_parte
         ]);
 
     }
@@ -305,7 +334,7 @@ class OrdenController extends Controller
             array_push($ordenes, (object)[
                 'id_orden' => $orden->id_orden,
                 'orden' => $orden->nombre_orden,
-                'tipo' => 'Orden de trabajo',
+                'tipo' => 'Orden de '.$orden->getOrdenDe->getNombreTipoOrden(),
                 'numero_tipo' => 1
             ]);
         }

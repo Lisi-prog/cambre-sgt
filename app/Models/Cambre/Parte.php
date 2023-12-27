@@ -47,4 +47,29 @@ class Parte extends Model
     {
         return $this->hasOne(Parte_trabajo::class, 'id_parte');
     }
+
+    public function getParteMecanizado()
+    {
+        return $this->hasOne(Parte_mecanizado::class, 'id_parte');
+    }
+
+    public function getParte(){
+        // return $this->hasOne(Parte_manufactura::class, 'id_parte');
+
+        if ($this->hasOne(Parte_trabajo::class, 'id_parte')) {
+            return $this->hasOne(Parte_trabajo::class, 'id_parte');
+        }
+
+        if ($this->hasOne(Parte_manufactura::class, 'id_parte')) {
+            return $this->hasOne(Parte_manufactura::class, 'id_parte');
+        }
+
+        if ($this->hasOne(Parte_mecanizado::class, 'id_parte')) {
+            return $this->hasOne(Parte_mecanizado::class, 'id_parte');
+        }
+
+        if ($this->hasOne(Parte_mantenimiento::class, 'id_parte')) {
+            return $this->hasOne(Parte_mantenimiento::class, 'id_parte');
+        }
+    }
 }

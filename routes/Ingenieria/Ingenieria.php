@@ -7,6 +7,7 @@ use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 use App\Http\Controllers\Ingenieria\Servicios\Proyectos\ProyectoController;
 use App\Http\Controllers\Ingenieria\Servicios\Etapas\EtapaController;
 use App\Http\Controllers\Ingenieria\Servicios\Ordenes\OrdenController;
+use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteController;
 use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RI\RequerimientoDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimientoController;
@@ -28,9 +29,13 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::post('/orden/obtener-una-orden-etapa/{id}',[OrdenController::class, 'ObtenerOrdenTrabajo']);
     Route::post('/orden/obtener-una-orden-mecanizado-etapa/{id}',[OrdenController::class, 'ObtenerOrdenMecanizado']);
     Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
+
+    Route::get('orden/partes/{id}', [ParteController::class, 'indexOrden'])->name('orden.partes');
+
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('etapas', EtapaController::class);
     Route::resource('ordenes', OrdenController::class);
+    Route::resource('partes', ParteController::class);
 // });
 
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {

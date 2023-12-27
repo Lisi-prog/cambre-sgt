@@ -84,9 +84,10 @@
                                                         </button>
                                                     </div>
                                                     <div class="col-6">
-                                                        <button type="button" class="btn 'btn btn-warning w-100'" data-bs-toggle="modal" data-bs-target="#verOrdenModal">
-                                                            parte
-                                                        </button>
+                                                        
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', $orden_trabajo->id_orden], 'style' => 'display:inline']) !!}
+                                                            {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
+                                                        {!! Form::close() !!}
                                                     </div>
                                                 </div>
                                             </td>
