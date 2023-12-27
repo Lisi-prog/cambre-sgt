@@ -71,7 +71,7 @@ class Orden extends Model
 
     public function getCalculoHorasReales()
     {
-        $partes = $this->hasMany(Parte::class, 'id_orden');
+        $partes = Parte::where('id_orden', $this->id_orden)->get();
         if($partes){
             $horas_estimadas = 0;
             $minutos_estimados = 0;
@@ -84,6 +84,7 @@ class Orden extends Model
                     $horas_estimadas += 1;
                 }
             }
+            
             if(strlen($horas_estimadas) < 2){
                 $horas_estimadas = '0'. $horas_estimadas;
             }
