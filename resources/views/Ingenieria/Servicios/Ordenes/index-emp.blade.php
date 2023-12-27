@@ -54,8 +54,9 @@
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
-                                    <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
+                                    <th class='text-center' style="color:#fff;">Horas estimadas</th>
+                                    <th class='text-center' style="color:#fff;">Horas reales</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
@@ -72,9 +73,11 @@
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado ?? ''}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getNombreResponsable()}}</td>
-
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->duracion_estimada ?? ''}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getCalculoHorasReales() ?? ''}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
