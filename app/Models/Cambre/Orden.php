@@ -109,21 +109,23 @@ class Orden extends Model
         $parte_mantenimiento = Parte_mantenimiento::where('id_parte', $parte->id_parte)->first();
 
         if ($parte_trabajo){
-            $estado = $parte_trabajo->getEstado;
+            $estado = $parte_trabajo->getNombreEstado();
         }elseif ($parte_mecanizado){
-            $estado = $parte_mecanizado->getEstado;
+            $estado = $parte_mecanizado->getNombreEstado();
         }elseif ($parte_manufactura) {
             $estado = $parte_manufactura->getEstado;
         }elseif ($parte_mantenimiento) {
             $estado = $parte_mantenimiento->getEstado;
         }
-        if($estado->nombre_estado == 'Completo'){
+        if($estado == 'Completo' || $estado == 'Pieza finalizada' ){
             $año = substr($parte->fecha_carga, 0, 4);
             $mes = substr($parte->fecha_carga, 5, 2);
             $dia = substr($parte->fecha_carga, 8, 2);
             return ($dia . '-' . $mes . '-' . $año);
         }else{
             return '__-__-____';
+        }
+    }
 
     public function getOrdenDe(){
         // return $this->hasOne(Parte_manufactura::class, 'id_parte');

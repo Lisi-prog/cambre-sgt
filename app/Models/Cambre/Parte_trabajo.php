@@ -28,6 +28,10 @@ class Parte_trabajo extends Model
         return $this->belongsTo(Estado::class, 'id_estado');
     }
 
+    public function getNombreEstado(){
+        return Estado::where('id_estado', $this->id_estado)->first()->nombre_estado;
+    }
+
     public function getParte()
     {
         return $this->belongsTo(Parte::class, 'id_parte');
