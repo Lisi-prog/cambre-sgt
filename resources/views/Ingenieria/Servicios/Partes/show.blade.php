@@ -176,7 +176,7 @@
                                                      
                                             @endswitch
 
-                                            <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->horas)->format('H:i')}}</td>
+                                            <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td>
 
                                             <td>
                                                 {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}

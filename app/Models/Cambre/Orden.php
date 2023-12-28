@@ -77,8 +77,12 @@ class Orden extends Model
             $minutos_estimados = 0;
             
             foreach($partes as $parte){
-                $horas_estimadas += substr($parte->horas, 0, 2);
-                $minutos_estimados += substr($parte->horas, 3, 2);
+                $horas_estimadas += strstr($parte->horas, ':', true);
+                
+                if (preg_match_all('/\:(.*?)\:/', $parte->horas, $matches)) {
+                    $minutos_estimados += $matches[1][0];
+                }
+
                 if($minutos_estimados >= 60){
                     $minutos_estimados -= 60;
                     $horas_estimadas += 1;

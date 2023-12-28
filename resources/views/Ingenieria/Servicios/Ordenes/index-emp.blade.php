@@ -75,7 +75,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->duracion_estimada ?? ''}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{substr($orden_trabajo->duracion_estimada, 0, strlen($orden_trabajo->duracion_estimada)-3) ?? ''}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getCalculoHorasReales() ?? ''}}</td>
 

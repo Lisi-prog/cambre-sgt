@@ -182,8 +182,11 @@ class EtapaController extends Controller
             $horas_estimadas = 0;
             $minutos_estimados = 0;
             foreach ($ordenes as $orden){
-                $horas_estimadas += substr($orden->duracion_estimada, 0, 2);
-                $minutos_estimados += substr($orden->duracion_estimada, 3, 2);
+                $horas_estimadas += strstr($orden->duracion_estimada, ':', true);
+                if (preg_match('/\-(.*?)\-/', $parte->horas, $minutosStr)) {
+                    $minutos_estimados += $minutosStr[1];
+                }
+                //$minutos_estimados += substr($orden->duracion_estimada, 3, 2);
                 if($minutos_estimados >= 60){
                     $minutos_estimados -= 60;
                     $horas_estimadas += 1;
