@@ -194,21 +194,29 @@ class ProyectoController extends Controller
             'prioridad.required' => 'La prioridad no puede ser nula.',
             'motivo.required' => 'El motivo no puede estar vacio.'
         ]);
-
+        $minima_prioridad = Servicio::max('prioridad_servicio'); //trae el mayor numero asigando actuialmente a las prioridades
         $id_servicio = $request->input('id_proyecto');
-        $prioridad = $request->input('prioridad');
+
+
+        
+
         $motivo = $request->input('motivo');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $servicio = Servicio::find($id_servicio);
 
-        /* Cambio_de_prioridad::create([
-             'motivo' => $motivo,
-             'prioridad_ant' => $servicio->prioridad_servicio,
-             'prioridad_nue' => $prioridad,
-             'fecha_carga' => $fecha_carga,
-             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-             'id_servicio' => $id_servicio
-        ]); */
+        //Necesarias para saber entre que valores actualizar
+        $prioridadAnterior = $servicio->prioridad_servicio;
+        $prioridadActual = $request->input('prioridad');
+
+        if($request->input('prioridad') >= $minima_prioridad){
+            if($servicio->prioridad_servicio == $minima_prioridad){
+                return redirect()->route('proyectos.index')->with('error', 'La prioridad del proyecto ya es la menor posible');
+            }else{
+                $prioridad = $minima_prioridad;
+            }
+        }else{
+            $prioridad = $request->input('prioridad');
+        }
 
         $ultima_act = Actualizacion_servicio::where('id_servicio', $servicio->id_servicio)->orderBy('id_actualizacion_servicio', 'desc')->first();
 
@@ -226,7 +234,7 @@ class ProyectoController extends Controller
         ]);
 
         if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
-            $this->actualizarPrioridades($prioridad);
+            $this->actualizarPrioridades($prioridadActual, $prioridadAnterior);
         }
 
         $servicio->update([
@@ -236,8 +244,10 @@ class ProyectoController extends Controller
         return redirect()->route('proyectos.index')->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
     }
 
-    public function actualizarPrioridades($prioridad){
-        DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio + 1 WHERE prioridad_servicio >= ?', [$prioridad]);
+    public function actualizarPrioridades($prioridadActual, $prioridadAnterior){
+        DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio - 1 WHERE prioridad_servicio <= ? AND prioridad_servicio > ?'  , [$prioridadActual, $prioridadAnterior]);
+        DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio + 1 WHERE prioridad_servicio >= ? AND prioridad_servicio < ?', [$prioridadActual, $prioridadAnterior]);
+        
     }
     
     public function show($id)
