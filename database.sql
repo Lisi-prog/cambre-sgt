@@ -379,6 +379,17 @@ CREATE TABLE `parte_mantenimiento_x_maquinaria` (
   CONSTRAINT `pk_id_parte_man_x_maq_x_parte_man` FOREIGN KEY (`id_parte_mantenimiento`) REFERENCES `parte_mantenimiento`(`id_parte_mantenimiento`),
   CONSTRAINT `pk_id_parte_man_x_maq_x_maq` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`)
 );
+
+CREATE TABLE `cambio_de_prioridad`(
+  `id_cambio_de_prioridad` int NOT NULL AUTO_INCREMENT,
+  `motivo` varchar(500),
+  `prioridad_ant` int,
+  `prioridad_nue` int,
+  `fecha_carga` datetime,
+  `id_empleado` int,
+  `id_servicio` int,
+  PRIMARY KEY(`id_cambio_de_prioridad`)
+);
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)

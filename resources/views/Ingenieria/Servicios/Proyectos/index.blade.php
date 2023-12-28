@@ -123,7 +123,7 @@
                                                             {!! Form::close() !!}
                                                         </div>
                                                         <div class="col-6">
-                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal">
+                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}})">
                                                                 Prioridad  
                                                             </button>
                                                         </div>
@@ -238,6 +238,32 @@
             },
         });
     });
+</script>
+
+<script>
+    function cargarModalModif(id){
+        let codigo = document.getElementById('m-codigo_proyecto');
+        let nombre = document.getElementById('m-nombre_proyecto');
+        let id_proyecto = document.getElementById('id_proyecto');
+        let num_prioridad = document.getElementById('num_prioridad');
+        var table = $('#example').DataTable();
+ 
+        // $('#example tbody').on( 'click', 'tr', function () {
+        //     alert( 'Row index: '+table.row( this ).index() );
+        // } );
+
+        let indice = table.row( this ).index();
+
+        let numero_prioridad = table.row(indice).data()[0];
+        let codigo_proyecto = table.row(indice).data()[1];
+        let nombre_proyecto = table.row(indice).data()[2];
+
+        codigo.value = codigo_proyecto;
+        nombre.value = nombre_proyecto;
+        num_prioridad.value = numero_prioridad;
+        id_proyecto.value = id;
+    }
+    
 </script>
 
 @include('Ingenieria.Servicios.Proyectos.modal.crear-proyecto')

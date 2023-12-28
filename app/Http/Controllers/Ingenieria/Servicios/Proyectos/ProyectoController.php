@@ -182,6 +182,40 @@ class ProyectoController extends Controller
         return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');                      
     }
 
+    public function actualizarPrioridadServicio(Request $request){
+        return $request;
+    
+        $this->validate($request, [
+            'id_proyecto' => 'required',
+            'prioridad' => 'required',
+            'motivo' => 'required'
+        ],
+        [
+            'prioridad.required' => 'La prioridad no puede ser nula.',
+            'motivo.required' => 'El motivo no puede estar vacio.'
+        ]);
+
+        $id_servicio = $request->input('id_proyecto');
+        $prioridad = $request->input('prioridad');
+        $motivo = $request->input('motivo');
+
+        $servicio = Servicio::find($id_servicio);
+
+        $actualizacion = Actualizacion::create([
+
+        ]);
+
+        Actualizacion_servicio::create([
+
+        ]);
+
+        $servicio->update([
+
+        ]);
+
+        return redirect()->route('proyectos.index')->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
+    }
+
     public function actualizarPrioridades($prioridad){
         DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio + 1 WHERE prioridad_servicio >= ?', [$prioridad]);
     }

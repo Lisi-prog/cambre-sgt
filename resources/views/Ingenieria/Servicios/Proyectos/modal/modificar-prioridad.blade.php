@@ -6,10 +6,11 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Modificar prioridad del proyecto.</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'proyectos.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => 'proyectos.cambiarprioridad', 'method' => 'POST', 'class' => 'formulario']) !!}
 
             <div class="modal-body">
                 <div class="row">
+                    {!! Form::text('id_proyecto', null, ['class' => 'form-control', 'id' => 'id_proyecto', 'hidden']) !!}
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                         <div class="form-group">
                             {!! Form::label('codigo_proyecto', 'Codigo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
@@ -17,7 +18,7 @@
                             {!! Form::text('codigo_proyecto', null, [
                                 'class' => 'form-control',
                                 'required' => 'required',
-                                'id' => 'codigo_proyecto',
+                                'id' => 'm-codigo_proyecto',
                                 'readonly'
                             ]) !!}
                         </div>
@@ -29,7 +30,7 @@
                             {!! Form::text('nombre_proyecto', null, [
                                 'class' => 'form-control',
                                 'required' => 'required',
-                                'id' => 'nombre_proyecto',
+                                'id' => 'm-nombre_proyecto',
                                 'readonly'
                             ]) !!}
                         </div>
@@ -37,11 +38,33 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                        <div class="form-group">
+                            <div class="form-group">
+                                {!! Form::label('prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <span class="obligatorio">*</span>
+                                {!! Form::number('prioridad', null, [
+                                'class' => 'form-control',
+                                'min' => 0,
+                                'required' => 'required',
+                                'id' => 'num_prioridad'
+                                ]) !!}
 
+                                {{-- {!! Form::select('prioridad', [], null, [
+                                    'placeholder' => 'Seleccionar',
+                                    'class' => 'form-select',
+                                    'id' => 'num-prioridad',
+                                    'required'
+                                ]) !!} --}}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-6">
-
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                            <div class="form-group">
+                                {!! Form::label('motivo', 'Motivo del cambio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                <span class="obligatorio">*</span>
+                                <textarea name='motivo' id="id_motivo" class="form-control" rows="54" cols="54" style="resize:none; height: 15vh" required></textarea>
+                            </div>
                     </div>
                 </div>
 
