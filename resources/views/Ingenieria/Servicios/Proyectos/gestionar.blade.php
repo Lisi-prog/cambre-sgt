@@ -36,7 +36,18 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="text-center"><h5>Proyecto</h5></div>
+                            <div class="row m-auto">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                    <h5 class="text-center">Proyecto</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
+                                        Editar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -111,21 +122,16 @@
                                     <h5 class="text-center">Etapas</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
                                         Nueva
                                     </button>
                                 </div>
                             </div>
-                            {{-- <br>
-                            <div class="text-center"><h5>Viviendas</h5></div>                         --}}
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <div>
-                                <table id="example" class="table table-hover mt-2" class="display">
+                                <table id="tablaEtapas" class="table table-hover mt-2" class="display">
                                     <thead style="">
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Etapa</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -156,9 +162,9 @@
                                                 <td class='text-center'>
                                                     <div class="row my-2">
                                                         <div class="col-6">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                            {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditar({{$etapa->id_etapa}}, {{$etapa->nombre_etapa}}, {{$etapa->fecha_inicio}}, {{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}})">
+                                                                Editar
+                                                            </button>
                                                         </div>
                                                         <div class="col-6">
                                                             {!! Form::open(['method' => 'DELETE', 'route' => ['etapas.destroy', $etapa->id_etapa], 'style' => '']) !!}
@@ -171,9 +177,6 @@
                                                             <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
                                                                 Ordenes
                                                             </button>
-                                                            {{-- {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                            {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
-                                                            {!! Form::close() !!} --}}
                                                         </div>
                                                     </div>
                                                 </td>
@@ -204,13 +207,8 @@
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                                             Nueva
                                         </button>
-                                        {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                        {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                        {!! Form::close() !!} --}}
                                     </div>
                                 </div>
-                                {{-- <br>
-                                <div class="text-center"><h5>Viviendas</h5></div>                         --}}
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -222,52 +220,6 @@
                                             <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
                                         </thead>
                                         <tbody id="cuadro-ordenes">
-                                            {{-- @foreach ($proyecto->getEtapas as $etapa)
-                                                @foreach ($etapa->getOrdenTrabajo as $ordenTrabajo)
-                                                    <tr>
-                                                        <td class= 'text-center'> {{$ordenTrabajo->nombre_orden_trabajo}}</td>
-                                                        <td class= 'text-center'> Orden de trabajo</td>
-                                                        <td>
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                            {!! Form::submit('Ver parte', ['class' => 'btn btn-warning w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach --}}
-                                            {{-- @foreach ($proyecto->getEtapas as $lasEtapas)
-                                                @foreach ($lasEtapas as $unaEtapa)
-                                                {{$unaEtapa}}
-                                                     @foreach ($unaEtapa->getOrdenesTrabajo as $ordenes)
-                                                        <tr>
-                                                            <td class= 'text-center'> {{$orden->nombre_orden_trabajo}}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach --}}
-                                            {{-- @foreach ($proyecto->getEtapas as $etapa)
-                                                <tr>    
-                                                    <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-                                                    
-                                                    <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
-    
-                                                    <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
-    
-                                                    <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
-    
-                                                    <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
-    
-                                                    <td class= 'text-center'>+late</td>
-    
-                                                    <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
-    
-                                                    <td>
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                        {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </td>
-                                                </tr>
-                                            @endforeach --}}
                                         </tbody>
                                     </table>
                                     </div>
@@ -327,52 +279,7 @@
                                     </thead>
                                     
                                     <tbody id="cuadro-ordenes-trabajo">
-                                        {{-- @foreach ($proyecto->getEtapas as $etapa)
-                                            @foreach ($etapa->getOrdenTrabajo as $ordenTrabajo)
-                                                <tr>
-                                                    <td class= 'text-center'> {{$ordenTrabajo->nombre_orden_trabajo}}</td>
-                                                    <td class= 'text-center'> Orden de trabajo</td>
-                                                    <td>
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                        {!! Form::submit('Ver parte', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endforeach --}}
-                                        {{-- @foreach ($proyecto->getEtapas as $lasEtapas)
-                                            @foreach ($lasEtapas as $unaEtapa)
-                                            {{$unaEtapa}}
-                                                 @foreach ($unaEtapa->getOrdenesTrabajo as $ordenes)
-                                                    <tr>
-                                                        <td class= 'text-center'> {{$orden->nombre_orden_trabajo}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach --}}
-                                        {{-- @foreach ($proyecto->getEtapas as $etapa)
-                                            <tr>    
-                                                <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-                                                
-                                                <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
-
-                                                <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
-
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
-
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
-
-                                                <td class= 'text-center'>+late</td>
-
-                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
-
-                                                <td>
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                    {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
-                                                    {!! Form::close() !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach --}}
+                                        
                                     </tbody>
                                 </table>
                                 </div>
@@ -486,10 +393,34 @@
             });
         </script>
 
+        <script>
+            function cargarModalEditar(id, nombre, fecha, lider){
+                let input_nombre_etapa = document.getElementById('input-nombre_etapa');
+                let input_fec_ini = document.getElementById('input-fec_ini');
+                //let id_puesto = document.getElementById('input_id_puesto');
+
+                console.log(id);
+                console.log(nombre);
+                console.log(fecha);
+                console.log(lider);
+
+                const $select = document.querySelector('#mySelect');
+                $select.value = lider;
+                //let nombre_puesto = b.parentNode.parentNode.parentNode.children[0].innerText;
+                //let precio_hora = b.parentNode.parentNode.parentNode.children[1].innerText;
+
+                //input_puesto.value = nombre_puesto;
+                //costo_hora.value = precio_hora.replace('$ ', '').replace('.', '').replace(',', '.');
+                //id_puesto.value = id;
+            }
+        </script>
+
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
+    @include('Ingenieria.Servicios.Proyectos.modal.editar-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-orden')
+    @include('Ingenieria.Servicios.Proyectos.modal.editar-proyecto')
 
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection

@@ -32,6 +32,7 @@ use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Tipo_orden_trabajo;
+use App\Models\Cambre\Cambio_de_prioridad;
 
 class ProyectoController extends Controller
 {
@@ -183,8 +184,7 @@ class ProyectoController extends Controller
     }
 
     public function actualizarPrioridadServicio(Request $request){
-        return $request;
-    
+        //return $request;
         $this->validate($request, [
             'id_proyecto' => 'required',
             'prioridad' => 'required',
@@ -198,19 +198,39 @@ class ProyectoController extends Controller
         $id_servicio = $request->input('id_proyecto');
         $prioridad = $request->input('prioridad');
         $motivo = $request->input('motivo');
-
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $servicio = Servicio::find($id_servicio);
 
-        $actualizacion = Actualizacion::create([
+        /* Cambio_de_prioridad::create([
+             'motivo' => $motivo,
+             'prioridad_ant' => $servicio->prioridad_servicio,
+             'prioridad_nue' => $prioridad,
+             'fecha_carga' => $fecha_carga,
+             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+             'id_servicio' => $id_servicio
+        ]); */
 
-        ]);
+        $ultima_act = Actualizacion_servicio::where('id_servicio', $servicio->id_servicio)->orderBy('id_actualizacion_servicio', 'desc')->first();
+
+        $act = Actualizacion::create([
+            'descripcion' => $motivo.'  ( '.$servicio->prioridad_servicio.' a '.$prioridad.' )',
+            'fecha_limite' => $ultima_act->getActualizacion->fecha_limite,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $ultima_act->getActualizacion->id_estado,
+            'id_responsabilidad' => $ultima_act->getActualizacion->id_responsabilidad
+                ]);
 
         Actualizacion_servicio::create([
-
+            'id_actualizacion' => $act->id_actualizacion,
+            'id_servicio' => $ultima_act->id_servicio
         ]);
 
-        $servicio->update([
+        if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
+            $this->actualizarPrioridades($prioridad);
+        }
 
+        $servicio->update([
+            'prioridad_servicio' => $prioridad
         ]);
 
         return redirect()->route('proyectos.index')->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
@@ -226,6 +246,10 @@ class ProyectoController extends Controller
         return view('Ingenieria.Servicios.Proyectos.show',compact('proyecto'));
     }
     
+    public function obtenerProyecto($id){
+        return Servicio::find($id);
+    }
+
     public function edit($id)
     {
         $permiso = Permission::findOrFail($id);
@@ -235,17 +259,43 @@ class ProyectoController extends Controller
     
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-    
-        $permiso = Permission::find($id);
+        //return $request;
 
-        $permiso->update([
-            'name' => strtoupper($request->input('name'))
+        $this->validate($request, [
+            'codigo_proyecto' => 'required',
+            'nombre_proyecto' => 'required',
+            'id_tipo_proyecto' => 'required',
+            'lider' => 'required',
+            'fecha_ini' => 'required',
         ]);
+
+        $servicio = Servicio::find($id);
+
+        $codigo = $request->input('codigo_proyecto');
+
+        $nombre = $request->input('nombre_proyecto');
+
+        $tipo = $request->input('id_tipo_proyecto');
+
+        $lider = $request->input('lider');
+
+        $fecha_inicio = $request->input('fecha_ini');
+
+        $servicio->update([
+            'codigo_servicio' => $codigo,
+            'nombre_servicio' => $nombre,
+            'fecha_inicio' => $fecha_inicio,
+            'id_subtipo_servicio' => $tipo,
+        ]);
+
+
+        if ($servicio->getResponsabilidad->getEmpleado->id_empleado != $lider) {
+           $res = Responsabilidad::find($servicio->getResponsabilidad->id_responsabilidad);
+           $res->id_empleado = $lider;
+           $res->save();
+        }
     
-        return redirect()->route('permisos.index')->with('mensaje',$permiso->name.' editado exitosamente.');                        
+        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Proyecto editado exitosamente.');                        
     }
     
     public function destroy($id)
@@ -259,10 +309,11 @@ class ProyectoController extends Controller
 
     public function gestionar($id)
     {
+        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $proyecto = Servicio::find($id);
         $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios'));
     }
 }

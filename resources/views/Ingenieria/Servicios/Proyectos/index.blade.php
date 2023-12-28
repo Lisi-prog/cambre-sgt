@@ -37,9 +37,6 @@
         </div>
         <div class="ms-auto">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                {!! Form::close() !!} --}}
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
                     Nuevo   
                 </button>
@@ -50,35 +47,8 @@
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {{-- <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Rol" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-
                 <div class="card">
                     <div class="card-body">
-                        <!-- Centramos la paginacion a la derecha -->
-                        {{-- <div class="pagination justify-content-end">
-                                {!! $CategoriasLaborales->links() !!}
-                        </div> --}}
                         <div class="table-responsive">
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
@@ -123,7 +93,7 @@
                                                             {!! Form::close() !!}
                                                         </div>
                                                         <div class="col-6">
-                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}})">
+                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
                                                                 Prioridad  
                                                             </button>
                                                         </div>
@@ -246,21 +216,27 @@
         let nombre = document.getElementById('m-nombre_proyecto');
         let id_proyecto = document.getElementById('id_proyecto');
         let num_prioridad = document.getElementById('num_prioridad');
-        var table = $('#example').DataTable();
- 
-        // $('#example tbody').on( 'click', 'tr', function () {
-        //     alert( 'Row index: '+table.row( this ).index() );
-        // } );
+        
+        $.when($.ajax({
+            type: "post",
+            url: '/proyectos/obtener-proyecto/'+id, 
+            data: {
+                id: id
+            },
+            success: function (response) {
+                let numero_prioridad = response.prioridad_servicio;
+                let codigo_proyecto = response.codigo_servicio;
+                let nombre_proyecto = response.nombre_servicio;
 
-        let indice = table.row( this ).index();
-
-        let numero_prioridad = table.row(indice).data()[0];
-        let codigo_proyecto = table.row(indice).data()[1];
-        let nombre_proyecto = table.row(indice).data()[2];
-
-        codigo.value = codigo_proyecto;
-        nombre.value = nombre_proyecto;
-        num_prioridad.value = numero_prioridad;
+                codigo.value = codigo_proyecto;
+                nombre.value = nombre_proyecto;
+                num_prioridad.value = numero_prioridad;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+            }));
+        
         id_proyecto.value = id;
     }
     
