@@ -326,4 +326,15 @@ class ProyectoController extends Controller
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios'));
     }
+
+    public function verActualizaciones($id){
+        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $proyecto = Servicio::find($id);
+        //$etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        //$tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
+        //$actualizaciones_servicio = $proyecto->getActualizaciones;
+        //$actualizaciones = $actualizaciones_servicio->getActualizacion;
+        return view('Ingenieria.Servicios.Proyectos.ver-actualizaciones',compact('proyecto', 'empleados', 'Tipos_servicios'));
+    }
 }

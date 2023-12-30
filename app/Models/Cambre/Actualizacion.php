@@ -35,4 +35,9 @@ class Actualizacion extends Model
     {
         return $this->belongsTo(Estado::class, 'id_estado');
     }
+
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
+    }
 }

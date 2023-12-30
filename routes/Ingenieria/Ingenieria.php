@@ -16,6 +16,11 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 //Gestion de proyectos
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
+
+    Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');
+    
+    Route::get('etapas/actualizaciones/{id}', [EtapaController::class, 'verActualizaciones'])->name('etapas.actualizaciones');
+
     Route::post('/proyectos/obtener-proyecto/{id}', [ProyectoController::class, 'obtenerProyecto']);
     Route::post('proyectos/actualizar-prioridad', [ProyectoController::class, 'actualizarPrioridadServicio'])->name('proyectos.cambiarprioridad');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');

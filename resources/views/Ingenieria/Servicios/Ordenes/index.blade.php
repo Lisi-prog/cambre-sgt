@@ -78,6 +78,7 @@
                                     <th class='text-center' style="color:#fff;">Orden</th>
                                     <th class='text-center' style="color:#fff;">Tipo de orden</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
+                                    <th class='text-center' style="color:#fff;">Supervisor</th>
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;">Fecha finalizacion</th>
@@ -109,10 +110,10 @@
                                                     
                                             @endswitch
 
-                                            
-
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getSupervisor()}}</td>
-
+                                            
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getNombreResponsable()}}</td>
+                                            
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getFechaFinalizacion()}}</td>

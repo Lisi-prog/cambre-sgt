@@ -206,4 +206,9 @@ class EtapaController extends Controller
         
     }
 
+    public function verActualizaciones($id){
+        $etapa = Etapa::find($id);
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Servicios.Etapas.ver-actualizaciones', compact('etapa', 'empleados'));
+    }
 }
