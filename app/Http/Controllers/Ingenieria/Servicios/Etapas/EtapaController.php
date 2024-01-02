@@ -153,6 +153,27 @@ class EtapaController extends Controller
 
         return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La etapa se ha eliminado con exito.');               
     }
+    
+    public function obtenerActualizacionesEtapa($id){
+
+        $actualizaciones_etapa = Actualizacion_etapa::where('id_etapa', $id)->get();
+        $actualizacion_arr = array();
+
+        foreach ($actualizaciones_etapa as $act_etapa) {
+
+            array_push($actualizacion_arr, (object)[
+                'codigo' => $act_etapa->getActualizacion->id_actualizacion,
+                'fecha_carga' => Carbon::parse($act_etapa->getActualizacion->fecha_carga)->format('d-m-Y H:i'),
+                'descripcion' => $act_etapa->getActualizacion->descripcion,
+                'fecha_limite' => Carbon::parse($act_etapa->getActualizacion->fecha_limite)->format('d-m-Y'),
+                'estado' => $act_etapa->getActualizacion->getEstado->nombre_estado,
+                'responsable' => $act_etapa->getActualizacion->getResponsable->getEmpleado->nombre_empleado
+            ]);
+
+        }
+
+        return $actualizacion_arr;
+    }
 
     public function gestionar($id)
     {
@@ -166,6 +187,7 @@ class EtapaController extends Controller
             'descripcion_etapa' => $etapa->descripcion_etapa,
             'estado' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->getEstado->nombre_estado,
             'responsable' => $etapa->getResponsable->getEmpleado->nombre_empleado,
+            'id_responsable' => $etapa->getResponsable->getEmpleado->id_empleado,
             'fecha_inicio' => $etapa->fecha_inicio,
             'fecha_limite' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_limite,
             'fecha_fin_real' => '+late',
@@ -176,6 +198,38 @@ class EtapaController extends Controller
         return $etapaEspecial;
     }
 
+    function actualizarEtapa(Request $request){
+        // return $request;
+        
+        $this->validate($request, [
+            'nom_etapa' => 'required',
+            'responsable' => 'required',
+            'fecha_ini' => 'required'
+        ]);
+
+        $id_etapa = $request->input('id_etapa');
+        $id_servicio = $request->input('id_servicio');
+        $lider = $request->input('responsable');
+        $fecha_inicio = $request->input('fecha_ini');
+        $nombre_etapa = $request->input('nom_etapa');
+
+        $etapa = Etapa::find($id_etapa);
+
+
+        $etapa->update([
+            'descripcion_etapa' => $nombre_etapa,
+            'fecha_inicio' => $fecha_inicio
+        ]);
+
+        if ($etapa->getResponsable->getEmpleado->id_empleado != $lider) {
+            $res = Responsabilidad::find($etapa->getResponsable->id_responsabilidad);
+            $res->id_empleado = $lider;
+            $res->save();
+        }
+
+        return redirect()->route('proyectos.gestionar', $id_servicio)->with('mensaje', 'Etapa editada exitosamente.');  
+    }
+    
     function calcularHorasEstimadas($ordenes)
     {
         if($ordenes){

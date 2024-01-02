@@ -20,6 +20,10 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');
     
     Route::get('etapas/actualizaciones/{id}', [EtapaController::class, 'verActualizaciones'])->name('etapas.actualizaciones');
+    Route::post('proyectos/guardar-actualizacion/{id}', [ProyectoController::class, 'guardarActualizacion'])->name('actualizacion.crear');
+    Route::post('etapas/guardar-actualizacion', [EtapaController::class, 'guardarActualizacion'])->name('actualizacion-etapa.crear');
+    Route::post('/etapas/obtener-actualizaciones-etapa/{id}', [EtapaController::class, 'obtenerActualizacionesEtapa']);
+    Route::post('/proyectos/obtener-actualizaciones-proyecto/{id}', [ProyectoController::class, 'obtenerActualizacionesServicio']);
 
     Route::post('/proyectos/obtener-proyecto/{id}', [ProyectoController::class, 'obtenerProyecto']);
     Route::post('proyectos/actualizar-prioridad', [ProyectoController::class, 'actualizarPrioridadServicio'])->name('proyectos.cambiarprioridad');
@@ -32,7 +36,8 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
 
     Route::post('/etapa/obtener-una-etapa/{id}',[EtapaController::class, 'obtenerUnaEtapa']);
-
+    Route::post('etapa/actualizar-etapa',[EtapaController::class, 'actualizarEtapa'])->name('etapa.actualizar');
+    
     Route::post('/orden/obtener-una-orden-etapa/{id}',[OrdenController::class, 'ObtenerOrdenTrabajo']);
     Route::post('/orden/obtener-una-orden-mecanizado-etapa/{id}',[OrdenController::class, 'ObtenerOrdenMecanizado']);
     Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);

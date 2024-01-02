@@ -36,10 +36,13 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="row m-auto">
+                            <div class="d-flex justify-content-between">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    <button type="button" class="btn btn-primary" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
+                                        Actualizaciones
+                                    </button>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 text-center">
                                     <h5 class="text-center">Proyecto</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
@@ -89,13 +92,13 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fec_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite', \Carbon\Carbon::parse($proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('fecha_limite', \Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('estado', $proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -110,6 +113,47 @@
                 </div>
                 {{-- ------------- --}}
                 
+                {{-- Actualizaciones del proyecto --}}
+                <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_act_proyecto' hidden>
+                    <div class="card">
+                        <div class="card-head">
+                            <br>
+                            <div class="row m-auto">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                    <h5 class="text-center">Actualizaciones proyecto</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearActModal">
+                                        Nueva
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div>
+                                <table id="tablaAct" class="table table-hover mt-2" class="display">
+                                    <thead style="">
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Codigo</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Fecha carga</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Estado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>                                                          
+                                    </thead>
+                                    <tbody id="cuadro-act">
+                                        
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- ------------- --}}
+
                 {{-- Etapas del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="card">
@@ -149,7 +193,7 @@
                                                 
                                                 <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 
-                                                <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
+                                                <td class= 'text-center' >{{$etapa->getResponsable->getEmpleado->nombre_empleado}}</td>
 
                                                 <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
 
@@ -162,26 +206,67 @@
                                                 <td class='text-center'>
                                                     <div class="row my-2">
                                                         <div class="col-6">
-                                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditar({{$etapa->id_etapa}}, {{$etapa->nombre_etapa}}, {{$etapa->fecha_inicio}}, {{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}})">
+                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
                                                                 Editar
                                                             </button>
                                                         </div>
                                                         <div class="col-6">
-                                                            {!! Form::open(['method' => 'DELETE', 'route' => ['etapas.destroy', $etapa->id_etapa], 'style' => '']) !!}
-                                                            {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                            <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
+                                                                Ordenes
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                                Ordenes
+                                                            <button type="button" class="btn btn-primary w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
+                                                                Actualizaciones
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                         @endforeach
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- ------------- --}}
+
+                {{-- Actualizaciones de la etapa --}}
+                <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_act_etapa' hidden>
+                    <div class="card">
+                        <div class="card-head">
+                            <br>
+                            <div class="row m-auto">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                    <h5 class="text-center">Actualizaciones etapa</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearActEtaModal">
+                                        Nueva
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div>
+                                <table id="tablaAct" class="table table-hover mt-2" class="display">
+                                    <thead style="">
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Codigo</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Fecha carga</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Estado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>                                                          
+                                    </thead>
+                                    <tbody id="cuadro-act-etapa">
+                                        
                                     </tbody>
                                 </table>
                                 </div>
@@ -227,69 +312,8 @@
                             </div>
                         </div>
                     </div>
-                
-                
                 {{-- ------------- --}}
 
-                {{-- Orden de trabajo del proyecto --}}
-                
-                <div id='cuadro-orden-de-trabajo' class="col-xs-12 col-sm-12 col-md-12" hidden>
-                    <div class="card">
-                        <div class="card-head">
-                            <br>
-                            <div class="row m-auto">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
-                                    <h5 class="text-center">Orden de trabajo</h5>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                                        Nueva
-                                    </button> --}}
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
-                                </div>
-                            </div>
-                            {{-- <br>
-                            <div class="text-center"><h5>Viviendas</h5></div>                         --}}
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <div>
-                                <table class="table table-hover mt-2" class="display">
-                                    <thead style="">
-                                        <tr>
-                                            <th class="text-center" scope="col" style="color:#fff; border: 1px solid #fff;" colspan="9">Orden</th>
-                                            <th class="text-center" scope="col" style="color:#fff; border: 1px solid #fff;" colspan="3">Ultimo parte</th>
-                                        </tr>
-                                        <th class="text-center" scope="col" style="color:#fff; width: 50%;">Orden</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Tipo orden</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha inicio</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha fin real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Duracion estimada</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Duracion real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width: 50%;">Descripcion</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Supervisa</th>                                                              
-                                    </thead>
-                                    
-                                    <tbody id="cuadro-ordenes-trabajo">
-                                        
-                                    </tbody>
-                                </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-            
-            {{-- ------------- --}}
 
                 {{-- Partes del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12" id='parte_de_trabajo' hidden>
@@ -369,7 +393,7 @@
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
             
         </script>
-        {{-- <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script> --}}
+        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script>
 
         <script>
             $(document).ready(function () {
@@ -393,34 +417,14 @@
             });
         </script>
 
-        <script>
-            function cargarModalEditar(id, nombre, fecha, lider){
-                let input_nombre_etapa = document.getElementById('input-nombre_etapa');
-                let input_fec_ini = document.getElementById('input-fec_ini');
-                //let id_puesto = document.getElementById('input_id_puesto');
-
-                console.log(id);
-                console.log(nombre);
-                console.log(fecha);
-                console.log(lider);
-
-                const $select = document.querySelector('#mySelect');
-                $select.value = lider;
-                //let nombre_puesto = b.parentNode.parentNode.parentNode.children[0].innerText;
-                //let precio_hora = b.parentNode.parentNode.parentNode.children[1].innerText;
-
-                //input_puesto.value = nombre_puesto;
-                //costo_hora.value = precio_hora.replace('$ ', '').replace('.', '').replace(',', '.');
-                //id_puesto.value = id;
-            }
-        </script>
-
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.editar-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.editar-proyecto')
+    @include('Ingenieria.Servicios.Proyectos.modal.crear-act')
+    @include('Ingenieria.Servicios.Proyectos.modal.crear-act-eta')
 
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection
