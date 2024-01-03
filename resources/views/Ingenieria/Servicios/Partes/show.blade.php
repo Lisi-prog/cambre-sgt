@@ -1,27 +1,5 @@
 @extends('layouts.app')
-@section('content')
-<style>
-     .tableFixHead {
-        overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-        height: 300px; /* gives an initial height of 200px to the table */
-      }
-      .tableFixHead thead th {
-        position: sticky; /* make the table heads sticky */
-        top: 0px; /* table head will be placed from the top of the table and sticks to it */
-      }
-      #viv table {
-        border-collapse: collapse; /* make the table borders collapse to each other */
-        width: 100%;
-      }
-      /* #viv th,
-      #viv td {
-        padding: 8px 16px;
-        border: 1px solid #ccc;
-      }*/
-      #viv th {
-        background: #ee9b27;
-      }
-</style>
+@section('content') 
     <section class="section">
         <div class="section-header d-flex">
             <div class="">
@@ -31,6 +9,7 @@
         <div class="section-body">
             <div class="row">
                 @include('layouts.modal.mensajes')
+
                 {{-- Informacion del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
@@ -116,9 +95,6 @@
                                     </div>
                                 </div>
                             </div>
-                                
-                                
-                            
                         </div>
                     </div>
                 </div>
@@ -173,7 +149,6 @@
                                                     
                                                     @break
                                                 @default
-                                                     
                                             @endswitch
 
                                             <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td>
@@ -182,45 +157,9 @@
                                                 {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
                                                     {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
                                                 {!! Form::close() !!}
-                                                {{-- <div class="row">
-                                                    <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                            {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                    <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                            {!! Form::submit('Borrar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                </div> --}}
                                             </td>
                                         </tr>
-                                            
                                         @endforeach
-                                        {{-- @foreach ($proyecto->getEtapas as $etapa)
-                                            <tr>    
-                                                <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-                                                
-                                                <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
-
-                                                <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
-
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
-
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
-
-                                                <td class= 'text-center'>+late</td>
-
-                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
-
-                                                <td>
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                    {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
-                                                    {!! Form::close() !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach --}}
                                     </tbody>
                                 </table>
                                 </div>
@@ -228,7 +167,7 @@
                         </div>
                     </div>
                 </div>
-                 {{-- ------------- --}}
+                {{-- ------------- --}}
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
@@ -252,10 +191,5 @@
             </div>
         </div>
     </section>
-  
-@endsection
-@include('Ingenieria.Servicios.Partes.modal.crear-parte')
-
-@section('js')
-
+    @include('Ingenieria.Servicios.Partes.modal.crear-parte')
 @endsection

@@ -148,7 +148,7 @@ class UsuarioController extends Controller
             $rolesAsig = [];
         }
 
-        $user->assignRole($rolesAsig);
+        $user->syncRoles($rolesAsig);
         $user->syncPermissions($permisoAsig);
 
         return redirect()->route('usuarios.index')->with('mensaje','El usuario '.$user->name. ' editado con éxito!.');                     

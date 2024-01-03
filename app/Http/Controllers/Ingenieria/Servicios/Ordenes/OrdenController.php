@@ -59,7 +59,10 @@ class OrdenController extends Controller
     {        
         if (Auth::user()->hasRole('SUPERVISOR')) {
             $ordenes_trabajo = Orden::orderBy('id_orden')->get();
-            return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo'));
+            $supervisores = User::role('SUPERVISOR')->get();
+            $responsables = Empleado::orderBy('nombre_empleado')->get();
+            $estados = $this->listarTodosLosEstados();
+            return view('Ingenieria.Servicios.Ordenes.index', compact('ordenes_trabajo', 'supervisores', 'responsables', 'estados'));
         } else {
 
             try {
@@ -73,6 +76,32 @@ class OrdenController extends Controller
         }   
     }
 
+    public function listarTodosLosEstados(){
+        $estados_arr = array();
+
+        //$estados = Estado::get();
+
+        foreach (Estado::get() as $estado) {
+            array_push($estados_arr, (object)[
+                'nombre' => $estado->nombre_estado
+            ]);
+        }
+
+        foreach (Estado_mecanizado::get() as $estado) {
+            array_push($estados_arr, (object)[
+                'nombre' => $estado->nombre_estado_mecanizado
+            ]);
+        }
+
+        foreach (Estado_manufactura::get() as $estado) {
+            array_push($estados_arr, (object)[
+                'nombre' => $estado->nombre_estado_manufactura
+            ]);
+        }
+
+        return $estados_arr;
+    }
+    
     public function listaOrdenEmp(){
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first()->id_rol_empleado;
         $responsabilidades = Responsabilidad::where('id_rol_empleado', $rol_empleado)->where('id_empleado', Auth::user()->getEmpleado->id_empleado)->get();

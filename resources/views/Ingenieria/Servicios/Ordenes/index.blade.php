@@ -26,6 +26,11 @@
     #example thead input {
         width: 100%;
     }
+
+    .btn-primary-outline {
+        background-color: transparent;
+        border-color: transparent;
+    }
 </style>
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
@@ -40,29 +45,84 @@
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {{-- <div class="card">
-                    <div class="card-body ">
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Rol" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
+                        </div>
+                        <div class="row" id="demo" hidden>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                            <div class="">
+                                                <label>Tipo orden:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                <label><input name="tipo" type="checkbox" value="Trabajo"> Trabajo</label>
+                                                <label><input name="tipo" type="checkbox" value="Manufactura"> Manufactura</label>
+                                                <label><input name="tipo" type="checkbox" value="Mecanizado"> Mecanizado</label>
+                                                <label><input name="tipo" type="checkbox" value="Mantenimiento"> Mantenimiento </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                            <div class="">
+                                                <label>Supervisor:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($supervisores->sortBy('name') as $supervisor)
+                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->name}}"> {{$supervisor->name}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                            <div class="">
+                                                <label>Responsable:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($responsables as $responsable)
+                                                    <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}"> {{$responsable->nombre_empleado}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                            <div class="">
+                                                <label>Estados:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($estados as $estado)
+                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> --}}
-
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -180,7 +240,97 @@
         });
     });
 </script> --}}
+
 <script>
+    $(document).ready( function () {
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+            var positions = $('input:checkbox[name="sup"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+            if (positions.length === 0) {
+                return true;
+            }
+            
+            if (positions.indexOf(searchData[6]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="res"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[7]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="est"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[5]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="tipo"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[4]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+    var table = $('#example').DataTable();
+  
+    $('input:checkbox').on('change', function () {
+        table.draw();
+    });
+
+    } );
+</script>
+
+{{-- <script>
     $(document).ready(function () {
         // Setup - add a text input to each footer cell
         $('#example thead tr')
@@ -242,6 +392,17 @@
             },
         });
     });
+</script> --}}
+
+<script>
+    function mostrarFiltro(){
+        let cuadro_filtro = document.getElementById("demo");
+        if ($('#demo').is(":hidden")) {
+            cuadro_filtro.hidden = false;
+        }else{
+            cuadro_filtro.hidden = true;
+        }
+    }
 </script>
 
 @endsection
