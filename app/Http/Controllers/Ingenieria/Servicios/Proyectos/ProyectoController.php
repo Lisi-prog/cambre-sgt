@@ -276,7 +276,7 @@ class ProyectoController extends Controller
             'nombre_proyecto' => 'required',
             'id_tipo_proyecto' => 'required',
             'lider' => 'required',
-            'fecha_ini' => 'required',
+            'fecha_inicio' => 'required',
         ]);
 
         $servicio = Servicio::find($id);
@@ -289,7 +289,7 @@ class ProyectoController extends Controller
 
         $lider = $request->input('lider');
 
-        $fecha_inicio = $request->input('fecha_ini');
+        $fecha_inicio = $request->input('fecha_inicio');
 
         $servicio->update([
             'codigo_servicio' => $codigo,
@@ -323,10 +323,32 @@ class ProyectoController extends Controller
         $proyecto = Servicio::find($id);
         $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados'));
     }
 
+    public function obtenerActualizacionesServicio($id){
+
+        $actualizaciones_servicio = Actualizacion_servicio::where('id_servicio', $id)->get();
+        $actualizacion_arr = array();
+
+        foreach ($actualizaciones_servicio as $act_servicio) {
+
+            array_push($actualizacion_arr, (object)[
+                'codigo' => $act_servicio->getActualizacion->id_actualizacion,
+                'fecha_carga' => Carbon::parse($act_servicio->getActualizacion->fecha_carga)->format('d-m-Y H:i'),
+                'descripcion' => $act_servicio->getActualizacion->descripcion,
+                'fecha_limite' => Carbon::parse($act_servicio->getActualizacion->fecha_limite)->format('d-m-Y'),
+                'estado' => $act_servicio->getActualizacion->getEstado->nombre_estado,
+                'responsable' => $act_servicio->getActualizacion->getResponsable->getEmpleado->nombre_empleado
+            ]);
+
+        }
+
+        return $actualizacion_arr;
+    }
+    
     public function verActualizaciones($id){
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $proyecto = Servicio::find($id);
@@ -336,5 +358,44 @@ class ProyectoController extends Controller
         //$actualizaciones_servicio = $proyecto->getActualizaciones;
         //$actualizaciones = $actualizaciones_servicio->getActualizacion;
         return view('Ingenieria.Servicios.Proyectos.ver-actualizaciones',compact('proyecto', 'empleados', 'Tipos_servicios'));
+    }
+
+    public function guardarActualizacion(Request $request, $id){
+        
+        //return $request;
+        $this->validate($request, [
+            'descripcion' => 'required',
+            'id_estado' => 'required',
+            'fecha_limite' => 'required'
+        ]);
+
+        $descripcion = $request->input('descripcion');
+
+        $id_estado = $request->input('id_estado');
+
+        $fecha_limite = $request->input('fecha_limite');
+
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+
+        $actualizacion = Actualizacion::create([
+                            'descripcion' => $descripcion,
+                            'fecha_limite' => $fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'id_estado' => $id_estado,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+
+        Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacion->id_actualizacion,
+            'id_servicio' => $id
+        ]);
+        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 }

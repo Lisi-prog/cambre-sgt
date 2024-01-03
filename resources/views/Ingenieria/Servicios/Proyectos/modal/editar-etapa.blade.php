@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Etapa</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'etapas.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => 'etapa.actualizar', 'method' => 'POST', 'class' => 'formulario']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -26,7 +26,7 @@
                                 {!! Form::select('responsable', $empleados, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
-                                    'id' => 'responsable'
+                                    'id' => 'm-ce-responsable'
                                 ]) !!}
                             </div>
                         </div>
@@ -44,7 +44,8 @@
                             ]) !!}
                         </div>
                         <div class="" hidden>
-                            {!! Form::text('id_etapa', null, ['class' => 'form-control', 'id' => 'id_etapa']) !!}
+                            {!! Form::text('id_etapa', null, ['class' => 'form-control', 'id' => 'm_ee_id_etapa']) !!}
+                            {!! Form::text('id_servicio', $proyecto->id_servicio, ['class' => 'form-control', 'id' => 'm_ee_id_servicio']) !!}
                         </div>
                     </div>
                 </div>
