@@ -134,8 +134,8 @@ class Orden extends Model
 
     public function getOrdenDe(){
         // return $this->hasOne(Parte_manufactura::class, 'id_parte');
-        // return count(Orden_trabajo::where('id_orden', $this->id_orden)->get());
-
+        //print_r( count(Orden_manufactura::where('id_orden', $this->id_orden)->get()));
+        //print_r($this->hasOne(Orden_manufactura::class, 'id_orden'));
         if (count(Orden_trabajo::where('id_orden', $this->id_orden)->get()) == 1) {
             return $this->hasOne(Orden_trabajo::class, 'id_orden');
         }
@@ -145,11 +145,14 @@ class Orden extends Model
         }
 
         if (count(Orden_manufactura::where('id_orden', $this->id_orden)->get()) == 1) {
-            return $this->hasOne(Orden_manufactura::class, 'id_parte');
+            return $this->hasOne(Orden_manufactura::class, 'id_orden');
         }
 
         if (count(Orden_mantenimiento::where('id_orden', $this->id_orden)->get()) == 1) {
             return $this->hasOne(Orden_mantenimiento::class, 'id_orden');
         }
+
+        
     }
+
 }

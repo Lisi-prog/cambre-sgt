@@ -33,7 +33,7 @@ class Orden_mantenimiento extends Model
         return $this->belongsTo(Tipo_orden_mantenimiento::class, 'id_tipo_orden_mantenimiento');
     }
 
-    public function getTipoOrden()
+    public function getNombreTipoOrden()
     {
         return 'Manufactura';
     }

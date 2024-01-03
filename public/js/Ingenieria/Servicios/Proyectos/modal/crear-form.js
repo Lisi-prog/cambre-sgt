@@ -1,14 +1,18 @@
 import opcion1 from './opcion-orden-trabajo.js';
+import opcion2 from './opcion-orden-manufactura.js';
 import opcion3 from './opcion-orden-mecanizado.js';
 import bodyModalOrdenTrabajo from './ver-orden-trabajo.js';
 import bodyModalOrdenMecanizado from './ver-orden-mecanizado.js';
 
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
+    $('#nueva_orden_meca').on('click', modificarFormulario);
 });
 
 function modificarFormulario(){
+    
    let tipo_orden = Number($(this).val());
+   console.log(tipo_orden);
    let formulario = document.getElementById("formulario");
    let html;
    switch (tipo_orden) {
@@ -17,17 +21,23 @@ function modificarFormulario(){
         html = opcion1
         formulario.innerHTML += html;
         cargarTipoOrdenTrabajo();
-        cargarSupervisores()
+        cargarSupervisores();
         cargarEmpleados();
         cargarEstados();
         break;
     case 2:
         formulario.innerHTML = '';
+        html = opcion2
+        formulario.innerHTML += html;
+        cargarSupervisores();
+        cargarEmpleados();
+        cargarEstadosManufacturas();
         break;
     case 3:
         formulario.innerHTML = '';
         html = opcion3
         formulario.innerHTML += html;
+        cargarSupervisores();
         cargarEmpleados();
         cargarEstadosMecanizados();
         break;
@@ -421,6 +431,30 @@ function cargarEstadosMecanizados(){
                                 `
         });
         c_bx_estados_mec.innerHTML += html_estados_mec;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarEstadosManufacturas(){
+    let c_bx_estados_man = document.getElementById("cbx_estado_man");
+    let html_estados_man = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-estados-manufacturas', 
+        data: {
+            
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_estados_man += `
+                                <option value="`+element.id_estado_manufactura+`">`+element.nombre_estado_manufactura
+                                +`</option> 
+                                `
+        });
+        c_bx_estados_man.innerHTML += html_estados_man;
     },
     error: function (error) {
         console.log(error);

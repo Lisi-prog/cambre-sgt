@@ -498,6 +498,14 @@ VALUES
   ('Planos entregados'),
   ('Temple');
 
+INSERT INTO estado_manufactura(nombre_estado_manufactura)
+VALUES
+  ('Cancelado'),
+  ('Orden creada'),
+  ('Piezas en fabricacion'),
+  ('Piezas listas'),
+  ('Ajuste listo'),
+  ('Ensamble listo');
 
 
 DROP TABLE parte_mantenimiento;

@@ -2,12 +2,11 @@ export default
 `<div class="row"> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
         <div class="form-group"> 
-            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de mecanizado:</label> 
+            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de manufactura:</label> 
             <span class="obligatorio">*</span> 
             <input class="form-control" name="nom_orden" type="text" id="nom_orden" required> 
         </div> 
     </div>
-
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
         <div class="form-group">
             <label for="supervisor" class="control-label fs-7" style="white-space: nowrap;">Supervisor:</label> 
@@ -16,10 +15,10 @@ export default
                 <option selected="selected" value="">Seleccionar</option>
             </select>
         </div>
-    </div>
+    </div> 
 </div> 
 <div class="row"> 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
         <div class="form-group">
             <div class="form-group"> 
                 <label for="revision" class="control-label fs-7" style="white-space: nowrap;">Revision:</label> 
@@ -28,7 +27,7 @@ export default
             </div> 
         </div> 
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
+    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
         <div class="form-group">
             <div class="form-group"> 
                 <label for="cantidad" class="control-label fs-7" style="white-space: nowrap;">Cantidad:</label> 
@@ -36,7 +35,7 @@ export default
                 <input class="form-control" name="cantidad" type="number" id="cantidad" required> 
             </div> 
         </div> 
-    </div> 
+    </div>  -->
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
         <div class="form-group"> 
             <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
@@ -70,9 +69,9 @@ export default
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
         <div class="form-group"> 
-            <label for="estado" class="control-label fs-7" style="white-space: nowrap;">Estado mecanizado:</label> 
+            <label for="estado" class="control-label fs-7" style="white-space: nowrap;">Estado manufactura:</label> 
             <span class="obligatorio">*</span> 
-            <select class="form-select form-group" id="cbx_estado_mec" name="estado_mecanizado" required>
+            <select class="form-select form-group" id="cbx_estado_man" name="estado_manufactura" required>
                 <option selected="selected" value="">Seleccionar</option>
             </select>
         </div>

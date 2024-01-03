@@ -28,6 +28,7 @@ use App\Models\Cambre\Responsabilidad_orden;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Tipo_servicio;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
@@ -38,7 +39,9 @@ use App\Models\Cambre\Orden_trabajo;
 use App\Models\Cambre\Parte_trabajo;
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Tipo_orden_trabajo;
+use App\Models\Cambre\Orden_manufactura;
 use App\Models\Cambre\Orden_mecanizado;
+use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Parte_mecanizado;
 
 class OrdenController extends Controller
@@ -151,12 +154,43 @@ class OrdenController extends Controller
                     'id_estado' => 'required',
                     'fecha_req' => 'required'
                 ], [
-                    'horas_estimadas.required' => 'Faltan las horas estimadas'
+                    'horas_estimadas.required' => 'Faltan las horas estimadas',
+                    'supervisor.required' => 'Seleccione un supervisor'
                 ]);
 
                 $this->crearOrdenTrabajo($request);
                 
                 return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de trabajo y el parte de trabajo se ha creado con exito.'); 
+                break;
+            case 2:
+                # Crear orden de manufactura
+                $this->validate($request, [
+                    'num_etapa' => 'required',
+                    'nom_orden' => 'required',
+                    'horas_estimadas' => 'required',
+                    'minutos_estimados' => 'required',
+                    'responsable' => 'required',
+                    'supervisor' => 'required',
+                    'fecha_ini' => 'required',
+                    'estado_manufactura' => 'required',
+                    'fecha_req' => 'required',
+                    'ruta_plano' => 'required'
+                ], [
+                    'num_etapa.required' => 'Seleccione una etapa.',
+                    'nom_orden.required' => 'Falta el nombre de la orden.',
+                    'horas_estimadas.required' => 'Faltan las horas estimadas.',
+                    'minutos_estimados.required' => 'Faltan los minutos estimados.',
+                    'responsable.required' => 'Seleccione un responsable',
+                    'supervisor.required' => 'Seleccione un supervisor',
+                    'fecha_ini.required' => 'Seleccione una fecha de inicio.',
+                    'estado_manufactura.required' => 'Seleccione una etapa.',
+                    'fecha_req.required' => 'Seleccione una fecha limite.',
+                    'ruta_plano.required' => 'Falta la ruta del plano.'
+                ]);
+
+                $this->crearOrdenManufactura($request);
+
+                return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de manufactura y el parte de manufactura se ha creado con exito.');
                 break;
             case 3:
                 # Crear orden de mecanizado
@@ -166,6 +200,7 @@ class OrdenController extends Controller
                     'horas_estimadas' => 'required',
                     'minutos_estimados' => 'required',
                     'responsable' => 'required',
+                    'supervisor' => 'required',
                     'fecha_ini' => 'required',
                     'estado_mecanizado' => 'required',
                     'fecha_req' => 'required',
@@ -176,6 +211,7 @@ class OrdenController extends Controller
                     'horas_estimadas.required' => 'Faltan las horas estimadas.',
                     'minutos_estimados.required' => 'Faltan los minutos estimados.',
                     'responsable.required' => 'Seleccione un responsable',
+                    'supervisor.required' => 'Seleccione un supervisor',
                     'fecha_ini.required' => 'Seleccione una fecha de inicio.',
                     'estado_mecanizado.required' => 'Seleccione una etapa.',
                     'fecha_req.required' => 'Seleccione una fecha limite.',
@@ -258,6 +294,74 @@ class OrdenController extends Controller
         ]);
     }
 
+    public function crearOrdenManufactura($request){
+        $id_etapa = $request->input('num_etapa');
+        $nombre_orden = $request->input('nom_orden');
+        $revision = $request->input('revision');
+        //$cantidad = $request->input('cantidad');
+        $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
+        $id_responsable = $request->input('responsable');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $id_estado_man = $request->input('estado_manufactura');
+        $ruta_plano = $request->input('ruta_plano');
+        $observaciones = $request->input('observaciones');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
+        $id_supervisor = $request->input('supervisor');
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $id_responsable,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+
+        $responsabilidad_supervisor = Responsabilidad::create([
+            'id_empleado' => $id_supervisor,
+            'id_rol_empleado' => $rol_empleado_supervisor->id_rol_empleado
+        ]);
+
+        $orden = Orden::create([
+                    'nombre_orden' => $nombre_orden,
+                    'duracion_estimada' => $duracion_estimada,
+                    'fecha_inicio' => $fecha_ini,
+                    'id_etapa' => $id_etapa
+                ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        Orden_manufactura::create([
+            'revision' => $revision,
+            //'cantidad' => $cantidad,
+            'ruta_plano' => $ruta_plano,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        $parte = Parte::create([
+            'observaciones' => 'Generacion de orden de manufactura',
+            'fecha' => $fecha_ini,
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'horas' => '00:00',
+            'id_orden' => $orden->id_orden,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        Parte_manufactura::create([
+            'id_estado_manufactura' => $id_estado_man,
+            'id_parte' => $parte->id_parte
+        ]);
+
+    }
+
     public function crearOrdenMecanizado($request){
         $id_etapa = $request->input('num_etapa');
         $nombre_orden = $request->input('nom_orden');
@@ -273,8 +377,8 @@ class OrdenController extends Controller
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
-        $id_supervisor = 1;//$request->input('supervisor');
-
+        $id_supervisor = $request->input('supervisor');
+        $id_orden_manufactura = $request->input('id_orden_manuf');
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $id_responsable,
             'id_rol_empleado' => $rol_empleado->id_rol_empleado
@@ -306,11 +410,12 @@ class OrdenController extends Controller
             'revision' => $revision,
             'cantidad' => $cantidad,
             'ruta_pieza' => $ruta_plano,
-            'id_orden' => $orden->id_orden
+            'id_orden' => $orden->id_orden,
+            'id_orden_manufactura' => $id_orden_manufactura
         ]);
 
         $parte = Parte::create([
-            'observaciones' => 'Generacion de orden de trabajo',
+            'observaciones' => 'Generacion de orden de mecanizado',
             'fecha' => $fecha_ini,
             'fecha_limite' => $fecha_req,
             'fecha_carga' => $fecha_carga,
@@ -324,6 +429,36 @@ class OrdenController extends Controller
             'id_parte' => $parte->id_parte
         ]);
 
+    }
+
+    public function validarOrdenMecanizado(Request $request){
+        $id_orden_manufactura = $request->input('id_orden_manuf');
+        $this->validate($request, [
+            'num_etapa' => 'required',
+            'nom_orden' => 'required',
+            'horas_estimadas' => 'required',
+            'minutos_estimados' => 'required',
+            'responsable' => 'required',
+            'supervisor' => 'required',
+            'fecha_ini' => 'required',
+            'estado_mecanizado' => 'required',
+            'fecha_req' => 'required',
+            'ruta_plano' => 'required'
+        ], [
+            'num_etapa.required' => 'Seleccione una etapa.',
+            'nom_orden.required' => 'Falta el nombre de la orden.',
+            'horas_estimadas.required' => 'Faltan las horas estimadas.',
+            'minutos_estimados.required' => 'Faltan los minutos estimados.',
+            'responsable.required' => 'Seleccione un responsable',
+            'fecha_ini.required' => 'Seleccione una fecha de inicio.',
+            'estado_mecanizado.required' => 'Seleccione una etapa.',
+            'fecha_req.required' => 'Seleccione una fecha limite.',
+            'ruta_plano.required' => 'Falta la ruta del plano.'
+        ]);
+
+        $this->crearOrdenMecanizado($request);
+
+        return redirect()->route('ordenes.manufacturamecanizado', $id_orden_manufactura)->with('mensaje', 'La orden de mecanizado se ha creado con exito.');
     }
 
     public function obtenerOrdenesDeUnaEtapa($id){
@@ -453,11 +588,21 @@ class OrdenController extends Controller
         return Estado::orderBy('nombre_estado')->get();
     }
 
+    public function obtenerEstadosManufacturas(){
+        return Estado_manufactura::orderBy('nombre_estado_manufactura')->get();
+    }
+
     public function obtenerEstadosMecanizados(){
         return Estado_mecanizado::orderBy('nombre_estado_mecanizado')->get();
     }
 
     public function obtenerSupervisores(){
         return Empleado::orderBy('nombre_empleado')->get();
+    }
+
+    public function verMecanizados($id){
+        $orden_manufactura = Orden_manufactura::find($id);
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Servicios.Ordenes.crear-mecanizado-manufactura', compact('orden_manufactura', 'empleados'));
     }
 }

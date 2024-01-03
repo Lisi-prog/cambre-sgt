@@ -53,6 +53,12 @@ class Parte extends Model
         return $this->hasOne(Parte_mecanizado::class, 'id_parte');
     }
 
+    public function getParteManufactura()
+    {   
+        //return Parte_manufactura::where('id_parte', $this->id_parte)->first();
+        return $this->hasOne(Parte_manufactura::class, 'id_parte');
+    }
+
     public function getParte(){
         // return $this->hasOne(Parte_manufactura::class, 'id_parte');
 
