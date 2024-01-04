@@ -59,7 +59,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    @if (!is_null($Req_ing->getSolicitud->fecha_requerida))
+                                    @if(!is_null($Req_ing->getSolicitud->fecha_requerida))
                                         <div class="form-group">
                                             {!! Form::label('fecha_req', "Fecha requerida:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                             {!! Form::text('fecha_req',\Carbon\Carbon::parse($Req_ing->getSolicitud->fecha_requerida)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
@@ -131,9 +131,33 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="d-flex">
+                                <div class="col-5">
+
+                                </div>
+                                <div class="col-2">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            {!! Form::open(['method' => 'GET', 'route' => 'r_i.index', 'style' => '']) !!}
+                                            {!! Form::submit('Aceptar', ['class' => 'btn btn-success']) !!}
+                                            {!! Form::close() !!}
+                                        </div>
+                                        <div class="col-6">
+                                            {!! Form::open(['method' => 'GET', 'route' => 'r_i.index', 'style' => '']) !!}
+                                            {!! Form::submit('Rechazar', ['class' => 'btn btn-danger']) !!}
+                                            {!! Form::close() !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-5 d-flex">
+                                    <div class="ms-auto">
+                                        {!! Form::open(['method' => 'GET', 'route' => 'r_i.index', 'style' => '']) !!}
+                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
+                                        {!! Form::close() !!}
+                                    </div>
+                                </div>
+                                {{-- <div class="d-flex">
                                     <div class="me-auto">
-                                        {{-- (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong> --}}
+                                        {{-- (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                                     </div>
                                     <div class="p-1">
                                     </div>
@@ -142,7 +166,7 @@
                                         {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
                                         {!! Form::close() !!}
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
