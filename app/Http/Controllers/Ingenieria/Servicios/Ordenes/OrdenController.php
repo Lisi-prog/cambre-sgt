@@ -43,6 +43,8 @@ use App\Models\Cambre\Orden_manufactura;
 use App\Models\Cambre\Orden_mecanizado;
 use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Parte_mecanizado;
+use App\Models\Cambre\Tipo_relacion_gantt;
+use App\Models\Cambre\Orden_gantt;
 
 class OrdenController extends Controller
 {
@@ -633,5 +635,14 @@ class OrdenController extends Controller
         $orden_manufactura = Orden_manufactura::find($id);
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         return view('Ingenieria.Servicios.Ordenes.crear-mecanizado-manufactura', compact('orden_manufactura', 'empleados'));
+    }
+
+    public function relacionarOrdenes(){
+        $ordenes = Orden::orderBy('fecha_inicio', 'asc')->get();
+        $relaciones = Tipo_relacion_gantt::orderBy('id_tipo_relacion_gantt')->get();
+        $supervisores = $this->obtenerEmpleados();
+        $responsables = $this->obtenerEmpleados();
+        $estados = $this->listarTodosLosEstados();
+        return view('Ingenieria.Servicios.Ordenes.relacionar-ordenes', compact('ordenes', 'relaciones', 'supervisores', 'responsables', 'estados'));
     }
 }

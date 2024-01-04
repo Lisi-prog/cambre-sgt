@@ -390,6 +390,23 @@ CREATE TABLE `cambio_de_prioridad`(
   `id_servicio` int,
   PRIMARY KEY(`id_cambio_de_prioridad`)
 );
+
+CREATE TABLE `tipo_relacion_gantt`(
+  `id_tipo_relacion_gantt` int NOT NULL AUTO_INCREMENT,
+  `nombre_relacion_gantt` varchar(50),
+  PRIMARY KEY(`id_tipo_relacion_gantt`)
+);
+
+CREATE TABLE `orden_gantt`(
+  `id_orden_gantt` int NOT NULL AUTO_INCREMENT,
+  `id_tipo_relacion_gantt` int,
+  `id_orden_anterior` int,
+  `id_orden_siguiente` int,
+  PRIMARY KEY(`id_orden_gantt`),
+  CONSTRAINT `id_orden_gantt_x_id_tipo_relacion_gantt` FOREIGN KEY (`id_tipo_relacion_gantt`) REFERENCES `tipo_relacion_gantt`(`id_tipo_relacion_gantt`)
+);
+
+
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)
@@ -507,6 +524,12 @@ VALUES
   ('Ajuste listo'),
   ('Ensamble listo');
 
+INSERT INTO tipo_relacion_gantt(nombre__relacion_gantt)
+VALUES
+  ('inicio - inicio'),
+  ('inicio - fin'),
+  ('fin - fin');
+
 
 DROP TABLE parte_mantenimiento;
 DROP TABLE orden_mantenimiento;
@@ -546,3 +569,5 @@ DROP TABLE estado_solicitud;
 DROP TABLE prioridad_solicitud;
 DROP TABLE tipo_orden_mantenimiento;
 DROP TABLE tipo_orden_trabajo;
+DROP TABLE orden_gantt;
+DROP TABLE tipo_relacion_gantt;

@@ -30,6 +30,8 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::post('proyectos/actualizar-prioridad', [ProyectoController::class, 'actualizarPrioridadServicio'])->name('proyectos.cambiarprioridad');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
 
+    Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
+
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
 
     Route::post('/orden/obtener-tipo-orden',[OrdenController::class, 'obtenerTipoTrabajo']);
