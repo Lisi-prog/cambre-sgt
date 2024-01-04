@@ -69,7 +69,7 @@
                                                             'route' => ['empleados.destroy', $empleado->id_empleado],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger','onclick' => "return confirm('¿Está seguro que desea ELIMINAR el empleado?'"]) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el empleado?');"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
 
