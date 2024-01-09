@@ -70,9 +70,14 @@ class Servicio extends Model
         $progreso = 0;
 
         foreach ($etapas as $etapa) {
-            $progreso += $etapa->getProgreso();   
+            
+            if ($etapa->getProgreso() == 100) {
+                $progreso += $total;
+            }else{
+                $progreso += $etapa->getProgreso();
+            }
         }
-        
+
         return ceil($progreso);
     }
 }

@@ -65,6 +65,7 @@ class Etapa extends Model
         } catch (\Throwable $th) {
             $total = 0;
         }
+        
         return $progreso;     
     }
 }
