@@ -12,6 +12,7 @@ use Carbon\Carbon;
 
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 use App\Models\Cambre\Prioridad_solicitud;
 use App\Models\Cambre\Estado_solicitud;
@@ -19,6 +20,8 @@ use App\Models\Cambre\Solicitud;
 use App\Models\Cambre\Requerimiento_de_ingenieria;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
+use App\Models\Cambre\Servicio;
+use App\Models\Cambre\Subtipo_servicio;
 
 class RequerimientoDeIngenieriaController extends Controller
 {
@@ -97,7 +100,104 @@ class RequerimientoDeIngenieriaController extends Controller
     
     public function evaluar($id){
         $Req_ing = Requerimiento_de_ingenieria::find($id);
-        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing'));
+        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        
+        $supervisores_user = User::role('SUPERVISOR')->get();
+
+        foreach ($supervisores_user as $supervisor_user) {
+            $id_supervisor[] = $supervisor_user->id;
+        }
+
+        $empleados = Empleado::whereIn('user_id', $id_supervisor)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing', 'Tipos_servicios', 'empleados', 'prioridadMax'));
+    }
+
+    public function aceptar(Request $request, $id){
+
+        return $request;
+        $this->validate($request, [
+            'codigo_proyecto' => 'required',
+            'nombre_proyecto' => 'required',
+            'id_tipo_proyecto' => 'required',
+            'lider' => 'required',
+            'prioridad' => 'required',
+            'fecha_ini' => 'required',
+            'fecha_req' => 'required',
+            'prioridad' => 'required'
+        ],
+        [
+            'codigo_proyecto.required' => 'Se necesita el codigo del proyecto',
+            'nombre_proyecto.required' => 'Se necesita el nombre del proyecto',
+            'id_tipo_proyeto.required' => 'Se necesita el tipo del proyecto',
+            'lider.required' => 'Se necesita el nombre del proyecto',
+            'fecha_ini.required' => 'Se necesita la fecha de inicio',
+            'fecha_req.required' => 'Se necesita la fecha requerida',
+            'prioridad.required' => 'Se necesita la prioridad'
+        ]);
+
+
+        $codigo_proyecto = $request->input('codigo_proyecto');
+        $nombre_proyecto = $request->input('nombre_proyecto');
+        $tipo_proyecto = $request->input('id_tipo_proyecto');
+        $lider = $request->input('lider');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
+        $estado = Estado::where('nombre_estado', 'espera')->first();
+        
+        $tipo_servicio = $request->input('id_tipo_proyecto');
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $lider,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+        
+        $proyecto = Servicio::create([
+            'codigo_servicio' => $codigo_proyecto,
+            'nombre_servicio' => $nombre_proyecto,
+            'id_subtipo_servicio' => $tipo_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'fecha_inicio' => $fecha_ini,
+            'prioridad_servicio' => $prioridadMax
+        ]);
+
+        $actualizacionServicio = Actualizacion::create([
+            'descripcion' => 'Creacion de proyecto.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacion_servicio = Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
+            'id_servicio' => $proyecto->id_servicio
+        ]);
+
+        $etapa = Etapa::create([
+            'descripcion_etapa' => 'Creacion de etapa.',
+            'fecha_inicio' => $fecha_ini,
+            'id_servicio' => $proyecto->id_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacionEtapa = Actualizacion::create([
+            'descripcion' => 'Creacion de etapa.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacion_etapa = Actualizacion_etapa::create([
+            'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+            'id_etapa' => $etapa->id_etapa
+        ]);
+
+        return $this->index();
     }
 
     public function buscarPermisos(Request $request)
@@ -162,28 +262,33 @@ class RequerimientoDeIngenieriaController extends Controller
     
     public function show($id)
     {
+        $Req_ing = Requerimiento_de_ingenieria::find($id);
+        return view('Ingenieria.Solicitud.RI.show', compact('Req_ing'));
     }
     
     public function edit($id)
     {
-        $permiso = Permission::findOrFail($id);
+        $Req_ing = Requerimiento_de_ingenieria::find($id);
     
-        return view('Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
+        return view('Ingenieria.Solicitud.RI.editar', compact('Req_ing'));
     }
     
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-    
-        $permiso = Permission::find($id);
+        $solicitud = Solicitud::find($id);
 
-        $permiso->update([
-            'name' => strtoupper($request->input('name'))
+        $solicitud->update([
+            'fecha_requerida' => $request->input('fecha_req'),
+            'descripcion_solicitud' => $request->input('descripcion')
         ]);
+
+        if ($request->input('descripcion_urgencia')) {
+            $solicitud->update([
+                'descripcion_urgencia' => $request->input('descripcion_urgencia')
+            ]);
+        }
     
-        return redirect()->route('permisos.index')->with('mensaje',$permiso->name.' editado exitosamente.');                        
+        return redirect()->route('r_i.index')->with('mensaje', 'Requerimiento de ingenieria editado exitosamente.');                        
     }
     
     public function destroy($id)

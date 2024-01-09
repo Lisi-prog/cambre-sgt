@@ -14,9 +14,6 @@
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRIModal">
                 Nuevo   
             </button>
-                {{-- {!! Form::open(['method' => 'GET', 'route' => ['r_i.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nueva', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!} --}}
             {{-- @endcan --}}
         </div>
     </div>
@@ -24,35 +21,8 @@
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {{-- <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Rol" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-
                 <div class="card">
                     <div class="card-body">
-                        <!-- Centramos la paginacion a la derecha -->
-                        {{-- <div class="pagination justify-content-end">
-                                {!! $CategoriasLaborales->links() !!}
-                        </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
@@ -67,6 +37,10 @@
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado')
+                                    @endphp
+
                                     @foreach ($ListaRI as $Ri)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_carga)->format('d-m-Y H:i:s')}}</td>
@@ -92,63 +66,29 @@
 
                                             <td>
                                                 <div class="row">
-                                                    <div class="col-6">{!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                    <div class="col-6">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['r_i.edit', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                     <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                        
+                                                        @if ($Ri->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['r_i.show', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                            {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        @else
+                                                            @hasrole('SUPERVISOR')
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            @endhasrole
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 
                                                 
                                             </td>
-                                            {{--@if (!is_null($obra->id_loc))
-                                                <td class='text-center' style="vertical-align: middle;">{{$obra->getLocalidad->nom_loc}}</td>
-                                            @else
-                                                <td class='text-center' style="vertical-align: middle;"> NO EXISTE </td>
-                                            @endif
-                                            
-                                            
-                                            <td>
-                                                <div>
-                                                    <div class="row mb-2 ">
-                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.show',$obra->id_obr], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Ver', ['class' => 'btn btn-warning w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        </div>
-                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                                            @can('EDITAR-OBRAVIVIENDA')
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.edit',$obra->id_obr], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
-                                                                {!! Form::close() !!}
-                                                            @endcan
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                            
-                                                            @can('EDITAR-OBRAVIVIENDA')
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.viviendas',$obra->id_obr], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Viviendas', ['class' => 'btn btn-primary mb-2 w-100']) !!}
-                                                                {!! Form::close() !!}
-                                                            @endcan
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                        @can('VER-OBRAVIVIENDA')
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.etapas', $obra->id_obr], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Etapas/Entregas', ['class' => 'btn btn-primary mr-2 w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        @endcan
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

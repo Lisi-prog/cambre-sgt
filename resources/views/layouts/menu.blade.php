@@ -166,13 +166,13 @@
                 </ul>
             </li>
 
-            {{-- <li>
-                <a class="nav-link" href="{{route('proyectos.index')}}" title="Proyectos">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Proyectos</span>
+            <li>
+                <a class="nav-link" href="{{route('proyectos.index')}}" title="Maquinaria">
+                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Maquinaria</span>
                 </a>
             </li>
 
-            <li>
+            {{-- <li>
                 <a class="nav-link" href="" title="Tareas">
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Tareas</span>
                 </a>

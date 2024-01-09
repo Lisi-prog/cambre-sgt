@@ -60,6 +60,7 @@
                                         <th class='text-center' style="color:#fff;">Tipo proyecto</th>
                                         {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
                                         <th class='text-center' style="color:#fff;">Lider</th>
+                                        <th class='text-center' style="color:#fff;">Progreso</th>
                                         <th class='text-center' style="color:#fff;">Estado</th>
                                         <th class='text-center' style="color:#fff;">Fecha inicio</th>
                                         <th class='text-center' style="color:#fff;">Fecha limite</th>
@@ -79,6 +80,12 @@
     
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
     
+                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{$proyecto->getProgreso()}}%</div>
+                                                    </div>
+                                                </td>
+
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->getEstado->nombre_estado}}</td>
     
                                                 <td class= 'text-center'style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y')}}</td>

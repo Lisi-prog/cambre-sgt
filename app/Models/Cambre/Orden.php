@@ -155,4 +155,9 @@ class Orden extends Model
         
     }
 
+    public function getFinalizado()
+    {
+        return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getFinalizado();
+    }
+
 }

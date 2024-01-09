@@ -182,6 +182,8 @@ CREATE TABLE `maquinaria` (
   `id_maquinaria` int NOT NULL AUTO_INCREMENT,
   `codigo_maquinaria` varchar(50) DEFAULT NULL,
   `alias_maquinaria` varchar(50) DEFAULT NULL,
+  `descripcion_maquinaria` varchar(300),
+  `id_sector` int
   PRIMARY KEY (`id_maquinaria`)
 );
 

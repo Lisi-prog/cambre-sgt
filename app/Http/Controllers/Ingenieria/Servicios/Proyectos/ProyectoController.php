@@ -250,6 +250,103 @@ class ProyectoController extends Controller
         
     }
     
+    public function aceptar_solicitud(Request $request, $id){
+
+        $this->validate($request, [
+            'codigo_proyecto' => 'required',
+            'nombre_proyecto' => 'required',
+            'id_tipo_proyecto' => 'required',
+            'lider' => 'required',
+            'prioridad' => 'required',
+            'fecha_ini' => 'required',
+            'fecha_req' => 'required',
+            'prioridad' => 'required'
+        ],
+        [
+            'codigo_proyecto.required' => 'Se necesita el codigo del proyecto',
+            'nombre_proyecto.required' => 'Se necesita el nombre del proyecto',
+            'id_tipo_proyeto.required' => 'Se necesita el tipo del proyecto',
+            'lider.required' => 'Se necesita el nombre del proyecto',
+            'fecha_ini.required' => 'Se necesita la fecha de inicio',
+            'fecha_req.required' => 'Se necesita la fecha requerida',
+            'prioridad.required' => 'Se necesita la prioridad'
+        ]);
+
+        $id_estado_solicitud = Estado_solicitud::where('nombre_estado_solicitud', 'aceptado')->first()->id_estado_solicitud;
+
+        $solicitud = Solicitud::find($id);
+
+        $solicitud->update([
+            'id_estado_solicitud' => $id_estado_solicitud
+        ]);
+
+        $codigo_proyecto = $request->input('codigo_proyecto');
+        $nombre_proyecto = $request->input('nombre_proyecto');
+        $tipo_proyecto = $request->input('id_tipo_proyecto');
+        $lider = $request->input('lider');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
+        $estado = Estado::where('nombre_estado', 'espera')->first();
+        
+        $tipo_servicio = $request->input('id_tipo_proyecto');
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $lider,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+        
+        $proyecto = Servicio::create([
+            'codigo_servicio' => $codigo_proyecto,
+            'nombre_servicio' => $nombre_proyecto,
+            'id_subtipo_servicio' => $tipo_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'fecha_inicio' => $fecha_ini,
+            'prioridad_servicio' => $prioridadMax
+        ]);
+
+        $solicitud->update([
+            'id_servicio' => $proyecto->id_servicio
+        ]);
+
+        $actualizacionServicio = Actualizacion::create([
+            'descripcion' => 'Creacion de proyecto.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacion_servicio = Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
+            'id_servicio' => $proyecto->id_servicio
+        ]);
+
+        $etapa = Etapa::create([
+            'descripcion_etapa' => 'Creacion de etapa.',
+            'fecha_inicio' => $fecha_ini,
+            'id_servicio' => $proyecto->id_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacionEtapa = Actualizacion::create([
+            'descripcion' => 'Creacion de etapa.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacion_etapa = Actualizacion_etapa::create([
+            'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+            'id_etapa' => $etapa->id_etapa
+        ]);
+
+        return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.'); 
+    }
+
     public function show($id)
     {
         $proyecto = Servicio::find($id);

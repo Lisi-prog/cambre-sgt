@@ -159,19 +159,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getOrdenDe->getNombreTipoOrden()}}</td>
                                             
-                                            @switch($orden_trabajo->getOrdenDe->getTipoOrden())
-                                                @case(1)
-                                                    <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado ?? ''}}</td>
-                                                    @break
-                                                @case(2)
-                                                    <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteManufactura->getEstadoManufactura->nombre_estado_manufactura ?? ''}}</td>
-                                                    @break
-                                                @case(3)
-                                                    <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteMecanizado->getEstadoMecanizado->nombre_estado_mecanizado ?? ''}}</td>
-                                                    @break
-                                                @default
-                                                    
-                                            @endswitch
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado() ?? ''}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getSupervisor()}}</td>
                                             

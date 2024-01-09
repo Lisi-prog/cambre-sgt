@@ -2,39 +2,26 @@
 
 @section('content')
 
-@include('layouts.modal.delete', ['modo' => 'Agregar'])
-
 <section class="section">
-    <div class="section-header">
-        <h3 class="page__heading">Permisos</h3>
+    <div class="section-header d-flex">
+        <div class="">
+            <h4 class="titulo page__heading my-auto mr-5">Maquinaria</h4>
+        </div>
+        {!! Form::open(['method' => 'GET', 'route' => ['puesto_empleado.index'], 'class' => 'd-flex justify-content-end']) !!}
+            {!! Form::submit('Puesto de empleado', ['class' => 'btn btn-success my-1']) !!}
+        {!! Form::close() !!}
+        <div class="ms-auto">
+            {{-- @can('CREAR-RI') --}}
+                {!! Form::open(['method' => 'GET', 'route' => ['empleados.create'], 'class' => 'd-flex justify-content-end']) !!}
+                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
+                {!! Form::close() !!}
+            {{-- @endcan --}}
+        </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-                <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Permiso" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-primary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['permisos.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Permiso', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -43,22 +30,34 @@
                         </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead style="height:50px;">
-                                    <th class='ml-3 text-center' style="color:#fff;">Codigo</th>
-                                    <th class='text-center' style="color:#fff;">Permiso</th>
+                                <thead>
+                                    <th class='text-center' style="color:#fff;">Codigo</th>
+                                    <th class='text-center' style="color:#fff;">Nombre</th>
+                                    <th class='text-center' style="color:#fff;">Email</th>
+                                    <th class='text-center' style="color:#fff;">Telefono</th>
+                                    <th class='text-center' style="color:#fff;">Puesto</th>
+                                    <th class='text-center' style="color:#fff;">Sector</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($permisos as $permiso)
-                                        <tr>
-                                            <td class='text-center'>{{$permiso->id}}</td>
+                                    @foreach ($empleados as $empleado)
+                                        <tr class="my-auto">
+                                            <td class='text-center'>{{$empleado->id_empleado}}</td>
 
-                                            <td class='text-center'>{{$permiso->name}}</td>
+                                            <td class='text-center'>{{$empleado->nombre_empleado}}</td>
+
+                                            <td class='text-center'>{{$empleado->email_empleado}}</td>
+
+                                            <td class='text-center'>{{$empleado->telefono}}</td>
+
+                                            <td class='text-center'>{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
+
+                                            <td class='text-center'>{{$empleado->getSector->nombre_sector}}</td>
 
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['permisos.edit', $permiso->id], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
@@ -67,10 +66,10 @@
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['permisos.destroy', $permiso->id],
+                                                            'route' => ['empleados.destroy', $empleado->id_empleado],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea BORRAR el permiso?');"]) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el empleado?');"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
 

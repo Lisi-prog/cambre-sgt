@@ -70,7 +70,7 @@
                                                             'route' => ['roles.destroy', $rol->id],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea BORRAR el rol?');"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
 

@@ -60,4 +60,19 @@ class Servicio extends Model
     public function getEstado(){
         return $this->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado;
     }
+
+    public function getProgreso()
+    {
+        $etapas = $this->getEtapas;
+
+        $total = 100 / count($etapas);
+        
+        $progreso = 0;
+
+        foreach ($etapas as $etapa) {
+            $progreso += $etapa->getProgreso();   
+        }
+        
+        return ceil($progreso);
+    }
 }

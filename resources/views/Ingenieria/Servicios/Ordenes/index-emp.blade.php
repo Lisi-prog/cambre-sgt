@@ -71,7 +71,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->nombre_orden}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado ?? ''}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado() ?? ''}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
@@ -82,7 +82,7 @@
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden}}, {{$orden_trabajo->getOrdenTrabajo->getTipoOrden()}})">
+                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden}}, {{$orden_trabajo->getOrdenDe->getTipoOrden()}})">
                                                             ver
                                                         </button>
                                                     </div>

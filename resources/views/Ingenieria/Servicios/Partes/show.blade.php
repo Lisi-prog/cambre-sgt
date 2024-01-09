@@ -141,15 +141,9 @@
 
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->fecha_limite)->format('d-m-Y')}}</td>
 
-                                            @switch($orden->getOrdenDe->getTipoOrden())
-                                                @case(1)
-                                                    <td class= 'text-center'>{{$parte->getParte->getEstado->nombre_estado}}</td>
-                                                    @break
-                                                @case(2)
-                                                    
-                                                    @break
-                                                @default
-                                            @endswitch
+                                            
+                                                    <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>
+                                              
 
                                             <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td>
 

@@ -51,8 +51,20 @@ class Etapa extends Model
         return $this->hasMany(Orden::class, 'id_etapa');
     }
 
-    public function getOrdenMecanizado()
-    {
-        return $this->hasMany(Orden_mecanizado::class, 'id_etapa');
+    public function getProgreso(){
+        $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
+        $progreso = 0;
+        
+        try {
+            $total = 100 / count($ordenes);
+            foreach ($ordenes as $orden) {
+                if ($orden->getFinalizado() == 1) {
+                     $progreso += $total;
+                } ;
+             }
+        } catch (\Throwable $th) {
+            $total = 0;
+        }
+        return $progreso;     
     }
 }
