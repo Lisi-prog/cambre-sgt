@@ -31,6 +31,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
 
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
+    Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
 
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
 

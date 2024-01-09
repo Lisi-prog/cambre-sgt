@@ -645,4 +645,16 @@ class OrdenController extends Controller
         $estados = $this->listarTodosLosEstados();
         return view('Ingenieria.Servicios.Ordenes.relacionar-ordenes', compact('ordenes', 'relaciones', 'supervisores', 'responsables', 'estados'));
     }
+
+    public function guardarRelacionesOrdenes(Request $request){
+        for ($i=0; $i < count($request->id_orden_hija); $i++) { 
+            if(!empty($request->id_orden_hija[$i] && !empty($request->relacion[$i]))){
+                print_r($request->id_orden[$i]);
+                print_r($request->relacion[$i]);
+                print_r($request->id_orden_hija[$i]);
+                print_r('--');
+            }
+        }
+        return $request;
+    }
 }

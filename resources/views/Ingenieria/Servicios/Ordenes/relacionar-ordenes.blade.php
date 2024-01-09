@@ -129,7 +129,7 @@
                         {{-- <div class="pagination justify-content-end">
                                 {!! $CategoriasLaborales->links() !!}
                         </div> --}}
-                        {!! Form::open(['route' => 'ordenes.crear', 'method' => 'POST', 'class' => 'formulario']) !!}
+                        {!! Form::open(['route' => 'ordenes.relacionar', 'method' => 'POST', 'class' => 'formulario']) !!}
                         <div class="table-responsive" id="formulario">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
@@ -137,9 +137,9 @@
                                     <th class='text-center' style="color:#fff; width:15vh">Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
-                                    <th class='text-center' style="color:#fff;">Tipo de orden</th>
+                                    {{-- <th class='text-center' style="color:#fff;">Tipo de orden</th> --}}
                                     {{-- <th class='text-center' style="color:#fff;">Estado</th> --}}
-                                    <th class='text-center' style="color:#fff;">Supervisor</th>
+                                    {{-- <th class='text-center' style="color:#fff;">Supervisor</th> --}}
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff; width:9vh">Fecha inicio</th>
                                     <th class='text-center' style="color:#fff; width:9vh">Fecha limite</th>
@@ -150,7 +150,6 @@
                                 </thead>
                                 
                                 <tbody>
-                                    
                                     @foreach ($ordenes as $orden)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio}}</td>
@@ -161,7 +160,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td> --}}
                                             
                                             {{-- @switch($orden->getOrdenDe->getTipoOrden())
                                                 @case(1)
@@ -177,7 +176,7 @@
                                                     
                                             @endswitch --}}
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getSupervisor()}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getSupervisor()}}</td> --}}
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable()}}</td>
 
@@ -186,26 +185,24 @@
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
                                             
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td> --}}
-
+                                                {{-- ORDEN ACTUAL --}}
                                              <td class='text-center' style="vertical-align: middle;"> {{--{{$orden->id_orden}} --}}
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                         <div class="form-group">
-                                                            {{-- {!! Form::label('id_orden', "Id orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!} --}}
-                                                            {{-- <span class="obligatorio">*</span> --}}
-                                                            {!! Form::text('id_orden', null, ['class' => 'form-control', 'id' => 'input_id_orden', 'readonly']) !!}
+                                                            {!! Form::text('id_orden[]', $orden->id_orden, ['class' => 'text-center form-control', 'id' => 'input_id_orden', 'readonly']) !!}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            
+                                            {{-- RELACION --}}
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             {{-- {!! Form::label('relacion', 'Relacion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!} --}}
                                                             {{-- <span class="obligatorio">*</span> --}}
-                                                            {!! Form::select('relacion', $relaciones, null, [
+                                                            {!! Form::select('relacion[]', $relaciones->pluck('nombre_relacion_gantt'), null, [
                                                                 'placeholder' => 'Seleccionar',
                                                                 'class' => 'form-select form-group',
                                                                 'id' => 'relacion'
@@ -214,14 +211,12 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            
+                                            {{-- ORDEN HIJA --}}
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                         <div class="form-group">
-                                                            {{-- {!! Form::label('id_orden_hija', "Id hija:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!} --}}
-                                                            {{-- <span class="obligatorio">*</span> --}}
-                                                            {!! Form::text('id_orden_hija', null, ['class' => 'form-control', 'id' => 'input_id_orden_hija']) !!}
+                                                            {!! Form::text('id_orden_hija[]', null, ['class' => 'text-center form-control', 'id' => 'input_id_orden_hija']) !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -230,7 +225,12 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            
                         </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
