@@ -35,4 +35,12 @@ class Parte_mantenimiento extends Model
     {
         return $this->belongsTo(Parte::class, 'id_parte');
     }
+
+    public function getFinalizado()
+    {
+        if ($this->id_estado_mecanizado == 2) {
+            return 1;
+        }
+        return 0;
+    }
 }

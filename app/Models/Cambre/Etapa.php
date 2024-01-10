@@ -65,7 +65,26 @@ class Etapa extends Model
         } catch (\Throwable $th) {
             $total = 0;
         }
-        
+
         return $progreso;     
+    }
+
+    public function getTotalOrdenes()
+    {
+        return count(Orden::where('id_etapa', $this->id_etapa)->get());
+    }
+
+    public function getOrdenesFinalizadas()
+    {
+        $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
+        $totalOrdenesFinalizadas = 0;
+        foreach ($ordenes as $orden) {
+
+           if ($orden->getFinalizado() == 1) {
+                $totalOrdenesFinalizadas +=1;
+           }
+
+        }
+        return $totalOrdenesFinalizadas;
     }
 }

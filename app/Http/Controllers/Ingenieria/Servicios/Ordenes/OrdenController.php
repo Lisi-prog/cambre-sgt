@@ -593,7 +593,7 @@ class OrdenController extends Controller
         foreach ($orden->getPartes as $parte_trabajo) {
             array_push($partes_de_trabajo_arr, (object)[
                 'fecha_carga' => Carbon::parse($parte_trabajo->fecha_carga)->format('d-m-Y H:i'),
-                'estado' => $parte_trabajo->getParteTrabajo->getEstado->nombre_estado,
+                'estado' => $parte_trabajo->getParteDe->getNombreEstado(),
                 'observaciones' => $parte_trabajo->observaciones,
                 'fecha' => Carbon::parse($parte_trabajo->fecha)->format('d-m-Y'),
                 'fecha_limite' => Carbon::parse($parte_trabajo->fecha_limite)->format('d-m-Y'),

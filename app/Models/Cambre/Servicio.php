@@ -80,4 +80,36 @@ class Servicio extends Model
 
         return ceil($progreso);
     }
+
+    public function getOrdenesRealizadas()
+    {
+        $etapas = $this->getEtapas;
+        $totalOrdenes = 0;
+        $totalOrdenesFinalizados = 0;
+
+        foreach ($etapas as $etapa) {
+            $totalOrdenes += $etapa->getTotalOrdenes();
+            $totalOrdenesFinalizados += $etapa->getOrdenesFinalizadas();
+        }
+        return $totalOrdenesFinalizados.'/'.$totalOrdenes;
+    }
+
+    public function getOrdenesRealizadasPorcentaje()
+    {
+        $etapas = $this->getEtapas;
+        $totalOrdenes = 0;
+        $totalOrdenesFinalizados = 0;
+
+        try {
+            foreach ($etapas as $etapa) {
+                $totalOrdenes += $etapa->getTotalOrdenes();
+                $totalOrdenesFinalizados += $etapa->getOrdenesFinalizadas();
+            }
+            return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
+        } catch (\Throwable $th) {
+            return '0';
+        }
+        
+        // return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
+    }
 }
