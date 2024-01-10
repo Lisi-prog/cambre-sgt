@@ -61,7 +61,7 @@
                                         {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
                                         <th class='text-center' style="color:#fff;">Lider</th>
                                         <th class='text-center' style="color:#fff;">Progreso</th>
-                                        <th class='text-center' style="color:#fff;">Ordenes</th>
+                                        {{-- <th class='text-center' style="color:#fff;">Ordenes</th> --}}
                                         <th class='text-center' style="color:#fff;">Estado</th>
                                         <th class='text-center' style="color:#fff;">Fecha inicio</th>
                                         <th class='text-center' style="color:#fff;">Fecha limite</th>
@@ -83,10 +83,10 @@
     
                                                 <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress">
-                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{$proyecto->getOrdenesRealizadasPorcentaje()}}%</div>
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span></div>
                                                     </div>
                                                 </td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadas()}}</td>
+                                                {{-- <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadas()}}</td> --}}
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->getEstado->nombre_estado}}</td>
     

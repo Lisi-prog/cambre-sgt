@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_trabajo;
 use App\Models\Cambre\Responsabilidad;
@@ -45,12 +46,13 @@ class ParteController extends Controller
         if (Auth::user()->hasRole('SUPERVISOR')) {
             $editable = '';
             $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
+            $estados_manufactura = Estado_manufactura::orderBy('id_estado_manufactura')->pluck('nombre_estado_manufactura','id_estado_manufactura');
         } else {
             $editable = 'readonly';
             $estados = Estado::whereIn('id_estado', [4, 6, 7, 9])->orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         }
         
-        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados'));
+        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura'));
     }
 
     public function create(Request $request)

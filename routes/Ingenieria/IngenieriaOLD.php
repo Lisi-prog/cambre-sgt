@@ -12,8 +12,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController
 use App\Http\Controllers\Ingenieria\Solicitud\RI\RequerimientoDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimientoController;
 use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
-use App\Http\Controllers\Ingenieria\Activos\ActivoController;
-use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
+
 //Gestion de proyectos
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
@@ -32,7 +31,6 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
 
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
-    Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
 
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
 
@@ -59,8 +57,6 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     Route::resource('etapas', EtapaController::class);
     Route::resource('ordenes', OrdenController::class);
     Route::resource('partes', ParteController::class);
-    Route::resource('maquinarias', MaquinariaController::class);
-    Route::resource('activos', ActivoController::class);
 // });
 
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {

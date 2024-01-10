@@ -38,9 +38,13 @@ class Parte_mantenimiento extends Model
 
     public function getFinalizado()
     {
-        if ($this->id_estado_mecanizado == 2) {
+        if ($this->id_estado == 2) {
             return 1;
         }
         return 0;
+    }
+
+    public function getNombreEstado(){
+        return Estado::where('id_estado', $this->id_estado)->first()->nombre_estado;
     }
 }

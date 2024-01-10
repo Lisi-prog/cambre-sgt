@@ -167,8 +167,14 @@
             </li>
 
             <li>
-                <a class="nav-link" href="{{route('proyectos.index')}}" title="Maquinaria">
+                <a class="nav-link" href="{{route('maquinarias.index')}}" title="Maquinaria">
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Maquinaria</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('activos.index')}}" title="Activos">
+                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Activos</span>
                 </a>
             </li>
 

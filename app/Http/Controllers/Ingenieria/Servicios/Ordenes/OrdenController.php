@@ -498,9 +498,12 @@ class OrdenController extends Controller
 
         foreach ($etapa->getOrden as $orden) {
             array_push($ordenes, (object)[
+                'etapa' => $etapa->descripcion_etapa,
                 'id_orden' => $orden->id_orden,
                 'orden' => $orden->nombre_orden,
                 'tipo' => 'Orden de '.$orden->getOrdenDe->getNombreTipoOrden(),
+                'estado' => $orden->getEstado(),
+                'responsable' => $orden->getNombreResponsable(),
                 'numero_tipo' => 1
             ]);
         }

@@ -51,6 +51,25 @@ class Etapa extends Model
         return $this->hasMany(Orden::class, 'id_etapa');
     }
 
+    public function getFechaFinalizacion()
+    {
+        if($this->getOrdenesFinalizadas() == $this->getTotalOrdenes()){
+            $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
+            
+            foreach ($ordenes as $orden) {
+                return $orden->getPartes->sortByDesc('id_parte')->first()->fecha;
+                if ($orden->getFinalizado() == 1) {
+                    //$fechaExt = $orden->getFechaFinalizado();
+                    $fechaExt = $orden->getPartes->sortByDesc('id_parte')->first()->fecha;
+                }
+            }
+
+            return $fechaExt;
+        }else{
+            return null;
+        }
+    }
+
     public function getProgreso(){
         $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
         $progreso = 0;
@@ -86,5 +105,10 @@ class Etapa extends Model
 
         }
         return $totalOrdenesFinalizadas;
+    }
+
+    public function getOrdenesRealizadasPorcentaje()
+    {
+        return ceil(($this->getOrdenesFinalizadas()*100)/$this->getTotalOrdenes());
     }
 }

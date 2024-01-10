@@ -25,7 +25,7 @@
     <section class="section">
         <div class="section-header d-flex">
             <div class="">
-                <div class="titulo page__heading py-1 fs-5">Gestionar Proyecto</div>
+                <div class="titulo page__heading py-1 fs-5">Gestionar Servicio</div>
             </div>
         </div>
         <div class="section-body">
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
-                                        Nueva
+                                        Nueva etapa
                                     </button>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@
 
                                                 <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
-                                                <td class= 'text-center'>+late</td>
+                                                <td class= 'text-center'>{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : 'uwu'}}</td>
 
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
 
@@ -290,7 +290,7 @@
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                                            Nueva
+                                            Nueva orden
                                         </button>
                                     </div>
                                 </div>
@@ -300,8 +300,11 @@
                                     <div>
                                     <table id="example" class="table table-hover mt-2" class="display">
                                         <thead style="">
-                                            <th class="text-center" scope="col" style="color:#fff;width:50%;">Orden</th>
-                                            <th class="text-center" scope="col" style="color:#fff;width:25%;">Tipo orden</th>
+                                            <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
+                                            <th class="text-center" scope="col" style="color:#fff;">Orden</th>
+                                            <th class="text-center" scope="col" style="color:#fff;">Tipo orden</th>
+                                            <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                            <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                                             <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
                                         </thead>
                                         <tbody id="cuadro-ordenes">
@@ -324,7 +327,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
-                                    <h5 class="text-center">Parte de trabajo</h5>
+                                    <h5 class="text-center">Partes</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
@@ -416,7 +419,6 @@
                 });
             });
         </script>
-
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.editar-etapa')

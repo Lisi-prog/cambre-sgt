@@ -68,8 +68,12 @@
                 </div>
 
                 <div class="row">
+                    @php
+                        $orden_de_trabajo = Config::get('myconfig.orden_de_trabajo');
+                        $orden_de_manufactura = Config::get('myconfig.orden_de_manufactura');
+                    @endphp
                     @switch($orden->getOrdenDe->getTipoOrden())
-                        @case(1)
+                        @case($orden_de_trabajo)
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                 <div class="form-group">
                                     {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
@@ -83,8 +87,19 @@
                                 </div>
                             </div>
                             @break
-                        @case(2)
-                            
+                        @case($orden_de_manufactura)
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                <div class="form-group">
+                                    {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                    <span class="obligatorio">*</span>
+                                    {!! Form::select('estado', $estados_manufactura, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-group',
+                                            'required',
+                                            'id' => 'estado'
+                                        ]) !!}
+                                </div>
+                            </div>
                             @break
                         @default
                         

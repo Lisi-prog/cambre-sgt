@@ -114,6 +114,7 @@
                         next: 'Sig.',
                     },
                 },
+                order: [[ 0, 'asc' ]],
                 "aaSorting": []
         });
     });

@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearParteModal">
-                                        Nuevo   
+                                        Nuevo parte   
                                     </button>
                                 </div>
                             </div>

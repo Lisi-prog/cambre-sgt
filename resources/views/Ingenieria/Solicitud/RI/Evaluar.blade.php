@@ -122,7 +122,6 @@
                                 <div class="col-2">
                                     <div class="row">
                                         <div class="col-6">
-                                            
                                             {{-- {!! Form::submit('Aceptar', ['class' => 'btn btn-success']) !!} --}}
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearServicioModal">
                                                 Aceptar   

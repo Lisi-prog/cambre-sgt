@@ -20,11 +20,13 @@ class Maquinaria extends Model
 
     protected $fillable = [ 
         'codigo_maquinaria',
-        'alias_maquinaria'
+        'alias_maquinaria',
+        'descripcion_maquinaria',
+        'id_sector'
     ];
 
-    public function getProyectos()
+    public function getSector()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Sector::class, 'id_sector');
     }
 }

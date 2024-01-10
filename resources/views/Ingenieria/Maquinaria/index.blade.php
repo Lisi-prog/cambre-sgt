@@ -24,31 +24,25 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <!-- Centramos la paginacion a la derecha -->
-                        {{-- <div class="pagination justify-content-end">
-                                {!! $CategoriasLaborales->links() !!}
-                        </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead>
                                     <th class='text-center' style="color:#fff;">Codigo</th>
-                                    <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Email</th>
-                                    <th class='text-center' style="color:#fff;">Telefono</th>
-                                    <th class='text-center' style="color:#fff;">Puesto</th>
+                                    <th class='text-center' style="color:#fff;">Alias</th>
+                                    <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color:#fff;">Sector</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($empleados as $empleado)
+                                    @foreach ($maquinarias as $maquinaria)
                                         <tr class="my-auto">
-                                            <td class='text-center'>{{$empleado->id_empleado}}</td>
+                                            <td class='text-center'>{{$maquinaria->codigo_maquinaria}}</td>
 
-                                            <td class='text-center'>{{$empleado->nombre_empleado}}</td>
+                                            <td class='text-center'>{{$maquinaria->alias_maquinaria}}</td>
 
-                                            <td class='text-center'>{{$empleado->email_empleado}}</td>
+                                            <td class='text-center'>{{$maquinaria->descripcion_maquinaria}}</td>
 
-                                            <td class='text-center'>{{$empleado->telefono}}</td>
+                                            <td class='text-center'>{{$maquinaria->getSector->nombre_sector}}</td>
 
                                             <td class='text-center'>{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
 
@@ -57,7 +51,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.edit', $maquinaria->id_maquinaria], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
@@ -66,7 +60,7 @@
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['empleados.destroy', $empleado->id_empleado],
+                                                            'route' => ['empleados.destroy', $maquinaria->id_maquinaria],
                                                             'style' => 'display:inline',
                                                         ]) !!}
                                                         {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el empleado?');"]) !!}

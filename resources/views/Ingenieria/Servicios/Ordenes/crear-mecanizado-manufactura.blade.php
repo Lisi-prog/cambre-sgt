@@ -91,7 +91,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->getParteManufactura()->getEstadoManufactura->nombre_estado_manufactura, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('estado', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->getParteManufactura->getEstadoManufactura->nombre_estado_manufactura, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">

@@ -49,6 +49,10 @@ class Orden extends Model
         return $this->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite;
     }
 
+    public function getFechaFinalizado(){
+        return $this->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha;
+    }
+
     public function getSupervisor(){
         $supervisor = '';
         foreach ($this->getResponsabilidaOrden as $resp_orden) {
@@ -118,9 +122,9 @@ class Orden extends Model
         }elseif ($parte_mecanizado){
             $estado = $parte_mecanizado->getNombreEstado();
         }elseif ($parte_manufactura) {
-            $estado = $parte_manufactura->getEstado;
+            $estado = $parte_manufactura->getNombreEstado();
         }elseif ($parte_mantenimiento) {
-            $estado = $parte_mantenimiento->getEstado;
+            $estado = $parte_mantenimiento->getNombreEstado();
         }
         if($estado == 'Completo' || $estado == 'Pieza finalizada' ){
             $año = substr($parte->fecha, 0, 4);
@@ -158,6 +162,11 @@ class Orden extends Model
     public function getFinalizado()
     {
         return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getFinalizado();
+    }
+
+    public function getEstado()
+    {
+        return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado();
     }
 
 }

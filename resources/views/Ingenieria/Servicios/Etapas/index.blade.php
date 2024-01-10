@@ -59,6 +59,8 @@
                                     <th class='text-center' style="color:#fff;">Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Lider</th>
+                                    <th class='text-center' style="color:#fff;">Avance</th>
+                                    {{-- <th class='text-center' style="color:#fff;">Ordenes</th> --}}
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
@@ -73,6 +75,13 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->descripcion_etapa}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->getResponsable->getEmpleado->nombre_empleado}}</td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$etapa->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{$etapa->getOrdenesFinalizadas()}}/{{$etapa->getTotalOrdenes()}}</div>
+                                                </div>
+                                            </td>
+                                            {{-- <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getOrdenesFinalizadas()}}/{{$etapa->getTotalOrdenes()}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 

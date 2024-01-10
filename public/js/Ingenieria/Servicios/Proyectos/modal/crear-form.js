@@ -4,6 +4,8 @@ import opcion3 from './opcion-orden-mecanizado.js';
 import bodyModalOrdenTrabajo from './ver-orden-trabajo.js';
 import bodyModalOrdenMecanizado from './ver-orden-mecanizado.js';
 
+let bandera = 1;
+
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
     $('#nueva_orden_meca').on('click', modificarFormulario);
@@ -52,9 +54,6 @@ function modificarFormulario(){
 }
 
 export function crearCuadrOrdenes(id_etapa){
-
-    // let div_cuadro_de_orden = document.getElementById("cuadro-ordenes-trabajo");
-    // let html_odt = '';
     let cuadro_oculto_de_ordenes = document.getElementById("cuadro_de_ordenes");
 
     if ($('#cuadro_de_ordenes').is(":hidden")) {
@@ -62,6 +61,7 @@ export function crearCuadrOrdenes(id_etapa){
     }else{
         cuadro_oculto_de_ordenes.hidden = true;
     }
+    
 
     let div_cuadro_orden = document.getElementById("cuadro-ordenes");
     let html_orden = '';
@@ -75,17 +75,20 @@ export function crearCuadrOrdenes(id_etapa){
         success: function (response) {
             response.forEach(element => {
                 html_orden += `<tr>
+                                    <td class= "text-center"> `+element.etapa+`</td> 
                                     <td class= "text-center"> `+element.orden+`</td> 
-                                    <td class= "text-center">`+element.tipo+`</td> 
+                                    <td class= "text-center">`+element.tipo+`</td>
+                                    <td class= "text-center">`+element.estado+`</td>
+                                    <td class= "text-center">`+element.responsable+`</td> 
                                     <td>
                                         <div class="row"> 
-                                            <div class="col"> 
-                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(`+element.id_orden+`,`+element.numero_tipo+`)">
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
+                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(`+element.id_orden+`,`+element.numero_tipo+`)">
                                                     Ver
                                                 </button>
                                             </div>
-                                            <div class="col"> 
-                                                <button type="button" class="btn btn-warning" onclick="window.obtenerPartes(`+element.id_orden+`)">Partes</button> 
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
+                                                <button type="button" class="btn btn-warning w-100" onclick="window.obtenerPartes(`+element.id_orden+`)">Partes</button> 
                                             </div> 
                                         </div> 
                                     </td> 

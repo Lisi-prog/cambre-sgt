@@ -10,7 +10,7 @@
         <div class="section-header">
             {{-- <h3 class="page__heading">Empresa - Rubro - Asignar</h3> --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                <h3 class="titulo my-auto">Asignar Permisos a Roles</h3>    
+                <h4 class="titulo my-auto">Asignar Permisos a Roles</h4>    
             </div>
             <div class="col-lg-5 my-auto">
             </div>
@@ -26,19 +26,16 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="pb-2">Rol: {{$rol->name}} </h4>
+                            <h5 class="pb-2">Rol: {{$rol->name}} </h5>
                             <div class="row">
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                                    {{-- {!! Form::label('Buscar:', null, ['class' => 'control-label me-2']) !!} --}}
-                                </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8">
-                                    <input id="buscarpermiso" name="name" type="text" class="form-control" placeholder="Buscar Permiso" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <input id="buscarpermiso" name="permisos" type="text" class="form-control" placeholder="Buscar Permiso" aria-label="Recipient's username" aria-describedby="button-addon2">
                                 </div>
                                 {{-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2 my-auto">
                                     {!! Form::submit('Buscar', ['class' => 'btn btn-primary mr-2']) !!}
                                 </div> --}}
                             </div>
-                            <div class="row pt-3 ml-2">
+                            <div class="row pt-3">
                                 <h6>Seleccione los permisos que tiene el rol:</h6>
                             </div>
                             <div class="row">
@@ -89,9 +86,26 @@
                                 </div>
                             </div>
                             <div class="row">
-                                        {!! Form::submit('Guardar', ['class' => 'btn btn-success m-auto', 'style' => 'width: 40%']) !!}
-                                        {!! Form::close() !!} 
+                                <div class="row">
+                                    <div class="col-5">
+    
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                {!! Form::submit('Guardar', ['class' => 'btn btn-success m-auto', 'style' => 'width: 40%']) !!}
+                                                {!! Form::close() !!} 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 d-flex">
+                                        <div class="ms-auto">
+                                            <a href="{{ route('roles.index') }}"class="btn btn-primary">Volver</a>
+                                        </div>
+                                    </div>
+                                </div>   
                             </div>
+                                        
                         </div>
                     </div>  
                 </div>     
