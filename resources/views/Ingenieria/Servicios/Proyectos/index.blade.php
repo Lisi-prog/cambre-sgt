@@ -96,21 +96,22 @@
                                                 <td class= 'text-center'style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y')}}</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
-    
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col-6">
+                                                        <div class="col-12">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                             {!! Form::close() !!}
                                                         </div>
-                                                        <div class="col-6">
-                                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
                                                                 Prioridad  
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="row mt-2">
+                                                    <div class="row">
                                                         <div class="col-12">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}

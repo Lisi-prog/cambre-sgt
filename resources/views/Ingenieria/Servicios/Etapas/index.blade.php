@@ -39,8 +39,8 @@
     
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
-                {!! Form::open(['method' => 'GET', 'route' => ['etapas.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
+                {!! Form::open(['method' => 'GET', 'route' => ['etapas.create'], 'class' => '']) !!}
+                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success col-9']) !!}
                 {!! Form::close() !!}
             </div>
         </div>
@@ -92,14 +92,16 @@
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">
+                                                <div class="row my-2">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">
                                                             ver
                                                         </button>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <button type="button" class="btn 'btn btn-warning w-100'" data-bs-toggle="modal" data-bs-target="#verEtapaModal">
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal">
                                                             parte
                                                         </button>
                                                     </div>

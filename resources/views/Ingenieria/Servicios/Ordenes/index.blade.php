@@ -173,15 +173,17 @@
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden_trabajo->getFechaFinalizacion()}}</td>
-
+        
                                             <td class='text-center' style="vertical-align: middle;">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden}}, {{$orden_trabajo->getOrdenDe->getTipoOrden()}})">
+                                                <div class="row my-2">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden_trabajo->id_orden}}, {{$orden_trabajo->getOrdenDe->getTipoOrden()}})">
                                                             ver
                                                         </button>
                                                     </div>
-                                                    <div class="col-6">
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="col-12">
                                                         {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', $orden_trabajo->id_orden], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
                                                         {!! Form::close() !!}
