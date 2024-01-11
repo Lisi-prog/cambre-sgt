@@ -32,6 +32,7 @@ CREATE TABLE `servicio_requerido` (
 CREATE TABLE `activo` (
   `id_activo` int NOT NULL AUTO_INCREMENT,
   `nombre_activo` varchar(100) DEFAULT NULL,
+  `descripcion_activo` varchar(200),
   PRIMARY KEY (`id_activo`)
 );
 

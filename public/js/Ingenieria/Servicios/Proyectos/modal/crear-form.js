@@ -14,7 +14,6 @@ $(function(){
 function modificarFormulario(){
     
    let tipo_orden = Number($(this).val());
-   console.log(tipo_orden);
    let formulario = document.getElementById("formulario");
    let html;
    switch (tipo_orden) {
@@ -73,7 +72,20 @@ export function crearCuadrOrdenes(id_etapa){
             id_etapa: id_etapa,
         },
         success: function (response) {
+            console.log(response);
+            let boton_ordenes = '';
             response.forEach(element => {
+                if (element.numero_tipo == 2) {
+                    boton_ordenes = `<div class="row my-2">
+                                            <div class="col-12"> 
+                                                <form method="GET" action="http://localhost/orden/manufactura_mecanizado/`+element.id_orden+`" accept-charset="UTF-8" style="display:inline">
+                                                    <input class="btn btn-danger w-100" type="submit" value="Agregar mecanizados">
+                                                </form>
+                                            </div> 
+                                        </div>
+                    `
+                }
+                
                 html_orden += `<tr>
                                     <td class= "text-center"> `+element.etapa+`</td> 
                                     <td class= "text-center"> `+element.orden+`</td> 
@@ -91,12 +103,13 @@ export function crearCuadrOrdenes(id_etapa){
                                         <div class="row my-2">
                                             <div class="col-12"> 
                                                 <button type="button" class="btn btn-warning w-100" onclick="window.obtenerPartes(`+element.id_orden+`)">
-                                                    Cargar partes
+                                                    Ver partes
                                                 </button> 
                                             </div> 
-                                        </div> 
+                                        </div>`+boton_ordenes+` 
                                     </td> 
                                 </tr>`;
+                boton_ordenes = '';
             });
             div_cuadro_orden.innerHTML = html_orden;
     },
@@ -122,7 +135,6 @@ export function cargarModalVerEtapa(id_etapa){
             id_etapa: id_etapa,
         },
     success: function (response) {
-        console.log(response.input_fecha_ultima_actualizacion)
             input_etapa.value = response.descripcion_etapa;
             input_estado.value = response.estado;
             input_responsable.value = response.responsable;
@@ -149,6 +161,10 @@ export function cargarModalVerOrden(id_orden, tipo){
             cargarModalVerOrdenTrabajo(id_orden);
             break;
             
+        case 2:
+            body_modal_ver_orden.innerHTML = bodyModalOrdenTrabajo;
+            cargarModalVerOrdenManufactura(id_orden);
+            break;
         case 3:
             body_modal_ver_orden.innerHTML = bodyModalOrdenMecanizado;
             cargarModalVerOrdenMecanizado(id_orden);
@@ -163,7 +179,7 @@ function cargarModalVerOrdenTrabajo(id_orden){
     let input_tipo = document.getElementById("input-tipo");
     let input_estado = document.getElementById("input-estado");
     let input_responsable = document.getElementById("input-responsable");
-    let input_fecha_inicio = document.getElementById("input-fec_ini");
+    let input_fecha_inicio = document.getElementById("input-fec_inicio");
     let input_fecha_limite = document.getElementById("input-fec_limite");
     let input_fecha_fin = document.getElementById("input-fec_fin");
     let input_duracion_estimada = document.getElementById("input-duracion_estimada");
@@ -201,24 +217,18 @@ function cargarModalVerOrdenTrabajo(id_orden){
 }
 
 function cargarModalVerOrdenMecanizado(id_orden){
-    // let input_orden = document.getElementById("input-orden");
+    let input_nombre = document.getElementById("input-nom_orden");
     let input_revision = document.getElementById("input-revision");
     let input_cantidad = document.getElementById("input-cantidad");
     let input_responsable = document.getElementById("input-responsable");
     let input_duracion_estimada = document.getElementById("input-duracion_estimada");
     let input_duracion_real = document.getElementById("input-duracion_real");
-    let input_fecha_inicio = document.getElementById("input-fec_ini");
+    let input_fecha_inicio = document.getElementById("input-fec_inicio");
     let input_fecha_limite = document.getElementById("input-fec_req");
     let input_fecha_fin = document.getElementById("input_fecha_fin");
     let input_estado_mecanizado = document.getElementById("input-estado_mecanizado");
     let input_ruta_plano = document.getElementById("input-ruta_plano");
     let input_observaciones = document.getElementById("input-observaciones");
-    /* let input_fecha_fin = document.getElementById("input-fec_fin");
-    let input_duracion_estimada = document.getElementById("input-duracion_estimada");
-    let input_duracion_real = document.getElementById("input-duracion_real");
-    let input_fecha_ultimo_parte = document.getElementById("input-fecha_ultimo_parte");
-    let input_observacion = document.getElementById("input-observacion");
-    let input_supervisor = document.getElementById("input-supervisor");*/
 
     $.when($.ajax({
         type: "post",
@@ -228,7 +238,7 @@ function cargarModalVerOrdenMecanizado(id_orden){
         },
     success: function (response) {
         response.forEach(element => {
-            // input_orden.value = '';
+            input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;
             input_duracion_estimada.value = element.duracion_estimada;
@@ -240,11 +250,6 @@ function cargarModalVerOrdenMecanizado(id_orden){
             input_observaciones.value = element.observaciones;
             input_fecha_fin.value = element.fecha_fin_real;
             input_estado_mecanizado.value = element.estado_mecanizado;
-            /*input_duracion_estimada.value = element.duracion_estimada;
-            input_duracion_real.value = element.duracion_real;
-            input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
-            input_observacion.value = element.descripcion_ultimo_parte;
-            input_supervisor.value = element.supervisa;*/
         });
     },
     error: function (error) {
@@ -382,7 +387,6 @@ function cargarSupervisores(){
             
         },
     success: function (response) {
-        console.log(response)
         response.forEach(element => {
             html_supervisores += `
                                 <option value="`+element.id_empleado+`">`+element.nombre_empleado

@@ -50,7 +50,7 @@ export default
         <div class="form-group">
             <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
             <span class="obligatorio">*</span>
-            <input class="form-control" name="fec_ini" type="text" id="input-fec_ini" readonly> 
+            <input class="form-control" name="fec_ini" type="text" id="input-fec_inicio" readonly> 
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">

@@ -74,34 +74,26 @@
             </div>
         </div>
     </div>
-    {{-- <script src="{{ asset('js/input-number-two-decimal.js') }}"></script> --}}
 </section>
-@include('Informatica.Puesto_empleado.modal.crear-puesto-empleado')
-@include('Informatica.Puesto_empleado.modal.editar-puesto-empleado')
-    {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
-    {{-- <script src="{{ asset('js/input-number-two-decimal.js') }}"></script> --}}
-    <script src="{{ asset('js/input-number-two-decimal.js') }}"></script>
-{{-- <script srck="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
+    @include('Informatica.Puesto_empleado.modal.crear-puesto-empleado')
+    @include('Informatica.Puesto_empleado.modal.editar-puesto-empleado')
+    
+<script src="{{ asset('js/input-number-two-decimal.js') }}"></script>
 
-{{-- <script src="{{ asset('js/modal/success.js') }}"></script> --}}
 <script>
     function cargarModalEditar(id, b){
         let input_puesto = document.getElementById('input_puesto');
         let costo_hora = document.getElementById('input-costo_hora');
         let id_puesto = document.getElementById('input_id_puesto');
-
-        // console.log(id);
-        // console.log(b.parentNode.parentNode.parentNode.children[0].innerText);
-        // console.log(b.parentNode.parentNode.parentNode.children[1].innerText);
         let nombre_puesto = b.parentNode.parentNode.parentNode.children[0].innerText;
         let precio_hora = b.parentNode.parentNode.parentNode.children[1].innerText;
 
         input_puesto.value = nombre_puesto;
         costo_hora.value = precio_hora.replace('$ ', '').replace('.', '').replace(',', '.');
         id_puesto.value = id;
-    }
-    
+    } 
 </script>
+
 <script>
     $(document).ready(function () {
         $('#example').DataTable({

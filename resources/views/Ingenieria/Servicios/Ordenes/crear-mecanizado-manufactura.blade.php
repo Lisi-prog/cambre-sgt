@@ -91,7 +91,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->getParteManufactura->getEstadoManufactura->nombre_estado_manufactura, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('estado', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -136,7 +136,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Fecha limite</th>      
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Duracion estimada</th>     
-                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                   
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                    --}}
                                     </thead>
                                     <tbody>
                                         @foreach ($orden_manufactura->getOrdenesMecanizado as $orden_mecanizado)
@@ -147,23 +147,11 @@
 
                                                 <td class= 'text-center' >{{$orden_mecanizado->revision}}</td>
 
-                                                {{-- <td class= 'text-center' >{{$orden_mecanizado->ruta_pieza}}</td> --}}
-
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($orden_mecanizado->getOrden->fecha_inicio)->format('d-m-Y')}}</td>
 
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($orden_mecanizado->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite)->format('d-m-Y')}}</td>
                                                 
                                                 <td class= 'text-center' >{{$orden_mecanizado->getOrden->duracion_estimada}}</td>
-
-                                                <td class='text-center'>
-                                                    <div class="row my-2">
-                                                        {{-- <div class="col-6">
-                                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditar({{$etapa->id_etapa}}, {{$etapa->nombre_etapa}}, {{$etapa->fecha_inicio}}, {{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}})">
-                                                                Editar
-                                                            </button>
-                                                        </div> --}}
-                                                    </div>
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -173,6 +161,29 @@
                         </div>
                     </div>
                 </div>   
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="d-flex">
+                                    <div class="me-auto">
+                                        
+                                    </div>
+                                    <div class="p-1">
+                                        
+                                    </div>
+                                    <div class="p-1">
+                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $orden_manufactura->getOrden->getEtapa->getServicio->id_servicio], 'style' => '']) !!}
+                                        {!! Form::submit('volver', ['class' => 'btn btn-primary']) !!}
+                                        {!! Form::close() !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
 
         <script type="module"> 
             // import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';

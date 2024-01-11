@@ -7,21 +7,19 @@
         <div class="">
             <h4 class="titulo page__heading my-auto mr-5">Maquinaria</h4>
         </div>
-        {!! Form::open(['method' => 'GET', 'route' => ['puesto_empleado.index'], 'class' => 'd-flex justify-content-end']) !!}
-            {!! Form::submit('Puesto de empleado', ['class' => 'btn btn-success my-1']) !!}
-        {!! Form::close() !!}
+        
         <div class="ms-auto">
             {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['empleados.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
-                {!! Form::close() !!}
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaMaquinariaModal">
+                Nueva maquinaria
+            </button>
             {{-- @endcan --}}
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -42,36 +40,29 @@
 
                                             <td class='text-center'>{{$maquinaria->descripcion_maquinaria}}</td>
 
-                                            <td class='text-center'>{{$maquinaria->getSector->nombre_sector}}</td>
-
-                                            <td class='text-center'>{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
-
-                                            <td class='text-center'>{{$empleado->getSector->nombre_sector}}</td>
+                                            <td class='text-center'>{{$maquinaria->getSector->nombre_sector ?? 'sin sector'}}</td>
 
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.edit', $maquinaria->id_maquinaria], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['maquinarias.edit', $maquinaria->id_maquinaria], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
                                                         {!! Form::close() !!}
+                                                        {{-- <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarMaquinariaModal" onclick="cargarModalEditar({{$maquinaria->id_maquinaria}})">
+                                                            Editar
+                                                        </button> --}}
                                                     {{-- @endcan --}}
 
                                                     {{-- @can('BORRAR-ROL') --}}
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['empleados.destroy', $maquinaria->id_maquinaria],
+                                                            'route' => ['maquinarias.destroy', $maquinaria->id_maquinaria],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el empleado?');"]) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR la maquinaria?');"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
-
-                                                    {{-- @can('AGREGAR-PERMISOS')
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['rubros.edit', $rubro->id], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    @endcan --}}
                                                 </div>
                                             </td>
                                         </tr>
@@ -86,9 +77,35 @@
     </div>
 </section>
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
+    @include('Ingenieria.Maquinaria.modal.crear-maquinaria')
+    @include('Ingenieria.Maquinaria.modal.editar-maquinaria')
 
-{{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
-{{-- <script src="{{ asset('js/modal/success.js') }}"></script> --}}
+<script>
+    function cargarModalEditar(id){
+        let codigo = document.getElementById('input_codigo_maquinaria');
+        let alias = document.getElementById('input_alias_maquinaria');
+        let descripcion = document.getElementById('input_descripcion');
+
+        $.when($.ajax({
+            type: "post",
+            url: '/maquinaria/obtener/'+id, 
+            data: {
+                    id: id,
+                },
+            success: function (response) {
+                    codigo.value = response.codigo_maquinaria;
+                    alias.value = response.alias_maquinaria;
+                    descripcion.value = response.descripcion_maquinaria
+                    if (response.id_sector) {
+                        document.querySelector('#input_id_sector').value = response.id_sector;
+                    }     
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        }));
+    }
+</script>
 
 <script>
     $(document).ready(function () {
@@ -110,7 +127,5 @@
                 "aaSorting": []
         });
     });
-</script>
-
-    
+</script> 
 @endsection

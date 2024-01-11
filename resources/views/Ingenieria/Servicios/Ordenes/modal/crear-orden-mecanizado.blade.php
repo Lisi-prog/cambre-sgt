@@ -13,6 +13,7 @@
                         <div class="form-group">
                             {!! Form::label('id_orden_manuf', 'Id orden manufactura:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::text('id_orden_manuf', $orden_manufactura->id_orden_manufactura, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                            {!! Form::text('id_orden', $orden_manufactura->getOrden->id_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" hidden>

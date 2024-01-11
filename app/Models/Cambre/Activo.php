@@ -19,7 +19,8 @@ class Activo extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'nombre_activo'
+        'nombre_activo',
+        'descripcion_activo'
     ];
 
     public function getServicioDeMantenimiento()
