@@ -37,17 +37,18 @@
                         <div class="card-head">
                             <br>
                             <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button type="button" class="btn btn-primary" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
-                                        Actualizaciones
-                                    </button>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+    
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
                                     <h5 class="text-center">Proyecto</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    <button type="button" class="btn btn-primary col-9" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
                                         Editar
+                                    </button>
+                                    <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
+                                        Actualizaciones
                                     </button>
                                 </div>
                             </div>
@@ -118,14 +119,14 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="row m-auto">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
                                     <h5 class="text-center">Actualizaciones proyecto</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearActModal">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActModal">
                                         Nueva
                                     </button>
                                 </div>
@@ -159,14 +160,14 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="row m-auto">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
                                     <h5 class="text-center">Etapas</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
                                         Nueva etapa
                                     </button>
                                 </div>
@@ -284,14 +285,14 @@
                         <div class="card">
                             <div class="card-head">
                                 <br>
-                                <div class="row m-auto">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                <div class="d-flex justify-content-between">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
                                         <h5 class="text-center">Ordenes</h5>
                                     </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                        <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                                             Nueva orden
                                         </button>
                                     </div>
