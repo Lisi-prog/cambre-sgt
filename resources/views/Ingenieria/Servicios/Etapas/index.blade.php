@@ -30,18 +30,22 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    <div class="section-header d-flex">
-        <div class="">
-            <h4 class="titulo page__heading my-auto">Etapas</h4>
-        </div>
-        <div class="ms-auto">
-            {{-- @can('CREAR-RI') --}}
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                <h4 class="titulo page__heading my-auto">Etapas</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+    
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
                 {!! Form::open(['method' => 'GET', 'route' => ['etapas.create'], 'class' => 'd-flex justify-content-end']) !!}
                     {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
                 {!! Form::close() !!}
-            {{-- @endcan --}}
+            </div>
         </div>
     </div>
+
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">

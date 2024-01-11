@@ -243,14 +243,14 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="row m-auto">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
                                     <h5 class="text-center">Actualizaciones etapa</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearActEtaModal">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActEtaModal">
                                         Nueva
                                     </button>
                                 </div>

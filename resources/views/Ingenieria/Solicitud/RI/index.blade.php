@@ -5,16 +5,19 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    <div class="section-header d-flex">
-        <div class="">
-            <h4 class="titulo page__heading my-auto">Requerimientos de ingenieria</h4>
-        </div>
-        <div class="ms-auto">
-            {{-- @can('CREAR-RI') --}}
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRIModal">
-                Nuevo   
-            </button>
-            {{-- @endcan --}}
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+        
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                <h4 class="">Requerimientos de ingenieria</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearRIModal">
+                    Nuevo   
+                </button>
+            </div>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])

@@ -30,14 +30,17 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    
-    <div class="section-header d-flex">
-        <div class="">
-            <h4 class="titulo page__heading my-auto">Proyectos</h4>
-        </div>
-        <div class="ms-auto">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
+
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+        
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 ">
+                <h4 class="">Proyectos</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
                     Nuevo   
                 </button>
             </div>
