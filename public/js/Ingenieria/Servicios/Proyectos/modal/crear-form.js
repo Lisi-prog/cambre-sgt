@@ -80,15 +80,19 @@ export function crearCuadrOrdenes(id_etapa){
                                     <td class= "text-center">`+element.tipo+`</td>
                                     <td class= "text-center">`+element.estado+`</td>
                                     <td class= "text-center">`+element.responsable+`</td> 
-                                    <td>
-                                        <div class="row"> 
-                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
+                                    <td class= "text-center">
+                                        <div class="row my-2"> 
+                                            <div class="col-12"> 
                                                 <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(`+element.id_orden+`,`+element.numero_tipo+`)">
-                                                    Ver
+                                                    Ver orden
                                                 </button>
                                             </div>
-                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6"> 
-                                                <button type="button" class="btn btn-warning w-100" onclick="window.obtenerPartes(`+element.id_orden+`)">Partes</button> 
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col-12"> 
+                                                <button type="button" class="btn btn-warning w-100" onclick="window.obtenerPartes(`+element.id_orden+`)">
+                                                    Cargar partes
+                                                </button> 
                                             </div> 
                                         </div> 
                                     </td> 

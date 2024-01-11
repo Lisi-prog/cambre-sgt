@@ -205,21 +205,23 @@
 
                                                 <td class='text-center'>
                                                     <div class="row my-2">
-                                                        <div class="col-6">
+                                                        <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
-                                                                Editar
+                                                                Editar etapa
                                                             </button>
                                                         </div>
-                                                        <div class="col-6">
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
                                                             <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                                Ordenes
+                                                                Cargar ordenes
                                                             </button>
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
                                                         <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                                Actualizaciones
+                                                                Cargar actualizaciones
                                                             </button>
                                                         </div>
                                                     </div>
