@@ -23,9 +23,15 @@
       }
 </style>
     <section class="section">
-        <div class="section-header d-flex">
-            <div class="">
-                <div class="titulo page__heading py-1 fs-5">Gestionar Servicio</div>
+        <div class="d-flex section-header justify-content-center">
+            <div class="d-flex flex-row col-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 my-auto">
+                    <h4 class="">Gestionar Servicio</h5>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                </div>
             </div>
         </div>
         <div class="section-body">
@@ -40,7 +46,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
     
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
                                     <h5 class="text-center">Proyecto</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
@@ -163,8 +169,8 @@
                             <div class="d-flex justify-content-between">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
-                                    <h5 class="text-center">Etapas</h5>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
+                                    <h5 class="text-center my-auto">Etapas</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
@@ -246,8 +252,8 @@
                             <div class="d-flex justify-content-between">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
-                                    <h5 class="text-center">Actualizaciones etapa</h5>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                                    <h5 class="text-center  my-auto">Actualizaciones etapa</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActEtaModal">
@@ -288,8 +294,8 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
-                                        <h5 class="text-center">Ordenes</h5>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                                        <h5 class="text-center  my-auto">Ordenes</h5>
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                         <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
@@ -329,8 +335,8 @@
                             <div class="row m-auto">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
-                                    <h5 class="text-center">Partes</h5>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center  my-auto">
+                                    <h5 class="text-center  my-auto">Partes</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
