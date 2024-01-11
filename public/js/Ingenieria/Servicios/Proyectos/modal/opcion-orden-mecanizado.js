@@ -83,9 +83,6 @@ export default
             <span class="obligatorio">*</span>
             <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control" name="fecha_req" type="date" value="2023-12-12" required>
         </div>
-        <div class="" hidden="">
-            <input class="form-control" name="id_servicio" type="text" value="1">
-        </div>
     </div>
 </div>
 <div class="row">

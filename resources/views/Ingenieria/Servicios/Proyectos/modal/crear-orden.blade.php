@@ -11,6 +11,12 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
+                            {!! Form::text('id_servicio', $proyecto->id_servicio, [
+                                            'class' => 'form-control',
+                                            'required' => 'required',
+                                            'id' => 'id_servicio',
+                                            'hidden' => true
+                                        ]) !!}
                             {!! Form::label('tipo_orden', "Tipo orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::select('tipo_orden', [1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 3 => 'Orden de mecanizado',4 => 'Orden de mantenimiento'], null, [

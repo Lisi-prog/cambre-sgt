@@ -190,7 +190,7 @@ class EtapaController extends Controller
             'id_responsable' => $etapa->getResponsable->getEmpleado->id_empleado,
             'fecha_inicio' => $etapa->fecha_inicio,
             'fecha_limite' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_limite,
-            'fecha_fin_real' => '+late',
+            'fecha_fin_real' => $etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____',
             'duracion_estimada' => $this->calcularHorasEstimadas($etapa->getOrdenTrabajo),
             'duracion_real' => '+late',
             'fecha_ultima_actualizacion' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_carga,

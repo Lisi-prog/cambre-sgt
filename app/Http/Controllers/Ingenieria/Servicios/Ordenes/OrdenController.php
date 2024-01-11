@@ -642,7 +642,8 @@ class OrdenController extends Controller
 
     public function relacionarOrdenes(){
         $ordenes = Orden::orderBy('fecha_inicio', 'asc')->get();
-        $relaciones = Tipo_relacion_gantt::orderBy('id_tipo_relacion_gantt')->get();
+        $ordenes_relacionadas = Orden_gantt::orderBy('id_orden_gantt', 'asc')->get();
+        $relaciones = Tipo_relacion_gantt::orderBy('id_tipo_relacion_gantt')->pluck('nombre_relacion_gantt', 'id_tipo_relacion_gantt');
         $supervisores = $this->obtenerEmpleados();
         $responsables = $this->obtenerEmpleados();
         $estados = $this->listarTodosLosEstados();
@@ -650,14 +651,16 @@ class OrdenController extends Controller
     }
 
     public function guardarRelacionesOrdenes(Request $request){
+
         for ($i=0; $i < count($request->id_orden_hija); $i++) { 
-            if(!empty($request->id_orden_hija[$i] && !empty($request->relacion[$i]))){
-                print_r($request->id_orden[$i]);
-                print_r($request->relacion[$i]);
-                print_r($request->id_orden_hija[$i]);
-                print_r('--');
+            if(!empty($request->id_orden_hija[$i]) && !empty($request->relacion[$i])){
+                Orden_gantt::create([
+                    'id_tipo_relacion_gantt' => $request->relacion[$i],
+                    'id_orden_anterior' => $request->id_orden[$i],
+                    'id_orden_siguiente' => $request->id_orden_hija[$i]
+                ]);
             }
         }
-        return $request;
+        return $this->relacionarOrdenes();
     }
 }

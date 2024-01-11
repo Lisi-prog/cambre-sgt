@@ -202,7 +202,7 @@
                                                         <div class="form-group">
                                                             {{-- {!! Form::label('relacion', 'Relacion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!} --}}
                                                             {{-- <span class="obligatorio">*</span> --}}
-                                                            {!! Form::select('relacion[]', $relaciones->pluck('nombre_relacion_gantt'), null, [
+                                                            {!! Form::select('relacion[]', $relaciones, null, [
                                                                 'placeholder' => 'Seleccionar',
                                                                 'class' => 'form-select form-group',
                                                                 'id' => 'relacion'
@@ -216,7 +216,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                         <div class="form-group">
-                                                            {!! Form::text('id_orden_hija[]', null, ['class' => 'text-center form-control', 'id' => 'input_id_orden_hija']) !!}
+                                                            {!! Form::text('id_orden_hija[]', null, ['class' => 'text-center form-control', 'id' => 'input_id_orden_hija', 'min' => '0']) !!}
                                                         </div>
                                                     </div>
                                                 </div>

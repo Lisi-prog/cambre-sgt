@@ -54,6 +54,7 @@ class Etapa extends Model
     public function getFechaFinalizacion()
     {
         if($this->getOrdenesFinalizadas() == $this->getTotalOrdenes()){
+            $fechaExt = null;
             $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
             
             foreach ($ordenes as $orden) {
@@ -109,6 +110,11 @@ class Etapa extends Model
 
     public function getOrdenesRealizadasPorcentaje()
     {
-        return ceil(($this->getOrdenesFinalizadas()*100)/$this->getTotalOrdenes());
+        if($this->getTotalOrdenes() > 0){
+            return ceil(($this->getOrdenesFinalizadas()*100)/$this->getTotalOrdenes());
+        }else{
+            return '-';
+        }
+        
     }
 }
