@@ -89,7 +89,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 
-                                            <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
+                                            <td class= 'text-center ' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row my-2">
