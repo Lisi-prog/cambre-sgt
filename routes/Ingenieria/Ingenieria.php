@@ -55,7 +55,10 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 
     Route::get('orden/partes/{id}', [ParteController::class, 'indexOrden'])->name('orden.partes');
     Route::post('maquinaria/obtener/{id}', [MaquinariaController::class, 'obtenerMaquinaria']);
+    // VISTAS DE ORDENES
+    Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
 
+    //------------------
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('etapas', EtapaController::class);
     Route::resource('ordenes', OrdenController::class);

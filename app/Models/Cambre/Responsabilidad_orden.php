@@ -25,7 +25,7 @@ class Responsabilidad_orden extends Model
 
     public function getOrden()
     {
-        return $this->belongsTo(Empleado::class, 'id_orden');
+        return $this->belongsTo(Orden::class, 'id_orden');
     }
 
     public function getResponsabilidad()

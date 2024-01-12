@@ -37,4 +37,8 @@ class Responsabilidad extends Model
     {
         return $this->belongsTo(Rol_empleado::class, 'id_rol_empleado');
     }
+
+    public function getResponsabilidadOrden(){  
+        return $this->hasOne(Responsabilidad_orden::class, 'id_responsabilidad');
+    }
 }

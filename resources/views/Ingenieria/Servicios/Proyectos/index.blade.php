@@ -97,7 +97,7 @@
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
                                                 <td>
-                                                    <div class="row">
+                                                    <div class="row" hidden>
                                                         <div class="col-12">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}

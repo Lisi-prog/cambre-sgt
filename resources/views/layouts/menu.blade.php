@@ -117,7 +117,7 @@
             </li>
 
             <li class="dropdown ">
-                <a href="" class="nav-link has-dropdown ">
+                <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Servicios</span>
                 </a>
                 
@@ -136,33 +136,32 @@
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Etapas</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="nav-link" href="{{route('ordenes.index')}}" title="Ordenes">
+                    {{-- ORDENES --}}
+                    <li class="dropdown">
+                        <a href="" class="nav-link has-dropdown" title="Ordenes">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Ordenes</span>
                         </a>
+                        <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none; margin-left: -2vh;">
+                            <li class="dropdown-title pt-3">
+                                Ordenes
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                                    <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Trabajo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                                    <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Manufactura</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                                    <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Mecanizado</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    {{-- <li>
-                        <a class="nav-link" href="" title="Requerimientos de servicios de mantenimiento">
-                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
-                        </a>
-                    </li>
-            
-                    <li>
-                        <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
-                            <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>S.S.I.</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="" title="Propuesta de mejora">
-                            <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>P.M.</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="nav-link" href="" title="Requerimiento de ingenieria">
-                            <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>R.I.</span>
-                        </a>
-                    </li> --}}
                 </ul>
             </li>
 

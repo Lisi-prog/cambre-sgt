@@ -68,14 +68,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud}}</td>
 
                                             <td>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['r_i.edit', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                    <div class="col-6">
-                                                        
+                                                <div class="row my-2">
+                                                    <div class="col-12">
                                                         @if ($Ri->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
                                                             {!! Form::open(['method' => 'GET', 'route' => ['r_i.show', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
@@ -88,9 +82,14 @@
                                                             @endhasrole
                                                         @endif
                                                     </div>
+                                                </div> 
+                                                <div class="row my-2">
+                                                    <div class="col-12">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['r_i.edit', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                        {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
                                                 </div>
-                                                
-                                                
                                             </td>
                                         </tr>
                                     @endforeach

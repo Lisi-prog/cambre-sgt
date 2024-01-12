@@ -78,7 +78,7 @@ export function crearCuadrOrdenes(id_etapa){
                 if (element.numero_tipo == 2) {
                     boton_ordenes = `<div class="row my-2">
                                             <div class="col-12"> 
-                                                <form method="GET" action="http://localhost/orden/manufactura_mecanizado/`+element.id_orden+`" accept-charset="UTF-8" style="display:inline">
+                                                <form method="GET" action="http://localhost:8080/orden/manufactura_mecanizado/`+element.id_orden+`" accept-charset="UTF-8" style="display:inline">
                                                     <input class="btn btn-danger w-100" type="submit" value="Agregar mecanizados">
                                                 </form>
                                             </div> 

@@ -682,4 +682,70 @@ class OrdenController extends Controller
         }
         return $this->relacionarOrdenes();
     }
+
+    // VISTAS DE ORDENES
+    public function obtenerOrdenes($tipo_orden){
+        $id_empleado = Auth::id();
+        $supervisores = $this->obtenerEmpleados();
+        $responsables = $this->obtenerEmpleados();
+        $estados = $this->listarTodosLosEstados();
+        
+        $array_responsabilidades_ordenes = array();
+        $array_ordenes = array();
+        $ordenes = array();
+        if (Auth::user()->hasRole('SUPERVISOR')) {
+            //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+            $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();
+        }else{
+            //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+            $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
+            foreach ($responsabilidades as $responsabilidad) {
+                is_null($responsabilidad->getResponsabilidadOrden) ? '' : array_push($array_responsabilidades_ordenes, $responsabilidad->getResponsabilidadOrden);
+            }
+            foreach ($array_responsabilidades_ordenes as $responsabilidad_orden) {
+                array_push($array_ordenes, $responsabilidad_orden->getOrden);
+            }
+        }
+        //FILTRAMOS LAS ORDENES POR TIP0
+        switch ($tipo_orden) {           
+            case 1:
+                //ORDEN DE TRABAJO
+                foreach ($array_ordenes as $orden) {
+                    if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->get()) == 1) {
+                        array_push($ordenes, $orden);
+                    }
+                }
+                break;
+            case 2:
+                //ORDEN DE MANUFACTURA
+                foreach ($array_ordenes as $orden) {
+                    if (count(Orden_manufactura::where('id_orden', $orden->id_orden)->get()) == 1) {
+                        array_push($ordenes, $orden); ;
+                    }
+                }
+                break;
+            case 3:
+                //ORDEN DE MECANIZADO
+                foreach ($array_ordenes as $orden) {
+                    if (count(Orden_mecanizado::where('id_orden', $orden->id_orden)->get()) == 1) {
+                        array_push($ordenes, $orden); ;
+                    }
+                }
+                break;
+            case 4:
+                //ORDEN DE MANTENIMIENTO
+                foreach ($array_ordenes as $orden) {
+                    if (count(Orden_mantenimiento::where('id_orden', $orden->id_orden)->get()) == 1) {
+                        array_push($ordenes, $orden); ;
+                    }
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        
+        return view('Ingenieria.Servicios.Ordenes.ordenes-trabajo', compact('ordenes', 'supervisores', 'responsables', 'estados'));
+    }
+    //------------------
 }
