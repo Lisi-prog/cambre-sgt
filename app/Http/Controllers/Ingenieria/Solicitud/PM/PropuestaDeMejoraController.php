@@ -120,7 +120,7 @@ class PropuestaDeMejoraController extends Controller
 
         $this->validate($request, [
             'titulo-propuesta' => 'required',
-            'id_lider' => 'required',
+            'nombre_emisor' => 'required',
             'obj-propuesta' => 'required',
             'desc-propuesta' => 'required',
             'an-i-propuesta' => 'required',
@@ -129,12 +129,12 @@ class PropuestaDeMejoraController extends Controller
             'eva-propuesta' => 'required',
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
-            'id_lider.required' => 'Seleccione un lider.',
+            'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',
             'obj-propuesta.required' => 'El objetivo de la propuesta no puede estar vacio.'
         ]);
 
         $titulo = $request->input('titulo-propuesta');
-        $lider = $request->input('id_lider');
+        $lider = Auth::user()->getEmpleado->id_empleado; //$request->input('id_lider');
         $objetivo = $request->input('obj-propuesta');
         $descripcion = $request->input('desc-propuesta');
         $analisis = $request->input('en-i-propuesta');
@@ -142,7 +142,7 @@ class PropuestaDeMejoraController extends Controller
         $problema = $request->input('prob-propuesta');
         $evaluacion = $request->input('eva-propuesta');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-
+        $nombre_emisor = $request->input('nombre_emisor');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
 
         $responsabilidad = Responsabilidad::create([
@@ -151,7 +151,7 @@ class PropuestaDeMejoraController extends Controller
         ]);
 
         $propuestaMejora =  Propuesta_de_mejora::create([
-                                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                'nombre_emisor' => $nombre_emisor,
                                 'id_responsabilidad' => $responsabilidad->id_responsabilidad,
                                 'titulo_propuesta' => $titulo,
                                 'objetivo_propuesta' => $objetivo,

@@ -19,7 +19,7 @@ class Propuesta_de_mejora extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'id_empleado',
+        'nombre_emisor',
         'id_responsabilidad',
         'id_sector',
         'id_activo',

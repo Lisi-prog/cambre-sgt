@@ -69,7 +69,7 @@ CREATE TABLE `requerimiento_de_ingenieria` (
 
 CREATE TABLE `propuesta_de_mejora` (
   `id_propuesta_de_mejora` int NOT NULL AUTO_INCREMENT,
-  `id_empleado` int,
+  `nombre_emisor` varchar(100),
   `id_responsabilidad` int,
   `id_sector` int,
   `id_activo` int,

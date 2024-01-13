@@ -685,7 +685,7 @@ class OrdenController extends Controller
 
     // VISTAS DE ORDENES
     public function obtenerOrdenes($tipo_orden){
-        $id_empleado = Auth::id();
+        $id_empleado = Auth::user()->getEmpleado->id_empleado;
         $supervisores = $this->obtenerEmpleados();
         $responsables = $this->obtenerEmpleados();
         $estados = $this->listarTodosLosEstados();
