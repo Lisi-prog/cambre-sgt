@@ -136,7 +136,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Fecha limite</th>      
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Duracion estimada</th>     
-                                        {{-- <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                    --}}
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                   
                                     </thead>
                                     <tbody>
                                         @foreach ($orden_manufactura->getOrdenesMecanizado as $orden_mecanizado)
@@ -152,6 +152,23 @@
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($orden_mecanizado->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite)->format('d-m-Y')}}</td>
                                                 
                                                 <td class= 'text-center' >{{$orden_mecanizado->getOrden->duracion_estimada}}</td>
+
+                                                <td>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.editar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

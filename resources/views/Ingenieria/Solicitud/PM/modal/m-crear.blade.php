@@ -39,6 +39,7 @@
                         <div class="form-group">
                             {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
+                            {{--    ACTIVOS    --}}
                             {{-- {!! Form::select('id_activo', $activos, null, [
                                 'placeholder' => 'Seleccionar',
                                 'class' => 'form-select form-control',

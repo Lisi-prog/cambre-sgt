@@ -745,7 +745,15 @@ class OrdenController extends Controller
                 break;
         }
         
-        return view('Ingenieria.Servicios.Ordenes.ordenes-trabajo', compact('ordenes', 'supervisores', 'responsables', 'estados'));
+        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados'));
     }
     //------------------
+
+    public function editarOrden($id_orden){
+        return 'Editar orden'. ' ' . $id_orden;
+    }
+
+    public function eliminarOrden($id_orden){
+        return 'Eliminar orden:'. ' ' . $id_orden;
+    }
 }

@@ -189,6 +189,7 @@
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>
+                                                
                                             </td>
                                         </tr>
                                     @endforeach
