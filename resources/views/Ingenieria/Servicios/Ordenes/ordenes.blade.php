@@ -37,10 +37,10 @@
 <section class="section">
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-                <h4 class="">Ordenes</h5>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 my-auto">
+                <h4 class="">Ordenes de {{$tipo}}</h5>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
             </div>

@@ -689,7 +689,7 @@ class OrdenController extends Controller
         $supervisores = $this->obtenerEmpleados();
         $responsables = $this->obtenerEmpleados();
         $estados = $this->listarTodosLosEstados();
-        
+        $tipo = '';
         $array_responsabilidades_ordenes = array();
         $array_ordenes = array();
         $ordenes = array();
@@ -715,6 +715,7 @@ class OrdenController extends Controller
                         array_push($ordenes, $orden);
                     }
                 }
+                $tipo = 'Trabajo';
                 break;
             case 2:
                 //ORDEN DE MANUFACTURA
@@ -723,6 +724,7 @@ class OrdenController extends Controller
                         array_push($ordenes, $orden); ;
                     }
                 }
+                $tipo = 'Manufactura';
                 break;
             case 3:
                 //ORDEN DE MECANIZADO
@@ -731,6 +733,7 @@ class OrdenController extends Controller
                         array_push($ordenes, $orden); ;
                     }
                 }
+                $tipo = 'Mecanizado';
                 break;
             case 4:
                 //ORDEN DE MANTENIMIENTO
@@ -739,13 +742,14 @@ class OrdenController extends Controller
                         array_push($ordenes, $orden); ;
                     }
                 }
+                $tipo = 'Mantenimiento';
                 break;
             default:
                 # code...
                 break;
         }
         
-        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados'));
+        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo'));
     }
     //------------------
 

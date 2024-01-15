@@ -265,4 +265,41 @@ class EtapaController extends Controller
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         return view('Ingenieria.Servicios.Etapas.ver-actualizaciones', compact('etapa', 'empleados'));
     }
+
+    public function guardarActualizacion(Request $request){
+        $this->validate($request, [
+            'descripcion' => 'required',
+            'id_estado' => 'required',
+            'fecha_limite' => 'required'
+        ]);
+
+        $descripcion = $request->input('descripcion');
+
+        $id_estado = $request->input('id_estado');
+
+        $fecha_limite = $request->input('fecha_limite');
+
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+
+        $actualizacion = Actualizacion::create([
+                            'descripcion' => $descripcion,
+                            'fecha_limite' => $fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'id_estado' => $id_estado,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+
+        Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacion->id_actualizacion,
+            'id_servicio' => $id
+        ]);
+        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
+    }
 }
