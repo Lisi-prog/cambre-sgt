@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 //agregamos
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Cambre\Activo;
 
 class ActivoController extends Controller
 {
@@ -21,7 +22,9 @@ class ActivoController extends Controller
     }
     
     public function index(Request $request)
-    {        
+    {   
+        $activos = Activo::orderBy('id_activo')->get();     
+        return view('Ingenieria.Activos.index', compact('activos'));
     }
 
     public function create()
@@ -29,7 +32,23 @@ class ActivoController extends Controller
     }
 
     public function store(Request $request)
-    {                     
+    {         
+        $this->validate($request, [
+            'nombre_activo' => 'required'
+        ]);
+
+        //variables
+        $nombre = $request->input('nombre_activo');
+        $descripcion = $request->input('descripcion');
+        //-----------------------------------
+
+        //Crear activo
+        Activo::create([
+            'nombre_activo' => $nombre,
+            'descripcion_activo' => $descripcion
+        ]);
+        //------------------------------------
+        return redirect()->route('activos.index')->with('mensaje', 'Activo creado exitosamente.');             
     }
     
     public function show($id)
