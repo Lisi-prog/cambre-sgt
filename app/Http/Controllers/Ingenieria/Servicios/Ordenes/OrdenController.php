@@ -754,6 +754,24 @@ class OrdenController extends Controller
     }
 
     public function eliminarOrden($id_orden){
-        return 'Eliminar orden:'. ' ' . $id_orden;
+        if(Auth::user()->hasRole('SUPERVISOR')){
+            $orden = Orden::find($id_orden);
+            $responsabilidades_orden = $orden->getResponsabilidaOrden;
+            $orden_de_x = $orden->getOrdenDe;
+            $partes = $orden->getPartes;
+            //Borramos partes ligadas a la orden
+            foreach ($partes as $parte) {
+            $parte->getParteDe()->delete();
+            $parte->delete();
+            }
+            //Borramos la responsabilidad ligada a la orden
+            foreach ($responsabilidades_orden as $responsabilidad_orden) {
+                $responsabilidad_orden->delete();
+                $responsabilidad_orden->getResponsabilidad->delete();
+            }
+            //Borramos la orden
+            $orden_de_x->delete();
+            $orden->delete();
+        }
     }
 }
