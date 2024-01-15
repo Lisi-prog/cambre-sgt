@@ -57,14 +57,40 @@ class ActivoController extends Controller
     
     public function edit($id)
     {
+        $activo = Activo::find($id);
+        return view('Ingenieria.Activos.editar', compact('activo'));
     }
     
     public function update(Request $request, $id)
-    {                        
+    {             
+        $this->validate($request, [
+            'nombre_activo' => 'required'
+        ]);    
+        
+        //variables
+        $nombre = $request->input('nombre_activo');
+        //-----------------------------------
+
+        $activo = Activo::find($id);
+
+        $activo->update([
+            'nombre_activo' => $nombre
+        ]);
+
+        if ($request->input('descripcion')) {
+            $activo->update([
+                'descripcion_activo' => $request->input('descripcion')
+            ]);
+        }
+
+        return redirect()->route('activos.index')->with('mensaje', 'Activo editado exitosamente.');           
     }
     
     public function destroy($id)
-    {            
+    {      
+        Activo::destroy($id);
+
+        return redirect()->route('activos.index')->with('mensaje', 'El activo se elimino exitosamente.');         
     }
 
 }

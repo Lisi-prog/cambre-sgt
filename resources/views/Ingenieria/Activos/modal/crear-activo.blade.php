@@ -11,12 +11,12 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('nombree_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            {!! Form::label('nombre_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nombrea_activo', null, [
+                            {!! Form::text('nombre_activo', null, [
                                 'class' => 'form-control',
                                 'required' => 'required',
-                                'id' => 'nombrea_activo'
+                                'id' => 'nombre_activo'
                             ]) !!}
                         </div>
                     </div>

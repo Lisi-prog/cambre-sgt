@@ -3526,8 +3526,8 @@ body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a {
 body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu {
     position: absolute;
     background-color: #fff;
-    left: 65px;
-    top: 10px;
+    left: 60px;
+    top: -30px;
     width: 200px;
     display: none;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.03);
@@ -3567,7 +3567,7 @@ body.sidebar-mini .main-sidebar .sidebar-menu li:hover > ul.dropdown-menu li:hov
 }
 
 body.sidebar-mini .main-sidebar .sidebar-menu li:hover > ul.dropdown-menu li .dropdown-menu {
-    left: 200px;
+    left: 190px;
     padding: 0;
 }
 
