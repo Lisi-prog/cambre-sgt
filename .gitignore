@@ -13,3 +13,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+.dockerignore
+.fly/entrypoint.sh
+.fly/scripts/caches.sh
+Dockerfile
+fly.toml
