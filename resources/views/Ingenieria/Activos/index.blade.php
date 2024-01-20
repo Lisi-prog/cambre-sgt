@@ -33,17 +33,17 @@
                                 <tbody>
                                     @foreach ($activos as $activo)
                                         <tr class="my-auto">
-                                            <td class='text-center'>{{$maquinaria->id_activo}}</td>
+                                            <td class='text-center'>{{$activo->id_activo}}</td>
 
-                                            <td class='text-center'>{{$maquinaria->nombre_activo}}</td>
+                                            <td class='text-center'>{{$activo->nombre_activo}}</td>
 
-                                            <td class='text-center'>{{$maquinaria->descripcion_activo}}</td>
+                                            <td class='text-center'>{{$activo->descripcion_activo}}</td>
 
 
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['activos.edit', $maquinaria->id_activo], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['activos.edit', $activo->id_activo], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
                                                         {!! Form::close() !!}
                                                         {{-- <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarMaquinariaModal" onclick="cargarModalEditar({{$maquinaria->id_maquinaria}})">
@@ -55,10 +55,10 @@
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['activos.destroy', $maquinaria->id_activo],
+                                                            'route' => ['activos.destroy', $activo->id_activo],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR la maquinaria?');"]) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el activo?');"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
                                                 </div>

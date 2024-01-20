@@ -9,17 +9,17 @@
         <a href="" class="nav-link has-dropdown ">
             <i class="fas fa-home"></i><span>Informatica</span>
         </a>
-        <ul class="dropdown-menu border border-primary border-2 borde-menu m-0" style="display: none;">
+        <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
             <li class="dropdown-title pt-3">
                 Informatica
             </li>
         
             <li class="dropdown ">
-                <a href="" class="nav-link has-dropdown ">
+                <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Herramientas</span>
                 </a>
                 
-                <ul class="dropdown-menu borde-menu m-0" style="display: none;">
+                <ul class="dropdown-menu borde-menu" style="display: none;">
                     <li class="dropdown-title pt-3">
                         Herramientas
                     </li>
@@ -76,17 +76,18 @@
             <i class="fas fa-home"></i><span>Ingenieria</span>
         </a>
 
+        
         <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
             <li class="dropdown-title pt-3">
                 Ingenieria
             </li>
 
             <li class="dropdown ">
-                <a href="" class="nav-link has-dropdown ">
+                <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Solicitudes</span>
                 </a>
                 
-                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none; margin-left: -2vh;">
+                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
                     <li class="dropdown-title">
                         Solicitudes
                     </li>
@@ -121,7 +122,7 @@
                     <i class="fas fa-home"></i><span>Servicios</span>
                 </a>
                 
-                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none; margin-left: -2vh;">
+                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
                     <li class="dropdown-title pt-3">
                         Servicios
                     </li>
@@ -139,9 +140,9 @@
                     {{-- ORDENES --}}
                     <li class="dropdown">
                         <a href="" class="nav-link has-dropdown" title="Ordenes">
-                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Ordenes</span>
+                            <i class="fas fa-home" style="font-size:1.2em;"></i><span>Ordenes</span>
                         </a>
-                        <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none; margin-left: -2vh;">
+                        <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
                             <li class="dropdown-title pt-3">
                                 Ordenes
                             </li>
