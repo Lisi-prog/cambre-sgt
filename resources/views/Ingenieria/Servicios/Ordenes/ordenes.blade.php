@@ -178,7 +178,7 @@
                                                 <div class="row my-2">
                                                     <div class="col-12">
                                                         <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
-                                                            ver
+                                                            Ver
                                                         </button>
                                                     </div>
                                                 </div>
@@ -189,7 +189,13 @@
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>
-                                                
+                                                <div class="row my-2">
+                                                    <div class="col-12"> 
+                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
+                                                            Editar
+                                                        </button> 
+                                                    </div> 
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -204,15 +210,17 @@
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script type="module"> 
-        import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;
         window.cargarModalVerOrden = cargarModalVerOrden;
         window.obtenerPartes = obtenerPartes;
+        window.modificarFormularioConArgumentos= modificarFormularioConArgumentos;
+        window.cargarModalEditarOrden = cargarModalEditarOrden;
     </script>
 </section>
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
-
+@include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 
 {{-- <script>
     $(document).ready(function () {
@@ -238,7 +246,11 @@
 </script> --}}
 
 <script>
+    let x = '';
     $(document).ready( function () {
+        //dudoso
+        modificarFormularioConArgumentos(window.location.pathname.substring(9, 10));
+
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {

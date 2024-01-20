@@ -302,8 +302,6 @@ class OrdenController extends Controller
             'id_orden' => $orden->id_orden
         ]);
 
-        
-
         $orden_trabajo = Orden_trabajo::create([
                             'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
                             'id_orden' => $orden->id_orden
@@ -515,50 +513,84 @@ class OrdenController extends Controller
     public function ObtenerOrdenTrabajo($id){
         $orden_trabajo = Orden::find($id);
         $orden_trabajo_arr = array();
-
+        
         $supervisor = '';
         $responsable = '';
+        $id_supervisor = '';
+        $id_responsable = '';
         foreach ($orden_trabajo->getResponsabilidaOrden as $resp_orden) {
             if(strcasecmp($resp_orden->getResponsabilidad->getRol->nombre_rol_empleado, 'supervisor') == 0){
                 $supervisor = $resp_orden->getResponsabilidad->getEmpleado->nombre_empleado;
+                $id_supervisor = $resp_orden->getResponsabilidad->getEmpleado->id_empleado;
             }
             if(strcasecmp($resp_orden->getResponsabilidad->getRol->nombre_rol_empleado, 'responsable') == 0){
                 $responsable = $resp_orden->getResponsabilidad->getEmpleado->nombre_empleado;
+                $id_responsable = $resp_orden->getResponsabilidad->getEmpleado->id_empleado;
             }
         }
 
         switch ($orden_trabajo->getOrdenDe->getTipoOrden()) {
             case 1:
                 array_push($orden_trabajo_arr, (object)[
-                    'id_orden' => $orden_trabajo->id_orden_trabajo,
+                    'id_orden' => $orden_trabajo->id_orden,
                     'orden' => $orden_trabajo->nombre_orden,
+                    'id_tipo' => $orden_trabajo->getOrdenDe->getTipoOrdenTrabajo->id_tipo_orden_trabajo,
                     'tipo' => $orden_trabajo->getOrdenDe->getTipoOrdenTrabajo->nombre_tipo_orden_trabajo,
-                    'estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado,
+                    'id_estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstado->id_estado,
+                    'estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstado->nombre_estado,
+                    'id_responsable' => $id_responsable,
                     'responsable' => $responsable,
-                    'fecha_inicio' => Carbon::parse($orden_trabajo->fecha_inicio)->format('d-m-Y'),
-                    'fecha_limite' => Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_limite)->format('d-m-Y'),
+                    'fecha_inicio' => $orden_trabajo->fecha_inicio,
+                    'fecha_limite' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_limite,
                     'fecha_fin_real' => $orden_trabajo->getFechaFinalizacion(),
                     'duracion_estimada' => substr($orden_trabajo->duracion_estimada, 0, strlen($orden_trabajo->duracion_estimada)-3),
                     'duracion_real' => $orden_trabajo->getCalculoHorasReales(),
-                    'fecha_ultimo_parte' => Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga)->format('d-m-Y'),
+                    'fecha_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga,
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
+                    'id_supervisor' => $id_supervisor,
+                    'supervisa' => $supervisor
+                    ]);
+                break;
+            case 2:
+                array_push($orden_trabajo_arr, (object)[
+                    'id_orden' => $orden_trabajo->id_orden,
+                    'orden' => $orden_trabajo->nombre_orden,
+                    'revision' => $orden_trabajo->getOrdenDe->revision,
+                    'ruta_plano' => $orden_trabajo->getOrdenDe->ruta_plano,
+                    'id_estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstadoManufactura->id_estado_manufactura,
+                    'estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstadoManufactura->nombre_estado_manufactura,
+                    'id_responsable' => $id_responsable,
+                    'responsable' => $responsable,
+                    'fecha_inicio' => $orden_trabajo->fecha_inicio,
+                    'fecha_limite' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_limite,
+                    'fecha_fin_real' => $orden_trabajo->getFechaFinalizacion(),
+                    'duracion_estimada' => substr($orden_trabajo->duracion_estimada, 0, strlen($orden_trabajo->duracion_estimada)-3),
+                    'duracion_real' => $orden_trabajo->getCalculoHorasReales(),
+                    'fecha_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga,
+                    'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
+                    'id_supervisor' => $id_supervisor,
                     'supervisa' => $supervisor
                     ]);
                 break;
             case 3:
                 array_push($orden_trabajo_arr, (object)[
-                    'id_orden' => $orden_trabajo->id_orden_trabajo,
+                    'id_orden' => $orden_trabajo->id_orden,
                     'orden' => $orden_trabajo->nombre_orden,
-                    'tipo' => $orden_trabajo->getOrdenDe->getTipoOrdenTrabajo->nombre_tipo_orden_trabajo,
-                    'estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteTrabajo->getEstado->nombre_estado,
+                    'revision' => $orden_trabajo->getOrdenDe->revision,
+                    'cantidad' => $orden_trabajo->getOrdenDe->cantidad,
+                    'ruta_plano' => $orden_trabajo->getOrdenDe->ruta_pieza,
+                    'id_estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstadoMecanizado->id_estado_mecanizado,
+                    'estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstadoMecanizado->nombre_estado_mecanizado,
+                    'id_responsable' => $id_responsable,
                     'responsable' => $responsable,
-                    'fecha_inicio' => Carbon::parse($orden_trabajo->fecha_inicio)->format('d-m-Y'),
-                    'fecha_limite' => Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_limite)->format('d-m-Y'),
+                    'fecha_inicio' => $orden_trabajo->fecha_inicio,
+                    'fecha_limite' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_limite,
                     'fecha_fin_real' => $orden_trabajo->getFechaFinalizacion(),
                     'duracion_estimada' => substr($orden_trabajo->duracion_estimada, 0, strlen($orden_trabajo->duracion_estimada)-3),
                     'duracion_real' => $orden_trabajo->getCalculoHorasReales(),
-                    'fecha_ultimo_parte' => Carbon::parse($orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga)->format('d-m-Y'),
+                    'fecha_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga,
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
+                    'id_supervisor' => $id_supervisor,
                     'supervisa' => $supervisor
                     ]);
                 break;
@@ -751,10 +783,84 @@ class OrdenController extends Controller
         
         return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo'));
     }
-    //------------------
 
-    public function editarOrden($id_orden){
-        return 'Editar orden'. ' ' . $id_orden;
+    public function editarOrden(Request $request){
+        $this->validate($request, [
+            'nom_orden' => 'required',
+            'supervisor' => 'required',
+            'responsable' => 'required',
+            'fecha_ini' => 'required',
+            'fecha_req' => 'required',
+            'id_estado' => 'required',
+            'tipo_orden_trabajo' => 'required',
+            'horas_estimadas' => 'required',
+            'minutos_estimados' => 'required'
+        ]);
+
+        $orden = Orden::find($request->input('id_orden'));
+        $tipo_orden = $orden->getOrdenDe->getTipoOrden();
+        $orden->update([
+            'nombre_orden' => $request->input('nom_orden'),
+            'fecha_inicio' => $request->input('fecha_ini'),
+            'duracion_estimada' => $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados')
+        ]);
+
+        $responsabilidades_orden = $orden->getResponsabilidaOrden;
+        $responsabilidad_res = '';
+        $responsabilidad_sup = '';
+        foreach ($responsabilidades_orden as $resp_ord) {
+           $rol = $resp_ord->getResponsabilidad->getRol->nombre_rol_empleado;
+           switch ($rol) {
+            case 'Responsable':
+                $responsabilidad_res = $resp_ord->getResponsabilidad;
+                if($responsabilidad_res->getEmpleado->id_empleado != $request->input('responsable')){
+                    $responsabilidad_res = $request->input('responsable');
+                    $responsabilidad_res->save();
+                }
+                break;
+            case 'Supervisor':
+                $responsabilidad_sup = $resp_ord->getResponsabilidad;
+                if($responsabilidad_sup->getEmpleado->id_empleado != $request->input('supervisor')){
+                    $responsabilidad_sup = $request->input('supervisor');
+                    $responsabilidad_sup->save();
+                }
+                break;
+            default:
+                # code...
+                break;
+           }
+        }
+        $fecha = Carbon::now()->format('Y-m-d');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => 1
+        ]);
+
+        $parte = Parte::create([
+            'observaciones' => 'Edicion de orden',
+            'fecha' => Carbon::now()->format('Y-m-d'),
+            'fecha_limite' => $request->input('fecha_req'),
+            'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s'),
+            'horas' => '00:00',
+            'id_orden' => $orden->id_orden,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        switch ($tipo_orden) {
+            case 1:
+                Parte_trabajo::create([
+                    'id_estado' => $request->input('id_estado'),
+                    'id_parte' => $parte->id_parte
+                ]);
+                break;
+            default:
+                # code...
+                break;
+        }
+        
+        return $this->ObtenerOrdenes($tipo_orden);
     }
 
     public function eliminarOrden($id_orden){
@@ -770,12 +876,14 @@ class OrdenController extends Controller
             }
             //Borramos la responsabilidad ligada a la orden
             foreach ($responsabilidades_orden as $responsabilidad_orden) {
+                $responsabilidad = $responsabilidad_orden->getResponsabilidad;
                 $responsabilidad_orden->delete();
-                $responsabilidad_orden->getResponsabilidad->delete();
+                $responsabilidad->delete();
             }
             //Borramos la orden
             $orden_de_x->delete();
             $orden->delete();
         }
+
     }
 }

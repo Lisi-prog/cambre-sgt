@@ -9,10 +9,12 @@ let bandera = 1;
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
     $('#nueva_orden_meca').on('click', modificarFormulario);
+    $(document).read
 });
-
+function prueba(){
+    console.log("prueba");
+}
 function modificarFormulario(){
-    
    let tipo_orden = Number($(this).val());
    let formulario = document.getElementById("formulario");
    let html;
@@ -51,6 +53,47 @@ function modificarFormulario(){
    }
 
 }
+export function modificarFormularioConArgumentos(tipo_orden){
+    //let tipo_orden = Number($(this).val());
+    console.log('Ordenes de tipo: ' + tipo_orden);
+    let formulario = document.getElementById("formulario");
+    let html;
+    switch (Number(tipo_orden)) {
+     case 1:
+         formulario.innerHTML = '';
+         html = opcion1
+         formulario.innerHTML += html;
+         cargarTipoOrdenTrabajo();
+         cargarSupervisores();
+         cargarEmpleados();
+         cargarEstados();
+         break;
+     case 2:
+         formulario.innerHTML = '';
+         html = opcion2
+         formulario.innerHTML += html;
+         cargarSupervisores();
+         cargarEmpleados();
+         cargarEstadosManufacturas();
+         break;
+     case 3:
+         formulario.innerHTML = '';
+         html = opcion3
+         formulario.innerHTML += html;
+         cargarSupervisores();
+         cargarEmpleados();
+         cargarEstadosMecanizados();
+         break;
+     case 4:
+         formulario.innerHTML = '';
+         break;    
+     default:
+         formulario.innerHTML = '';
+         break;
+    }
+
+    //cargarModalEditarOrden(document.getElementById("input_id_orden").value);
+ }
 
 export function crearCuadrOrdenes(id_etapa){
     let cuadro_oculto_de_ordenes = document.getElementById("cuadro_de_ordenes");
@@ -104,6 +147,13 @@ export function crearCuadrOrdenes(id_etapa){
                                             <div class="col-12"> 
                                                 <button type="button" class="btn btn-warning w-100" onclick="window.obtenerPartes(`+element.id_orden+`)">
                                                     Ver partes
+                                                </button> 
+                                            </div> 
+                                        </div>
+                                        <div class="row my-2">
+                                            <div class="col-12"> 
+                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal">
+                                                    Editar orden
                                                 </button> 
                                             </div> 
                                         </div>`+boton_ordenes+` 
@@ -172,6 +222,57 @@ export function cargarModalVerOrden(id_orden, tipo){
         default:
             break;
     }
+}
+
+export function cargarModalEditarOrden(id_orden, nombre_etapa){
+    console.log('Id de la orden: ' + id_orden);
+    console.log('Nombre de la etapa: ' + nombre_etapa);
+    let input_id_orden = document.getElementById('id_orden');
+    let input_etapa = document.getElementById('etapa');
+    let input_nom_orden = document.getElementById('nom_orden');
+    let input_fec_ini = document.getElementById('fec_ini');
+    let input_fec_req = document.getElementById('fec_req');
+    let input_horas_estimadas = document.getElementById('horas_estimadas');
+    let input_minutos_estimados = document.getElementById('minutos_estimados');
+    let input_revision = document.getElementById('revision');
+    let input_ruta_plano = document.getElementById('ruta_plano');
+    let input_cantidad = document.getElementById('cantidad');
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-una-orden-etapa/'+id_orden, 
+        data: {
+            id: id_orden,
+        },
+    success: function (response) {
+        console.log('-------------------');
+        console.log(response);
+        console.log('-------------------');
+        response.forEach(element => {
+            input_id_orden.value = id_orden;
+            input_etapa.value = nombre_etapa;
+            input_nom_orden.value = element.orden;
+            input_fec_ini.value = element.fecha_inicio;
+            input_fec_req.value = element.fecha_limite;
+            input_horas_estimadas.value = element.duracion_estimada.substring(0, 2);
+            input_minutos_estimados.value = element.duracion_estimada.substring(3, 5);
+            document.querySelector('#cbx_supervisor').value = element.id_supervisor;
+            document.querySelector('#cbx_responsable').value = element.id_responsable;
+            //OPCIONALES
+            document.querySelector('#tipo_orden_trabajo') ? document.querySelector('#tipo_orden_trabajo').value = element.id_tipo : '';
+            document.querySelector('#cbx_estado') ? document.querySelector('#cbx_estado').value = element.id_estado : '';
+            document.querySelector('#cbx_estado_man') ? document.querySelector('#cbx_estado_man').value = element.id_estado : '';
+            document.querySelector('#cbx_estado_mec') ? document.querySelector('#cbx_estado_mec').value = element.id_estado : '';
+            input_revision ? input_revision.value = element.revision : '';
+            input_ruta_plano ? input_ruta_plano.value = element.ruta_plano: '';
+            input_cantidad ? input_cantidad.value = element.cantidad : '';
+            
+        });
+        
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
 }
 
 function cargarModalVerOrdenTrabajo(id_orden){
