@@ -56,7 +56,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                         <div class="form-group"> 
-                            <label for="horas" class="control-label" style="white-space: nowrap; ">Horas:</label> 
+                            <label for="horas" class="control-label" style="white-space: nowrap; ">Horas hombre:</label> 
                             <span class="obligatorio">*</span> 
                             <div class= "input-group">
                                 <input class="form-control" name="horas" type="number" min="0" value="00" id="horas" required>
@@ -71,6 +71,7 @@
                     @php
                         $orden_de_trabajo = Config::get('myconfig.orden_de_trabajo');
                         $orden_de_manufactura = Config::get('myconfig.orden_de_manufactura');
+                        $orden_de_mecanizado = Config::get('myconfig.orden_de_mecanizado');
                     @endphp
                     @switch($orden->getOrdenDe->getTipoOrden())
                         @case($orden_de_trabajo)
@@ -98,6 +99,47 @@
                                             'required',
                                             'id' => 'estado'
                                         ]) !!}
+                                </div>
+                            </div>
+                            @break
+                            @case($orden_de_mecanizado)
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                    <div class="form-group" >
+                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('estado', $estados_mecanizado, null, [
+                                                'placeholder' => 'Seleccionar',
+                                                'class' => 'form-select form-group',
+                                                'required',
+                                                'id' => 'estado'
+                                            ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class ='row'> 
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                    <div class="form-group">
+                                        {!! Form::label('maquina', "Maquina:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('maquina', $maquinas, null, [
+                                                'placeholder' => 'Seleccionar',
+                                                'class' => 'form-select form-group',
+                                                'required',
+                                                'id' => 'maquina'
+                                            ]) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                    <div class="form-group"> 
+                                        <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
+                                        <span class="obligatorio">*</span> 
+                                        <div class= "input-group">
+                                            <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina" required>
+                                            <span class="input-group-text">:</span>
+                                            <input class="form-control" name="minutos_maquina" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             @break

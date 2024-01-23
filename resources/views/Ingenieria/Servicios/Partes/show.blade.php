@@ -142,7 +142,7 @@
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->fecha_limite)->format('d-m-Y')}}</td>
 
                                             
-                                                    <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>
+                                            <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>
                                               
 
                                             <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td>

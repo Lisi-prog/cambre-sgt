@@ -17,11 +17,15 @@ use Illuminate\Http\Response;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
+use App\Models\Cambre\Estado_mecanizado;
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_trabajo;
+use App\Models\Cambre\Parte_mecanizado;
+use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
-
+use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Parte_mecanizado_x_maquinaria;
 class ParteController extends Controller
 {
     function __construct()
@@ -47,12 +51,14 @@ class ParteController extends Controller
             $editable = '';
             $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
             $estados_manufactura = Estado_manufactura::orderBy('id_estado_manufactura')->pluck('nombre_estado_manufactura','id_estado_manufactura');
+            $estados_mecanizado = Estado_mecanizado::orderBy('id_estado_mecanizado')->pluck('nombre_estado_mecanizado','id_estado_mecanizado');
+            $maquinas = Maquinaria::orderBy('id_maquinaria')->pluck('alias_maquinaria','id_maquinaria');
         } else {
             $editable = 'readonly';
             $estados = Estado::whereIn('id_estado', [4, 6, 7, 9])->orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         }
         
-        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura'));
+        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura', 'estados_mecanizado', 'maquinas'));
     }
 
     public function create(Request $request)
@@ -100,6 +106,7 @@ class ParteController extends Controller
 
         $horas = $request->input('horas') . ':' . $request->input('minutos');
 
+        
         switch ($opcion) {
             case 1:
                 $this->validate($request, [
@@ -129,9 +136,75 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
             
-                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte trabajo creado con éxito!.');                       
+                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte de trabajo creado con éxito!.');                       
                 break;
+            case 2:
+                $this->validate($request, [
+                    'estado' => 'required'
+                ]);
+
+                $estado = $request->input('estado');
+
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $parte = Parte::create([
+                            'observaciones' => $observaciones,
+                            'fecha' => $fecha,
+                            'fecha_limite' => $fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => $horas,
+                            'id_orden' => $orden->id_orden,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+                Parte_manufactura::create([
+                    'id_estado_manufactura' => $estado,
+                    'id_parte' => $parte->id_parte
+                ]);
             
+                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte de manufactura creado con éxito!.');                       
+                break;
+            case 3:
+                
+                $this->validate($request, [
+                    'estado' => 'required'
+                ]);
+
+                $estado = $request->input('estado');
+                $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
+                $maquina = $request->input('maquina');
+
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $parte = Parte::create([
+                            'observaciones' => $observaciones,
+                            'fecha' => $fecha,
+                            'fecha_limite' => $fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => $horas,
+                            'id_orden' => $orden->id_orden,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+                $parte_mecanizado = Parte_mecanizado::create([
+                    'id_estado_mecanizado' => $estado,
+                    'id_parte' => $parte->id_parte
+                ]);
+                Parte_mecanizado_x_maquinaria::create([
+                    'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
+                    'id_maquinaria' => $maquina,
+                    'horas_maquina' => $horas_maquina
+                ]);
+                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte de mecanizado creado con éxito!.');                       
+                break;
             default:
                 # code...
                 break;
