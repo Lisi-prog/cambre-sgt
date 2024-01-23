@@ -785,20 +785,41 @@ class OrdenController extends Controller
     }
 
     public function editarOrden(Request $request){
-        $this->validate($request, [
-            'nom_orden' => 'required',
-            'supervisor' => 'required',
-            'responsable' => 'required',
-            'fecha_ini' => 'required',
-            'fecha_req' => 'required',
-            'id_estado' => 'required',
-            'tipo_orden_trabajo' => 'required',
-            'horas_estimadas' => 'required',
-            'minutos_estimados' => 'required'
-        ]);
-
         $orden = Orden::find($request->input('id_orden'));
         $tipo_orden = $orden->getOrdenDe->getTipoOrden();
+        switch ($tipo_orden) {
+            case 1:
+                $this->validate($request, [
+                    'nom_orden' => 'required',
+                    'supervisor' => 'required',
+                    'responsable' => 'required',
+                    'fecha_ini' => 'required',
+                    'fecha_req' => 'required',
+                    'id_estado' => 'required',
+                    'tipo_orden_trabajo' => 'required',
+                    'horas_estimadas' => 'required',
+                    'minutos_estimados' => 'required'
+                ]);
+                break;
+            case 2:
+                $this->validate($request, [
+                    'nom_orden' => 'required',
+                    'supervisor' => 'required',
+                    'responsable' => 'required',
+                    'fecha_ini' => 'required',
+                    'fecha_req' => 'required',
+                    'estado_manufactura' => 'required',
+                    'horas_estimadas' => 'required',
+                    'minutos_estimados' => 'required'
+                ]);
+                break;
+            default:
+                # code...
+                break;
+        }
+        
+
+        
         $orden->update([
             'nombre_orden' => $request->input('nom_orden'),
             'fecha_inicio' => $request->input('fecha_ini'),
@@ -855,12 +876,32 @@ class OrdenController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
                 break;
+            case 2:
+                $orden_manufactura = $orden->getOrdenDe;
+                $orden_manufactura->revision = $request->input('revision');
+                $orden_manufactura->ruta_plano = $request->input('ruta_plano');
+                $orden_manufactura->save();
+                Parte_manufactura::create([
+                    'id_estado_manufactura' => $request->input('estado_manufactura'),
+                    'id_parte' => $parte->id_parte
+                ]);
+                break;
+            case 3:
+                $orden_mecanizado = $orden->getOrdenDe;
+                $orden_mecanizado->revision = $request->input('revision');
+                $orden_mecanizado->cantidad = $request->input('cantidad');
+                $orden_mecanizado->ruta_pieza = $request->input('ruta_plano');
+                $orden_mecanizado->save();
+                Parte_mecanizado::create([
+                    'id_estado_mecanizado' => $request->input('estado_mecanizado'),
+                    'id_parte' => $parte->id_parte
+                ]);
+                break;
             default:
                 # code...
                 break;
         }
-        
-        return $this->ObtenerOrdenes($tipo_orden);
+        return redirect()->route('ordenes.tipo', $tipo_orden)->with('mensaje', 'La orden ha sido editada con exito.');
     }
 
     public function eliminarOrden($id_orden){
