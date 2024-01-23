@@ -948,5 +948,6 @@ class OrdenController extends Controller
             //Borramos la orden
             $orden_de_x->delete();
             $orden->delete();
+            return redirect()->back()->with('mensaje','Se elimino la orden con exito.');
     }
 }
