@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('titulo', 'Asignar permisos')
+
 @section('content')
 
 @include('layouts.modal.delete', ['modo' => 'Agregar'])

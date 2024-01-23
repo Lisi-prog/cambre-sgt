@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('titulo', 'Crear empleado')
+
 @section('content')
 
     <section class="section">
@@ -137,8 +139,8 @@
                                         {!! Form::close() !!}
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'r_i.index', 'style' => '']) !!}
-                                        {!! Form::submit('Cancelar', ['class' => 'btn btn-primary']) !!}
+                                        {!! Form::open(['method' => 'GET', 'route' => 'empleados.index', 'style' => '']) !!}
+                                        {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                         {!! Form::close() !!}
                                     </div>
                                 </div>

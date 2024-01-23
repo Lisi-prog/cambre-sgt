@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('titulo', 'Ver R.I.')
+
 @section('content')
     <section class="section">
         <div class="section-header d-flex">

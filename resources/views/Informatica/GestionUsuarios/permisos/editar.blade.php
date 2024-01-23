@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('titulo', 'Editar permiso')
+
 @section('content')
     <section class="section">
         <div class="section-header">

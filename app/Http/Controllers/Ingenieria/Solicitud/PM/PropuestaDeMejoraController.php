@@ -21,6 +21,7 @@ use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Responsabilidad;
+use App\Models\Cambre\Activo;
 
 class PropuestaDeMejoraController extends Controller
 {
@@ -38,7 +39,8 @@ class PropuestaDeMejoraController extends Controller
         //$permisos = Permission::orderBy('name', 'asc')->get();
         $ListaPM = Propuesta_de_mejora::get();
         $supervisores = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores'));
+        $activos = Activo::orderBy('nombre_activo')->pluck('nombre_activo', 'id_activo');
+        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos'));
     }
 
     public function crearAlt(Request $request)

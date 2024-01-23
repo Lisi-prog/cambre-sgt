@@ -50,11 +50,13 @@ class OrdenController extends Controller
 {
     function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         //  $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
         //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
         //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
+        $this->middleware('role_or_permission:BORRAR-ORDEN|SUPERVISOR', ['only' => ['destroy', 'eliminarOrden']]);
+
     }
     
     public function index(Request $request)
@@ -928,7 +930,6 @@ class OrdenController extends Controller
     }
 
     public function eliminarOrden($id_orden){
-        if(Auth::user()->hasRole('SUPERVISOR')){
             $orden = Orden::find($id_orden);
             $responsabilidades_orden = $orden->getResponsabilidaOrden;
             $orden_de_x = $orden->getOrdenDe;
@@ -947,7 +948,5 @@ class OrdenController extends Controller
             //Borramos la orden
             $orden_de_x->delete();
             $orden->delete();
-        }
-
     }
 }

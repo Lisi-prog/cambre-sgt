@@ -22,30 +22,23 @@
                             {!! Form::label('nombre_emisor', 'Emisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('nombre_emisor', null, ['class' => 'form-control']) !!}
-                            {{-- {!! Form::label('selected-lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            <span class="obligatorio">*</span>
-                            {!! Form::select('id_lider', $supervisores, null, [
-                                'placeholder' => 'Seleccionar',
-                                'class' => 'form-select form-control',
-                                'id' => 'selected-lider',
-                                'required'
-                            ]) !!} --}}
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
                             {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {{--    ACTIVOS    --}}
-                            {{-- {!! Form::select('id_activo', $activos, null, [
+                            {!! Form::select('id_activo', $activos, null, [
                                 'placeholder' => 'Seleccionar',
                                 'class' => 'form-select form-control',
                                 'id' => 'id_activo',
                                 'required'
-                            ]) !!} --}}
+                            ]) !!}
                         </div>
                     </div>
                 </div>

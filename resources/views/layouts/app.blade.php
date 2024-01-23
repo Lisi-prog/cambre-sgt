@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <title>{{ config('app.name') }}</title>
+    <title>{{ config('app.name') }} | @yield('titulo')</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="icon" href="{{ asset('img/logo-cambre-ico.ico') }}" type="image/icon type">
     <!-- Bootstrap 4.1.1 -->

@@ -68,9 +68,9 @@
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-danger w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                        Eliminar
-                                                    </button>
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
@@ -163,9 +163,9 @@
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-danger w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                        Eliminar
-                                                    </button>
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
@@ -254,9 +254,9 @@
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-danger w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                        Eliminar
-                                                    </button>
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
@@ -336,9 +336,9 @@
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-danger w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                        Eliminar
-                                                    </button>
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
