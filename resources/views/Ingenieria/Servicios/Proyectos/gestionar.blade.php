@@ -285,46 +285,48 @@
                 </div>
                 {{-- ------------- --}}
 
+                @include('Ingenieria.Servicios.Proyectos.layout.gestionar-ordenes-v1')
+
                 {{-- Ordenes del proyecto --}}
-                
-                    <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes' hidden>
-                        <div class="card">
-                            <div class="card-head">
-                                <br>
-                                <div class="d-flex justify-content-between">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
-                                        <h5 class="text-center  my-auto">Ordenes</h5>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                        <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                                            Nueva orden
-                                        </button>
-                                    </div>
+            
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes' hidden>
+                    <div class="card">
+                        <div class="card-head">
+                            <br>
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                                    <h5 class="text-center  my-auto">Ordenes</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
+                                        Nueva orden
+                                    </button>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <div>
-                                    <table id="example" class="table table-hover mt-2" class="display">
-                                        <thead style="">
-                                            <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
-                                            <th class="text-center" scope="col" style="color:#fff;">Orden</th>
-                                            <th class="text-center" scope="col" style="color:#fff;">Tipo orden</th>
-                                            <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                                            <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                                            <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
-                                        </thead>
-                                        <tbody id="cuadro-ordenes">
-                                        </tbody>
-                                    </table>
-                                    </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div>
+                                <table id="example" class="table table-hover mt-2" class="display">
+                                    <thead style="">
+                                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Orden</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Tipo orden</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
+                                    </thead>
+                                    <tbody id="cuadro-ordenes">
+                                    </tbody>
+                                </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {{-- ------------- --}}
+                </div> --}}
+            {{-- ------------- --}}
 
 
                 {{-- Partes del proyecto --}}
@@ -436,6 +438,7 @@
     @include('Ingenieria.Servicios.Proyectos.modal.editar-proyecto')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-act')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-act-eta')
+    @include('Ingenieria.Servicios.Proyectos.modal.ver-partes')
 
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection

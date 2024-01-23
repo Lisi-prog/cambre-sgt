@@ -1,4 +1,4 @@
-const { stubString } = require("lodash");
+//const { stubString } = require("lodash");
 
 function mostrarActProyecto(id){
     let cuadro_oculto_de_act_proyecto = document.getElementById("cuadro_de_act_proyecto");
@@ -98,6 +98,39 @@ function cargarModalEditarOrden(id_orden){
             document.querySelector('#tipo_orden_trabajo').element = response.tipo;
             document.querySelector('#cbx_estado').element = response.estado;
         });
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarModalVerPartes(id){
+    let html = '';
+    document.getElementById('body_ver_parte').innerHTML = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/parte/obtener/'+id, 
+        data: {
+            id: id,
+        },
+    success: function (response) {
+        console.log(response)
+        response.forEach(element => {
+            html += `<tr>
+                        <td class="text-center">`+element.fecha+`</td>
+                        <td class="text-center">`+element.fecha_limite+`</td>
+                        <td class="text-center">`+element.estado+`</td>
+                        <td class="text-center">`+element.horas+`</td>
+                        <td class="text-center">`+element.observaciones+`</td>
+                        <td class="text-center">`+element.responsable+`</td>
+                        <td class="text-center">`+element.supervisor+`</td>
+                    </tr>`
+        });
+        document.getElementById('body_ver_parte').innerHTML = html;
+        document.getElementById('mv-orden').value = response[0].orden;
+        document.getElementById('mv-etapa').value = response[0].etapa;
+        document.getElementById('mv-estado').value = response[0].estado;
     },
     error: function (error) {
         console.log(error);

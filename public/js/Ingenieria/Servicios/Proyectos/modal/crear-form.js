@@ -100,6 +100,8 @@ export function crearCuadrOrdenes(id_etapa){
 
     if ($('#cuadro_de_ordenes').is(":hidden")) {
         cuadro_oculto_de_ordenes.hidden = false;
+        let numero_etapa = document.getElementById("id_estapa");
+        numero_etapa.value = id_etapa;
     }else{
         cuadro_oculto_de_ordenes.hidden = true;
     }
@@ -108,7 +110,7 @@ export function crearCuadrOrdenes(id_etapa){
     let div_cuadro_orden = document.getElementById("cuadro-ordenes");
     let html_orden = '';
 
-    $.when($.ajax({
+    /*$.when($.ajax({
         type: "post",
         url: '/orden/obtener-orden-etapa/'+id_etapa, 
         data: {
@@ -166,7 +168,7 @@ export function crearCuadrOrdenes(id_etapa){
     error: function (error) {
         console.log(error);
     }
-    }));
+    }));*/
 }
 export function cargarModalVerEtapa(id_etapa){
     let input_etapa = document.getElementById("input-etapa");

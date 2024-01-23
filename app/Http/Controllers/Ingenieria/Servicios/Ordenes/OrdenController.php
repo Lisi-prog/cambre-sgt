@@ -510,6 +510,29 @@ class OrdenController extends Controller
         return $ordenes;
     }
 
+    public function obtenerOrdenesDeUnaEtapaTipo($id, $tipo){
+        $etapa = Etapa::find($id);
+        $ordenes = array();
+
+        foreach ($etapa->getOrden as $orden) {
+            if ($orden->getOrdenDe->getTipoOrden() == $tipo) {
+                array_push($ordenes, (object)[
+                    'etapa' => $etapa->descripcion_etapa,
+                    'id_orden' => $orden->id_orden,
+                    'orden' => $orden->nombre_orden,
+                    'tipo' => 'Orden de '.$orden->getOrdenDe->getNombreTipoOrden(),
+                    'estado' => $orden->getEstado(),
+                    'responsable' => $orden->getNombreResponsable(),
+                    'supervisor' => $orden->getSupervisor(),
+                    'fecha_limite' => Carbon::parse($orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '')->format('d-m-Y'),
+                    'fecha_finalizacion' => $orden->getFechaFinalizacion(),
+                    'numero_tipo' => $orden->getOrdenDe->getTipoOrden()
+                ]);
+            }   
+        }
+        return $ordenes;
+    }
+    
     public function ObtenerOrdenTrabajo($id){
         $orden_trabajo = Orden::find($id);
         $orden_trabajo_arr = array();
