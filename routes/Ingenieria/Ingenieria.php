@@ -45,7 +45,7 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     
     Route::post('/orden/obtener-estados-mecanizados',[OrdenController::class, 'obtenerEstadosMecanizados']);
     Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
-
+    Route::post('/orden/obtener-orden-etapa-tipo/{id}/{tipo}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapaTipo']);
     Route::post('/etapa/obtener-una-etapa/{id}',[EtapaController::class, 'obtenerUnaEtapa']);
     Route::post('etapa/actualizar-etapa',[EtapaController::class, 'actualizarEtapa'])->name('etapa.actualizar');
     
@@ -56,6 +56,7 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     Route::get('orden/partes/{id}', [ParteController::class, 'indexOrden'])->name('orden.partes');
     Route::post('maquinaria/obtener/{id}', [MaquinariaController::class, 'obtenerMaquinaria']);
 
+    Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
     Route::post('orden/editar', [OrdenController::class, 'editarOrden'])->name('orden.editar');
     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
     // VISTAS DE ORDENES

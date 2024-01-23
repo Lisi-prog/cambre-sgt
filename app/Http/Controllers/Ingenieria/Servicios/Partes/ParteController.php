@@ -180,4 +180,27 @@ class ParteController extends Controller
         
     }
     
+    public function obtenerPartesDeUnaOrden($id)
+    {
+        $orden = Orden::find($id);
+        $partes_arr = array();
+
+        foreach ($orden->getPartes as $parte) {
+            array_push($partes_arr, (object)[
+                'id_parte' => $parte->id_parte,
+                'observaciones' => $parte->observaciones,
+                'estado' => $parte->getParteDe->getNombreEstado(),
+                'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+                'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
+                'fecha_limite' => Carbon::parse($parte->fecha_limite)->format('d-m-Y'),
+                'horas' => Carbon::parse($parte->horas)->format('H:s'),
+                'supervisor' => $parte->getOrden->getSupervisor(),
+                'orden' => $orden->nombre_orden,
+                'etapa' => $orden->getEtapa->descripcion_etapa,
+                'estado_orden' => $orden->getEstado()
+                ]);
+        }
+
+        return $partes_arr;
+    }
 }

@@ -5,7 +5,7 @@ CREATE TABLE `prioridad_solicitud` (
 );
 
 CREATE TABLE `estado_solicitud` (
-  `id_estado_solicitud` int NOT NULL AUTO_INCREMENT,
+  `id_estado_solicitud` int NOT NULL,
   `nombre_estado_solicitud` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_estado_solicitud`)
 );
@@ -105,26 +105,20 @@ CREATE TABLE `tipo_proyecto` (
   PRIMARY KEY (`id_tipo_proyecto`)
 );
 
--- CREATE TABLE `prioridad` (
---  `id_prioridad` int NOT NULL AUTO_INCREMENT,
---  `nombre_prioridad` varchar(50) DEFAULT NULL,
---  PRIMARY KEY (`id_prioridad`)
--- );
-
 CREATE TABLE `estado` (
-  `id_estado` int NOT NULL AUTO_INCREMENT,
+  `id_estado` int NOT NULL,
   `nombre_estado` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_estado`)
 );
 
 CREATE TABLE `estado_mecanizado` (
-  `id_estado_mecanizado` int NOT NULL AUTO_INCREMENT,
+  `id_estado_mecanizado` int NOT NULL,
   `nombre_estado_mecanizado` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_estado_mecanizado`)
 );
 
 CREATE TABLE `estado_manufactura` (
-  `id_estado_manufactura` int NOT NULL AUTO_INCREMENT,
+  `id_estado_manufactura` int NOT NULL,
   `nombre_estado_manufactura` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_estado_manufactura`)
 );
