@@ -100,10 +100,36 @@ export default
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
             <label for="observaciones" class="control-label" style="white-space: nowrap; ">Observaciones:</label> 
             <textarea id='input-observaciones' class="form-control" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh" readonly></textarea>
         </div>
+    </div> -->
+</div>
+<div class="row">
+        <label for="ultimo_parte" class="control-label" style="white-space: nowrap; ">Ultimo parte:</label>
+        <div class="col-3">
+            <div class="form-group">
+                <label for="fecha_ultimo_parte" class="control-label" style="white-space: nowrap; ">Fecha:</label>
+                <span class="obligatorio">*</span>
+                <input class="form-control" id="input-fecha_ultimo_parte" readonly="" name="fecha_ultimo_parte" type="text">
+            </div> 
+        </div>
+        <div class="col-9">
+            <div class="form-group">
+                <label for="observacion" class="control-label" style="white-space: nowrap; ">Observacion:</label>
+                <span class="obligatorio">*</span>
+                <input class="form-control" id="input-observacion" readonly="" name="observacion" type="text">
+            </div> 
+        </div>
+
+        <div class="col-4">
+            <div class="form-group">
+                <label for="supervisor" class="control-label" style="white-space: nowrap; ">Supervisor:</label>
+                <span class="obligatorio">*</span>
+                <input class="form-control" id="input-supervisor" readonly="" name="supervisor" type="text">
+            </div> 
+        </div> 
     </div>
-</div>`;
+`;

@@ -330,8 +330,10 @@ function cargarModalVerOrdenManufactura(id_orden){
     let input_fecha_fin = document.getElementById("input_fecha_fin");
     let input_estado_manufactura = document.getElementById("input-estado_manufactura");
     let input_ruta_plano = document.getElementById("input-ruta_plano");
-    let input_observaciones = document.getElementById("input-observaciones");
-
+    let input_fecha_ultimo_parte = document.getElementById("input-fecha_ultimo_parte");
+    let input_supervisor = document.getElementById("input-supervisor");
+    let input_observacion = document.getElementById("input-observacion");
+    
     $.when($.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id_orden, 
@@ -349,9 +351,11 @@ function cargarModalVerOrdenManufactura(id_orden){
             input_fecha_inicio.value = element.fecha_inicio;
             input_fecha_limite.value = element.fecha_limite;
             input_ruta_plano.value = element.ruta_plano;
-            input_observaciones.value = element.observaciones;
+            input_observacion.value = element.descripcion_ultimo_parte;
             input_fecha_fin.value = element.fecha_fin_real;
-            input_estado_manufactura.value = element.estado_manufactura;
+            input_estado_manufactura.value = element.estado;
+            input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
+            input_supervisor.value = element.supervisa;
         });
     },
     error: function (error) {
@@ -372,11 +376,13 @@ function cargarModalVerOrdenMecanizado(id_orden){
     let input_fecha_fin = document.getElementById("input_fecha_fin");
     let input_estado_mecanizado = document.getElementById("input-estado_mecanizado");
     let input_ruta_plano = document.getElementById("input-ruta_plano");
-    let input_observaciones = document.getElementById("input-observaciones");
+    let input_fecha_ultimo_parte = document.getElementById("input-fecha_ultimo_parte");
+    let input_supervisor = document.getElementById("input-supervisor");
+    let input_observacion = document.getElementById("input-observacion");
 
     $.when($.ajax({
         type: "post",
-        url: '/orden/obtener-una-orden-mecanizado-etapa/'+id_orden, 
+        url: '/orden/obtener-una-orden-etapa/'+id_orden, 
         data: {
             id_orden: id_orden,
         },
@@ -391,9 +397,11 @@ function cargarModalVerOrdenMecanizado(id_orden){
             input_fecha_inicio.value = element.fecha_inicio;
             input_fecha_limite.value = element.fecha_limite;
             input_ruta_plano.value = element.ruta_plano;
-            input_observaciones.value = element.observaciones;
+            input_observacion.value = element.descripcion_ultimo_parte;
             input_fecha_fin.value = element.fecha_fin_real;
-            input_estado_mecanizado.value = element.estado_mecanizado;
+            input_estado_mecanizado.value = element.estado;
+            input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
+            input_supervisor.value = element.supervisa;
         });
     },
     error: function (error) {
