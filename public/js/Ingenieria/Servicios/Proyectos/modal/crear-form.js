@@ -2,6 +2,7 @@ import opcion1 from './opcion-orden-trabajo.js';
 import opcion2 from './opcion-orden-manufactura.js';
 import opcion3 from './opcion-orden-mecanizado.js';
 import bodyModalOrdenTrabajo from './ver-orden-trabajo.js';
+import bodyModalOrdenManufactura from './ver-orden-manufactura.js';
 import bodyModalOrdenMecanizado from './ver-orden-mecanizado.js';
 
 let bandera = 1;
@@ -100,8 +101,6 @@ export function crearCuadrOrdenes(id_etapa){
 
     if ($('#cuadro_de_ordenes').is(":hidden")) {
         cuadro_oculto_de_ordenes.hidden = false;
-        let numero_etapa = document.getElementById("id_estapa");
-        numero_etapa.value = id_etapa;
     }else{
         cuadro_oculto_de_ordenes.hidden = true;
     }
@@ -110,7 +109,7 @@ export function crearCuadrOrdenes(id_etapa){
     let div_cuadro_orden = document.getElementById("cuadro-ordenes");
     let html_orden = '';
 
-    /*$.when($.ajax({
+    $.when($.ajax({
         type: "post",
         url: '/orden/obtener-orden-etapa/'+id_etapa, 
         data: {
@@ -168,7 +167,7 @@ export function crearCuadrOrdenes(id_etapa){
     error: function (error) {
         console.log(error);
     }
-    }));*/
+    }));
 }
 export function cargarModalVerEtapa(id_etapa){
     let input_etapa = document.getElementById("input-etapa");
@@ -214,7 +213,7 @@ export function cargarModalVerOrden(id_orden, tipo){
             break;
             
         case 2:
-            body_modal_ver_orden.innerHTML = bodyModalOrdenTrabajo;
+            body_modal_ver_orden.innerHTML = bodyModalOrdenManufactura;
             cargarModalVerOrdenManufactura(id_orden);
             break;
         case 3:
@@ -311,6 +310,48 @@ function cargarModalVerOrdenTrabajo(id_orden){
             input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
             input_observacion.value = element.descripcion_ultimo_parte;
             input_supervisor.value = element.supervisa;
+        });
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function cargarModalVerOrdenManufactura(id_orden){
+    let input_nombre = document.getElementById("input-nom_orden");
+    let input_revision = document.getElementById("input-revision");
+    let input_cantidad = document.getElementById("input-cantidad");
+    let input_responsable = document.getElementById("input-responsable");
+    let input_duracion_estimada = document.getElementById("input-duracion_estimada");
+    let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_fecha_inicio = document.getElementById("input-fec_inicio");
+    let input_fecha_limite = document.getElementById("input-fec_req");
+    let input_fecha_fin = document.getElementById("input_fecha_fin");
+    let input_estado_manufactura = document.getElementById("input-estado_manufactura");
+    let input_ruta_plano = document.getElementById("input-ruta_plano");
+    let input_observaciones = document.getElementById("input-observaciones");
+
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-una-orden-etapa/'+id_orden, 
+        data: {
+            id_orden: id_orden,
+        },
+    success: function (response) {
+        response.forEach(element => {
+            input_nombre.value = element.orden;
+            input_revision.value = element.revision;
+            input_cantidad.value = element.cantidad;
+            input_duracion_estimada.value = element.duracion_estimada;
+            input_duracion_real.value = element.duracion_real;
+            input_responsable.value = element.responsable;
+            input_fecha_inicio.value = element.fecha_inicio;
+            input_fecha_limite.value = element.fecha_limite;
+            input_ruta_plano.value = element.ruta_plano;
+            input_observaciones.value = element.observaciones;
+            input_fecha_fin.value = element.fecha_fin_real;
+            input_estado_manufactura.value = element.estado_manufactura;
         });
     },
     error: function (error) {
