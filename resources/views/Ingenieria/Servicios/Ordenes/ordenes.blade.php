@@ -58,7 +58,7 @@
                         <div class="row" id="demo" hidden>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                    {{-- <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 150px;">
                                             <div class="">
                                                 <label>Tipo orden:</label>
@@ -70,19 +70,19 @@
                                                 <label><input name="tipo" type="checkbox" value="Mantenimiento"> Mantenimiento </label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
                                                 <label>Supervisor:</label>
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($supervisores->sortBy('name') as $supervisor)
-                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->name}}"> {{$supervisor->name}}</label>
+                                                @foreach ($supervisores as $supervisor)
+                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}"> {{$supervisor->nombre_empleado}}</label>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -92,7 +92,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
                                                 <label>Responsable:</label>
                                             </div>
@@ -108,7 +108,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 150px;">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
                                                 <label>Estados:</label>
                                             </div>
@@ -121,7 +121,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -261,7 +265,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[6]) !== -1) {
+            if (positions.indexOf(searchData[5]) !== -1) {
                 return true;
             }
             
@@ -281,7 +285,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[7]) !== -1) {
+            if (offices.indexOf(searchData[6]) !== -1) {
                 return true;
             }
             
@@ -301,7 +305,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[5]) !== -1) {
+            if (offices.indexOf(searchData[4]) !== -1) {
                 return true;
             }
             
@@ -410,6 +414,12 @@
         }else{
             cuadro_filtro.hidden = true;
         }
+    }
+
+    function limpiarFiltro(){
+        $('input[type=checkbox]').prop("checked", false);
+        var table = $('#example').DataTable();
+        table.draw();
     }
 </script>
 

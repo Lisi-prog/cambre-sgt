@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('titulo', 'Partes de una orden')
 @section('content') 
     <section class="section">
         <div class="section-header d-flex">

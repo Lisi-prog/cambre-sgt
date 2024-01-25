@@ -105,7 +105,7 @@ class OrdenController extends Controller
 
         return $estados_arr;
     }
-    
+
     public function listarTodosLosEstadosDe($opcion){
         $estados_arr = array();
 
@@ -137,7 +137,7 @@ class OrdenController extends Controller
         }
         return $estados_arr;
     }
-
+    
     public function listaOrdenEmp(){
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first()->id_rol_empleado;
         $responsabilidades = Responsabilidad::where('id_rol_empleado', $rol_empleado)->where('id_empleado', Auth::user()->getEmpleado->id_empleado)->get();
@@ -344,13 +344,7 @@ class OrdenController extends Controller
                             'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
                             'id_orden' => $orden->id_orden
                         ]);
-        //responsabilidad de la creacion del parte:
-        $rol_empleado_parte = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-        $responsabilidad_parte = Responsabilidad::create([
-            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-            'id_rol_empleado' => $rol_empleado_parte->id_rol_empleado
-        ]);
-        
+
         $parte = Parte::create([
             'observaciones' => 'Generacion de orden de trabajo',
             'fecha' => $fecha_ini,
@@ -358,7 +352,7 @@ class OrdenController extends Controller
             'fecha_carga' => $fecha_carga,
             'horas' => '00:00',
             'id_orden' => $orden->id_orden,
-            'id_responsabilidad' => $responsabilidad_parte->id_responsabilidad
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);
 
         Parte_trabajo::create([
@@ -748,6 +742,18 @@ class OrdenController extends Controller
         return Estado_mecanizado::orderBy('nombre_estado_mecanizado')->get();
     }
 
+    /*public function obtenerSupervisores(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->get();
+        $supervisores_array = array();
+        foreach ($usuariosSupervisor as $userSupervisor) {
+           array_push($supervisores_array, (object)[
+                'name' => $userSupervisor->getEmpleado->nombre_empleado,
+                'id_empleado' => $userSupervisor->getEmpleado->id_empleado
+           ]);
+        }
+        return $this->array_sort($supervisores_array, 'name', SORT_ASC);
+    }*/
+
     public function obtenerSupervisores(){
         $usuariosSupervisor = User::role('SUPERVISOR')->get();
 
@@ -756,6 +762,40 @@ class OrdenController extends Controller
         }
 
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
+    }
+
+    function array_sort($array, $on, $order){
+        $new_array = array();
+        $sortable_array = array();
+
+        if (count($array) > 0) {
+            foreach ($array as $k => $v) {
+                if (is_array($v)) {
+                    foreach ($v as $k2 => $v2) {
+                        if ($k2 == $on) {
+                            $sortable_array[$k] = $v2;
+                        }
+                    }
+                } else {
+                    $sortable_array[$k] = $v;
+                }
+            }
+
+            switch ($order) {
+                case SORT_ASC:
+                    asort($sortable_array);
+                break;
+                case SORT_DESC:
+                    arsort($sortable_array);
+                break;
+            }
+
+            foreach ($sortable_array as $k => $v) {
+                $new_array[$k] = $array[$k];
+            }
+        }
+
+        return $new_array;
     }
 
     public function verMecanizados($id){

@@ -22,6 +22,7 @@ function changeTdColor() {
     //Colores de los distintos estado
     for (let i = 0; i < values.length; i++) { // iterate all thorugh td
         values[i].children[row_index_first].style.color = "#fff";
+        //Estados de ordenes de trabajo y mantenimiento
         if (values[i].children[row_index_first].innerHTML == "Cancelado") { // check if td has desired value
           values[i].children[row_index_first].style.backgroundColor = "#FF160B"; // if matches, change color
         }
@@ -49,8 +50,40 @@ function changeTdColor() {
         if (values[i].children[row_index_first].innerHTML == "Revisar") { // check if td has desired value
             values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
         }
+
         if (values[i].children[row_index_first].innerHTML == "Planos entregados") { // check if td has desired value
             values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Orden creada") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#FA7D0D"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Piezas en fabricacion") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#48F1D3"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Piezas listas") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#F9CB24"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Ajuste listo") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Ensamble listo") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#15B218"; // if matches, change color
+        }
+
+        if (values[i].children[row_index_first].innerHTML == "Material encargado") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#cbf032"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Material preparado") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#FA7D0D"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Mecanizado completo") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#48F1D3"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Pieza finalizada") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#F9CB24"; // if matches, change color
+        }
+        if (values[i].children[row_index_first].innerHTML == "Temple") { // check if td has desired value
+            values[i].children[row_index_first].style.backgroundColor = "#15B218"; // if matches, change color
         }
     }
     //--------------------------------

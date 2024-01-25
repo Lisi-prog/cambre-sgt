@@ -99,13 +99,13 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div class="row my-2">
+                                                {{-- <div class="row my-2">
                                                     <div class="col-12">
                                                         <button type="button" class="btn btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal">
                                                             parte
                                                         </button>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </td>
                                         </tr>
                                     @endforeach
