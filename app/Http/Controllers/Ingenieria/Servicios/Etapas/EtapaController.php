@@ -191,8 +191,8 @@ class EtapaController extends Controller
             'fecha_inicio' => $etapa->fecha_inicio,
             'fecha_limite' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_limite,
             'fecha_fin_real' => $etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____',
-            'duracion_estimada' => $this->calcularHorasEstimadas($etapa->getOrdenTrabajo),
-            'duracion_real' => '+late',
+            'duracion_estimada' => $this->calcularHorasEstimadas($etapa->getOrden),
+            'duracion_real' => $etapa->getCalculoHorasReales(),
             'fecha_ultima_actualizacion' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_carga,
         ];
         return $etapaEspecial;
@@ -232,12 +232,12 @@ class EtapaController extends Controller
     
     function calcularHorasEstimadas($ordenes)
     {
-        if($ordenes){
+        if(!is_null($ordenes)){
             $horas_estimadas = 0;
             $minutos_estimados = 0;
             foreach ($ordenes as $orden){
                 $horas_estimadas += strstr($orden->duracion_estimada, ':', true);
-                if (preg_match('/\-(.*?)\-/', $parte->horas, $minutosStr)) {
+                if (preg_match('/\:(.*?)\:/', $orden->duracion_estimada, $minutosStr)) {
                     $minutos_estimados += $minutosStr[1];
                 }
                 //$minutos_estimados += substr($orden->duracion_estimada, 3, 2);

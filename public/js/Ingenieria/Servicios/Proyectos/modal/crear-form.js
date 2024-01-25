@@ -342,6 +342,7 @@ function cargarModalVerOrdenManufactura(id_orden){
         },
     success: function (response) {
         response.forEach(element => {
+            console.log(element.cantidad);
             input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;

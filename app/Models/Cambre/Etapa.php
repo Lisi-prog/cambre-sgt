@@ -117,4 +117,37 @@ class Etapa extends Model
         }
         
     }
+
+    public function getCalculoHorasReales()
+    {
+        $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
+        if(!is_null($ordenes)){
+            $horas_reales = 0;
+            $minutos_reales = 0;
+            
+            foreach($ordenes as $orden){
+                $horas_reales += strstr($orden->getCalculoHorasReales(), ':', true);
+                
+                if (preg_match_all('/\:(.*?)\:/', $orden->getCalculoHorasReales(), $matches)) {
+                    $minutos_reales += $matches[1][0];
+                }
+
+                if($minutos_reales >= 60){
+                    $minutos_reales -= 60;
+                    $horas_reales += 1;
+                }
+            }
+            
+            if(strlen($horas_reales) < 2){
+                $horas_reales = '0'. $horas_reales;
+            }
+            if(strlen($minutos_reales) < 2){
+                $minutos_reales = '0'. $minutos_reales;
+            }
+            $duracion_real = $horas_reales . ':' . $minutos_reales;
+            return $duracion_real;
+        }else{
+            return '00:00';
+        }
+    }
 }

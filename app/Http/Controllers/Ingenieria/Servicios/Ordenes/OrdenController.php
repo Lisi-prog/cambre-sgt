@@ -585,6 +585,7 @@ class OrdenController extends Controller
                     'id_orden' => $orden_trabajo->id_orden,
                     'orden' => $orden_trabajo->nombre_orden,
                     'revision' => $orden_trabajo->getOrdenDe->revision,
+                    'cantidad' => $orden_trabajo->getOrdenDe->cantidad,
                     'ruta_plano' => $orden_trabajo->getOrdenDe->ruta_plano,
                     'id_estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstadoManufactura->id_estado_manufactura,
                     'estado' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstadoManufactura->nombre_estado_manufactura,

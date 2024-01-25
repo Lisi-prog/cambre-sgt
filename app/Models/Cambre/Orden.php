@@ -82,30 +82,30 @@ class Orden extends Model
     {
         $partes = Parte::where('id_orden', $this->id_orden)->get();
         if($partes){
-            $horas_estimadas = 0;
-            $minutos_estimados = 0;
+            $horas_reales = 0;
+            $minutos_reales = 0;
             
             foreach($partes as $parte){
-                $horas_estimadas += strstr($parte->horas, ':', true);
+                $horas_reales += strstr($parte->horas, ':', true);
                 
                 if (preg_match_all('/\:(.*?)\:/', $parte->horas, $matches)) {
-                    $minutos_estimados += $matches[1][0];
+                    $minutos_reales += $matches[1][0];
                 }
 
-                if($minutos_estimados >= 60){
-                    $minutos_estimados -= 60;
-                    $horas_estimadas += 1;
+                if($minutos_reales >= 60){
+                    $minutos_reales -= 60;
+                    $horas_reales += 1;
                 }
             }
             
-            if(strlen($horas_estimadas) < 2){
-                $horas_estimadas = '0'. $horas_estimadas;
+            if(strlen($horas_reales) < 2){
+                $horas_reales = '0'. $horas_reales;
             }
-            if(strlen($minutos_estimados) < 2){
-                $minutos_estimados = '0'. $minutos_estimados;
+            if(strlen($minutos_reales) < 2){
+                $minutos_reales = '0'. $minutos_reales;
             }
-            $duracion_estimada = $horas_estimadas . ':' . $minutos_estimados;
-            return $duracion_estimada;
+            $duracion_real = $horas_reales . ':' . $minutos_reales;
+            return $duracion_real;
         }else{
             return '00:00';
         }
