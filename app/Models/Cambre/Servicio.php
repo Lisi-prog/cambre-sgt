@@ -49,7 +49,7 @@ class Servicio extends Model
 
     public function getUltimaActualizacion()
     {
-        return $this->hasMany(Actualizacion_servicio::class, 'id_servicio')->first();
+        return $this->hasMany(Actualizacion_servicio::class, 'id_servicio')->orderByDesc('id_actualizacion_servicio')->first();
     }
 
     public function getEtapas()

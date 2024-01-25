@@ -147,12 +147,18 @@ class ProyectoController extends Controller
             'prioridad_servicio' => $prioridadMax
         ]);
 
+        $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $responsabilidad_act = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado_act->id_rol_empleado
+        ]);
+
         $actualizacionServicio = Actualizacion::create([
             'descripcion' => 'Creacion de proyecto.',
             'fecha_limite' => $fecha_req,
             'fecha_carga' => $fecha_carga,
             'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            'id_responsabilidad' => $responsabilidad_act->id_responsabilidad
         ]);
 
         $actualizacion_servicio = Actualizacion_servicio::create([
@@ -463,6 +469,7 @@ class ProyectoController extends Controller
         $this->validate($request, [
             'descripcion' => 'required',
             'id_estado' => 'required',
+            'lider' => 'required',
             'fecha_limite' => 'required'
         ]);
 
@@ -471,6 +478,8 @@ class ProyectoController extends Controller
         $id_estado = $request->input('id_estado');
 
         $fecha_limite = $request->input('fecha_limite');
+
+        $lider = $request->input('lider');
 
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
@@ -493,6 +502,14 @@ class ProyectoController extends Controller
             'id_actualizacion' => $actualizacion->id_actualizacion,
             'id_servicio' => $id
         ]);
+
+        //Actualizamos el lider del proyecto
+        $servicio = Servicio::where('id_servicio', $id)->first();
+        $responsable_proyecto = $servicio->getResponsabilidad;
+        if($responsable_proyecto->id_empleado != $lider){
+            $responsable_proyecto->id_empleado = $lider;
+            $responsable_proyecto->save();
+        }
         return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 }

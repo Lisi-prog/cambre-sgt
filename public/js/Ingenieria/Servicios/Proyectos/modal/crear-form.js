@@ -411,6 +411,15 @@ function cargarModalVerOrdenMecanizado(id_orden){
     }));
 }
 
+export function cargarModalNuevaActProyecto(actualizacion, responsabilidad_servicio){
+    console.log(actualizacion);
+    let input_fecha_limite = document.getElementById('fecha_limite');
+    input_fecha_limite.value = actualizacion.fecha_limite;
+    //OPCIONALES
+    document.querySelector('#id_estado') ? document.querySelector('#id_estado').value = actualizacion.id_estado : '';
+    document.querySelector('#cbx_lider') ? document.querySelector('#cbx_lider').value = responsabilidad_servicio.id_empleado : '';
+}
+
 function verOrdenTrabajo(id_orden){
     let div_cuadro_orden_trabajo = document.getElementById("cuadro-ordenes-trabajo");
     let html_odt = '';

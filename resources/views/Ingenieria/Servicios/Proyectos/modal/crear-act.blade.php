@@ -44,6 +44,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                        <div class="form-group">
+                            {!! Form::label('lider', "Lider:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <span class="obligatorio">*</span>
+                            {!! Form::select('lider', $empleados, null, [
+                                    'placeholder' => 'Seleccionar',
+                                    'class' => 'form-select form-group',
+                                    'required',
+                                    'id' => 'cbx_lider'
+                                ]) !!}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Guardar</button>

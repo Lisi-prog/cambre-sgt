@@ -133,7 +133,7 @@
                                     <h5 class="text-center">Actualizaciones proyecto</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActModal">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActModal" onclick="cargarModalNuevaActProyecto({{$proyecto->getUltimaActualizacion()->getActualizacion}}, {{$proyecto->getResponsabilidad}})">
                                         Nueva
                                     </button>
                                 </div>
@@ -399,10 +399,11 @@
         </div>
 
         <script type="module"> 
-            import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+            import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, cargarModalNuevaActProyecto} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
             window.crearCuadrOrdenes = crearCuadrOrdenes;
             window.cargarModalVerOrden = cargarModalVerOrden;
             window.obtenerPartes = obtenerPartes;
+            window.cargarModalNuevaActProyecto = cargarModalNuevaActProyecto;
         </script>
 
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
