@@ -312,7 +312,13 @@ class OrdenController extends Controller
                             'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
                             'id_orden' => $orden->id_orden
                         ]);
-
+        //responsabilidad de la creacion del parte:
+        $rol_empleado_parte = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $responsabilidad_parte = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado_parte->id_rol_empleado
+        ]);
+        
         $parte = Parte::create([
             'observaciones' => 'Generacion de orden de trabajo',
             'fecha' => $fecha_ini,
@@ -320,7 +326,7 @@ class OrdenController extends Controller
             'fecha_carga' => $fecha_carga,
             'horas' => '00:00',
             'id_orden' => $orden->id_orden,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            'id_responsabilidad' => $responsabilidad_parte->id_responsabilidad
         ]);
 
         Parte_trabajo::create([
