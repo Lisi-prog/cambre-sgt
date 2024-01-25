@@ -91,12 +91,18 @@ class EtapaController extends Controller
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
         ]);
 
+        $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $responsabilidad_act = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado_act->id_rol_empleado
+        ]);
+
         $actualizacionEtapa = Actualizacion::create([
             'descripcion' => 'Creacion de etapa.',
             'fecha_limite' => $fecha_ini,
             'fecha_carga' => $fecha_carga,
             'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            'id_responsabilidad' => $responsabilidad_act->id_responsabilidad
         ]);
 
         $actualizacion_etapa = Actualizacion_etapa::create([
