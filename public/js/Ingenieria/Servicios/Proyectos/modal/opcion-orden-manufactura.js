@@ -18,7 +18,7 @@ export default
     </div> 
 </div> 
 <div class="row"> 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
         <div class="form-group">
             <div class="form-group"> 
                 <label for="revision" class="control-label fs-7" style="white-space: nowrap;">Revision:</label> 
@@ -27,7 +27,7 @@ export default
             </div> 
         </div> 
     </div>
-    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
         <div class="form-group">
             <div class="form-group"> 
                 <label for="cantidad" class="control-label fs-7" style="white-space: nowrap;">Cantidad:</label> 
@@ -35,7 +35,7 @@ export default
                 <input class="form-control" name="cantidad" type="number" id="cantidad" required> 
             </div> 
         </div> 
-    </div>  -->
+    </div> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
         <div class="form-group"> 
             <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
@@ -94,12 +94,12 @@ export default
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
             <label for="observaciones" class="control-label" style="white-space: nowrap; ">Observaciones:</label> 
             <textarea id='observaciones' class="form-control" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh" required></textarea>
         </div>
-    </div>
+    </div> -->
 </div>`;
     
     

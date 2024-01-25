@@ -204,6 +204,8 @@ class OrdenController extends Controller
                     'minutos_estimados' => 'required',
                     'responsable' => 'required',
                     'supervisor' => 'required',
+                    'revision' => 'required',
+                    'cantidad' => 'required',
                     'fecha_ini' => 'required',
                     'estado_manufactura' => 'required',
                     'fecha_req' => 'required',
@@ -215,6 +217,8 @@ class OrdenController extends Controller
                     'minutos_estimados.required' => 'Faltan los minutos estimados.',
                     'responsable.required' => 'Seleccione un responsable',
                     'supervisor.required' => 'Seleccione un supervisor',
+                    'revision.required' => 'Falta el numero de revision',
+                    'cantidad.required' => 'Falta la cantidad',
                     'fecha_ini.required' => 'Seleccione una fecha de inicio.',
                     'estado_manufactura.required' => 'Seleccione una etapa.',
                     'fecha_req.required' => 'Seleccione una fecha limite.',
@@ -329,14 +333,14 @@ class OrdenController extends Controller
         $id_etapa = $request->input('num_etapa');
         $nombre_orden = $request->input('nom_orden');
         $revision = $request->input('revision');
-        //$cantidad = $request->input('cantidad');
+        $cantidad = $request->input('cantidad');
         $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
         $id_responsable = $request->input('responsable');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $id_estado_man = $request->input('estado_manufactura');
         $ruta_plano = $request->input('ruta_plano');
-        $observaciones = $request->input('observaciones');
+        //$observaciones = $request->input('observaciones');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
@@ -371,7 +375,7 @@ class OrdenController extends Controller
 
         Orden_manufactura::create([
             'revision' => $revision,
-            //'cantidad' => $cantidad,
+            'cantidad' => $cantidad,
             'ruta_plano' => $ruta_plano,
             'id_orden' => $orden->id_orden
         ]);
@@ -404,7 +408,7 @@ class OrdenController extends Controller
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $id_estado_mec = $request->input('estado_mecanizado');
         $ruta_plano = $request->input('ruta_plano');
-        $observaciones = $request->input('observaciones');
+        //$observaciones = $request->input('observaciones');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
@@ -638,7 +642,7 @@ class OrdenController extends Controller
             'revision' => $orden_mecanizado->getOrdenDe->revision,
             'cantidad' => $orden_mecanizado->getOrdenDe->cantidad,
             'ruta_plano' => $orden_mecanizado->getOrdenDe->ruta_pieza,
-            'observaciones' => $orden_mecanizado->observaciones,
+            //'observaciones' => $orden_mecanizado->observaciones,
             'estado_mecanizado' => $orden_mecanizado->getEstado(),
             'responsable' => $orden_mecanizado->getNombreResponsable(),
             'fecha_inicio' => Carbon::parse($orden_mecanizado->fecha_inicio)->format('d-m-Y'),
