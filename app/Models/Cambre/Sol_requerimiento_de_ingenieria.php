@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Requerimiento_de_ingenieria extends Model
+class Sol_requerimiento_de_ingenieria extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'requerimiento_de_ingenieria';
+    protected $table = 'sol_requerimiento_de_ingenieria';
 
     protected $primaryKey = 'id_requerimiento_de_ingenieria';
 
@@ -20,18 +20,12 @@ class Requerimiento_de_ingenieria extends Model
 
     protected $fillable = [ 
         'id_solicitud',
-        'id_empleado',
         'id_sector'
     ];
 
     public function getSolicitud()
     {
-        return $this->hasOne(Solicitud::class, 'id_solicitud');
-    }
-
-    public function getEmpleado()
-    {
-        return $this->belongsTo(Empleado::class, 'id_empleado');
+        return $this->belongsTo(Sol_solicitud::class, 'id_solicitud');
     }
 
     public function getSector()

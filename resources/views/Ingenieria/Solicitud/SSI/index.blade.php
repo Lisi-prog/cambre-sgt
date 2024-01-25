@@ -13,7 +13,9 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
-                {{-- BOTON --}}
+                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearSSIModal">
+                    Nuevo   
+                </button>
             </div>
         </div>
     </div>
@@ -21,51 +23,74 @@
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {{-- <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Rol" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-
                 <div class="card">
                     <div class="card-body">
-                        <!-- Centramos la paginacion a la derecha -->
-                        {{-- <div class="pagination justify-content-end">
-                                {!! $CategoriasLaborales->links() !!}
-                        </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
+                                    <th class='text-center' style="color:#fff;">Fecha</th>
                                     <th class='ml-3 text-center' style="color:#fff;">Codigo</th>
-                                    <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Lider</th>
-                                    <th class='text-center' style="color:#fff;">Tipo Servicio</th>
-                                    <th class='text-center' style="color:#fff;">Tipo proyecto</th>
-                                    <th class='text-center' style="color:#fff;">Fecha inicio</th>
-                                    <th class='text-center' style="color:#fff;">Fecha limite</th>
+                                    <th class='text-center' style="color:#fff;">Empleado</th>
+                                    <th class='text-center' style="color:#fff;">Sector</th>
+                                    <th class='text-center' style="color:#fff;">Descripcion</th>
+                                    <th class='text-center' style="color:#fff;">Fecha requerida</th>
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
-                                    
+                                    @php
+                                        $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado')
+                                    @endphp
+                                    @foreach ($listaSSI as $Ssi)
+                                        <tr>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('d-m-Y H:i')}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->id_solicitud ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getEmpleado->nombre_empleado ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSector->nombre_sector ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->descripcion_solicitud ?? '-'}}</td>
+
+                                            @if (is_null($Ssi->getSolicitud->fecha_requerida))
+                                                <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
+                                            @else
+                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('d-m-Y')}}</td>
+                                            @endif
+                                            
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
+
+                                            <td>
+                                                <div class="row my-2">
+                                                    <div class="col-12">
+                                                        @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                            {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        @else
+                                                            @hasrole('SUPERVISOR')
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            @endhasrole
+                                                        @endif
+                                                    </div>
+                                                </div> 
+                                                <div class="row my-2">
+                                                    <div class="col-12">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -75,6 +100,7 @@
         </div>
     </div>
 </section>
+@include('Ingenieria.Solicitud.SSI.modal.m-crear')
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
 {{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}

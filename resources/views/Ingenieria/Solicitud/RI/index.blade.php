@@ -48,15 +48,15 @@
 
                                     @foreach ($ListaRI as $Ri)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_carga)->format('d-m-Y H:i:s')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_carga)->format('d-m-Y H:i')}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->id_solicitud}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->id_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getEmpleado->nombre_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getEmpleado->nombre_empleado ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSector->nombre_sector}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSector->nombre_sector ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->descripcion_solicitud}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->descripcion_solicitud ?? '-'}}</td>
 
                                             @if (is_null($Ri->getSolicitud->fecha_requerida))
                                             <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
@@ -65,9 +65,9 @@
                                             @endif
                                             
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
 
                                             <td>
                                                 <div class="row my-2">
@@ -79,7 +79,7 @@
                                                         @else
                                                             @hasrole('SUPERVISOR')
                                                                 {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Evaluar', ['class' => 'btn btn-warning w-100']) !!}
+                                                                {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
                                                                 {!! Form::close() !!}
                                                             @endhasrole
                                                         @endif
@@ -88,7 +88,7 @@
                                                 <div class="row my-2">
                                                     <div class="col-12">
                                                         {!! Form::open(['method' => 'GET', 'route' => ['r_i.edit', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-danger w-100']) !!}
+                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
                                                 </div>

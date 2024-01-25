@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Servicio_de_mantenimiento extends Model
+class Sol_servicio_de_mantenimiento extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'servicio_de_mantenimiento';
+    protected $table = 'sol_servicio_de_mantenimiento';
 
     protected $primaryKey = 'id_servicio_de_mantenimiento';
 
@@ -24,8 +24,8 @@ class Servicio_de_mantenimiento extends Model
         'id_activo'
     ];
 
-    public function getProyectos()
+    public function getSolicitud()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Sol_solicitud::class, 'id_solicitud');
     }
 }

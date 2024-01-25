@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Propuesta_de_mejora extends Model
+class Sol_propuesta_de_mejora extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'propuesta_de_mejora';
+    protected $table = 'sol_propuesta_de_mejora';
 
     protected $primaryKey = 'id_propuesta_de_mejora';
 
@@ -20,6 +20,7 @@ class Propuesta_de_mejora extends Model
 
     protected $fillable = [ 
         'nombre_emisor',
+        'id_solicitud',
         'id_responsabilidad',
         'id_sector',
         'id_activo',
@@ -29,13 +30,12 @@ class Propuesta_de_mejora extends Model
         'analisis_propuesta',
         'beneficio_propuesta',
         'problema_propuesta',
-        'evaluacion_propuesta',
-        'fecha_carga'
+        'evaluacion_propuesta'
     ];
 
     public function getSolicitud()
     {
-        return $this->hasOne(Solicitud::class, 'id_solicitud');
+        return $this->belongsTo(Sol_solicitud::class, 'id_solicitud');
     }
     
     public function getEmpleado()
@@ -56,10 +56,5 @@ class Propuesta_de_mejora extends Model
     public function getActivo()
     {
         return $this->belongsTo(Activo::class, 'id_activo');
-    }
-
-    public function getProyectos()
-    {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
     }
 }

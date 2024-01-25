@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('titulo', 'Agregar mecanizado')
 @section('content')
 <style>
      .tableFixHead {

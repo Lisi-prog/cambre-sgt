@@ -19,25 +19,25 @@
                     <i class="fas fa-home"></i><span>Herramientas</span>
                 </a>
                 
-                <ul class="dropdown-menu borde-menu" style="display: none;">
+                <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
                     <li class="dropdown-title pt-3">
                         Herramientas
                     </li>
                 
-                    <li>
+                    {{-- <li>
                         <a class="nav-link" href="" title="Logs-app">
                             <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Logs-app</span>
                         </a>
-                    </li>
+                    </li> --}}
             
-                    <li>
+                    {{-- <li>
                         <a class="nav-link" href="" title="Logs-audit">
                             <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Logs-audit</span>
                         </a>
-                    </li>
+                    </li> --}}
                     
                     <li>
-                        <a class="nav-link" href="" title="PHPinfo">
+                        <a class="nav-link" href="{{route('phpmyinfo')}}" title="PHPinfo">
                             <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>PHPinfo</span>
                         </a>
                     </li>

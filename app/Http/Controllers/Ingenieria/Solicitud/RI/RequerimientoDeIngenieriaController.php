@@ -14,10 +14,10 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 
-use App\Models\Cambre\Prioridad_solicitud;
-use App\Models\Cambre\Estado_solicitud;
-use App\Models\Cambre\Solicitud;
-use App\Models\Cambre\Requerimiento_de_ingenieria;
+use App\Models\Cambre\Sol_prioridad_solicitud;
+use App\Models\Cambre\Sol_estado_solicitud;
+use App\Models\Cambre\Sol_solicitud;
+use App\Models\Cambre\Sol_requerimiento_de_ingenieria;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Servicio;
@@ -27,7 +27,7 @@ class RequerimientoDeIngenieriaController extends Controller
 {
     function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         //  $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
         //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
@@ -37,8 +37,8 @@ class RequerimientoDeIngenieriaController extends Controller
     public function index(Request $request)
     {        
         //$permisos = Permission::orderBy('name', 'asc')->get();
-        $ListaRI = Requerimiento_de_ingenieria::get();
-        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        $ListaRI = Sol_requerimiento_de_ingenieria::get();
+        $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         return view('Ingenieria.Solicitud.RI.index', compact('ListaRI', 'Prioridades'));
     }
 
@@ -66,10 +66,10 @@ class RequerimientoDeIngenieriaController extends Controller
         $prioridad = $request->input('id_prioridad');
         $fecha_requerida = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-        $estado = Estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
+        $estado = Sol_estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
    
         
-        $Solicitud = Solicitud::create([
+        $Solicitud = Sol_solicitud::create([
             'id_prioridad_solicitud' => $prioridad,
             'id_estado_solicitud' => $estado,
             'nombre_solicitante' => $nombre,
@@ -84,12 +84,13 @@ class RequerimientoDeIngenieriaController extends Controller
             ]);
         }
 
-        $Req_ing = Requerimiento_de_ingenieria::create([
+        $Req_ing = Sol_requerimiento_de_ingenieria::create([
             'id_solicitud' => $Solicitud->id_solicitud,
             'id_empleado' => 1,
             'id_sector' => $sector
         ]);
 
+        return redirect()->back()->with('mensaje','Se creo el requerimiento de ingenieria con exito.');
         //return $Solicitud;
         //$permisos = Permission::orderBy('name', 'asc')->get();
         //$Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
@@ -99,7 +100,7 @@ class RequerimientoDeIngenieriaController extends Controller
     }
     
     public function evaluar($id){
-        $Req_ing = Requerimiento_de_ingenieria::find($id);
+        $Req_ing = Sol_requerimiento_de_ingenieria::find($id);
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         
         $supervisores_user = User::role('SUPERVISOR')->get();
@@ -115,7 +116,6 @@ class RequerimientoDeIngenieriaController extends Controller
 
     public function aceptar(Request $request, $id){
 
-        return $request;
         $this->validate($request, [
             'codigo_proyecto' => 'required',
             'nombre_proyecto' => 'required',
@@ -200,12 +200,11 @@ class RequerimientoDeIngenieriaController extends Controller
         return $this->index();
     }
 
-    public function buscarPermisos(Request $request)
-    {        
-         //Con paginación
-         $permisos = Permission::get();
-         return view('Coordinacion.Informatica.GestionUsuarios.permisos.index',compact('permisos'));
-         //al usar esta paginacion, recordar poner en el el index.blade.php este codigo  {!! $roles->links() !!} 
+    public function rechazar($id){
+        $solicitud = Sol_solicitud::find($id);
+        $solicitud->id_estado_solicitud = 3;
+        $solicitud->save();
+        return redirect()->route('r_i.index')->with('mensaje', 'Solicitud de requerimiento de ingenieria rechazada con exito.');  
     }
 
     public function create()
@@ -216,7 +215,7 @@ class RequerimientoDeIngenieriaController extends Controller
 
     public function store(Request $request)
     {
-        // return Auth::user()->getEmpleado;
+    
         $this->validate($request, [
             'id_prioridad' => 'required',
             'descripcion' => 'required|string|max:500'
@@ -233,16 +232,17 @@ class RequerimientoDeIngenieriaController extends Controller
         }
         
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-        $estado = Estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
+        $estado = Sol_estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
    
         
-        $Solicitud = Solicitud::create([
+        $Solicitud = Sol_solicitud::create([
             'id_prioridad_solicitud' => $prioridad,
             'id_estado_solicitud' => $estado,
             'nombre_solicitante' => $nombre,
             'descripcion_solicitud' => $descrip,
             'fecha_carga' => $fecha_carga,
-            'fecha_requerida' => $fecha_requerida
+            'fecha_requerida' => $fecha_requerida,
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado
         ]);
 
         if($request->input('descripcion_urgencia')){
@@ -251,7 +251,7 @@ class RequerimientoDeIngenieriaController extends Controller
             ]);
         }
 
-        $Req_ing = Requerimiento_de_ingenieria::create([
+        $Req_ing = Sol_requerimiento_de_ingenieria::create([
             'id_solicitud' => $Solicitud->id_solicitud,
             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
             'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
@@ -262,20 +262,20 @@ class RequerimientoDeIngenieriaController extends Controller
     
     public function show($id)
     {
-        $Req_ing = Requerimiento_de_ingenieria::find($id);
+        $Req_ing = Sol_requerimiento_de_ingenieria::find($id);
         return view('Ingenieria.Solicitud.RI.show', compact('Req_ing'));
     }
     
     public function edit($id)
     {
-        $Req_ing = Requerimiento_de_ingenieria::find($id);
+        $Req_ing = Sol_requerimiento_de_ingenieria::find($id);
     
         return view('Ingenieria.Solicitud.RI.editar', compact('Req_ing'));
     }
     
     public function update(Request $request, $id)
     {
-        $solicitud = Solicitud::find($id);
+        $solicitud = Sol_solicitud::find($id);
 
         $solicitud->update([
             'fecha_requerida' => $request->input('fecha_req'),
@@ -298,9 +298,5 @@ class RequerimientoDeIngenieriaController extends Controller
         Permission::destroy($id);
 
         return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
-    }
-
-    public function buscarpermisospornombre($nombre){
-        return Permission::where('name', 'like', '%'.$nombre.'%')->get();
     }
 }

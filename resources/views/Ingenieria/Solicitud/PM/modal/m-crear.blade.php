@@ -10,14 +10,14 @@
             <div class="modal-body">
                 {!! Form::open(['route' => 'p_m.store', 'method' => 'POST', 'class' => 'formulario']) !!}
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="form-group">
                             {!! Form::label('titulo-propuesta', 'Titulo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('titulo-propuesta', null, ['class' => 'form-control']) !!}
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('nombre_emisor', 'Emisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
@@ -26,9 +26,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>

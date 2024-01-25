@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Estado_solicitud extends Model
+class Sol_estado_solicitud extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'estado_solicitud';
+    protected $table = 'sol_estado_solicitud';
 
     protected $primaryKey = 'id_estado_solicitud';
 
@@ -24,6 +24,6 @@ class Estado_solicitud extends Model
 
     public function getSolicitud()
     {
-        return $this->hasMany(Solicitud::class, 'id_estado_solicitud');
+        return $this->hasMany(Sol_solicitud::class, 'id_estado_solicitud');
     }
 }

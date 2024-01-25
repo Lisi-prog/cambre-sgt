@@ -14,10 +14,10 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 
-use App\Models\Cambre\Prioridad_solicitud;
-use App\Models\Cambre\Estado_solicitud;
-use App\Models\Cambre\Solicitud;
-use App\Models\Cambre\Requerimiento_de_ingenieria;
+use App\Models\Cambre\sol_prioridad_solicitud;
+use App\Models\Cambre\sol_estado_solicitud;
+use App\Models\Cambre\Sol_solicitud;
+use App\Models\Cambre\Sol_requerimiento_de_ingenieria;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Servicio;
@@ -85,7 +85,7 @@ class ProyectoController extends Controller
     public function create()
     {
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
 
         $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
@@ -272,9 +272,9 @@ class ProyectoController extends Controller
             'prioridad.required' => 'Se necesita la prioridad'
         ]);
 
-        $id_estado_solicitud = Estado_solicitud::where('nombre_estado_solicitud', 'aceptado')->first()->id_estado_solicitud;
+        $id_estado_solicitud = Sol_estado_solicitud::where('nombre_estado_solicitud', 'aceptado')->first()->id_estado_solicitud;
 
-        $solicitud = Solicitud::find($id);
+        $solicitud = Sol_solicitud::find($id);
 
         $solicitud->update([
             'id_estado_solicitud' => $id_estado_solicitud

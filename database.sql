@@ -1,16 +1,16 @@
-CREATE TABLE `prioridad_solicitud` (
+CREATE TABLE `sol_prioridad_solicitud` (
   `id_prioridad_solicitud` int NOT NULL AUTO_INCREMENT,
   `nombre_prioridad_solicitud` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_prioridad_solicitud`)
 );
 
-CREATE TABLE `estado_solicitud` (
+CREATE TABLE `sol_estado_solicitud` (
   `id_estado_solicitud` int NOT NULL,
   `nombre_estado_solicitud` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_estado_solicitud`)
 );
 
-CREATE TABLE `solicitud` (
+CREATE TABLE `sol_solicitud` (
   `id_solicitud` int NOT NULL AUTO_INCREMENT,
   `id_prioridad_solicitud` int,
   `id_estado_solicitud` int,
@@ -20,10 +20,11 @@ CREATE TABLE `solicitud` (
   `fecha_requerida` date,
   `descripcion_urgencia` varchar(500) DEFAULT NULL,
   `id_servicio` int,
+  `id_empleado` int,
   PRIMARY KEY (`id_solicitud`)
 );
 
-CREATE TABLE `servicio_requerido` (
+CREATE TABLE `sol_servicio_requerido` (
   `id_servicio_requerido` int NOT NULL AUTO_INCREMENT,
   `nombre_servicio_requerido` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_servicio_requerido`)
@@ -36,12 +37,13 @@ CREATE TABLE `activo` (
   PRIMARY KEY (`id_activo`)
 );
 
-CREATE TABLE `servicio_de_mantenimiento` (
+CREATE TABLE `sol_servicio_de_mantenimiento` (
   `id_servicio_de_mantenimiento` int NOT NULL AUTO_INCREMENT,
   `id_solicitud` int,
   `id_servicio_requerido` int,
   `id_activo` int,
-  PRIMARY KEY (`id_servicio_de_mantenimiento`)
+  PRIMARY KEY (`id_servicio_de_mantenimiento`),
+  CONSTRAINT `pk_id_serv_de_man_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );
 
 CREATE TABLE `sector` (
@@ -50,25 +52,26 @@ CREATE TABLE `sector` (
   PRIMARY KEY (`id_sector`)
 );
 
-CREATE TABLE `servicio_de_ingenieria` (
+CREATE TABLE `sol_servicio_de_ingenieria` (
   `id_servicio_de_ingenieria` int NOT NULL AUTO_INCREMENT,
   `id_solicitud` int,
-  `id_empleado` int,
   `id_sector` int,
   `id_activo` int,
-  PRIMARY KEY (`id_servicio_de_ingenieria`)
+  PRIMARY KEY (`id_servicio_de_ingenieria`),
+  CONSTRAINT `pk_id_serv_de_ing_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );
 
-CREATE TABLE `requerimiento_de_ingenieria` (
+CREATE TABLE `sol_requerimiento_de_ingenieria` (
   `id_requerimiento_de_ingenieria` int NOT NULL AUTO_INCREMENT,
   `id_solicitud` int,
-  `id_empleado` int,
   `id_sector` int,
-  PRIMARY KEY (`id_requerimiento_de_ingenieria`)
+  PRIMARY KEY (`id_requerimiento_de_ingenieria`),
+  CONSTRAINT `pk_id_req_de_ing_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );
 
-CREATE TABLE `propuesta_de_mejora` (
+CREATE TABLE `sol_propuesta_de_mejora` (
   `id_propuesta_de_mejora` int NOT NULL AUTO_INCREMENT,
+  `id_solicitud` int,
   `nombre_emisor` varchar(100),
   `id_responsabilidad` int,
   `id_sector` int,
@@ -80,8 +83,8 @@ CREATE TABLE `propuesta_de_mejora` (
   `beneficio_propuesta` varchar(500) DEFAULT NULL,
   `problema_propuesta` varchar(500) DEFAULT NULL,
   `evaluacion_propuesta` varchar(500) DEFAULT NULL,
-  `fecha_carga` datetime,
-  PRIMARY KEY (`id_propuesta_de_mejora`)
+  PRIMARY KEY (`id_propuesta_de_mejora`),
+  CONSTRAINT `pk_id_prop_de_mejora_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );
 -- --------------------------------------------------
 
@@ -427,17 +430,17 @@ VALUES
     ('Calidad'),
     ('Mantenimiento');
 
-INSERT INTO prioridad_solicitud (nombre_prioridad_solicitud)
+INSERT INTO sol_prioridad_solicitud (nombre_prioridad_solicitud)
 VALUES
     ('Baja'),
     ('Programable'),
     ('Urgente');
 
-INSERT INTO estado_solicitud (nombre_estado_solicitud)
+INSERT INTO sol_estado_solicitud (id_estado_solicitud, nombre_estado_solicitud)
 VALUES
-    ('En espera'),
-    ('Aceptado'),
-    ('Rechazado');
+    (1, 'En espera'),
+    (2, 'Aceptado'),
+    (3, 'Rechazado');
 
 INSERT INTO puesto_empleado (titulo_puesto_empleado, costo_hora)
 VALUES

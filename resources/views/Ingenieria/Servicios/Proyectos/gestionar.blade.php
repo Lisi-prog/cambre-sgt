@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('titulo', 'Gestionar')
 @section('content')
 <style>
      .tableFixHead {

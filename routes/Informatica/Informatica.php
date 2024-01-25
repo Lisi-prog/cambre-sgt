@@ -21,6 +21,9 @@ use App\Http\Controllers\Informatica\PuestoEmpleadoController;
     Route::resource('puesto_empleado', PuestoEmpleadoController::class);
 // });
 
+Route::get('phpmyinfo', function () {
+                            phpinfo(); 
+                                })->name('phpmyinfo');
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-ROLES']], function () {
 //     Route::resource('roles', RolController::class)
 // });
