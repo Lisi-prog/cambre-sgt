@@ -14,8 +14,8 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 
-use App\Models\Cambre\sol_prioridad_solicitud;
-use App\Models\Cambre\sol_estado_solicitud;
+use App\Models\Cambre\Sol_prioridad_solicitud;
+use App\Models\Cambre\Sol_estado_solicitud;
 use App\Models\Cambre\Sol_solicitud;
 use App\Models\Cambre\Sol_requerimiento_de_ingenieria;
 use App\Models\Cambre\Sector;

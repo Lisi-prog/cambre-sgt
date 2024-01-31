@@ -181,13 +181,12 @@ CREATE TABLE `maquinaria` (
   `codigo_maquinaria` varchar(50) DEFAULT NULL,
   `alias_maquinaria` varchar(50) DEFAULT NULL,
   `descripcion_maquinaria` varchar(300),
-  `id_sector` int
+  `id_sector` int,
   PRIMARY KEY (`id_maquinaria`)
 );
 
 CREATE TABLE `etapa` (
   `id_etapa` int NOT NULL AUTO_INCREMENT,
-  `nombre_etapa` varchar(50) DEFAULT NULL,
   `descripcion_etapa` varchar(50) DEFAULT NULL,
   `fecha_inicio` date,
   `id_servicio` int,
@@ -493,38 +492,38 @@ VALUES
 --  ('Media'),
 --  ('Alta');
 
-INSERT INTO estado(nombre_estado)
+INSERT INTO estado(id_estado, nombre_estado)
 VALUES
-  ('Cancelado'),
-  ('Completo'),
-  ('Continua'),
-  ('En proceso'),
-  ('Externo'),
-  ('Espera'),
-  ('Revisar'),
-  ('Pausa'),
-  ('Problema');
+  (1, 'Cancelado'),
+  (2, 'Completo'),
+  (3, 'Continua'),
+  (4, 'En proceso'),
+  (5, 'Externo'),
+  (6, 'Espera'),
+  (7, 'Revisar'),
+  (8, 'Pausa'),
+  (9, 'Problema');
 
-INSERT INTO estado_mecanizado(nombre_estado_mecanizado)
+INSERT INTO estado_mecanizado(id_estado_mecanizado, nombre_estado_mecanizado)
 VALUES
-  ('Cancelado'),
-  ('Material encargado'),
-  ('Material preparado'),
-  ('Mecanizado completo'),
-  ('Pieza finalizada'),
-  ('Planos entregados'),
-  ('Temple');
+  (1, 'Cancelado'),
+  (2, 'Material encargado'),
+  (3, 'Material preparado'),
+  (4, 'Mecanizado completo'),
+  (5, 'Pieza finalizada'),
+  (6, 'Planos entregados'),
+  (7, 'Temple');
 
-INSERT INTO estado_manufactura(nombre_estado_manufactura)
+INSERT INTO estado_manufactura(id_estado_manufactura, nombre_estado_manufactura)
 VALUES
-  ('Cancelado'),
-  ('Orden creada'),
-  ('Piezas en fabricacion'),
-  ('Piezas listas'),
-  ('Ajuste listo'),
-  ('Ensamble listo');
+  (1, 'Cancelado'),
+  (2, 'Orden creada'),
+  (3, 'Piezas en fabricacion'),
+  (4, 'Piezas listas'),
+  (5, 'Ajuste listo'),
+  (6, 'Ensamble listo');
 
-INSERT INTO tipo_relacion_gantt(nombre__relacion_gantt)
+INSERT INTO tipo_relacion_gantt(nombre_relacion_gantt)
 VALUES
   ('inicio - inicio'),
   ('inicio - fin'),
