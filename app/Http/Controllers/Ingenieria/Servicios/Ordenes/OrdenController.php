@@ -751,9 +751,17 @@ class OrdenController extends Controller
     public function obtenerSupervisores(){
         $usuariosSupervisor = User::role('SUPERVISOR')->get();
 
-        foreach ($usuariosSupervisor as $userSupervisor) {
-            $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado;   
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
         }
+        
 
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
     }
@@ -859,7 +867,7 @@ class OrdenController extends Controller
                 break;
         }
         
-        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo'));
+        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden'));
     }
 
     public function editarOrden(Request $request){

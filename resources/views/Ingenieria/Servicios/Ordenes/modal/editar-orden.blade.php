@@ -23,7 +23,7 @@
                                     'required'=> 'required',
                                     'hidden' => false
                                 ]) !!} --}}
-                            {!! Form::text('id_orden', $orden->id_orden, [
+                            {!! Form::text('id_orden', null, [
                                 'class' => 'form-control',
                                 'id' => 'id_orden',
                                 'required'=> 'required',
@@ -36,7 +36,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('etapa', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('etapa', $orden->getEtapa->descripcion_etapa, [
+                            {!! Form::text('etapa', null, [
                                     'class' => 'form-control',
                                     'required',
                                     'readonly',

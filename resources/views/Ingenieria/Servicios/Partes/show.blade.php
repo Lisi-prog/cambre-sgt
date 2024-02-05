@@ -174,7 +174,7 @@
                                     <div class="p-1">
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'ordenes.index', 'style' => '']) !!}
+                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', $tipo_orden], 'style' => '']) !!}
                                         {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
                                         {!! Form::close() !!}
                                     </div>

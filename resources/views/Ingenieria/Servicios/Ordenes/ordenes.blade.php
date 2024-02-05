@@ -158,21 +158,21 @@
                                     
                                     @foreach ($ordenes as $orden)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->getServicio->nombre_servicio}}" style="text-decoration:none; font-variant: none;">{{$orden->getEtapa->getServicio->codigo_servicio}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->getServicio->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->descripcion_etapa}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->descripcion_etapa ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
 
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td> --}}
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado() ?? ''}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getSupervisor()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getSupervisor() ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable() ?? '-'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
@@ -188,7 +188,7 @@
                                                 </div>
                                                 <div class="row my-2">
                                                     <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', $orden->id_orden, $tipo_orden], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>

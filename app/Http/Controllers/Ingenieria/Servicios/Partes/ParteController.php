@@ -44,7 +44,7 @@ class ParteController extends Controller
         
     }
     
-    public function indexOrden($id){
+    public function indexOrden($id, $tipo_orden){
         $orden = Orden::find($id);
         
         if (Auth::user()->hasRole('SUPERVISOR')) {
@@ -58,7 +58,7 @@ class ParteController extends Controller
             $estados = Estado::whereIn('id_estado', [4, 6, 7, 9])->orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         }
         
-        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura', 'estados_mecanizado', 'maquinas'));
+        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura', 'estados_mecanizado', 'maquinas', 'tipo_orden'));
     }
 
     public function create(Request $request)

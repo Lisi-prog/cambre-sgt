@@ -53,7 +53,7 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     Route::post('/orden/obtener-una-orden-mecanizado-etapa/{id}',[OrdenController::class, 'ObtenerOrdenMecanizado']);
     Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
 
-    Route::get('orden/partes/{id}', [ParteController::class, 'indexOrden'])->name('orden.partes');
+    Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
     Route::post('maquinaria/obtener/{id}', [MaquinariaController::class, 'obtenerMaquinaria']);
 
     Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
