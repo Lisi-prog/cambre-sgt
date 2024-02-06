@@ -252,6 +252,7 @@ CREATE TABLE `parte`(
   `fecha_limite` date NOT NULL,
   `fecha_carga` datetime NOT NULL,
   `horas` time NOT NULL,
+  `costo` decimal(10,2),
   `id_orden` int,
   `id_responsabilidad` int,
   PRIMARY KEY(`id_parte`),

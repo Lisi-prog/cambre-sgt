@@ -91,6 +91,25 @@ export default
     </div>
 </div>
 <div class="row">
+        <div class="col-4">
+            
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label for="costo_estimado" class="control-label" style="white-space: nowrap; ">Costo estimado:</label>
+                <span class="obligatorio">*</span>
+                <input class="form-control" id="input-costo_estimado" readonly="" name="costo_estimado" type="text">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label for="costo_real" class="control-label" style="white-space: nowrap; ">Costo real:</label>
+                <span class="obligatorio">*</span>
+                <input class="form-control" id="input-costo_real" readonly="" name="costo_real" type="text">
+            </div> 
+        </div>
+    </div>
+<div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group"> 
             <label for="estado" class="control-label fs-7" style="white-space: nowrap;">Ruta de plano:</label> 

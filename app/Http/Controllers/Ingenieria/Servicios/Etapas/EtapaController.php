@@ -199,6 +199,8 @@ class EtapaController extends Controller
             'fecha_fin_real' => $etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____',
             'duracion_estimada' => $this->calcularHorasEstimadas($etapa->getOrden),
             'duracion_real' => $etapa->getCalculoHorasReales(),
+            'costo_estimado' => $etapa->getCostoEstimado(),
+            'costo_real' => $etapa->getCostoReal(),
             'fecha_ultima_actualizacion' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->fecha_carga,
         ];
         return $etapaEspecial;

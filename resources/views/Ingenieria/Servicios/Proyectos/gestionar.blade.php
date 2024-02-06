@@ -116,6 +116,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                                    
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                    <div class="form-group">
+                                        {!! Form::label('costo_estimado', "Costo estimado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('costo_estimado', $proyecto->getCostoEstimado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                    <div class="form-group">
+                                        {!! Form::label('costo_real', "Costo real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('costo_real', $proyecto->getCostoReal(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -192,6 +209,8 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha limite</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha fin real</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Ultima actualizacion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
@@ -210,6 +229,10 @@
                                                 <td class= 'text-center'>{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____'}}</td>
 
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
+
+                                                <td class= 'text-center' >{{$etapa->getCostoEstimado()}}</td>
+                                                
+                                                <td class= 'text-center' >{{$etapa->getCostoReal()}}</td>
 
                                                 <td class='text-center'>
                                                     <div class="row my-2">

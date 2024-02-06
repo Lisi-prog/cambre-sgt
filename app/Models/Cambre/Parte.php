@@ -24,6 +24,7 @@ class Parte extends Model
         'fecha_limite',
         'fecha_carga',
         'horas',
+        'costo',
         'id_orden',
         'id_responsabilidad'
     ];

@@ -112,4 +112,24 @@ class Servicio extends Model
         
         // return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
     }
+
+    public function getCostoReal()
+    {
+        $etapas = Etapa::where('id_servicio', $this->id_servicio)->get();
+        $costo_real = 0;
+        foreach ($etapas as $etapa) {
+            $costo_real = $costo_real + $etapa->getCostoReal();
+        }
+        return round($costo_real, 2);
+    }
+
+    public function getCostoEstimado()
+    {
+        $etapas = Etapa::where('id_servicio', $this->id_servicio)->get();
+        $costo_estimado = 0;
+        foreach ($etapas as $etapa) {
+            $costo_estimado = $costo_estimado + $etapa->getCostoEstimado();
+        }
+        return round($costo_estimado, 2);
+    }
 }

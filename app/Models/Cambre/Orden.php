@@ -77,7 +77,27 @@ class Orden extends Model
         }
         return $responsable;
     }
-
+///////////////////////////////////////////////////
+//Devuelven el objeto empleado entero
+    public function getObjSupervisor(){
+        $supervisor = '';
+        foreach ($this->getResponsabilidaOrden as $resp_orden) {
+            if(strcasecmp($resp_orden->getResponsabilidad->getRol->nombre_rol_empleado, 'supervisor') == 0){
+                $supervisor = $resp_orden->getResponsabilidad->getEmpleado;
+            }
+        }
+        return $supervisor;
+    }
+    public function getObjResponsable(){
+        $responsable = '';
+        foreach ($this->getResponsabilidaOrden as $resp_orden) {
+            if(strcasecmp($resp_orden->getResponsabilidad->getRol->nombre_rol_empleado, 'responsable') == 0){
+                $responsable = $resp_orden->getResponsabilidad->getEmpleado;
+            }
+        }
+        return $responsable;
+    }
+//////////////////////////////////////////////////
     public function getCalculoHorasReales()
     {
         $partes = Parte::where('id_orden', $this->id_orden)->get();
@@ -109,6 +129,44 @@ class Orden extends Model
         }else{
             return '00:00';
         }
+    }
+
+    public function getCostoReal()
+    {
+        $duracion_real = $this->getCalculoHorasReales();
+        $horas_reales = 0;
+        $minutos_reales = 0;
+
+        $horas_reales += strstr($duracion_real, ':', true);
+        if (preg_match_all('/\:(.*?)\:/', $duracion_real, $matches)) {
+            $minutos_reales += $matches[1][0];
+        }
+
+        $responsable = $this->getObjResponsable();
+        $puesto_responsable = Puesto_empleado::find($responsable->id_puesto_empleado);
+        $precio_h = $puesto_responsable->costo_hora;
+
+        $costo = $horas_reales * $precio_h + $minutos_reales * ($precio_h/60);
+        return round($costo, 2);
+    }
+
+    public function getCostoEstimado()
+    {
+        $duracion_real = $this->duracion_estimada;
+        $horas_reales = 0;
+        $minutos_reales = 0;
+
+        $horas_reales += strstr($duracion_real, ':', true);
+        if (preg_match_all('/\:(.*?)\:/', $duracion_real, $matches)) {
+            $minutos_reales += $matches[1][0];
+        }
+
+        $responsable = $this->getObjResponsable();
+        $puesto_responsable = Puesto_empleado::find($responsable->id_puesto_empleado);
+        $precio_h = $puesto_responsable->costo_hora;
+
+        $costo = $horas_reales * $precio_h + $minutos_reales * ($precio_h/60);
+        return round($costo, 2);
     }
 
     public function getFechaFinalizacion()

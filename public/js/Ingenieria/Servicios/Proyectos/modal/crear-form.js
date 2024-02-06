@@ -178,6 +178,8 @@ export function cargarModalVerEtapa(id_etapa){
     let input_fecha_fin = document.getElementById("input-fecha_fin_real");
     let input_duracion_estimada = document.getElementById("input-duracion_estimada");
     let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_costo_estimado = document.getElementById("input-costo_estimado");
+    let input_costo_real = document.getElementById("input-costo_real");
     let input_fecha_ultima_actualizacion = document.getElementById("input-fecha_ultima_actualizacion");
     $.when($.ajax({
         type: "post",
@@ -194,6 +196,8 @@ export function cargarModalVerEtapa(id_etapa){
             input_fecha_fin.value = response.fecha_fin_real;
             input_duracion_estimada.value = response.duracion_estimada;
             input_duracion_real.value = response.duracion_real;
+            input_costo_estimado.value = response.costo_estimado;
+            input_costo_real.value = response.costo_real;
             input_fecha_ultima_actualizacion.value = response.fecha_ultima_actualizacion; //.substring(0, 10)
     },
     error: function (error) {
@@ -286,6 +290,8 @@ function cargarModalVerOrdenTrabajo(id_orden){
     let input_fecha_fin = document.getElementById("input-fec_fin");
     let input_duracion_estimada = document.getElementById("input-duracion_estimada");
     let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_costo_estimado = document.getElementById("input-costo_estimado");
+    let input_costo_real = document.getElementById("input-costo_real");
     let input_fecha_ultimo_parte = document.getElementById("input-fecha_ultimo_parte");
     let input_observacion = document.getElementById("input-observacion");
     let input_supervisor = document.getElementById("input-supervisor");
@@ -307,6 +313,8 @@ function cargarModalVerOrdenTrabajo(id_orden){
             input_fecha_fin.value = element.fecha_fin_real;
             input_duracion_estimada.value = element.duracion_estimada;
             input_duracion_real.value = element.duracion_real;
+            input_costo_estimado.value = element.costo_estimado;
+            input_costo_real.value = element.costo_real;
             input_fecha_ultimo_parte.value = element.fecha_ultimo_parte;
             input_observacion.value = element.descripcion_ultimo_parte;
             input_supervisor.value = element.supervisa;
@@ -325,6 +333,8 @@ function cargarModalVerOrdenManufactura(id_orden){
     let input_responsable = document.getElementById("input-responsable");
     let input_duracion_estimada = document.getElementById("input-duracion_estimada");
     let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_costo_estimado = document.getElementById("input-costo_estimado");
+    let input_costo_real = document.getElementById("input-costo_real");
     let input_fecha_inicio = document.getElementById("input-fec_inicio");
     let input_fecha_limite = document.getElementById("input-fec_req");
     let input_fecha_fin = document.getElementById("input_fecha_fin");
@@ -348,6 +358,8 @@ function cargarModalVerOrdenManufactura(id_orden){
             input_cantidad.value = element.cantidad;
             input_duracion_estimada.value = element.duracion_estimada;
             input_duracion_real.value = element.duracion_real;
+            input_costo_estimado.value = element.costo_estimado;
+            input_costo_real.value = element.costo_real;
             input_responsable.value = element.responsable;
             input_fecha_inicio.value = element.fecha_inicio;
             input_fecha_limite.value = element.fecha_limite;
@@ -372,6 +384,8 @@ function cargarModalVerOrdenMecanizado(id_orden){
     let input_responsable = document.getElementById("input-responsable");
     let input_duracion_estimada = document.getElementById("input-duracion_estimada");
     let input_duracion_real = document.getElementById("input-duracion_real");
+    let input_costo_estimado = document.getElementById("input-costo_estimado");
+    let input_costo_real = document.getElementById("input-costo_real");
     let input_fecha_inicio = document.getElementById("input-fec_inicio");
     let input_fecha_limite = document.getElementById("input-fec_req");
     let input_fecha_fin = document.getElementById("input_fecha_fin");
@@ -394,6 +408,8 @@ function cargarModalVerOrdenMecanizado(id_orden){
             input_cantidad.value = element.cantidad;
             input_duracion_estimada.value = element.duracion_estimada;
             input_duracion_real.value = element.duracion_real;
+            input_costo_estimado.value = element.costo_estimado;
+            input_costo_real.value = element.costo_real;
             input_responsable.value = element.responsable;
             input_fecha_inicio.value = element.fecha_inicio;
             input_fecha_limite.value = element.fecha_limite;

@@ -93,7 +93,9 @@ class ParteController extends Controller
         ]);
 
         $orden = Orden::find($request->input('id_orden'));
-
+        $responsable = $orden->getObjResponsable();
+        $puesto = $responsable->getPuestoEmpleado;
+        
         $fecha_limite = $request->input('fecha_limite');
 
         $fecha = $request->input('fecha');
@@ -105,8 +107,9 @@ class ParteController extends Controller
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
 
         $horas = $request->input('horas') . ':' . $request->input('minutos');
-
         
+        $costo = $request->input('horas')*$puesto->costo_hora + $request->input('minutos') * ($puesto->costo_hora/60);
+
         switch ($opcion) {
             case 1:
                 $this->validate($request, [
@@ -128,6 +131,7 @@ class ParteController extends Controller
                             'fecha_limite' => $fecha_limite,
                             'fecha_carga' => $fecha_carga,
                             'horas' => $horas,
+                            'costo' => $costo,
                             'id_orden' => $orden->id_orden,
                             'id_responsabilidad' => $responsabilidad->id_responsabilidad
                         ]);
@@ -136,7 +140,7 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
             
-                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte de trabajo creado con éxito!.');                       
+                return redirect()->route('orden.partes', [$orden->id_orden, 1])->with('mensaje','Parte de trabajo creado con éxito!.');                       
                 break;
             case 2:
                 $this->validate($request, [
@@ -158,6 +162,7 @@ class ParteController extends Controller
                             'fecha_limite' => $fecha_limite,
                             'fecha_carga' => $fecha_carga,
                             'horas' => $horas,
+                            'costo' => $costo,
                             'id_orden' => $orden->id_orden,
                             'id_responsabilidad' => $responsabilidad->id_responsabilidad
                         ]);
@@ -166,7 +171,7 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
             
-                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte de manufactura creado con éxito!.');                       
+                return redirect()->route('orden.partes', [$orden->id_orden, 2])->with('mensaje','Parte de manufactura creado con éxito!.');                       
                 break;
             case 3:
                 
@@ -191,6 +196,7 @@ class ParteController extends Controller
                             'fecha_limite' => $fecha_limite,
                             'fecha_carga' => $fecha_carga,
                             'horas' => $horas,
+                            'costo' => $costo,
                             'id_orden' => $orden->id_orden,
                             'id_responsabilidad' => $responsabilidad->id_responsabilidad
                         ]);
@@ -203,7 +209,7 @@ class ParteController extends Controller
                     'id_maquinaria' => $maquina,
                     'horas_maquina' => $horas_maquina
                 ]);
-                return redirect()->route('orden.partes', $orden->id_orden)->with('mensaje','Parte de mecanizado creado con éxito!.');                       
+                return redirect()->route('orden.partes', [$orden->id_orden, 3])->with('mensaje','Parte de mecanizado creado con éxito!.');                       
                 break;
             default:
                 # code...

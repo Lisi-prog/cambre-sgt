@@ -30,6 +30,8 @@
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
@@ -50,6 +52,10 @@
                                         <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
+
+                                        <td class= 'text-center' >{{$orden->getCostoEstimado()}}</td>
+                                                
+                                        <td class= 'text-center' >{{$orden->getCostoReal()}}</td>
 
                                         <td class='text-center'>
                                             <div class="row my-2">
@@ -118,6 +124,8 @@
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
@@ -138,6 +146,10 @@
                                         <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
+
+                                        <td class= 'text-center' >{{$orden->getCostoEstimado()}}</td>
+                                                
+                                        <td class= 'text-center' >{{$orden->getCostoReal()}}</td>
 
                                         <td class='text-center'>
                                             <div class="row my-2">
@@ -214,6 +226,8 @@
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
@@ -237,6 +251,10 @@
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
+                                        <td class= 'text-center' >{{$orden->getCostoEstimado()}}</td>
+                                                
+                                        <td class= 'text-center' >{{$orden->getCostoReal()}}</td>
+                                        
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
