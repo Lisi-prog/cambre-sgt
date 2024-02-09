@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo', 'Gestionar')
+@section('titulo', 'Costos')
 @section('content')
 <style>
      .tableFixHead {
@@ -27,7 +27,7 @@
         <div class="d-flex section-header justify-content-center">
             <div class="d-flex flex-row col-12">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 my-auto">
-                    <h4 class="">Gestionar Servicio</h5>
+                    <h4 class="">Costos actualizados</h5>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                 </div>
@@ -43,25 +43,10 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-    
-                                </div>
+                            <div class="d-flex justify-content-center">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
                                     <h5 class="text-center">Proyecto</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-primary col-9" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
-                                        Editar
-                                    </button>
-                                    <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
-                                        Actualizaciones
-                                    </button>
-                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.costos', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                    {!! Form::submit('Costos actualizados', ['class' => 'btn btn-primary col-9']) !!}
-                                    {!! Form::close() !!}
-                                </div>
-                            </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -126,13 +111,13 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('costo_estimado', "Costo estimado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_estimado', $proyecto->getCostoEstimadoGuardado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('costo_estimado', $proyecto->getCostoEstimado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('costo_real', "Costo real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_real', $proyecto->getCostoRealGuardado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('costo_real', $proyecto->getCostoReal(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -146,16 +131,9 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
+                            <div class="d-flex justify-content-center">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center">
                                     <h5 class="text-center">Actualizaciones proyecto</h5>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActModal" onclick="cargarModalNuevaActProyecto({{$proyecto->getUltimaActualizacion()->getActualizacion}}, {{$proyecto->getResponsabilidad}})">
-                                        Nueva
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -187,17 +165,15 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
+                            <div class="d-flex justify-content-center">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
                                     <h5 class="text-center my-auto">Etapas</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
                                         Nueva etapa
                                     </button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -214,7 +190,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                           
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                            --}}
                                     </thead>
                                     <tbody>
                                         @foreach ($proyecto->getEtapas as $etapa)
@@ -233,11 +209,11 @@
 
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
 
-                                                <td class= 'text-center' >{{$etapa->getCostoEstimadoGuardado()}}</td>
+                                                <td class= 'text-center' >{{$etapa->getCostoEstimado()}}</td>
                                                 
-                                                <td class= 'text-center' >{{$etapa->getCostoRealGuardado()}}</td>
+                                                <td class= 'text-center' >{{$etapa->getCostoReal()}}</td>
 
-                                                <td class='text-center'>
+                                                {{-- <td class='text-center'>
                                                     <div class="row my-2">
                                                         <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
@@ -260,7 +236,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -276,16 +252,9 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
+                            <div class="d-flex justify-content-center">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
                                     <h5 class="text-center  my-auto">Actualizaciones etapa</h5>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearActEtaModal">
-                                        Nueva
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -312,7 +281,7 @@
                 </div>
                 {{-- ------------- --}}
 
-                @include('Ingenieria.Servicios.Proyectos.layout.gestionar-ordenes-v1')
+                @include('Ingenieria.Servicios.Proyectos.layout.costos-ordenes-v1')
 
                 {{-- Ordenes del proyecto --}}
             
@@ -412,7 +381,7 @@
                                     <div class="p-1">
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'proyectos.index', 'style' => '']) !!}
+                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => '']) !!}
                                         {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
                                         {!! Form::close() !!}
                                     </div>

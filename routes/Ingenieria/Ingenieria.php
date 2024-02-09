@@ -17,7 +17,7 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 //Gestion de proyectos
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
-
+    Route::get('proyectos/costos/{id}', [ProyectoController::class, 'costos'])->name('proyectos.costos');
     Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');
     
     Route::get('etapas/actualizaciones/{id}', [EtapaController::class, 'verActualizaciones'])->name('etapas.actualizaciones');

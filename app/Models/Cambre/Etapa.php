@@ -170,4 +170,24 @@ class Etapa extends Model
         }
         return round($costo_estimado, 2);
     }
+
+    public function getCostoRealGuardado()
+    {
+        $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
+        $costo_real = 0;
+        foreach ($ordenes as $orden) {
+            $costo_real = $costo_real + $orden->getCostoRealGuardado();
+        }
+        return round($costo_real, 2);
+    }
+
+    public function getCostoEstimadoGuardado()
+    {
+        $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
+        $costo_estimado = 0;
+        foreach ($ordenes as $orden) {
+            $costo_estimado = $costo_estimado + $orden->costo_estimado;
+        }
+        return round($costo_estimado, 2);
+    }
 }

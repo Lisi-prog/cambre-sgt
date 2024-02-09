@@ -232,6 +232,7 @@ CREATE TABLE `orden`(
   `fecha_inicio` date,
   `duracion_estimada` time,
   `id_etapa` int,
+  `costo_estimado` DECIMAL(10, 2),
   PRIMARY KEY(`id_orden`),
   CONSTRAINT `pk_id_orden_x_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`)
 );

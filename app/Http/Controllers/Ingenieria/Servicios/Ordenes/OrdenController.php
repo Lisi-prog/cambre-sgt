@@ -340,6 +340,10 @@ class OrdenController extends Controller
             'id_orden' => $orden->id_orden
         ]);
 
+        //Calculamos los costos despues de asignar responsabilidades
+        $orden->costo_estimado = $orden->getCostoEstimado();
+        $orden->save();
+
         $orden_trabajo = Orden_trabajo::create([
                             'id_tipo_orden_trabajo' => $tipo_orden_trabajo,
                             'id_orden' => $orden->id_orden
@@ -411,6 +415,10 @@ class OrdenController extends Controller
             'id_orden' => $orden->id_orden
         ]);
 
+        //Calculamos los costos despues de asignar responsabilidades
+        $orden->costo_estimado = $orden->getCostoEstimado();
+        $orden->save();
+
         Orden_manufactura::create([
             'revision' => $revision,
             'cantidad' => $cantidad,
@@ -469,6 +477,7 @@ class OrdenController extends Controller
                     'fecha_inicio' => $fecha_ini,
                     'id_etapa' => $id_etapa
                 ]);
+        
 
         Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
@@ -479,6 +488,10 @@ class OrdenController extends Controller
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
             'id_orden' => $orden->id_orden
         ]);
+
+        //Calculamos los costos despues de asignar responsabilidades
+        $orden->costo_estimado = $orden->getCostoEstimado();
+        $orden->save();
 
         Orden_mecanizado::create([
             'revision' => $revision,
