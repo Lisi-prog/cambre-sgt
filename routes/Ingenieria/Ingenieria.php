@@ -16,7 +16,7 @@ use App\Http\Controllers\Ingenieria\Activos\ActivoController;
 use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 
 //Gestion de proyectos
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|EMPLEADO']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
     Route::get('proyectos/costos/{id}', [ProyectoController::class, 'costos'])->name('proyectos.costos');
     Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');
