@@ -22,7 +22,8 @@ class Orden extends Model
         'nombre_orden',
         'fecha_inicio',
         'duracion_estimada',
-        'id_etapa'
+        'id_etapa',
+        'costo_estimado'
     ];
 
     public function getEtapa()
@@ -166,6 +167,16 @@ class Orden extends Model
         $precio_h = $puesto_responsable->costo_hora;
 
         $costo = $horas_reales * $precio_h + $minutos_reales * ($precio_h/60);
+        return round($costo, 2);
+    }
+
+    public function getCostoRealGuardado()
+    {
+        $partes = Parte::where('id_orden', $this->id_orden)->get();
+        $costo = 0;
+        foreach ($partes as $parte) {
+            $costo = $costo + $parte->costo;
+        }
         return round($costo, 2);
     }
 

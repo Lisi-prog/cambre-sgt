@@ -4,17 +4,10 @@
     <div class="card">
         <div class="card-head">
             <br>
-            <div class="d-flex justify-content-between">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                </div>
+            <div class="d-flex justify-content-center">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
                    {{-- <h5 id="label-orden-trabajo" class="text-center  my-auto">Orden de trabajo <i class="fas fa-caret-down"></i></h5> --}}
                    <h5 class="text-center  my-auto">Orden de trabajo</h5>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                        Nueva orden
-                    </button>
                 </div>
             </div>
         </div>
@@ -32,7 +25,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -53,30 +46,16 @@
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
-                                        <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                        <td class= 'text-center' >{{$orden->getCostoEstimado()}}</td>
                                                 
-                                        <td class= 'text-center' >{{$orden->getCostoRealGuardado()}}</td>
+                                        <td class= 'text-center' >{{$orden->getCostoReal()}}</td>
 
                                         <td class='text-center'>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                        Editar
-                                                    </button>
-                                                </div>
-                                            </div>
                                             <div class="row my-2">
                                                 <div class="col-12">
                                                     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
                                                         Ver partes
                                                     </button>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
@@ -126,7 +105,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                            
+                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -147,37 +126,16 @@
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
-                                        <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                        <td class= 'text-center' >{{$orden->getCostoEstimado()}}</td>
                                                 
-                                        <td class= 'text-center' >{{$orden->getCostoRealGuardado()}}</td>
+                                        <td class= 'text-center' >{{$orden->getCostoReal()}}</td>
 
-                                        <td class='text-center'>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                        Editar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.manufacturamecanizado', $orden->id_orden], 'style' => '']) !!}
-                                                        {!! Form::submit('Agregar mecanizado', ['class' => 'btn btn-success w-100']) !!}
-                                                    {!! Form::close() !!}
-                                                </div>
-                                            </div>
+                                        <td class= 'text-center' >
                                             <div class="row my-2">
                                                 <div class="col-12">
                                                     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
                                                         Ver partes
                                                     </button>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
@@ -228,7 +186,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -251,30 +209,16 @@
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
-                                        <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                        <td class= 'text-center' >{{$orden->getCostoEstimado()}}</td>
                                                 
-                                        <td class= 'text-center' >{{$orden->getCostoRealGuardado()}}</td>
+                                        <td class= 'text-center' >{{$orden->getCostoReal()}}</td>
                                         
                                         <td class='text-center'>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                        Editar
-                                                    </button>
-                                                </div>
-                                            </div>
                                             <div class="row my-2">
                                                 <div class="col-12">
                                                     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
                                                         Ver partes
                                                     </button>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
@@ -322,7 +266,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -340,23 +284,9 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                        Editar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-12">
                                                     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
                                                         Ver partes
                                                     </button>
-                                                </div>
-                                            </div>
-                                            <div class="row my-2">
-                                                <div class="col-12">
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                    {!! Form::close() !!}
                                                 </div>
                                             </div>
                                         </td>
