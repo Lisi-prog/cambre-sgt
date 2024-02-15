@@ -14,8 +14,9 @@ use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimi
 use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 use App\Http\Controllers\Ingenieria\Activos\ActivoController;
 use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
+
 //Gestion de proyectos
-// Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
 
     Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');
@@ -69,9 +70,9 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     Route::resource('partes', ParteController::class);
     Route::resource('maquinarias', MaquinariaController::class);
     Route::resource('activos', ActivoController::class);
-// });
+});
 
-// Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
     Route::post('r_i/evaluar/aceptar/{id}', [ProyectoController::class, 'aceptar_solicitud'])->name('solicitud.aceptar');
@@ -83,8 +84,9 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
     Route::resource('r_i', RequerimientoDeIngenieriaController::class);
     Route::resource('p_m', PropuestaDeMejoraController::class);
     Route::resource('proyectos', ProyectoController::class);
-// });
+});
 
+/*
 Route::get('no_au/solicitud_servicio_ingenieria', [ServicioDeIngenieriaController::class, 'crearAlt'])->name('ssi.sa.crear');
 Route::post('no_au/solicitud_servicio_ingenieria/guardar', [ServicioDeIngenieriaController::class, 'guardarAlt'])->name('ssi.sa.guardar');
 
@@ -93,4 +95,4 @@ Route::post('no_au/requerimiento_ingenieria/guardar', [RequerimientoDeIngenieria
 
 Route::get('no_au/requerimiento_servicio_mantenimiento', [RequerimientoServicioMantenimientoController::class, 'crearAlt'])->name('rsm.sa.crear');
 Route::post('no_au/requerimiento_servicio_mantenimiento/guardar', [RequerimientoServicioMantenimientoController::class, 'guardarAlt'])->name('rsm.sa.guardar');
-
+*/

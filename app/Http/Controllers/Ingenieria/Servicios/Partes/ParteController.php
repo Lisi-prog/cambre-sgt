@@ -45,7 +45,7 @@ class ParteController extends Controller
     }
     
     public function indexOrden($id, $tipo_orden){
-        $orden = Orden::find($id);
+        $orden = Orden::find(base64url_decode($id));
         
         if (Auth::user()->hasRole('SUPERVISOR')) {
             $editable = '';

@@ -38,8 +38,8 @@ class ProyectoController extends Controller
 {
     function __construct()
     {
-        //$this->middleware('auth');
-        //  $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
+        $this->middleware('auth');
+        $this->middleware('permission:VER-MENU-PROYECTO', ['only' => ['index']]);
         //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
         //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);

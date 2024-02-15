@@ -4,7 +4,7 @@
     </a>
 </li>
 
-{{-- @can('VER-MENU-INFORMATICA') --}}
+@can('VER-MENU-INFORMATICA')
     <li class="dropdown ">
         <a href="" class="nav-link has-dropdown ">
             <i class="fas fa-home"></i><span>Informatica</span>
@@ -68,9 +68,9 @@
             </li>
         </ul>
     </li>
-{{-- @endcan --}}
+@endcan
 
-{{-- @can('VER-MENU-PLANTA') --}}
+@can('VER-MENU-INGENIERIA')
     <li class="dropdown ">
         <a href="" class="nav-link has-dropdown ">
             <i class="fas fa-home"></i><span>Ingenieria</span>
@@ -81,7 +81,7 @@
             <li class="dropdown-title pt-3">
                 Ingenieria
             </li>
-
+            @can('VER-MENU-SOLICITUDES')
             <li class="dropdown ">
                 <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Solicitudes</span>
@@ -97,26 +97,31 @@
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>R.S.M.</span>
                         </a>
                     </li> --}}
-            
+                    @can('VER-MENU-SSI')
                     <li>
                         <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>S.S.I.</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('VER-MENU-PM')
                     <li>
                         <a class="nav-link" href="{{route('p_m.index')}}" title="Propuesta de mejora">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em; "></i><span>P.M.</span>
                         </a>
                     </li>
-
+                    @endcan
+                    @can('VER-MENU-RI')
                     <li>
                         <a class="nav-link" href="{{route('r_i.index')}}" title="Requerimiento de ingenieria">
                             <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>R.I.</span>
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
-
+            @endcan
+            @can('VER-MENU-SERVICIOS')
             <li class="dropdown ">
                 <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Servicios</span>
@@ -126,17 +131,21 @@
                     <li class="dropdown-title pt-3">
                         Servicios
                     </li>
-                
+                    @can('VER-MENU-PROYECTO')
                     <li>
                         <a class="nav-link" href="{{route('proyectos.index')}}" title="Proyectos">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Proyectos</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('VER-MENU-ETAPA')
                     <li>
                         <a class="nav-link" href="{{route('etapas.index')}}" title="Etapas">
                             <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Etapas</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('VER-MENU-ORDENES')
                     {{-- ORDENES --}}
                     <li class="dropdown">
                         <a href="" class="nav-link has-dropdown" title="Ordenes">
@@ -163,21 +172,24 @@
                             </li>
                         </ul>
                     </li>
+                    @endcan
                 </ul>
             </li>
-
+            @endcan
+            @can('VER-MENU-MAQUINARIA')
             <li>
                 <a class="nav-link" href="{{route('maquinarias.index')}}" title="Maquinaria">
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Maquinaria</span>
                 </a>
             </li>
-
+            @endcan
+            @can('VER-MENU-ACTIVOS')
             <li>
                 <a class="nav-link" href="{{route('activos.index')}}" title="Activos">
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Activos</span>
                 </a>
             </li>
-
+            @endcan
             {{-- <li>
                 <a class="nav-link" href="" title="Tareas">
                     <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Tareas</span>
@@ -186,5 +198,5 @@
 
         </ul>
     </li>
-{{-- @endcan --}}
+@endcan
 

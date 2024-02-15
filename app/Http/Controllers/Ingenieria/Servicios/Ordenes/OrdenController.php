@@ -813,6 +813,7 @@ class OrdenController extends Controller
         $array_responsabilidades_ordenes = array();
         $array_ordenes = array();
         $ordenes = array();
+
         if (Auth::user()->hasRole('SUPERVISOR')) {
             //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
             $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();
@@ -826,6 +827,7 @@ class OrdenController extends Controller
                 array_push($array_ordenes, $responsabilidad_orden->getOrden);
             }
         }
+        
         //FILTRAMOS LAS ORDENES POR TIP0
         switch ($tipo_orden) {           
             case 1:
