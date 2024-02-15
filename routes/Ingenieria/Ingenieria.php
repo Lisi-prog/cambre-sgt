@@ -72,7 +72,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('activos', ActivoController::class);
 });
 
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|EMPLEADO']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
     Route::post('r_i/evaluar/aceptar/{id}', [ProyectoController::class, 'aceptar_solicitud'])->name('solicitud.aceptar');
