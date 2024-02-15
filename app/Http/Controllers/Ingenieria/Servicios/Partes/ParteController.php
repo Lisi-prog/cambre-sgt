@@ -140,7 +140,7 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
             
-                return redirect()->route('orden.partes', [$orden->id_orden, 1])->with('mensaje','Parte de trabajo creado con éxito!.');                       
+                return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 1])->with('mensaje','Parte de trabajo creado con éxito!.');                       
                 break;
             case 2:
                 $this->validate($request, [
@@ -171,7 +171,7 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
             
-                return redirect()->route('orden.partes', [$orden->id_orden, 2])->with('mensaje','Parte de manufactura creado con éxito!.');                       
+                return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 2])->with('mensaje','Parte de manufactura creado con éxito!.');                       
                 break;
             case 3:
                 
@@ -209,21 +209,13 @@ class ParteController extends Controller
                     'id_maquinaria' => $maquina,
                     'horas_maquina' => $horas_maquina
                 ]);
-                return redirect()->route('orden.partes', [$orden->id_orden, 3])->with('mensaje','Parte de mecanizado creado con éxito!.');                       
+                return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 3])->with('mensaje','Parte de mecanizado creado con éxito!.');                       
                 break;
             default:
                 # code...
                 break;
         }
-        return 1;
-        //"id_orden":"4","observaciones":"ththt","fecha_limite":"2023-12-30","fecha_ini":"2023-12-27","horas":"10","minutos":"00","estado":"4"}
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-    
-        $role = Role::create(['name' => strtoupper($request->input('name'))]);
-        
-        return redirect()->route('roles.index')->with('mensaje','Rol '.strtoupper($request->input('name')). ' creado con éxito!.');                       
+        return 1;                      
     }
     
     public function show($id)

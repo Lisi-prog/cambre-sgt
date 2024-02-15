@@ -20,25 +20,25 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     <div class="form-group">
                                         {!! Form::label('prioridad', "Prioridad:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', $orden->getEtapa->getServicio->prioridad_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('prioridad', $orden->getEtapa->getServicio->prioridad_servicio ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('id_proyecto', "ID:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_proyecto', $orden->getEtapa->getServicio->codigo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('id_proyecto', $orden->getEtapa->getServicio->codigo_servicio ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
                                         {!! Form::label('nom_proyecto', 'Nombre proyecto:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_proyecto', $orden->getEtapa->getServicio->nombre_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('nom_proyecto', $orden->getEtapa->getServicio->nombre_servicio ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $orden->getEtapa->getServicio->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('estado', $orden->getEtapa->getServicio->getEstado() ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
                                         {!! Form::label('desc', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('dec', $orden->getEtapa->descripcion_etapa, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('dec', $orden->getEtapa->descripcion_etapa ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -66,7 +66,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('tipo', "Tipo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('tipo', $orden->getOrdenDe->getNombreTipoOrden(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('tipo', $orden->getOrdenDe->getNombreTipoOrden() ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
 
