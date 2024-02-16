@@ -245,16 +245,16 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="row my-2">
+                                                    {{-- <div class="row my-2">
                                                         <div class="col-12">
                                                             <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
                                                                 Cargar ordenes
                                                             </button>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="row my-2">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-primary w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
+                                                            <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
                                                                 Cargar actualizaciones
                                                             </button>
                                                         </div>
