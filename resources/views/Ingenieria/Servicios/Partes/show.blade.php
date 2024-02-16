@@ -127,16 +127,19 @@
                                 <table id="example" class="table table-hover mt-2" class="display">
                                     <thead style="">
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Observaciones</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Horas</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                            --}}
                                     </thead>
                                     <tbody>
                                         @foreach ($orden->getPartes as $parte)
                                         <tr>
                                             <td class= 'text-center' >{{$parte->id_parte}}</td>
+
+                                            <td class= 'text-center' >{{$parte->observaciones}}</td>
 
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->fecha)->format('d-m-Y')}}</td>
 
@@ -148,11 +151,11 @@
 
                                             <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td>
 
-                                            <td>
+                                            {{-- <td>
                                                 {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
                                                     {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
                                                 {!! Form::close() !!}
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @endforeach
                                     </tbody>
