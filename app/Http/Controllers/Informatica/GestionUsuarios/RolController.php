@@ -31,66 +31,11 @@ class RolController extends Controller
     {  
         $roles = Role::orderBy('name', 'asc')->get();
         return view('Informatica.GestionUsuarios.roles.index', compact('roles'));
-        return 'roles';
-        $name = $request->query->get('name');
-
-        if ($name =='') {
-            $roles = DB::table('diegoz.roles')
-                    ->join('diegoz.grant_rolesxpermisos', 'diegoz.roles.id', '=', 'diegoz.grant_rolesxpermisos.role_id')
-                    ->select('diegoz.roles.*')
-                    ->distinct('name')
-                    ->orderBy('name', 'asc')
-                    ->get();
-                    
-            $roles_sinpermisos = DB::table('diegoz.grant_rolesxpermisos')
-                    ->rightJoin('diegoz.roles', 'diegoz.roles.id', '=', 'diegoz.grant_rolesxpermisos.role_id')
-                    ->select('diegoz.roles.*')
-                    ->where('name','like','%' .$name . '%')
-                    ->whereNull('diegoz.grant_rolesxpermisos.role_id')
-                    ->distinct('name')
-                    ->orderBy('name', 'asc')
-                    ->get();
-            return view('Coordinacion.Informatica.GestionUsuarios.roles.index',compact('roles','roles_sinpermisos'));
-        } else {
-            $name = strtoupper($name);
-            $roles = DB::table('diegoz.roles')
-                    ->join('diegoz.grant_rolesxpermisos', 'diegoz.roles.id', '=', 'diegoz.grant_rolesxpermisos.role_id')
-                    ->select('diegoz.roles.*')
-                    ->where('name','like','%' .$name . '%')
-                    ->distinct('name')
-                    ->orderBy('name', 'asc')
-                    ->get();
-            $roles_sinpermisos = DB::table('diegoz.grant_rolesxpermisos')
-                    ->rightJoin('diegoz.roles', 'diegoz.roles.id', '=', 'diegoz.grant_rolesxpermisos.role_id')
-                    ->select('diegoz.roles.*')
-                    ->where('name','like','%' .$name . '%')
-                    ->whereNull('diegoz.grant_rolesxpermisos.role_id')
-                    ->distinct('name')
-                    ->orderBy('name', 'asc')
-                    ->get();
-            //$roles = Role::where('name', 'like', '%' .$name . '%')->orderBy('updated_at', 'DESC')->simplePaginate(10);
-            //$roles = Role::whereRaw('UPPER(name) LIKE ?', ['%' . strtoupper($name) . '%'])->orderBy('name', 'asc')->simplePaginate(10); 
-            return view('Coordinacion.Informatica.GestionUsuarios.roles.index',compact('roles','roles_sinpermisos'));
-        }
     }
     
     public function create(Request $request)
     {
-        return view('Informatica.GestionUsuarios.roles.crear');
-        $name = $request->query->get('name');
-
-        if ($name =='') {
-            //Con paginación
-            $permission = Permission::orderBy('updated_at', 'desc')->get();
-            return view('Coordinacion.Informatica.GestionUsuarios.roles.crear',compact('permission'));
-            //al usar esta paginacion, recordar poner en el el index.blade.php este codigo  {!! $roles->links() !!}
-        } else {
-            $name = strtoupper($name);
-            $permission = Permission::where('name', 'like', '%' .$name . '%')->orderBy('updated_at', 'DESC')->get();
-            //$permission = Permission::whereRaw('UPPER(name) LIKE ?', ['%' . strtoupper($name) . '%'])->orderBy('updated_at', 'desc')->get(); 
-            return view('Coordinacion.Informatica.GestionUsuarios.roles.crear',compact('permission'));
-        }
-        
+        return view('Informatica.GestionUsuarios.roles.crear');     
     }
     
     public function store(Request $request)
