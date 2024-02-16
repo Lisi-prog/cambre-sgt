@@ -106,13 +106,13 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="row m-auto">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 my-auto text-center">
                                     <h5 class="text-center">Parte de {{$orden->getOrdenDe->getNombreTipoOrden()}}</h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearParteModal">
                                         Nuevo parte   
                                     </button>
@@ -127,11 +127,11 @@
                                 <table id="example" class="table table-hover mt-2" class="display">
                                     <thead style="">
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Observaciones</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Horas</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas</th>
                                         {{-- <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                            --}}
                                     </thead>
                                     <tbody>
