@@ -28,6 +28,9 @@
     #example thead input {
         width: 100%;
     }
+    .table {
+        zoom: 85%;
+    }
 </style>
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
@@ -56,7 +59,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div id="tableFixHead">
-                                <table class="table table-striped mt-2" id="example">
+                                <table class="table table-striped mt-2" id="example" style="zoom: 85%">
                                     <thead style="height:50px;">
                                         <th class='text-center' style="color:#fff;">Prioridad</th>
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}

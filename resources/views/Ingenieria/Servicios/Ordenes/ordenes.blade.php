@@ -31,6 +31,13 @@
         background-color: transparent;
         border-color: transparent;
     }
+
+    .table {
+        zoom: 85%;
+    }
+    .col-4 {
+        padding: 5px;
+    }
 </style>
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
@@ -151,7 +158,7 @@
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;">Fecha finalizacion</th>
-                                    <th class='text-center' style="color: #fff;">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:20%">Acciones</th>
                                 </thead>
                                 
                                 <tbody>
@@ -179,26 +186,22 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
-                                                            Ver
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', base64url_encode($orden->id_orden), $tipo_orden], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
-                                                    </div>
-                                                </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12"> 
-                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
-                                                            Editar
-                                                        </button> 
-                                                    </div> 
+                                                <div class="row my-2 justify-content-center" >
+                                                        <div class="col-4">
+                                                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                                Ver
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', base64url_encode($orden->id_orden), $tipo_orden], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
+                                                                Editar
+                                                            </button> 
+                                                        </div> 
                                                 </div>
                                             </td>
                                         </tr>

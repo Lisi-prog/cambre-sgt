@@ -21,6 +21,9 @@
       #viv th {
         background: #ee9b27;
       }
+      .table {
+        zoom: 85%;
+    }
 </style>
     <section class="section">
         <div class="section-header d-flex">
