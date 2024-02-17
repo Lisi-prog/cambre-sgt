@@ -23,9 +23,9 @@
                                     'required'=> 'required',
                                     'hidden' => false
                                 ]) !!} --}}
-                            {!! Form::text('id_orden', null, [
+                            {!! Form::text('id_orden_edit', null, [
                                 'class' => 'form-control',
-                                'id' => 'id_orden',
+                                'id' => 'id_orden_edit',
                                 'required'=> 'required',
                                 'hidden' => true
                             ]) !!}
@@ -35,12 +35,12 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('etapa', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('etapa', null, [
+                            {!! Form::label('etapa_edit', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::text('etapa_edit', null, [
                                     'class' => 'form-control',
                                     'required',
                                     'readonly',
-                                    'id' => 'etapa'
+                                    'id' => 'etapa_edit'
                                 ]) !!}
                             {{-- {!! Form::text('num_etapa', $orden->getEtapa->id_etapa, [
                                 'class' => 'form-control',
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="formulario">
+                <div id="formulario-editar-orden">
                     
                 </div>
             </div>

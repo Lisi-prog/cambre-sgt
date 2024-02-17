@@ -44,7 +44,7 @@
                                     <h5 class="text-center">Orden de manufactura</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
+                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden_manufactura->id_orden}}, '{{$orden_manufactura->getOrden->nombre_orden}}')">
                                         Editar
                                     </button>
                                 </div>
@@ -55,8 +55,8 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_orden', 'Nombre orden:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_orden', $orden_manufactura->getOrden->nombre_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('nom_orden_manuf', 'Nombre orden:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('nom_orden_manuf', $orden_manufactura->getOrden->nombre_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
 
@@ -66,33 +66,33 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('supervisor_orden', "Supervisor de orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('supervisor', $orden_manufactura->getOrden->getSupervisor(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('supervisor_orden_manuf', "Supervisor de orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('supervisor_manuf', $orden_manufactura->getOrden->getSupervisor(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('responsable_orden', "Responsable de orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('responsable', $orden_manufactura->getOrden->getNombreResponsable(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('responsable_orden_manuf', "Responsable de orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('responsable_manuf', $orden_manufactura->getOrden->getNombreResponsable(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_inicio',\Carbon\Carbon::parse($orden_manufactura->getOrden->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('fec_ini_manuf', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('fecha_inicio_manuf',\Carbon\Carbon::parse($orden_manufactura->getOrden->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite', \Carbon\Carbon::parse($orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('fec_limite_manuf', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('fecha_limite_manuf', \Carbon\Carbon::parse($orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('estado_manuf', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('estado_manuf', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -119,7 +119,7 @@
                                     <h5 class="text-center">Ordenes de mecanizado</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    <button id="nueva_orden_meca" value="3" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenMecanizadoModal">
+                                    <button id="nueva_orden_meca" value="3" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenMecanizadoModal" onclick="cargarModalCrearMecanizado()">
                                         Nueva
                                     </button>
                                 </div>
@@ -157,9 +157,9 @@
                                                 <td>
                                                     <div class="row my-2">
                                                         <div class="col-12">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.editar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden_mecanizado->id_orden}}, '{{$orden_mecanizado->getOrden->getEtapa->descripcion_etapa}}')">
+                                                                Editar
+                                                            </button> 
                                                         </div>
                                                     </div>
                                                     <div class="row my-2">
@@ -203,20 +203,13 @@
                 </div>
                 
 
-        <script type="module"> 
-            // import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
-            // window.crearCuadrOrdenes = crearCuadrOrdenes;
-            // window.cargarModalVerOrden = cargarModalVerOrden;
-            // window.obtenerPartes = obtenerPartes;
-        </script>
-
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
             
         </script>
-        {{-- <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script> --}}
 
         <script>
             $(document).ready(function () {
+                //modificarFormularioConArgumentos(3, 'formulario-crear-orden-meca', false);
                 $('#exampless').DataTable({
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -236,29 +229,18 @@
                 });
             });
             
-            function cargarModalEditar(id, nombre, fecha, lider){
-                let input_nombre_etapa = document.getElementById('input-nombre_etapa');
-                let input_fec_ini = document.getElementById('input-fec_ini');
-                //let id_puesto = document.getElementById('input_id_puesto');
-
-                console.log(id);
-                console.log(nombre);
-                console.log(fecha);
-                console.log(lider);
-
-                const $select = document.querySelector('#mySelect');
-                $select.value = lider;
-                //let nombre_puesto = b.parentNode.parentNode.parentNode.children[0].innerText;
-                //let precio_hora = b.parentNode.parentNode.parentNode.children[1].innerText;
-
-                //input_puesto.value = nombre_puesto;
-                //costo_hora.value = precio_hora.replace('$ ', '').replace('.', '').replace(',', '.');
-                //id_puesto.value = id;
-            }
         </script>
-        {{-- <script src="{{ asset('js/change-td-color.js') }}"></script> --}}
+        <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
+        <script type="module"> 
+            import {cargarModalVerOrden, cargarModalEditarManufactura, cargarModalEditarMecanizado, cargarModalCrearMecanizado} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+            window.cargarModalVerOrden = cargarModalVerOrden;
+            window.cargarModalEditarManufactura = cargarModalEditarManufactura;
+            window.cargarModalEditarMecanizado = cargarModalEditarMecanizado;
+            window.cargarModalCrearMecanizado = cargarModalCrearMecanizado;
+        </script>
     </section>
 @include('Ingenieria.Servicios.Ordenes.modal.crear-orden-mecanizado')
+@include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 
     
 @endsection

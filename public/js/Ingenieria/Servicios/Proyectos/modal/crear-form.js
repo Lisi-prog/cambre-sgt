@@ -1,6 +1,9 @@
 import opcion1 from './opcion-orden-trabajo.js';
 import opcion2 from './opcion-orden-manufactura.js';
 import opcion3 from './opcion-orden-mecanizado.js';
+import opcion1Edit from './opcion-orden-trabajo-EDITAR.js';
+import opcion2Edit from './opcion-orden-manufactura-EDITAR.js';
+import opcion3Edit from './opcion-orden-mecanizado-EDITAR.js';
 import bodyModalOrdenTrabajo from './ver-orden-trabajo.js';
 import bodyModalOrdenManufactura from './ver-orden-manufactura.js';
 import bodyModalOrdenMecanizado from './ver-orden-mecanizado.js';
@@ -9,7 +12,7 @@ let bandera = 1;
 
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
-    $('#nueva_orden_meca').on('click', modificarFormulario);
+    //$('#nueva_orden_meca').on('click', modificarFormularioConArgumentos(3, 'formulario-crear-orden-meca', false));
     $(document).read
 });
 function prueba(){
@@ -54,15 +57,16 @@ function modificarFormulario(){
    }
 
 }
-export function modificarFormularioConArgumentos(tipo_orden){
+export function modificarFormularioConArgumentos(tipo_orden, id_formulario, editar){
     //let tipo_orden = Number($(this).val());
-    console.log('Ordenes de tipo: ' + tipo_orden);
-    let formulario = document.getElementById("formulario");
+    // console.log('Ordenes de tipo: ' + tipo_orden);
+    // console.log('Id Formulario: ' + id_formulario);
+    let formulario = document.getElementById(id_formulario);
     let html;
     switch (Number(tipo_orden)) {
      case 1:
          formulario.innerHTML = '';
-         html = opcion1
+         html = editar ? opcion1Edit : opcion1;
          formulario.innerHTML += html;
          cargarTipoOrdenTrabajo();
          cargarSupervisores();
@@ -71,7 +75,7 @@ export function modificarFormularioConArgumentos(tipo_orden){
          break;
      case 2:
          formulario.innerHTML = '';
-         html = opcion2
+         html = editar ? opcion2Edit : opcion2;
          formulario.innerHTML += html;
          cargarSupervisores();
          cargarEmpleados();
@@ -79,7 +83,7 @@ export function modificarFormularioConArgumentos(tipo_orden){
          break;
      case 3:
          formulario.innerHTML = '';
-         html = opcion3
+         html = editar ? opcion3Edit : opcion3;
          formulario.innerHTML += html;
          cargarSupervisores();
          cargarEmpleados();
@@ -92,8 +96,7 @@ export function modificarFormularioConArgumentos(tipo_orden){
          formulario.innerHTML = '';
          break;
     }
-
-    //cargarModalEditarOrden(document.getElementById("input_id_orden").value);
+    //console.log(formulario);
  }
 
 export function crearCuadrOrdenes(id_etapa){
@@ -230,18 +233,19 @@ export function cargarModalVerOrden(id_orden, tipo){
 }
 
 export function cargarModalEditarOrden(id_orden, nombre_etapa){
+    console.log('cargarModalEditarOrden');
     console.log('Id de la orden: ' + id_orden);
     console.log('Nombre de la etapa: ' + nombre_etapa);
-    let input_id_orden = document.getElementById('id_orden');
-    let input_etapa = document.getElementById('etapa');
-    let input_nom_orden = document.getElementById('nom_orden');
-    let input_fec_ini = document.getElementById('fec_ini');
-    let input_fec_req = document.getElementById('fec_req');
-    let input_horas_estimadas = document.getElementById('horas_estimadas');
-    let input_minutos_estimados = document.getElementById('minutos_estimados');
-    let input_revision = document.getElementById('revision');
-    let input_ruta_plano = document.getElementById('ruta_plano');
-    let input_cantidad = document.getElementById('cantidad');
+    let input_id_orden = document.getElementById('id_orden_edit');
+    let input_etapa = document.getElementById('etapa_edit');
+    let input_nom_orden = document.getElementById('nom_orden_edit');
+    let input_fec_ini = document.getElementById('fec_ini_edit');
+    let input_fec_req = document.getElementById('fec_req_edit');
+    let input_horas_estimadas = document.getElementById('horas_estimadas_edit');
+    let input_minutos_estimados = document.getElementById('minutos_estimados_edit');
+    let input_revision = document.getElementById('revision_edit');
+    let input_ruta_plano = document.getElementById('ruta_plano_edit');
+    let input_cantidad = document.getElementById('cantidad_edit');
     $.when($.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id_orden, 
@@ -258,15 +262,15 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
             input_nom_orden.value = element.orden;
             input_fec_ini.value = element.fecha_inicio;
             input_fec_req.value = element.fecha_limite;
-            input_horas_estimadas.value = element.duracion_estimada.substring(0, 2);
-            input_minutos_estimados.value = element.duracion_estimada.substring(3, 5);
-            document.querySelector('#cbx_supervisor').value = element.id_supervisor;
-            document.querySelector('#cbx_responsable').value = element.id_responsable;
+            input_horas_estimadas.value = element.duracion_estimada.split(':')[0];
+            input_minutos_estimados.value = element.duracion_estimada.split(':')[1];    
+            document.querySelector('#cbx_supervisor_edit').value = element.id_supervisor;
+            document.querySelector('#cbx_responsable_edit').value = element.id_responsable;
             //OPCIONALES
-            document.querySelector('#tipo_orden_trabajo') ? document.querySelector('#tipo_orden_trabajo').value = element.id_tipo : '';
-            document.querySelector('#cbx_estado') ? document.querySelector('#cbx_estado').value = element.id_estado : '';
-            document.querySelector('#cbx_estado_man') ? document.querySelector('#cbx_estado_man').value = element.id_estado : '';
-            document.querySelector('#cbx_estado_mec') ? document.querySelector('#cbx_estado_mec').value = element.id_estado : '';
+            document.querySelector('#tipo_orden_trabajo_edit') ? document.querySelector('#tipo_orden_trabajo_edit').value = element.id_tipo : '';
+            document.querySelector('#cbx_estado_edit') ? document.querySelector('#cbx_estado_edit').value = element.id_estado : '';
+            document.querySelector('#cbx_estado_man_edit') ? document.querySelector('#cbx_estado_man_edit').value = element.id_estado : '';
+            document.querySelector('#cbx_estado_mec_edit') ? document.querySelector('#cbx_estado_mec_edit').value = element.id_estado : '';
             input_revision ? input_revision.value = element.revision : '';
             input_ruta_plano ? input_ruta_plano.value = element.ruta_plano: '';
             input_cantidad ? input_cantidad.value = element.cantidad : '';
@@ -508,7 +512,8 @@ export function obtenerPartes(id_orden){
 
 
 function cargarTipoOrdenTrabajo(){
-    let c_bx_tipo_orden = document.getElementById("tipo_orden_trabajo");
+    let c_bx_tipo_orden = document.getElementById("tipo_orden_trabajo") ? document.getElementById("tipo_orden_trabajo") : '';
+    let c_bx_tipo_orden_edit = document.getElementById("tipo_orden_trabajo_edit") ? document.getElementById("tipo_orden_trabajo_edit") : '';
     let html_tipo_orden = '';
     $.when($.ajax({
         type: "post",
@@ -523,7 +528,8 @@ function cargarTipoOrdenTrabajo(){
                                 +`</option> 
                                 `
         });
-        c_bx_tipo_orden.innerHTML += html_tipo_orden;
+        c_bx_tipo_orden != '' ? c_bx_tipo_orden.innerHTML += html_tipo_orden: '';
+        c_bx_tipo_orden_edit != '' ? c_bx_tipo_orden_edit.innerHTML += html_tipo_orden : '';
     },
     error: function (error) {
         console.log(error);
@@ -532,7 +538,8 @@ function cargarTipoOrdenTrabajo(){
 }
 
 function cargarEmpleados(){
-    let c_bx_empleados = document.getElementById("cbx_responsable");
+    let c_bx_empleados = document.getElementById("cbx_responsable") ? document.getElementById("cbx_responsable") : '';
+    let c_bx_empleados_edit = document.getElementById("cbx_responsable_edit") ? document.getElementById("cbx_responsable_edit") : '';
     let html_empleados = '';
     $.when($.ajax({
         type: "post",
@@ -547,7 +554,8 @@ function cargarEmpleados(){
                                 +`</option> 
                                 `
         });
-        c_bx_empleados.innerHTML += html_empleados;
+        c_bx_empleados != ''  ? c_bx_empleados.innerHTML += html_empleados : '';
+        c_bx_empleados_edit != '' ? c_bx_empleados_edit.innerHTML += html_empleados : '';
     },
     error: function (error) {
         console.log(error);
@@ -556,7 +564,8 @@ function cargarEmpleados(){
 }
 
 function cargarSupervisores(){
-    let c_bx_supervisores = document.getElementById("cbx_supervisor");
+    let c_bx_supervisores = document.getElementById("cbx_supervisor") ? document.getElementById("cbx_supervisor") : '';
+    let c_bx_supervisores_edit = document.getElementById("cbx_supervisor_edit") ? document.getElementById("cbx_supervisor_edit") : '';
     let html_supervisores = '';
     $.when($.ajax({
         type: "post",
@@ -571,7 +580,8 @@ function cargarSupervisores(){
                                 +`</option> 
                                 `
         });
-        c_bx_supervisores.innerHTML += html_supervisores;
+        c_bx_supervisores != '' ? c_bx_supervisores.innerHTML += html_supervisores : '';
+        c_bx_supervisores_edit != '' ? c_bx_supervisores_edit.innerHTML += html_supervisores : '';
     },
     error: function (error) {
         console.log(error);
@@ -580,7 +590,8 @@ function cargarSupervisores(){
 }
 
 function cargarEstados(){
-    let c_bx_estados = document.getElementById("cbx_estado");
+    let c_bx_estados = document.getElementById("cbx_estado") ? document.getElementById("cbx_estado") : '';
+    let c_bx_estados_edit = document.getElementById("cbx_estado_edit") ? document.getElementById("cbx_estado_edit") : '';
     let html_estados = '';
     $.when($.ajax({
         type: "post",
@@ -595,7 +606,8 @@ function cargarEstados(){
                                 +`</option> 
                                 `
         });
-        c_bx_estados.innerHTML += html_estados;
+        c_bx_estados != '' ? c_bx_estados.innerHTML += html_estados : '';
+        c_bx_estados_edit != '' ? c_bx_estados_edit.innerHTML += html_estados : '';
     },
     error: function (error) {
         console.log(error);
@@ -604,7 +616,8 @@ function cargarEstados(){
 }
 
 function cargarEstadosMecanizados(){
-    let c_bx_estados_mec = document.getElementById("cbx_estado_mec");
+    let c_bx_estados_mec =  document.getElementById("cbx_estado_mec") ? document.getElementById("cbx_estado_mec") : '';
+    let c_bx_estados_mec_edit =  document.getElementById("cbx_estado_mec_edit") ? document.getElementById("cbx_estado_mec_edit") : '';
     let html_estados_mec = '';
     $.when($.ajax({
         type: "post",
@@ -619,7 +632,8 @@ function cargarEstadosMecanizados(){
                                 +`</option> 
                                 `
         });
-        c_bx_estados_mec.innerHTML += html_estados_mec;
+        c_bx_estados_mec != '' ? c_bx_estados_mec.innerHTML += html_estados_mec : '';
+        c_bx_estados_mec_edit != '' ? c_bx_estados_mec_edit.innerHTML += html_estados_mec : '';
     },
     error: function (error) {
         console.log(error);
@@ -628,7 +642,8 @@ function cargarEstadosMecanizados(){
 }
 
 function cargarEstadosManufacturas(){
-    let c_bx_estados_man = document.getElementById("cbx_estado_man");
+    let c_bx_estados_man = document.getElementById("cbx_estado_man") ? document.getElementById("cbx_estado_man") : '';
+    let c_bx_estados_man_edit = document.getElementById("cbx_estado_man_edit") ? document.getElementById("cbx_estado_man_edit") : '';
     let html_estados_man = '';
     $.when($.ajax({
         type: "post",
@@ -643,10 +658,40 @@ function cargarEstadosManufacturas(){
                                 +`</option> 
                                 `
         });
-        c_bx_estados_man.innerHTML += html_estados_man;
+        c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
+        c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : '';
     },
     error: function (error) {
         console.log(error);
     }
     }));
+}
+
+export function cargarModalEditarTrabajo(id_orden, nombre_etapa){
+    console.log('Editar trabajo');
+    modificarFormularioConArgumentos(1, 'formulario-editar-orden', true);
+    cargarModalEditarOrden(id_orden, nombre_etapa);
+}
+export function cargarModalEditarManufactura(id_orden, nombre_etapa){
+    console.log('Editar manufactura');
+    modificarFormularioConArgumentos(2, 'formulario-editar-orden', true);
+    cargarModalEditarOrden(id_orden, nombre_etapa);
+}
+export function cargarModalEditarMecanizado(id_orden, nombre_etapa){
+    console.log('Editar mecanizado');
+    modificarFormularioConArgumentos(3, 'formulario-editar-orden', true);
+    cargarModalEditarOrden(id_orden, nombre_etapa);
+}
+
+export function cargarModalCrearTrabajo(){
+    console.log('Crearditar trabajo');
+    modificarFormularioConArgumentos(1, 'formulario-crear-orden', false);
+}
+export function cargarModalCrearManufactura(){
+    console.log('Crear manufactura');
+    modificarFormularioConArgumentos(2, 'formulario-crear-orden', false);
+}
+export function cargarModalCrearMecanizado(){
+    console.log('Crear mecanizado');
+    modificarFormularioConArgumentos(3, 'formulario-crear-orden', false);
 }

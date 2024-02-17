@@ -23,8 +23,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="formulario">
-
+                <div id="formulario-crear-orden">
+                    
                 </div>
             </div>
             <div class="modal-footer">

@@ -892,32 +892,46 @@ class OrdenController extends Controller
     }
 
     public function editarOrden(Request $request){
-        $orden = Orden::find($request->input('id_orden'));
+        $orden = Orden::find($request->input('id_orden_edit'));
         $tipo_orden = $orden->getOrdenDe->getTipoOrden();
         switch ($tipo_orden) {
             case 1:
                 $this->validate($request, [
-                    'nom_orden' => 'required',
-                    'supervisor' => 'required',
-                    'responsable' => 'required',
-                    'fecha_ini' => 'required',
-                    'fecha_req' => 'required',
-                    'id_estado' => 'required',
-                    'tipo_orden_trabajo' => 'required',
-                    'horas_estimadas' => 'required',
-                    'minutos_estimados' => 'required'
+                    'nom_orden_edit' => 'required',
+                    'supervisor_edit' => 'required',
+                    'responsable_edit' => 'required',
+                    'fecha_ini_edit' => 'required',
+                    'fecha_req_edit' => 'required',
+                    'id_estado_edit' => 'required',
+                    'tipo_orden_trabajo_edit' => 'required',
+                    'horas_estimadas_edit' => 'required',
+                    'minutos_estimados_edit' => 'required'
                 ]);
                 break;
             case 2:
                 $this->validate($request, [
-                    'nom_orden' => 'required',
-                    'supervisor' => 'required',
-                    'responsable' => 'required',
-                    'fecha_ini' => 'required',
-                    'fecha_req' => 'required',
-                    'estado_manufactura' => 'required',
-                    'horas_estimadas' => 'required',
-                    'minutos_estimados' => 'required'
+                    'nom_orden_edit' => 'required',
+                    'supervisor_edit' => 'required',
+                    'responsable_edit' => 'required',
+                    'fecha_ini_edit' => 'required',
+                    'fecha_req_edit' => 'required',
+                    'estado_man_edit' => 'required',
+                    'horas_estimadas_edit' => 'required',
+                    'minutos_estimados_edit' => 'required',
+                    'ruta_plano_edit' => 'required'
+                ]);
+                break;
+            case 3:
+                $this->validate($request, [
+                    'nom_orden_edit' => 'required',
+                    'supervisor_edit' => 'required',
+                    'responsable_edit' => 'required',
+                    'fecha_ini_edit' => 'required',
+                    'fecha_req_edit' => 'required',
+                    'estado_mecanizado_edit' => 'required',
+                    'horas_estimadas_edit' => 'required',
+                    'minutos_estimados_edit' => 'required',
+                    'ruta_plano_edit' => 'required'
                 ]);
                 break;
             default:
@@ -928,9 +942,9 @@ class OrdenController extends Controller
 
         
         $orden->update([
-            'nombre_orden' => $request->input('nom_orden'),
-            'fecha_inicio' => $request->input('fecha_ini'),
-            'duracion_estimada' => $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados')
+            'nombre_orden' => $request->input('nom_orden_edit'),
+            'fecha_inicio' => $request->input('fecha_ini_edit'),
+            'duracion_estimada' => $request->input('horas_estimadas_edit') . ':' . $request->input('minutos_estimados_edit')
         ]);
 
         $responsabilidades_orden = $orden->getResponsabilidaOrden;
@@ -941,15 +955,15 @@ class OrdenController extends Controller
            switch ($rol) {
             case 'Responsable':
                 $responsabilidad_res = $resp_ord->getResponsabilidad;
-                if($responsabilidad_res->getEmpleado->id_empleado != $request->input('responsable')){
-                    $responsabilidad_res = $request->input('responsable');
+                if($responsabilidad_res->getEmpleado->id_empleado != $request->input('responsable_edit')){
+                    $responsabilidad_res->id_empleado = $request->input('responsable_edit');
                     $responsabilidad_res->save();
                 }
                 break;
             case 'Supervisor':
                 $responsabilidad_sup = $resp_ord->getResponsabilidad;
-                if($responsabilidad_sup->getEmpleado->id_empleado != $request->input('supervisor')){
-                    $responsabilidad_sup = $request->input('supervisor');
+                if($responsabilidad_sup->getEmpleado->id_empleado != $request->input('supervisor_edit')){
+                    $responsabilidad_sup->id_empleado = $request->input('supervisor_edit');
                     $responsabilidad_sup->save();
                 }
                 break;
@@ -969,7 +983,7 @@ class OrdenController extends Controller
         $parte = Parte::create([
             'observaciones' => 'Edicion de orden',
             'fecha' => Carbon::now()->format('Y-m-d'),
-            'fecha_limite' => $request->input('fecha_req'),
+            'fecha_limite' => $request->input('fecha_req_edit'),
             'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s'),
             'horas' => '00:00',
             'id_orden' => $orden->id_orden,
@@ -979,28 +993,29 @@ class OrdenController extends Controller
         switch ($tipo_orden) {
             case 1:
                 Parte_trabajo::create([
-                    'id_estado' => $request->input('id_estado'),
+                    'id_estado' => $request->input('id_estado_edit'),
                     'id_parte' => $parte->id_parte
                 ]);
                 break;
             case 2:
                 $orden_manufactura = $orden->getOrdenDe;
-                $orden_manufactura->revision = $request->input('revision');
-                $orden_manufactura->ruta_plano = $request->input('ruta_plano');
+                $orden_manufactura->revision = $request->input('revision_edit');
+                $orden_manufactura->cantidad = $request->input('cantidad_edit');
+                $orden_manufactura->ruta_plano = $request->input('ruta_plano_edit');
                 $orden_manufactura->save();
                 Parte_manufactura::create([
-                    'id_estado_manufactura' => $request->input('estado_manufactura'),
+                    'id_estado_manufactura' => $request->input('estado_man_edit'),
                     'id_parte' => $parte->id_parte
                 ]);
                 break;
             case 3:
                 $orden_mecanizado = $orden->getOrdenDe;
-                $orden_mecanizado->revision = $request->input('revision');
-                $orden_mecanizado->cantidad = $request->input('cantidad');
-                $orden_mecanizado->ruta_pieza = $request->input('ruta_plano');
+                $orden_mecanizado->revision = $request->input('revision_edit');
+                $orden_mecanizado->cantidad = $request->input('cantidad_edit');
+                $orden_mecanizado->ruta_pieza = $request->input('ruta_plano_edit');
                 $orden_mecanizado->save();
                 Parte_mecanizado::create([
-                    'id_estado_mecanizado' => $request->input('estado_mecanizado'),
+                    'id_estado_mecanizado' => $request->input('estado_mecanizado_edit'),
                     'id_parte' => $parte->id_parte
                 ]);
                 break;
