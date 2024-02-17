@@ -26,7 +26,7 @@
                                 {!! Form::select('responsable', $empleados, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
-                                    'id' => 'cbx_responsable_etapa'
+                                    'id' => 'm-ce-responsable'
                                 ]) !!}
                             </div>
                         </div>
@@ -44,8 +44,8 @@
                             ]) !!}
                         </div>
                         <div class="" hidden>
-                            {!! Form::text('id_etapa', $etapa->id_etapa, ['class' => 'form-control', 'id' => 'm_ee_id_etapa']) !!}
-                            {!! Form::text('id_servicio', $etapa->id_servicio, ['class' => 'form-control', 'id' => 'm_ee_id_servicio']) !!}
+                            {!! Form::text('id_etapa', null, ['class' => 'form-control', 'id' => 'm_ee_id_etapa']) !!}
+                            {!! Form::text('id_servicio', $proyecto->id_servicio, ['class' => 'form-control', 'id' => 'm_ee_id_servicio']) !!}
                         </div>
                     </div>
                 </div>

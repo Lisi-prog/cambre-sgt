@@ -95,17 +95,17 @@
                                                 <div class="row my-2">
                                                     <div class="col-12">
                                                         <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">
-                                                            ver
+                                                            Ver
                                                         </button>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
+                                                                Editar
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal">
-                                                            parte
-                                                        </button>
-                                                    </div>
-                                                </div> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -120,11 +120,13 @@
 </section>
 
 @include('Ingenieria.Servicios.Etapas.modal.ver-etapa')
+@include('Ingenieria.Servicios.Etapas.modal.editar-etapa')
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script type="module"> 
-    import {cargarModalVerEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+    import {cargarModalVerEtapa, cargarModalEditarEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
     window.cargarModalVerEtapa = cargarModalVerEtapa;
+    window.cargarModalEditarEtapa = cargarModalEditarEtapa;
 </script>
 {{-- <script>
     $(document).ready(function () {

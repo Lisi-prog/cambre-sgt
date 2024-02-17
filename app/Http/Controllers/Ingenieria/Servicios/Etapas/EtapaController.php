@@ -44,9 +44,10 @@ class EtapaController extends Controller
     }
     
     public function index(Request $request)
-    {        
+    {   
         $etapas = Etapa::orderBy('id_etapa')->get();
-        return view('Ingenieria.Servicios.Etapas.index', compact('etapas'));
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Servicios.Etapas.index', compact('etapas', 'empleados'));
     }
 
     public function create()
@@ -191,6 +192,7 @@ class EtapaController extends Controller
         $etapa = Etapa::find($id);
         $etapaEspecial = (object)[
             'descripcion_etapa' => $etapa->descripcion_etapa,
+            'id_estado' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->getEstado->id_estado,
             'estado' => $etapa->getActualizaciones->sortByDesc('id_actualizacion')->first()->getActualizacion->getEstado->nombre_estado,
             'responsable' => $etapa->getResponsable->getEmpleado->nombre_empleado,
             'id_responsable' => $etapa->getResponsable->getEmpleado->id_empleado,
@@ -223,7 +225,6 @@ class EtapaController extends Controller
 
         $etapa = Etapa::find($id_etapa);
 
-
         $etapa->update([
             'descripcion_etapa' => $nombre_etapa,
             'fecha_inicio' => $fecha_inicio
@@ -235,7 +236,7 @@ class EtapaController extends Controller
             $res->save();
         }
 
-        return redirect()->route('proyectos.gestionar', $id_servicio)->with('mensaje', 'Etapa editada exitosamente.');  
+        return redirect()->back()->with('mensaje', 'Etapa editada exitosamente.');  
     }
     
     function calcularHorasEstimadas($ordenes)

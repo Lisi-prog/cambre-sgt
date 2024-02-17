@@ -425,11 +425,12 @@
         </div>
 
         <script type="module"> 
-            import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, cargarModalNuevaActProyecto} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+            import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, cargarModalNuevaActProyecto, cargarModalEditarEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
             window.crearCuadrOrdenes = crearCuadrOrdenes;
             window.cargarModalVerOrden = cargarModalVerOrden;
             window.obtenerPartes = obtenerPartes;
             window.cargarModalNuevaActProyecto = cargarModalNuevaActProyecto;
+            window.cargarModalEditarEtapa = cargarModalEditarEtapa;
         </script>
 
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">

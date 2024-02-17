@@ -209,6 +209,46 @@ export function cargarModalVerEtapa(id_etapa){
     }));
 }
 
+export function cargarModalEditarEtapa(id_etapa){
+    let input_etapa = document.getElementById("input-nombre_etapa");
+    //let input_estado = document.getElementById("input-estado");
+    // let input_responsable = document.getElementById("input-responsable");
+    let input_fecha_inicio = document.getElementById("input-fec_ini");
+    // let input_fecha_limite = document.getElementById("input-fecha_limite");
+    // let input_fecha_fin = document.getElementById("input-fecha_fin_real");
+    // let input_duracion_estimada = document.getElementById("input-duracion_estimada");
+    // let input_duracion_real = document.getElementById("input-duracion_real");
+    // let input_costo_estimado = document.getElementById("input-costo_estimado");
+    // let input_costo_real = document.getElementById("input-costo_real");
+    // let input_fecha_ultima_actualizacion = document.getElementById("input-fecha_ultima_actualizacion");
+        
+    $.when($.ajax({
+        type: "post",
+        url: '/etapa/obtener-una-etapa/'+id_etapa, 
+        data: {
+            id_etapa: id_etapa,
+        },
+    success: function (response) {
+            input_etapa.value = response.descripcion_etapa;
+            
+            //input_responsable.value = response.responsable;
+            input_fecha_inicio.value = response.fecha_inicio;
+            //input_fecha_limite.value = response.fecha_limite;
+            //input_fecha_fin.value = response.fecha_fin_real;
+            //input_duracion_estimada.value = response.duracion_estimada;
+            //input_duracion_real.value = response.duracion_real;
+            //input_costo_estimado.value = response.costo_estimado;
+            //input_costo_real.value = response.costo_real;
+            //input_fecha_ultima_actualizacion.value = response.fecha_ultima_actualizacion; //.substring(0, 10)
+            document.querySelector('#cbx_responsable_etapa').value = response.id_responsable;
+    },      
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+    return ''
+}
+
 export function cargarModalVerOrden(id_orden, tipo){
     let body_modal_ver_orden = document.getElementById('modal-body-ver-orden');
     
