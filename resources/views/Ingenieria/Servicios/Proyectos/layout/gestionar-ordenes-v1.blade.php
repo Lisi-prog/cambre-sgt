@@ -1,5 +1,4 @@
 {{-- Ordenes de trabajo del proyecto --}}
-                
 <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_trabajo'>
     <div class="card">
         <div class="card-head">
@@ -60,7 +59,7 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
+                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarTrabajo({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
                                                         Editar
                                                     </button>
                                                 </div>
@@ -154,7 +153,7 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
+                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
                                                         Editar
                                                     </button>
                                                 </div>
@@ -258,7 +257,7 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
+                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
                                                         Editar
                                                     </button>
                                                 </div>
@@ -372,28 +371,11 @@
     </div>
 </div>
 {{-- ------------- --}}
-
-{{-- <script>
-    $(function(){
-        $('#label-orden-trabajo').on('click', mostrarTablaTrabajo);
-    });
-
-    const etiqueta = document.getElementById('label-orden-trabajo');
-
-    etiqueta.addEventListener('mouseover', () => {
-        etiqueta.style.cursor = 'pointer';
-    });
-
-    etiqueta.addEventListener('mouseout', () => {
-        etiqueta.style.cursor = 'default';
-    }); 
-
-    function mostrarTablaTrabajo(){
-        let cuadro_oculto_de_ordenes = document.getElementById('tabla_de_ordenes_trabajo');
-        if ($('#tabla_de_ordenes_trabajo').is(":hidden")) {
-            cuadro_oculto_de_ordenes.hidden = false;
-        }else{
-            cuadro_oculto_de_ordenes.hidden = true;
-        }
-    }
-</script> --}}
+<script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
+<script type="module"> 
+    import {cargarModalVerOrden, cargarModalEditarManufactura, cargarModalEditarMecanizado, cargarModalEditarTrabajo} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+    window.cargarModalVerOrden = cargarModalVerOrden;
+    window.cargarModalEditarManufactura = cargarModalEditarManufactura;
+    window.cargarModalEditarMecanizado = cargarModalEditarMecanizado;
+    window.cargarModalEditarTrabajo = cargarModalEditarTrabajo;
+</script>

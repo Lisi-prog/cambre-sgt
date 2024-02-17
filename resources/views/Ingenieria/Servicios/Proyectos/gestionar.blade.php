@@ -467,6 +467,7 @@
     @include('Ingenieria.Servicios.Proyectos.modal.crear-act')
     @include('Ingenieria.Servicios.Proyectos.modal.crear-act-eta')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-partes')
+    @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection
