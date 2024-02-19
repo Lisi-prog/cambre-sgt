@@ -22,7 +22,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN']], function () 
     
     Route::get('etapas/actualizaciones/{id}', [EtapaController::class, 'verActualizaciones'])->name('etapas.actualizaciones');
     Route::post('proyectos/guardar-actualizacion/{id}', [ProyectoController::class, 'guardarActualizacion'])->name('actualizacion.crear');
-    Route::post('etapas/guardar-actualizacion', [EtapaController::class, 'guardarActualizacion'])->name('actualizacion-etapa.crear');
+    Route::post('etapas/guardar-actualizacion/{id}', [EtapaController::class, 'guardarActualizacion'])->name('actualizacion-etapa.crear');
     Route::post('/etapas/obtener-actualizaciones-etapa/{id}', [EtapaController::class, 'obtenerActualizacionesEtapa']);
     Route::post('/proyectos/obtener-actualizaciones-proyecto/{id}', [ProyectoController::class, 'obtenerActualizacionesServicio']);
     Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');

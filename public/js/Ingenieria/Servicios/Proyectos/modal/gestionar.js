@@ -45,7 +45,8 @@ function mostrarActEtapa(id){
     }else{
         cuadro_oculto_de_act_proyecto.hidden = true;
     }
-
+    let id_etapa = document.getElementById('m_cae_id_etapa');
+    id_etapa.value = id;
     let renglones_actualizacion = document.getElementById("cuadro-act-etapa");
     let html_act = '';
 
@@ -55,22 +56,39 @@ function mostrarActEtapa(id){
         data: {
             id: id,
         },
-    success: function (response) {
-        response.forEach(element => {
-            html_act += `<tr>
-                            <td class="text-center">`+element.codigo+`</td>
-                            <td class="text-center">`+element.fecha_carga+`</td>
-                            <td class="text-center">`+element.descripcion+`</td>
-                            <td class="text-center">`+element.fecha_limite+`</td>
-                            <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.responsable+`</td>
-                            </tr>`
-        });
-        renglones_actualizacion.innerHTML = html_act;
-    },
-    error: function (error) {
-        console.log(error);
-    }
+        success: function (response) {
+            response.forEach(element => {
+                html_act += `<tr>
+                                <td class="text-center">`+element.codigo+`</td>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                <td class="text-center">`+element.descripcion+`</td>
+                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+element.estado+`</td>
+                                <td class="text-center">`+element.responsable+`</td>
+                                </tr>`
+            });
+            renglones_actualizacion.innerHTML = html_act;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+
+    let fecha_lim = document.getElementById('m-crear-act-eta-feclimite');
+    let estado_actual = document.getElementById('m-crear-act-eta-idestado');
+    $.when($.ajax({
+        type: "post",
+        url: '/etapa/obtener-una-etapa/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (response) {
+            fecha_lim.value = response.fecha_limite;
+            estado_actual.value = response.id_estado;
+        },
+        error: function (error) {
+            console.log(error);
+        }
     }));
 }
 

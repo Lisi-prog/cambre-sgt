@@ -275,11 +275,12 @@ class EtapaController extends Controller
         return view('Ingenieria.Servicios.Etapas.ver-actualizaciones', compact('etapa', 'empleados'));
     }
 
-    public function guardarActualizacion(Request $request){
+    public function guardarActualizacion(Request $request, $id){
         $this->validate($request, [
             'descripcion' => 'required',
             'id_estado' => 'required',
-            'fecha_limite' => 'required'
+            'fecha_limite' => 'required',
+            'id_etapa' => 'required'
         ]);
 
         $descripcion = $request->input('descripcion');
@@ -287,6 +288,8 @@ class EtapaController extends Controller
         $id_estado = $request->input('id_estado');
 
         $fecha_limite = $request->input('fecha_limite');
+
+        $id_etapa = $request->input('id_etapa');
 
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
@@ -305,10 +308,10 @@ class EtapaController extends Controller
                             'id_responsabilidad' => $responsabilidad->id_responsabilidad
                         ]);
 
-        Actualizacion_servicio::create([
+        Actualizacion_etapa::create([
             'id_actualizacion' => $actualizacion->id_actualizacion,
-            'id_servicio' => $id
+            'id_etapa' => $id_etapa
         ]);
-        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
+        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion de la etapa creado exitosamente.');  
     }
 }

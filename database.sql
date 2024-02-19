@@ -496,34 +496,35 @@ VALUES
 
 INSERT INTO estado(id_estado, nombre_estado)
 VALUES
-  (1, 'Cancelado'),
-  (2, 'Completo'),
-  (3, 'Continua'),
-  (4, 'En proceso'),
+  (1, 'Continua'),
+  (2, 'En proceso'),
+  (3, 'Espera'),
+  (4, 'Pausa'),
   (5, 'Externo'),
-  (6, 'Espera'),
+  (6, 'Programado'),
   (7, 'Revisar'),
-  (8, 'Pausa'),
-  (9, 'Problema');
+  (8, 'Problema'),
+  (9, 'Completo'),
+  (10, 'Cancelado');
 
 INSERT INTO estado_mecanizado(id_estado_mecanizado, nombre_estado_mecanizado)
 VALUES
-  (1, 'Cancelado'),
+  (1, 'Planos entregados'),
   (2, 'Material encargado'),
   (3, 'Material preparado'),
   (4, 'Mecanizado completo'),
-  (5, 'Pieza finalizada'),
-  (6, 'Planos entregados'),
-  (7, 'Temple');
+  (5, 'Temple'),
+  (6, 'Pieza finalizada'),
+  (7, 'Cancelado');
 
 INSERT INTO estado_manufactura(id_estado_manufactura, nombre_estado_manufactura)
 VALUES
-  (1, 'Cancelado'),
-  (2, 'Orden creada'),
-  (3, 'Piezas en fabricacion'),
-  (4, 'Piezas listas'),
-  (5, 'Ajuste listo'),
-  (6, 'Ensamble listo');
+  (1, 'Orden creada'),
+  (2, 'Piezas en fabricacion'),
+  (3, 'Piezas listas'),
+  (4, 'Ajuste listo'),
+  (5, 'Ensamble listo'),
+  (6, 'Cancelado');
 
 INSERT INTO tipo_relacion_gantt(nombre_relacion_gantt)
 VALUES

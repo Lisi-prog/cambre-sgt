@@ -81,6 +81,18 @@
                                             </div>
                                         </div>
                                     </div> --}}
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Proyectos:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($codigos_servicio as $codigo_servicio)
+                                                    <label><input name="cod_serv" type="checkbox" value="{{$codigo_servicio->codigo_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
@@ -317,7 +329,7 @@
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
         
-            var offices = $('input:checkbox[name="tipo"]:checked').map(function() {
+            var offices = $('input:checkbox[name="cod_serv"]:checked').map(function() {
                 return this.value;
             }).get();
         
@@ -325,15 +337,19 @@
             if (offices.length === 0) {
                 return true;
             }
-            
-            if (offices.indexOf(searchData[4]) !== -1) {
+
+            // console.log('searchData', searchData[1])
+        // searchData = searchData[0].replace(/[0-9]/g, '');
+        console.log(offices)
+        console.log(searchData[1])
+        console.log(offices.indexOf(['IN-PROY-0048']))
+            if (offices.indexOf(['IN-PROY-0048']) !== -1) {
                 return true;
             }
             
             return false;
             }
         );
-
     var table = $('#example').DataTable();
   
     $('input:checkbox').on('change', function () {

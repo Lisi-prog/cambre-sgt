@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear actualizacion etapa</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'actualizacion-etapa.crear', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => ['actualizacion-etapa.crear', $proyecto->id_servicio], 'method' => 'POST', 'class' => 'formulario']) !!}
             <div class="modal-body">
                 {!! Form::text('id_etapa', null, ['class' => 'form-control', 'hidden', 'id' => 'm_cae_id_etapa']) !!}
                 <div class="row">
@@ -27,6 +27,7 @@
                             {!! Form::select('id_estado', $estados, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
+                                    'id' => 'm-crear-act-eta-idestado',
                                     'required',
                                 ]) !!}
                         </div>
@@ -39,7 +40,7 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'class' => 'form-control',
-                                'id' => 'fecc_limite'
+                                'id' => 'm-crear-act-eta-feclimite'
                             ]) !!}
                         </div>
                     </div>

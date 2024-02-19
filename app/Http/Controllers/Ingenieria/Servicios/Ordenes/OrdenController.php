@@ -755,6 +755,10 @@ class OrdenController extends Controller
         return Empleado::orderBy('nombre_empleado')->get();
     }
 
+    public function obtenerCodigoServicio(){
+        return Servicio::orderBy('prioridad_servicio')->get('codigo_servicio');
+    }
+
     public function obtenerEstados(){
         return Estado::orderBy('nombre_estado')->get();
     }
@@ -821,6 +825,7 @@ class OrdenController extends Controller
         $id_empleado = Auth::user()->getEmpleado->id_empleado;
         $supervisores = $this->obtenerSupervisores();
         $responsables = $this->obtenerEmpleados();
+        $codigos_servicio = $this->obtenerCodigoServicio();
         //$estados = $this->listarTodosLosEstados();
         $tipo = '';
         $array_responsabilidades_ordenes = array();
@@ -888,7 +893,7 @@ class OrdenController extends Controller
                 break;
         }
         
-        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden'));
+        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio'));
     }
 
     public function editarOrden(Request $request){
