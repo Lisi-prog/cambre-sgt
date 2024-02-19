@@ -45,7 +45,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13vh;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @php 
@@ -73,32 +73,34 @@ table.dataTable tbody td {
                                                 
                                         <td class= 'text-center' >{{$orden->getCostoRealGuardado()}}</td>
 
-                                        <td class='text-center'>
+                                        <td>
                                             <div class="row justify-content-center" >
-                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenTrabajo{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenTrabajo{{$idCount}}">
-                                                    Opciones
-                                                </button>
-                                            </div>
-                                            <div class="collapse" id="collapseOrdenTrabajo{{$idCount}}">
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarTrabajo({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
-                                                            Editar
-                                                        </button>
-                                                    </div>
+                                                <div class="row justify-content-center" >
+                                                    <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenTrabajo{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenTrabajo{{$idCount}}">
+                                                        Opciones
+                                                    </button>
                                                 </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                            Partes
-                                                        </button>
+                                                <div class="collapse" id="collapseOrdenTrabajo{{$idCount}}">
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarTrabajo({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
+                                                                Editar
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                                Partes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,7 +154,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13vh;">Acciones</th>                                                            
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @php 
@@ -182,37 +184,39 @@ table.dataTable tbody td {
 
                                         <td>
                                             <div class="row justify-content-center" >
-                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenManufactura{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenManufactura{{$idCount}}">
-                                                    Opciones
-                                                </button>
-                                            </div>
-                                            <div class="collapse" id="collapseOrdenManufactura{{$idCount}}">
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
-                                                            Editar
-                                                        </button>
-                                                    </div>
+                                                <div class="row justify-content-center" >
+                                                    <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenManufactura{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenManufactura{{$idCount}}">
+                                                        Opciones
+                                                    </button>
                                                 </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.manufacturamecanizado', $orden->id_orden], 'style' => '']) !!}
-                                                            {!! Form::submit('Agregar mecanizado', ['class' => 'btn btn-success w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                <div class="collapse" id="collapseOrdenManufactura{{$idCount}}">
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
+                                                                Editar
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                            Partes
-                                                        </button>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['ordenes.manufacturamecanizado', $orden->id_orden], 'style' => '']) !!}
+                                                                {!! Form::submit('Agregar mecanizado', ['class' => 'btn btn-success w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                                Partes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -267,7 +271,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13vh;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @php
@@ -299,30 +303,32 @@ table.dataTable tbody td {
                                         
                                         <td class='text-center'>
                                             <div class="row justify-content-center" >
-                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenMecanizado{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenMecanizado{{$idCount}}">
-                                                    Opciones
-                                                </button>
-                                            </div>
-                                            <div class="collapse" id="collapseOrdenMecanizado{{$idCount}}">
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
-                                                            Editar
-                                                        </button>
-                                                    </div>
+                                                <div class="row justify-content-center" >
+                                                    <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenMecanizado{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenMecanizado{{$idCount}}">
+                                                        Opciones
+                                                    </button>
                                                 </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                            Partes
-                                                        </button>
+                                                <div class="collapse" id="collapseOrdenMecanizado{{$idCount}}">
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
+                                                                Editar
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                                Partes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-12">
+                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                            {!! Form::close() !!}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -374,7 +380,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)

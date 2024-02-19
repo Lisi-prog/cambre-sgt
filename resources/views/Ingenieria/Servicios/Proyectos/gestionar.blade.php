@@ -25,14 +25,15 @@
       .table {
         zoom: 85%;
     }
-    table.dataTable tbody td {
-        padding: 0px 10px;
+    table tbody td {
+        padding: 1px 10px !important;
+        height: 0px !important;
     }
     .col-4 {
         padding: 5px;
     }
-    .col-5 {
-        padding: 5px;
+    .col-12 {
+        padding: 5px !important;
     }
 </style>
     <section class="section">
@@ -219,19 +220,18 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <div>
-                                <table id="tablaEtapas" class="table table-hover mt-2" class="display">
-                                    <thead style="">
-                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Etapa</th>
+                                <table id="tablaEtapas" class="table table-hover mt-2">
+                                    <thead>
+                                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha fin real</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Fecha inicio</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Fecha fin real</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:13vh;">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff; width:17vh">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
                                         @php 
@@ -239,43 +239,45 @@
                                         @endphp
                                         @foreach ($proyecto->getEtapas as $etapa)
                                             <tr>    
-                                                <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->descripcion_etapa}}</td>
                                                 
-                                                <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 
-                                                <td class= 'text-center' >{{$etapa->getResponsable->getEmpleado->nombre_empleado}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getResponsable->getEmpleado->nombre_empleado}}</td>
 
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
 
-                                                <td class= 'text-center'>{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
-                                                <td class= 'text-center'>{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____'}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____'}}</td>
 
-                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
 
-                                                <td class= 'text-center' >{{$etapa->getCostoEstimadoGuardado()}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getCostoEstimadoGuardado()}}</td>
                                                 
-                                                <td class= 'text-center' >{{$etapa->getCostoRealGuardado()}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getCostoRealGuardado()}}</td>
 
-                                                <td class='text-center'>
+                                                <td class='text-center' style="vertical-align: middle;">
                                                     <div class="row justify-content-center">
-                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEtapa{{$idCount}}" aria-expanded="false" aria-controls="collapseEtapa{{$idCount}}">
-                                                            Opciones
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse" id="collapseEtapa{{$idCount}}">
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
-                                                                    Editar
-                                                                </button>
-                                                            </div>
+                                                        <div class="row justify-content-center">
+                                                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEtapa{{$idCount}}" aria-expanded="false" aria-controls="collapseEtapa{{$idCount}}">
+                                                                Opciones
+                                                            </button>
                                                         </div>
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                                    Cargar actualizaciones
-                                                                </button>
+                                                        <div class="collapse" id="collapseEtapa{{$idCount}}">
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
+                                                                        Editar
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
+                                                                        Actualizaciones
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -287,7 +289,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                </div>
                             </div>
                         </div>
                     </div>
