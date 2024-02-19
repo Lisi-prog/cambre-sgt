@@ -29,10 +29,18 @@
     .table {
         zoom: 85%;
     }
-
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .table td {
+        min-height: 0px
+    }
     .col-4 {
         padding: 5px;
     }
+
+
+
 
 </style>
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
@@ -78,6 +86,9 @@
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $idCount = 0;
+                                    @endphp
                                     @foreach ($etapas as $etapa)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{$etapa->getServicio->prioridad_servicio}}</td>
@@ -101,20 +112,34 @@
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 
-                                                <div class="row my-2 justify-content-center">
-                                                    <div class="col-4">
-                                                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">
-                                                            Ver
+                                                <div class="row justify-content-center" >
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEtapas{{$idCount}}" aria-expanded="false" aria-controls="collapseEtapas{{$idCount}}">
+                                                            Opciones
                                                         </button>
                                                     </div>
-                                                    <div class="col-4">
-                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
-                                                            Editar
-                                                        </button>
+                                                    <div class="collapse" id="collapseEtapas{{$idCount}}">
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">
+                                                                    Ver
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
+                                                                    Editar
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount += 1;
+                                        @endphp
                                     @endforeach
                                 </tbody>          
                             </table>

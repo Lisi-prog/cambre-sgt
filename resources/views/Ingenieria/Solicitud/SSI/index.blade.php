@@ -3,7 +3,17 @@
 @section('content')
 
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
-
+<style>
+    .table {
+        zoom: 85%;
+    }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .col-4 {
+        padding: 5px;
+    }
+</style>
 <section class="section">
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
@@ -40,7 +50,8 @@
                                 </thead>
                                 <tbody>
                                     @php
-                                        $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado')
+                                        $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado');
+                                        $idCount = 0;
                                     @endphp
                                     @foreach ($listaSSI as $Ssi)
                                         <tr>
@@ -66,30 +77,42 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
 
                                             <td>
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        @else
-                                                            @hasrole('SUPERVISOR')
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
-                                                                {!! Form::close() !!}
-                                                            @endhasrole
-                                                        @endif
+                                                <div class="row justify-content-center">
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSSI{{$idCount}}" aria-expanded="false" aria-controls="collapseSSI{{$idCount}}">
+                                                            Opciones
+                                                        </button>
                                                     </div>
-                                                </div> 
-                                                <div class="row my-2">
-                                                    <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                    <div class="collapse" id="collapseSSI{{$idCount}}">
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                    {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                @else
+                                                                    @hasrole('SUPERVISOR')
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    @endhasrole
+                                                                @endif
+                                                            </div>
+                                                        </div> 
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount += 1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>

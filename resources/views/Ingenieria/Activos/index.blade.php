@@ -3,14 +3,25 @@
 @section('titulo', 'Activos')
 
 @section('content')
-
+<style>
+    .table {
+        zoom: 85%;
+    }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .col-4 {
+        padding: 5px;
+    }
+</style>
 <section class="section">
-    <div class="section-header d-flex">
-        <div class="">
+    <div class="section-header d-flex justify-content-center">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
             <h4 class="titulo page__heading my-auto mr-5">Activos</h4>
         </div>
-        
-        <div class="ms-auto">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
             {{-- @can('CREAR-RI') --}}
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
                 Nueva activo
@@ -30,42 +41,63 @@
                                     <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
-                                    <th class='text-center' style="color: #fff;">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $idCount = 0;   
+                                    @endphp
                                     @foreach ($activos as $activo)
                                         <tr class="my-auto">
-                                            <td class='text-center'>{{$activo->id_activo}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->id_activo}}</td>
 
-                                            <td class='text-center'>{{$activo->nombre_activo}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->nombre_activo}}</td>
 
-                                            <td class='text-center'>{{$activo->descripcion_activo}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo}}</td>
 
 
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['activos.edit', $activo->id_activo], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                        {{-- <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarMaquinariaModal" onclick="cargarModalEditar({{$maquinaria->id_maquinaria}})">
-                                                            Editar
-                                                        </button> --}}
-                                                    {{-- @endcan --}}
+                                                <div class="row justify-content-center">
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseActivo{{$idCount}}" aria-expanded="false" aria-controls="collapseActivo{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" id="collapseActivo{{$idCount}}">
+                                                        {{-- @can('EDITAR-ROL') --}}
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['activos.edit', $activo->id_activo], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2 w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                            {{-- <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarMaquinariaModal" onclick="cargarModalEditar({{$maquinaria->id_maquinaria}})">
+                                                                Editar
+                                                            </button> --}}
+                                                        {{-- @endcan --}}
 
-                                                    {{-- @can('BORRAR-ROL') --}}
-                                                        {!! Form::open([
-                                                            'method' => 'DELETE',
-                                                            'class' => 'formulario',
-                                                            'route' => ['activos.destroy', $activo->id_activo],
-                                                            'style' => 'display:inline',
-                                                        ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el activo?');"]) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
+                                                        {{-- @can('BORRAR-ROL') --}}
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['activos.destroy', $activo->id_activo],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el activo?');"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        {{-- @endcan --}}
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount +=1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>

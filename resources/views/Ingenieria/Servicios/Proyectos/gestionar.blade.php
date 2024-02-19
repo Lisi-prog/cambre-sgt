@@ -25,6 +25,15 @@
       .table {
         zoom: 85%;
     }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .col-4 {
+        padding: 5px;
+    }
+    .col-5 {
+        padding: 5px;
+    }
 </style>
     <section class="section">
         <div class="d-flex section-header justify-content-center">
@@ -54,15 +63,20 @@
                                     <h5 class="text-center">Proyecto</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-primary col-9" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
-                                        Editar
+                                    <button class="btn btn-primary col-9 my-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyecto" aria-expanded="false" aria-controls="collapsecollapseProyecto">
+                                        Opciones
                                     </button>
-                                    <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
-                                        Actualizaciones
-                                    </button>
-                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.costos', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                    {!! Form::submit('Costos actualizados', ['class' => 'btn btn-primary col-9']) !!}
-                                    {!! Form::close() !!}
+                                    <div class="collapse" id="collapseProyecto">
+                                        <button type="button" class="btn btn-primary col-9" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
+                                            Editar
+                                        </button>
+                                        <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
+                                            Actualizaciones
+                                        </button>
+                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.costos', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                        {!! Form::submit('Costos actualizados', ['class' => 'btn btn-primary col-9']) !!}
+                                        {!! Form::close() !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -217,9 +231,12 @@
                                         <th class="text-center" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff;width:13vh;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
+                                        @php 
+                                            $idCount = 0;
+                                        @endphp
                                         @foreach ($proyecto->getEtapas as $etapa)
                                             <tr>    
                                                 <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
@@ -241,29 +258,32 @@
                                                 <td class= 'text-center' >{{$etapa->getCostoRealGuardado()}}</td>
 
                                                 <td class='text-center'>
-                                                    <div class="row my-2">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
-                                                                Editar etapa
-                                                            </button>
-                                                        </div>
+                                                    <div class="row justify-content-center">
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEtapa{{$idCount}}" aria-expanded="false" aria-controls="collapseEtapa{{$idCount}}">
+                                                            Opciones
+                                                        </button>
                                                     </div>
-                                                    {{-- <div class="row my-2">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                                Cargar ordenes
-                                                            </button>
+                                                    <div class="collapse" id="collapseEtapa{{$idCount}}">
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
+                                                                    Editar
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div> --}}
-                                                    <div class="row my-2">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
-                                                                Cargar actualizaciones
-                                                            </button>
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
+                                                                    Cargar actualizaciones
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @php 
+                                            $idCount += 1;
+                                        @endphp
                                         @endforeach
                                     </tbody>
                                 </table>

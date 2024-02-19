@@ -35,6 +35,9 @@
     .table {
         zoom: 85%;
     }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
     .col-4 {
         padding: 5px;
     }
@@ -158,11 +161,13 @@
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;">Fecha finalizacion</th>
-                                    <th class='text-center' style="color: #fff;width:20%">Acciones</th>
+                                    <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 
                                 <tbody>
-                                    
+                                    @php
+                                        $idCount = 0;
+                                    @endphp
                                     @foreach ($ordenes as $orden)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio ?? '-'}}</td>
@@ -186,25 +191,41 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
-                                                <div class="row my-2 justify-content-center" >
-                                                        <div class="col-4">
-                                                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
-                                                                Ver
-                                                            </button>
+                                                <div class="row justify-content-center" >
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" id="collapseOrdenes{{$idCount}}">
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                                    Ver
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-4">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', base64url_encode($orden->id_orden), $tipo_orden], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', base64url_encode($orden->id_orden), $tipo_orden], 'style' => 'display:inline']) !!}
+                                                                    {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
                                                         </div>
-                                                        <div class="col-4">
-                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
-                                                                Editar
-                                                            </button> 
-                                                        </div> 
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
+                                                                    Editar
+                                                                </button> 
+                                                            </div> 
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                        $idCount += 1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>

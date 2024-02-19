@@ -31,6 +31,15 @@
     .table {
         zoom: 85%;
     }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .col-4 {
+        padding: 5px;
+    }
+    .col-5 {
+        padding: 5px;
+    }
 </style>
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
@@ -59,7 +68,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div id="tableFixHead">
-                                <table class="table table-striped mt-2" id="example" style="zoom: 85%">
+                                <table class="table table-striped mt-2" id="example">
                                     <thead style="height:50px;">
                                         <th class='text-center' style="color:#fff;">Prioridad</th>
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
@@ -76,6 +85,9 @@
                                         <th class='text-center' style="color: #fff;">Acciones</th>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $idCount = 0;
+                                        @endphp
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
                                                 {{-- <td class='text-center' style="vertical-align: middle;">{{ $proyecto->getEstado->nombre_estado}}</td> --}}
@@ -102,29 +114,41 @@
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
                                                 <td>
-                                                    <div class="row" hidden>
+                                                    {{-- <div class="row" hidden>
                                                         <div class="col-12">
                                                             {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
                                                             {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                             {!! Form::close() !!}
                                                         </div>
-                                                    </div>
-                                                    <div class="row my-2">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
-                                                                Prioridad  
+                                                    </div> --}}
+                                                    <div class="row justify-content-center">
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
+                                                                Opciones
                                                             </button>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                        <div class="collapse" id="collapseProyectos{{$idCount}}">
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
+                                                                        Prioridad  
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @php
+                                                $idCount += 1;
+                                            @endphp
                                         @endforeach
                                     </tbody>
                                 </table>
