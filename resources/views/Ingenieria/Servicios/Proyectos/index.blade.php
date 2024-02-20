@@ -29,7 +29,7 @@
         width: 100%;
     }
     .table {
-        zoom: 85%;
+        zoom: 100%;
     }
     table.dataTable tbody td {
         padding: 0px 10px;

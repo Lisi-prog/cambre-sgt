@@ -22,6 +22,16 @@
       #viv th {
         background: #ee9b27;
       }
+      .table {
+        zoom: 100%;
+    }
+    table tbody td {
+        padding: 0px 10px !important;
+        height: 0px !important;
+    }
+    .col-4 {
+        padding: 5px !important;
+    }
 </style>
     <section class="section">
         <div class="section-header d-flex">
@@ -137,9 +147,12 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha inicio</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Fecha limite</th>      
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Duracion estimada</th>     
-                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                   
+                                        <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                   
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $idCount = 0;
+                                        @endphp
                                         @foreach ($orden_manufactura->getOrdenesMecanizado as $orden_mecanizado)
                                             <tr>
                                                 <td class= 'text-center' >{{$orden_mecanizado->getOrden->nombre_orden}}</td> 
@@ -155,22 +168,34 @@
                                                 <td class= 'text-center' >{{$orden_mecanizado->getOrden->duracion_estimada}}</td>
 
                                                 <td>
-                                                    <div class="row my-2">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden_mecanizado->id_orden}}, '{{$orden_mecanizado->getOrden->getEtapa->descripcion_etapa}}')">
-                                                                Editar
-                                                            </button> 
+                                                    <div class="row justify-content-center" >
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMecanizados{{$idCount}}" aria-expanded="false" aria-controls="collapseMecanizados{{$idCount}}">
+                                                                Opciones
+                                                            </button>
                                                         </div>
-                                                    </div>
-                                                    <div class="row my-2">
-                                                        <div class="col-12">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                            {!! Form::close() !!}
+                                                        <div class="collapse" id="collapseMecanizados{{$idCount}}">
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden_mecanizado->id_orden}}, '{{$orden_mecanizado->getOrden->getEtapa->descripcion_etapa}}')">
+                                                                        Editar
+                                                                    </button> 
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @php
+                                                $idCount += 1;
+                                            @endphp
                                         @endforeach
                                     </tbody>
                                 </table>

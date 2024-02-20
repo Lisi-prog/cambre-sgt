@@ -1,5 +1,18 @@
 {{-- Ordenes de trabajo del proyecto --}}
-                
+<style>
+    .table {
+        zoom: 100%;
+    }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .col-4 {
+        padding: 5px;
+    }
+    .col-5 {
+        padding: 5px;
+    }
+    </style>
 <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_trabajo'>
     <div class="card">
         <div class="card-head">

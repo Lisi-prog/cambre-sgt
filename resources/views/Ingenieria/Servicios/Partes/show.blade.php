@@ -1,6 +1,17 @@
 @extends('layouts.app')
 @section('titulo', 'Partes de una orden')
 @section('content') 
+<style>
+    .table {
+        zoom: 100%;
+    }
+    table.dataTable tbody td {
+        padding: 0px 10px;
+    }
+    .col-4 {
+        padding: 5px;
+    }
+</style>
     <section class="section">
         <div class="section-header d-flex">
             <div class="">

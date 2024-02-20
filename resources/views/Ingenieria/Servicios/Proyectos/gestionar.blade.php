@@ -23,7 +23,7 @@
         background: #ee9b27;
       }
       .table {
-        zoom: 85%;
+        zoom: 100%;
     }
     table tbody td {
         padding: 1px 10px !important;
@@ -265,14 +265,14 @@
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseEtapa{{$idCount}}">
-                                                            <div class="row my-2">
+                                                            <div class="row ">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
                                                                         Editar
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                            <div class="row my-2">
+                                                            <div class="row">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
                                                                         Actualizaciones
