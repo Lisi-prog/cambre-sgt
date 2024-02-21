@@ -43,8 +43,10 @@
             @include('layouts.header')
 
         </nav>
+        <div class="sticky-top">
         <div class="main-sidebar main-sidebar-postion">
             @include('layouts.sidebar')
+        </div>
         </div>
         <!-- Main Content -->
         <div class="main-content">

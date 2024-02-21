@@ -71,7 +71,7 @@
                         </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead style="height:50px;">
+                                <thead style="height:50px;background-color:#2970c1">
                                     <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color:#fff;">Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>

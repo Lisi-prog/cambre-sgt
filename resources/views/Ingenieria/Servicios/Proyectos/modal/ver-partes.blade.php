@@ -42,7 +42,7 @@
                 </div>
                 <div class="row">
                     <table class="table table-striped">
-                        <thead>
+                        <thead id="encabezado_tabla_parte">
                             <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
                             <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                             <th class="text-center" scope="col" style="color:#fff;">Estado</th>

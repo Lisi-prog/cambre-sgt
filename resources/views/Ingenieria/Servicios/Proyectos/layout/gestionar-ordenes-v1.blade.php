@@ -35,7 +35,7 @@ table.dataTable tbody td {
             <div class="table-responsive" id="tabla_de_ordenes_trabajo">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #558540">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -90,7 +90,7 @@ table.dataTable tbody td {
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
                                                                 Partes
                                                             </button>
                                                         </div>
@@ -144,7 +144,7 @@ table.dataTable tbody td {
             <div class="table-responsive">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #982b37">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -206,7 +206,7 @@ table.dataTable tbody td {
                                                     </div>
                                                     <div class="row ">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
                                                                 Partes
                                                             </button>
                                                         </div>
@@ -260,7 +260,7 @@ table.dataTable tbody td {
             <div class="table-responsive">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #d37c00">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Manufactura</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
@@ -318,7 +318,7 @@ table.dataTable tbody td {
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
                                                                 Partes
                                                             </button>
                                                         </div>
@@ -372,7 +372,7 @@ table.dataTable tbody td {
             <div class="table-responsive">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #5e4879">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -405,7 +405,7 @@ table.dataTable tbody td {
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
+                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
                                                         Partes
                                                     </button>
                                                 </div>

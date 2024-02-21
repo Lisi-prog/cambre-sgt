@@ -69,7 +69,7 @@
                         <div class="table-responsive">
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
-                                    <thead style="height:50px;">
+                                    <thead style="height:50px;background-color:#28587d;">
                                         <th class='text-center' style="color:#fff;">Prioridad</th>
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                         <th class='ml-3 text-center' style="color:#fff;">ID</th>

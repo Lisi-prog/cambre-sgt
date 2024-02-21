@@ -181,7 +181,7 @@
                             <div class="table-responsive">
                                 <div>
                                 <table id="tablaAct" class="table table-hover mt-2" class="display">
-                                    <thead style="">
+                                    <thead style="background-color:#00b1b1">
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Codigo</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Fecha carga</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>
@@ -221,7 +221,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="tablaEtapas" class="table table-hover mt-2">
-                                    <thead>
+                                    <thead style="background-color: #2970c1">
                                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
@@ -317,7 +317,7 @@
                             <div class="table-responsive">
                                 <div>
                                 <table id="tablaAct" class="table table-hover mt-2" class="display">
-                                    <thead style="">
+                                    <thead style="background-color: #5997d4">
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Codigo</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Fecha carga</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>

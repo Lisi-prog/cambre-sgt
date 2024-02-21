@@ -122,10 +122,33 @@ function cargarModalEditarOrden(id_orden){
     }
     }));
 }
+function colorEncabezadoPartePorTipoDeOrden(tipo_orden){
+    console.log('COLOR');
+    switch (tipo_orden) {
+        case 1:
+            return '#93c180';
+            break;
+        case 2:
+            return '#d16b76';
+            break;
+        case 3:
+            return '#f3b065';
+            break;
+        case 4:
+            return '#f3b065';
+        break;
+        default:
+            break;
+    }
+}
 
-function cargarModalVerPartes(id){
+function cargarModalVerPartes(id, tipo_orden){
     let html = '';
+    console.log(tipo_orden);
+    let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
+    
     document.getElementById('body_ver_parte').innerHTML = '';
+    document.getElementById('encabezado_tabla_parte').style = 'background-color:'+color_encabezado;
     $.when($.ajax({
         type: "post",
         url: '/parte/obtener/'+id, 
