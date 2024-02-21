@@ -47,7 +47,6 @@ class ProyectoController extends Controller
     
     public function index(Request $request)
     {        
-        //$permisos = Permission::orderBy('name', 'asc')->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
 
         if($tipo_servicio){
@@ -63,23 +62,29 @@ class ProyectoController extends Controller
         
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        // $Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        // $prioridades = Prioridad::orderBy('id_prioridad')->pluck('nombre_prioridad', 'id_prioridad');
         $prioridades = [];
         
-        // if(Servicio::max('prioridad_servicio')){
-        //     $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-
-        //     for ($i=1; $i <= $prioridadMax; $i++) { 
-        //         $prioridades += [$i => $i];
-        //     }
-
-        // }else{
-        //     $prioridades = ["1" => "1"];
-        // }
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax'));
+    }
+
+    public function indexPorTipo(Request $request, $opcion)
+    {   
+        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
+        $tipo = Subtipo_servicio::where('id_subtipo_servicio', $opcion)->first();
+
+        if($tipo_servicio){
+            $proyectos = Servicio::where('id_subtipo_servicio', $opcion)->get();
+        }else{
+            $proyectos = [];
+        }
+        
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo'));
     }
 
     public function create()

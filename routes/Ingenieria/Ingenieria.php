@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
 
     Route::post('/proyectos/obtener-proyecto/{id}', [ProyectoController::class, 'obtenerProyecto']);
     Route::post('proyectos/actualizar-prioridad', [ProyectoController::class, 'actualizarPrioridadServicio'])->name('proyectos.cambiarprioridad');
+    Route::get('proyectos/obtener-proyecto-tipo/{id}', [ProyectoController::class, 'indexPorTipo'])->name('proyecto.indextipo');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
 
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
