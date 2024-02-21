@@ -849,9 +849,13 @@ class OrdenController extends Controller
             case 1:
                 //ORDEN DE TRABAJO
                 foreach ($array_ordenes as $orden) {
-                    if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->get()) == 1) {
-                        array_push($ordenes, $orden);
+                    try {
+                        if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->get()) == 1) {
+                            array_push($ordenes, $orden);
+                        }
+                    } catch (\Throwable $th) {
                     }
+                    
                 }
                 $tipo = 'Trabajo';
                 $estados = $this->listarTodosLosEstadosDe(1);
@@ -859,9 +863,13 @@ class OrdenController extends Controller
             case 2:
                 //ORDEN DE MANUFACTURA
                 foreach ($array_ordenes as $orden) {
-                    if (count(Orden_manufactura::where('id_orden', $orden->id_orden)->get()) == 1) {
-                        array_push($ordenes, $orden); ;
+                    try {
+                        if (count(Orden_manufactura::where('id_orden', $orden->id_orden)->get()) == 1) {
+                            array_push($ordenes, $orden); ;
+                        }
+                    } catch (\Throwable $th) {
                     }
+                    
                 }
                 $tipo = 'Manufactura';
                 $estados = $this->listarTodosLosEstadosDe(2);
@@ -869,9 +877,13 @@ class OrdenController extends Controller
             case 3:
                 //ORDEN DE MECANIZADO
                 foreach ($array_ordenes as $orden) {
-                    if (count(Orden_mecanizado::where('id_orden', $orden->id_orden)->get()) == 1) {
-                        array_push($ordenes, $orden); ;
+                    try {
+                        if (count(Orden_mecanizado::where('id_orden', $orden->id_orden)->get()) == 1) {
+                            array_push($ordenes, $orden); ;
+                        }
+                    } catch (\Throwable $th) {
                     }
+                    
                 }
                 $tipo = 'Mecanizado';
                 $estados = $this->listarTodosLosEstadosDe(3);
@@ -879,8 +891,11 @@ class OrdenController extends Controller
             case 4:
                 //ORDEN DE MANTENIMIENTO
                 foreach ($array_ordenes as $orden) {
-                    if (count(Orden_mantenimiento::where('id_orden', $orden->id_orden)->get()) == 1) {
-                        array_push($ordenes, $orden); ;
+                    try {
+                        if (count(Orden_mantenimiento::where('id_orden', $orden->id_orden)->get()) == 1) {
+                            array_push($ordenes, $orden); ;
+                        }
+                    } catch (\Throwable $th) {
                     }
                 }
                 $tipo = 'Mantenimiento';

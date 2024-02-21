@@ -17,7 +17,6 @@ use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 //Gestion de proyectos
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     // RUTAS PROYECTOS
-    Route::resource('proyectos', ProyectoController::class);
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
     Route::get('proyectos/costos/{id}', [ProyectoController::class, 'costos'])->name('proyectos.costos');
     Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');
@@ -25,17 +24,18 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('proyectos/actualizar-prioridad', [ProyectoController::class, 'actualizarPrioridadServicio'])->name('proyectos.cambiarprioridad');
     Route::post('/proyectos/obtener-actualizaciones-proyecto/{id}', [ProyectoController::class, 'obtenerActualizacionesServicio']);
     Route::post('proyectos/guardar-actualizacion/{id}', [ProyectoController::class, 'guardarActualizacion'])->name('actualizacion.crear');
+    Route::get('proyectos/obtener-proyecto-tipo/{id}', [ProyectoController::class, 'indexPorTipo'])->name('proyecto.indextipo');
+    Route::resource('proyectos', ProyectoController::class);
     // RUTAS ETAPAS
-    Route::resource('etapas', EtapaController::class);
     Route::get('etapas/actualizaciones/{id}', [EtapaController::class, 'verActualizaciones'])->name('etapas.actualizaciones');
     Route::post('etapas/guardar-actualizacion/{id}', [EtapaController::class, 'guardarActualizacion'])->name('actualizacion-etapa.crear');
     Route::post('/etapas/obtener-actualizaciones-etapa/{id}', [EtapaController::class, 'obtenerActualizacionesEtapa']);
     Route::post('/etapa/obtener-una-etapa/{id}',[EtapaController::class, 'obtenerUnaEtapa']);
     Route::post('etapa/actualizar-etapa',[EtapaController::class, 'actualizarEtapa'])->name('etapa.actualizar');
+    Route::resource('etapas', EtapaController::class);
     // RUTAS DE ORDENES
-    Route::resource('ordenes', OrdenController::class);
+    
     Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
-    Route::get('proyectos/obtener-proyecto-tipo/{id}', [ProyectoController::class, 'indexPorTipo'])->name('proyecto.indextipo');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
     Route::post('orden/editar', [OrdenController::class, 'editarOrden'])->name('orden.editar');
@@ -58,17 +58,15 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
-
+    Route::resource('ordenes', OrdenController::class);
     //------------------
     //MAQUINARIA Y ACTIVOS
+    Route::post('maquinaria/obtener/{id}', [MaquinariaController::class, 'obtenerMaquinaria']);
     Route::resource('maquinarias', MaquinariaController::class);
     Route::resource('activos', ActivoController::class);
-    Route::post('maquinaria/obtener/{id}', [MaquinariaController::class, 'obtenerMaquinaria']);
+    
  });
-//  Route::group(['middleware' => ['auth','role_or_permission:TECNICO']], function () {
 
-
-//  });
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
@@ -92,3 +90,32 @@ Route::post('no_au/requerimiento_ingenieria/guardar', [RequerimientoDeIngenieria
 Route::get('no_au/requerimiento_servicio_mantenimiento', [RequerimientoServicioMantenimientoController::class, 'crearAlt'])->name('rsm.sa.crear');
 Route::post('no_au/requerimiento_servicio_mantenimiento/guardar', [RequerimientoServicioMantenimientoController::class, 'guardarAlt'])->name('rsm.sa.guardar');
 
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], function () {
+     // RUTAS DE ORDENES
+     Route::resource('ordenes', OrdenController::class);
+     Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
+     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
+     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
+     Route::post('orden/editar', [OrdenController::class, 'editarOrden'])->name('orden.editar');
+     Route::post('/orden/obtener-una-orden-etapa/{id}',[OrdenController::class, 'ObtenerOrdenTrabajo']);
+     Route::post('/orden/obtener-una-orden-mecanizado-etapa/{id}',[OrdenController::class, 'ObtenerOrdenMecanizado']);
+     Route::post('/orden/obtener-estados-mecanizados',[OrdenController::class, 'obtenerEstadosMecanizados']);
+     Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
+     Route::post('/orden/obtener-orden-etapa-tipo/{id}/{tipo}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapaTipo']);
+     Route::post('/orden/obtener-tipo-orden',[OrdenController::class, 'obtenerTipoTrabajo']);
+     Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleados']);
+     Route::post('/orden/obtener-estados',[OrdenController::class, 'obtenerEstados']);
+     Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
+     Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
+     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
+     Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
+     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
+     Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
+         //RUTAS PARTES
+         Route::resource('partes', ParteController::class);
+         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
+         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
+         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
+
+     //------------------
+});
