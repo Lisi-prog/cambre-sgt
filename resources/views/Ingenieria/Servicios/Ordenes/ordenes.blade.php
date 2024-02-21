@@ -173,7 +173,7 @@
                                     <th class='text-center' style="color:#fff;">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;">Fecha finalizacion</th>
-                                    <th class='text-center' style="color: #fff;">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 
                                 <tbody>
