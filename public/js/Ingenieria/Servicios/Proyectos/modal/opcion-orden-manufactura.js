@@ -64,7 +64,7 @@ export default
         <div class="form-group">
             <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
             <span class="obligatorio">*</span>
-            <input min="2023-01-01" max="2023-12" id="fec_ini" class="form-control" name="fecha_ini" type="date" value="2023-12-12" required>
+            <input min="2023-01-01" max="2023-12" id="fec_ini" class="form-control" name="fecha_ini" type="date" required>
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">

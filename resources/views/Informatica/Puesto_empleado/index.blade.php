@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('titulo', 'Puesto empleado')
+@section('titulo', 'Puesto técnico')
 
 @section('content')
 
@@ -9,7 +9,7 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h4 class="titulo page__heading my-auto">Puesto empleado</h4>
+            <h4 class="titulo page__heading my-auto">Puesto técnico</h4>
         </div>
         <div class="ms-auto">
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearPuestoEmpleadoModal">
@@ -48,17 +48,14 @@
                                                     <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarPuestoEmpleadoModal" onclick="cargarModalEditar({{$puesto_empleado->id_puesto_empleado}}, this)">
                                                         Editar
                                                     </button>
-                                                        {{-- {!! Form::open(['method' => 'GET', 'route' => ['puesto_empleado.edit', $puesto_empleado->id_puesto_empleado], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
-                                                        {!! Form::close() !!} --}}
                                                     {{-- @endcan --}}
 
                                                     {{-- @can('BORRAR-ROL') --}}
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['puesto_empleado.destroy', $puesto_empleado->id_puesto_empleado],
-                                                            'onclick' => "return confirm('Estas seguro que desea ELIMINAR el puesto empleado?",
+                                                            'route' => ['puesto_tecnico.destroy', $puesto_empleado->id_puesto_empleado],
+                                                            'onclick' => "return confirm('Estas seguro que desea ELIMINAR el puesto técnico?",
                                                             'style' => 'display:inline',
                                                         ]) !!}
                                                         {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}

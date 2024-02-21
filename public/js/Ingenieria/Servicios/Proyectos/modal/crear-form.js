@@ -12,7 +12,8 @@ let bandera = 1;
 
 $(function(){
     $('#selected-tipo-orden').on('change', modificarFormulario);
-    //$('#nueva_orden_meca').on('click', modificarFormularioConArgumentos(3, 'formulario-crear-orden-meca', false));
+    //$('#nueva_orden_meca').on('click', modificarFormularioConArgumentos(3, 'formulario-crear-orden-meca', false));)
+    
     $(document).read
 });
 function prueba(){
@@ -22,6 +23,8 @@ function modificarFormulario(){
    let tipo_orden = Number($(this).val());
    let formulario = document.getElementById("formulario");
    let html;
+   let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0]
+   console.log(fecha_de_hoy);
    switch (tipo_orden) {
     case 1:
         formulario.innerHTML = '';
@@ -55,6 +58,8 @@ function modificarFormulario(){
         formulario.innerHTML = '';
         break;
    }
+    formulario.getElementsByClassName('form-control').namedItem('fec_ini') ? formulario.getElementsByClassName('form-control').namedItem('fec_ini').value = fecha_de_hoy : '';
+    formulario.getElementsByClassName('form-control').namedItem('fec_req') ? formulario.getElementsByClassName('form-control').namedItem('fec_req').value = fecha_de_hoy : '';
 
 }
 export function modificarFormularioConArgumentos(tipo_orden, id_formulario, editar){
@@ -63,6 +68,7 @@ export function modificarFormularioConArgumentos(tipo_orden, id_formulario, edit
     // console.log('Id Formulario: ' + id_formulario);
     let formulario = document.getElementById(id_formulario);
     let html;
+    let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0];
     switch (Number(tipo_orden)) {
      case 1:
          formulario.innerHTML = '';
@@ -96,6 +102,9 @@ export function modificarFormularioConArgumentos(tipo_orden, id_formulario, edit
          formulario.innerHTML = '';
          break;
     }
+    
+    formulario.getElementsByClassName('form-control').namedItem('fec_ini') ? formulario.getElementsByClassName('form-control').namedItem('fec_ini').value = fecha_de_hoy : '';
+    formulario.getElementsByClassName('form-control').namedItem('fec_req') ? formulario.getElementsByClassName('form-control').namedItem('fec_req').value = fecha_de_hoy : '';
     //console.log(formulario);
  }
 

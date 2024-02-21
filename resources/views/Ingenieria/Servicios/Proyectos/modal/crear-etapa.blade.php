@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 <span class="obligatorio">*</span>
-                                {!! Form::select('responsable', $empleados, null, [
+                                {!! Form::select('responsable', $supervisores, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
                                     'id' => 'responsable'

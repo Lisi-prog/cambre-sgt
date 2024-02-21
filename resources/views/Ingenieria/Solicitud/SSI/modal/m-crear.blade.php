@@ -29,12 +29,10 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                             {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                <span class="obligatorio">*</span>
                                 {!! Form::select('id_activo', $activos, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select',
                                     'id' => 'activo',
-                                    'required'
                                 ]) !!}
                         </div>
                     </div>

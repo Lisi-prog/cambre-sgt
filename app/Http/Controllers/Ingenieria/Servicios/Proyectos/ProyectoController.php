@@ -428,7 +428,8 @@ class ProyectoController extends Controller
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados'));
+        $supervisores = $this->obtenerSupervisores();
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores'));
     }
 
     public function costos($id)
@@ -522,5 +523,21 @@ class ProyectoController extends Controller
             $responsable_proyecto->save();
         }
         return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
+    }
+
+    public function obtenerSupervisores(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 }

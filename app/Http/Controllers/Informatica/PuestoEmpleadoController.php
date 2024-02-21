@@ -57,7 +57,7 @@ class PuestoEmpleadoController extends Controller
             'costo_hora' => $costo_hora
         ]);
 
-        return redirect()->route('puesto_empleado.index')->with('mensaje', 'El puesto '.$puesto_empleado->titulo_puesto_empleado.' creado exitosamente.');                     
+        return redirect()->route('puesto_tecnico.index')->with('mensaje', 'El puesto '.$puesto_empleado->titulo_puesto_empleado.' creado exitosamente.');                     
     }
     
     public function show($id)
@@ -100,7 +100,7 @@ class PuestoEmpleadoController extends Controller
             'id_sector' => $sector
         ]);
     
-        return redirect()->route('empleados.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        
+        return redirect()->route('tecnicos.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        
     }
 
     public function updateOrden(Request $request)
@@ -123,7 +123,7 @@ class PuestoEmpleadoController extends Controller
             'costo_hora' => $costo_hora
         ]);
 
-        return redirect()->route('puesto_empleado.index')->with('mensaje', 'El puesto '.$puesto_empleado->titulo_puesto_empleado.' editado exitosamente.');                      
+        return redirect()->route('puesto_tecnico.index')->with('mensaje', 'El puesto '.$puesto_empleado->titulo_puesto_empleado.' editado exitosamente.');                      
     }
     
     public function destroy($id)
@@ -131,9 +131,9 @@ class PuestoEmpleadoController extends Controller
         try {
             $puesto_empleado = Puesto_empleado::find($id);
             Puesto_empleado::destroy($id);
-            return redirect()->route('puesto_empleado.index')->with('mensaje', 'El puesto se elimino exitosamente.'); 
+            return redirect()->route('puesto_tecnico.index')->with('mensaje', 'El puesto se elimino exitosamente.'); 
         } catch (\Throwable $th) {
-            return redirect()->route('puesto_empleado.index')->with('error', 'El puesto empleado esta asignado a un empleado.'); 
+            return redirect()->route('puesto_tecnico.index')->with('error', 'El puesto empleado esta asignado a un empleado.'); 
         }             
     }
 }

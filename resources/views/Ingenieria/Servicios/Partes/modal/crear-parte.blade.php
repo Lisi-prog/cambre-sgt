@@ -121,11 +121,9 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
                                         {!! Form::label('maquina', "Maquina:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        <span class="obligatorio">*</span>
                                         {!! Form::select('maquina', $maquinas, null, [
                                                 'placeholder' => 'Seleccionar',
                                                 'class' => 'form-select form-group',
-                                                'required',
                                                 'id' => 'maquina'
                                             ]) !!}
                                     </div>
@@ -133,7 +131,6 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group"> 
                                         <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
-                                        <span class="obligatorio">*</span> 
                                         <div class= "input-group">
                                             <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina" required>
                                             <span class="input-group-text">:</span>

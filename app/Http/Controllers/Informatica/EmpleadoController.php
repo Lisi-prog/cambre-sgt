@@ -101,7 +101,7 @@ class EmpleadoController extends Controller
 
                 break;
         }
-        return redirect()->route('empleados.index')->with('mensaje', 'Empleado creado exitosamente.');                     
+        return redirect()->route('tecnicos.index')->with('mensaje', 'Empleado creado exitosamente.');                     
     }
     
     public function show($id)
@@ -144,7 +144,7 @@ class EmpleadoController extends Controller
             'id_sector' => $sector
         ]);
     
-        return redirect()->route('empleados.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        
+        return redirect()->route('tecnicos.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        
     }
     
     public function destroy($id)
@@ -152,7 +152,7 @@ class EmpleadoController extends Controller
         $empleado = Empleado::find($id);
         Empleado::destroy($id);
         User::destroy($empleado->user_id);
-        return redirect()->route('empleados.index')->with('mensaje', 'El empleado se elimino exitosamente.');               
+        return redirect()->route('tecnicos.index')->with('mensaje', 'El empleado se elimino exitosamente.');               
     }
 
     public function buscarpermisospornombre($nombre){

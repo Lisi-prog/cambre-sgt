@@ -15,12 +15,12 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER
     Route::get('usuario/permisos/{id}', [RolController::class, 'verPermisosxRol'])->name('roles.permisos');
     Route::post('usuario/permisos/{id}/guardar', [RolController::class, 'guardarPermisosxRol'])->name('roles.guardarpermisos');
     Route::post('/usuarios/buscarpermisosdelrol', [RolController::class, 'buscarpermisosdelrol']);
-    Route::get('/puesto_empleado/editar-modal', [PuestoEmpleadoController::class, 'updateOrden'])->name('puesto_empleado.editar');
+    Route::get('/puesto_tecnico/editar-modal', [PuestoEmpleadoController::class, 'updateOrden'])->name('puesto_empleado.editar');
     Route::post('usuario/editar', [UsuarioController::class, 'editarUsuario'])->name('usuario.editar');
     Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
     Route::resource('usuarios', UsuarioController::class);
-    Route::resource('empleados', EmpleadoController::class);
-    Route::resource('puesto_empleado', PuestoEmpleadoController::class);
+    Route::resource('tecnicos', EmpleadoController::class);
+    Route::resource('puesto_tecnico', PuestoEmpleadoController::class);
 });
 
 Route::get('phpmyinfo', function () {

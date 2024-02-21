@@ -62,26 +62,15 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link" href="{{route('empleados.index')}}" title="Empleados">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Empleados</span>
+                <a class="nav-link" href="{{route('tecnicos.index')}}" title="Tecnicos">
+                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Técnicos</span>
                 </a>
             </li>
         </ul>
     </li>
 @endcan
 
-@can('VER-MENU-INGENIERIA')
-    <li class="dropdown ">
-        <a href="" class="nav-link has-dropdown ">
-            <i class="fas fa-home"></i><span>Ingenieria</span>
-        </a>
-
-        
-        <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
-            <li class="dropdown-title pt-3">
-                Ingenieria
-            </li>
-            @can('VER-MENU-SOLICITUDES')
+@can('VER-MENU-SOLICITUDES')
             <li class="dropdown ">
                 <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Solicitudes</span>
@@ -121,7 +110,7 @@
                 </ul>
             </li>
             @endcan
-            @can('VER-MENU-SERVICIOS')
+@can('VER-MENU-SERVICIOS')
             <li class="dropdown ">
                 <a href="" class="nav-link has-dropdown">
                     <i class="fas fa-home"></i><span>Servicios</span>
@@ -145,58 +134,34 @@
                         </a>
                     </li>
                     @endcan
-                    @can('VER-MENU-ORDENES')
-                    {{-- ORDENES --}}
-                    <li class="dropdown">
-                        <a href="" class="nav-link has-dropdown" title="Ordenes">
-                            <i class="fas fa-home" style="font-size:1.2em;"></i><span>Ordenes</span>
-                        </a>
-                        <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
-                            <li class="dropdown-title pt-3">
-                                Ordenes
-                            </li>
-                            <li>
-                                <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
-                                    <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Trabajo</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
-                                    <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Manufactura</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
-                                    <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Mecanizado</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    @endcan
                 </ul>
             </li>
             @endcan
-            @can('VER-MENU-MAQUINARIA')
-            <li>
-                <a class="nav-link" href="{{route('maquinarias.index')}}" title="Maquinaria">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Maquinaria</span>
+            @can('VER-MENU-ORDENES')
+            {{-- ORDENES --}}
+            <li class="dropdown">
+                <a href="" class="nav-link has-dropdown" title="Ordenes">
+                    <i class="fas fa-home" style="font-size:1.2em;"></i><span>Ordenes</span>
                 </a>
+                <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
+                    <li class="dropdown-title pt-3">
+                        Ordenes
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Trabajo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Manufactura</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                            <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Mecanizado</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             @endcan
-            @can('VER-MENU-ACTIVOS')
-            <li>
-                <a class="nav-link" href="{{route('activos.index')}}" title="Activos">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Activos</span>
-                </a>
-            </li>
-            @endcan
-            {{-- <li>
-                <a class="nav-link" href="" title="Tareas">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Tareas</span>
-                </a>
-            </li> --}}
-
-        </ul>
-    </li>
-@endcan
-

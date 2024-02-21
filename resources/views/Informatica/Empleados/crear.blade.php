@@ -10,7 +10,7 @@
         </div>
         <div class="section-body">
             <div class="row">
-                {!! Form::open(['route' => 'empleados.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                {!! Form::open(['route' => 'tecnicos.store', 'method' => 'POST', 'class' => 'formulario']) !!}
                 @include('layouts.modal.mensajes')
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
@@ -139,7 +139,7 @@
                                         {!! Form::close() !!}
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'empleados.index', 'style' => '']) !!}
+                                        {!! Form::open(['method' => 'GET', 'route' => 'tecnicos.index', 'style' => '']) !!}
                                         {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                         {!! Form::close() !!}
                                     </div>

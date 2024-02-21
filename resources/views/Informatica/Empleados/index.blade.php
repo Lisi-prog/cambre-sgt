@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('titulo', 'Empleados')
+@section('titulo', 'Técnicos')
 
 @section('content')
 
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h4 class="titulo page__heading my-auto mr-5">Empleados</h4>
+            <h4 class="titulo page__heading my-auto mr-5">Técnicos</h4>
         </div>
-        {!! Form::open(['method' => 'GET', 'route' => ['puesto_empleado.index'], 'class' => 'd-flex justify-content-end']) !!}
-            {!! Form::submit('Puesto de empleado', ['class' => 'btn btn-success my-1']) !!}
+        {!! Form::open(['method' => 'GET', 'route' => ['puesto_tecnico.index'], 'class' => 'd-flex justify-content-end']) !!}
+            {!! Form::submit('Puesto de técnico', ['class' => 'btn btn-success my-1']) !!}
         {!! Form::close() !!}
         <div class="ms-auto">
             {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['empleados.create'], 'class' => 'd-flex justify-content-end']) !!}
+                {!! Form::open(['method' => 'GET', 'route' => ['tecnicos.create'], 'class' => 'd-flex justify-content-end']) !!}
                     {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
                 {!! Form::close() !!}
             {{-- @endcan --}}
@@ -59,7 +59,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['empleados.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['tecnicos.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
                                                         {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
@@ -68,10 +68,10 @@
                                                         {!! Form::open([
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
-                                                            'route' => ['empleados.destroy', $empleado->id_empleado],
+                                                            'route' => ['tecnicos.destroy', $empleado->id_empleado],
                                                             'style' => 'display:inline',
                                                         ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el empleado?');"]) !!}
+                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el técnico?');"]) !!}
                                                         {!! Form::close() !!}
                                                     {{-- @endcan --}}
 

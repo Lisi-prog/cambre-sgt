@@ -52,7 +52,6 @@
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
                                             'id' => 'id_activo',
-                                            'required'
                                         ]) !!}
                                     </div>
                                 </div>

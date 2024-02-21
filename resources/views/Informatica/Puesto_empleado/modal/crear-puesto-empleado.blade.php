@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Puesto</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'puesto_empleado.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => 'puesto_tecnico.store', 'method' => 'POST', 'class' => 'formulario']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
