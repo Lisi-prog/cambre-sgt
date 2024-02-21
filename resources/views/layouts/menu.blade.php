@@ -38,7 +38,7 @@
                     
                     <li>
                         <a class="nav-link" href="{{route('phpmyinfo')}}" title="PHPinfo">
-                            <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>PHPinfo</span>
+                            <i class="fas fa-tools"style="font-size:1.2em; "></i><span>PHPinfo</span>
                         </a>
                     </li>
                 </ul>
@@ -46,24 +46,24 @@
 
             <li>
                 <a class="nav-link" href="{{route('permisos.index')}}" title="Permisos">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Permisos</span>
+                    <i class="fas fa-server"style="font-size:1.2em; "></i><span>Permisos</span>
                 </a>
             </li>
 
             <li>
                 <a class="nav-link" href="{{route('roles.index')}}" title="Roles">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Roles</span>
+                    <i class="fas fa-server"style="font-size:1.2em; "></i><span>Roles</span>
                 </a>
             </li>
 
             <li>
                 <a class="nav-link" href="{{route('usuarios.index')}}" title="Usuarios">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Usuarios</span>
+                    <i class="fas fa-server"style="font-size:1.2em; "></i><span>Usuarios</span>
                 </a>
             </li>
             <li>
                 <a class="nav-link" href="{{route('tecnicos.index')}}" title="Tecnicos">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Técnicos</span>
+                    <i class="fas fa-server"style="font-size:1.2em; "></i><span>Técnicos</span>
                 </a>
             </li>
         </ul>
@@ -83,7 +83,7 @@
             @can('VER-MENU-MAQUINARIA')
             <li>
                 <a class="nav-link" href="{{route('maquinarias.index')}}" title="Maquinaria">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Maquinaria</span>
+                    <i class="fas fa-wrench"style="font-size:1.2em; "></i><span>Maquinaria</span>
                 </a>
             </li>
             @endcan
@@ -91,7 +91,7 @@
             @can('VER-MENU-ACTIVOS')
             <li>
                 <a class="nav-link" href="{{route('activos.index')}}" title="Activos">
-                    <i class="fas fa-clipboard-list"style="font-size:1.2em; "></i><span>Activos</span>
+                    <i class="fas fa-wrench"style="font-size:1.2em; "></i><span>Activos</span>
                 </a>
             </li>
             @endcan
@@ -102,7 +102,7 @@
     @can('VER-MENU-SOLICITUDES')
         <li class="dropdown ">
             <a href="" class="nav-link has-dropdown">
-                <i class="fas fa-clipboard"></i><span>Solicitudes</span>
+                <i class="fas fa-clipboard-list"></i><span>Solicitudes</span>
             </a>
             
             <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
@@ -143,7 +143,7 @@
     @can('VER-MENU-SERVICIOS')
         <li class="dropdown ">
             <a href="" class="nav-link has-dropdown">
-                <i class="fas fa-home"></i><span>Servicios</span>
+                <i class="fas fa-file-alt"></i><span>Servicios</span>
             </a>
             
             <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
@@ -185,7 +185,7 @@
                 @can('VER-MENU-ETAPA')
                 <li>
                     <a class="nav-link" href="{{route('etapas.index')}}" title="Etapas">
-                        <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Etapas</span>
+                        <i class="fas fa-file-alt" style="font-size:1.2em;"></i><span>Etapas</span>
                     </a>
                 </li>
                 @endcan
@@ -204,17 +204,17 @@
                 </li>
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
-                        <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Trabajo</span>
+                        <i class="fas fa-briefcase" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
-                        <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Manufactura</span>
+                        <i class="fas fa-briefcase" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
-                        <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Mecanizado</span>
+                        <i class="fas fa-briefcase" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
             </ul>
