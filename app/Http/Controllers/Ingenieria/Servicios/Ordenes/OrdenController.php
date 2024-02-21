@@ -760,15 +760,15 @@ class OrdenController extends Controller
     }
 
     public function obtenerEstados(){
-        return Estado::orderBy('nombre_estado')->get();
+        return Estado::orderBy('id_estado')->get();
     }
 
     public function obtenerEstadosManufacturas(){
-        return Estado_manufactura::orderBy('nombre_estado_manufactura')->get();
+        return Estado_manufactura::orderBy('id_estado_manufactura')->get();
     }
 
     public function obtenerEstadosMecanizados(){
-        return Estado_mecanizado::orderBy('nombre_estado_mecanizado')->get();
+        return Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
     }
 
     public function obtenerSupervisores(){
@@ -829,7 +829,7 @@ class OrdenController extends Controller
         $array_responsabilidades_ordenes = array();
         $array_ordenes = array();
         $ordenes = array();
-
+                        
         if (Auth::user()->hasRole('SUPERVISOR')) {
             //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
             $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();

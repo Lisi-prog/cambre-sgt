@@ -49,7 +49,7 @@
         <div class="d-flex flex-row col-12">
         
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Proyectos</h5>
+                <h4 class="titulo page__heading my-auto">Proyectos - {{$tipo->nombre_subtipo_servicio ?? ''}}</h5>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
             </div>
@@ -128,6 +128,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseProyectos{{$idCount}}">
+                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
@@ -135,6 +136,7 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
+                                                            @endcan
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
