@@ -102,7 +102,7 @@
     @can('VER-MENU-SOLICITUDES')
         <li class="dropdown ">
             <a href="" class="nav-link has-dropdown">
-                <i class="fas fa-home"></i><span>Solicitudes</span>
+                <i class="fas fa-clipboard"></i><span>Solicitudes</span>
             </a>
             
             <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
@@ -196,7 +196,7 @@
     @can('VER-MENU-ORDENES') {{-- ORDENES --}}
         <li class="dropdown">
             <a href="" class="nav-link has-dropdown" title="Ordenes">
-                <i class="fas fa-home"></i><span>Ordenes</span>
+                <i class="fas fa-briefcase"></i><span>Ordenes</span>
             </a>
             <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
                 <li class="dropdown-title pt-3">

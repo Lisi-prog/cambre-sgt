@@ -128,6 +128,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseProyectos{{$idCount}}">
+                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
@@ -135,6 +136,7 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
+                                                            @endcan
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}

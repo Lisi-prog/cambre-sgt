@@ -135,39 +135,6 @@ class UsuarioController extends Controller
         }                      
     }
 
-    public function guardargrupo(Request $request)  
-    {
-        //return $request->input('idpadre').$request->input('nombre').'3';
-        $validator = Validator::make($request->all(), [
-            'nombre' => 'required|unique:roles,name',
-            'idpadre' => 'required|min:0|max:9999|integer',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->route('roles.index')
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-    
-        $role = Role::create(['name' => strtoupper($name)]);
-               
-        return redirect()->route('roles.creargrupo')->with('mensaje','Grupo '.strtoupper($request->input('name')). ' creado con éxito!.');                       
-    }
-     
-    public function buscarpermisos(Request $request)
-    {
-        
-        $name = $request->input("name3");
-
-        if ($name =='') {
-            $permisos = Permission::orderBy('name', 'asc')->get();
-        } else {
-            $name = strtoupper($name);
-            $permisos = Permission::where('name', 'like', '%'.$name.'%')->orderBy('name', 'asc')->get();
-        }
-        //Role::where('airline_id', '')->orderBy('name', 'asc')->paginate(5);
-        return $permisos;
-
-    }
     public function buscarrol(Request $request)
     {
         $this->validate($request, [

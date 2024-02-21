@@ -760,15 +760,15 @@ class OrdenController extends Controller
     }
 
     public function obtenerEstados(){
-        return Estado::orderBy('nombre_estado')->get();
+        return Estado::orderBy('id_estado')->get();
     }
 
     public function obtenerEstadosManufacturas(){
-        return Estado_manufactura::orderBy('nombre_estado_manufactura')->get();
+        return Estado_manufactura::orderBy('id_estado_manufactura')->get();
     }
 
     public function obtenerEstadosMecanizados(){
-        return Estado_mecanizado::orderBy('nombre_estado_mecanizado')->get();
+        return Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
     }
 
     public function obtenerSupervisores(){

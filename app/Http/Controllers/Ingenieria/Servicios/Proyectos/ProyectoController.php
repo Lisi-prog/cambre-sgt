@@ -40,6 +40,7 @@ class ProyectoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:VER-MENU-PROYECTO', ['only' => ['index']]);
+        $this->middleware('permission:MODIFICAR-PRIORIDAD-PROYECTO', ['only' => ['actualizarPrioridadServicio']]); 
         //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
         //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
