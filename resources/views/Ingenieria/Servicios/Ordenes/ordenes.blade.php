@@ -58,6 +58,93 @@
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
+        {{-- <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', $tipo_orden], 'style' => 'display:inline']) !!}
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Proyectos:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($codigos_servicio as $codigo_servicio)
+                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Supervisor:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($supervisores as $supervisor)
+                                                            <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Responsable:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($responsables as $responsable)
+                                                            <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Estados:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($estados as $estado)
+                                                            <label><input name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
+                                
+                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100']) !!}
+                                {!! Form::close() !!}
+                            </div>
+                        </div>                     
+                    </div>
+                </div>
+            </div>
+        </div> --}}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -68,19 +155,6 @@
                         <div class="row" id="demo" hidden>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
-                                    {{-- <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 150px;">
-                                            <div class="">
-                                                <label>Tipo orden:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label><input name="tipo" type="checkbox" value="Trabajo"> Trabajo</label>
-                                                <label><input name="tipo" type="checkbox" value="Manufactura"> Manufactura</label>
-                                                <label><input name="tipo" type="checkbox" value="Mecanizado"> Mecanizado</label>
-                                                <label><input name="tipo" type="checkbox" value="Mantenimiento"> Mantenimiento </label>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
@@ -165,6 +239,7 @@
                                 <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color:#fff; width:20vh">Proyecto</th>
+                                    <th class='text-center' style="color:#fff; width:20vh" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
                                     {{-- <th class='text-center' style="color:#fff;">Tipo de orden</th> --}}
@@ -185,6 +260,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio ?? '-'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->getServicio->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
+
+                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->descripcion_etapa ?? '-'}}</td>
 
@@ -280,7 +357,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[5]) !== -1) {
+            if (positions.indexOf(searchData[6]) !== -1) {
                 return true;
             }
             
@@ -300,7 +377,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[6]) !== -1) {
+            if (offices.indexOf(searchData[7]) !== -1) {
                 return true;
             }
             
@@ -320,7 +397,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[4]) !== -1) {
+            if (offices.indexOf(searchData[5]) !== -1) {
                 return true;
             }
             
@@ -340,12 +417,8 @@
                 return true;
             }
 
-            // console.log('searchData', searchData[1])
-        // searchData = searchData[0].replace(/[0-9]/g, '');
-        console.log(offices)
-        console.log(searchData[1])
-        console.log(offices.indexOf(['IN-PROY-0048']))
-            if (offices.indexOf(['IN-PROY-0048']) !== -1) {
+
+            if (offices.indexOf(searchData[2]) !== -1) {
                 return true;
             }
             

@@ -113,6 +113,7 @@ class OrdenController extends Controller
             case 1:
                 foreach (Estado::get() as $estado) {
                     array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado,
                         'nombre' => $estado->nombre_estado
                     ]);
                 }
@@ -120,6 +121,7 @@ class OrdenController extends Controller
             case 2:
                 foreach (Estado_manufactura::get() as $estado) {
                     array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado_manufactura,
                         'nombre' => $estado->nombre_estado_manufactura
                     ]);
                 }
@@ -127,6 +129,7 @@ class OrdenController extends Controller
             case 3:
                 foreach (Estado_mecanizado::get() as $estado) {
                     array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado_mecanizado,
                         'nombre' => $estado->nombre_estado_mecanizado
                     ]);
                 }
@@ -765,7 +768,7 @@ class OrdenController extends Controller
     }
 
     public function obtenerCodigoServicio(){
-        return Servicio::orderBy('prioridad_servicio')->get('codigo_servicio');
+        return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
 
     public function obtenerEstados(){
@@ -852,7 +855,7 @@ class OrdenController extends Controller
                 array_push($array_ordenes, $responsabilidad_orden->getOrden);
             }
         }
-        
+       
         //FILTRAMOS LAS ORDENES POR TIP0
         switch ($tipo_orden) {           
             case 1:
@@ -874,7 +877,7 @@ class OrdenController extends Controller
                 foreach ($array_ordenes as $orden) {
                     try {
                         if (count(Orden_manufactura::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden); ;
+                            array_push($ordenes, $orden);
                         }
                     } catch (\Throwable $th) {
                     }
@@ -888,7 +891,7 @@ class OrdenController extends Controller
                 foreach ($array_ordenes as $orden) {
                     try {
                         if (count(Orden_mecanizado::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden); ;
+                            array_push($ordenes, $orden);
                         }
                     } catch (\Throwable $th) {
                     }
@@ -902,7 +905,7 @@ class OrdenController extends Controller
                 foreach ($array_ordenes as $orden) {
                     try {
                         if (count(Orden_mantenimiento::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden); ;
+                            array_push($ordenes, $orden);
                         }
                     } catch (\Throwable $th) {
                     }
