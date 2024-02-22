@@ -744,3 +744,24 @@ export function cargarModalCrearMecanizado(){
     console.log('Crear mecanizado');
     modificarFormularioConArgumentos(3, 'formulario-crear-orden', false);
 }
+
+export function colorEncabezadoPorTipoDeOrden(tipo_orden){
+    console.log('COLOR');
+    switch (Number(tipo_orden)) {
+        case 1:
+            return '#558540';
+            break;
+        case 2:
+            return '#982b37';
+            break;
+        case 3:
+            return '#d37c00';
+            break;
+        case 4:
+            return '#5e4879';
+        break;
+        default:
+            return 'Fallo';
+            break;
+    }
+}

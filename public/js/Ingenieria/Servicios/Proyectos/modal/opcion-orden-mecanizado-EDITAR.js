@@ -2,7 +2,7 @@ export default
 `<div class="row"> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
         <div class="form-group"> 
-            <label for="nom_orden_edit" class="control-label" style="white-space: nowrap; ">Nombre orden de mecanizado:</label> 
+            <label for="nom_orden_edit" class="control-label" style="white-space: nowrap; ">ID-PIEZA:</label> 
             <span class="obligatorio">*</span> 
             <input class="form-control" name="nom_orden_edit" type="text" id="nom_orden_edit" required> 
         </div> 

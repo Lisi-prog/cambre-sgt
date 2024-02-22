@@ -236,7 +236,7 @@
                         </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead style="height:50px;">
+                                <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color:#fff; width:20vh">Proyecto</th>
                                     <th class='text-center' style="color:#fff; width:20vh" hidden>Proyecto</th>
@@ -324,15 +324,16 @@
             </div>
         </div>
     </div>
-    <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
-    <script type="module"> 
-        import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+    <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
+    <script type="module" > 
+        import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;
         window.cargarModalVerOrden = cargarModalVerOrden;
         window.obtenerPartes = obtenerPartes;
         window.modificarFormularioConArgumentos= modificarFormularioConArgumentos;
         window.cargarModalEditarOrden = cargarModalEditarOrden;
+        window.colorEncabezadoPorTipoDeOrden = colorEncabezadoPorTipoDeOrden;
     </script>
 </section>
 
@@ -343,8 +344,9 @@
     let x = '';
     $(document).ready( function () {
         //dudoso
-        modificarFormularioConArgumentos(window.location.pathname.substring(9, 10), 'formulario-editar-orden', true);
-
+        let tipo_orden = window.location.pathname.substring(9, 10);
+        modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
+        document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {

@@ -180,7 +180,7 @@
                             <div class="table-responsive">
                                 <div>
                                 <table id="tablaEtapas" class="table table-hover mt-2" class="display">
-                                    <thead style="">
+                                    <thead style="background-color: #2970c1">
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Etapa</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
