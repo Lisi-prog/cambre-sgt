@@ -23,10 +23,10 @@ function mostrarActProyecto(id){
             html_act += `<tr>
                             <td class="text-center">`+element.codigo+`</td>
                             <td class="text-center">`+element.fecha_carga+`</td>
-                            <td class="text-center">`+element.descripcion+`</td>
+                            <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+`<i class="fas fa-eye"></i></abbr></td>
                             <td class="text-center">`+element.fecha_limite+`</td>
                             <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.responsable+`</td>
+                            <td class="text-center">`+element.responsable+`</td>    
                             </tr>`
         });
         renglones_actualizacion.innerHTML = html_act;
@@ -61,7 +61,7 @@ function mostrarActEtapa(id){
                 html_act += `<tr>
                                 <td class="text-center">`+element.codigo+`</td>
                                 <td class="text-center">`+element.fecha_carga+`</td>
-                                <td class="text-center">`+element.descripcion+`</td>
+                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+`<i class="fas fa-eye"></i></abbr></td>
                                 <td class="text-center">`+element.fecha_limite+`</td>
                                 <td class="text-center">`+element.estado+`</td>
                                 <td class="text-center">`+element.responsable+`</td>
