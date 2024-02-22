@@ -2,7 +2,7 @@ export default
 `<div class="row"> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
         <div class="form-group"> 
-            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de manufactura:</label> 
+            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">ID-CONJUNTO:</label>
             <span class="obligatorio">*</span> 
             <input class="form-control" name="nom_orden" type="text" id="nom_orden" required> 
         </div> 

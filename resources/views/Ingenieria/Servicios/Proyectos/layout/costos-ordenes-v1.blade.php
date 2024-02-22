@@ -28,7 +28,7 @@
             <div class="table-responsive" id="tabla_de_ordenes_trabajo">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #558540">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -38,7 +38,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -66,8 +66,8 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                        Ver partes
+                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                        Partes
                                                     </button>
                                                 </div>
                                             </div>
@@ -108,7 +108,7 @@
             <div class="table-responsive">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #982b37">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -118,7 +118,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                            
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -146,8 +146,8 @@
                                         <td class= 'text-center' >
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                        Ver partes
+                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                        Partes
                                                     </button>
                                                 </div>
                                             </div>
@@ -188,7 +188,7 @@
             <div class="table-responsive">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #d37c00">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Manufactura</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
@@ -199,7 +199,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -229,8 +229,8 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                        Ver partes
+                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                        Partes
                                                     </button>
                                                 </div>
                                             </div>
@@ -271,7 +271,7 @@
             <div class="table-responsive">
                 <div>
                 <table id="example" class="table table-hover mt-2" class="display">
-                    <thead style="">
+                    <thead style="background-color: #5e4879">
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -279,7 +279,7 @@
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @foreach ($proyecto->getEtapas as $etapa)
@@ -297,8 +297,8 @@
                                         <td class='text-center'>
                                             <div class="row my-2">
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}})">
-                                                        Ver partes
+                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                        Partes
                                                     </button>
                                                 </div>
                                             </div>

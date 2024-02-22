@@ -446,7 +446,8 @@ class ProyectoController extends Controller
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
-        return view('Ingenieria.Servicios.Proyectos.costos',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados'));
+        $supervisores = $this->obtenerSupervisores();
+        return view('Ingenieria.Servicios.Proyectos.costos',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores'));
     }
 
     public function obtenerActualizacionesServicio($id){

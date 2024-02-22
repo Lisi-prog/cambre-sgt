@@ -148,7 +148,7 @@ function cargarModalVerPartes(id, tipo_orden){
     let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
     
     document.getElementById('body_ver_parte').innerHTML = '';
-    document.getElementById('encabezado_tabla_parte').style = 'background-color:'+color_encabezado;
+    document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
     $.when($.ajax({
         type: "post",
         url: '/parte/obtener/'+id, 

@@ -65,7 +65,7 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_orden_manuf', 'Nombre orden:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::label('nom_orden_manuf', 'ID-CONJUNTO:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                         {!! Form::text('nom_orden_manuf', $orden_manufactura->getOrden->nombre_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
@@ -139,8 +139,8 @@
                             <div class="table-responsive">
                                 <div>
                                 <table id="tablaEtapas" class="table table-hover mt-2" class="display">
-                                    <thead style="">
-                                        <th class="text-center" scope="col" style="color:#fff;">Nombre</th>
+                                    <thead style="background-color: #d37c00">
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%">ID-PIEZA</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Cantidad</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Revision</th>
                                         {{-- <th class="text-center" scope="col" style="color:#fff;">Ruta</th> --}}
