@@ -95,7 +95,14 @@ export default `
             </div> 
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="observaciones" class="control-label" style="white-space: nowrap; ">Descripción:</label> 
+                <textarea id='input-observaciones' class="form-control" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh" readonly></textarea>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <label for="ultimo_parte" class="control-label" style="white-space: nowrap; ">Ultimo parte:</label>
         <div class="col-3">

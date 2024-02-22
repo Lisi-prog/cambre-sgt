@@ -2,7 +2,7 @@ export default
 `<div class="row"> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
         <div class="form-group"> 
-            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">Nombre orden de mecanizado:</label> 
+            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">ID-PIEZA:</label> 
             <span class="obligatorio">*</span> 
             <input class="form-control" name="nom_orden" type="text" id="input-nom_orden" readonly> 
         </div> 
@@ -76,7 +76,7 @@ export default
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
-        <div class="form-group"> 
+        <div class="form-group" hidden> 
             <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
             <span class="obligatorio">*</span> 
             <input class="form-control" name="duracion_estimada" type="text" id="input-duracion_estimada" readonly> 
@@ -119,12 +119,12 @@ export default
     </div>
 </div>
 <div class="row">
-    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
             <label for="observaciones" class="control-label" style="white-space: nowrap; ">Observaciones:</label> 
             <textarea id='input-observaciones' class="form-control" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh" readonly></textarea>
         </div>
-    </div> -->
+    </div>
 </div>
 <div class="row">
         <label for="ultimo_parte" class="control-label" style="white-space: nowrap; ">Ultimo parte:</label>

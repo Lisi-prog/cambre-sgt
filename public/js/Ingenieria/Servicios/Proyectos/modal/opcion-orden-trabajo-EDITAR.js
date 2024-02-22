@@ -74,6 +74,14 @@ export default
             <input min="2023-01-01" max="2023-12" id="fec_req_edit" class="form-control" name="fecha_req_edit" type="date" value="2023-12-12" required>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
+            <label for="observaciones_edit" class="control-label" style="white-space: nowrap; ">Descripción:</label> 
+            <textarea id='observaciones_edit' class="form-control" rows="54" cols="54" name="observaciones_edit" style="resize:none; height: 20vh" required></textarea>
+        </div>
+    </div>
 </div>`;
     
     

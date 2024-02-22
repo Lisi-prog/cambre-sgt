@@ -23,7 +23,8 @@ class Orden extends Model
         'fecha_inicio',
         'duracion_estimada',
         'id_etapa',
-        'costo_estimado'
+        'costo_estimado',
+        'observaciones'
     ];
 
     public function getEtapa()

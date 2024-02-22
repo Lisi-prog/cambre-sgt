@@ -312,6 +312,7 @@ class OrdenController extends Controller
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
         $estado = Estado::where('id_estado', $id_estado)->first();
+        $observaciones = $request->input('observaciones');
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $id_responsable,
@@ -327,7 +328,8 @@ class OrdenController extends Controller
                     'nombre_orden' => $nombre_orden,
                     'duracion_estimada' => $duracion_estimada,
                     'fecha_inicio' => $fecha_ini,
-                    'id_etapa' => $id_etapa
+                    'id_etapa' => $id_etapa,
+                    'observaciones' => $observaciones
                 ]);
 
         Responsabilidad_orden::create([
@@ -382,7 +384,7 @@ class OrdenController extends Controller
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $id_estado_man = $request->input('estado_manufactura');
         $ruta_plano = $request->input('ruta_plano');
-        //$observaciones = $request->input('observaciones');
+        $observaciones = $request->input('observaciones');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
@@ -402,7 +404,8 @@ class OrdenController extends Controller
                     'nombre_orden' => $nombre_orden,
                     'duracion_estimada' => $duracion_estimada,
                     'fecha_inicio' => $fecha_ini,
-                    'id_etapa' => $id_etapa
+                    'id_etapa' => $id_etapa,
+                    'observaciones' => $observaciones
                 ]);
 
         Responsabilidad_orden::create([
@@ -454,7 +457,7 @@ class OrdenController extends Controller
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $id_estado_mec = $request->input('estado_mecanizado');
         $ruta_plano = $request->input('ruta_plano');
-        //$observaciones = $request->input('observaciones');
+        $observaciones = $request->input('observaciones');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
@@ -475,7 +478,8 @@ class OrdenController extends Controller
                     'nombre_orden' => $nombre_orden,
                     'duracion_estimada' => $duracion_estimada,
                     'fecha_inicio' => $fecha_ini,
-                    'id_etapa' => $id_etapa
+                    'id_etapa' => $id_etapa,
+                    'observaciones' => $observaciones
                 ]);
         
 
@@ -561,7 +565,8 @@ class OrdenController extends Controller
                 'tipo' => 'Orden de '.$orden->getOrdenDe->getNombreTipoOrden(),
                 'estado' => $orden->getEstado(),
                 'responsable' => $orden->getNombreResponsable(),
-                'numero_tipo' => $orden->getOrdenDe->getTipoOrden()
+                'numero_tipo' => $orden->getOrdenDe->getTipoOrden(),
+                'observaciones' => $orden->observaciones
             ]);
         }
         return $ordenes;
@@ -583,7 +588,8 @@ class OrdenController extends Controller
                     'supervisor' => $orden->getSupervisor(),
                     'fecha_limite' => Carbon::parse($orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '')->format('d-m-Y'),
                     'fecha_finalizacion' => $orden->getFechaFinalizacion(),
-                    'numero_tipo' => $orden->getOrdenDe->getTipoOrden()
+                    'numero_tipo' => $orden->getOrdenDe->getTipoOrden(),
+                    'observaciones' => $orden->observaciones
                 ]);
             }   
         }
@@ -630,7 +636,8 @@ class OrdenController extends Controller
                     'fecha_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga,
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
                     'id_supervisor' => $id_supervisor,
-                    'supervisa' => $supervisor
+                    'supervisa' => $supervisor,
+                    'observaciones' => $orden_trabajo->observaciones
                     ]);
                 break;
             case 2:
@@ -654,7 +661,8 @@ class OrdenController extends Controller
                     'fecha_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga,
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
                     'id_supervisor' => $id_supervisor,
-                    'supervisa' => $supervisor
+                    'supervisa' => $supervisor,
+                    'observaciones' => $orden_trabajo->observaciones
                     ]);
                 break;
             case 3:
@@ -678,7 +686,8 @@ class OrdenController extends Controller
                     'fecha_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->fecha_carga,
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
                     'id_supervisor' => $id_supervisor,
-                    'supervisa' => $supervisor
+                    'supervisa' => $supervisor,
+                    'observaciones' => $orden_trabajo->observaciones
                     ]);
                 break;
             default:
@@ -700,7 +709,7 @@ class OrdenController extends Controller
             'revision' => $orden_mecanizado->getOrdenDe->revision,
             'cantidad' => $orden_mecanizado->getOrdenDe->cantidad,
             'ruta_plano' => $orden_mecanizado->getOrdenDe->ruta_pieza,
-            //'observaciones' => $orden_mecanizado->observaciones,
+            'observaciones' => $orden_mecanizado->observaciones,
             'estado_mecanizado' => $orden_mecanizado->getEstado(),
             'responsable' => $orden_mecanizado->getNombreResponsable(),
             'fecha_inicio' => Carbon::parse($orden_mecanizado->fecha_inicio)->format('d-m-Y'),
@@ -962,7 +971,8 @@ class OrdenController extends Controller
         $orden->update([
             'nombre_orden' => $request->input('nom_orden_edit'),
             'fecha_inicio' => $request->input('fecha_ini_edit'),
-            'duracion_estimada' => $request->input('horas_estimadas_edit') . ':' . $request->input('minutos_estimados_edit')
+            'duracion_estimada' => $request->input('horas_estimadas_edit') . ':' . $request->input('minutos_estimados_edit'),
+            'observaciones' => $request->input('observaciones_edit')
         ]);
 
         $responsabilidades_orden = $orden->getResponsabilidaOrden;

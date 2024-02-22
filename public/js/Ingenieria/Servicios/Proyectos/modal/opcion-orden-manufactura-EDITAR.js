@@ -37,7 +37,7 @@ export default
         </div> 
     </div> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
-        <div class="form-group"> 
+        <div class="form-group" hidden> 
             <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
             <span class="obligatorio">*</span> 
             <div class= "input-group">
@@ -94,12 +94,12 @@ export default
     </div>
 </div>
 <div class="row">
-    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
             <label for="observaciones_edit" class="control-label" style="white-space: nowrap; ">Observaciones:</label> 
             <textarea id='observaciones_edit' class="form-control" rows="54" cols="54" name="observaciones_edit" style="resize:none; height: 20vh" required></textarea>
         </div>
-    </div> -->
+    </div>
 </div>`;
     
     
