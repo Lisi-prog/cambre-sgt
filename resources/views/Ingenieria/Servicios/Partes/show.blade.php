@@ -122,6 +122,13 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 my-auto text-center">
                                     <h5 class="text-center">Parte de {{$orden->getOrdenDe->getNombreTipoOrden()}}</h5>
+                                    <div hidden>
+                                        {!! Form::text('tipo_orden', $orden->getOrdenDe->getTipoOrden(), [
+                                        'id' => 'tipo_orden',
+                                        'disabled',
+                                        'readonly'
+                                    ]) !!}
+                                    </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearParteModal">
@@ -201,4 +208,12 @@
         </div>
     </section>
     @include('Ingenieria.Servicios.Partes.modal.crear-parte')
+    <script>
+        $(document).ready(function () {
+            let tipo_orden = document.getElementById('tipo_orden').value;
+            var url = '{{route('ordenes.tipo',':tipo_orden')}}';
+            url = url.replace(':tipo_orden', tipo_orden);
+            document.getElementById('volver').href = url;
+        });
+    </script>
 @endsection

@@ -238,12 +238,9 @@
         </ul>
     </li>
     @endcan
-<<<<<<< HEAD
     
     <div class="d-flex mx-auto justify-content-center">
         <a class="nav-link btn w-60" href="" id="volver" style="background-color: #21628d">
             <i class="fas fa-arrow-left" style="color:rgb(255, 255, 255);font-size:1.5em;"></i><span style="color:white"> Volver </span>
         </a>
     </div>
-=======
->>>>>>> 29b3afb319ee67a964049d9def6ae3edae29914b
