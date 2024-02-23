@@ -202,6 +202,14 @@
                 Ingenieria
             </li>
 
+            @can('VER-MENU-ACTIVOS')
+            <li>
+                <a class="nav-link" href="{{route('activos.index')}}" title="Activos">
+                    <i class="fas fa-wrench"style="font-size:1.2em; "></i><span>Activos</span>
+                </a>
+            </li>
+            @endcan
+
             @can('VER-MENU-MAQUINARIA')
             <li>
                 <a class="nav-link" href="{{route('maquinarias.index')}}" title="Maquinaria">
@@ -210,13 +218,15 @@
             </li>
             @endcan
 
-            @can('VER-MENU-ACTIVOS')
+            @can('VER-MENU-PREFIJOS')
             <li>
-                <a class="nav-link" href="{{route('activos.index')}}" title="Activos">
-                    <i class="fas fa-wrench"style="font-size:1.2em; "></i><span>Activos</span>
+                <a class="nav-link" href="{{route('prefijo_proyecto.index')}}" title="Prefijos proyecto">
+                    <i class="fas fa-wrench"style="font-size:1.2em; "></i><span>Prefijos Proyecto</span>
                 </a>
             </li>
             @endcan
+
+            
         </ul>
     </li>
     @endcan

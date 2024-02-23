@@ -407,6 +407,12 @@ CREATE TABLE `orden_gantt`(
   CONSTRAINT `id_orden_gantt_x_id_tipo_relacion_gantt` FOREIGN KEY (`id_tipo_relacion_gantt`) REFERENCES `tipo_relacion_gantt`(`id_tipo_relacion_gantt`)
 );
 
+CREATE TABLE `prefijo_proyecto`(
+  `id_prefijo_proyecto` int NOT NULL AUTO_INCREMENT,
+  `nombre_prefijo_proyecto` varchar(100),
+  `descripcion_prefijo_proyecto` varchar(500),
+  PRIMARY KEY(`id_prefijo_proyecto`)
+);
 
 --------------------------------------------------
 -- Insert iniciales

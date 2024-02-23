@@ -33,6 +33,7 @@ use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Tipo_orden_trabajo;
 use App\Models\Cambre\Cambio_de_prioridad;
+use App\Models\Cambre\Prefijo_proyecto;
 
 class ProyectoController extends Controller
 {
@@ -60,14 +61,14 @@ class ProyectoController extends Controller
         }
         
         
-        
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridades = [];
         
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos'));
     }
 
     public function indexPorTipo(Request $request, $opcion)
@@ -80,12 +81,12 @@ class ProyectoController extends Controller
         }else{
             $proyectos = [];
         }
-        
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo', 'prefijos'));
     }
 
     public function create()
@@ -547,4 +548,33 @@ class ProyectoController extends Controller
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
+
+
+    public function obtenerMayorCodigoServicioPrefijo($id){
+        try {
+            $prefijo = Prefijo_proyecto::find($id);
+            $prefijos_recortados_array = array();
+            $total_char = strlen($prefijo->nombre_prefijo_proyecto);
+            return $servicio_candidato = Servicio::where('codigo_servicio', 'like', '%'.$prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->get('codigo_servicio')->first();
+        } catch (\Throwable $th) {
+            return '';
+        }
+        
+
+        /*foreach ($servicios_candidatos as $servicio_candidato) {
+            array_push($prefijos_recortados_array, substr($servicio_candidato->codigo_servicio, $total_char));
+        }
+        rsort($prefijos_recortados_array);
+        return $prefijos_recortados_array[0];*/
+
+        /*foreach ($servicios_candidatos as $servicio_candidato) {
+            array_push($prefijos_recortados_array, (object)[
+                'codigo_servicio' => $servicio_candidato->codigo_servicio,
+                'codigo_servicio_recortado' => substr($servicio_candidato->codigo_servicio, $total_char),
+            ]);
+        }
+        return collect($prefijos_recortados_array)->orderBy('codigo_servicio_recortado');*/
+    }
+
+   
 }
