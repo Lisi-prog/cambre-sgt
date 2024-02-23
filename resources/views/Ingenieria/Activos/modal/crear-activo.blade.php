@@ -11,6 +11,21 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
+                            {!! Form::label('codigo_activo', 'Codigo activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="obligatorio">*</span>
+                            {!! Form::text('codigo_activo', null, [
+                                'class' => 'form-control',
+                                'required' => 'required',
+                                'style' => 'text-transform:uppercase',
+                                'id' => 'codigo_activo'
+                            ]) !!}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
                             {!! Form::label('nombre_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('nombre_activo', null, [
@@ -21,7 +36,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

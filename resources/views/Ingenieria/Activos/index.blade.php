@@ -38,6 +38,7 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead>
+                                    <th class='text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
@@ -51,9 +52,11 @@
                                         <tr class="my-auto">
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->id_activo}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->nombre_activo}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->codigo_activo ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->nombre_activo ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
 
 
                                             <td>

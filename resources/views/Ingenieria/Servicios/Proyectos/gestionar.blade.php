@@ -138,8 +138,22 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-                                    
+                                
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    {{-- @if($proyecto->id_activo)
+                                        <div class="form-group">
+                                            {!! Form::label('activo', "Codigo activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            {!! Form::text('activo', $proyecto->getActivo->codigo_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        </div>
+                                    @endif --}}
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                                    @if($proyecto->id_activo)
+                                        <div class="form-group">
+                                            {!! Form::label('activo', "Activo asociado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            {!! Form::text('activo', $proyecto->getActivo->codigo_activo.' - '.$proyecto->getActivo->nombre_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">

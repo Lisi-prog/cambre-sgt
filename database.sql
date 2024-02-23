@@ -32,6 +32,7 @@ CREATE TABLE `sol_servicio_requerido` (
 
 CREATE TABLE `activo` (
   `id_activo` int NOT NULL AUTO_INCREMENT,
+  `codigo_activo` varchar(150),
   `nombre_activo` varchar(100) DEFAULT NULL,
   `descripcion_activo` varchar(200),
   PRIMARY KEY (`id_activo`)
@@ -170,6 +171,7 @@ CREATE TABLE `servicio` (
   `id_responsabilidad` int,
   `id_subtipo_servicio` int,
   `prioridad_servicio` int,
+  `id_activo` int,
   PRIMARY KEY (`id_servicio`),
   CONSTRAINT `pk_id_servicio_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_id_servicio_x_subtipo_servicio` FOREIGN KEY (`id_subtipo_servicio`) REFERENCES `subtipo_servicio`(`id_subtipo_servicio`)
@@ -233,6 +235,7 @@ CREATE TABLE `orden`(
   `duracion_estimada` time,
   `id_etapa` int,
   `costo_estimado` DECIMAL(10, 2),
+  `observaciones` varchar(500),
   PRIMARY KEY(`id_orden`),
   CONSTRAINT `pk_id_orden_x_etapa` FOREIGN KEY (`id_etapa`) REFERENCES `etapa`(`id_etapa`)
 );

@@ -24,12 +24,18 @@ class Servicio extends Model
         'fecha_inicio',
         'id_responsabilidad',
         'id_subtipo_servicio',
-        'prioridad_servicio'
+        'prioridad_servicio',
+        'id_activo'
     ];
 
     public function getSubTipoServicio()
     {
         return $this->belongsTo(Subtipo_servicio::class, 'id_subtipo_servicio');
+    }
+
+    public function getActivo()
+    {
+        return $this->belongsTo(Activo::class, 'id_activo');
     }
 
     public function getResponsabilidad()
@@ -59,6 +65,10 @@ class Servicio extends Model
 
     public function getEstado(){
         return $this->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado;
+    }
+
+    public function getIdEstado(){
+        return $this->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->id_estado;
     }
 
     public function getProgreso()

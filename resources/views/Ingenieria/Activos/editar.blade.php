@@ -14,10 +14,23 @@
     <div class="section-body">
         {!! Form::model($activo, ['method' => 'PUT', 'route' => ['activos.update', $activo->id_activo], 'class' => '']) !!}
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                <div class="form-group">
+                                    {!! Form::label('codigo_activo', 'Codigo activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    <span class="obligatorio">*</span>
+                                    {!! Form::text('codigo_activo', $activo->codigo_activo, [
+                                        'class' => 'form-control',
+                                        'required' => 'required',
+                                        'style' => 'text-transform:uppercase',
+                                        'id' => 'codigo_activo'
+                                    ]) !!}
+                                </div>
+                            </div>
+
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
                                 <div class="form-group">
                                     {!! Form::label('nombre_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
@@ -32,7 +45,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                     {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$activo->descripcion_activo}}</textarea>
@@ -53,7 +66,7 @@
                                 </div>
                                 <div class="p-1">
                                     {!! Form::open(['method' => 'GET', 'route' => 'maquinarias.index', 'style' => '']) !!}
-                                    {!! Form::submit('Cancelar', ['class' => 'btn btn-primary']) !!}
+                                    {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}
                                 </div>
                             </div>

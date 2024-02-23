@@ -25,6 +25,7 @@
                             <span class="obligatorio">*</span>
                             {!! Form::text('codigo_proyecto', null, [
                                 'class' => 'form-control',
+                                'style' => 'text-transform:uppercase',
                                 'required' => 'required',
                                 'id' => 'codigo_proyecto'
                             ]) !!}
@@ -59,7 +60,7 @@
 
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
                             <div class="form-group">
                                 {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
@@ -72,7 +73,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                        <div class="form-group">
+                            <div class="form-group">
+                                {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                {!! Form::select('id_activo', $activos, null, [
+                                    'placeholder' => 'Seleccionar',
+                                    'class' => 'form-select',
+                                    'id' => 'id_activo'
+                                ]) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                         <div class="form-group">
                             {!! Form::label('prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>

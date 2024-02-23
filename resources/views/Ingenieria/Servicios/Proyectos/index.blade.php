@@ -49,7 +49,7 @@
         <div class="d-flex flex-row col-12">
         
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Proyectos - {{$tipo->nombre_subtipo_servicio ?? ''}}</h5>
+                <h4 class="titulo page__heading my-auto">{{$tipo ?? ''}}</h5>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
             </div>
