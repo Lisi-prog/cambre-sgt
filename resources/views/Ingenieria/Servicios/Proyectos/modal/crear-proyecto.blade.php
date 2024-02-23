@@ -131,6 +131,7 @@
     function obtenerValorPrefijo(){
         id = $(this).val();
         input_codigo_proyecto = document.getElementById('codigo_proyecto');
+        let e = document.getElementById('prefijo_proyecto');
         input_codigo_proyecto.value = '';
         if (id) {
             $.when($.ajax({
@@ -141,7 +142,12 @@
             },
             success: function (response) {
                 //console.log(response);
-                input_codigo_proyecto.value = response.codigo_servicio;
+                if (response) {
+                    input_codigo_proyecto.value = response.codigo_servicio;
+                }else{
+                    input_codigo_proyecto.value = e.options[e.selectedIndex].text;
+                }
+                
             },
             error: function (error) {
                 console.log(error);
