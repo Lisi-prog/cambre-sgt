@@ -1,44 +1,32 @@
 @extends('layouts.app')
 
-@section('titulo', 'Editar activo')
+@section('titulo', 'Editar prefijo proyecto')
 
 @section('content')
 
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h5 class="titulo page__heading my-auto mr-5">Editar activo #{{$activo->id_codigo}}</h5>
+            <h5 class="titulo page__heading my-auto mr-5">Editar prefijo proyecto #{{$prefijo->id_prefijo_proyecto}}</h5>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
-        {!! Form::model($activo, ['method' => 'PUT', 'route' => ['activos.update', $activo->id_activo], 'class' => '']) !!}
+        {!! Form::model($prefijo, ['method' => 'PUT', 'route' => ['prefijo_proyecto.update', $prefijo->id_prefijo_proyecto], 'class' => '']) !!}
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {!! Form::label('codigo_activo', 'Codigo activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    {!! Form::label('nombre_prefijo', 'Nombre prefijo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                     <span class="obligatorio">*</span>
-                                    {!! Form::text('codigo_activo', $activo->codigo_activo, [
+                                    {!! Form::text('nombre_prefijo', $prefijo->nombre_prefijo_proyecto, [
                                         'class' => 'form-control',
                                         'required' => 'required',
                                         'style' => 'text-transform:uppercase',
-                                        'id' => 'codigo_activo'
-                                    ]) !!}
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-                                <div class="form-group">
-                                    {!! Form::label('nombre_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    <span class="obligatorio">*</span>
-                                    {!! Form::text('nombre_activo', $activo->nombre_activo, [
-                                        'class' => 'form-control',
-                                        'required' => 'required',
-                                        'id' => 'nombre_activo'
+                                        'id' => 'nombre_prefijo'
                                     ]) !!}
                                 </div>
                             </div>
@@ -48,7 +36,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                     {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                    <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$activo->descripcion_activo}}</textarea>
+                                    <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$prefijo->descripcion_prefijo_proyecto}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +53,7 @@
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="p-1">
-                                    {!! Form::open(['method' => 'GET', 'route' => 'maquinarias.index', 'style' => '']) !!}
+                                    {!! Form::open(['method' => 'GET', 'route' => 'prefijo_proyecto.index', 'style' => '']) !!}
                                     {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}
                                 </div>

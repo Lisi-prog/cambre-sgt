@@ -19,6 +19,7 @@ class Activo extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
+        'codigo_activo',
         'nombre_activo',
         'descripcion_activo'
     ];

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('titulo', 'Activos')
+@section('titulo', 'Prefijo proyecto')
 
 @section('content')
 <style>
@@ -17,14 +17,14 @@
 <section class="section">
     <div class="section-header d-flex justify-content-center">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-            <h4 class="titulo page__heading my-auto mr-5">Activos</h4>
+            <h4 class="titulo page__heading my-auto mr-5">Prefijo Proyecto</h4>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
             {{-- @can('CREAR-RI') --}}
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
-                Nueva activo
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoPrefijoModal">
+                Nuevo prefijo
             </button>
             {{-- @endcan --}}
         </div>
@@ -38,7 +38,6 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead>
-                                    <th class='text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
@@ -48,15 +47,14 @@
                                     @php
                                         $idCount = 0;   
                                     @endphp
-                                    @foreach ($activos as $activo)
+                                    
+                                    @foreach ($prefijos as $prefijo)
                                         <tr class="my-auto">
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->id_activo}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$prefijo->id_prefijo_proyecto ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->codigo_activo ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$prefijo->nombre_prefijo_proyecto ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->nombre_activo ?? '-'}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$prefijo->descripcion_prefijo_proyecto ?? '-'}}</td>
 
 
                                             <td>
@@ -70,14 +68,11 @@
                                                         {{-- @can('EDITAR-ROL') --}}
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['activos.edit', $activo->id_activo], 'style' => 'display:inline']) !!}
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['prefijo_proyecto.edit', $prefijo->id_prefijo_proyecto], 'style' => 'display:inline']) !!}
                                                                 {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2 w-100']) !!}
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
-                                                            {{-- <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarMaquinariaModal" onclick="cargarModalEditar({{$maquinaria->id_maquinaria}})">
-                                                                Editar
-                                                            </button> --}}
                                                         {{-- @endcan --}}
 
                                                         {{-- @can('BORRAR-ROL') --}}
@@ -86,10 +81,10 @@
                                                                 {!! Form::open([
                                                                     'method' => 'DELETE',
                                                                     'class' => 'formulario',
-                                                                    'route' => ['activos.destroy', $activo->id_activo],
+                                                                    'route' => ['prefijo_proyecto.destroy', $prefijo->id_prefijo_proyecto],
                                                                     'style' => 'display:inline',
                                                                 ]) !!}
-                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el activo?');"]) !!}
+                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el prefijo proyecto?');"]) !!}
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
@@ -113,13 +108,10 @@
 </section>
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
     {{-- @include('Ingenieria.Maquinaria.modal.crear-maquinaria')--}}
-    @include('Ingenieria.Activos.modal.crear-activo') 
+    @include('Ingenieria.Servicios.Proyectos.prefijo.modal.crear-prefijo') 
 
 <script>
     $(document).ready(function () {
-        var url = '{{url('/')}}';
-        //url = url.replace(':id_servicio', id_servicio);
-        document.getElementById('volver').href = url;
         $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',

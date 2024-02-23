@@ -34,16 +34,19 @@ class ActivoController extends Controller
     public function store(Request $request)
     {         
         $this->validate($request, [
+            'codigo_activo' => 'required',
             'nombre_activo' => 'required'
         ]);
 
         //variables
+        $codigo =  strtoupper($request->input('codigo_activo'));
         $nombre = $request->input('nombre_activo');
         $descripcion = $request->input('descripcion');
         //-----------------------------------
 
         //Crear activo
         Activo::create([
+            'codigo_activo' => $codigo,
             'nombre_activo' => $nombre,
             'descripcion_activo' => $descripcion
         ]);
@@ -64,16 +67,19 @@ class ActivoController extends Controller
     public function update(Request $request, $id)
     {             
         $this->validate($request, [
+            'codigo_activo' => 'required',
             'nombre_activo' => 'required'
         ]);    
         
         //variables
         $nombre = $request->input('nombre_activo');
+        $codigo =  strtoupper($request->input('codigo_activo'));
         //-----------------------------------
 
         $activo = Activo::find($id);
 
         $activo->update([
+            'codigo_activo' => $codigo,
             'nombre_activo' => $nombre
         ]);
 

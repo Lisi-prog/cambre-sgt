@@ -33,6 +33,8 @@ use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Tipo_orden_trabajo;
 use App\Models\Cambre\Cambio_de_prioridad;
+use App\Models\Cambre\Prefijo_proyecto;
+use App\Models\Cambre\Activo;
 
 class ProyectoController extends Controller
 {
@@ -60,14 +62,14 @@ class ProyectoController extends Controller
         }
         
         
-        
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridades = [];
-        
+        $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos'));
     }
 
     public function indexPorTipo(Request $request, $opcion)
@@ -80,12 +82,42 @@ class ProyectoController extends Controller
         }else{
             $proyectos = [];
         }
-        
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-        
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo'));
+        $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo', 'prefijos', 'activos'));
+    }
+
+    public function indexPorPrefijo($prefijo, $tipo){
+        // return $prefijo;
+        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
+
+        switch ($prefijo) {
+            case 1:
+                $proyectos = Servicio::orderBy('prioridad_servicio')->get();
+                break;
+            case 'SSI':
+                $proyectos = Servicio::where('id_subtipo_servicio', 5)->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
+                break;
+            case 2:
+                $proyectos = Servicio::where('id_subtipo_servicio', 5)->orderBy('prioridad_servicio')->get();
+                break;
+            case 'PROY':
+                $proyectos = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->get();
+                break;
+            default:
+                $proyectos = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->get();
+                break;
+        }
+
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo'));
     }
 
     public function create()
@@ -120,7 +152,8 @@ class ProyectoController extends Controller
             'fecha_req.required' => 'Se necesita la fecha requerida',
             'prioridad.required' => 'Se necesita la prioridad'
         ]);
-        $codigo_proyecto = $request->input('codigo_proyecto');
+        $activo = $request->input('id_activo');
+        $codigo_proyecto = strtoupper($request->input('codigo_proyecto'));
         $nombre_proyecto = $request->input('nombre_proyecto');
         $tipo_proyecto = $request->input('id_tipo_proyecto');
         $lider = $request->input('lider');
@@ -150,7 +183,8 @@ class ProyectoController extends Controller
             'id_subtipo_servicio' => $tipo_servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'fecha_inicio' => $fecha_ini,
-            'prioridad_servicio' => $prioridadMax
+            'prioridad_servicio' => $prioridadMax,
+            'id_activo' => $activo
         ]);
 
         $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
@@ -192,7 +226,8 @@ class ProyectoController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
-        return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');                      
+        //return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');   
+        return redirect()->back()->with('mensaje','El proyecto se ha creado con exito.');                  
     }
 
     public function actualizarPrioridadServicio(Request $request){
@@ -547,5 +582,34 @@ class ProyectoController extends Controller
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
+
+
+    public function obtenerMayorCodigoServicioPrefijo($id){
+        try {
+            $prefijo = Prefijo_proyecto::find($id);
+            $prefijos_recortados_array = array();
+            $total_char = strlen($prefijo->nombre_prefijo_proyecto);
+            return $servicio_candidato = Servicio::where('codigo_servicio', 'like', '%'.$prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->get('codigo_servicio')->first();
+        } catch (\Throwable $th) {
+            return '';
+        }
+        
+
+        /*foreach ($servicios_candidatos as $servicio_candidato) {
+            array_push($prefijos_recortados_array, substr($servicio_candidato->codigo_servicio, $total_char));
+        }
+        rsort($prefijos_recortados_array);
+        return $prefijos_recortados_array[0];*/
+
+        /*foreach ($servicios_candidatos as $servicio_candidato) {
+            array_push($prefijos_recortados_array, (object)[
+                'codigo_servicio' => $servicio_candidato->codigo_servicio,
+                'codigo_servicio_recortado' => substr($servicio_candidato->codigo_servicio, $total_char),
+            ]);
+        }
+        return collect($prefijos_recortados_array)->orderBy('codigo_servicio_recortado');*/
+    }
+
+   
 
 }
