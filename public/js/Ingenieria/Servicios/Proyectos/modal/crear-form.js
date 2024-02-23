@@ -772,3 +772,8 @@ export function colorEncabezadoPorTipoDeOrden(tipo_orden){
             break;
     }
 }
+
+export function volver(ruta){
+    document.getElementById('volver').href = '{{route('+ruta+')}}';
+    console.log(document.getElementById('volver'));
+}

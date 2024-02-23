@@ -424,22 +424,22 @@
                     </div>
                 </div>
                 {{-- ------------- --}}
-
+                <div class="p-1 position-fixed" style="bottom:2vh; left:0.5vh;">
+                    {{-- {!! Form::open(['method' => 'GET', 'route' => 'proyectos.index', 'style' => '']) !!}
+                    <button class="btn btn-primary">
+                        <a class="nav-link" href="{{route('proyectos.index')}}" title="volver">
+                            <i class="fas fa-arrow-left " style="margin-right:5px"></i>
+                        </a>
+                    </button>
+                    {{-- {!! Form::submit('', ['class' => 'btn btn-primary']) !!}
+                    {!! Form::close() !!} --}}
+                </div>
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row" >
                                 <div class="d-flex">
-                                    <div class="me-auto">
-                                        {{-- (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong> --}}
-                                    </div>
-                                    <div class="p-1">
-                                    </div>
-                                    <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'proyectos.index', 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -464,6 +464,8 @@
 
         <script>
             $(document).ready(function () {
+                document.getElementById('volver').href = '{{route('proyectos.index')}}';
+                console.log('{{route('proyectos.index')}}');
                 $('#exampless').DataTable({
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',

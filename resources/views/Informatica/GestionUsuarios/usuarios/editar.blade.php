@@ -210,4 +210,11 @@
         {!! Form::close() !!}
         <script src="{{ asset('js/Informatica/GestionUsuarios/Usuario/editar-usuario.js') }}"></script>
     </section>
+    <script>
+        $(document).ready(function () {
+            var url = '{{route('usuarios.index')}}';
+            //url = url.replace(':id_servicio', id_servicio);
+            document.getElementById('volver').href = url;
+        });
+    </script>
 @endsection

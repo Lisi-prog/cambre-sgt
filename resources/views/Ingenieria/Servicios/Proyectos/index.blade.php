@@ -192,6 +192,9 @@
 </script> --}}
 <script>
     $(document).ready(function () {
+        var url = '{{url('/')}}';
+        //url = url.replace(':id_servicio', id_servicio);
+        document.getElementById('volver').href = url;
         // Setup - add a text input to each footer cell
         $('#example thead tr')
             .clone(true)

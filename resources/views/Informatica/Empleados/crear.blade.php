@@ -152,4 +152,11 @@
         </div>
     </section>
     <script src="{{ asset('js/Informatica/Empleados/crear-empleado.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            var url = '{{route('tecnicos.index')}}';
+            //url = url.replace(':id_servicio', id_servicio);
+            document.getElementById('volver').href = url;
+        });
+    </script>
 @endsection

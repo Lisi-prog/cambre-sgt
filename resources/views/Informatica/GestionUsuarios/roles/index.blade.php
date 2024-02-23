@@ -101,6 +101,9 @@
 
 <script>
     $(document).ready(function () {
+        var url = '{{url('/')}}';
+        //url = url.replace(':id_servicio', id_servicio);
+        document.getElementById('volver').href = url;
         $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',

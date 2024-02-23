@@ -113,4 +113,11 @@
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(function () {
+            var url = '{{url('r_i')}}';
+            //url = url.replace(':id_servicio', id_servicio);
+            document.getElementById('volver').href = url;
+        })
+    </script>
 @endsection

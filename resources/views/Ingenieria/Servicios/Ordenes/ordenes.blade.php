@@ -343,6 +343,9 @@
 <script>
     let x = '';
     $(document).ready( function () {
+        var url = '{{url('/')}}';
+        //url = url.replace(':id_servicio', id_servicio);
+        document.getElementById('volver').href = url;
         //dudoso
         let tipo_orden = window.location.pathname.substring(9, 10);
         modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);

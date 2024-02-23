@@ -547,4 +547,5 @@ class ProyectoController extends Controller
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
+
 }

@@ -116,5 +116,11 @@
     </section>
 
     <script src="{{ asset('js/Informatica/GestionUsuarios/Rol/asignar-rol.js') }}"></script>
-
+    <script>
+        $(document).ready(function () {
+            var url = '{{route('roles.index')}}';
+            //url = url.replace(':id_servicio', id_servicio);
+            document.getElementById('volver').href = url;
+        });
+    </script>
 @endsection

@@ -6,7 +6,7 @@ use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
 use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 use App\Http\Controllers\Informatica\EmpleadoController;
 use App\Http\Controllers\Informatica\PuestoEmpleadoController;
-
+use App\Http\Controllers\Informatica\SideBarController;
 //Gestion de usuario
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER-USUARIOS|VER-ROLES']], function () {
     Route::resource('roles', RolController::class);
@@ -24,8 +24,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER
 });
 
 Route::get('phpmyinfo', function () {
-                            phpinfo(); 
-                                })->name('phpmyinfo');
+    phpinfo(); 
+})->name('phpmyinfo');
 // Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-ROLES']], function () {
 //     Route::resource('roles', RolController::class)
 // });

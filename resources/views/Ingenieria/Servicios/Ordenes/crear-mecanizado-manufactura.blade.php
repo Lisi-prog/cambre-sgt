@@ -53,6 +53,10 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 text-center">
                                     <h5 class="text-center">Orden de manufactura</h5>
                                 </div>
+                                <div hidden>
+                                    {{-- SOLO PARA OBTENER EL ID DE LA ORDEN --}}
+                                    {!! Form::text('id_servicio', $orden_manufactura->getOrden->getEtapa->id_servicio, ['style' => 'disabled;', 'readonly'=> 'true', 'id' => 'id_servicio']) !!}
+                                </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden_manufactura->id_orden}}, '{{$orden_manufactura->getOrden->nombre_orden}}')">
                                         Editar
@@ -205,27 +209,27 @@
                     </div>
                 </div>   
 
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="d-flex">
-                                    <div class="me-auto">
-                                        
-                                    </div>
-                                    <div class="p-1">
-                                        
-                                    </div>
-                                    <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $orden_manufactura->getOrden->getEtapa->getServicio->id_servicio], 'style' => '']) !!}
-                                        {!! Form::submit('volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
+                    {{-- <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="d-flex">
+                                        <div class="me-auto">
+                                            
+                                        </div>
+                                        <div class="p-1">
+                                            
+                                        </div>
+                                        <div class="p-1">
+                                            {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $orden_manufactura->getOrden->getEtapa->getServicio->id_servicio], 'style' => '']) !!}
+                                            {!! Form::submit('volver', ['class' => 'btn btn-primary']) !!}
+                                            {!! Form::close() !!}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> --}}
                 
 
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
@@ -234,6 +238,10 @@
 
         <script>
             $(document).ready(function () {
+                let id_servicio = document.getElementById('id_servicio').value;
+                var url = '{{route('proyectos.gestionar', ':id_servicio')}}';
+                url = url.replace(':id_servicio', id_servicio);
+                document.getElementById('volver').href = url;
                 //modificarFormularioConArgumentos(3, 'formulario-crear-orden-meca', false);
                 $('#exampless').DataTable({
                     language: {

@@ -153,6 +153,12 @@
     </section>
     @include('Ingenieria.Solicitud.SSI.modal.m-crear-servicio')
     <script>
+        $(document).ready(function () {
+            var url = '{{url('s_s_i')}}';
+            //url = url.replace(':id_servicio', id_servicio);
+            document.getElementById('volver').href = url;
+        })
+
         $(function(){
             $('#crear_serv').on('change', mostrarCrearServicio);
         });
