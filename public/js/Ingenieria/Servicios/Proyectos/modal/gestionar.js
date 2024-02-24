@@ -158,9 +158,15 @@ function cargarModalVerPartes(id, tipo_orden){
     success: function (response) {
         console.log(response)
         response.forEach(element => {
+            if (element.fecha_limite) {
+                fecha_lim = element.fecha_limite;
+            }else{
+                fecha_lim = '-';
+            }
+            
             html += `<tr>
                         <td class="text-center">`+element.fecha+`</td>
-                        <td class="text-center">`+element.fecha_limite+`</td>
+                        <td class="text-center">`+fecha_lim+`</td>
                         <td class="text-center">`+element.estado+`</td>
                         <td class="text-center">`+element.horas+`</td>
                         <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>

@@ -18,7 +18,7 @@ function crearCuadrOrdenes(id_etapa){
             id_etapa: id_etapa,
         },
     success: function (response) {
-        console.log(response);
+        // console.log(response);
         response.forEach(element => {
             html_orden += `<tr>
                                 <td class= "text-center"> `+element.orden+`</td> 
@@ -125,8 +125,8 @@ function verOrdenTrabajo(id_orden){
             id_orden: id_orden,
         },
     success: function (response) {
-        console.log(response);
-        console.log('hola');
+        // console.log(response);
+        // console.log('hola');
         response.forEach(element => {
             html_odt = `<tr>
                             <td class="text-center">`+element.orden+`</td>
@@ -168,7 +168,7 @@ function obtenerPartes(id_orden){
             id_orden: id_orden,
         },
     success: function (response) {
-        console.log(response);
+        // console.log(response);
          response.forEach(element => {
              html_parte += `<tr>
                                 <td class="text-center">`+element.fecha_carga+`</td>

@@ -253,7 +253,7 @@ CREATE TABLE `parte`(
   `id_parte` int NOT NULL AUTO_INCREMENT,
   `observaciones` varchar(500),
   `fecha` date NOT NULL,
-  `fecha_limite` date NOT NULL,
+  `fecha_limite` date,
   `fecha_carga` datetime NOT NULL,
   `horas` time NOT NULL,
   `costo` decimal(10,2),

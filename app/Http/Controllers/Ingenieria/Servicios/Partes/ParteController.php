@@ -261,7 +261,7 @@ class ParteController extends Controller
                 'estado' => $parte->getParteDe->getNombreEstado(),
                 'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
                 'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
-                'fecha_limite' => Carbon::parse($parte->fecha_limite)->format('d-m-Y'),
+                'fecha_limite' => $parte->fecha_limite ? Carbon::parse($parte->fecha_limite)->format('d-m-Y') : null,
                 'horas' => Carbon::parse($parte->horas)->format('H:s'),
                 'supervisor' => $parte->getOrden->getSupervisor(),
                 'orden' => $orden->nombre_orden,

@@ -34,6 +34,7 @@ function modificarFormulario(){
         cargarSupervisores();
         cargarEmpleados();
         cargarEstados();
+        $('#cbx_estado').on('change', mostrarOcultarFechaRequerida);
         break;
     case 2:
         formulario.innerHTML = '';
@@ -776,4 +777,20 @@ export function colorEncabezadoPorTipoDeOrden(tipo_orden){
 export function volver(ruta){
     document.getElementById('volver').href = '{{route('+ruta+')}}';
     console.log(document.getElementById('volver'));
+}
+
+function mostrarOcultarFechaRequerida(){
+    // console.log('holanda');
+    // console.log($(this).val());
+    let opcion = parseInt($(this).val());
+    let fecha_requerida_div = document.getElementById('div_fecha_requerida');
+    let fecha_requerida_input = document.getElementById('fec_req');
+    
+    if(opcion === 2 || opcion === 5){
+        fecha_requerida_div.hidden = false;
+        fecha_requerida_input.disabled = false;
+    }else{
+        fecha_requerida_div.hidden = true;
+        fecha_requerida_input.disabled = true;
+    }
 }
