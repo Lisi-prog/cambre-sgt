@@ -70,7 +70,7 @@ export default
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
         <div class="form-group" id="div_fecha_requerida">
             <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label>
-            <span class="obligatorio">*</span>
+            <span class="obligatorio" id="id_span_fec_req">*</span>
             <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control" name="fecha_req" type="date" value="2023-12-12" required>
         </div>
     </div>
