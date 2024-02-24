@@ -39,7 +39,7 @@ class Parte_manufactura extends Model
 
     public function getFinalizado()
     {
-        if ($this->id_estado_manufactura == 6) {
+        if ($this->id_estado_manufactura == 5) {
             return 1;
         }
         return 0;

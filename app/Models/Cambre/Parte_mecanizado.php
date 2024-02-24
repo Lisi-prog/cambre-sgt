@@ -39,7 +39,7 @@ class Parte_mecanizado extends Model
 
     public function getFinalizado()
     {
-        if ($this->id_estado_mecanizado == 4) {
+        if ($this->id_estado_mecanizado == 6) {
             return 1;
         }
         return 0;
