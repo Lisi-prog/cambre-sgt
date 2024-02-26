@@ -274,7 +274,7 @@
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable() ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{ $orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ? \Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '')->format('d-m-Y') : '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td>
         

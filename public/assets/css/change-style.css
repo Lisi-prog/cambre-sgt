@@ -1,0 +1,5 @@
+/* Cambios sobre el estilo default del stilsa */
+.menu-hover:hover {
+    color: #fff !important;
+    background-color: #00628c !important;
+}

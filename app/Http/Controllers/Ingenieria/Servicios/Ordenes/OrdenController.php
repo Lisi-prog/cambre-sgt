@@ -220,12 +220,11 @@ class OrdenController extends Controller
                     'supervisor' => 'required',
                     'fecha_ini' => 'required',
                     'id_estado' => 'required',
-                    'fecha_req' => 'required'
                 ], [
                     'horas_estimadas.required' => 'Faltan las horas estimadas',
                     'supervisor.required' => 'Seleccione un supervisor'
                 ]);
-
+        
                 $this->crearOrdenTrabajo($request);
                 
                 return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de trabajo y el parte de trabajo se ha creado con exito.'); 
@@ -308,7 +307,7 @@ class OrdenController extends Controller
         $tipo_orden_trabajo = $request->input('tipo_orden_trabajo');
         $id_responsable = $request->input('responsable');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
-        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $fecha_req = $request->input('fecha_req');
         $id_estado = $request->input('id_estado');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $id_supervisor = $request->input('supervisor');

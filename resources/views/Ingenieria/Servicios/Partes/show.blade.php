@@ -161,7 +161,7 @@
 
                                             <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->fecha)->format('d-m-Y')}}</td>
 
-                                            <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->fecha_limite)->format('d-m-Y')}}</td>
+                                            <td class= 'text-center'>{{ $parte->fecha_limite ? \Carbon\Carbon::parse($parte->fecha_limite)->format('d-m-Y') : '-'}}</td>
 
                                             
                                             <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>

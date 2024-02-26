@@ -65,7 +65,7 @@ table.dataTable tbody td {
 
                                         <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
 
-                                        <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
+                                        <td class= 'text-center' >{{$orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ? \Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y') : '-'}}</td>
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
@@ -148,6 +148,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Progreso Mecanizado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
@@ -169,6 +170,12 @@ table.dataTable tbody td {
                                         <td class= 'text-center' >{{$orden->nombre_orden}}</td>
 
                                         <td class= 'text-center' >{{$orden->getEstado()}}</td>
+
+                                        <td class= 'text-center' style="vertical-align: middle;">
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->getOrdenDe->getOrdenesMecanizadoRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span style="color: #ffffff">{{$orden->getOrdenDe->getOrdenesMecanizadoRealizadas()}}</span></div>
+                                            </div>
+                                        </td>
 
                                         <td class= 'text-center' >{{$orden->getSupervisor()}}</td>
 

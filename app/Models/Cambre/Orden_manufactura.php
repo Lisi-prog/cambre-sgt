@@ -38,7 +38,60 @@ class Orden_manufactura extends Model
     {
         return 2;
     }
+
     public function getNombreTipoOrden(){
         return 'Manufactura';
+    }
+
+    public function getOrdenesMecanizadoRealizadas()
+    {
+        $ordenes = $this->getOrdenesMecanizado;
+        $totalOrdenes = count($ordenes);
+        $totalOrdenesFinalizados = $this->getOrdenesMecanizadofinalizadas();
+        return $totalOrdenesFinalizados.'/'.$totalOrdenes;
+    }
+
+    public function getOrdenesMecanizadoRealizadasPorcentaje()
+    {
+        try {
+            $ordenes = $this->getOrdenesMecanizado;
+            $totalOrdenes = count($ordenes);
+            $totalOrdenesFinalizados = $this->getOrdenesMecanizadofinalizadas();
+            return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
+        } catch (\Throwable $th) {
+            return '0';
+        }
+        
+    }
+
+    public function getOrdenesRealizadasPorcentaje()
+    {
+        $etapas = $this->getEtapas;
+        $totalOrdenes = 0;
+        $totalOrdenesFinalizados = 0;
+
+        try {
+            foreach ($etapas as $etapa) {
+                $totalOrdenes += $etapa->getTotalOrdenes();
+                $totalOrdenesFinalizados += $etapa->getOrdenesFinalizadas();
+            }
+            return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
+        } catch (\Throwable $th) {
+            return '0';
+        }
+        
+        // return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
+    }
+
+    public function getOrdenesMecanizadofinalizadas(){
+        $ordenes = $this->getOrdenesMecanizado;
+        $totalOrdenesFinalizadas = 0;
+        foreach ($ordenes as $orden_mec) {
+           if ($orden_mec->getOrden->getFinalizado() == 1) {
+                $totalOrdenesFinalizadas +=1;
+           }
+
+        }
+        return $totalOrdenesFinalizadas;
     }
 }

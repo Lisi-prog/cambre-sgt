@@ -66,6 +66,103 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
+                        </div>
+                        <div class="row" id="demo" hidden>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Proyectos:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($proyectos as $proyecto)
+                                                    <label><input name="cod_serv" type="checkbox" value="{{$proyecto->codigo_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Tipo:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($subtipos_servicio as $subtipo_servicio)
+                                                    <label><input name="subtip" type="checkbox" value="{{$subtipo_servicio->nombre_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Lider:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($supervisores as $supervisor)
+                                                    <label><input name="lid" type="checkbox" value="{{$supervisor->nombre_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Responsable:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($responsables as $responsable)
+                                                    <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}"> {{$responsable->nombre_empleado}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Estados:</label>
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                @foreach ($estados as $estado)
+                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
@@ -74,7 +171,7 @@
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                         <th class='ml-3 text-center' style="color:#fff;">ID</th>
                                         <th class='text-center' style="color:#fff;">Nombre</th>
-                                        <th class='text-center' style="color:#fff;">Tipo proyecto</th>
+                                        <th class='text-center' style="color:#fff;">Tipo</th>
                                         {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
                                         <th class='text-center' style="color:#fff;">Lider</th>
                                         <th class='text-center' style="color:#fff;">Progreso</th>
@@ -108,7 +205,7 @@
                                                 </td>
                                                 {{-- <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadas()}}</td> --}}
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->getEstado->nombre_estado}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getEstado()}}</td>
     
                                                 <td class= 'text-center'style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y')}}</td>
                                                 
@@ -190,7 +287,8 @@
         });
     });
 </script> --}}
-<script>
+
+{{-- <script>
     $(document).ready(function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
@@ -255,6 +353,120 @@
             },
         });
     });
+</script> --}}
+
+<script>
+    let x = '';
+    $(document).ready( function () {
+        var url = '{{url('/')}}';
+        //url = url.replace(':id_servicio', id_servicio);
+        document.getElementById('volver').href = url;
+        //dudoso
+        // let tipo_orden = window.location.pathname.substring(9, 10);
+        // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
+        // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+            var positions = $('input:checkbox[name="lid"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+            if (positions.length === 0) {
+                return true;
+            }
+            
+            if (positions.indexOf(searchData[4]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="subtip"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[3]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="est"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[6]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="cod_serv"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+
+
+            if (offices.indexOf(searchData[1]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+    var table = $('#example').DataTable();
+  
+    $('input:checkbox').on('change', function () {
+        table.draw();
+    });
+
+    } );
+</script>
+
+<script>
+    function mostrarFiltro(){
+        let cuadro_filtro = document.getElementById("demo");
+        if ($('#demo').is(":hidden")) {
+            cuadro_filtro.hidden = false;
+        }else{
+            cuadro_filtro.hidden = true;
+        }
+    }
+
+    function limpiarFiltro(){
+        $('input[type=checkbox]').prop("checked", false);
+        var table = $('#example').DataTable();
+        table.draw();
+    }
 </script>
 
 <script>

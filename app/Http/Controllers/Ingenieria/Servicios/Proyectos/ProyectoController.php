@@ -117,7 +117,34 @@ class ProyectoController extends Controller
                 break;
         }
 
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo'));
+        //Para el filtro
+            $supervisores = $this->obtenerSupervisoresFiltro();
+            $codigos_servicio = $this->obtenerCodigoServicio();
+            $subtipos_servicio = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->get();
+            $estados = Estado::orderBy('id_estado')->get();
+        //------------------
+
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados'));
+    }
+
+    public function obtenerCodigoServicio(){
+        return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
+    }
+
+    public function obtenerSupervisoresFiltro(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
     }
 
     public function create()

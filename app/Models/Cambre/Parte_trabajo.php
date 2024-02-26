@@ -39,7 +39,7 @@ class Parte_trabajo extends Model
 
     public function getFinalizado()
     {
-        if ($this->id_estado == 2) {
+        if ($this->id_estado == 9) {
             return 1;
         }
         return 0;

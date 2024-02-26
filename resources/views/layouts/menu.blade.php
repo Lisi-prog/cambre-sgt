@@ -1,12 +1,19 @@
-    <li class="side-menus {{ Request::is('*') ? 'active' : '' }}">
-        <a class="nav-link" href="/">
-            <i class=" fas fa-building"></i><span>Cambre S.A.</span>
+    {{-- <li class="side-menus {{ Request::is('*') ? 'active' : '' }}"> --}}
+    {{-- <style>
+        .prubb:hover {
+            color: #fff !important;
+            background-color: #00628c !important;
+        }
+    </style> --}}
+    <li class="side-menus">
+        <a class="nav-link menu-hover" href="/">
+            <i class="fas fa-home"></i><span>Cambre S.A.</span>
         </a>
     </li>
 
     @can('VER-MENU-SOLICITUDES')
         <li class="dropdown ">
-            <a href="" class="nav-link has-dropdown">
+            <a href="" class="nav-link has-dropdown menu-hover">
                 <i class="fas fa-clipboard-list"></i><span>Solicitudes</span>
             </a>
             
@@ -47,7 +54,7 @@
 
     @can('VER-MENU-SERVICIOS')
         <li class="dropdown ">
-            <a href="" class="nav-link has-dropdown">
+            <a href="" class="nav-link has-dropdown menu-hover">
                 <i class="fas fa-project-diagram"></i><span>Servicios</span>
             </a>
             
@@ -131,7 +138,7 @@
 
     @can('VER-MENU-ORDENES') {{-- ORDENES --}}
         <li class="dropdown">
-            <a href="" class="nav-link has-dropdown">
+            <a href="" class="nav-link has-dropdown menu-hover">
                 <i class="fas fa-briefcase"></i><span>Ordenes</span>
             </a>
             <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
@@ -159,7 +166,7 @@
 
     @can('VER-MENU-INGENIERIA')
     <li class="dropdown ">
-        <a href="" class="nav-link has-dropdown ">
+        <a href="" class="nav-link has-dropdown menu-hover">
             <i class="fas fa-wrench"></i><span>Ingenieria</span>
         </a>
         <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
@@ -198,7 +205,7 @@
 
     @can('VER-MENU-INFORMATICA')
     <li class="dropdown ">
-        <a href="" class="nav-link has-dropdown ">
+        <a href="" class="nav-link has-dropdown menu-hover">
             <i class="fas fa-server"></i><span>Sistema</span>
         </a>
         <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
