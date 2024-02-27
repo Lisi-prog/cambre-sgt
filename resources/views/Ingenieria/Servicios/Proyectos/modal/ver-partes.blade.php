@@ -96,13 +96,14 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
-                                {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;', 'required']) !!}
+                                {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                             <span class="obligatorio">*</span>
                                 {!! Form::date('fecha', \Carbon\Carbon::now(), [
                                     'min' => '2023-01-01',
                                     'max' => \Carbon\Carbon::now()->year . '-12',
                                     'id' => 'fecha',
-                                    'class' => 'form-control'
+                                    'class' => 'form-control',
+                                    'required'
                                 ]) !!}
                             </div>
                         </div>
