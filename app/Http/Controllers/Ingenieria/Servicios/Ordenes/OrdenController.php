@@ -837,6 +837,7 @@ class OrdenController extends Controller
         $codigos_servicio = $this->obtenerCodigoServicio();
         //$estados = $this->listarTodosLosEstados();
         $tipo = '';
+        $servicios = '';
         $array_responsabilidades_ordenes = array();
         $array_ordenes = array();
         $ordenes = array();
@@ -917,7 +918,16 @@ class OrdenController extends Controller
                 break;
         }
         
-        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio'));
+        if(count($ordenes) != 0){
+            foreach ($ordenes as $orden) {
+                $servicios_ids[] = $orden->getEtapa->getServicio->id_servicio;
+            }
+    
+            $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('prioridad_servicio')->get();
+        }
+
+        
+        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
     }
 
     public function editarOrden(Request $request){

@@ -123,7 +123,7 @@ function cargarModalEditarOrden(id_orden){
     }));
 }
 function colorEncabezadoPartePorTipoDeOrden(tipo_orden){
-    console.log('COLOR');
+    // console.log('COLOR');
     switch (tipo_orden) {
         case 1:
             return '#93c180';
@@ -144,8 +144,14 @@ function colorEncabezadoPartePorTipoDeOrden(tipo_orden){
 
 function cargarModalVerPartes(id, tipo_orden){
     let html = '';
-    console.log(tipo_orden);
+    obtenerEstados(tipo_orden);
+    modificarModalVerPartesEstadoFechaLimite(id);
+    let orden = document.getElementById('m-ver-parte-orden');
+    orden.value = id;
     let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
+    
+    document.getElementById('m-ver-parte-div').hidden = true;
+    document.getElementById('m-ver-parte-orden-btn').hidden = true;
     
     document.getElementById('body_ver_parte').innerHTML = '';
     document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
@@ -177,11 +183,71 @@ function cargarModalVerPartes(id, tipo_orden){
         document.getElementById('body_ver_parte').innerHTML = html;
         document.getElementById('mv-orden').value = response[0].orden;
         document.getElementById('mv-etapa').value = response[0].etapa;
-        document.getElementById('mv-estado').value = response[0].estado;
+        document.getElementById('mv-estado').value = response[0].estado_orden;
     },
     error: function (error) {
         console.log(error);
     }
     }));
+}
+
+function obtenerEstados(opcion){
+    let select_estados = document.getElementById('m-ver-parte-estado');
+    select_estados.innerHTML = '<option value="">Seleccionar</option>';
+    html_estados = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-estados-de/'+opcion, 
+        data: {
+            
+        },
+    success: function (response) {
+        // console.log(response);
+        response.forEach(element => {
+            html_estados += `
+                                <option value="`+element.id_estado+`">`+element.nombre
+                                +`</option> 
+                                `
+        });
+        select_estados.innerHTML += html_estados;
+       /* c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
+        c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : ''; */
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+} 
+
+function modificarModalVerPartesEstadoFechaLimite(id){
+    let fecha_limite = document.getElementById('m-ver-parte-fecha-limite');
+    let estado = document.getElementById('m-ver-parte-estado');
+    $.when($.ajax({
+        type: "post",
+        url: '/orden/obtener-una-orden-etapa/'+id, 
+        data: {
+            
+        },
+    success: function (response) {
+        // console.log(response);
+        estado.value= response[0].id_estado;
+        fecha_limite.value= response[0].fecha_limite;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
+function verCargarParteModalParte(){
+    let cuadro_oculto_de_cargar_parte = document.getElementById('m-ver-parte-div');
+    let btn_oculto_de_cargar_parte = document.getElementById('m-ver-parte-orden-btn');
+    if ($('#m-ver-parte-div').is(":hidden")) {
+        cuadro_oculto_de_cargar_parte.hidden = false;
+        btn_oculto_de_cargar_parte.hidden = false;
+    }else{
+        cuadro_oculto_de_cargar_parte.hidden = true;
+        btn_oculto_de_cargar_parte.hidden = true;
+    }
 }
 

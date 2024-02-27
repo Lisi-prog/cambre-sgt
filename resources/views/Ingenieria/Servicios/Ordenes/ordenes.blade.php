@@ -161,8 +161,8 @@
                                                 <label>Proyectos:</label>
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($codigos_servicio as $codigo_servicio)
-                                                    <label><input name="cod_serv" type="checkbox" value="{{$codigo_servicio->codigo_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
+                                                @foreach ($servicios as $servicio)
+                                                    <label><input name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}"> {{$servicio->codigo_servicio}}</label>
                                                 @endforeach
                                             </div>
                                         </div>

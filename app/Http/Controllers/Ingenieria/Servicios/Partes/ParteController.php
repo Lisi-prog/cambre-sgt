@@ -137,8 +137,8 @@ class ParteController extends Controller
                     'id_estado' => $estado,
                     'id_parte' => $parte->id_parte
                 ]);
-            
-                return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 1])->with('mensaje','Parte de trabajo creado con éxito!.');                       
+                return redirect()->back()->with('mensaje','Parte de trabajo creado con éxito!.');
+                // return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 1])->with('mensaje','Parte de trabajo creado con éxito!.');                       
                 break;
             case 2:
                 $this->validate($request, [
@@ -168,11 +168,10 @@ class ParteController extends Controller
                     'id_estado_manufactura' => $estado,
                     'id_parte' => $parte->id_parte
                 ]);
-            
-                return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 2])->with('mensaje','Parte de manufactura creado con éxito!.');                       
+                return redirect()->back()->with('mensaje','Parte de manufactura creado con éxito!.');
+                //return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 2])->with('mensaje','Parte de manufactura creado con éxito!.');                       
                 break;
             case 3:
-                
                 $this->validate($request, [
                     'estado' => 'required'
                 ]);
@@ -202,12 +201,18 @@ class ParteController extends Controller
                     'id_estado_mecanizado' => $estado,
                     'id_parte' => $parte->id_parte
                 ]);
-                Parte_mecanizado_x_maquinaria::create([
-                    'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
-                    'id_maquinaria' => $maquina,
-                    'horas_maquina' => $horas_maquina
-                ]);
-                return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 3])->with('mensaje','Parte de mecanizado creado con éxito!.');                       
+                
+                if ($maquina) {
+                    Parte_mecanizado_x_maquinaria::create([
+                        'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
+                        'id_maquinaria' => $maquina,
+                        'horas_maquina' => $horas_maquina
+                    ]);
+                }
+                
+
+                return redirect()->back()->with('mensaje','Parte de mecanizado creado con éxito!.');
+                //return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 3])->with('mensaje','Parte de mecanizado creado con éxito!.');                       
                 break;
             default:
                 # code...
