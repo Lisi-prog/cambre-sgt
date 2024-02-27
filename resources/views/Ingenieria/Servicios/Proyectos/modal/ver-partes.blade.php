@@ -85,7 +85,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                                 {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                            <span class="obligatorio">*</span>
+                                            {{-- <span class="obligatorio">*</span> --}}
                                 {!! Form::date('fecha_limite', null, [
                                     'min' => '2023-01-01',
                                     'max' => \Carbon\Carbon::now()->year . '-12',
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
-                                {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;', 'required']) !!}
                                             <span class="obligatorio">*</span>
                                 {!! Form::date('fecha', \Carbon\Carbon::now(), [
                                     'min' => '2023-01-01',
