@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('titulo', 'Proyectos')
+@section('titulo', $tipo ?? '')
 
 @section('content')
 <style>
