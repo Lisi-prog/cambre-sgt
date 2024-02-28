@@ -124,7 +124,7 @@ class ProyectoController extends Controller
             $estados = Estado::orderBy('id_estado')->get();
         //------------------
 
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', ));
     }
 
     public function obtenerCodigoServicio(){
@@ -433,9 +433,7 @@ class ProyectoController extends Controller
 
     public function edit($id)
     {
-        $permiso = Permission::findOrFail($id);
-    
-        return view('Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
+        
     }
     
     public function update(Request $request, $id)
@@ -481,15 +479,13 @@ class ProyectoController extends Controller
     
     public function destroy($id)
     {
-        $permiso = Permission::findOrFail($id);
-
-        Permission::destroy($id);
-
-        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
+                      
     }
 
-    public function gestionar($id)
+    public function gestionar(Request $request, $id)
     {
+        $tipo = $request->input('tipo');
+        $prefijo = $request->input('prefijo');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $proyecto = Servicio::find($id);
         $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
@@ -497,7 +493,7 @@ class ProyectoController extends Controller
         $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo'));
     }
 
     public function costos($id)

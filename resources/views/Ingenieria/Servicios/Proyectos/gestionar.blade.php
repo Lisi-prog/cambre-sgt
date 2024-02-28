@@ -453,7 +453,6 @@
                         <div class="card-body">
                             <div class="row" >
                                 <div class="d-flex">
-                                    
                                 </div>
                             </div>
                         </div>
@@ -478,8 +477,13 @@
 
         <script>
             $(document).ready(function () {
-                document.getElementById('volver').href = '{{route('proyectos.index')}}';
-                console.log('{{route('proyectos.index')}}');
+                let prefijo = '{{$prefijo}}';
+                let tipo = '{{$tipo}}';
+                var url = '{{route('proyecto.indexprefijo',[':prefijo',':tipo'])}}';
+                url = url.replace(':prefijo', prefijo).replace(':tipo', tipo);
+                // console.log(tipo);
+                document.getElementById('volver').href = url;
+                // document.getElementById('volver').href = '{{route('proyectos.index')}}';
                 $('#exampless').DataTable({
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',

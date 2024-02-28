@@ -237,6 +237,8 @@
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                     {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>
