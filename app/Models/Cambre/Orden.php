@@ -53,11 +53,11 @@ class Orden extends Model
     }
 
     public function getFechaLimite(){
-        return $this->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite;
+        return $this->getPartes->sortByDesc('id_parte')->first()->fecha_limite;
     }
 
     public function getFechaFinalizado(){
-        return $this->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha;
+        return $this->getPartes->sortByDesc('id_parte')->first()->fecha;
     }
 
     public function getSupervisor(){
