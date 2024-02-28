@@ -781,7 +781,7 @@ export function volver(ruta){
 
 function mostrarOcultarFechaRequerida(){
     // console.log('holanda');
-    console.log($(this).val());
+    //console.log($(this).val());
     let opcion = parseInt($(this).val());
     //let fecha_requerida_div = document.getElementById('div_fecha_requerida');
     let fecha_requerida_input = document.getElementById('fec_req');
