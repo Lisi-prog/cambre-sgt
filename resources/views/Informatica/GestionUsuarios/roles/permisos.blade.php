@@ -75,9 +75,9 @@
                                             'method' => 'POST',
                                             'route' => ['roles.guardarpermisos', $rol->id],
                                             'style' => 'display:inline',
-                                            'class' => 'validar'
+                                            'class' => 'validar d-flex flex-column overflow-auto'
                                         ]) !!}
-                                        <div class="overflow-auto">
+                                        <div class="d-flex flex-column overflow-auto">
                                             <div class="card-body d-flex flex-column pt-0" id="permisosAsignados">
                                                 @foreach($permisosAsignados as $permisoAsignado)
                                                     <label id="per{{$permisoAsignado->id}}"><input checked onclick="eliminarPermiso('{{$permisoAsignado->id}}')" class="pe{{$permisoAsignado->id}}" name="permisos[]" type="checkbox" value="{{$permisoAsignado->id}}"> {{$permisoAsignado->name}}</label> 
