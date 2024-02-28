@@ -924,6 +924,8 @@ class OrdenController extends Controller
             }
     
             $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('prioridad_servicio')->get();
+        }else{
+            $servicios = [];
         }
 
         
