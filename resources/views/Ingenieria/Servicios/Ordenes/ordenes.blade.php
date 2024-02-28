@@ -301,11 +301,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="row my-2">
+                                                            @can('EDITAR-ORDENES')
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
                                                                     Editar
                                                                 </button> 
-                                                            </div> 
+                                                            </div>
+                                                            @endcan
                                                         </div>
                                                     </div>
                                                 </div>
