@@ -71,6 +71,10 @@ class Etapa extends Model
         }
     }
 
+    public function getFechaLimite(){
+        return $this->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite;
+    }
+
     public function getProgreso(){
         $ordenes = Orden::where('id_etapa', $this->id_etapa)->get();
         $progreso = 0;

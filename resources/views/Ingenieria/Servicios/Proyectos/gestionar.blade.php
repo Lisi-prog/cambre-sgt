@@ -36,6 +36,9 @@
         padding: 5px !important;
     }
 </style>
+@php
+    $formato_fecha= Config::get('myconfig.formato_fecha');
+@endphp
     <section class="section">
         <div class="d-flex section-header justify-content-center">
             <div class="d-flex flex-row col-12">
@@ -71,9 +74,12 @@
                                         <button type="button" class="btn btn-primary col-9" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
                                             Editar
                                         </button>
-                                        <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
+                                        <button type="button" class="btn btn-primary my-2 col-9" data-bs-toggle="modal" data-bs-target="#verActServOrdenModal" onclick="mostrarActProyectoAlt({{$proyecto->id_servicio}})">
                                             Actualizaciones
                                         </button>
+                                        {{-- <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
+                                            Actualizaciones
+                                        </button> --}}
                                         {!! Form::open(['method' => 'GET', 'route' => ['proyectos.costos', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
                                         {!! Form::submit('Costos actualizados', ['class' => 'btn btn-primary col-9']) !!}
                                         {!! Form::close() !!}
@@ -174,7 +180,7 @@
                 {{-- ------------- --}}
                 
                 {{-- Actualizaciones del proyecto --}}
-                <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_act_proyecto' hidden>
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_act_proyecto' hidden>
                     <div class="card">
                         <div class="card-head">
                             <br>
@@ -211,7 +217,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 {{-- ------------- --}}
 
                 {{-- Etapas del proyecto --}}
@@ -259,9 +265,11 @@
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getResponsable->getEmpleado->nombre_empleado}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->fecha_inicio)->format($formato_fecha)}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
+                                                {{-- <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td> --}}
+
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaLimite()}}</td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '__-__-____'}}</td>
 
@@ -288,7 +296,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-12">
-                                                                    <button type="button" class="btn btn-warning w-100" onclick="mostrarActEtapa({{$etapa->id_etapa}})">
+                                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verActEtapaOrdenModal" onclick="mostrarActEtapaAlt({{$etapa->id_etapa}})">
                                                                         Actualizaciones
                                                                     </button>
                                                                 </div>
@@ -310,7 +318,7 @@
                 {{-- ------------- --}}
 
                 {{-- Actualizaciones de la etapa --}}
-                <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_act_etapa' hidden>
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_act_etapa' hidden>
                     <div class="card">
                         <div class="card-head">
                             <br>
@@ -347,7 +355,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 {{-- ------------- --}}
 
                 @include('Ingenieria.Servicios.Proyectos.layout.gestionar-ordenes-v1')
@@ -509,11 +517,12 @@
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.editar-proyecto')
-    @include('Ingenieria.Servicios.Proyectos.modal.crear-act')
-    @include('Ingenieria.Servicios.Proyectos.modal.crear-act-eta')
+    {{-- @include('Ingenieria.Servicios.Proyectos.modal.crear-act') --}}
+    {{-- @include('Ingenieria.Servicios.Proyectos.modal.crear-act-eta') --}}
     @include('Ingenieria.Servicios.Proyectos.modal.ver-partes')
     @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-
+    @include('Ingenieria.Servicios.Proyectos.modal.ver-act-servicio')
+    @include('Ingenieria.Servicios.Proyectos.modal.ver-act-etapa')
 {{-- @include('layouts.modal.confirmation') --}}
 @endsection
 

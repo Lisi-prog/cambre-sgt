@@ -37,6 +37,64 @@ function mostrarActProyecto(id){
     }));
 }
 
+function mostrarActProyectoAlt(id){
+    let renglones_actualizacion = document.getElementById("cuadro-act");
+    let html_act = '';
+    document.getElementById("m-ver-act-div").hidden = true;
+    document.getElementById("m-ver-act-btn").hidden = true;
+    $.when($.ajax({
+        type: "post",
+        url: '/proyectos/obtener-actualizaciones-proyecto/'+id, 
+        data: {
+            id: id,
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_act += `<tr>
+                            <td class="text-center">`+element.codigo+`</td>
+                            <td class="text-center">`+element.fecha_carga+`</td>
+                            <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">`+element.fecha_limite+`</td>
+                            <td class="text-center">`+element.estado+`</td>
+                            <td class="text-center">`+element.responsable+`</td>    
+                            </tr>`
+        });
+        renglones_actualizacion.innerHTML = html_act;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+    cargarFechaEstadoLiderModalVerAct(id);
+}
+
+function cargarFechaEstadoLiderModalVerAct(id){
+    let estado = document.getElementById("m-ver-act-id_estado");
+    let fecha_limite = document.getElementById("m-ver-act-fecha_limite");
+    let lider = document.getElementById("m-ver-act-cbx_lider");
+
+    $.when($.ajax({
+        type: "post",
+        url: '/proyectos/obtener-ultima-actualizacion-servicio/'+id, 
+        data: {
+            id: id,
+        },
+    success: function (response) {
+        console.log(response);
+        estado.value = response[0].estado;
+        fecha_limite.value = response[0].fecha_limite;
+        lider.value = response[0].lider;
+        // response.forEach(element => {
+        //     estado.value = response.estado;
+        // });
+        
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+}
+
 function mostrarActEtapa(id){
     let cuadro_oculto_de_act_proyecto = document.getElementById("cuadro_de_act_etapa");
 
@@ -85,6 +143,61 @@ function mostrarActEtapa(id){
         success: function (response) {
             fecha_lim.value = response.fecha_limite;
             estado_actual.value = response.id_estado;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+}
+
+function mostrarActEtapaAlt(id){
+    let id_etapa = document.getElementById('m_cae_id_etapa');
+    id_etapa.value = id;
+    let renglones_actualizacion = document.getElementById("cuadro-act-etapa");
+    let html_act = '';
+
+    $.when($.ajax({
+        type: "post",
+        url: '/etapas/obtener-actualizaciones-etapa/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (response) {
+            response.forEach(element => {
+                html_act += `<tr>
+                                <td class="text-center">`+element.codigo+`</td>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+element.estado+`</td>
+                                <td class="text-center">`+element.responsable+`</td>
+                                </tr>`
+            });
+            renglones_actualizacion.innerHTML = html_act;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+
+    let fecha_lim = document.getElementById('m-crear-act-eta-feclimite');
+    let estado_actual = document.getElementById('m-crear-act-eta-idestado');
+    let etapa_desc = document.getElementById("m-ver-act-etapa");
+    let nombre_estado = document.getElementById("m-ver-act-eta-orden");
+    let respo = document.getElementById("m-ver-act-eta-responsable");
+    $.when($.ajax({
+        type: "post",
+        url: '/etapa/obtener-una-etapa/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (response) {
+            console.log(response);
+            fecha_lim.value = response.fecha_limite;
+            estado_actual.value = response.id_estado;
+            etapa_desc.value = response.descripcion_etapa;
+            nombre_estado.value = response.estado;
+            respo.value = response.responsable;
         },
         error: function (error) {
             console.log(error);
@@ -162,7 +275,7 @@ function cargarModalVerPartes(id, tipo_orden){
             id: id,
         },
     success: function (response) {
-        console.log(response)
+        // console.log(response)
         response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
@@ -248,6 +361,30 @@ function verCargarParteModalParte(){
     }else{
         cuadro_oculto_de_cargar_parte.hidden = true;
         btn_oculto_de_cargar_parte.hidden = true;
+    }
+}
+
+function verCargarActModal(){
+    let cuadro_oculto_de_cargar_act = document.getElementById('m-ver-act-div');
+    let btn_oculto_de_cargar_act = document.getElementById('m-ver-act-btn');
+    if ($('#m-ver-act-div').is(":hidden")) {
+        cuadro_oculto_de_cargar_act.hidden = false;
+        btn_oculto_de_cargar_act.hidden = false;
+    }else{
+        cuadro_oculto_de_cargar_act.hidden = true;
+        btn_oculto_de_cargar_act.hidden = true;
+    }
+}
+
+function verCargarActEtaModal(){
+    let cuadro_oculto_de_cargar_act_eta = document.getElementById('m-ver-act-eta-div');
+    let btn_oculto_de_cargar_act_eta  = document.getElementById('m-ver-act-eta-btn');
+    if ($('#m-ver-act-eta-div').is(":hidden")) {
+        cuadro_oculto_de_cargar_act_eta.hidden = false;
+        btn_oculto_de_cargar_act_eta.hidden = false;
+    }else{
+        cuadro_oculto_de_cargar_act_eta.hidden = true;
+        btn_oculto_de_cargar_act_eta.hidden = true;
     }
 }
 

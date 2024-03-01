@@ -12,9 +12,7 @@ table.dataTable tbody td {
     padding: 5px;
 }
 </style>
-@php
-    $orden_de_trabajo = Config::get('myconfig.orden_de_trabajo');
-@endphp
+
 {{-- Ordenes de trabajo del proyecto --}}
 <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_trabajo'>
     <div class="card">
@@ -186,7 +184,9 @@ table.dataTable tbody td {
 
                                         <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
 
-                                        <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
+                                        {{-- <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td> --}}
+
+                                        <td class= 'text-center' >{{$orden->getFechaLimite() ?? '-'}}</td>
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
@@ -305,7 +305,9 @@ table.dataTable tbody td {
 
                                         <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
 
-                                        <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td>
+                                        {{-- <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td> --}}
+
+                                        <td class= 'text-center' >{{$orden->getFechaLimite() ?? '-'}}</td>
 
                                         <td class= 'text-center' >{{$orden->getFechaFinalizacion()}}</td>
 
@@ -394,8 +396,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
-                    <tbody id="cuadro-ordenes-trabajo">
-                        @foreach ($proyecto->getEtapas as $etapa)
+                    <tbody id="cuadro-ordenes-mantenimiento">
+                        {{-- @foreach ($proyecto->getEtapas as $etapa)
                             @foreach ($etapa->getOrden as $orden)
                                 @if ($orden->getOrdenDe->getTipoOrden() == 4)
                                     <tr>    
@@ -433,7 +435,7 @@ table.dataTable tbody td {
                                     </tr>
                                 @endif
                             @endforeach
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
                 </div>

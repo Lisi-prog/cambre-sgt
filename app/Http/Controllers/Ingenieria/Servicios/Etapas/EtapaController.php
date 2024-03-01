@@ -276,20 +276,21 @@ class EtapaController extends Controller
     }
 
     public function guardarActualizacion(Request $request, $id){
+        // return $request;
         $this->validate($request, [
-            'descripcion' => 'required',
-            'id_estado' => 'required',
-            'fecha_limite' => 'required',
-            'id_etapa' => 'required'
+            'm-ver-act-eta-descripcion' => 'required',
+            'm-crear-act-eta-idestado' => 'required',
+            'm-crear-act-eta-feclimite' => 'required',
+            'm-crear-act-eta-idestado' => 'required'
         ]);
 
-        $descripcion = $request->input('descripcion');
+        $descripcion = $request->input('m-ver-act-eta-descripcion');
 
-        $id_estado = $request->input('id_estado');
+        $id_estado = $request->input('m-crear-act-eta-idestado');
 
-        $fecha_limite = $request->input('fecha_limite');
+        $fecha_limite = $request->input('m-crear-act-eta-feclimite');
 
-        $id_etapa = $request->input('id_etapa');
+        $id_etapa = $request->input('m-crear-act-eta-id_etapa');
 
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 

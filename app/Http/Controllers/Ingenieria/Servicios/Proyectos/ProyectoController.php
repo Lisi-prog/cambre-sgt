@@ -544,19 +544,19 @@ class ProyectoController extends Controller
         
         //return $request;
         $this->validate($request, [
-            'descripcion' => 'required',
-            'id_estado' => 'required',
-            'lider' => 'required',
-            'fecha_limite' => 'required'
+            'm-ver-act-descripcion' => 'required',
+            'm-ver-act-id_estado' => 'required',
+            'm-ver-act-lider' => 'required',
+            'm-ver-act-fecha_limite' => 'required'
         ]);
 
-        $descripcion = $request->input('descripcion');
+        $descripcion = $request->input('m-ver-act-descripcion');
 
-        $id_estado = $request->input('id_estado');
+        $id_estado = $request->input('m-ver-act-id_estado');
 
-        $fecha_limite = $request->input('fecha_limite');
+        $fecha_limite = $request->input('m-ver-act-fecha_limite');
 
-        $lider = $request->input('lider');
+        $lider = $request->input('m-ver-act-lider');
 
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
@@ -633,6 +633,17 @@ class ProyectoController extends Controller
         return collect($prefijos_recortados_array)->orderBy('codigo_servicio_recortado');*/
     }
 
+    public function obtenerUltimaActualizacion($id){
+        $ultima_act = array();
+        $servicio = Servicio::find($id);
+        $act_servicio = $servicio->getUltimaActualizacion();
+        array_push($ultima_act, (object)[
+            'fecha_limite' => $act_servicio->getActualizacion->fecha_limite,
+            'estado' => $act_servicio->getActualizacion->getEstado->id_estado,
+            'lider' => $act_servicio->getActualizacion->getResponsable->getEmpleado->id_empleado
+        ]);
+        return $ultima_act;
+    }
    
 
 }

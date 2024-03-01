@@ -205,9 +205,11 @@ class Orden extends Model
             $año = substr($parte->fecha, 0, 4);
             $mes = substr($parte->fecha, 5, 2);
             $dia = substr($parte->fecha, 8, 2);
-            return ($dia . '-' . $mes . '-' . $año);
+            // return ($dia . '-' . $mes . '-' . $año);
+            return ( $año . '-' . $mes . '-' . $dia);
         }else{
-            return '__-__-____';
+            // return '__-__-____';
+            return '____-__-__';
         }
     }
 
