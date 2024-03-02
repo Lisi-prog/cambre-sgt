@@ -12,6 +12,7 @@
                 @include('layouts.modal.mensajes')
                 <div class="card col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="row">
+                        @can('VER-MENU-SERVICIOS')
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 p-2" style="">
                             <div class="menu-hover m-auto rounded-4" style="width: 70%">
                                 <a class="nav-link" href="{{route('proyecto.indexprefijo', ['PROY', 'Proyectos'])}}" title="Proyectos">
@@ -51,7 +52,8 @@
                                 </a>
                             </div>
                         </div>
-
+                        @endcan
+                        @can('VER-MENU-ORDENES') 
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 p-2" style="">
                             <div class="menu-hover m-auto rounded-4" style="width: 70%">
                                 <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
@@ -90,7 +92,7 @@
                                 </a>
                             </div>
                         </div>
-
+                        @endcan
                     </div>
                 </div>
             </div>
