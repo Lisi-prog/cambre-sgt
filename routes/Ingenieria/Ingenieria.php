@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     //------------------
     //MAQUINARIA Y ACTIVOS
     Route::post('maquinaria/obtener/{id}', [MaquinariaController::class, 'obtenerMaquinaria']);
+    Route::post('/maquinaria/obtener-maquinarias', [MaquinariaController::class, 'obtenerMaquinarias']);
     Route::resource('maquinarias', MaquinariaController::class);
     Route::resource('activos', ActivoController::class);
     

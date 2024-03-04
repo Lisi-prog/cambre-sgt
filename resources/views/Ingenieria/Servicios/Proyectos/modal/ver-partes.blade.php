@@ -40,6 +40,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="row">
                     <table class="table table-striped">
                         <thead id="encabezado_tabla_parte">
@@ -118,6 +119,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row" id="m-ver-parte-maquinaria">
+
                     </div>
                 </div>
             </div>

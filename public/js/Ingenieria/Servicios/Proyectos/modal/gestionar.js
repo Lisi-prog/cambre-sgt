@@ -302,7 +302,61 @@ function cargarModalVerPartes(id, tipo_orden){
         console.log(error);
     }
     }));
+    
+    if(tipo_orden == 3){
+        let maquinaria_div = document.getElementById("m-ver-parte-maquinaria");
+        let maq_html = `<div class="row"> 
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="form-group">
+                                <label for="maquina" class="control-label" style="white-space: nowrap; ">Maquina:</label>
+                                <select class="form-select form-group" id="m-ver-parte-maquina" name="maquina">
+                                    <option selected="selected" value="">Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="form-group"> 
+                                <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
+                                <div class="input-group">
+                                    <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina" required="">
+                                    <span class="input-group-text">:</span>
+                                    <input class="form-control" name="minutos_maquina" type="number" min="0" max="59" value="00" id="minutos_maquina" required="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                maquinaria_div.innerHTML = maq_html;
+                obtenerMaquinaria();
+    }else{
+        document.getElementById("m-ver-parte-maquinaria").innerHTML = '';
+    }
 }
+
+function obtenerMaquinaria(){
+    let select_maquinaria = document.getElementById('m-ver-parte-maquina');
+    select_maquinaria.innerHTML = '<option value="">Seleccionar</option>';
+    html_maquinaria = '';
+
+    $.when($.ajax({
+        type: "post",
+        url: '/maquinaria/obtener-maquinarias', 
+        data: {
+            
+        },
+    success: function (response) {
+        response.forEach(element => {
+            html_maquinaria += `
+                                <option value="`+element.id_maquinaria+`">`+element.codigo_maquinaria
+                                +`</option> 
+                                `
+        });
+        select_maquinaria.innerHTML += html_maquinaria;
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+} 
 
 function obtenerEstados(opcion){
     let select_estados = document.getElementById('m-ver-parte-estado');

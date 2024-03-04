@@ -104,4 +104,10 @@ class MaquinariaController extends Controller
     {
         return Maquinaria::find($id);
     }
+
+    public function obtenerMaquinarias()
+    {
+        return Maquinaria::orderBy('codigo_maquinaria')->get();
+    }
+
 }

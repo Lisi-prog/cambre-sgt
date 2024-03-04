@@ -70,6 +70,7 @@
 <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.nicescroll.js') }}"></script>
+<script src="{{ asset('assets/js/prevent_multiple_submits.js') }}"></script>
 
 <!-- Template JS File -->
 <script src="{{ asset('web/js/stisla.js') }}"></script>

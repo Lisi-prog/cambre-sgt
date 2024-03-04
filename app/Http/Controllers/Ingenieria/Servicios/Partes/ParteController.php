@@ -80,7 +80,7 @@ class ParteController extends Controller
     
     public function store(Request $request)
     {
-        //return $request;
+        // return $request;
         $this->validate($request, [
             'id_orden' => 'required',
             'observaciones' => 'required',

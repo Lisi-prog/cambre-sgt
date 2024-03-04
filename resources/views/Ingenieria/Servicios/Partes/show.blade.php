@@ -48,8 +48,8 @@
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $orden->getEtapa->getServicio->getEstado() ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('estadoo', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('estadoo', $orden->getEtapa->getServicio->getEstado() ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                             </div>
