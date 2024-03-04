@@ -220,8 +220,8 @@
                                                     </div> --}}
                                                     <div class="row justify-content-center">
                                                         <div class="row justify-content-center" >
-                                                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
-                                                                Opciones
+                                                            <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
+                                                                Opciones <i class="fas fa-chevron-down m-auto"></i>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" id="collapseProyectos{{$idCount}}">
@@ -452,6 +452,30 @@
     });
 
     } );
+</script>
+
+<script>
+    // <i class="fas fa-chevron-right"></i>
+    $(document).ready(function () {
+        $('.collapse')
+                .on('shown.bs.collapse', function() {
+                    $(this)
+                        .parent()
+                        .find(".fa-chevron-down")
+                        .removeClass("fa-chevron-down")
+                        .addClass("fa-chevron-right");
+                    console.log('hola')
+                })
+                .on('hidden.bs.collapse', function() {
+                    $(this)
+                        .parent()
+                        .find(".fa-chevron-right")
+                        .removeClass("fa-chevron-right")
+                        .addClass("fa-chevron-down");
+                        console.log('chau')
+                        
+                });
+        });
 </script>
 
 <script>

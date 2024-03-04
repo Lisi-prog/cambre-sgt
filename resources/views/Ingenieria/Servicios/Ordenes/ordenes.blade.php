@@ -185,22 +185,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Responsable:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($responsables as $responsable)
-                                                    <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}"> {{$responsable->nombre_empleado}}</label>
-                                                @endforeach
+                            @role('SUPERVISOR')
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="row">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                <div class="">
+                                                    <label>Responsable:</label>
+                                                </div>
+                                                <div class="d-flex flex-column overflow-auto">
+                                                    @foreach ($responsables as $responsable)
+                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}"> {{$responsable->nombre_empleado}}</label>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endrole
+                            
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
