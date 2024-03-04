@@ -56,6 +56,7 @@ class ParteController extends Controller
         $estados_manufactura = Estado_manufactura::orderBy('id_estado_manufactura')->pluck('nombre_estado_manufactura','id_estado_manufactura');
         $estados_mecanizado = Estado_mecanizado::orderBy('id_estado_mecanizado')->pluck('nombre_estado_mecanizado','id_estado_mecanizado');
         $maquinas = Maquinaria::orderBy('id_maquinaria')->pluck('alias_maquinaria','id_maquinaria');
+       
         return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura', 'estados_mecanizado', 'maquinas', 'tipo_orden'));
     }
 
@@ -227,31 +228,14 @@ class ParteController extends Controller
     
     public function edit(Request $request, $id)
     {
-        $rol = Role::find($id);
-        return view('Informatica.GestionUsuarios.roles.editar',compact('rol'));
     }
     
     public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-    
-        $role = Role::find($id);
-        $role->update([
-            'name' => strtoupper($request->input('name')),
-        ]);
-    
-        return redirect()->route('roles.index')->with('mensaje','Rol '.strtoupper($request->input('name')). ' editado con éxito!.');                       
+    {                      
     }
     
     public function destroy($id)
-    {   
-        $rol = Role::findOrFail($id);
-
-        Role::destroy($id);
-        return redirect()->route('roles.index')->with('mensaje','Rol'.$rol->name.' borrado con éxito!.');    
-        
+    {      
     }
     
     public function obtenerPartesDeUnaOrden($id)
@@ -260,19 +244,37 @@ class ParteController extends Controller
         $partes_arr = array();
 
         foreach ($orden->getPartes as $parte) {
-            array_push($partes_arr, (object)[
-                'id_parte' => $parte->id_parte,
-                'observaciones' => $parte->observaciones,
-                'estado' => $parte->getParteDe->getNombreEstado(),
-                'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
-                'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
-                'fecha_limite' => $parte->fecha_limite ? Carbon::parse($parte->fecha_limite)->format('d-m-Y') : null,
-                'horas' => Carbon::parse($parte->horas)->format('H:s'),
-                'supervisor' => $parte->getOrden->getSupervisor(),
-                'orden' => $orden->nombre_orden,
-                'etapa' => $orden->getEtapa->descripcion_etapa,
-                'estado_orden' => $orden->getEstado()
-                ]);
+            if ($orden->getOrdenDe->getTipoOrden() == 3) {
+                array_push($partes_arr, (object)[
+                    'id_parte' => $parte->id_parte,
+                    'observaciones' => $parte->observaciones,
+                    'estado' => $parte->getParteDe->getNombreEstado(),
+                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+                    'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
+                    'fecha_limite' => $parte->fecha_limite ? Carbon::parse($parte->fecha_limite)->format('d-m-Y') : null,
+                    'horas' => Carbon::parse($parte->horas)->format('H:s'),
+                    'supervisor' => $parte->getOrden->getSupervisor(),
+                    'orden' => $orden->nombre_orden,
+                    'etapa' => $orden->getEtapa->descripcion_etapa,
+                    'estado_orden' => $orden->getEstado(),
+                    'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-',
+                    'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? Carbon::parse($parte->getParteDe->getParteMecxMaq->first()->horas_maquina)->format('H:s') : '-'
+                    ]);
+            } else {
+                array_push($partes_arr, (object)[
+                    'id_parte' => $parte->id_parte,
+                    'observaciones' => $parte->observaciones,
+                    'estado' => $parte->getParteDe->getNombreEstado(),
+                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+                    'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
+                    'fecha_limite' => $parte->fecha_limite ? Carbon::parse($parte->fecha_limite)->format('d-m-Y') : null,
+                    'horas' => Carbon::parse($parte->horas)->format('H:s'),
+                    'supervisor' => $parte->getOrden->getSupervisor(),
+                    'orden' => $orden->nombre_orden,
+                    'etapa' => $orden->getEtapa->descripcion_etapa,
+                    'estado_orden' => $orden->getEstado(),
+                    ]);
+            } 
         }
 
         return $partes_arr;

@@ -50,6 +50,8 @@
                             <th class="text-center" scope="col" style="color:#fff;">Horas</th>
                             <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
                             <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                            <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
+                            <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
                             <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         </thead>
                         <tbody id="body_ver_parte">

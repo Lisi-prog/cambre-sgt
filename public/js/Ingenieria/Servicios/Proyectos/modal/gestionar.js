@@ -268,6 +268,15 @@ function cargarModalVerPartes(id, tipo_orden){
     
     document.getElementById('body_ver_parte').innerHTML = '';
     document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
+
+    if(tipo_orden == 3){
+        document.getElementById('column-maq').hidden = false;
+        document.getElementById('column-hora-maq').hidden = false;
+    }else{
+        document.getElementById('column-maq').hidden = true;
+        document.getElementById('column-hora-maq').hidden = true;
+    }
+
     $.when($.ajax({
         type: "post",
         url: '/parte/obtener/'+id, 
@@ -276,6 +285,7 @@ function cargarModalVerPartes(id, tipo_orden){
         },
     success: function (response) {
         // console.log(response)
+        let maq_y_hora = '';
         response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
@@ -283,6 +293,12 @@ function cargarModalVerPartes(id, tipo_orden){
                 fecha_lim = '-';
             }
             
+            if(tipo_orden == 3){
+                maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
+                                  <td class="text-center">`+element.horas_maquinaria+`</td>
+                                 `
+            }
+
             html += `<tr>
                         <td class="text-center">`+element.fecha+`</td>
                         <td class="text-center">`+fecha_lim+`</td>
@@ -290,6 +306,7 @@ function cargarModalVerPartes(id, tipo_orden){
                         <td class="text-center">`+element.horas+`</td>
                         <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                         <td class="text-center">`+element.responsable+`</td>
+                        `+maq_y_hora+`
                         <td class="text-center">`+element.supervisor+`</td>
                     </tr>`
         });

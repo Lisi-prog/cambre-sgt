@@ -24,8 +24,8 @@ class Parte_mecanizado_x_maquinaria extends Model
         'horas_maquina'
     ];
 
-    public function getProyectos()
+    public function getMaquinaria()
     {
-        return $this->hasMany(Tic_Estados_x_Tarea::class, 'idtarea' ,'idtarea');
+        return $this->belongsTo(Maquinaria::class, 'id_maquinaria');
     }
 }
