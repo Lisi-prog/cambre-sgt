@@ -8,7 +8,7 @@
             </div>
 
             <div class="modal-body">
-                {!! Form::open(['route' => 'p_m.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                {!! Form::open(['route' => 'p_m.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="form-group">
@@ -98,7 +98,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                        {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
+                        {!! Form::submit('Guardar', ['class' => 'btn btn-success button-prevent-multiple-submits']) !!}
                 {!! Form::close() !!}
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 {{-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button> --}}

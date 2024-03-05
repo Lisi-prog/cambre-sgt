@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear actualizacion etapa</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => ['actualizacion-etapa.crear', $proyecto->id_servicio], 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => ['actualizacion-etapa.crear', $proyecto->id_servicio], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 {!! Form::text('id_etapa', null, ['class' => 'form-control', 'hidden', 'id' => 'm_cae_id_etapa']) !!}
                 <div class="row">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

@@ -9,7 +9,7 @@
 
             <div class="modal-body">
                 <div class="row">
-                    {!! Form::open(['route' => 's_s_i.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                    {!! Form::open(['route' => 's_s_i.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
                     @include('layouts.modal.mensajes')
 
                     <div class="row">
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                        {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
+                        {!! Form::submit('Guardar', ['class' => 'btn btn-success button-prevent-multiple-submits']) !!}
                 {!! Form::close() !!}
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 {{-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button> --}}

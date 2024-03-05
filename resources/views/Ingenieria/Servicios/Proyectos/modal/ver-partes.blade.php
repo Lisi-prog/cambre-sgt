@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="row" id="m-ver-parte-div" hidden>
-                    {!! Form::open(['route' => 'partes.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                    {!! Form::open(['route' => 'partes.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
                     {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -129,7 +129,7 @@
             </div>
             <div class="modal-footer">
                 {{-- <button type="submit" class="btn btn-success">Guardar</button> --}}
-                <button type="submit" class="btn btn-success" id="m-ver-parte-orden-btn" hidden>Guardar</button>
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits" id="m-ver-parte-orden-btn" hidden>Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

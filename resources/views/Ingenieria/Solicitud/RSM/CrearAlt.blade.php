@@ -11,7 +11,7 @@
                     Requerimiento de servicio de mantenimiento.
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['route' => 'ri.sa.guardar', 'method' => 'POST', 'class' => 'formulario']) !!}
+                    {!! Form::open(['route' => 'ri.sa.guardar', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
                             <div class="form-group">
@@ -90,7 +90,7 @@
 
                         </div>
                         <div class="col-2">
-                                {!! Form::submit('Enviar', ['class' => 'btn btn-success']) !!}
+                                {!! Form::submit('Enviar', ['class' => 'btn btn-success button-prevent-multiple-submits']) !!}
                             {!! Form::close() !!}
                         </div>
                         <div class="col-2">

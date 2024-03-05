@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Servicio</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => ['solicitud.aceptar', $Req_ing->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => ['solicitud.aceptar', $Req_ing->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
@@ -91,7 +91,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Aceptar y crear servicio</button>
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits">Aceptar y crear servicio</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

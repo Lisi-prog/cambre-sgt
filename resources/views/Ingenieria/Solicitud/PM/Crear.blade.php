@@ -14,7 +14,7 @@
         </div>
         <div class="section-body">
             <div class="row">
-                {!! Form::open(['route' => 'r_i.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                {!! Form::open(['route' => 'r_i.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
                 @include('layouts.modal.mensajes')
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
@@ -70,7 +70,7 @@
                                     </div>
                                     <div class="p-1">
                                         {{-- @can('CREAR-OBRAVIVIENDA') --}}
-                                            {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
+                                            {!! Form::submit('Guardar', ['class' => 'btn btn-success button-prevent-multiple-submits']) !!}
                                         {{-- @endcan --}}
                                         {!! Form::close() !!}
                                     </div>

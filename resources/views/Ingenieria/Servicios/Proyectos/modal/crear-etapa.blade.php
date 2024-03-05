@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Etapa</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'etapas.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => 'etapas.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

@@ -55,7 +55,7 @@
                                                             'method' => 'DELETE',
                                                             'class' => 'formulario',
                                                             'route' => ['puesto_tecnico.destroy', $puesto_empleado->id_puesto_empleado],
-                                                            'onclick' => "return confirm('Estas seguro que desea ELIMINAR el puesto técnico?",
+                                                            'onclick' => "return confirm('¿Está seguro que desea BORRAR el puesto tecnico?');",
                                                             'style' => 'display:inline',
                                                         ]) !!}
                                                         {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}

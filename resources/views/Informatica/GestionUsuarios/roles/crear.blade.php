@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-body">         
 
-                    {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
+                    {!! Form::open(array('route' => 'roles.store','method'=>'POST', 'class'=>'form-prevent-multiple-submits')) !!}
                         <div class="row">
                             <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                                 <div class="form-group">
@@ -23,7 +23,7 @@
                                 </div>
                             </div>       
                         </div>
-                        <button type="submit" class="btn btn-success mr-2">Guardar</button>
+                        <button type="submit" class="btn btn-success mr-2 button-prevent-multiple-submits">Guardar</button>
                         <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Volver</a>
                     {!! Form::close() !!}
                     </div>
