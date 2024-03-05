@@ -438,7 +438,23 @@ INSERT INTO sector (nombre_sector)
 VALUES
     ('Comercial'),
     ('Calidad'),
-    ('Mantenimiento');
+    ('Mantenimiento'),
+    ('Armado'),
+    ('Compras'),
+    ('Depósito de insumos'),
+    ('Expedición'),
+    ('I+D'),
+    ('Ingeniería'),
+    ('Inyección'),
+    ('Marketing'),
+    ('Matricería'),
+    ('Mecánica'),
+    ('Pañol'),
+    ('Producción'),
+    ('RRHH'),
+    ('Sistemas');
+
+-- insert into sector (nombre_sector) values ('Armado'), ('Compras'), ('Depósito de insumos'), ('Expedición'), ('I+D'), ('Ingeniería'), ('Inyección'), ('Marketing'), ('Matricería'), ('Mecánica'), ('Pañol'), ('Producción'), ('RRHH'), ('Sistemas');
 
 INSERT INTO sol_prioridad_solicitud (nombre_prioridad_solicitud)
 VALUES

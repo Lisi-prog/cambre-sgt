@@ -4,7 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Casts\HoraMinutoCast;
 
 class Parte_mecanizado_x_maquinaria extends Model
 {
@@ -22,6 +22,10 @@ class Parte_mecanizado_x_maquinaria extends Model
         'id_parte_mecanizado',
         'id_maquinaria',
         'horas_maquina'
+    ];
+
+    protected $casts = [
+        'horas_maquina' => HoraMinutoCast::class
     ];
 
     public function getMaquinaria()

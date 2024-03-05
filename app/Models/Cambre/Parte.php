@@ -4,7 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Casts\HoraMinutoCast;
 
 class Parte extends Model
 {
@@ -27,6 +27,10 @@ class Parte extends Model
         'costo',
         'id_orden',
         'id_responsabilidad'
+    ];
+
+    protected $casts = [
+        'horas' => HoraMinutoCast::class
     ];
 
     public function getEstado()

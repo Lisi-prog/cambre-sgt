@@ -111,7 +111,7 @@ class EtapaController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
-        return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La etapa se ha creado con exito.');                      
+        return redirect()->back()->with('mensaje', 'La etapa se ha creado con exito.');                      
     }
     
     public function show($id)

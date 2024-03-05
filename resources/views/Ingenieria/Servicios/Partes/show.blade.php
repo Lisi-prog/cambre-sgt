@@ -146,10 +146,16 @@
                                     <thead style="">
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%">Fecha limite</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas</th>
+
+                                        @if ($orden->getOrdenDe->getTipoOrden() == 3)
+                                            <th class="text-center" scope="col" style="color:#fff;width:10%;">Maquina</th>
+                                            <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas maquina</th>
+                                        @endif
+                                        
                                         {{-- <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                            --}}
                                     </thead>
                                     <tbody>
@@ -167,8 +173,14 @@
                                             <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>
                                               
 
-                                            <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td>
+                                            {{-- <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td> --}}
 
+                                            <td class= 'text-center'>{{$parte->horas}}
+
+                                            @if ($orden->getOrdenDe->getTipoOrden() == 3)
+                                                <td class= 'text-center'>{{$parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-'}}</td>
+                                                <td class= 'text-center'>{{$parte->getParteDe->getParteMecxMaq->first()->horas_maquina ?? '-'}}</td>
+                                            @endif
                                             {{-- <td>
                                                 {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
                                                     {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
