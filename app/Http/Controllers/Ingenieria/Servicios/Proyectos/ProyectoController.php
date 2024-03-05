@@ -474,7 +474,7 @@ class ProyectoController extends Controller
            $res->save();
         }
     
-        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Proyecto editado exitosamente.');                        
+        return redirect()->back()->with('mensaje', 'Proyecto editado exitosamente.');                        
     }
     
     public function destroy($id)
@@ -587,7 +587,7 @@ class ProyectoController extends Controller
             $responsable_proyecto->id_empleado = $lider;
             $responsable_proyecto->save();
         }
-        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
+        return redirect()->back()->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 
     public function obtenerSupervisores(){

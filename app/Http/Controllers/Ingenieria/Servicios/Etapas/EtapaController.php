@@ -158,7 +158,7 @@ class EtapaController extends Controller
 
         Etapa::destroy($id);
 
-        return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La etapa se ha eliminado con exito.');               
+        return redirect()->back()->with('mensaje', 'La etapa se ha eliminado con exito.');               
     }
     
     public function obtenerActualizacionesEtapa($id){
@@ -313,6 +313,6 @@ class EtapaController extends Controller
             'id_actualizacion' => $actualizacion->id_actualizacion,
             'id_etapa' => $id_etapa
         ]);
-        return redirect()->route('proyectos.gestionar', $id)->with('mensaje', 'Actualizacion de la etapa creado exitosamente.');  
+        return redirect()->back()->with('mensaje', 'Actualizacion de la etapa creado exitosamente.');  
     }
 }
