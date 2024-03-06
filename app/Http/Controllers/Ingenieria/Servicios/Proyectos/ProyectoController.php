@@ -493,7 +493,7 @@ class ProyectoController extends Controller
         $proyecto = Servicio::find($id);
         $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        $estados = Estado::orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
+        $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo'));

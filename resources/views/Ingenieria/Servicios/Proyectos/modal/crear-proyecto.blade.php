@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="crearProyectoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="mcarga modal fade" id="crearProyectoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,6 +137,7 @@
 </div>
 
 <script>
+    
     $(function(){
         $('#prefijo_proyecto').on('change', obtenerValorPrefijo);
     });

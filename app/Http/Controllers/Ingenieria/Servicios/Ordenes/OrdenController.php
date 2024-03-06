@@ -842,7 +842,7 @@ class OrdenController extends Controller
         $array_ordenes = array();
         $ordenes = array();
                         
-        if (Auth::user()->hasRole('SUPERVISOR')) {
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
             //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
             $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();
         }else{
