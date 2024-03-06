@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.collapse')
+    /* $('.collapse')
         .on('shown.bs.collapse', function() {
             $(this)
                 .parent()
@@ -13,5 +13,10 @@ $(document).ready(function () {
                 .find(".fa-eye-slash")
                 .removeClass("fa-eye-slash")
                 .addClass("fa-eye");
-        });
+        }); */
+
+    $('.modal').modal({
+        backdrop: 'static',
+        keyboard: true
+        })
 });
