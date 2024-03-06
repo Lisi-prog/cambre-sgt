@@ -250,21 +250,21 @@
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
                                     <thead style="height:50px;background-color:#28587d;">
-                                        <th class='text-center' style="color:#fff;">Prioridad</th>
+                                        <th class='text-center' style="color:#fff;width: 1vw">Prioridad</th>
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
-                                        <th class='ml-3 text-center' style="color:#fff;">ID</th>
-                                        <th class='text-center' style="color:#fff;">Nombre</th>
+                                        <th class='ml-3 text-center' style="color:#fff;width: 10vw">ID</th>
+                                        <th class='text-center' style="color:#fff;width: 8vw">Nombre</th>
                                         <th class='text-center' style="color:#fff;">Tipo</th>
                                         {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
-                                        <th class='text-center' style="color:#fff;">Lider</th>
+                                        <th class='text-center' style="color:#fff;width: 5vw">Lider</th>
                                         <th class='text-center' style="color:#fff;">Progreso</th>
                                         {{-- <th class='text-center' style="color:#fff;">Ordenes</th> --}}
                                         <th class='text-center' style="color:#fff;">Estado</th>
-                                        <th class='text-center' style="color:#fff;">Fecha inicio</th>
-                                        <th class='text-center' style="color:#fff;">Fecha limite</th>
+                                        <th class='text-center' style="color:#fff;width: 5vw">Fecha inicio</th>
+                                        <th class='text-center' style="color:#fff;width: 5vw">Fecha limite</th>
                                         <th class='text-center' style="color: #fff;">Acciones</th>
                                     </thead>
-                                    <tbody>
+                                    <tbody  id="accordion">
                                         @php
                                             $idCount = 0;
                                         @endphp
@@ -279,7 +279,7 @@
     
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
     
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider}}</td>
+                                                <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
     
                                                 <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
@@ -309,7 +309,7 @@
                                                                 Opciones <i class="fas fa-chevron-down m-auto"></i>
                                                             </button>
                                                         </div>
-                                                        <div class="collapse" id="collapseProyectos{{$idCount}}">
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
                                                             @can('MODIFICAR-PRIORIDAD-PROYECTO')
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">

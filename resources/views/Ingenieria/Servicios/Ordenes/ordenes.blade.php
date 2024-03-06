@@ -253,7 +253,7 @@
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
-                                <tbody>
+                                <tbody id="accordion">
                                     @php
                                         $idCount = 0;
                                     @endphp
@@ -288,7 +288,7 @@
                                                             Opciones
                                                         </button>
                                                     </div>
-                                                    <div class="collapse" id="collapseOrdenes{{$idCount}}">
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">

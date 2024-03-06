@@ -237,7 +237,7 @@ class ProyectoController extends Controller
         ]);
 
         $etapa = Etapa::create([
-            'descripcion_etapa' => 'Creacion de etapa.',
+            'descripcion_etapa' => $nombre_proyecto,
             'fecha_inicio' => $fecha_ini,
             'id_servicio' => $proyecto->id_servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad
