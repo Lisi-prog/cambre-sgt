@@ -122,7 +122,8 @@ function calcularDiferenciaFechas(){
     //Colores de los distintos estado
     for (let i = 1; i < values.length; i++) { // iterate all thorugh td
         values[i].children[row_index_first].style.color = "#fff";
-        fechaFin    = new Date(castDate(values[i].children[row_index_first].innerHTML)).getTime();
+        // fechaFin    = new Date(castDate(values[i].children[row_index_first].innerHTML)).getTime();
+        fechaFin = new Date(values[i].children[row_index_first].innerHTML).getTime();
         diff = fechaFin - fechaInicio;
         diasDife = diff/(1000*60*60*24);
 

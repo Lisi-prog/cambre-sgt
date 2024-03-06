@@ -175,8 +175,10 @@ table.dataTable tbody td {
                                         <td class= 'text-center' >{{$orden->getEstado()}}</td>
 
                                         <td class= 'text-center' style="vertical-align: middle;">
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->getOrdenDe->getOrdenesMecanizadoRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span style="color: #ffffff">{{$orden->getOrdenDe->getOrdenesMecanizadoRealizadas()}}</span></div>
+                                            <div class="progress position-relative" style="background-color: #b2baf8">
+                                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->getOrdenDe->getOrdenesMecanizadoRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$orden->getOrdenDe->getOrdenesMecanizadoRealizadas()}}</span>
+                                                </div>
                                             </div>
                                         </td>
 
@@ -365,7 +367,7 @@ table.dataTable tbody td {
 
 {{-- Ordenes de mantenimiento del proyecto --}}
 
-<div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_trabajo'>
+<div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_mantenimiento'>
     <div class="card">
         <div class="card-head">
             <br>

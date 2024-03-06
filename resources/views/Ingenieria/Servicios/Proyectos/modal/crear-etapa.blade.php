@@ -13,7 +13,7 @@
                         <div class="form-group">
                             {!! Form::label('nom_etapa', "Nombre etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nom_etapa', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('nom_etapa', null, ['class' => 'form-control', 'required']) !!}
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,8 @@
                                 {!! Form::select('responsable', $supervisores, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
-                                    'id' => 'responsable'
+                                    'id' => 'responsable',
+                                    'required'
                                 ]) !!}
                             </div>
                         </div>
@@ -40,7 +41,8 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_ini',
-                                'class' => 'form-control'
+                                'class' => 'form-control',
+                                'required'
                             ]) !!}
                         </div>
                         <div class="" hidden>

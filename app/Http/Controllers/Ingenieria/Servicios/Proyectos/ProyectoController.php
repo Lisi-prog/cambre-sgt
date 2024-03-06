@@ -35,6 +35,7 @@ use App\Models\Cambre\Tipo_orden_trabajo;
 use App\Models\Cambre\Cambio_de_prioridad;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Activo;
+use App\Models\Cambre\Vw_servicio;
 
 class ProyectoController extends Controller
 {
@@ -90,8 +91,9 @@ class ProyectoController extends Controller
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo', 'prefijos', 'activos'));
     }
 
-    public function indexPorPrefijo($prefijo, $tipo){
-        // return $prefijo;
+    public function indexPorPrefijo(Request $request, $prefijo, $tipo){
+        // return $request->input('tipos');
+        // return  Vw_servicio::servicio($request->input('cod_serv'))->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
@@ -101,22 +103,23 @@ class ProyectoController extends Controller
 
         switch ($prefijo) {
             case 1:
-                $proyectos = Servicio::orderBy('prioridad_servicio')->get();
+                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->orderBy('prioridad_servicio')->get();
                 break;
+
             case 'SSI':
-                $proyectos = Servicio::where('id_subtipo_servicio', 5)->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
+                $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
                 break;
-            case 2:
-                $proyectos = Servicio::where('id_subtipo_servicio', 5)->orderBy('prioridad_servicio')->get();
-                break;
+
             case 'PROY':
-                $proyectos = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->get();
+                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->orderBy('prioridad_servicio')->get();
                 break;
             default:
-                $proyectos = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->get();
+                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->servicio($request->input('cod_serv'))->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
                 break;
         }
 
+        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
+        
         //Para el filtro
             $supervisores = $this->obtenerSupervisoresFiltro();
             $codigos_servicio = $this->obtenerCodigoServicio();
@@ -124,7 +127,7 @@ class ProyectoController extends Controller
             $estados = Estado::orderBy('id_estado')->get();
         //------------------
 
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', ));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', 'proyectosFilter'));
     }
 
     public function obtenerCodigoServicio(){
@@ -284,7 +287,7 @@ class ProyectoController extends Controller
 
         if($request->input('prioridad') >= $minima_prioridad){
             if($servicio->prioridad_servicio == $minima_prioridad){
-                return redirect()->route('proyectos.index')->with('error', 'La prioridad del proyecto ya es la menor posible');
+                return redirect()->back()->with('error', 'La prioridad del proyecto ya es la menor posible');
             }else{
                 $prioridad = $minima_prioridad;
             }
@@ -315,7 +318,7 @@ class ProyectoController extends Controller
             'prioridad_servicio' => $prioridad
         ]);
 
-        return redirect()->route('proyectos.index')->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
+        return redirect()->back()->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
     }
 
     public function actualizarPrioridades($prioridadActual, $prioridadAnterior){
@@ -418,7 +421,7 @@ class ProyectoController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
-        return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.'); 
+        return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.'); 
     }
 
     public function show($id)

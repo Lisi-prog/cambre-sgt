@@ -69,6 +69,106 @@
                         <div class="row">
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
+                        {!! Form::open(['method' => 'GET', 'route' => ['proyecto.indexprefijo', [$prefijo, $tipo]], 'style' => 'display:inline']) !!}
+                        <div class="row" id="demo" hidden>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Proyectos:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($proyectosFilter as $proyecto)
+                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                        @endforeach
+                                                        {{-- @foreach ($codigos_servicio as $codigo_servicio)
+                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
+                                                        @endforeach --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Tipo:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($subtipos_servicio as $subtipo_servicio)
+                                                            <label><input name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                        @endforeach 
+                                                        {{-- @foreach ($supervisores as $supervisor)
+                                                            <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                        @endforeach --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Lider:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($supervisores as $supervisor)
+                                                            <label><input name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                        @endforeach
+                                                        {{-- @foreach ($responsables as $responsable)
+                                                            <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
+                                                        @endforeach --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Estados:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        @foreach ($estados as $estado)
+                                                            <label><input name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre_estado}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
+                                
+                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100']) !!}
+                                {!! Form::close() !!}
+                            </div>
+                        </div>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
+                        </div>
                         <div class="row" id="demo" hidden>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
@@ -118,22 +218,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Responsable:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($responsables as $responsable)
-                                                    <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}"> {{$responsable->nombre_empleado}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
@@ -154,11 +238,10 @@
                                 <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -194,22 +277,24 @@
     
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
     
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSubTipoServicio->nombre_subtipo_servicio}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
     
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->getResponsabilidad->getEmpleado->nombre_empleado}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider}}</td>
     
                                                 <td class= 'text-center' style="vertical-align: middle;">
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span></div>
+                                                    <div class="progress position-relative" style="background-color: #b2baf8">
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 {{-- <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadas()}}</td> --}}
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getEstado()}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
     
-                                                <td class= 'text-center'style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
                                                 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_proyecto')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
                                                 <td>
                                                     {{-- <div class="row" hidden>
                                                         <div class="col-12">
