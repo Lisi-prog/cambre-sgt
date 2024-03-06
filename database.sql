@@ -557,15 +557,15 @@ VALUES
   ('inicio - fin'),
   ('fin - fin');
 
-CREATE VIEW vw_servicio AS
-select se.id_servicio, se.prioridad_servicio, se.codigo_servicio, se.nombre_servicio, stb.id_subtipo_servicio, stb.nombre_subtipo_servicio, tb.id_tipo_servicio, tb.nombre_tipo_servicio, se.fecha_inicio, emp.id_empleado, emp.nombre_empleado as lider, act_se.id_actualizacion, act.fecha_limite, est.id_estado, est.nombre_estado    
-inner join responsabilidad as res on se.id_responsabilidad = res.id_responsabilidad
-    inner join empleado as emp on res.id_empleado = emp.id_empleado
-    inner join (select act_s.id_actualizacion_servicio, max(act_s.id_actualizacion) as id_actualizacion, act_s.id_servicio 
-			          from actualizacion_servicio as act_s 
-                group by act_s.id_servicio) as act_se on act_se.id_servicio = se.id_servicio
-    inner join actualizacion as act on act.id_actualizacion=act_se.id_actualizacion
-    inner join estado as est on act.id_estado=est.id_estado;
+-- CREATE VIEW vw_servicio AS
+-- select se.id_servicio, se.prioridad_servicio, se.codigo_servicio, se.nombre_servicio, stb.id_subtipo_servicio, stb.nombre_subtipo_servicio, tb.id_tipo_servicio, tb.nombre_tipo_servicio, se.fecha_inicio, emp.id_empleado, emp.nombre_empleado as lider, act_se.id_actualizacion, act.fecha_limite, est.id_estado, est.nombre_estado    
+-- inner join responsabilidad as res on se.id_responsabilidad = res.id_responsabilidad
+--    inner join empleado as emp on res.id_empleado = emp.id_empleado
+--    inner join (select act_s.id_actualizacion_servicio, max(act_s.id_actualizacion) as id_actualizacion, act_s.id_servicio 
+--			          from actualizacion_servicio as act_s 
+--                group by act_s.id_servicio) as act_se on act_se.id_servicio = se.id_servicio
+--    inner join actualizacion as act on act.id_actualizacion=act_se.id_actualizacion
+--    inner join estado as est on act.id_estado=est.id_estado;
 
 
 CREATE VIEW vw_servicio AS
