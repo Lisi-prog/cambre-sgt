@@ -96,7 +96,7 @@ class ProyectoController extends Controller
         // return  Vw_servicio::servicio($request->input('cod_serv'))->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
-        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $empleados = $this->obtenerSupervisoresAdmin();
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
@@ -360,6 +360,7 @@ class ProyectoController extends Controller
         $codigo_proyecto = $request->input('codigo_proyecto');
         $nombre_proyecto = $request->input('nombre_proyecto');
         $tipo_proyecto = $request->input('id_tipo_proyecto');
+        $activo = $request->input('id_activo');
         $lider = $request->input('lider');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
@@ -381,7 +382,8 @@ class ProyectoController extends Controller
             'id_subtipo_servicio' => $tipo_servicio,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'fecha_inicio' => $fecha_ini,
-            'prioridad_servicio' => $prioridadMax
+            'prioridad_servicio' => $prioridadMax,
+            'id_activo' => $activo
         ]);
 
         $solicitud->update([
@@ -421,7 +423,8 @@ class ProyectoController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
-        return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.'); 
+        return redirect()->route('proyectos.gestionar', $proyecto->id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
+        // return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.'); 
     }
 
     public function show($id)
@@ -487,16 +490,30 @@ class ProyectoController extends Controller
 
     public function gestionar(Request $request, $id)
     {
-        $tipo = $request->input('tipo');
-        $prefijo = $request->input('prefijo');
+        // $tipo = $request->input('tipo');
+        // $prefijo = $request->input('prefijo');
+
+        if ($request->input('tipo')) {
+            $tipo = $request->input('tipo');
+        }else{
+            $tipo = 'Servicios';
+        }
+
+        if ($request->input('prefijo')) {
+            $prefijo = $request->input('prefijo');
+        }else{
+            $prefijo = 1;
+        }
+
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $proyecto = Servicio::find($id);
         $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $supervisores_admin = $this->obtenerSupervisoresAdmin();
         $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin'));
     }
 
     public function costos($id)
@@ -609,6 +626,21 @@ class ProyectoController extends Controller
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+    }
 
     public function obtenerMayorCodigoServicioPrefijo($id){
         try {

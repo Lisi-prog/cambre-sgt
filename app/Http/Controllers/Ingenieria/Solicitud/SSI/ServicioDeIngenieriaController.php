@@ -23,6 +23,7 @@ use App\Models\Cambre\Activo;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Servicio;
+use App\Models\Cambre\Prefijo_proyecto;
 
 class ServicioDeIngenieriaController extends Controller
 {
@@ -39,7 +40,7 @@ class ServicioDeIngenieriaController extends Controller
     {        
         $listaSSI = Sol_servicio_de_ingenieria::get();
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        $activos = Activo::orderBy('nombre_activo')->pluck('nombre_activo', 'id_activo');
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
         return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos'));
     }
 
@@ -138,9 +139,28 @@ class ServicioDeIngenieriaController extends Controller
             $id_supervisor[] = $supervisor_user->id;
         }
 
-        $empleados = Empleado::whereIn('user_id', $id_supervisor)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $empleados = $this->obtenerSupervisoresAdmin();
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-        return view('Ingenieria.Solicitud.SSI.Evaluar', compact('Ssi', 'Tipos_servicios', 'empleados', 'prioridadMax'));
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
+
+        return view('Ingenieria.Solicitud.SSI.Evaluar', compact('Ssi', 'Tipos_servicios', 'empleados', 'prioridadMax', 'prefijos', 'activos'));
+    }
+
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function rechazar($id){
@@ -152,14 +172,7 @@ class ServicioDeIngenieriaController extends Controller
 
     public function destroy($id)
     {
-        $permiso = Permission::findOrFail($id);
-
-        Permission::destroy($id);
-
-        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
+                       
     }
 
-    public function buscarpermisospornombre($nombre){
-        return Permission::where('name', 'like', '%'.$nombre.'%')->get();
-    }
 }

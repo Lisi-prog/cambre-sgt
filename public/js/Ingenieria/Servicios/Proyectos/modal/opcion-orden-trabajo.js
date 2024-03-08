@@ -79,7 +79,7 @@ export default
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
             <label for="observaciones" class="control-label" style="white-space: nowrap; ">Descripción:</label> 
-            <textarea id='observaciones' class="form-control" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh" required></textarea>
+            <textarea id='observaciones' class="form-control" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh"></textarea>
         </div>
     </div>
 </div>`;

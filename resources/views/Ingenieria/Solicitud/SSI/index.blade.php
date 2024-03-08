@@ -18,7 +18,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
-                <h4 class="titulo page__heading my-auto">Solicitud de servicios de ingenieria</h5>
+                <h4 class="titulo page__heading my-auto">Servicio de ingenieria</h5>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
             </div>
@@ -91,11 +91,11 @@
                                                                     {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 @else
-                                                                    @hasrole('SUPERVISOR')
+                                                                    @can('EVALUAR-SOLICITUD')
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
                                                                         {!! Form::close() !!}
-                                                                    @endhasrole
+                                                                    @endcan
                                                                 @endif
                                                             </div>
                                                         </div> 

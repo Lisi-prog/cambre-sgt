@@ -81,52 +81,7 @@
                         <i class="fas fa-star" style="font-size:1.2em;"></i><span>TMC</span>
                     </a>
                 </li>
-
-                {{-- <li>
-                    <a class="nav-link" href="{{route('proyecto.indexprefijo', [2, 'Servicios activos'])}}" title="Servicios activos">
-                        <i class="fas fa-file-alt" style="font-size:1.2em;"></i><span>Serv. activo</span>
-                    </a>
-                </li> --}}
-
-                {{-- @can('VER-MENU-PROYECTO') {{-- PROYECTOS
-                <li class="dropdown">
-                    <a href="" class="nav-link has-dropdown" title="Proyectos">
-                        <i class="fas fa-home" style="font-size:1.2em;"></i><span>Proyectos</span>
-                    </a>
-                    <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
-                        <li class="dropdown-title pt-3">
-                            Proyectos
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{route('proyecto.indextipo', 1)}}" title="Macroproyecto">
-                                <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Macroproyecto</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{route('proyecto.indextipo', 2)}}" title="Microproyecto">
-                                <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Microproyecto</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{route('proyecto.indextipo', 3)}}" title="Modificacion">
-                                <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Modificacion</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{route('proyecto.indextipo', 4)}}" title="Tarea">
-                                <i class="fas fa-clipboard-list" style="font-size:1.2em;"></i><span>Tarea</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                @endcan --}}
-                {{-- @can('VER-MENU-ETAPA')
-                <li>
-                    <a class="nav-link" href="{{route('etapas.index')}}" title="Etapas">
-                        <i class="fas fa-file-alt" style="font-size:1.2em;"></i><span>Etapas</span>
-                    </a>
-                </li>
-                @endcan --}}
+                
                 <li>
                     <a class="nav-link" href="{{route('proyecto.indexprefijo', [1, 'Servicios'])}}" title="Servicios">
                         <i class="fas fa-file-alt" style="font-size:1.2em;"></i><span>Mostrar todo</span>

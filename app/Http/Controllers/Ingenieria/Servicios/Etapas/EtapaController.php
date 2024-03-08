@@ -209,7 +209,7 @@ class EtapaController extends Controller
     }
 
     function actualizarEtapa(Request $request){
-        // return $request;
+        //return $request;
         
         $this->validate($request, [
             'nom_etapa' => 'required',
@@ -218,22 +218,48 @@ class EtapaController extends Controller
         ]);
 
         $id_etapa = $request->input('id_etapa');
-        $id_servicio = $request->input('id_servicio');
-        $lider = $request->input('responsable');
+        // $id_servicio = $request->input('id_servicio');
+        $responsable = $request->input('responsable');
         $fecha_inicio = $request->input('fecha_ini');
         $nombre_etapa = $request->input('nom_etapa');
-
         $etapa = Etapa::find($id_etapa);
-
+        $descripcion = '';
+        
         $etapa->update([
             'descripcion_etapa' => $nombre_etapa,
             'fecha_inicio' => $fecha_inicio
         ]);
 
-        if ($etapa->getResponsable->getEmpleado->id_empleado != $lider) {
+        if ($etapa->getResponsable->getEmpleado->id_empleado != $responsable) {
+            $ultima_act_etapa = Actualizacion_etapa::where('id_etapa', $id_etapa)->orderBy('id_actualizacion_etapa', 'desc')->first();
+            $nuevo_responsable = Empleado::find($responsable);
+
             $res = Responsabilidad::find($etapa->getResponsable->id_responsabilidad);
-            $res->id_empleado = $lider;
+            $descripcion = "Se cambio el responsable de la etapa de ".$etapa->getResponsable->getEmpleado->nombre_empleado." a ".$nuevo_responsable->nombre_empleado;
+            $res->id_empleado = $responsable;
             $res->save();
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $actualizacion = Actualizacion::create([
+                                'descripcion' => $descripcion,
+                                'fecha_limite' => $ultima_act_etapa->getActualizacion->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'id_estado' => $ultima_act_etapa->getActualizacion->id_estado,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+            Actualizacion_etapa::create([
+                'id_actualizacion' => $actualizacion->id_actualizacion,
+                'id_etapa' => $id_etapa
+            ]);
         }
 
         return redirect()->back()->with('mensaje', 'Etapa editada exitosamente.');  
@@ -276,12 +302,13 @@ class EtapaController extends Controller
     }
 
     public function guardarActualizacion(Request $request, $id){
-        // return $request;
+        return $request;
         $this->validate($request, [
             'm-ver-act-eta-descripcion' => 'required',
             'm-crear-act-eta-idestado' => 'required',
             'm-crear-act-eta-feclimite' => 'required',
-            'm-crear-act-eta-idestado' => 'required'
+            'cbx_responsable_etapa' => 'required',
+            'm-crear-act-eta-id_etapa' => 'required'
         ]);
 
         $descripcion = $request->input('m-ver-act-eta-descripcion');

@@ -80,7 +80,7 @@ function cargarFechaEstadoLiderModalVerAct(id){
             id: id,
         },
     success: function (response) {
-        console.log(response);
+        // console.log(response);
         estado.value = response[0].estado;
         fecha_limite.value = response[0].fecha_limite;
         lider.value = response[0].lider;
@@ -185,6 +185,8 @@ function mostrarActEtapaAlt(id){
     let etapa_desc = document.getElementById("m-ver-act-etapa");
     let nombre_estado = document.getElementById("m-ver-act-eta-orden");
     let respo = document.getElementById("m-ver-act-eta-responsable");
+    let responsable = document.getElementById("cbx_responsable_etapa");
+    
     $.when($.ajax({
         type: "post",
         url: '/etapa/obtener-una-etapa/'+id, 
@@ -192,12 +194,13 @@ function mostrarActEtapaAlt(id){
             id: id,
         },
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             fecha_lim.value = response.fecha_limite;
             estado_actual.value = response.id_estado;
             etapa_desc.value = response.descripcion_etapa;
             nombre_estado.value = response.estado;
             respo.value = response.responsable;
+            responsable.value = response.id_responsable;
         },
         error: function (error) {
             console.log(error);

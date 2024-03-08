@@ -95,11 +95,11 @@
                                                                     {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 @else
-                                                                    @hasrole('SUPERVISOR')
+                                                                    @can('EVALUAR-SOLICITUD')
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
                                                                         {!! Form::close() !!}
-                                                                    @endhasrole
+                                                                    @endcan
                                                                 @endif
                                                             </div>
                                                         </div> 
