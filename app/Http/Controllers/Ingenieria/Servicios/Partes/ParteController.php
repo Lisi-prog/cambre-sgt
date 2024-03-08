@@ -252,13 +252,13 @@ class ParteController extends Controller
                     'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
                     'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
                     'fecha_limite' => $parte->fecha_limite ? Carbon::parse($parte->fecha_limite)->format('d-m-Y') : null,
-                    'horas' => Carbon::parse($parte->horas)->format('H:s'),
+                    'horas' => $parte->horas,
                     'supervisor' => $parte->getOrden->getSupervisor(),
                     'orden' => $orden->nombre_orden,
                     'etapa' => $orden->getEtapa->descripcion_etapa,
                     'estado_orden' => $orden->getEstado(),
                     'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-',
-                    'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? Carbon::parse($parte->getParteDe->getParteMecxMaq->first()->horas_maquina)->format('H:s') : '-'
+                    'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-'
                     ]);
             } else {
                 array_push($partes_arr, (object)[
@@ -268,7 +268,7 @@ class ParteController extends Controller
                     'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
                     'fecha' => Carbon::parse($parte->fecha)->format('d-m-Y'),
                     'fecha_limite' => $parte->fecha_limite ? Carbon::parse($parte->fecha_limite)->format('d-m-Y') : null,
-                    'horas' => Carbon::parse($parte->horas)->format('H:s'),
+                    'horas' => $parte->horas,
                     'supervisor' => $parte->getOrden->getSupervisor(),
                     'orden' => $orden->nombre_orden,
                     'etapa' => $orden->getEtapa->descripcion_etapa,

@@ -288,7 +288,7 @@ function cargarModalVerPartes(id, tipo_orden){
         },
     success: function (response) {
         // console.log(response)
-        let maq_y_hora = '';
+        let maq_y_hora = '-';
         response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
