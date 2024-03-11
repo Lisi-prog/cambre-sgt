@@ -44,7 +44,7 @@
                                     <th class='text-center' style="color:#fff;">Sector</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
                                     @php
                                         $idCount = 0;
                                     @endphp
@@ -65,7 +65,7 @@
                                                             Opciones
                                                         </button>
                                                     </div>
-                                                    <div class="collapse" id="collapseMaquinarias{{$idCount}}">
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseMaquinarias{{$idCount}}">
                                                         <div class="row my-2 justify-content-center">
                                                             {{-- @can('EDITAR-ROL') --}}
                                                                 {!! Form::open(['method' => 'GET', 'route' => ['maquinarias.edit', $maquinaria->id_maquinaria], 'style' => 'display:inline']) !!}

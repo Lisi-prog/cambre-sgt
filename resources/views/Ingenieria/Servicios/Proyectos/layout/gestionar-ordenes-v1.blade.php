@@ -83,7 +83,7 @@ table.dataTable tbody td {
                                                         Opciones
                                                     </button>
                                                 </div>
-                                                <div class="collapse" id="collapseOrdenTrabajo{{$idCount}}">
+                                                <div class="collapse" data-bs-parent="#cuadro-ordenes-trabajo" id="collapseOrdenTrabajo{{$idCount}}">
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarTrabajo({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
@@ -160,7 +160,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                         <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                            
                     </thead>
-                    <tbody id="cuadro-ordenes-trabajo">
+                    <tbody id="cuadro-ordenes-manufactura">
                         @php 
                             $idCount = 0;
                         @endphp
@@ -203,7 +203,7 @@ table.dataTable tbody td {
                                                         Opciones
                                                     </button>
                                                 </div>
-                                                <div class="collapse" id="collapseOrdenManufactura{{$idCount}}">
+                                                <div class="collapse" data-bs-parent="#cuadro-ordenes-manufactura"id="collapseOrdenManufactura{{$idCount}}">
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">
@@ -287,7 +287,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                         <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
                     </thead>
-                    <tbody id="cuadro-ordenes-trabajo">
+                    <tbody id="cuadro-ordenes-mecanizado">
                         @php
                             $idCount = 0;
                         @endphp
@@ -324,7 +324,7 @@ table.dataTable tbody td {
                                                         Opciones
                                                     </button>
                                                 </div>
-                                                <div class="collapse" id="collapseOrdenMecanizado{{$idCount}}">
+                                                <div class="collapse" data-bs-parent="#cuadro-ordenes-mecanizado" id="collapseOrdenMecanizado{{$idCount}}">
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->nombre_orden}}')">

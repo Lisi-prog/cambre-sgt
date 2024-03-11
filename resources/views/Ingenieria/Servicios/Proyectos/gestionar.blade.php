@@ -253,7 +253,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
                                         <th class="text-center" scope="col" style="color:#fff; width:17vh">Acciones</th>                                                           
                                     </thead>
-                                    <tbody>
+                                    <tbody id="accordion">
                                         @php 
                                             $idCount = 0;
                                         @endphp
@@ -286,7 +286,7 @@
                                                                 Opciones
                                                             </button>
                                                         </div>
-                                                        <div class="collapse" id="collapseEtapa{{$idCount}}">
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseEtapa{{$idCount}}">
                                                             <div class="row ">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">

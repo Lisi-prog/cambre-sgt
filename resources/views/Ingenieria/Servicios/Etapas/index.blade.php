@@ -82,7 +82,7 @@
                                     <th class='text-center' style="color:#fff;">Fecha limite</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
                                     @php
                                         $idCount = 0;
                                     @endphp
@@ -115,7 +115,7 @@
                                                             Opciones
                                                         </button>
                                                     </div>
-                                                    <div class="collapse" id="collapseEtapas{{$idCount}}">
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseEtapas{{$idCount}}">
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verEtapaModal" onclick="window.cargarModalVerEtapa({{$etapa->id_etapa}})">

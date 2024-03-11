@@ -43,7 +43,7 @@
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
                                     @php
                                         $idCount = 0;   
                                     @endphp
@@ -64,7 +64,7 @@
                                                             Opciones
                                                         </button>
                                                     </div>
-                                                    <div class="collapse" id="collapseActivo{{$idCount}}">
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseActivo{{$idCount}}">
                                                         {{-- @can('EDITAR-ROL') --}}
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">

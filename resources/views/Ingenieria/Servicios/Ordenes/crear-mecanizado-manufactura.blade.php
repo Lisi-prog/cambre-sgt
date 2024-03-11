@@ -153,7 +153,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:20%;">Duracion estimada</th>     
                                         <th class="text-center" scope="col" style="color:#fff;width:13%;">Acciones</th>                                                   
                                     </thead>
-                                    <tbody>
+                                    <tbody id="accordion">
                                         @php
                                             $idCount = 0;
                                         @endphp
@@ -178,7 +178,7 @@
                                                                 Opciones
                                                             </button>
                                                         </div>
-                                                        <div class="collapse" id="collapseMecanizados{{$idCount}}">
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseMecanizados{{$idCount}}">
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden_mecanizado->id_orden}}, '{{$orden_mecanizado->getOrden->getEtapa->descripcion_etapa}}')">
