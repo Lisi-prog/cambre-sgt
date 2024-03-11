@@ -103,8 +103,19 @@
                                     ]) !!}
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                            </div>
+                            {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('responsable', $supervisores_admin, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'cbx_responsable_etapa'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

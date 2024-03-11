@@ -22,6 +22,8 @@ use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Subtipo_servicio;
+use App\Models\Cambre\Activo;
+use App\Models\Cambre\Prefijo_proyecto;
 
 class RequerimientoDeIngenieriaController extends Controller
 {
@@ -109,9 +111,27 @@ class RequerimientoDeIngenieriaController extends Controller
             $id_supervisor[] = $supervisor_user->id;
         }
 
-        $empleados = Empleado::whereIn('user_id', $id_supervisor)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $empleados = $this->obtenerSupervisoresAdmin();
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing', 'Tipos_servicios', 'empleados', 'prioridadMax'));
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
+        return view('Ingenieria.Solicitud.RI.Evaluar', compact('Req_ing', 'Tipos_servicios', 'empleados', 'prioridadMax', 'activos', 'prefijos'));
+    }
+
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function aceptar(Request $request, $id){

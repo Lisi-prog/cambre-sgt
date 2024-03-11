@@ -24,7 +24,7 @@ function modificarFormulario(){
    let formulario = document.getElementById("formulario");
    let html;
    let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0]
-   console.log(fecha_de_hoy);
+//    console.log(fecha_de_hoy);
    switch (tipo_orden) {
     case 1:
         formulario.innerHTML = '';
@@ -129,7 +129,7 @@ export function crearCuadrOrdenes(id_etapa){
             id_etapa: id_etapa,
         },
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             let boton_ordenes = '';
             response.forEach(element => {
                 if (element.numero_tipo == 2) {
@@ -224,6 +224,7 @@ export function cargarModalEditarEtapa(id_etapa){
     //let input_estado = document.getElementById("input-estado");
     // let input_responsable = document.getElementById("input-responsable");
     let input_fecha_inicio = document.getElementById("input-fec_ini");
+    let cb_responsable = document.getElementById("cbx_responsable_etapa");
     // let input_fecha_limite = document.getElementById("input-fecha_limite");
     // let input_fecha_fin = document.getElementById("input-fecha_fin_real");
     // let input_duracion_estimada = document.getElementById("input-duracion_estimada");
@@ -231,7 +232,7 @@ export function cargarModalEditarEtapa(id_etapa){
     // let input_costo_estimado = document.getElementById("input-costo_estimado");
     // let input_costo_real = document.getElementById("input-costo_real");
     // let input_fecha_ultima_actualizacion = document.getElementById("input-fecha_ultima_actualizacion");
-        
+    document.getElementById("m_ee_id_etapa").value = id_etapa;
     $.when($.ajax({
         type: "post",
         url: '/etapa/obtener-una-etapa/'+id_etapa, 
@@ -243,6 +244,7 @@ export function cargarModalEditarEtapa(id_etapa){
             
             //input_responsable.value = response.responsable;
             input_fecha_inicio.value = response.fecha_inicio;
+            cb_responsable.value = response.id_responsable;
             //input_fecha_limite.value = response.fecha_limite;
             //input_fecha_fin.value = response.fecha_fin_real;
             //input_duracion_estimada.value = response.duracion_estimada;
@@ -250,7 +252,7 @@ export function cargarModalEditarEtapa(id_etapa){
             //input_costo_estimado.value = response.costo_estimado;
             //input_costo_real.value = response.costo_real;
             //input_fecha_ultima_actualizacion.value = response.fecha_ultima_actualizacion; //.substring(0, 10)
-            document.querySelector('#cbx_responsable_etapa').value = response.id_responsable;
+           // document.querySelector('#cbx_responsable_etapa').value = response.id_responsable;
     },      
     error: function (error) {
         console.log(error);
@@ -283,9 +285,9 @@ export function cargarModalVerOrden(id_orden, tipo){
 }
 
 export function cargarModalEditarOrden(id_orden, nombre_etapa){
-    console.log('cargarModalEditarOrden');
-    console.log('Id de la orden: ' + id_orden);
-    console.log('Nombre de la etapa: ' + nombre_etapa);
+    // console.log('cargarModalEditarOrden');
+    // console.log('Id de la orden: ' + id_orden);
+    // console.log('Nombre de la etapa: ' + nombre_etapa);
     let input_id_orden = document.getElementById('id_orden_edit');
     let input_etapa = document.getElementById('etapa_edit');
     let input_nom_orden = document.getElementById('nom_orden_edit');
@@ -304,9 +306,9 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
             id: id_orden,
         },
     success: function (response) {
-        console.log('-------------------');
-        console.log(response);
-        console.log('-------------------');
+        // console.log('-------------------');
+        // console.log(response);
+        // console.log('-------------------');
         response.forEach(element => {
             input_id_orden.value = id_orden;
             input_etapa.value = nombre_etapa;
@@ -411,7 +413,7 @@ function cargarModalVerOrdenManufactura(id_orden){
         },
     success: function (response) {
         response.forEach(element => {
-            console.log(element.cantidad);
+            // console.log(element.cantidad);
             input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;
@@ -489,7 +491,7 @@ function cargarModalVerOrdenMecanizado(id_orden){
 }
 
 export function cargarModalNuevaActProyecto(actualizacion, responsabilidad_servicio){
-    console.log(actualizacion);
+    // console.log(actualizacion);
     let input_fecha_limite = document.getElementById('fecha_limite');
     input_fecha_limite.value = actualizacion.fecha_limite;
     //OPCIONALES
@@ -725,31 +727,31 @@ function cargarEstadosManufacturas(){
 }
 
 export function cargarModalEditarTrabajo(id_orden, nombre_etapa){
-    console.log('Editar trabajo');
+    // console.log('Editar trabajo');
     modificarFormularioConArgumentos(1, 'formulario-editar-orden', true);
     cargarModalEditarOrden(id_orden, nombre_etapa);
 }
 export function cargarModalEditarManufactura(id_orden, nombre_etapa){
-    console.log('Editar manufactura');
+    // console.log('Editar manufactura');
     modificarFormularioConArgumentos(2, 'formulario-editar-orden', true);
     cargarModalEditarOrden(id_orden, nombre_etapa);
 }
 export function cargarModalEditarMecanizado(id_orden, nombre_etapa){
-    console.log('Editar mecanizado');
+    // console.log('Editar mecanizado');
     modificarFormularioConArgumentos(3, 'formulario-editar-orden', true);
     cargarModalEditarOrden(id_orden, nombre_etapa);
 }
 
 export function cargarModalCrearTrabajo(){
-    console.log('Crearditar trabajo');
+    // console.log('Crearditar trabajo');
     modificarFormularioConArgumentos(1, 'formulario-crear-orden', false);
 }
 export function cargarModalCrearManufactura(){
-    console.log('Crear manufactura');
+    // console.log('Crear manufactura');
     modificarFormularioConArgumentos(2, 'formulario-crear-orden', false);
 }
 export function cargarModalCrearMecanizado(){
-    console.log('Crear mecanizado');
+    // console.log('Crear mecanizado');
     modificarFormularioConArgumentos(3, 'formulario-crear-orden', false);
 }
 
@@ -776,7 +778,7 @@ export function colorEncabezadoPorTipoDeOrden(tipo_orden){
 
 export function volver(ruta){
     document.getElementById('volver').href = '{{route('+ruta+')}}';
-    console.log(document.getElementById('volver'));
+    // console.log(document.getElementById('volver'));
 }
 
 function mostrarOcultarFechaRequerida(){

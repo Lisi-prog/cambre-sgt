@@ -93,11 +93,11 @@
                                                                     {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 @else
-                                                                    @hasrole('SUPERVISOR')
+                                                                    @can('EVALUAR-SOLICITUD')
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['pm.evaluar', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
                                                                         {!! Form::close() !!}
-                                                                    @endhasrole
+                                                                    @endcan
                                                                 @endif
                                                             </div>
                                                         </div> 

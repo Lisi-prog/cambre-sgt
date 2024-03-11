@@ -76,9 +76,15 @@
                                         {!! Form::text('prioridad',$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                    
-                                </div>
+                                @if ($Ssi->getActivo)
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            {!! Form::label('activo', "Activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            {!! Form::text('activo', $Ssi->getActivo->codigo_activo.' - '.$Ssi->getActivo->nombre_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        </div>
+                                    </div>
+                                @endif
+                                
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     {{-- <div class="form-group">
