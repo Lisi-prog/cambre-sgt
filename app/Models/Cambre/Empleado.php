@@ -25,6 +25,7 @@ class Empleado extends Model
         'telefono_empleado',
         'id_puesto_empleado',
         'id_sector',
+        'costo_hora',
         'user_id'
     ];
 

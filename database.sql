@@ -141,6 +141,7 @@ CREATE TABLE `empleado` (
   `telefono_empleado` varchar(50),
   `id_puesto_empleado` int,
   `id_sector` int,
+  `costo_hora` decimal(10,2),
   `user_id` bigInt,
   PRIMARY KEY (`id_empleado`),
   CONSTRAINT `pk_id_empleado_x_puesto` FOREIGN KEY (`id_puesto_empleado`) REFERENCES `puesto_empleado`(`id_puesto_empleado`),

@@ -49,6 +49,7 @@ class EmpleadoController extends Controller
             'email' => 'required',
             'puesto' => 'required',
             'sector' => 'required',
+            'costo_hora' => 'required',
             'user_wb' => 'required'
         ]);
 
@@ -56,6 +57,8 @@ class EmpleadoController extends Controller
         $email = $request->input('email');
         $puesto = $request->input('puesto');
         $sector = $request->input('sector');
+        $costo_hora = $request->input('costo_hora');
+
         if ($request->input('telefono')) {
             $telefono = $request->input('telefono');
         }else{
@@ -70,6 +73,7 @@ class EmpleadoController extends Controller
                     'email_empleado' => $email,
                     'telefono_empleado' => $telefono,
                     'id_puesto_empleado' => $puesto,
+                    'costo_hora' => $costo_hora,
                     'id_sector' => $sector 
                 ]);
                 break;
@@ -96,6 +100,7 @@ class EmpleadoController extends Controller
                     'telefono_empleado' => $telefono,
                     'id_puesto_empleado' => $puesto,
                     'id_sector' => $sector,
+                    'costo_hora' => $costo_hora,
                     'user_id' => $usuario->id
                 ]);
 
@@ -122,13 +127,16 @@ class EmpleadoController extends Controller
             'nombre_completo' => 'required',
             'email' => 'required',
             'puesto' => 'required',
-            'sector' => 'required'
+            'sector' => 'required',
+            'costo_hora' => 'required'
         ]);
 
         $nombre = $request->input('nombre_completo');
         $email = $request->input('email');
         $puesto = $request->input('puesto');
         $sector = $request->input('sector');
+        $costo_hora = $request->input('costo_hora');
+
         if ($request->input('telefono')) {
             $telefono = $request->input('telefono');
         }else{
@@ -141,7 +149,8 @@ class EmpleadoController extends Controller
             'email_empleado' => $email,
             'telefono_empleado' => $telefono,
             'id_puesto_empleado' => $puesto,
-            'id_sector' => $sector
+            'id_sector' => $sector,
+            'costo_hora' => $costo_hora
         ]);
     
         return redirect()->route('tecnicos.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        

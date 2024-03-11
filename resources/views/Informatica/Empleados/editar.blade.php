@@ -107,8 +107,17 @@
                                         ]) !!}
                                     </div>
                                 </div>
-
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                    <div class="form-group">
+                                        {!! Form::label('costo_hora', 'Costo hora:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::text('costo_hora', $empleado->costo_hora, [
+                                            'class' => 'form-control',
+                                            'id' => 'costo_hora'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">

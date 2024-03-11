@@ -39,6 +39,7 @@
                                     <th class='text-center' style="color:#fff;">Telefono</th>
                                     <th class='text-center' style="color:#fff;">Puesto</th>
                                     <th class='text-center' style="color:#fff;">Sector</th>
+                                    <th class='text-center' style="color:#fff;">Costo/hora</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
                                 <tbody>
@@ -50,11 +51,13 @@
 
                                             <td class='text-center'>{{$empleado->email_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->telefono}}</td>
+                                            <td class='text-center'>{{$empleado->telefono_empleado}}</td>
 
                                             <td class='text-center'>{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
 
                                             <td class='text-center'>{{$empleado->getSector->nombre_sector}}</td>
+
+                                            <td class='text-center'>{{$empleado->costo_hora}}</td>
 
                                             <td>
                                                 <div class="d-flex justify-content-center">
