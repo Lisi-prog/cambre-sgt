@@ -35,7 +35,7 @@
                             <span class="obligatorio">*</span>
                             {!! Form::select('num_etapa', $etapas, null, [
                                     'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select form-group',
+                                    'class' => 'form-select form-group reset-input',
                                     'required',
                                     'id' => 'num_etapa'
                                 ]) !!}

@@ -14,7 +14,7 @@
                             {!! Form::label('nombre_prefijo', 'Nombre prefijo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('nombre_prefijo', null, [
-                                'class' => 'form-control',
+                                'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'style' => 'text-transform:uppercase',
                                 'id' => 'nombre_prefijo'
@@ -28,7 +28,7 @@
                         <div class="form-group">
                             {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='descripcion' id="descripcion" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>

@@ -14,7 +14,7 @@
                             {!! Form::label('prefijo_proyecto', 'Prefijo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::select('prefijo_proyecto', $prefijos, null, [
                                             'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
+                                            'class' => 'form-select form-control reset-input',
                                             'id' => 'prefijo_proyecto'
                                             ]) !!}
                         </div>
@@ -24,7 +24,7 @@
                             {!! Form::label('codigo_proyecto', 'Codigo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('codigo_proyecto', null, [
-                                'class' => 'form-control',
+                                'class' => 'form-control reset-input',
                                 'style' => 'text-transform:uppercase',
                                 'required' => 'required',
                                 'id' => 'codigo_proyecto'
@@ -40,7 +40,7 @@
                         <div class="form-group">
                             {!! Form::label('nombre', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nombre_proyecto', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('nombre_proyecto', null, ['class' => 'form-control reset-input']) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
@@ -49,7 +49,7 @@
                             <span class="obligatorio">*</span>
                             {!! Form::select('id_tipo_proyecto', $Tipos_servicios, null, [
                                 'placeholder' => 'Seleccionar',
-                                'class' => 'form-select',
+                                'class' => 'form-select reset-input',
                                 'id' => 'id_tipo_proyecto',
                                 'required'
                             ]) !!}
@@ -67,7 +67,7 @@
                                 <span class="obligatorio">*</span>
                                 {!! Form::select('lider', $empleados, null, [
                                     'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
+                                    'class' => 'form-select reset-input',
                                     'id' => 'lider'
                                 ]) !!}
                             </div>
@@ -79,7 +79,7 @@
                                 {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 {!! Form::select('id_activo', $activos, null, [
                                     'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
+                                    'class' => 'form-select reset-input',
                                     'id' => 'id_activo'
                                 ]) !!}
                             </div>
@@ -110,7 +110,7 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_ini',
-                                'class' => 'form-control'
+                                'class' => 'form-control reset-fecha'
                             ]) !!}
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_req',
-                                'class' => 'form-control'
+                                'class' => 'form-control reset-fecha'
                             ]) !!}
                         </div>
                     </div>

@@ -14,14 +14,14 @@
                         <div class="form-group">
                             {!! Form::label('titulo-propuesta', 'Titulo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('titulo-propuesta', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('titulo-propuesta', null, ['class' => 'form-control reset-input']) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('nombre_emisor', 'Emisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nombre_emisor', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('nombre_emisor', null, ['class' => 'form-control reset-input']) !!}
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                             {{--    ACTIVOS    --}}
                             {!! Form::select('id_activo', $activos, null, [
                                 'placeholder' => 'Seleccionar',
-                                'class' => 'form-select form-control',
+                                'class' => 'form-select form-control reset-input',
                                 'id' => 'id_activo',
                                 'required'
                             ]) !!}
@@ -45,54 +45,54 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('obj-propuesta', 'Objetivo de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('obj-propuesta', 'Objetivo de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='obj-propuesta' id="obj-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='obj-propuesta' id="obj-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>      
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('desc-propuesta', 'Descripcion de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('desc-propuesta', 'Descripcion de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='desc-propuesta' id="desc-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='desc-propuesta' id="desc-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div> 
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('an-i-propuesta', 'Analisis de impacto de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('an-i-propuesta', 'Analisis de impacto de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='an-i-propuesta' id="an-i-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='an-i-propuesta' id="an-i-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>    
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('bene-propuesta', 'Beneficios de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('bene-propuesta', 'Beneficios de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='bene-propuesta' id="bene-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='bene-propuesta' id="bene-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>     
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('prob-propuesta', 'Problemas de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('prob-propuesta', 'Problemas de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='prob-propuesta' id="prob-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='prob-propuesta' id="prob-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('eva-propuesta', 'Evaluacion de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('eva-propuesta', 'Evaluacion de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='eva-propuesta' id="eva-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='eva-propuesta' id="eva-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>

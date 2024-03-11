@@ -14,7 +14,7 @@
                             {!! Form::label('codigo_activo', 'Codigo activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('codigo_activo', null, [
-                                'class' => 'form-control',
+                                'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'style' => 'text-transform:uppercase',
                                 'id' => 'codigo_activo'
@@ -29,7 +29,7 @@
                             {!! Form::label('nombre_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('nombre_activo', null, [
-                                'class' => 'form-control',
+                                'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'id' => 'nombre_activo'
                             ]) !!}
@@ -41,7 +41,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                            <textarea name='descripcion' id="descripcion" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                         </div>
                     </div>
                 </div>

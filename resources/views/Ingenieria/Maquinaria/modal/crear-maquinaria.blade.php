@@ -14,7 +14,7 @@
                             {!! Form::label('codigo_maquinaria', 'Codigo maquinaria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('codigo_maquinaria', null, [
-                                'class' => 'form-control',
+                                'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'id' => 'codigo_maquinaria'
                             ]) !!}
@@ -25,7 +25,7 @@
                             {!! Form::label('alias_maquinaria', 'Alias maquinaria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('alias_maquinaria', null, [
-                                'class' => 'form-control',
+                                'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'id' => 'alias_maquinaria'
                             ]) !!}
@@ -38,14 +38,14 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
                         <div class="form-group">
                             {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                            <textarea name='descripcion' id="descripcion" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             {!! Form::label('id_sector', 'Sector:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::select('id_sector', $sectores, null, [
                                 'placeholder' => 'Seleccionar',
-                                'class' => 'form-select',
+                                'class' => 'form-select reset-input',
                                 'id' => 'id_sector'
                             ]) !!}
                     </div>

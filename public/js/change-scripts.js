@@ -20,13 +20,43 @@ $(document).ready(function () {
         keyboard: true
         })
     
-    /* $('.mcarga').on('hidden.bs.modal', function (e) {
+    $('.modal').on('hidden.bs.modal', function (e) {
+        resetInputs(this)
+        resetHoras(this)
+        resetFechas(this) //Pendiente
         $(this)
-            .find("input,textarea,select")
-                .val('')
-                .end()
+            // .find("select")
+            //     .val('')
+            //     .end()
             .find("input[type=checkbox], input[type=radio]")
                 .prop("checked", "")
                 .end();
-        }) */
+    })
 });
+
+function resetInputs(document){
+    let resetElements = document.getElementsByClassName('reset-input')
+        //console.log(resetElements)
+        for(var i = 0; i < resetElements.length; i++){
+            //console.log(resetElements[i].value);
+            resetElements[i].value = '';
+        }
+}
+
+function resetHoras(document){
+    let resetElements = document.getElementsByClassName('reset-horas')
+        //console.log(resetElements)
+        for(var i = 0; i < resetElements.length; i++){
+            console.log(resetElements[i].value);
+            resetElements[i].value = '00';
+        }
+}
+
+function resetFechas(document){
+    let resetElements = document.getElementsByClassName('reset-fecha')
+        //console.log(resetElements)
+        for(var i = 0; i < resetElements.length; i++){
+            //console.log(resetElements[i].value);
+            //resetElements[i].value = ''; 
+        }
+}

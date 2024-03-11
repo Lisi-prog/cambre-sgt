@@ -19,7 +19,7 @@
                                 <span class="obligatorio">*</span>
                                 {!! Form::select('id_prioridad', $Prioridades, null, [
                                     'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
+                                    'class' => 'form-select' ,
                                     'id' => 'selected-prioridad',
                                     'required'
                                 ]) !!}
@@ -43,7 +43,7 @@
                             <div class="form-group">
                                 {!! Form::label('descrip', 'Descripcion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                 <span class="obligatorio">*</span>
-                                <textarea name='descripcion' id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" required></textarea>
+                                <textarea name='descripcion' id="descrip" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 40vh" required></textarea>
                             </div>
                         </div>
 
