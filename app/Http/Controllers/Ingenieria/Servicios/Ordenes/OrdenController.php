@@ -1034,6 +1034,9 @@ class OrdenController extends Controller
 
         switch ($tipo_orden) {
             case 1:
+                $orden_trabajo = $orden->getOrdenDe;
+                $orden_trabajo->id_tipo_orden_trabajo = $request->input('tipo_orden_trabajo_edit');
+                $orden_trabajo->save();
                 Parte_trabajo::create([
                     'id_estado' => $request->input('id_estado_edit'),
                     'id_parte' => $parte->id_parte
