@@ -246,4 +246,9 @@ class Orden extends Model
         return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado();
     }
 
+    public function getIdEstado()
+    {
+        return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado();
+    }
+
 }

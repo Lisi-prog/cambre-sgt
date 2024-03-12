@@ -46,18 +46,26 @@ class ParteController extends Controller
     
     public function indexOrden($id, $tipo_orden){
         $orden = Orden::find(base64url_decode($id));
+
         if (Auth::user()->hasRole('SUPERVISOR')) {
             $editable = '';
+            $editarEstado = 1;
             $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
         } else {
             $editable = 'readonly';
             $estados = Estado::whereIn('id_estado', [1, 6, 7])->orderBy('nombre_estado')->pluck('nombre_estado', 'id_estado');
+            $editarEstado = 0;
+
+            if (in_array($orden->getIdEstado(), [1, 6, 7])) {
+                $editarEstado = 1;
+            }
         }
+
         $estados_manufactura = Estado_manufactura::orderBy('id_estado_manufactura')->pluck('nombre_estado_manufactura','id_estado_manufactura');
         $estados_mecanizado = Estado_mecanizado::orderBy('id_estado_mecanizado')->pluck('nombre_estado_mecanizado','id_estado_mecanizado');
         $maquinas = Maquinaria::orderBy('id_maquinaria')->pluck('alias_maquinaria','id_maquinaria');
        
-        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura', 'estados_mecanizado', 'maquinas', 'tipo_orden'));
+        return view('Ingenieria.Servicios.Partes.show', compact('orden', 'editable', 'estados', 'estados_manufactura', 'estados_mecanizado', 'maquinas', 'tipo_orden', 'editarEstado'));
     }
 
     public function create(Request $request)

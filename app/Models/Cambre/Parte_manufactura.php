@@ -37,6 +37,10 @@ class Parte_manufactura extends Model
         return Estado_manufactura::where('id_estado_manufactura', $this->id_estado_manufactura)->first()->nombre_estado_manufactura;
     }
 
+    public function getIdEstado(){
+        return $this->id_estado_manufactura;
+    }
+
     public function getFinalizado()
     {
         if ($this->id_estado_manufactura == 5) {

@@ -32,6 +32,10 @@ class Parte_mecanizado extends Model
         return Estado_mecanizado::where('id_estado_mecanizado', $this->id_estado_mecanizado)->first()->nombre_estado_mecanizado;
     }
 
+    public function getIdEstado(){
+        return $this->id_estado_mecanizado;
+    }
+
     public function getParte()
     {
         return $this->belongsTo(Parte::class, 'id_parte');

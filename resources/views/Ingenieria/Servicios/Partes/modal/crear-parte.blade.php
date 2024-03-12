@@ -79,12 +79,18 @@
                                 <div class="form-group">
                                     {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <span class="obligatorio">*</span>
-                                    {!! Form::select('estado', $estados, null, [
+                                    @if ($editarEstado)
+                                        {!! Form::select('estado', $estados, $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado(), [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-group',
                                             'required',
                                             'id' => 'estado'
-                                        ]) !!}
+                                        ]) !!} 
+                                    @else
+                                        {!! Form::text('est', $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado(), ['class' => 'form-control', 'disabled']) !!}
+                                        {!! Form::text('estado', $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado(), ['class' => 'form-control', 'hidden']) !!}
+                                    @endif
+                                    
                                 </div>
                             </div>
                             @break
@@ -93,12 +99,17 @@
                                 <div class="form-group">
                                     {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <span class="obligatorio">*</span>
-                                    {!! Form::select('estado', $estados_manufactura, null, [
+                                    @if ($editarEstado)
+                                        {!! Form::select('estado', $estados_manufactura, $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado(), [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-group',
                                             'required',
                                             'id' => 'estado'
                                         ]) !!}
+                                    @else
+                                        {!! Form::text('est', $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado(), ['class' => 'form-control', 'disabled']) !!}
+                                        {!! Form::text('estado', $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado(), ['class' => 'form-control', 'hidden']) !!}
+                                    @endif
                                 </div>
                             </div>
                             @break
@@ -108,12 +119,18 @@
                                     <div class="form-group" >
                                         {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('estado', $estados_mecanizado, null, [
+                                        @if ($editarEstado)
+                                            {!! Form::select('estado', $estados_mecanizado, $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado(), [
                                                 'placeholder' => 'Seleccionar',
                                                 'class' => 'form-select form-group',
                                                 'required',
                                                 'id' => 'estado'
                                             ]) !!}
+                                        @else
+                                            {!! Form::text('est', $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado(), ['class' => 'form-control', 'disabled']) !!}
+                                            {!! Form::text('estado', $orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado(), ['class' => 'form-control', 'hidden']) !!}
+                                        @endif
+                                        
                                     </div>
                                 </div>
                             </div>
