@@ -13,6 +13,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\RI\RequerimientoDeIngenieriaContro
 use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimientoController;
 use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 use App\Http\Controllers\Ingenieria\Activos\ActivoController;
+use App\Http\Controllers\Ingenieria\Sector\SectorController;
 use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 use App\Http\Controllers\Ingenieria\Servicios\Proyectos\PrefijoProyectoController;
 //Gestion de proyectos
@@ -71,7 +72,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/maquinaria/obtener-maquinarias', [MaquinariaController::class, 'obtenerMaquinarias']);
     Route::resource('maquinarias', MaquinariaController::class);
     Route::resource('activos', ActivoController::class);
-    
+    Route::resource('sectores', SectorController::class);
  });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {

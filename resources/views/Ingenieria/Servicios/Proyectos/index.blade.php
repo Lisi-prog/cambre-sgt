@@ -81,8 +81,9 @@
                                                         <label>Proyectos:</label>
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
+                                                            <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($proyectosFilter as $proyecto)
-                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                            <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
                                                         @endforeach
                                                         {{-- @foreach ($codigos_servicio as $codigo_servicio)
                                                             <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
@@ -100,8 +101,9 @@
                                                         <label>Tipo:</label>
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="tipos[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($subtipos_servicio as $subtipo_servicio)
-                                                            <label><input name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                            <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
                                                         @endforeach 
                                                         {{-- @foreach ($supervisores as $supervisor)
                                                             <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
@@ -120,8 +122,9 @@
                                                         <label>Lider:</label>
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="lid[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($supervisores as $supervisor)
-                                                            <label><input name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                            <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
                                                         @endforeach
                                                         {{-- @foreach ($responsables as $responsable)
                                                             <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
@@ -140,8 +143,13 @@
                                                         <label>Estados:</label>
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="estados[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($estados as $estado)
-                                                            <label><input name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre_estado}}</label>
+                                                            @if ($estado->id_estado < 9)
+                                                                <label><input class="input-filter" name="estados[]" type="checkbox" value="{{$estado->id_estado}}" checked> {{$estado->nombre_estado}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre_estado}}</label>
+                                                            @endif
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -153,7 +161,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
                                 
-                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100']) !!}
+                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100', 'id' => 'btn-filtrar']) !!}
                                 {!! Form::close() !!}
                             </div>
                         </div>                     
@@ -346,6 +354,7 @@
         </div>
     </div>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/filter.js') }}"></script>
 </section>
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
@@ -558,23 +567,6 @@
                         .addClass("fa-chevron-down");          
                 });
         });
-</script>
-
-<script>
-    function mostrarFiltro(){
-        let cuadro_filtro = document.getElementById("demo");
-        if ($('#demo').is(":hidden")) {
-            cuadro_filtro.hidden = false;
-        }else{
-            cuadro_filtro.hidden = true;
-        }
-    }
-
-    function limpiarFiltro(){
-        $('input[type=checkbox]').prop("checked", false);
-        var table = $('#example').DataTable();
-        table.draw();
-    }
 </script>
 
 <script>

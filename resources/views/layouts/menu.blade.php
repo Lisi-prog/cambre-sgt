@@ -193,6 +193,12 @@
             </li>
 
             <li>
+                <a class="nav-link" href="{{route('sectores.index')}}" title="Sectores">
+                    <i class="fas fa-bezier-curve"></i><span>Sectores</span>
+                </a>
+            </li>
+
+            <li>
                 <a class="nav-link" href="{{route('phpmyinfo')}}" title="PHPinfo">
                     <i class="fas fa-tools"style="font-size:1.2em; "></i><span>PHPinfo</span>
                 </a>
