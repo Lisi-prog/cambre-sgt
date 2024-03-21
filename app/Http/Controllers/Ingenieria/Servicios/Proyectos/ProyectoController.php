@@ -125,9 +125,13 @@ class ProyectoController extends Controller
             $codigos_servicio = $this->obtenerCodigoServicio();
             $subtipos_servicio = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->get();
             $estados = Estado::orderBy('id_estado')->get();
+
+            $flt_serv = $request->input('cod_serv');
+            $flt_tip = $request->input('tipos');
+            $flt_lid = $request->input('lid');
         //------------------
 
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', 'proyectosFilter'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid'));
     }
 
     public function obtenerCodigoServicio(){

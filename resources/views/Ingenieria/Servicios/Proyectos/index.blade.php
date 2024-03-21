@@ -83,7 +83,12 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                             <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($proyectosFilter as $proyecto)
-                                                            <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                            @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
+                                                                <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                            @endif
+                                                            {{-- <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label> --}}
                                                         @endforeach
                                                         {{-- @foreach ($codigos_servicio as $codigo_servicio)
                                                             <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
@@ -103,7 +108,12 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="tipos[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($subtipos_servicio as $subtipo_servicio)
-                                                            <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                            @if (is_null($flt_tip) || in_array($subtipo_servicio->id_subtipo_servicio, $flt_tip))
+                                                                <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                            @endif
+                                                            {{-- <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label> --}}
                                                         @endforeach 
                                                         {{-- @foreach ($supervisores as $supervisor)
                                                             <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
@@ -124,7 +134,12 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="lid[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($supervisores as $supervisor)
-                                                            <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                                            @if (is_null($flt_lid) || in_array($supervisor->id_empleado, $flt_lid))
+                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label> 
+                                                            @endif
+                                                            {{-- <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label> --}}
                                                         @endforeach
                                                         {{-- @foreach ($responsables as $responsable)
                                                             <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
@@ -170,86 +185,7 @@
             </div>
         </div>
 
-        {{-- <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
-                        </div>
-                        <div class="row" id="demo" hidden>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Proyectos:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($proyectos as $proyecto)
-                                                    <label><input name="cod_serv" type="checkbox" value="{{$proyecto->codigo_servicio}}"> {{$proyecto->codigo_servicio}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Tipo:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($subtipos_servicio as $subtipo_servicio)
-                                                    <label><input name="subtip" type="checkbox" value="{{$subtipo_servicio->nombre_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Lider:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($supervisores as $supervisor)
-                                                    <label><input name="lid" type="checkbox" value="{{$supervisor->nombre_empleado}}"> {{$supervisor->nombre_empleado}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Estados:</label>
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                @foreach ($estados as $estado)
-                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+        
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
