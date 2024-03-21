@@ -59,7 +59,7 @@
 
                                     @foreach ($ListaRI as $Ri)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_carga)->format('d-m-Y H:i')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->id_solicitud ?? '-'}}</td>
 
@@ -72,7 +72,7 @@
                                             @if (is_null($Ri->getSolicitud->fecha_requerida))
                                             <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
                                             @else
-                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_requerida)->format('d-m-Y')}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_requerida)->format('Y-m-d')}}</td>
                                             @endif
                                             
 

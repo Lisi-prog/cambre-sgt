@@ -58,7 +58,7 @@
                                     @endphp
                                     @foreach ($ListaPM as $Pm)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Pm->getSolicitud->fecha_carga)->format('d-m-Y')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Pm->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Pm->getSolicitud->id_solicitud}}</td>
 

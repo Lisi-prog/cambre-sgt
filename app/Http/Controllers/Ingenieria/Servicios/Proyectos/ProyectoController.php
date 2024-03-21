@@ -538,9 +538,9 @@ class ProyectoController extends Controller
 
             array_push($actualizacion_arr, (object)[
                 'codigo' => $act_servicio->getActualizacion->id_actualizacion,
-                'fecha_carga' => Carbon::parse($act_servicio->getActualizacion->fecha_carga)->format('d-m-Y H:i'),
+                'fecha_carga' => Carbon::parse($act_servicio->getActualizacion->fecha_carga)->format('Y-m-d H:i'),
                 'descripcion' => $act_servicio->getActualizacion->descripcion,
-                'fecha_limite' => Carbon::parse($act_servicio->getActualizacion->fecha_limite)->format('d-m-Y'),
+                'fecha_limite' => $act_servicio->getActualizacion->fecha_limite,
                 'estado' => $act_servicio->getActualizacion->getEstado->nombre_estado,
                 'responsable' => $act_servicio->getActualizacion->getResponsable->getEmpleado->nombre_empleado
             ]);

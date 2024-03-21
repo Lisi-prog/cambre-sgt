@@ -93,14 +93,14 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fec_ini_manuf', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_inicio_manuf',\Carbon\Carbon::parse($orden_manufactura->getOrden->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('fecha_inicio_manuf',$orden_manufactura->getOrden->fecha_inicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fec_limite_manuf', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite_manuf', \Carbon\Carbon::parse($orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -165,11 +165,11 @@
 
                                                 <td class= 'text-center' >{{$orden_mecanizado->revision}}</td>
 
-                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($orden_mecanizado->getOrden->fecha_inicio)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->fecha_inicio}}</td>
 
-                                                <td class= 'text-center' >{{\Carbon\Carbon::parse($orden_mecanizado->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite)->format('d-m-Y')}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite}}</td>
                                                 
-                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->duracion_estimada}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->getduracionHoraMinuto()}}</td>
 
                                                 <td>
                                                     <div class="row justify-content-center" >

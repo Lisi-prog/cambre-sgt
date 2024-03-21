@@ -45,7 +45,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fecha_carga', "Fecha y hora:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('d-m-Y H:i:s'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('Y-m-d H:i'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
@@ -64,7 +64,7 @@
                                     @if(!is_null($Ssi->getSolicitud->fecha_requerida))
                                         <div class="form-group">
                                             {!! Form::label('fecha_req', "Fecha requerida:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                            {!! Form::text('fecha_req',\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                            {!! Form::text('fecha_req',\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                         </div>
                                     @endif
                                 </div>
@@ -142,13 +142,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-5 d-flex">
+                                {{-- <div class="col-5 d-flex">
                                     <div class="ms-auto">
                                         {!! Form::open(['method' => 'GET', 'route' => 's_s_i.index', 'style' => '']) !!}
                                         {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
                                         {!! Form::close() !!}
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

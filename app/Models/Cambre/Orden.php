@@ -251,4 +251,7 @@ class Orden extends Model
         return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getIdEstado();
     }
 
+    public function getduracionHoraMinuto(){
+        return substr($this->duracion_estimada, 0, -3);
+    }
 }

@@ -38,7 +38,7 @@ class ServicioDeIngenieriaController extends Controller
     
     public function index(Request $request)
     {        
-        $listaSSI = Sol_servicio_de_ingenieria::get();
+        $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
         return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos'));

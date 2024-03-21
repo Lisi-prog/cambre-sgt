@@ -66,8 +66,8 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('desc', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('dec', \Carbon\Carbon::parse($orden->getEtapa->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::label('desc', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('dec', $orden->getEtapa->fecha_inicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -165,9 +165,9 @@
 
                                             <td class= 'text-center' >{{$parte->observaciones}}</td>
 
-                                            <td class= 'text-center'>{{\Carbon\Carbon::parse($parte->fecha)->format('d-m-Y')}}</td>
+                                            <td class= 'text-center'>{{$parte->fecha}}</td>
 
-                                            <td class= 'text-center'>{{ $parte->fecha_limite ? \Carbon\Carbon::parse($parte->fecha_limite)->format('d-m-Y') : '-'}}</td>
+                                            <td class= 'text-center'>{{ $parte->fecha_limite ?? '-'}}</td>
 
                                             
                                             <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>
