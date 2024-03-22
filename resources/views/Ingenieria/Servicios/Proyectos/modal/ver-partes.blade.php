@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 
-                <div class="row">
+                <div class="row table-responsive">
                     <table class="table table-striped">
                         <thead id="encabezado_tabla_parte">
                             <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
