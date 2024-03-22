@@ -196,13 +196,13 @@
                     </div>
                 </div>
                 {{-- ------------- --}}
-                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
+                {{-- <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="d-flex">
                                     <div class="me-auto">
-                                        {{-- (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong> --}}
+                                        {{-- (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                                     </div>
                                     <div class="p-1">
                                     </div>
@@ -215,7 +215,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

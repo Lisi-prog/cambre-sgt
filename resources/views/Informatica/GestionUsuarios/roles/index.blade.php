@@ -7,36 +7,24 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    <div class="section-header">
-        <h3 class="page__heading">Roles</h3>
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
+                <h4 class="titulo page__heading my-auto">Roles</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
+                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success']) !!}
+                {!! Form::close() !!}
+            </div>
+        </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-                <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Rol" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -50,40 +38,57 @@
                                     <th class='text-center' style="color:#fff;">Rol</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
+                                    @php
+                                        $idCount = 0;   
+                                    @endphp
                                     @foreach ($roles as $rol)
-                                        <tr>
-                                            <td class='text-center'>{{$rol->id}}</td>
+                                        <tr class="my-auto">
+                                            <td class='text-center' style="vertical-align: middle;">{{$rol->id}}</td>
 
-                                            <td class='text-center'>{{$rol->name}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$rol->name}}</td>
 
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['roles.edit', $rol->id], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('BORRAR-ROL') --}}
-                                                        {!! Form::open([
-                                                            'method' => 'DELETE',
-                                                            'class' => 'formulario',
-                                                            'route' => ['roles.destroy', $rol->id],
-                                                            'style' => 'display:inline',
-                                                        ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea BORRAR el rol?');"]) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('AGREGAR-PERMISOS')--}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['roles.permisos', $rol->id], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info ml-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan  --}}
+                                                <div class="row justify-content-center">
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRol{{$idCount}}" aria-expanded="false" aria-controls="collapseActivo{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseRol{{$idCount}}">
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['roles.edit', $rol->id], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['roles.destroy', $rol->id],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100', 'onclick' => "return confirm('¿Está seguro que desea BORRAR el rol?');"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['roles.permisos', $rol->id], 'style' => 'display:inline']) !!}
+                                                                    {!! Form::submit('Permisos', ['class' => 'btn btn-info w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount +=1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>

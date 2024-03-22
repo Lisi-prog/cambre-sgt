@@ -7,14 +7,18 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    <div class="section-header d-flex">
-        <div class="">
-            <h4 class="titulo page__heading my-auto">Puesto técnico</h4>
-        </div>
-        <div class="ms-auto">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearPuestoEmpleadoModal">
-                Nuevo puesto
-            </button>
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
+                <h4 class="titulo page__heading my-auto">Puesto técnico</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearPuestoEmpleadoModal">
+                    Nuevo puesto
+                </button>
+            </div>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -35,7 +39,10 @@
                                     <th class='text-center' style="color:#fff;">Costo hora</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
+                                    @php
+                                        $idCount = 0;   
+                                    @endphp
                                     @foreach ($puestos_empleados as $puesto_empleado)
                                         <tr>
                                             <td class='text-center'>{{$puesto_empleado->titulo_puesto_empleado}}</td>
@@ -43,27 +50,40 @@
                                             <td class='text-center'>{{'$ ' . number_format($puesto_empleado->costo_hora, 2, ',', '.')}}</td>
 
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    {{-- @can('EDITAR-ROL') --}}
-                                                    <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarPuestoEmpleadoModal" onclick="cargarModalEditar({{$puesto_empleado->id_puesto_empleado}}, this)">
-                                                        Editar
-                                                    </button>
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('BORRAR-ROL') --}}
-                                                        {!! Form::open([
-                                                            'method' => 'DELETE',
-                                                            'class' => 'formulario',
-                                                            'route' => ['puesto_tecnico.destroy', $puesto_empleado->id_puesto_empleado],
-                                                            'onclick' => "return confirm('¿Está seguro que desea BORRAR el puesto tecnico?');",
-                                                            'style' => 'display:inline',
-                                                        ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger']) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
+                                                <div class="row justify-content-center">
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePuesto{{$idCount}}" aria-expanded="false" aria-controls="collapseActivo{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapsePuesto{{$idCount}}">
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarPuestoEmpleadoModal" onclick="cargarModalEditar({{$puesto_empleado->id_puesto_empleado}}, this)">
+                                                                    Editar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['puesto_tecnico.destroy', $puesto_empleado->id_puesto_empleado],
+                                                                    'onclick' => "return confirm('¿Está seguro que desea BORRAR el puesto tecnico?');",
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount +=1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>
@@ -84,9 +104,8 @@
         let input_puesto = document.getElementById('input_puesto');
         let costo_hora = document.getElementById('input-costo_hora');
         let id_puesto = document.getElementById('input_id_puesto');
-        let nombre_puesto = b.parentNode.parentNode.parentNode.children[0].innerText;
-        let precio_hora = b.parentNode.parentNode.parentNode.children[1].innerText;
-
+        let nombre_puesto = b.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].innerText;
+        let precio_hora = b.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[1].innerText;
         input_puesto.value = nombre_puesto;
         costo_hora.value = precio_hora.replace('$ ', '').replace('.', '').replace(',', '.');
         id_puesto.value = id;

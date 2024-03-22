@@ -7,36 +7,21 @@
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
-    <div class="section-header">
-        <h3 class="page__heading">Usuarios</h3>
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
+                <h4 class="titulo page__heading my-auto">Usuarios</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+            </div>
+        </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-                <div class="card">
-                    <div class="card-body ">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <form method="GET" action="">
-                                    <div class="input-group">
-                                        <input name="name" type="text" class="form-control" placeholder="Buscar Usuario" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                        <button class="btn btn-primary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                {{-- {!! Form::open(['method' => 'GET', 'route' => ['roles.create'], 'class' => 'd-flex justify-content-end']) !!}
-                                    {!! Form::submit('Nuevo Rol', ['class' => 'btn btn-success my-1']) !!}
-                                {!! Form::close() !!} --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -51,7 +36,10 @@
                                     <th class='text-center' style="color:#fff;">Email</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
+                                    @php
+                                        $idCount = 0;   
+                                    @endphp
                                     @foreach ($usuarios as $usuario)
                                         <tr>
                                             <td class='text-center'>{{$usuario->id}}</td>
@@ -61,32 +49,39 @@
                                             <td class='text-center'>{{$usuario->email}}</td>
 
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['usuarios.edit', $usuario->id], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('BORRAR-ROL') --}}
-                                                        {!! Form::open([
-                                                            'method' => 'DELETE',
-                                                            'class' => 'formulario',
-                                                            'route' => ['usuarios.destroy', $usuario->id],
-                                                            'style' => 'display:inline',
-                                                        ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea BORRAR el usuario?');"]) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('AGREGAR-PERMISOS')
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['rubros.edit', $rubro->id], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    @endcan --}}
+                                                <div class="row justify-content-center">
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsuario{{$idCount}}" aria-expanded="false" aria-controls="collapseActivo{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseUsuario{{$idCount}}">
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['usuarios.edit', $usuario->id], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['usuarios.destroy', $usuario->id],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100', 'onclick' => "return confirm('¿Está seguro que desea BORRAR el usuario?');"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount +=1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>

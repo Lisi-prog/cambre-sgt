@@ -15,18 +15,18 @@
     }
 </style>
 <section class="section">
-    <div class="section-header d-flex justify-content-center">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-            <h4 class="titulo page__heading my-auto mr-5">Activos</h4>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
-            {{-- @can('CREAR-RI') --}}
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
-                Nueva activo
-            </button>
-            {{-- @endcan --}}
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
+                <h4 class="titulo page__heading my-auto">Activos</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
+                    Nuevo activo
+                </button>
+            </div>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -67,7 +67,6 @@
                                                         </button>
                                                     </div>
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseActivo{{$idCount}}">
-                                                        {{-- @can('EDITAR-ROL') --}}
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
                                                                 {!! Form::open(['method' => 'GET', 'route' => ['activos.edit', $activo->id_activo], 'style' => 'display:inline']) !!}
@@ -75,12 +74,6 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
-                                                            {{-- <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#editarMaquinariaModal" onclick="cargarModalEditar({{$maquinaria->id_maquinaria}})">
-                                                                Editar
-                                                            </button> --}}
-                                                        {{-- @endcan --}}
-
-                                                        {{-- @can('BORRAR-ROL') --}}
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
                                                                 {!! Form::open([
@@ -93,7 +86,6 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
-                                                        {{-- @endcan --}}
                                                     </div>
                                                 </div>
                                             </td>

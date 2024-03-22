@@ -5,19 +5,23 @@
 @section('content')
 
 <section class="section">
-    <div class="section-header d-flex">
-        <div class="">
-            <h4 class="titulo page__heading my-auto mr-5">Técnicos</h4>
-        </div>
-        {!! Form::open(['method' => 'GET', 'route' => ['puesto_tecnico.index'], 'class' => 'd-flex justify-content-end']) !!}
-            {!! Form::submit('Puesto de técnico', ['class' => 'btn btn-success my-1']) !!}
-        {!! Form::close() !!}
-        <div class="ms-auto">
-            {{-- @can('CREAR-RI') --}}
-                {!! Form::open(['method' => 'GET', 'route' => ['tecnicos.create'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success my-1']) !!}
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
+                <h4 class="titulo page__heading my-auto">Técnicos</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
+                {!! Form::open(['method' => 'GET', 'route' => ['puesto_tecnico.index'], 'class' => 'd-flex justify-content-end']) !!}
+                    {!! Form::submit('Puesto de técnico', ['class' => 'btn btn-success']) !!}
                 {!! Form::close() !!}
-            {{-- @endcan --}}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                {!! Form::open(['method' => 'GET', 'route' => ['tecnicos.create'], 'class' => 'd-flex justify-content-end']) !!}
+                    {!! Form::submit('Nuevo', ['class' => 'btn btn-success']) !!}
+                {!! Form::close() !!}
+            </div>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -42,7 +46,10 @@
                                     <th class='text-center' style="color:#fff;">Costo/hora</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
                                 </thead>
-                                <tbody>
+                                <tbody id="accordion">
+                                    @php
+                                        $idCount = 0;   
+                                    @endphp
                                     @foreach ($empleados as $empleado)
                                         <tr class="my-auto">
                                             <td class='text-center'>{{$empleado->id_empleado}}</td>
@@ -60,32 +67,46 @@
                                             <td class='text-center'>{{$empleado->costo_hora}}</td>
 
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    {{-- @can('EDITAR-ROL') --}}
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['tecnicos.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
-                                                        {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('BORRAR-ROL') --}}
-                                                        {!! Form::open([
-                                                            'method' => 'DELETE',
-                                                            'class' => 'formulario',
-                                                            'route' => ['tecnicos.destroy', $empleado->id_empleado],
-                                                            'style' => 'display:inline',
-                                                        ]) !!}
-                                                        {!! Form::submit('Borrar', ['class' => 'btn btn-danger', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el técnico?');"]) !!}
-                                                        {!! Form::close() !!}
-                                                    {{-- @endcan --}}
-
-                                                    {{-- @can('AGREGAR-PERMISOS')
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['rubros.edit', $rubro->id], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Permisos', ['class' => 'btn btn-info mr-2']) !!}
-                                                        {!! Form::close() !!}
-                                                    @endcan --}}
+                                                <div class="row justify-content-center">
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTecnico{{$idCount}}" aria-expanded="false" aria-controls="collapseActivo{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseTecnico{{$idCount}}">
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['tecnicos.edit', $empleado->id_empleado], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['tecnicos.destroy', $empleado->id_empleado],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el técnico?');"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['usuarios.edit', $empleado->getUser->id], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Usuario', ['class' => 'btn btn-warning w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php
+                                            $idCount +=1;
+                                        @endphp
                                     @endforeach
                                 </tbody>
                             </table>

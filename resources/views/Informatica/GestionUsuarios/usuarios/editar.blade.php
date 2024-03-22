@@ -46,7 +46,7 @@
                             
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <button type="submit" class="btn btn-success mr-2">Guardar</button>
-                                <a href="{{ route('usuarios.index') }}"class="btn btn-danger fo">Volver</a>
+                                <a href="{{ route('usuarios.index') }}"class="btn btn-danger fo">Cancelar</a>
                                 {{-- @can('CREAR-USUARIO')
                                 {!! Form::button('Guardar', ['onclick' => 'clickSubmit()', 'class' => 'btn btn-warning mr-2']) !!}
                                 {!! Form::submit('Guardar', ['id' => 'submit', 'class' => 'd-none']) !!}
