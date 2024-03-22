@@ -24,7 +24,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoSectorModal">
-                    Nueva sector
+                    Nuevo sector
                 </button>
             </div>
         </div>
