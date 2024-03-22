@@ -58,93 +58,7 @@
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
-        {{-- <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', $tipo_orden], 'style' => 'display:inline']) !!}
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                        <div class="row">
-                                            <div class="d-flex flex-row align-items-start justify-content-around">
-                                                <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                    <div class="">
-                                                        <label>Proyectos:</label>
-                                                    </div>
-                                                    <div class="d-flex flex-column overflow-auto">
-                                                        @foreach ($codigos_servicio as $codigo_servicio)
-                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                        <div class="row">
-                                            <div class="d-flex flex-row align-items-start justify-content-around">
-                                                <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                    <div class="">
-                                                        <label>Supervisor:</label>
-                                                    </div>
-                                                    <div class="d-flex flex-column overflow-auto">
-                                                        @foreach ($supervisores as $supervisor)
-                                                            <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                        <div class="row">
-                                            <div class="d-flex flex-row align-items-start justify-content-around">
-                                                <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                    <div class="">
-                                                        <label>Responsable:</label>
-                                                    </div>
-                                                    <div class="d-flex flex-column overflow-auto">
-                                                        @foreach ($responsables as $responsable)
-                                                            <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                        <div class="row">
-                                            <div class="d-flex flex-row align-items-start justify-content-around">
-                                                <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                    <div class="">
-                                                        <label>Estados:</label>
-                                                    </div>
-                                                    <div class="d-flex flex-column overflow-auto">
-                                                        @foreach ($estados as $estado)
-                                                            <label><input name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre}}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
-                                
-                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100']) !!}
-                                {!! Form::close() !!}
-                            </div>
-                        </div>                     
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+        
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -161,8 +75,9 @@
                                                 <label>Proyectos:</label>
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
                                                 @foreach ($servicios as $servicio)
-                                                    <label><input name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}"> {{$servicio->codigo_servicio}}</label>
+                                                    <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -177,8 +92,9 @@
                                                 <label>Supervisor:</label>
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
                                                 @foreach ($supervisores as $supervisor)
-                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -194,8 +110,9 @@
                                                     <label>Responsable:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
                                                     @foreach ($responsables as $responsable)
-                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}"> {{$responsable->nombre_empleado}}</label>
+                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -212,19 +129,23 @@
                                                 <label>Estados:</label>
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($estados as $estado)
-                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                    @if ($estado->id_estado < 9)
+                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                    @else
+                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
-                            </div>
-                        </div>
-                        
+                            </div> --}}
+                        </div>   
                     </div>
                 </div>
             </div>
@@ -277,7 +198,7 @@
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable() ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{ $orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ? \Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '')->format('d-m-Y') : '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{ $orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td>
         
@@ -329,6 +250,7 @@
         </div>
     </div>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';

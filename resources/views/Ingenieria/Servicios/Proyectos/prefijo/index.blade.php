@@ -15,18 +15,18 @@
     }
 </style>
 <section class="section">
-    <div class="section-header d-flex justify-content-center">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-            <h4 class="titulo page__heading my-auto mr-5">Prefijo Proyecto</h4>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
-            {{-- @can('CREAR-RI') --}}
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoPrefijoModal">
-                Nuevo prefijo
-            </button>
-            {{-- @endcan --}}
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
+                <h4 class="titulo page__heading my-auto">Prefijo</h5>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoPrefijoModal">
+                    Nuevo prefijo
+                </button>
+            </div>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])

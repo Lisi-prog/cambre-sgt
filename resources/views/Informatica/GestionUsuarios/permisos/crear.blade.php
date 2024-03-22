@@ -24,7 +24,7 @@
                             </div>       
                         </div>
                         <button type="submit" class="btn btn-success mr-2 button-prevent-multiple-submits">Guardar</button>
-                        <a href="{{ route('permisos.index') }}"class="btn btn-danger fo">Volver</a>
+                        <a href="{{ route('permisos.index') }}"class="btn btn-danger fo">Cancelar</a>
                     {!! Form::close() !!}
                     </div>
                 </div>

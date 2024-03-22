@@ -21,7 +21,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fecha_carga', "Fecha y hora:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('d-m-Y H:i'), ['class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('Y-m-d H:i'), ['class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
@@ -109,7 +109,16 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </section>
+
+    <script>
+        $(document).ready(function () {
+            var url = '{{url('/s_s_i')}}';
+            //url = url.replace(':id_servicio', id_servicio);
+            document.getElementById('volver').href = url;
+        });
+    </script>
+
 @endsection

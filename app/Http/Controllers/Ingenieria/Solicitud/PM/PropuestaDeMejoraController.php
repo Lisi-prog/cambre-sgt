@@ -42,7 +42,7 @@ class PropuestaDeMejoraController extends Controller
     {        
         $ListaPM = Sol_propuesta_de_mejora::get();
         $supervisores = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        $activos = Activo::orderBy('nombre_activo')->pluck('nombre_activo', 'id_activo');
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
         return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos'));
     }
 
