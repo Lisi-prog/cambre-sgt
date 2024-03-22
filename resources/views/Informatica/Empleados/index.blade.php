@@ -52,19 +52,19 @@
                                     @endphp
                                     @foreach ($empleados as $empleado)
                                         <tr class="my-auto">
-                                            <td class='text-center'>{{$empleado->id_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->id_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->nombre_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->nombre_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->email_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->email_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->telefono_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->telefono_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->getPuestoEmpleado->titulo_puesto_empleado}}</td>
 
-                                            <td class='text-center'>{{$empleado->getSector->nombre_sector}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->getSector->nombre_sector}}</td>
 
-                                            <td class='text-center'>{{$empleado->costo_hora}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->costo_hora}}</td>
 
                                             <td>
                                                 <div class="row justify-content-center">
