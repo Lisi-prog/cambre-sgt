@@ -6,7 +6,7 @@
 
     <section class="section">
         <div class="section-header">
-            <div class="titulo py-1">Nuevo empleado</div>
+            <div class="titulo py-1">Nuevo técnico</div>
         </div>
         <div class="section-body">
             <div class="row">
