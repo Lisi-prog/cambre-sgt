@@ -42,11 +42,11 @@
                                     @endphp
                                     @foreach ($usuarios as $usuario)
                                         <tr>
-                                            <td class='text-center'>{{$usuario->id}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$usuario->id}}</td>
 
-                                            <td class='text-center'>{{$usuario->name}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$usuario->name}}</td>
 
-                                            <td class='text-center'>{{$usuario->email}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$usuario->email}}</td>
 
                                             <td>
                                                 <div class="row justify-content-center">

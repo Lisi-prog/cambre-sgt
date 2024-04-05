@@ -17,7 +17,7 @@ function agregarUrgencia(){
             html_fecha = `<div class="form-group">
                             <label for="fec_req" class="control-label fs-7 reset-fecha" style="white-space: nowrap;">Fecha requerida:</label>
                             <span class="obligatorio">*</span>
-                            <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control" name="fecha_req" type="date" value=`+fecha_de_hoy+` required> 
+                            <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control reset-fecha" name="fecha_req" type="date" value=`+fecha_de_hoy+` required> 
                         </div>`;
             fec.innerHTML = html_fecha;
             des.innerHTML = '';
@@ -31,7 +31,7 @@ function agregarUrgencia(){
             html_fecha = `<div class="form-group">
                     <label for="fec_req" class="control-label fs-7 reset-fecha" style="white-space: nowrap;">Fecha requerida:</label>
                     <span class="obligatorio">*</span>
-                    <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control" name="fecha_req" type="date" value=`+fecha_de_hoy+` required> 
+                    <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control reset-fecha" name="fecha_req" type="date" value=`+fecha_de_hoy+` required> 
                 </div>`;
             fec.innerHTML = html_fecha;
             des.innerHTML = html;

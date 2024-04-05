@@ -6,7 +6,7 @@
 
     <section class="section">
         <div class="section-header">
-            <div class="titulo py-1">Editar empleado</div>
+            <div class="titulo py-1">Editar técnico</div>
         </div>
         <div class="section-body">
             <div class="row">
@@ -149,7 +149,7 @@
                                     </div>
                                     <div class="p-1">
                                         {!! Form::open(['method' => 'GET', 'route' => 'tecnicos.index', 'style' => '']) !!}
-                                        {!! Form::submit('Cancelar', ['class' => 'btn btn-primary']) !!}
+                                        {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                         {!! Form::close() !!}
                                     </div>
                                 </div>

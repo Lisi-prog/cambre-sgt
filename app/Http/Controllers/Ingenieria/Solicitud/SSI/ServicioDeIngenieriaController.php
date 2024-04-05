@@ -131,7 +131,7 @@ class ServicioDeIngenieriaController extends Controller
     
     public function evaluar($id){
         $Ssi = Sol_servicio_de_ingenieria::find($id);
-        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $Tipos_servicios = Subtipo_servicio::orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         
         $supervisores_user = User::role('SUPERVISOR')->get();
 
