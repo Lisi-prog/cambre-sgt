@@ -17,12 +17,12 @@
 <section class="section">
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5 my-auto">
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 my-auto">
                 <h4 class="titulo page__heading my-auto">Maquinaria</h5>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaMaquinariaModal">
                     Nueva maquinaria
                 </button>

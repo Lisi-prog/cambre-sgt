@@ -45,15 +45,15 @@
 
 <section class="section">
 
-    <div class="d-flex section-header justify-content-center">
+    <div class="d-flex section-header justify-content-center" >
         <div class="d-flex flex-row col-12">
         
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
                 <h4 class="titulo page__heading my-auto">{{$tipo ?? ''}}</h5>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+            <div class="d-flex col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
                 <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
                     Nuevo   
                 </button>
