@@ -14,7 +14,7 @@
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='observaciones' id="observaciones" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='observaciones' id="observaciones" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                         {{-- <div class="form-group">
                             {!! Form::label('num_etapa', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
@@ -50,7 +50,7 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fecha',
-                                'class' => 'form-control'
+                                'class' => 'form-control reset-fecha'
                             ]) !!}
                         </div>
                     </div>
@@ -59,9 +59,9 @@
                             <label for="horas" class="control-label" style="white-space: nowrap; ">Horas hombre:</label> 
                             <span class="obligatorio">*</span> 
                             <div class= "input-group">
-                                <input class="form-control" name="horas" type="number" min="0" value="00" id="horas" required>
+                                <input class="form-control reset-horas" name="horas" type="number" min="0" value="00" id="horas" required>
                                 <span class="input-group-text">:</span>
-                                <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos" required>
+                                <input class="form-control reset-horas" name="minutos" type="number" min="0" max="59" value="00" id="minutos" required>
                             </div>
                         </div>
                     </div>

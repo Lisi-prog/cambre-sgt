@@ -199,6 +199,12 @@
             </li>
 
             <li>
+                <a class="nav-link" href="{{route('documentacion.index')}}" title="Documentacion">
+                    <i class="fas fa-scroll"style="font-size:1.2em; "></i><span>Documentacion</span>
+                </a>
+            </li>
+
+            <li>
                 <a class="nav-link" href="{{route('phpmyinfo')}}" title="PHPinfo">
                     <i class="fas fa-tools"style="font-size:1.2em; "></i><span>PHPinfo</span>
                 </a>
@@ -207,6 +213,12 @@
     </li>
     @endcan
     
+    <li class="side-menus">
+        <a class="nav-link menu-hover" href="" target="_blank" id="ayudin" hidden>
+            <i class="fas fa-question-circle"></i><span>Ayudame loco</span>
+        </a>
+    </li>
+
     <div class="d-flex mx-auto justify-content-center">
         <a class="nav-link btn w-60" href="" id="volver" style="background-color: #21628d">
             <i class="fas fa-arrow-left" style="color:rgb(255, 255, 255);font-size:1.5em;"></i><span style="color:white"> Volver </span>

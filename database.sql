@@ -418,6 +418,13 @@ CREATE TABLE `prefijo_proyecto`(
   PRIMARY KEY(`id_prefijo_proyecto`)
 );
 
+CREATE TABLE `doc_documento`(
+  `id_documento` int NOT NULL AUTO_INCREMENT,
+  `nombre_documento` varchar(100),
+  `descripcion_documento` varchar(500),
+  `ubicacion_documento` varchar(200),
+  PRIMARY KEY(`id_documento`)
+);
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)
@@ -485,7 +492,9 @@ VALUES
     ('Macroproyecto', 1),
     ('Microproyecto', 1),
     ('Modificacion', 1),
-    ('Tarea', 1);
+    ('Tarea', 1),
+    ('Servicio de ingenieria', 2),
+    ('Servicio de mantenimiento', 3);
 
 -- INSERT INTO tipo_servicio (nombre_tipo_servicio)
 -- VALUES
