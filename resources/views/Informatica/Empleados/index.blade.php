@@ -94,13 +94,16 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
-                                                        <div class="row my-2 justify-content-center">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['usuarios.edit', $empleado->getUser->id], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Usuario', ['class' => 'btn btn-warning w-100']) !!}
-                                                                {!! Form::close() !!}
+                                                        @if ($empleado->getUser->id ?? 0)
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['usuarios.edit', $empleado->getUser->id], 'style' => 'display:inline']) !!}
+                                                                    {!! Form::submit('Usuario', ['class' => 'btn btn-warning w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
+                                                        
                                                     </div>
                                                 </div>
                                             </td>
