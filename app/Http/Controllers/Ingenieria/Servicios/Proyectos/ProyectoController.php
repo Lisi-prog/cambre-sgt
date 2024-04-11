@@ -121,7 +121,7 @@ class ProyectoController extends Controller
 
         $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
 
-        return count($proyectos);
+        // return count($proyectos);
         
         //Para el filtro
             $supervisores = $this->obtenerSupervisoresFiltro();
