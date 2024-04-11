@@ -106,6 +106,7 @@ class ProyectoController extends Controller
             case 1:
                 // $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->orderBy('prioridad_servicio')->get();
                 $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
+                return count($proyectosFilter);
                 break;
 
             case 'SSI':
