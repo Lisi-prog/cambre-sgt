@@ -104,9 +104,7 @@ class ProyectoController extends Controller
 
         switch ($prefijo) {
             case 1:
-                // $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->orderBy('prioridad_servicio')->get();
-                $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
-                return count($proyectosFilter);
+                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->orderBy('prioridad_servicio')->get();
                 break;
 
             case 'SSI':
@@ -122,6 +120,8 @@ class ProyectoController extends Controller
         }
 
         $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
+
+        return count($proyectos);
         
         //Para el filtro
             $supervisores = $this->obtenerSupervisoresFiltro();
