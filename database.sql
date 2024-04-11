@@ -167,7 +167,7 @@ CREATE TABLE `responsabilidad` (
 CREATE TABLE `servicio` (
   `id_servicio` int NOT NULL AUTO_INCREMENT,
   `codigo_servicio` varchar(50) DEFAULT NULL,
-  `nombre_servicio` varchar(50) DEFAULT NULL,
+  `nombre_servicio` varchar(150) DEFAULT NULL,
   `fecha_inicio` date,
   `id_responsabilidad` int,
   `id_subtipo_servicio` int,
