@@ -160,11 +160,21 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="estados[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($estados as $estado)
-                                                            @if ($estado->id_estado < 9)
-                                                                <label><input class="input-filter" name="estados[]" type="checkbox" value="{{$estado->id_estado}}" checked> {{$estado->nombre_estado}}</label>
+
+                                                            @if (is_null($flt_est))
+                                                                @if ($estado->id_estado < 9)
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}} checked> {{$estado->nombre_estado}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
+                                                                @endif
                                                             @else
-                                                                <label><input class="input-filter" name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre_estado}}</label>
+                                                                @if (in_array($estado->id_estado, $flt_est))
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}} checked> {{$estado->nombre_estado}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
+                                                                @endif
                                                             @endif
+                                                    
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -394,6 +404,8 @@
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
         //dudoso
+
+        document.getElementById('ayudin').hidden = false;
         // let tipo_orden = window.location.pathname.substring(9, 10);
         // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
