@@ -95,7 +95,8 @@ class Vw_servicio extends Model
     public function scopeEstado($query, $estado)
     {
         if ($estado == '') {
-            return $query->where('id_estado', '<', 9);
+            // return $query->where('id_estado', '<', 9);
+            return $query;
         } else{
             return $query->WhereIn('id_estado', $estado);
         }
