@@ -429,7 +429,7 @@
                         next: 'Sig.',
                     },
                 },
-                order: [[1, 'asc']],
+                order: [[0, 'asc']],
                 "pageLength": 25
         });
     });
