@@ -129,4 +129,10 @@ class DocumentoController extends Controller
             return redirect()->route('documentacion.index')->with('error', 'Ocurrio un error al borrar el archivo.');
         }               
     }
+
+    public function rutaDelArchivo($nombreArchivo)
+    {
+        $ruta = Doc_documento::where('nombre_documento', 'like', '%'.$nombreArchivo.'%')->first()->ubicacion_documento;
+        return $ruta;
+    }
 }
