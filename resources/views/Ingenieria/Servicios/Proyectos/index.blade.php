@@ -83,16 +83,26 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                             <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($proyectosFilter as $proyecto)
-                                                            @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
+                                                            @if (is_null($flt_serv))
+                                                                @if ($proyecto->id_estado < 9)
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                @endif
+                                                            @else
+                                                                @if (in_array($proyecto->id_servicio, $flt_serv))
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                @endif
+                                                            @endif
+
+                                                            {{-- @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
                                                                 <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
                                                             @else
                                                                 <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
-                                                            @endif
-                                                            {{-- <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label> --}}
+                                                            @endif --}}
                                                         @endforeach
-                                                        {{-- @foreach ($codigos_servicio as $codigo_servicio)
-                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
-                                                        @endforeach --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -139,7 +149,6 @@
                                                             @else
                                                                 <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label> 
                                                             @endif
-                                                            {{-- <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label> --}}
                                                         @endforeach
                                                         {{-- @foreach ($responsables as $responsable)
                                                             <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
@@ -399,7 +408,33 @@
 
 <script>
     let x = '';
-    $(document).ready( function () {
+
+    $(document).ready(function () {
+        var url = '{{url('/')}}';
+        document.getElementById('volver').href = url;
+        document.getElementById('ayudin').hidden = false;
+
+        $('#example').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": [1,'asc'],
+                "pageLength": 25
+        });
+    });
+
+    /*$(document).ready( function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
@@ -493,7 +528,7 @@
         table.draw();
     });
 
-    } );
+    } ); */
 </script>
 
 <script>
