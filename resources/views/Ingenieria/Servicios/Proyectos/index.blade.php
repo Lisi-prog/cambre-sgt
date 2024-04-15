@@ -209,6 +209,12 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <!-- Centramos la paginacion a la derecha -->
+                            @if (count($proyectos) != 0)
+                                <div class="pagination justify-content-end">
+                                    {!! $proyectos->links() !!}
+                                </div>
+                            @endif
                         <div class="table-responsive">
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
