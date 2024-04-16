@@ -123,7 +123,7 @@ class ProyectoController extends Controller
                 break;
         }
 
-        return $proyectos = Vw_servicio::whereIn('id_servicio', $id_serv)->servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
+        $proyectos = Vw_servicio::whereIn('id_servicio', $id_serv)->servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite']);
         
         // try {
         //     if (in_array(9, $request->input('estados')) || in_array(10, $request->input('estados')) ) {
