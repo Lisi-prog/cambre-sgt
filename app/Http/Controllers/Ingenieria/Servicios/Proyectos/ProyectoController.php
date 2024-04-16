@@ -105,7 +105,7 @@ class ProyectoController extends Controller
         switch ($prefijo) {
             case 1:
                 $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
-                $servicios = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->get(['id_servicio']);
+                $servicios = Servicio::orderBy('prioridad_servicio')->get(['id_servicio']);
                 foreach ($servicios as $servicio) {
                     $id_serv[] = $servicio->id_servicio;
                 }
