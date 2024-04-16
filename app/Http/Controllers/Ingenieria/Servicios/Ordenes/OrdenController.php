@@ -862,7 +862,7 @@ class OrdenController extends Controller
                 //ORDEN DE TRABAJO
                 foreach ($array_ordenes as $orden) {
                     try {
-                        if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->get()) == 1) {
+                        if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->paginate(25)) == 1) {
                             array_push($ordenes, $orden);
                         }
                     } catch (\Throwable $th) {
