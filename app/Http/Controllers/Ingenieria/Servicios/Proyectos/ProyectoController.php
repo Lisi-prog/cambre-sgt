@@ -105,6 +105,10 @@ class ProyectoController extends Controller
         switch ($prefijo) {
             case 1:
                 $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
+                $servicios = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->get(['id_servicio']);
+                foreach ($servicios as $servicio) {
+                    $id_serv[] = $servicio->id_servicio;
+                }
                 break;
 
             case 'SSI':
@@ -119,7 +123,7 @@ class ProyectoController extends Controller
                 break;
         }
 
-        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->paginate(25);
+        $proyectos = Vw_servicio::whereIn('id_servicio', $id_serv)->servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->paginate(25);
         
         // try {
         //     if (in_array(9, $request->input('estados')) || in_array(10, $request->input('estados')) ) {
