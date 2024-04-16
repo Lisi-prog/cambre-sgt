@@ -238,8 +238,7 @@
                                             $idCount = 0;
                                         @endphp
                                         @foreach ($proyectos as $proyecto)
-                                            <tr>
-                                                {{-- <td class='text-center' style="vertical-align: middle;">{{ $proyecto->getEstado->nombre_estado}}</td> --}}
+                                            {{-- <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
     
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
@@ -257,7 +256,6 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                {{-- <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadas()}}</td> --}}
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
     
@@ -265,13 +263,6 @@
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
                                                 <td>
-                                                    {{-- <div class="row" hidden>
-                                                        <div class="col-12">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        </div>
-                                                    </div> --}}
                                                     <div class="row justify-content-center">
                                                         <div class="row justify-content-center" >
                                                             <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
@@ -300,7 +291,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                             @php
                                                 $idCount += 1;
                                             @endphp
