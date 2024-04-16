@@ -134,11 +134,22 @@ class Vw_servicio extends Model
         $totalOrdenes = 0;
         $totalOrdenesFinalizados = 0;
 
-        foreach ($etapas as $etapa) {
-            $totalOrdenes += $etapa->getTotalOrdenes();
-            $totalOrdenesFinalizados += $etapa->getOrdenesFinalizadas();
+        $progreso = (object) array(
+            'barra' => 0,
+            'porcentaje' => 0
+        );
+
+        try {
+            foreach ($etapas as $etapa) {
+                $totalOrdenes += $etapa->getTotalOrdenes();
+                $totalOrdenesFinalizados += $etapa->getOrdenesFinalizadas();
+            }
+            $progreso->porcentaje = ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
+            $progreso->barra = $totalOrdenesFinalizados.'/'.$totalOrdenes;
+        } catch (\Throwable $th) {
+            $progreso->porcentaje = 0;
         }
-        return $totalOrdenesFinalizados.'/'.$totalOrdenes;
+        return $progreso;
     }
 
     public function getOrdenesRealizadasPorcentaje()
