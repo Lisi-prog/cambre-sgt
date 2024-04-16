@@ -249,21 +249,51 @@
                                                 
                                                 <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
                                                 
-                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                {{-- <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
                                                         <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                                             <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span>
                                                         </div>
                                                     </div>
+                                                </td> --}}
+
+                                                <td>--</td>
+                                                
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
+    
+                                                <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
+                                                
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
+
+                                                <td>
+                                                    <div class="row justify-content-center">
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
+                                                                Opciones <i class="fas fa-chevron-down m-auto"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
+                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
+                                                                        Prioridad  
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            @endcan
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
-                                                
-                                                <td></td>
-                                                
-                                                <td></td>
-                                                
-                                                <td></td>
-                                                
-                                                <td>-</td>
                                             </tr>
                                             {{-- <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
