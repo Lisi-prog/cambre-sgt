@@ -238,6 +238,7 @@
                                             $idCount = 0;
                                         @endphp
                                         @foreach ($proyectos as $proyecto)
+                                        {{$proyecto}}
                                             {{-- <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
     
