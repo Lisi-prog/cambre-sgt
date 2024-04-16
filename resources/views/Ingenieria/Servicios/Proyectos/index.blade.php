@@ -257,7 +257,7 @@
                                                     </div>
                                                 </td> --}}
 
-                                                <td>--</td>
+                                                <td class='text-center' style="vertical-align: middle;">-</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
     
