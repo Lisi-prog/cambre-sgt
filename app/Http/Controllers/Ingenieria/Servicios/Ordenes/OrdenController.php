@@ -844,7 +844,7 @@ class OrdenController extends Controller
                         
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
             //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-            $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();
+            $array_ordenes = Orden::orderBy('id_orden', 'asc')->paginate(25);
         }else{
             //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
             $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
@@ -862,7 +862,7 @@ class OrdenController extends Controller
                 //ORDEN DE TRABAJO
                 foreach ($array_ordenes as $orden) {
                     try {
-                        if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->paginate(25)) == 1) {
+                        if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->get()) == 1) {
                             array_push($ordenes, $orden);
                         }
                     } catch (\Throwable $th) {
