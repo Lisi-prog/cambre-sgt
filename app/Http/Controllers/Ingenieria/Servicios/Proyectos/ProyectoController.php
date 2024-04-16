@@ -91,7 +91,7 @@ class ProyectoController extends Controller
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo', 'prefijos', 'activos'));
     }
 
-    public function indexPorPrefijo(Request $request, $prefijo, $tipo){
+    public function indexPorPrefijo(Request $request, $opcion){
         // return $request->input('tipos');
         // return  Vw_servicio::servicio($request->input('cod_serv'))->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
@@ -102,16 +102,23 @@ class ProyectoController extends Controller
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
 
-        switch ($prefijo) {
-            case 1:
-                $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
+        switch ($opcion){
+            case 1: //Proyectos
+                $pre[] = ['PROY', 'TMC', 'SSI'];
+                $prefijo = 'PROY';
+                $tipo = 'Proyectos';
+                $proyectosFilter = Servicio::orderBy('prioridad_servicio')->get(['codigo_servicio']);
+                $servicios = Servicio::where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->get(['id_servicio']);
+                foreach ($servicios as $servicio) {
+                    $id_serv[] = $servicio->id_servicio;
+                }
                 break;
 
-            case 'SSI':
+            case 2: //Servicios de ingenieria
                 $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
                 break;
 
-            case 'PROY':
+            case 3: //Mejora continua o TMC
                 $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->orderBy('prioridad_servicio')->get();
                 break;
             default:
@@ -119,7 +126,7 @@ class ProyectoController extends Controller
                 break;
         }
 
-        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->paginate(25);
+        $proyectos = Vw_servicio::whereIn('id_servicio', $id_serv)->servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->paginate(25);
         
         // try {
         //     if (in_array(9, $request->input('estados')) || in_array(10, $request->input('estados')) ) {

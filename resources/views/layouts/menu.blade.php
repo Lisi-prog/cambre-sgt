@@ -65,25 +65,25 @@
                 
 
                 <li>
-                    <a class="nav-link" href="{{route('proyecto.indexprefijo', ['PROY', 'Proyectos'])}}" title="Proyectos">
+                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 1)}}" title="Proyectos">
                         <i class="fas fa-sitemap" style="font-size:1.2em;"></i><span>Proyectos</span>
                     </a>
                 </li>
 
                 <li>
-                    <a class="nav-link" href="{{route('proyecto.indexprefijo', ['SSI', 'Servicio de ingenieria'])}}" title="Servicio de ingenieria">
+                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 2)}}" title="Servicio de ingenieria">
                         <i class="fas fa-tape" style="font-size:1.2em;"></i><span>SSI</span>
                     </a>
                 </li>
 
                 <li>
-                    <a class="nav-link" href="{{route('proyecto.indexprefijo', ['TMC', 'Mejora continua'])}}" title="Mejora continua">
+                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Mejora continua">
                         <i class="fas fa-star" style="font-size:1.2em;"></i><span>TMC</span>
                     </a>
                 </li>
                 
                 <li>
-                    <a class="nav-link" href="{{route('proyecto.indexprefijo', [1, 'Servicios'])}}" title="Servicios">
+                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 0)}}" title="Servicios">
                         <i class="fas fa-file-alt" style="font-size:1.2em;"></i><span>Mostrar todo</span>
                     </a>
                 </li>
