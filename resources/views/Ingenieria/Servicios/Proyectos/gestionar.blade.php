@@ -510,6 +510,7 @@
                         },
                         "aaSorting": []
                 });
+                $('#tablaEtapas').excelTableFilter();
             });
         </script>
     </section>

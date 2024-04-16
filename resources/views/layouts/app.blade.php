@@ -27,6 +27,7 @@
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> --}}
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.css')}}" />
     @yield('css')
+    <link rel="stylesheet" href="{{asset('assets/css/excel-bootstrap-table-filter-style.css')}}"/>
 </head>
 
 <body id="body" class="sidebar-mini">
@@ -72,6 +73,7 @@
 <script src="{{ asset('assets/js/jquery.nicescroll.js') }}"></script>
 <script src="{{ asset('assets/js/prevent_multiple_submits.js') }}"></script>
 <script src="{{ asset('js/change-scripts.js') }}"></script>
+<script src="{{asset('assets/js/excel-bootstrap-table-filter-bundle.min.js')}}"></script>
 
 <!-- Template JS File -->
 <script src="{{ asset('web/js/stisla.js') }}"></script>
