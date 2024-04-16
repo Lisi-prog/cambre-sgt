@@ -117,6 +117,9 @@ class ProyectoController extends Controller
 
             case 'PROY':
                 $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->orderBy('prioridad_servicio')->get();
+                foreach ($proyectosFilter as $servicio) {
+                    $id_serv[] = $servicio->id_servicio;
+                }
                 break;
             default:
                 $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->servicio($request->input('cod_serv'))->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
