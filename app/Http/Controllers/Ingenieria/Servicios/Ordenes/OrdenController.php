@@ -928,7 +928,10 @@ class OrdenController extends Controller
             $servicios = [];
         }
 
-        return $ordenes;
+        foreach ($ordenes as $orden) {
+            $id_de_ordenes[] = $orden->id_orden;
+        }
+        $ordenes = Orden::whereIn('id_orden', $id_de_ordenes)->paginate(25);
         return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
     }
 
