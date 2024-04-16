@@ -57,7 +57,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$empleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->email_empleado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->getUser->email}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$empleado->telefono_empleado}}</td>
 
