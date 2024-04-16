@@ -257,7 +257,7 @@
                                                     </div>
                                                 </td> --}}
 
-                                                <td class='text-center' style="vertical-align: middle;">-</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadasPorcentaje()}} | {{$proyecto->getOrdenesRealizadas()}}</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
     
