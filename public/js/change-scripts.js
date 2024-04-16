@@ -21,9 +21,10 @@ $(document).ready(function () {
         })
     
     $('.modal').on('hidden.bs.modal', function (e) {
-        resetInputs(this)
-        resetHoras(this)
-        resetFechas(this) //Pendiente
+        //resetInputs(this)
+        //resetHoras(this)
+        //resetFechas(this) //Pendiente
+        $('form').trigger('reset');
         $(this)
             // .find("select")
             //     .val('')

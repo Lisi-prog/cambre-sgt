@@ -104,7 +104,7 @@ class ProyectoController extends Controller
 
         switch ($prefijo) {
             case 1:
-                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->orderBy('prioridad_servicio')->get();
+                $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
                 break;
 
             case 'SSI':
@@ -119,7 +119,20 @@ class ProyectoController extends Controller
                 break;
         }
 
-        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
+        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite']);
+        
+        // try {
+        //     if (in_array(9, $request->input('estados')) || in_array(10, $request->input('estados')) ) {
+        //         $proyectos = Vw_servicio::orderBy('prioridad_servicio')->get();
+        //     } else {
+        //         $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
+        //     }
+        // } catch (\Throwable $th) {
+        //     $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
+        // }
+        
+        
+        
         
         //Para el filtro
             $supervisores = $this->obtenerSupervisoresFiltro();
@@ -130,9 +143,10 @@ class ProyectoController extends Controller
             $flt_serv = $request->input('cod_serv');
             $flt_tip = $request->input('tipos');
             $flt_lid = $request->input('lid');
+            $flt_est = $request->input('estados');
         //------------------
 
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est'));
     }
 
     public function obtenerCodigoServicio(){

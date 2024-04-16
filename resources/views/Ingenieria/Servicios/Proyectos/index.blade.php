@@ -83,16 +83,26 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                             <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($proyectosFilter as $proyecto)
-                                                            @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
+                                                            @if (is_null($flt_serv))
+                                                                @if ($proyecto->id_estado < 9)
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                @endif
+                                                            @else
+                                                                @if (in_array($proyecto->id_servicio, $flt_serv))
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                @endif
+                                                            @endif
+
+                                                            {{-- @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
                                                                 <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
                                                             @else
                                                                 <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
-                                                            @endif
-                                                            {{-- <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label> --}}
+                                                            @endif --}}
                                                         @endforeach
-                                                        {{-- @foreach ($codigos_servicio as $codigo_servicio)
-                                                            <label><input name="cod_serv[]" type="checkbox" value="{{$codigo_servicio->id_servicio}}"> {{$codigo_servicio->codigo_servicio}}</label>
-                                                        @endforeach --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -139,7 +149,6 @@
                                                             @else
                                                                 <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label> 
                                                             @endif
-                                                            {{-- <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label> --}}
                                                         @endforeach
                                                         {{-- @foreach ($responsables as $responsable)
                                                             <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
@@ -160,11 +169,21 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="estados[]" checked> (Seleccionar todo)</label>
                                                         @foreach ($estados as $estado)
-                                                            @if ($estado->id_estado < 9)
-                                                                <label><input class="input-filter" name="estados[]" type="checkbox" value="{{$estado->id_estado}}" checked> {{$estado->nombre_estado}}</label>
+
+                                                            @if (is_null($flt_est))
+                                                                @if ($estado->id_estado < 9)
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}} checked> {{$estado->nombre_estado}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
+                                                                @endif
                                                             @else
-                                                                <label><input class="input-filter" name="estados[]" type="checkbox" value="{{$estado->id_estado}}"> {{$estado->nombre_estado}}</label>
+                                                                @if (in_array($estado->id_estado, $flt_est))
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}} checked> {{$estado->nombre_estado}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
+                                                                @endif
                                                             @endif
+                                                    
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -190,6 +209,12 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <!-- Centramos la paginacion a la derecha -->
+                            {{-- @if (count($proyectos) != 0)
+                                <div class="pagination justify-content-end">
+                                    {!! $proyectos->links() !!}
+                                </div>
+                            @endif --}}
                         <div class="table-responsive">
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
@@ -214,39 +239,33 @@
                                         @endphp
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
-                                                {{-- <td class='text-center' style="vertical-align: middle;">{{ $proyecto->getEstado->nombre_estado}}</td> --}}
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
     
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
     
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
-    
+                                                
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
-    
+                                                
                                                 <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
-    
-                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                
+                                                {{-- <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
                                                         <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                                             <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span>
                                                         </div>
                                                     </div>
-                                                </td>
-                                                {{-- <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->getOrdenesRealizadas()}}</td> --}}
+                                                </td> --}}
 
+                                                <td class='text-center' style="vertical-align: middle;">-</td>
+                                                
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
     
                                                 <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
+
                                                 <td>
-                                                    {{-- <div class="row" hidden>
-                                                        <div class="col-12">
-                                                            {!! Form::open(['method' => 'GET', 'route' => ['proyectos.show', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        </div>
-                                                    </div> --}}
                                                     <div class="row justify-content-center">
                                                         <div class="row justify-content-center" >
                                                             <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
@@ -276,6 +295,60 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            {{-- <tr>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
+    
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
+    
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
+    
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
+    
+                                                <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+    
+                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                    <div class="progress position-relative" style="background-color: #b2baf8">
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
+    
+                                                <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
+                                                
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
+                                                <td>
+                                                    <div class="row justify-content-center">
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
+                                                                Opciones <i class="fas fa-chevron-down m-auto"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
+                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
+                                                                        Prioridad  
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            @endcan
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr> --}}
                                             @php
                                                 $idCount += 1;
                                             @endphp
@@ -389,11 +462,39 @@
 
 <script>
     let x = '';
-    $(document).ready( function () {
+
+    $(document).ready(function () {
+        var url = '{{url('/')}}';
+        document.getElementById('volver').href = url;
+        document.getElementById('ayudin').hidden = false;
+
+        $('#example').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                order: [[0, 'asc']],
+                "pageLength": 25
+        });
+    });
+
+    /*$(document).ready( function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
         //dudoso
+
+        document.getElementById('ayudin').hidden = false;
         // let tipo_orden = window.location.pathname.substring(9, 10);
         // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
@@ -481,7 +582,7 @@
         table.draw();
     });
 
-    } );
+    } ); */
 </script>
 
 <script>

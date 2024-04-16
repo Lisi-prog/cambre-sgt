@@ -155,9 +155,11 @@
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
-                        {{-- <div class="pagination justify-content-end">
-                                {!! $CategoriasLaborales->links() !!}
-                        </div> --}}
+                        @if (count($ordenes) != 0)
+                            <div class="pagination justify-content-end">
+                                {!! $ordenes->links() !!}
+                            </div>
+                        @endif
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
@@ -354,7 +356,24 @@
             return false;
             }
         );
-    var table = $('#example').DataTable();
+    var table = $('#example').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                order: [[0, 'asc']],
+                "pageLength": 25
+        });
   
     $('input:checkbox').on('change', function () {
         table.draw();

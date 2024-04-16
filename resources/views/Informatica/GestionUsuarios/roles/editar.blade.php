@@ -22,7 +22,7 @@
                             </div>       
                         </div>
                         <button type="submit" class="btn btn-success mr-2">Guardar</button>
-                        <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Volver</a>
+                        <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Cancelar</a>
                     {!! Form::close() !!}
                     </div>
                 </div>

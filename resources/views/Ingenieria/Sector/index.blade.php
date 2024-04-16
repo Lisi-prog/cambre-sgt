@@ -113,11 +113,28 @@
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
+        document.getElementById('ayudin').hidden = false;
+        let nombreArchivo = 'sector';
+
+        $.when($.ajax({
+            type: "post",
+            url: '/documentacion/obtener/'+nombreArchivo, 
+            data: {
+                nombreArchivo: nombreArchivo,
+            },
+            success: function (response) {
+                document.getElementById('ayudin').href = response;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        }));
+
         $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
                     infoEmpty: 'No se ha encontrado registros',
                     infoFiltered: '(Filtrado de _MAX_ registros totales)',
                     search: 'Buscar',

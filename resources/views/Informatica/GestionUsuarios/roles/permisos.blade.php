@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="col-4 d-flex">
                                         <div class="ms-auto">
-                                            <a href="{{ route('roles.index') }}"class="btn btn-primary">Volver</a>
+                                            <a href="{{ route('roles.index') }}"class="btn btn-danger">Cancelar</a>
                                         </div>
                                     </div>
                                 </div>   

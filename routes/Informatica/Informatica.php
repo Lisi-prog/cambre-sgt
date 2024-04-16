@@ -6,7 +6,7 @@ use App\Http\Controllers\Informatica\GestionUsuarios\RolController;
 use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 use App\Http\Controllers\Informatica\EmpleadoController;
 use App\Http\Controllers\Informatica\PuestoEmpleadoController;
-use App\Http\Controllers\Informatica\SideBarController;
+use App\Http\Controllers\Informatica\DocumentoController;
 //Gestion de usuario
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER-USUARIOS|VER-ROLES']], function () {
     Route::resource('roles', RolController::class);
@@ -18,9 +18,11 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER
     Route::get('/puesto_tecnico/editar-modal', [PuestoEmpleadoController::class, 'updateOrden'])->name('puesto_empleado.editar');
     Route::post('usuario/editar', [UsuarioController::class, 'editarUsuario'])->name('usuario.editar');
     Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
+    Route::post('/documentacion/obtener/{nombreArchivo}', [DocumentoController::class, 'rutaDelArchivo']);
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('tecnicos', EmpleadoController::class);
     Route::resource('puesto_tecnico', PuestoEmpleadoController::class);
+    Route::resource('documentacion', DocumentoController::class);
 });
 
 Route::get('phpmyinfo', function () {
