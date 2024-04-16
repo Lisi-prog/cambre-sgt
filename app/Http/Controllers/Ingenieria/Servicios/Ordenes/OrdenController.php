@@ -844,7 +844,7 @@ class OrdenController extends Controller
                         
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
             //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-            $array_ordenes = Orden::orderBy('id_orden', 'asc')->paginate(25);
+            $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();
         }else{
             //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
             $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
@@ -928,7 +928,7 @@ class OrdenController extends Controller
             $servicios = [];
         }
 
-        
+        return $ordenes;
         return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
     }
 
