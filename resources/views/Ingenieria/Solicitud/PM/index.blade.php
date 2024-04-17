@@ -133,7 +133,7 @@
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
         document.getElementById('ayudin').hidden = false;
-        let nombreArchivo = 'requerimiento de ingenieria';
+        let nombreArchivo = 'propuesta de mejora';
 
         $.when($.ajax({
             type: "post",
