@@ -243,15 +243,15 @@
                             <div class="table-responsive" style="height: 400px">
                                 <table id="tablaEtapas" class="table table-hover mt-2">
                                     <thead style="background-color: #2970c1">
-                                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha inicio</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Fecha fin real</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Ultima actualizacion</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Etapa</th>
+                                        <th class="text-center apply-filter" scope="col" style="color:#fff;">Estado</th>
+                                        <th class="text-center apply-filter" scope="col" style="color:#fff;">Responsable</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha inicio</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha limite</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha fin real</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Ultima actualizacion</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo estimado</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo real</th>
                                         <th class="text-center" scope="col" style="color:#fff; width:17vh">Acciones</th>                                                           
                                     </thead>
                                     <tbody id="accordion">
@@ -510,7 +510,19 @@
                         },
                         "aaSorting": []
                 });
-                $('#tablaEtapas').excelTableFilter();
+
+                //Excel filter
+                var noCheck = [
+                    'Cancelado',
+                    'Completo',
+                ];
+                var colSelect = [
+                    'Etapa'
+                ]
+                $('#tablaEtapas').excelTableFilter({
+                    no_check: noCheck,
+                    columnSelector: '.apply-filter',
+                });
             });
         </script>
     </section>
