@@ -243,7 +243,7 @@
                             <div class="table-responsive tableFixHead" style="height: 400px">
                                 <table id="tablaEtapas" class="table table-hover mt-2">
                                     <thead style="background-color: #2970c1" id="viv">
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Etapa</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;width:17vh">Etapa</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Responsable</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha inicio</th>
