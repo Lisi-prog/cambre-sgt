@@ -285,7 +285,7 @@
                 nombreArchivo: nombreArchivo,
             },
             success: function (response) {
-                document.getElementById('ayudin').href = response;
+                document.getElementById('ayudin').href = '{{url('/')}}'+response;
             },
             error: function (error) {
                 console.log(error);
