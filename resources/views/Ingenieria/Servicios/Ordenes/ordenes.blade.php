@@ -275,6 +275,22 @@
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
         //dudoso
+        document.getElementById('ayudin').hidden = false;
+        let nombreArchivo = 'orden';
+
+        $.when($.ajax({
+            type: "post",
+            url: '/documentacion/obtener/'+nombreArchivo, 
+            data: {
+                nombreArchivo: nombreArchivo,
+            },
+            success: function (response) {
+                document.getElementById('ayudin').href = "{{url('/')}}"+'/'+response;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        }));
         let tipo_orden = window.location.pathname.substring(9, 10);
         modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);

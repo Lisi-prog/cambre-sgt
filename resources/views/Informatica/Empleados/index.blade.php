@@ -57,7 +57,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$empleado->nombre_empleado}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->getUser->email}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$empleado->getUser->email ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$empleado->telefono_empleado}}</td>
 
@@ -131,6 +131,22 @@
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
+        document.getElementById('ayudin').hidden = false;
+        let nombreArchivo = 'tecnico';
+
+        $.when($.ajax({
+            type: "post",
+            url: '/documentacion/obtener/'+nombreArchivo, 
+            data: {
+                nombreArchivo: nombreArchivo,
+            },
+            success: function (response) {
+                document.getElementById('ayudin').href = response;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        }));
         $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -146,7 +162,8 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: [[0, 'asc']],
+                "pageLength": 25
         });
     });
 </script>
