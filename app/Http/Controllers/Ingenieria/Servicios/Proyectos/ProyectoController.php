@@ -532,7 +532,10 @@ class ProyectoController extends Controller
         $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin'));
+
+        $flt_estados = Estado::orderBy('id_estado')->get();
+        $flt_supervisores = $this->obtenerSupervisoresNoPluck();
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin', 'flt_estados', 'flt_supervisores'));
     }
 
     public function costos($id)
@@ -644,6 +647,22 @@ class ProyectoController extends Controller
             }
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+    }
+
+    public function obtenerSupervisoresNoPluck(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
     }
 
     public function obtenerSupervisoresAdmin(){

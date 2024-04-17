@@ -230,7 +230,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
-                                    <h5 class="text-center my-auto" onclick="mostrarFiltro()" style="cursor: pointer;">Etapas <i class="fas fa-caret-down"></i></h5>
+                                    <h5 class="text-center my-auto">Etapas</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
@@ -239,20 +239,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-head" id="flt_etapa" hidden>
+                        <div class="card-head">
                             <div class="row" id="demo" >
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 170px;">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
                                                     <label>Etapa:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                    @foreach ($proyecto->getEtapas as $etapa)
-                                                        <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$etapa->descripcion_etapa}}" checked> {{$etapa->descripcion_etapa}}</label>
-                                                    @endforeach
+                                                    {{-- @foreach ($servicios as $servicio)
+                                                        <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
+                                                    @endforeach --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -262,19 +262,19 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 170px;">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
                                                     <label>Estados:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
-                                                    @foreach ($flt_estados as $estado)
+                                                    {{-- @foreach ($estados as $estado)
                                                         @if ($estado->id_estado < 9)
-                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre_estado}}" checked> {{$estado->nombre_estado}}</label>
+                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
                                                         @else
-                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
+                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
                                                         @endif
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -284,15 +284,15 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 170px;">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
                                                     <label>Responsable:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                    @foreach ($flt_supervisores as $supervisor)
-                                                        <label><input name="res" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
-                                                    @endforeach
+                                                    {{-- @foreach ($responsables as $responsable)
+                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
+                                                    @endforeach --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -308,7 +308,7 @@
                             {{-- <div class="table-responsive tableFixHead" style="height: 400px"> --}}
                                 <table id="tablaEtapas" class="table table-hover mt-2">
                                     <thead style="background-color: #2970c1" id="viv">
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;width:17vh">Etapa</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Etapa</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Responsable</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha inicio</th>
@@ -623,7 +623,7 @@
                         return true;
                     }
                     
-                    if (offices.indexOf(searchData[2]) !== -1) {
+                    if (offices.indexOf(searchData[7]) !== -1) {
                         return true;
                     }
                     
@@ -643,7 +643,7 @@
                         return true;
                     }
                     
-                    if (offices.indexOf(searchData[1]) !== -1) {
+                    if (offices.indexOf(searchData[5]) !== -1) {
                         return true;
                     }
                     
@@ -664,7 +664,7 @@
                     }
         
         
-                    if (offices.indexOf(searchData[0]) !== -1) {
+                    if (offices.indexOf(searchData[2]) !== -1) {
                         return true;
                     }
                     
@@ -688,7 +688,8 @@
                         },
                         order: [[0, 'asc']],
                         "pageLength": 10,
-                        fixedHeader: true
+                        fixedHeader: true,
+                        searching: false
                 });
           
             $('input:checkbox').on('change', function () {
@@ -696,46 +697,6 @@
             });
         
             } );
-        </script>
-        <script>
-            document.querySelectorAll('input[name=filter]').forEach(item => {
-                item.addEventListener('change', event => {
-                    if (item.checked) {
-                        //console.log("Checkbox is checked..");
-                        selects($(item).val());
-                    } else {
-                        //console.log("Checkbox is not checked..");
-                        deSelect($(item).val());
-                    }
-                    // validarFiltro();
-                })
-            });
-
-            function selects(name){  
-                var ele=document.getElementsByName(name);  
-                for(var i=0; i<ele.length; i++){  
-                    if(ele[i].type=='checkbox')  
-                        ele[i].checked=true;  
-                }  
-            }  
-
-            function deSelect(name){  
-                var ele=document.getElementsByName(name);  
-                for(var i=0; i<ele.length; i++){  
-                    if(ele[i].type=='checkbox')  
-                        ele[i].checked=false;  
-                        
-                }  
-            } 
-
-            function mostrarFiltro(){
-                let cuadro_filtro = document.getElementById("flt_etapa");
-                if ($('#flt_etapa').is(":hidden")) {
-                    cuadro_filtro.hidden = false;
-                }else{
-                    cuadro_filtro.hidden = true;
-                }
-            }
         </script>
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
