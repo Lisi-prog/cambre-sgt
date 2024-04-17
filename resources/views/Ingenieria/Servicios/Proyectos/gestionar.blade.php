@@ -20,7 +20,7 @@
         border: 1px solid #ccc;
       }*/
       #viv th {
-        background: #ee9b27;
+        background: #2970c1;
       }
       .table {
         zoom: 100%;
@@ -240,9 +240,9 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive" style="height: 400px">
+                            <div class="table-responsive tableFixHead" style="height: 400px">
                                 <table id="tablaEtapas" class="table table-hover mt-2">
-                                    <thead style="background-color: #2970c1">
+                                    <thead style="background-color: #2970c1" id="viv">
                                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
