@@ -512,19 +512,20 @@
                 });
 
                 //Excel filter
-                var noCheck = [
-                    'Cancelado',
-                    'Completo',
-                ];
-                var colSelect = [
-                    'Etapa'
-                ]
-                $('#tablaEtapas').excelTableFilter({
-                    no_check: noCheck,
-                    columnSelector: '.apply-filter',
-                });
+                // var noCheck = [
+                //     'Cancelado',
+                //     'Completo',
+                // ];
+                // var colSelect = [
+                //     'Etapa'
+                // ]
+                // $('#tablaEtapas').excelTableFilter({
+                //     no_check: noCheck,
+                //     columnSelector: '.apply-filter',
+                // });
             });
         </script>
+        <script src="{{ asset('js/change-td-color.js') }}"></script>
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.editar-etapa')
