@@ -230,7 +230,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
-                                    <h5 class="text-center my-auto" onclick="mostrarFiltro()" style="cursor: pointer;">Etapas <i class="fas fa-caret-down"></i></h5>
+                                    <h5 class="text-center my-auto" onclick="mostrarFiltro()" style="cursor: pointer;">Etapas <i class="fas fa-filter"></i></h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
