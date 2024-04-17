@@ -162,7 +162,8 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: [[0, 'asc']],
+                "pageLength": 25
         });
     });
 </script>
