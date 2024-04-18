@@ -42,11 +42,11 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @php 
@@ -151,14 +151,14 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Progreso Mecanizado</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:10vw">Progreso Mecanizado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                            
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-manufactura">
                         @php 
@@ -281,11 +281,11 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:8vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-mecanizado">
                         @php
@@ -396,7 +396,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:17vh;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;width:17vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-mantenimiento">
                         {{-- @foreach ($proyecto->getEtapas as $etapa)

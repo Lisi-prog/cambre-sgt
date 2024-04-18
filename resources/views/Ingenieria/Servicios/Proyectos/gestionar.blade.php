@@ -317,7 +317,7 @@
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo estimado</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo real</th>
-                                        <th class="text-center" scope="col" style="color:#fff; width:17vh">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff; width:6vw">Acciones</th>                                                           
                                     </thead>
                                     <tbody id="accordion">
                                         @php 
