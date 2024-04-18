@@ -227,12 +227,12 @@
                         <div class="card-head">
                             <br>
                             <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center my-auto">
                                     <h5 class="text-center my-auto" onclick="mostrarFiltro()" style="cursor: pointer;">Etapas <i class="fas fa-filter"></i></h5>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
                                         Nueva etapa
                                     </button>
@@ -313,7 +313,7 @@
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Responsable</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha inicio</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha limite</th>
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha fin real</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha finalizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo estimado</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo real</th>
@@ -337,7 +337,7 @@
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaLimite()}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '____-__-__'}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('Y-m-d') : '____-__-__'}}</td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format($formato_fecha_hora)}}</td>
 

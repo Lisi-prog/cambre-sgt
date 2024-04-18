@@ -8,44 +8,26 @@ window.addEventListener("change", changeTdColor);
 
 function changeTdColor() {
     const values = document.querySelectorAll("tr");
-    //console.log(valuesTh[0])
     var text_var = "Estado"
     var elem = $('th').filter(function() {
         return $(this).text().trim() == text_var;
         });
     var row_index_first = elem.index();
-    // console.log(row_index_first);
     var indexFilaEncabezados = [];
     var indexColumnaEstados = []
     for (let x = 0; x < values.length; x++) {
-        //console.log(values[x].cells)
         for (let y = 0; y < values[x].cells.length; y++) {
             if(values[x].cells[y].innerText == text_var){
                 indexFilaEncabezados.push(x);
             }
         }
     }
-    
-    indexFilaEncabezados.push(values.length);
-    //console.log(values)
-    indexFilaEncabezados.forEach(element => {
-        try{
-            for (let x = 0; x < values[element].cells.length; x++) {
-                if(values[element].cells[x].innerText == text_var){
-                    indexColumnaEstados.push(x)
-                }
-            }
-        }catch{
 
-        }
-    });
-    
-    //console.log(indexFilaEncabezados);
-    //console.log(indexColumnaEstados);
+    indexFilaEncabezados.push(values.length);
+    indexColumnaEstados = dameIndexColumnas(values,indexFilaEncabezados, text_var);
+
     for (let y = 0; y < indexColumnaEstados.length; y++) {
-        //console.log(indexFilaEncabezados[y+1])
         for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) {
-            //console.log(values[x].cells[indexColumnaEstados[y]].innerText)
             values[x].children[indexColumnaEstados[y]].style.color = "#fff";
             if (values[x].children[indexColumnaEstados[y]].innerHTML == "Continua") { // check if td has desired value
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#746cd6"; // if matches, change color
@@ -136,23 +118,23 @@ function calcularDiferenciaFechas(){
     let mes = fecha_hoy.getMonth() + 1;
     let str_fechahoy = fecha_hoy.getFullYear()+'-'+mes+'-'+fecha_hoy.getDate();
     str_fechahoy = str_fechahoy.toString();
-
-    var fechaInicio = new Date(str_fechahoy).getTime();
-
     const values = document.querySelectorAll("tr");
+    var fechaHoy = new Date(str_fechahoy).getTime();
+    var fechaFinalizacion;
+    var estado;
+    var text_fecha_fin = "Fecha finalizacion";
+    var indexColumnaFechaFinalizacion = [];
+    
     
     var text_var = "Fecha limite"
     var elem = $('th').filter(function() {
         return $(this).text().trim() == text_var;
         });
     var row_index_first = elem.index();
-    //console.log(valuesTh[0])
     var row_index_first = elem.index();
-    // console.log(row_index_first);
     var indexFilaEncabezados = [];
-    var indexColumnaEstados = []
+    var indexColumnaFechaLimite = [];
     for (let x = 0; x < values.length; x++) {
-        //console.log(values[x].cells)
         for (let y = 0; y < values[x].cells.length; y++) {
             if(values[x].cells[y].innerText == text_var){
                 indexFilaEncabezados.push(x);
@@ -161,40 +143,37 @@ function calcularDiferenciaFechas(){
     }
     
     indexFilaEncabezados.push(values.length);
-    //console.log(values)
-    indexFilaEncabezados.forEach(element => {
-        try{
-            for (let x = 0; x < values[element].cells.length; x++) {
-                if(values[element].cells[x].innerText == text_var){
-                    indexColumnaEstados.push(x)
-                }
-            }
-        }catch{
+    indexColumnaFechaLimite = dameIndexColumnas(values, indexFilaEncabezados, text_var);
+    indexColumnaFechaFinalizacion = dameIndexColumnas(values, indexFilaEncabezados, text_fecha_fin);
+    indexColumnaEstados = dameIndexColumnas(values, indexFilaEncabezados, "Estado");
 
-        }
-    });
-    console.log(indexFilaEncabezados);
-    console.log(indexColumnaEstados);
-    //Colores de los distintos estado
-    for (let y = 0; y < indexColumnaEstados.length; y++) {
-        console.log(indexFilaEncabezados[y+1])
+    for (let y = 0; y < indexColumnaFechaLimite.length; y++) {
         for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) { // iterate all thorugh td
-            values[x].children[indexColumnaEstados[y]].style.color = "#fff";
-            // fechaFin    = new Date(castDate(values[i].children[row_index_first].innerHTML)).getTime();
-            fechaFin = new Date(values[x].children[indexColumnaEstados[y]].innerHTML).getTime();
-            diff = fechaFin - fechaInicio;
+            values[x].children[indexColumnaFechaLimite[y]].style.color = "#fff";
+            fechaLimite = new Date(values[x].children[indexColumnaFechaLimite[y]].innerHTML).getTime();
+            try {
+                fechaFinalizacion = new Date(values[x].children[indexColumnaFechaFinalizacion[y]].innerHTML).getTime();                
+            } catch (error) {
+
+            }            
+            estado = values[x].children[indexColumnaEstados[y]].innerHTML
+            diff = fechaLimite - fechaHoy;
             diasDife = diff/(1000*60*60*24);
+            if(fechaFinalizacion || estado =='Completo'){
+                values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#bebebe";
+               
+            }else{
+                if (diasDife >= 10) {
+                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#109E09";
+                }
 
-            if (diasDife >= 10) {
-                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#109E09";
-            }
+                if (diasDife < 10) {
+                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E46B11";
+                }
 
-            if (diasDife < 10) {
-                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#E46B11";
-            }
-
-            if (diasDife <= 5) {
-                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#E41111";
+                if (diasDife <= 5) {
+                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E41111";
+                }
             }
         }
     }
@@ -209,3 +188,21 @@ function castDate(str_fecha){
         return anio+'-'+mes+'-'+dia;
 }
 
+function dameIndexColumnas(trValues,indexFilaEncabezados, text_encabezado){
+    var indexColumnas = []
+    indexFilaEncabezados.forEach(element => {
+        try{
+            for (let x = 0; x < trValues[element].cells.length; x++) {
+                if(trValues[element].cells[x].innerText == text_encabezado){
+                    indexColumnas.push(x)
+                }
+            }
+        }catch{
+
+        }
+    });
+    //console.log(text_encabezado)
+    //console.log(indexFilaEncabezados)
+    //console.log(indexColumnas)
+    return indexColumnas;
+}

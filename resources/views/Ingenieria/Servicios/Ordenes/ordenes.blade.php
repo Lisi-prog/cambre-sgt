@@ -33,7 +33,7 @@
     }
 
     .table {
-        zoom: 100%;
+        zoom: 90%;
     }
     table.dataTable tbody td {
         padding: 0px 10px;

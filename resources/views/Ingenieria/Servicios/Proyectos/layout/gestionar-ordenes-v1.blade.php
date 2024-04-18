@@ -19,13 +19,13 @@ table.dataTable tbody td {
         <div class="card-head">
             <br>
             <div class="d-flex justify-content-between">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center  my-auto">
                    {{-- <h5 id="label-orden-trabajo" class="text-center  my-auto">Orden de trabajo <i class="fas fa-caret-down"></i></h5> --}}
                    <h5 class="text-center  my-auto">Orden de trabajo</h5>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                         Nueva orden
                     </button>
@@ -131,12 +131,12 @@ table.dataTable tbody td {
         <div class="card-head">
             <br>
             <div class="d-flex justify-content-between">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center  my-auto">
                     <h5 class="text-center  my-auto">Orden de manufactura</h5>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
                     {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                         Nueva orden trabajo
                     </button> --}}
@@ -258,12 +258,12 @@ table.dataTable tbody td {
         <div class="card-head">
             <br>
             <div class="d-flex justify-content-between">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center  my-auto">
                     <h5 class="text-center  my-auto">Orden de mecanizado</h5>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
                     {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                         Nueva orden trabajo
                     </button> --}}
@@ -372,12 +372,12 @@ table.dataTable tbody td {
         <div class="card-head">
             <br>
             <div class="d-flex justify-content-between">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center  my-auto">
                     <h5 class="text-center  my-auto">Orden de mantenimiento</h5>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
                     {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                         Nueva orden trabajo
                     </button> --}}
