@@ -932,7 +932,7 @@ class OrdenController extends Controller
             $id_de_ordenes[] = $orden->id_orden;
         }
         try {
-            $ordenes = Orden::whereIn('id_orden', $id_de_ordenes)->paginate(25);
+            $ordenes = Orden::whereIn('id_orden', $id_de_ordenes)->get();
         } catch (\Throwable $th) {
             //throw $th;
         }

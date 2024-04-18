@@ -155,11 +155,11 @@
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
-                        @if (count($ordenes) != 0)
+                        {{-- @if (count($ordenes) != 0)
                             <div class="pagination justify-content-end">
                                 {!! $ordenes->links() !!}
                             </div>
-                        @endif
+                        @endif --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
