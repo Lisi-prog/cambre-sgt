@@ -27,6 +27,8 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Tipo_servicio;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Estado_manufactura;
+use App\Models\Cambre\Estado_mecanizado;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
@@ -535,7 +537,31 @@ class ProyectoController extends Controller
 
         $flt_estados = Estado::orderBy('id_estado')->get();
         $flt_supervisores = $this->obtenerSupervisoresNoPluck();
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin', 'flt_estados', 'flt_supervisores'));
+        $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
+        $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
+        $flt_estados_mec = Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
+ 
+        foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa) {
+            foreach ($etapa->getOrden as $orden) {
+                if ($orden->getOrdenDe->getTipoOrden() == 1) {
+                    $eta_ord_trabajo[] = $orden->getEtapa->descripcion_etapa;
+                }
+
+                if ($orden->getOrdenDe->getTipoOrden() == 2) {
+                    $eta_ord_manufactura[] = $orden->getEtapa->descripcion_etapa;
+                }
+
+                if ($orden->getOrdenDe->getTipoOrden() == 3) {
+                    $eta_ord_mecanizado[] = $orden->getEtapa->descripcion_etapa;
+                }
+            }
+        }
+
+        $flt_eta_ord_tra = array_unique($eta_ord_trabajo);
+        $flt_eta_ord_man = array_unique($eta_ord_manufactura);
+        $flt_eta_ord_mec = array_unique($eta_ord_mecanizado);
+
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec'));
     }
 
     public function costos($id)

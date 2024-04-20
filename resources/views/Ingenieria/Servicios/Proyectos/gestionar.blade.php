@@ -2,27 +2,42 @@
 @section('titulo', 'Gestionar')
 @section('content')
 <style>
-     .tableFixHead {
+    .tableFixHead {
         overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-        height: 300px; /* gives an initial height of 200px to the table */
-      }
-      .tableFixHead thead th {
+        min-height: 200px; /* gives an initial height of 200px to the table */
+        max-height: 400px;
+    }
+    .tableFixHead thead th {
         position: sticky; /* make the table heads sticky */
         top: 0px; /* table head will be placed from the top of the table and sticks to it */
-      }
-      #viv table {
+        z-index:2;
+    }
+    #viv table {
         border-collapse: collapse; /* make the table borders collapse to each other */
         width: 100%;
-      }
-      /* #viv th,
-      #viv td {
-        padding: 8px 16px;
-        border: 1px solid #ccc;
-      }*/
-      #viv th {
+    }
+    /* #viv th,
+    #viv td {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    }*/
+    #viv th {
         background: #2970c1;
-      }
-      .table {
+    }
+
+    #cot th {
+        background: #558540;
+    }
+
+    #comac th {
+        background: #982b37;
+    }
+
+    #comec th {
+        background: #d37c00;
+    }
+
+    .table {
         zoom: 100%;
     }
     table tbody td {
@@ -230,7 +245,7 @@
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 </div>
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center my-auto">
-                                    <h5 class="text-center my-auto" onclick="mostrarFiltro()" style="cursor: pointer;">Etapas <i class="fas fa-filter"></i></h5>
+                                    <h5 class="text-center my-auto" onclick="mostrarFiltro('flt_etapa')" style="cursor: pointer;">Etapas <i class="fas fa-filter"></i></h5>
                                 </div>
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
                                     <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
@@ -249,9 +264,9 @@
                                                     <label>Etapa:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                    @foreach ($proyecto->getEtapas as $etapa)
-                                                        <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$etapa->descripcion_etapa}}" checked> {{$etapa->descripcion_etapa}}</label>
+                                                    <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
+                                                    @foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa)
+                                                        <label><input class="eta-ckb" name="cod_serv" type="checkbox" value="{{$etapa->descripcion_etapa}}" checked> {{$etapa->descripcion_etapa}}</label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -267,12 +282,12 @@
                                                     <label>Estados:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
+                                                    <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                     @foreach ($flt_estados as $estado)
                                                         @if ($estado->id_estado < 9)
-                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre_estado}}" checked> {{$estado->nombre_estado}}</label>
+                                                            <label><input class="eta-ckb" name="est" type="checkbox" value="{{$estado->nombre_estado}}" checked> {{$estado->nombre_estado}}</label>
                                                         @else
-                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
+                                                            <label><input class="eta-ckb" name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
                                                         @endif
                                                     @endforeach
                                                 </div>
@@ -289,9 +304,9 @@
                                                     <label>Responsable:</label>
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                    <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
                                                     @foreach ($flt_supervisores as $supervisor)
-                                                        <label><input name="res" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                                        <label><input class="eta-ckb" name="res" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -305,7 +320,7 @@
                             </div>   
                         </div>
                         <div class="card-body">
-                            {{-- <div class="table-responsive tableFixHead" style="height: 400px"> --}}
+                            <div class="table-responsive tableFixHead">
                                 <table id="tablaEtapas" class="table table-hover mt-2">
                                     <thead style="background-color: #2970c1" id="viv">
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;width:17vh">Etapa</th>
@@ -323,8 +338,13 @@
                                         @php 
                                             $idCount = 0;
                                         @endphp
-                                        @foreach ($proyecto->getEtapas as $etapa)
-                                            <tr>    
+                                        @foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa)
+                                            
+                                            @if ($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->id_estado < 9)
+                                                <tr>
+                                            @else
+                                                <tr style="display: none;">
+                                            @endif     
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->descripcion_etapa}}</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
@@ -337,7 +357,7 @@
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaLimite()}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('Y-m-d') : '____-__-__'}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '____-__-__'}}</td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format($formato_fecha_hora)}}</td>
 
@@ -377,7 +397,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            {{-- </div> --}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -548,6 +568,7 @@
             
         </script>
         <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script>
+        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/FilterGestionar.js') }}"></script>
 
         <script>
             $(document).ready(function () {
@@ -558,7 +579,7 @@
                 // console.log(tipo);
                 document.getElementById('volver').href = url;
                 // document.getElementById('volver').href = '{{route('proyectos.index')}}';
-                $('#exampless').DataTable({
+               /*$('#tablaOrdenMan').DataTable({
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',
                             zeroRecords: 'No se ha encontrado registros',
@@ -574,7 +595,7 @@
                             },
                         },
                         "aaSorting": []
-                });
+                });*/
 
                 //Excel filter
                 /* var noCheck = [
@@ -590,113 +611,7 @@
                 }); */
             });
         </script>
-        <script>
-            $(document).ready( function () {
-                
-                $.fn.dataTable.ext.search.push(
-                    function( settings, searchData, index, rowData, counter ) {
-                    var positions = $('input:checkbox[name="sup"]:checked').map(function() {
-                        return this.value;
-                    }).get();
-                
-                    if (positions.length === 0) {
-                        return true;
-                    }
-                    
-                    if (positions.indexOf(searchData[6]) !== -1) {
-                        return true;
-                    }
-                    
-                    return false;
-                    }
-                );
-        
-                $.fn.dataTable.ext.search.push(
-                    function( settings, searchData, index, rowData, counter ) {
-                
-                    var offices = $('input:checkbox[name="res"]:checked').map(function() {
-                        return this.value;
-                    }).get();
-                
-        
-                    if (offices.length === 0) {
-                        return true;
-                    }
-                    
-                    if (offices.indexOf(searchData[2]) !== -1) {
-                        return true;
-                    }
-                    
-                    return false;
-                    }
-                );
-        
-                $.fn.dataTable.ext.search.push(
-                    function( settings, searchData, index, rowData, counter ) {
-                
-                    var offices = $('input:checkbox[name="est"]:checked').map(function() {
-                        return this.value;
-                    }).get();
-                
-        
-                    if (offices.length === 0) {
-                        return true;
-                    }
-                    
-                    if (offices.indexOf(searchData[1]) !== -1) {
-                        return true;
-                    }
-                    
-                    return false;
-                    }
-                );
-        
-                $.fn.dataTable.ext.search.push(
-                    function( settings, searchData, index, rowData, counter ) {
-                
-                    var offices = $('input:checkbox[name="cod_serv"]:checked').map(function() {
-                        return this.value;
-                    }).get();
-                
-        
-                    if (offices.length === 0) {
-                        return true;
-                    }
-        
-        
-                    if (offices.indexOf(searchData[0]) !== -1) {
-                        return true;
-                    }
-                    
-                    return false;
-                    }
-                );
-            var table = $('#tablaEtapas').DataTable({
-                    language: {
-                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                            zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
-                            infoEmpty: 'No se ha encontrado registros',
-                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                            search: 'Buscar',
-                            paginate:{
-                                first:"Prim.",
-                                last: "Ult.",
-                                previous: 'Ant.',
-                                next: 'Sig.',
-                            },
-                        },
-                        order: [[0, 'asc']],
-                        "pageLength": 10,
-                        fixedHeader: true
-                });
-          
-            $('input:checkbox').on('change', function () {
-                table.draw();
-            });
-        
-            } );
-        </script>
+
         <script>
             document.querySelectorAll('input[name=filter]').forEach(item => {
                 item.addEventListener('change', event => {
@@ -728,9 +643,9 @@
                 }  
             } 
 
-            function mostrarFiltro(){
-                let cuadro_filtro = document.getElementById("flt_etapa");
-                if ($('#flt_etapa').is(":hidden")) {
+            function mostrarFiltro(a){
+                let cuadro_filtro = document.getElementById(a);
+                if ($('#'+a).is(":hidden")) {
                     cuadro_filtro.hidden = false;
                 }else{
                     cuadro_filtro.hidden = true;

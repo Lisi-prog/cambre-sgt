@@ -64,7 +64,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('demo')">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
                         <div class="row" id="demo" hidden>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
