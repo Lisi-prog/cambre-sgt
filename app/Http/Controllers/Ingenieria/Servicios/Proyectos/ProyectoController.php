@@ -557,9 +557,25 @@ class ProyectoController extends Controller
             }
         }
 
-        $flt_eta_ord_tra = array_unique($eta_ord_trabajo);
-        $flt_eta_ord_man = array_unique($eta_ord_manufactura);
-        $flt_eta_ord_mec = array_unique($eta_ord_mecanizado);
+        try {
+            $flt_eta_ord_tra = array_unique($eta_ord_trabajo);
+        } catch (\Throwable $th) {
+            $flt_eta_ord_tra = [];
+        }
+        
+
+        try {
+            $flt_eta_ord_man = array_unique($eta_ord_manufactura);
+        } catch (\Throwable $th) {
+            $flt_eta_ord_man = [];
+        }
+        
+        try {
+            $flt_eta_ord_mec = array_unique($eta_ord_mecanizado);
+        } catch (\Throwable $th) {
+            $flt_eta_ord_mec = [];
+        }
+        
 
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec'));
     }
