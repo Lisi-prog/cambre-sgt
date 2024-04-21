@@ -302,7 +302,7 @@ class EtapaController extends Controller
     }
 
     public function guardarActualizacion(Request $request, $id){
-        return $request;
+        //return $request;
         $this->validate($request, [
             'm-ver-act-eta-descripcion' => 'required',
             'm-crear-act-eta-idestado' => 'required',
