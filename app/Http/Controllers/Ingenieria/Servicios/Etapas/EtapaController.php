@@ -307,7 +307,7 @@ class EtapaController extends Controller
             'm-ver-act-eta-descripcion' => 'required',
             'm-crear-act-eta-idestado' => 'required',
             'm-crear-act-eta-feclimite' => 'required',
-            'cbx_responsable_etapa' => 'required',
+            //'cbx_responsable_etapa' => 'required',
             'm-crear-act-eta-id_etapa' => 'required'
         ]);
 
