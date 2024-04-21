@@ -562,8 +562,7 @@ class ProyectoController extends Controller
         } catch (\Throwable $th) {
             $flt_eta_ord_tra = [];
         }
-        
-
+    
         try {
             $flt_eta_ord_man = array_unique($eta_ord_manufactura);
         } catch (\Throwable $th) {
