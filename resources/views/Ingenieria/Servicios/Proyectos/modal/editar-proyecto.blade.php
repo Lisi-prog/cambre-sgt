@@ -52,7 +52,7 @@
                             <div class="form-group">
                                 {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 <span class="obligatorio">*</span>
-                                {!! Form::select('lider', $empleados, $proyecto->getResponsabilidad->getEmpleado->id_empleado, [
+                                {!! Form::select('lider', $supervisores, $proyecto->getResponsabilidad->getEmpleado->id_empleado, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select',
                                     'id' => 'lider',
