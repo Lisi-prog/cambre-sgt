@@ -247,7 +247,8 @@
                                                 
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
                                                 
-                                                <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+                                                {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">
                                                     @php
