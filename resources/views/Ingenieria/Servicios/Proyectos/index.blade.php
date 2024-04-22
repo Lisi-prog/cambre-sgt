@@ -469,8 +469,8 @@
         var url = '{{url('/')}}';
         document.getElementById('volver').href = url;
         document.getElementById('ayudin').hidden = false;
-
-        $('#example').DataTable({
+        
+        var tabla = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
@@ -488,8 +488,11 @@
                 order: [[0, 'asc']],
                 "pageLength": 25
         });
+        tabla.on('draw',function () {
+            changeTdColor();
+        } )
     });
-
+    
     /*$(document).ready( function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);

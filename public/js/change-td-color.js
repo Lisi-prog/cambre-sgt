@@ -3,8 +3,7 @@
 // };
 
 window.addEventListener("load", changeTdColor);
-window.addEventListener("change", changeTdColor);
-
+window.addEventListener("pintarTabla", changeTdColor);
 
 function changeTdColor() {
     const values = document.querySelectorAll("tr");
