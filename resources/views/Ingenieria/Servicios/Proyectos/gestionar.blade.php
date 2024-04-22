@@ -320,19 +320,19 @@
                             </div>   
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive tableFixHead">
+                            {{-- <div class="table-responsive tableFixHead"> --}}
                                 <table id="tablaEtapas" class="table table-hover mt-2">
                                     <thead style="background-color: #2970c1" id="viv">
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;width:17vh">Etapa</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:10vw">Etapa</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Responsable</th>
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha inicio</th>
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha limite</th>
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Fecha finalizacion</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:5vw">Fecha inicio</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo estimado</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo real</th>
-                                        <th class="text-center" scope="col" style="color:#fff; width:6vw">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff; min-width:6vw">Acciones</th>                                                           
                                     </thead>
                                     <tbody id="accordion">
                                         @php 
@@ -397,7 +397,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            {{-- </div> --}}
                         </div>
                     </div>
                 </div>
@@ -579,7 +579,10 @@
                 // console.log(tipo);
                 document.getElementById('volver').href = url;
                 // document.getElementById('volver').href = '{{route('proyectos.index')}}';
-               /*$('#tablaOrdenMan').DataTable({
+               $('#tablaEtapas').DataTable({
+                    paging: false,
+                    scrollCollapse: true,
+                    scrollY: '400px',
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',
                             zeroRecords: 'No se ha encontrado registros',
@@ -595,7 +598,70 @@
                             },
                         },
                         "aaSorting": []
-                });*/
+                });
+
+                $('#tablaOrdenTrabajo').DataTable({
+                    paging: false,
+                    scrollCollapse: true,
+                    scrollY: '400px',
+                    language: {
+                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                            zeroRecords: 'No se ha encontrado registros',
+                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                            infoEmpty: 'No se ha encontrado registros',
+                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                            search: 'Buscar',
+                            paginate:{
+                                first:"Prim.",
+                                last: "Ult.",
+                                previous: 'Ant.',
+                                next: 'Sig.',
+                            },
+                        },
+                        "aaSorting": []
+                });
+
+                $('#tablaOrdenMan').DataTable({
+                    paging: false,
+                    scrollCollapse: true,
+                    scrollY: '400px',
+                    language: {
+                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                            zeroRecords: 'No se ha encontrado registros',
+                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                            infoEmpty: 'No se ha encontrado registros',
+                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                            search: 'Buscar',
+                            paginate:{
+                                first:"Prim.",
+                                last: "Ult.",
+                                previous: 'Ant.',
+                                next: 'Sig.',
+                            },
+                        },
+                        "aaSorting": []
+                });
+
+                $('#tablaOrdenMec').DataTable({
+                    paging: false,
+                    scrollCollapse: true,
+                    scrollY: '400px',
+                    language: {
+                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                            zeroRecords: 'No se ha encontrado registros',
+                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                            infoEmpty: 'No se ha encontrado registros',
+                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                            search: 'Buscar',
+                            paginate:{
+                                first:"Prim.",
+                                last: "Ult.",
+                                previous: 'Ant.',
+                                next: 'Sig.',
+                            },
+                        },
+                        "aaSorting": []
+                });
 
                 //Excel filter
                 /* var noCheck = [
