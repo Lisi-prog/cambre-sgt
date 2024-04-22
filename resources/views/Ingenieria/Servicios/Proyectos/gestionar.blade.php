@@ -357,7 +357,7 @@
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaLimite()}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('d-m-Y') : '____-__-__'}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->getFechaFinalizacion() ? \Carbon\Carbon::parse($etapa->getFechaFinalizacion())->format('Y-m-d') : '____-__-__'}}</td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format($formato_fecha_hora)}}</td>
 
