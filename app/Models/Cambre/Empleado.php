@@ -26,7 +26,8 @@ class Empleado extends Model
         'id_puesto_empleado',
         'id_sector',
         'costo_hora',
-        'user_id'
+        'user_id',
+        'esta_activo'
     ];
 
     public function getRequerimientoIngenieria()
@@ -57,5 +58,10 @@ class Empleado extends Model
     public function getEmpleadoResponsable()
     {
         return $this->hasMany(Responsabilidad::class, 'id_empleado');
+    }
+
+    public function scopeActivo($query)
+    {
+        return $query->where('esta_activo', 1);
     }
 }

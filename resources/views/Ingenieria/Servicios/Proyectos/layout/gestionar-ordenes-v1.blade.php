@@ -123,19 +123,19 @@ table.dataTable tbody td {
             </div>   
         </div>
         <div class="card-body" >
-            <div class="table-responsive tableFixHead" style="max-height: 400px" id="tabla_de_ordenes_trabajo" >
+            {{-- <div class="table-responsive tableFixHead" style="max-height: 400px" id="tabla_de_ordenes_trabajo" > --}}
                 <table id="tablaOrdenTrabajo" class="table table-hover mt-2" class="display">
                     <thead style="background-color: #558540"  id="cot">
-                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;min-width:6vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
                         @php 
@@ -149,10 +149,12 @@ table.dataTable tbody td {
                                 @else
                                     <tr style="display: none;">
                                 @endif   
-                                        <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-
                                         <td class= 'text-center' >{{$orden->nombre_orden}}</td>
 
+                                        <td class='text-center' style="vertical-align: middle;"><abbr title="{{$etapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($etapa->descripcion_etapa, 0, 16).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+
+                                        {{-- <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td> --}}
+                                        
                                         <td class= 'text-center' >{{$orden->getEstado()}}</td>
                                         
                                         <td class= 'text-center' >{{$orden->getSupervisor()}}</td>
@@ -210,7 +212,7 @@ table.dataTable tbody td {
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+            {{-- </div> --}}
         </div>
     </div>
 </div>
@@ -328,20 +330,20 @@ table.dataTable tbody td {
             </div>   
         </div>
         <div class="card-body">
-            <div class="table-responsive tableFixHead">
+            {{-- <div class="table-responsive tableFixHead"> --}}
                 <table id="tablaOrdenMan" class="table table-hover mt-2" class="display">
                     <thead style="background-color: #982b37" id="comac">
+                        <th class="text-center" scope="col" style="color:#fff;min-width:8vw">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;width:10vw">Progreso Mecanizado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw;">Acciones</th>                                                            
+                        <th class="text-center" scope="col" style="color:#fff;min-width:6vw;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-manufactura">
                         @php 
@@ -355,9 +357,11 @@ table.dataTable tbody td {
                                     @else
                                         <tr style="display: none;">
                                     @endif     
-                                        <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
+                                        {{-- <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td> --}}
 
                                         <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+
+                                        <td class='text-center' style="vertical-align: middle;"><abbr title="{{$etapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($etapa->descripcion_etapa, 0, 16).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
 
                                         <td class= 'text-center' >{{$orden->getEstado()}}</td>
 
@@ -431,7 +435,7 @@ table.dataTable tbody td {
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+            {{-- </div> --}}
         </div>
     </div>
 </div>
@@ -548,20 +552,20 @@ table.dataTable tbody td {
             </div>   
         </div>
         <div class="card-body">
-            <div class="table-responsive tableFixHead">
+            {{-- <div class="table-responsive tableFixHead"> --}}
                 <table id="tablaOrdenMec" class="table table-hover mt-2" class="display">
                     <thead style="background-color: #d37c00" id="comec">
-                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:6vw">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Manufactura</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Orden</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw">Fecha finalizacion</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
-                        <th class="text-center" scope="col" style="color:#fff;width:8vw;">Acciones</th>                                                           
+                        <th class="text-center" scope="col" style="color:#fff;min-width:8vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-mecanizado">
                         @php
@@ -575,11 +579,11 @@ table.dataTable tbody td {
                                 @else
                                     <tr style="display: none;">
                                 @endif     
-                                        <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
+                                        <td class= 'text-center' >{{$orden->nombre_orden}}</td>
 
                                         <td class= 'text-center' >{{$orden->getOrdenMecanizado->getOrdenManufactura->getOrden->nombre_orden ?? '-'}}</td>
 
-                                        <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+                                        <td class='text-center' style="vertical-align: middle;"><abbr title="{{$etapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($etapa->descripcion_etapa, 0, 6).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
 
                                         <td class= 'text-center' >{{$orden->getEstado()}}</td>
 
@@ -638,7 +642,7 @@ table.dataTable tbody td {
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+            {{-- </div> --}}
         </div>
     </div>
 </div>

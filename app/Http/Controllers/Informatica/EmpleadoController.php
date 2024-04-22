@@ -136,6 +136,7 @@ class EmpleadoController extends Controller
         $puesto = $request->input('puesto');
         $sector = $request->input('sector');
         $costo_hora = $request->input('costo_hora');
+        $esta_activo = $request->input('esta_activo');
 
         if ($request->input('telefono')) {
             $telefono = $request->input('telefono');
@@ -150,7 +151,8 @@ class EmpleadoController extends Controller
             'telefono_empleado' => $telefono,
             'id_puesto_empleado' => $puesto,
             'id_sector' => $sector,
-            'costo_hora' => $costo_hora
+            'costo_hora' => $costo_hora,
+            'esta_activo' => $esta_activo
         ]);
     
         return redirect()->route('tecnicos.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        

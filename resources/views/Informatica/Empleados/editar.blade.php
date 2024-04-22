@@ -16,7 +16,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('nom_comp', 'Nombre completo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -58,7 +58,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('email', 'Email:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -97,7 +97,7 @@
                             </div>
 
                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('telefono', 'Telefono:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         {{-- <span class="obligatorio">*</span> --}}
@@ -117,20 +117,19 @@
                                         ]) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                    <div class="form-group">
+                                        {!! Form::label('esta_activo', '¿Se encuentra activo?:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <span class="obligatorio">*</span>
+                                        {!! Form::select('esta_activo', [1 => 'SI', 0 => 'NO'], $empleado->esta_activo, [
+                                            'class' => 'form-select form-control',
+                                            'required'
+                                        ]) !!}
+                                    </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('categoria', 'Categoria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
-                                        {!! Form::select('rol', $roles, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'categoria-input',
-                                            'required'
-                                        ]) !!}
-                                    </div> --}}
+                                    
                                 </div>
                             </div>                            
                             

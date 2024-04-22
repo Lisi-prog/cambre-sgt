@@ -143,6 +143,7 @@ CREATE TABLE `empleado` (
   `id_sector` int,
   `costo_hora` decimal(10,2),
   `user_id` bigInt,
+  `esta_actvo` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`id_empleado`),
   CONSTRAINT `pk_id_empleado_x_puesto` FOREIGN KEY (`id_puesto_empleado`) REFERENCES `puesto_empleado`(`id_puesto_empleado`),
   CONSTRAINT `pk_id_empleado_x_sector` FOREIGN KEY (`id_sector`) REFERENCES `sector`(`id_sector`)
