@@ -129,8 +129,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
@@ -337,8 +337,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;width:10vw">Progreso Mecanizado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
@@ -559,8 +559,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Manufactura</th>
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
@@ -675,8 +675,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Orden</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th>
+                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;width:17vw;">Acciones</th>                                                           
