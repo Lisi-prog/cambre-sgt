@@ -62,23 +62,35 @@ class Vw_servicio extends Model
         } 
     }
 
-    public function scopePrefijo($query, $prefijo)
+    public function scopePrefijo($query, $opcion, $prefijos)
     {
-        switch ($prefijo) {
-            case 'PROY':
-                return $query->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo');
-                break;
-    
-            case 'SSI':
-                return $query->where('id_subtipo_servicio', 5)->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                break;
-
+        switch ($opcion) {
             case 1:
                 return $query;
                 break;
+            
+            case 2:
+                return $query->Where(function ($query) use($prefijos) {
+                    foreach ($prefijos as $prefijo){
+                       $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                    }      
+                })->orWhereNotNull('id_activo');
+                break;
+    
+            case 3:
+                return $query->where('id_subtipo_servicio', 5)->orWhere(function ($query) use($prefijos) {
+                                                                            foreach ($prefijos as $prefijo){
+                                                                                $query->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                                                                            }      
+                                                                        });
+                break;
 
-            default:
-                return $query->where('codigo_servicio', 'like', '%'.$prefijo.'%');
+            case 4:
+                return $query->orWhere(function ($query) use($prefijos) {
+                                            foreach ($prefijos as $prefijo){
+                                                $query->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                                            }      
+                                        });
                 break;
         }
     }

@@ -93,7 +93,7 @@ class ProyectoController extends Controller
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo', 'prefijos', 'activos'));
     }
 
-    public function indexPorPrefijo(Request $request, $prefijo, $tipo){
+    public function indexPorPrefijo(Request $request, $opcion){
         // return $request->input('tipos');
         // return  Vw_servicio::servicio($request->input('cod_serv'))->get();
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
@@ -104,36 +104,45 @@ class ProyectoController extends Controller
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
 
-        switch ($prefijo) {
+        switch ($opcion) {
             case 1:
+                $tipo = 'Servicios';
+                $prefijos_busq = array();
                 $proyectosFilter = Vw_servicio::orderBy('prioridad_servicio')->get();
                 break;
 
-            case 'SSI':
-                $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
+            case 2:
+                $tipo = 'Proyectos';
+                $prefijos_busq = array('PROY', 'AU');
+                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
+                                                                                        foreach ($prefijos_busq as $prefijo){
+                                                                                            $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                                                                                        }      
+                                                                                    })->orderBy('prioridad_servicio')->get();
                 break;
 
-            case 'PROY':
-                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orWhereNotNull('id_activo')->orderBy('prioridad_servicio')->get();
+            case 3:
+                $tipo = 'Servicio de ingenieria';
+                $prefijos_busq = array('SSI');
+                $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere(function ($query) use($prefijos_busq) {
+                                                                                                                foreach ($prefijos_busq as $prefijo){
+                                                                                                                    $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                                                                                                                }      
+                                                                                                            })->orderBy('prioridad_servicio')->get();
                 break;
-            default:
-                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->servicio($request->input('cod_serv'))->where('codigo_servicio', 'like', '%'.$prefijo.'%')->orderBy('prioridad_servicio')->get();
+
+            case 4:
+                $tipo = 'Mejora continua';
+                $prefijos_busq = array('TMC');
+                $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
+                                                                                        foreach ($prefijos_busq as $prefijo){
+                                                                                            $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                                                                                        }      
+                                                                                    })->orderBy('prioridad_servicio')->get();
                 break;
         }
 
-        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite']);
-        
-        // try {
-        //     if (in_array(9, $request->input('estados')) || in_array(10, $request->input('estados')) ) {
-        //         $proyectos = Vw_servicio::orderBy('prioridad_servicio')->get();
-        //     } else {
-        //         $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
-        //     }
-        // } catch (\Throwable $th) {
-        //     $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($prefijo)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get();
-        // }
-        
-        
+        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite']);
         
         
         //Para el filtro
@@ -148,7 +157,7 @@ class ProyectoController extends Controller
             $flt_est = $request->input('estados');
         //------------------
 
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'prefijo', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est'));
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion'));
     }
 
     public function obtenerCodigoServicio(){
@@ -511,10 +520,7 @@ class ProyectoController extends Controller
 
     public function gestionar(Request $request, $id)
     {
-        // $tipo = $request->input('tipo');
-        // $prefijo = $request->input('prefijo');
-
-        if ($request->input('tipo')) {
+        /* if ($request->input('tipo')) {
             $tipo = $request->input('tipo');
         }else{
             $tipo = 'Servicios';
@@ -524,6 +530,12 @@ class ProyectoController extends Controller
             $prefijo = $request->input('prefijo');
         }else{
             $prefijo = 1;
+        } */
+
+        if ($request->input('opcion')) {
+            $opcion = $request->input('opcion');
+        }else{
+            $opcion = 1;
         }
 
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
@@ -576,7 +588,7 @@ class ProyectoController extends Controller
         }
         
 
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'tipo', 'prefijo', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion'));
     }
 
     public function costos($id)

@@ -69,7 +69,7 @@
                         <div class="row">
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
-                        {!! Form::open(['method' => 'GET', 'route' => ['proyecto.indexprefijo', [$prefijo, $tipo]], 'style' => 'display:inline']) !!}
+                        {!! Form::open(['method' => 'GET', 'route' => ['proyecto.indexprefijo', $opcion], 'style' => 'display:inline']) !!}
                         <div class="row" id="demo" hidden>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
                                 <div class="row">
@@ -288,8 +288,9 @@
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {{-- {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} --}}
+                                                                        {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                     {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>

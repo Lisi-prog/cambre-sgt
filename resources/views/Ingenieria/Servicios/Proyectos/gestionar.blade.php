@@ -572,11 +572,9 @@
 
         <script>
             $(document).ready(function () {
-                let prefijo = '{{$prefijo}}';
-                let tipo = '{{$tipo}}';
-                var url = '{{route('proyecto.indexprefijo',[':prefijo',':tipo'])}}';
-                url = url.replace(':prefijo', prefijo).replace(':tipo', tipo);
-                // console.log(tipo);
+                let opcion = '{{$opcion}}';
+                var url = '{{route('proyecto.indexprefijo', ':opcion')}}';
+                url = url.replace(':opcion', opcion);
                 document.getElementById('volver').href = url;
                 // document.getElementById('volver').href = '{{route('proyectos.index')}}';
                $('#tablaEtapas').DataTable({
