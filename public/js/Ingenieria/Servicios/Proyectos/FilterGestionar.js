@@ -140,12 +140,13 @@ function buscarYfiltrarOrdTrabajo(tabla){
     sup = arrayForMe(supervisores);
 
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]; //etapa
+        td = tr[i].getElementsByTagName("td")[1]; //etapa
         td2 = tr[i].getElementsByTagName("td")[2]; //estado
         td3 = tr[i].getElementsByTagName("td")[3]; //supervisor
         td4 = tr[i].getElementsByTagName("td")[4]; //responsable
         if (td) {
-            txtValue = td.innerText;
+            // console.log(td.children[0].title);
+            txtValue = td.children[0].title;
             txtValu2 = td2.innerText;
             txtValu3 = td3.innerText;
             txtValu4 = td4.innerText;
@@ -181,12 +182,13 @@ function buscarYfiltrarOrdMan(tabla){
     sup = arrayForMe(supervisores);
 
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]; //etapa
+        td = tr[i].getElementsByTagName("td")[1]; //etapa
         td2 = tr[i].getElementsByTagName("td")[2]; //estado
         td3 = tr[i].getElementsByTagName("td")[4]; //supervisor
         td4 = tr[i].getElementsByTagName("td")[5]; //responsable
         if (td) {
-            txtValue = td.innerText;
+            // console.log(td.children[0].title);
+            txtValue = td.children[0].title;
             txtValu2 = td2.innerText;
             txtValu3 = td3.innerText;
             txtValu4 = td4.innerText;
@@ -222,12 +224,12 @@ function buscarYfiltrarOrdMec(tabla){
     sup = arrayForMe(supervisores);
 
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]; //etapa
+        td = tr[i].getElementsByTagName("td")[2]; //etapa
         td2 = tr[i].getElementsByTagName("td")[3]; //estado
         td3 = tr[i].getElementsByTagName("td")[4]; //supervisor
         td4 = tr[i].getElementsByTagName("td")[5]; //responsable
         if (td) {
-            txtValue = td.innerText;
+            txtValue = td.children[0].title;
             txtValu2 = td2.innerText;
             txtValu3 = td3.innerText;
             txtValu4 = td4.innerText;
