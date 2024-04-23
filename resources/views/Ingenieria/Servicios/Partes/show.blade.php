@@ -161,25 +161,25 @@
                                     <tbody>
                                         @foreach ($orden->getPartes as $parte)
                                         <tr>
-                                            <td class= 'text-center' >{{$parte->id_parte}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
 
-                                            <td class= 'text-center' >{{$parte->observaciones}}</td>
+                                            <td class= 'text-center'style="vertical-align: middle;">{{$parte->observaciones}}</td>
 
-                                            <td class= 'text-center'>{{$parte->fecha}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
 
-                                            <td class= 'text-center'>{{ $parte->fecha_limite ?? '-'}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{ $parte->fecha_limite ?? '-'}}</td>
 
                                             
-                                            <td class= 'text-center'>{{$parte->getParteDe->getNombreEstado()}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getNombreEstado()}}</td>
                                               
 
                                             {{-- <td class= 'text-center'>{{substr($parte->horas, 0, strlen($parte->horas)-3)}}</td> --}}
 
-                                            <td class= 'text-center'>{{$parte->horas}}
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->horas}}
 
                                             @if ($orden->getOrdenDe->getTipoOrden() == 3)
-                                                <td class= 'text-center'>{{$parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-'}}</td>
-                                                <td class= 'text-center'>{{$parte->getParteDe->getParteMecxMaq->first()->horas_maquina ?? '-'}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-'}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getParteMecxMaq->first()->horas_maquina ?? '-'}}</td>
                                             @endif
                                             {{-- <td>
                                                 {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
@@ -226,6 +226,24 @@
             var url = '{{route('ordenes.tipo',':tipo_orden')}}';
             url = url.replace(':tipo_orden', tipo_orden);
             document.getElementById('volver').href = url;
+            $('#example').DataTable({
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
+                    },
+                    order: [[0, 'asc']],
+                    "pageLength": 25
+            });
         });
     </script>
 @endsection
