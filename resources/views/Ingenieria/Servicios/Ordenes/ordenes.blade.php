@@ -131,11 +131,31 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($estados as $estado)
-                                                    @if ($estado->id_estado < 9)
-                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                    @else
-                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                    @endif
+                                                    @switch($tipo_orden)
+                                                        @case(1)
+                                                            @if ($estado->id_estado < 9)
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                            @else
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                            @endif
+                                                            @break
+                                                        @case(2)
+                                                            @if ($estado->id_estado < 5)
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                            @else
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                            @endif
+                                                            @break
+                                                        @case(3)
+                                                            @if ($estado->id_estado < 6)
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                            @else
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                            @endif
+                                                            @break
+                                                            
+                                                    @endswitch
+                                                        
                                                 @endforeach
                                             </div>
                                         </div>
