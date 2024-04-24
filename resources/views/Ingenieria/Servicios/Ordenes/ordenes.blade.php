@@ -186,8 +186,8 @@
                                     <th class='text-center' style="color:#fff;width:7%">Prioridad</th>
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
-                                    <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;">Orden</th>
+                                    <th class='text-center' style="color:#fff;">Etapa</th>
                                     <th class='text-center' style="color:#fff;width:10%">Estado</th>
                                     <th class='text-center' style="color:#fff;">Supervisor</th>
                                     <th class='text-center' style="color:#fff;">Responsable</th>
@@ -208,9 +208,9 @@
 
                                             <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->descripcion_etapa ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_orden ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 13) ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 13) ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
 
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td> --}}
                                             
@@ -220,7 +220,7 @@
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable() ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{ $orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getPartes->sortByDesc('id_orden')->first()->fecha_limite ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td>
         

@@ -927,7 +927,7 @@ class OrdenController extends Controller
                 $servicios_ids[] = $orden->getEtapa->getServicio->id_servicio;
             }
     
-            $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('prioridad_servicio')->get();
+            $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('codigo_servicio')->get();
         }else{
             $servicios = [];
         }
