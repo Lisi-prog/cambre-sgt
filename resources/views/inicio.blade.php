@@ -21,7 +21,7 @@
                                     <div class="row" style="margin-bottom:2vh">
                                         <li class="menu-hover card rounded-4 mx-2" style="height:150px; width:150px; margin:auto">
                                             <div class="m-auto rounded-4">
-                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', ['PROY', 'Proyectos'])}}" title="Proyectos">
+                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', 2)}}" title="Proyectos">
                                                 <div class="row m-auto text-center" style="">
                                                     <i class="fas fa-sitemap m-auto p-2" style="font-size:1.2em;"></i>
                                                 </div>
@@ -34,7 +34,7 @@
                                         </li>
                                         <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px;margin:auto">
                                             <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', ['SSI', 'Servicio de ingenieria'])}}" title="Servicio de ingenieria">
+                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Servicio de ingenieria">
                                                 <div class="row m-auto text-center" style="">
                                                     <i class="fas fa-tape m-auto p-2" style="font-size:1.2em;"></i>
                                                 </div>
@@ -47,7 +47,7 @@
         
                                         <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
                                             <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', ['TMC', 'Mejora continua'])}}" title="Mejora continua">
+                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', 4)}}" title="Mejora continua">
                                                 <div class="row m-auto text-center" style="">
                                                     <i class="fas fa-star m-auto p-2" style="font-size:1.2em;"></i>
                                                 </div>
