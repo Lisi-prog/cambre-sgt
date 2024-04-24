@@ -133,7 +133,7 @@
                                                 @foreach ($estados as $estado)
                                                     @switch($tipo_orden)
                                                         @case(1)
-                                                            @if ($estado->id_estado < 9)
+                                                            @if ($estado->id_estado < 9 && $estado->id_estado != 5)
                                                                 <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
                                                             @else
                                                                 <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
