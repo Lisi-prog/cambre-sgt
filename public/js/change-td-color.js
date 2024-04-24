@@ -8,10 +8,10 @@ window.addEventListener("pintarTabla", changeTdColor);
 function changeTdColor() {
     const values = document.querySelectorAll("tr");
     var text_var = "Estado"
-    var elem = $('th').filter(function() {
-        return $(this).text().trim() == text_var;
-        });
-    var row_index_first = elem.index();
+    //var elem = $('th').filter(function() {
+    //    return $(this).text().trim() == text_var;
+    //    });
+    //var row_index_first = elem.index();
     var indexFilaEncabezados = [];
     var indexColumnaEstados = []
     for (let x = 0; x < values.length; x++) {
