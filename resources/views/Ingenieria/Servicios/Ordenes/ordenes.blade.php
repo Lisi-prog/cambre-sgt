@@ -415,6 +415,9 @@
     $('input:checkbox').on('change', function () {
         table.draw();
     });
+    table.on('draw',function () {
+        changeTdColor();
+    } )
 
     } );
 </script>
