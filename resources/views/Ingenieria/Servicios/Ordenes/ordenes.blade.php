@@ -239,11 +239,18 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        <div class="row my-2">
+                                                        {{-- <div class="row my-2">
                                                             <div class="col-12">
                                                                 {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', base64url_encode($orden->id_orden), $tipo_orden], 'style' => 'display:inline']) !!}
                                                                     {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
                                                                 {!! Form::close() !!}
+                                                            </div>
+                                                        </div> --}}
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                                    Partes
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         <div class="row my-2">
@@ -274,6 +281,8 @@
     <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script>
+    
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;
@@ -287,7 +296,7 @@
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-
+@include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
 <script>
     let x = '';
     $(document).ready( function () {
