@@ -183,16 +183,16 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
-                                    <th class='text-center' style="color:#fff;width:7%">Prioridad</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Prioridad</th>
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
-                                    <th class='text-center' style="color:#fff;">Orden</th>
-                                    <th class='text-center' style="color:#fff;">Etapa</th>
-                                    <th class='text-center' style="color:#fff;width:10%">Estado</th>
-                                    <th class='text-center' style="color:#fff;">Supervisor</th>
-                                    <th class='text-center' style="color:#fff;">Responsable</th>
-                                    <th class='text-center' style="color:#fff;">Fecha limite</th>
-                                    <th class='text-center' style="color:#fff;">Fecha finalizacion</th>
+                                    <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
+                                    <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
+                                    <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
+                                    <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
+                                    <th class='text-center' style="color:#fff;min-width:6vw">Responsable</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -210,7 +210,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 13) ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 15) ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
 
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td> --}}
                                             
@@ -420,7 +420,7 @@
                 order: [[0, 'asc']],
                 "pageLength": 25
         });
-  
+        
     $('input:checkbox').on('change', function () {
         table.draw();
     });
@@ -429,6 +429,7 @@
     } )
 
     } );
+    
 </script>
 
 <script>

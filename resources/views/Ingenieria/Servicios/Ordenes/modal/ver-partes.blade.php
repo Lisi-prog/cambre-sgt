@@ -1,4 +1,10 @@
 <!-- Modal -->
+<style>
+    .tr {
+        width: 100%;
+        display: block;
+    }
+</style>
 <div class="modal fade" id="verPartesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -40,30 +46,29 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="row table-responsive">
-                    <table class="table table-striped">
-                        <thead id="encabezado_tabla_parte">
-                            <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                            <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                            <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                            <th class="text-center" scope="col" style="color:#fff;">Horas</th>
-                            <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
-                            <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                            <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
-                            <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
-                            <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
-                        </thead>
-                        <tbody id="body_ver_parte">
+                <div style="max-height: 30vh; overflow-y:auto">
+                <table class="table table-striped" id="verPartes" style="width:100%; margin:0px;">
+                    <thead id="encabezado_tabla_parte">
+                        <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                        <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
+                        <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
+                    </thead>
+                    <tbody id="body_ver_parte">
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>   
                 </div>
                 <div class="row mb-2">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-2">
                         <button type="button" class="btn btn-warning" onclick="verCargarParteModalParte()">Nuevo parte</button>
                     </div>
-                </div>
+                </div>             
                 <div class="row" id="m-ver-parte-div" hidden>
                     {!! Form::open(['route' => 'partes.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
                     {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
@@ -136,3 +141,24 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready( function () {
+        var table = $('#verPartes').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                }
+        });
+    });
+    
+</script>
