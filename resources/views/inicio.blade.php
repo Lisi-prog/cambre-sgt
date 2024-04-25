@@ -9,8 +9,8 @@
             <h3 class="page__heading">CAMBRE SGI</h3>
         </div>
         <div class="section-body" >
+            @include('layouts.modal.mensajes')
             <div style="display:flex;">
-                @include('layouts.modal.mensajes')
                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> --}}
                     {{-- <div class="row my-auto p-0"> --}}
                         {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">

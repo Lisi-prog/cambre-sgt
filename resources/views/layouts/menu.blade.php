@@ -213,11 +213,13 @@
     </li>
     @endcan
     
+    {{-- @role('SUPERVISOR') --}}
     <li class="side-menus">
-        <a class="nav-link menu-hover" href="" target="_blank" id="ayudin" hidden>
-            <i class="fas fa-question-circle"></i><span>Ayudame loco</span>
+        <a class="nav-link menu-hover" href="" target="_blank" id="ayudin" title="Ayudame loco" hidden>
+            <i class="fas fa-question-circle"></i><span>Ayuda</span>
         </a>
     </li>
+    {{-- @endrole --}}
 
     <div class="d-flex mx-auto justify-content-center">
         <a class="nav-link btn w-60" href="" id="volver" style="background-color: #21628d">
