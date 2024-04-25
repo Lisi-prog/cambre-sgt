@@ -18,10 +18,15 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER
     Route::get('/puesto_tecnico/editar-modal', [PuestoEmpleadoController::class, 'updateOrden'])->name('puesto_empleado.editar');
     Route::post('usuario/editar', [UsuarioController::class, 'editarUsuario'])->name('usuario.editar');
     Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
-    Route::post('/documentacion/obtener/{nombreArchivo}', [DocumentoController::class, 'rutaDelArchivo']);
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('tecnicos', EmpleadoController::class);
     Route::resource('puesto_tecnico', PuestoEmpleadoController::class);
+});
+
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNICO']], function () {
+    Route::post('usuario/editar', [UsuarioController::class, 'editarUsuario'])->name('usuario.editar');
+    Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
+    Route::post('/documentacion/obtener/{nombreArchivo}', [DocumentoController::class, 'rutaDelArchivo']);
     Route::resource('documentacion', DocumentoController::class);
 });
 

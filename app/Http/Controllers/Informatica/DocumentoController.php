@@ -132,7 +132,11 @@ class DocumentoController extends Controller
 
     public function rutaDelArchivo($nombreArchivo)
     {
-        $ruta = Doc_documento::where('nombre_documento', 'like', '%'.$nombreArchivo.'%')->first()->ubicacion_documento;
+        try {
+            $ruta = Doc_documento::where('nombre_documento', 'like', '%'.$nombreArchivo.'%')->first()->ubicacion_documento;
+        } catch (\Throwable $th) {
+            $ruta = '';
+        }
         return $ruta;
     }
 }
