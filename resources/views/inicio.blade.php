@@ -200,6 +200,40 @@
                 </div> --}}
             </div>
         </div>
+        @role('SUPERVISOR')
+            @php
+                $es_sup = 1;
+            @endphp
+        @else
+            @php
+                $es_sup = 0;
+            @endphp
+        @endrole
+        <script>
+            
+            $(document).ready( function () {
+                let es_super = {{$es_sup}};
+                if (es_super) {
+                    document.getElementById('ayudin').hidden = false;
+                    let nombreArchivo = 'supervisor';
+                    var url = '{{url('/')}}';
+                    $.when($.ajax({
+                        type: "post",
+                        url: '/documentacion/obtener/'+nombreArchivo, 
+                        data: {
+                            nombreArchivo: nombreArchivo,
+                        },
+                        success: function (response) {
+                            document.getElementById('ayudin').href = "{{url('/')}}"+'/'+response;
+                        },
+                        error: function (error) {
+                            // console.log(error);
+                        }
+                    }));
+                }
+            });
+        </script>
+
     </section>
     
 @endsection
