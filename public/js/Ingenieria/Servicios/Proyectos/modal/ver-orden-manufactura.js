@@ -95,14 +95,14 @@ export default
             
         </div>
         <div class="col-4">
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label for="costo_estimado" class="control-label" style="white-space: nowrap; ">Costo estimado:</label>
                 <span class="obligatorio">*</span>
                 <input class="form-control" id="input-costo_estimado" readonly="" name="costo_estimado" type="text">
             </div>
         </div>
         <div class="col-4">
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label for="costo_real" class="control-label" style="white-space: nowrap; ">Costo real:</label>
                 <span class="obligatorio">*</span>
                 <input class="form-control" id="input-costo_real" readonly="" name="costo_real" type="text">
