@@ -1,9 +1,13 @@
 <!-- Modal -->
 <style>
-    .tr {
+    /* .tr {
         width: 100%;
         display: block;
-    }
+    } */
+
+/* #verPartes th {
+       background: #ee9b27;
+     }  */
 </style>
 <div class="modal fade" id="verPartesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -15,16 +19,6 @@
 
             <div class="modal-body" id="modal-body-ver-partes">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                        <div class="form-group">
-                            {!! Form::label('etapa', 'Etapa:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('etapa', null, [
-                                'class' => 'form-control',
-                                'id' => 'mv-etapa',
-                                'readonly'
-                            ]) !!}
-                        </div>
-                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('orden', 'Orden:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
@@ -45,25 +39,35 @@
                             ]) !!}
                         </div>
                     </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                        <div class="form-group">
+                            {!! Form::label('etapa', 'Etapa:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::text('etapa', null, [
+                                'class' => 'form-control',
+                                'id' => 'mv-etapa',
+                                'readonly'
+                            ]) !!}
+                        </div>
+                    </div>
                 </div>
-                <div style="max-height: 30vh; overflow-y:auto">
-                <table class="table table-striped" id="verPartes" style="width:100%; margin:0px;">
-                    <thead id="encabezado_tabla_parte">
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Horas</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                        <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
-                        <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
-                    </thead>
-                    <tbody id="body_ver_parte">
+                    <div class="table-responsive tableFixHead">
+                        <table class="table table-striped" id="verPartes" >
+                            <thead id="encabezado_tabla_parte" style="background: #558540">
+                                <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Horas</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                                <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
+                                <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
+                            </thead>
+                            <tbody id="body_ver_parte">
 
-                    </tbody>
-                </table>   
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
                 <div class="row mb-2">
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-2">
                         <button type="button" class="btn btn-warning" onclick="verCargarParteModalParte()">Nuevo parte</button>
@@ -74,7 +78,6 @@
                     {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            {{-- {!! Form::text('id_orden',$orden->id_orden, ['class' => 'form-control', 'hidden']) !!} --}}
                             <div class="form-group">
                                 {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                 <span class="obligatorio">*</span>
@@ -93,7 +96,6 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                                 {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                            {{-- <span class="obligatorio">*</span> --}}
                                 {!! Form::date('fecha_limite', null, [
                                     'min' => '2023-01-01',
                                     'max' => \Carbon\Carbon::now()->year . '-12',
@@ -142,7 +144,7 @@
     </div>
 </div>
 <script>
-    $(document).ready( function () {
+   /* $(document).ready( function () {
         var table = $('#verPartes').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -159,6 +161,6 @@
                     },
                 }
         });
-    });
+    }); */
     
 </script>
