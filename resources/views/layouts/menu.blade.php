@@ -215,7 +215,7 @@
     
     {{-- @role('SUPERVISOR') --}}
     <li class="side-menus">
-        <a class="nav-link menu-hover" href="" target="_blank" id="ayudin" title="Ayudame loco" hidden>
+        <a class="nav-link menu-hover" href="" target="_blank" id="ayudin" hidden>
             <i class="fas fa-question-circle"></i><span>Ayuda</span>
         </a>
     </li>
