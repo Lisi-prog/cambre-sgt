@@ -205,13 +205,13 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio ?? '-'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->getServicio->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
-
+                                            
                                             <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 15) ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
-
+                                            {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 15) ?? '-'}} <i class="fas fa-eye"></i></abbr></td> --}}
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->getEtapa->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->getEtapa->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td> --}}
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado() ?? ''}}</td>
