@@ -262,6 +262,7 @@ function cargarModalVerPartes(id, tipo_orden){
     let html = '';
     obtenerEstados(tipo_orden);
     modificarModalVerPartesEstadoFechaLimite(id);
+    cargarDatosDeOrden(id);
     let orden = document.getElementById('m-ver-parte-orden');
     orden.value = id;
     let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
@@ -293,6 +294,7 @@ function cargarModalVerPartes(id, tipo_orden){
     success: function (response) {
         // console.log(response)
         let maq_y_hora = '';
+
         response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
@@ -300,27 +302,25 @@ function cargarModalVerPartes(id, tipo_orden){
                 fecha_lim = '-';
             }
             
-            if(tipo_orden == 3){
+            /* if(tipo_orden == 3){
                 maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
                                   <td class="text-center">`+element.horas_maquinaria+`</td>
                                  `
-            }
+            } */
 
             html += `<tr>
                         <td class="text-center">`+element.fecha+`</td>
                         <td class="text-center">`+fecha_lim+`</td>
                         <td class="text-center">`+element.estado+`</td>
                         <td class="text-center">`+element.horas+`</td>
-                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.toString().slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                         <td class="text-center">`+element.responsable+`</td>
                         `+maq_y_hora+`
                         <td class="text-center">`+element.supervisor+`</td>
                     </tr>`
         });
+
         document.getElementById('body_ver_parte').innerHTML = html;
-        document.getElementById('mv-orden').value = response[0].orden;
-        document.getElementById('mv-etapa').value = response[0].etapa;
-        document.getElementById('mv-estado').value = response[0].estado_orden;
     },
     error: function (error) {
         console.log(error);
@@ -354,6 +354,29 @@ function cargarModalVerPartes(id, tipo_orden){
     }else{
         document.getElementById("m-ver-parte-maquinaria").innerHTML = '';
     }
+}
+
+function cargarDatosDeOrden(id){
+
+    $.when($.ajax({
+        type: "post",
+        url: '/parte/obtener-orden-datos/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (response) {
+        // console.log(response);
+        document.getElementById('mv-orden').value = response.orden;
+        document.getElementById('mv-etapa').value = response.etapa;
+        document.getElementById('mv-estado').value = response.estado_orden;
+
+        // response.forEach(element => {
+        // });
+    },
+    error: function (error) {
+        console.log(error);
+    }
+    }));
 }
 
 function obtenerMaquinaria(){

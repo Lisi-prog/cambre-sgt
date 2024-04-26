@@ -246,9 +246,63 @@ class ParteController extends Controller
     {      
     }
     
+    public function obtenerDatosDeUnaOrden($id){
+        $orden = Orden::find($id);
+        return ['orden' => $orden->nombre_orden, 'estado_orden' => $orden->getEstado(), 'etapa' => $orden->getEtapa->descripcion_etapa];
+    }
+
     public function obtenerPartesDeUnaOrden($id)
     {
+        $partes_arr = array();
         $orden = Orden::find($id);
+
+        switch ($orden->getOrdenDe->getTipoOrden()) {
+            case 1:
+                $partes = DB::select('select p.id_parte, o.id_orden, p.fecha, p.fecha_limite, p.horas, e.nombre_estado, p.observaciones, emp.nombre_empleado, ret.supervisor from parte p
+                                        inner join parte_trabajo pt on pt.id_parte = p.id_parte
+                                        inner join orden o on o.id_orden = p.id_orden
+                                        inner join responsabilidad_orden res_o on res_o.id_orden = o.id_orden
+                                        inner join estado e on e.id_estado = pt.id_estado
+                                        inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+                                        inner join empleado emp on emp.id_empleado = res.id_empleado
+                                        inner join (select o.id_orden, emp.nombre_empleado as supervisor 
+                                                        from orden o
+                                                            inner join responsabilidad_orden res_o on res_o.id_orden = o.id_orden
+                                                            inner join responsabilidad res on res.id_responsabilidad = res_o.id_responsabilidad 
+                                                            inner join empleado emp on emp.id_empleado = res.id_empleado
+                                                            where res.id_rol_empleado = 3 and o.id_orden = ?) as ret on ret.id_orden = o.id_orden
+                                                        where o.id_orden = ?
+                                        order by p.id_parte;', [$id, $id]);
+                foreach ($partes as $parte) {
+                    array_push($partes_arr, (object)[
+                        'id_parte' => $parte->id_parte,
+                        'observaciones' => $parte->id_parte,
+                        'estado' => $parte->id_parte,
+                        'responsable' => $parte->nombre_empleado,
+                        'fecha' => $parte->fecha,
+                        'fecha_limite' => $parte->fecha_limite ?? '-',
+                        'horas' => $parte->horas,
+                        'supervisor' => $parte->supervisor,
+                        // 'orden' => $parte->nombre_orden,
+                        // 'etapa' => $parte->descripcion_etapa,
+                        // 'estado_orden' => $parte->nombre_estado,
+                        // 'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-',
+                        // 'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-'
+                        ]);
+                }
+                break;
+            
+            case 2:
+                # code...
+                break;
+            
+            case 3:
+                # code...
+                break;
+        }
+        
+
+       /* $orden = Orden::find($id);
         $partes_arr = array();
 
         foreach ($orden->getPartes as $parte) {
@@ -283,8 +337,10 @@ class ParteController extends Controller
                     'estado_orden' => $orden->getEstado(),
                     ]);
             } 
-        }
+        } 
 
+        return $partes_arr; */
+        
         return $partes_arr;
     }
 }

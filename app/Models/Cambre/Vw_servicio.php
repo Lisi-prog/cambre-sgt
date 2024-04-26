@@ -20,6 +20,7 @@ class Vw_servicio extends Model
 
     protected $fillable = [ 
         'prioridad_servicio',
+        'id_servicio',
         'codigo_servicio',
         'nombre_servicio',
         'id_subtipo_servicio',
@@ -32,7 +33,10 @@ class Vw_servicio extends Model
         'id_actualizacion',
         'fecha_limite',
         'id_estado',
-        'nombre_estado'
+        'nombre_estado',
+        'total_ord',
+        'total_ord_completa',
+        'progreso'
     ];
 
     /* public function scopeDescripcion($query,$descripcion)

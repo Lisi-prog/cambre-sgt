@@ -756,7 +756,7 @@ export function cargarModalCrearMecanizado(){
 }
 
 export function colorEncabezadoPorTipoDeOrden(tipo_orden){
-    console.log('COLOR');
+    // console.log('COLOR');
     switch (Number(tipo_orden)) {
         case 1:
             return '#558540';
