@@ -7,7 +7,7 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h5 class="titulo page__heading my-auto mr-5">Editar activo #{{$activo->id_codigo}}</h5>
+            <h5 class="titulo page__heading my-auto mr-5">Editar activo #{{$activo->id_activo}}</h5>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -65,7 +65,7 @@
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="p-1">
-                                    {!! Form::open(['method' => 'GET', 'route' => 'maquinarias.index', 'style' => '']) !!}
+                                    {!! Form::open(['method' => 'GET', 'route' => 'activos.index', 'style' => '']) !!}
                                     {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}
                                 </div>
