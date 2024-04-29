@@ -47,7 +47,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
                                         {!! Form::label('activo', 'Activo:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('activo',$Ssi->getActivo->nombre_activo, ['class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('activo',$Ssi->getActivo->nombre_activo ?? '-', ['class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
