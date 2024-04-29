@@ -601,6 +601,13 @@ class OrdenController extends Controller
     public function ObtenerOrdenTrabajo($id){
         $orden_trabajo = Orden::find($id);
         $orden_trabajo_arr = array();
+
+        if (Auth::user()->hasRole('TECNICO')) {
+            $es_tecnico = 1;
+        } else {
+            $es_tecnico = 0;
+        }
+        
         
         $supervisor = '';
         $responsable = '';
@@ -639,7 +646,8 @@ class OrdenController extends Controller
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
                     'id_supervisor' => $id_supervisor,
                     'supervisa' => $supervisor,
-                    'observaciones' => $orden_trabajo->observaciones
+                    'observaciones' => $orden_trabajo->observaciones,
+                    'tec' => $es_tecnico
                     ]);
                 break;
             case 2:
@@ -664,7 +672,8 @@ class OrdenController extends Controller
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
                     'id_supervisor' => $id_supervisor,
                     'supervisa' => $supervisor,
-                    'observaciones' => $orden_trabajo->observaciones
+                    'observaciones' => $orden_trabajo->observaciones,
+                    'tec' => $es_tecnico
                     ]);
                 break;
             case 3:
@@ -689,7 +698,8 @@ class OrdenController extends Controller
                     'descripcion_ultimo_parte' => $orden_trabajo->getPartes->sortByDesc('id_parte')->first()->observaciones,
                     'id_supervisor' => $id_supervisor,
                     'supervisa' => $supervisor,
-                    'observaciones' => $orden_trabajo->observaciones
+                    'observaciones' => $orden_trabajo->observaciones,
+                    'tec' => $es_tecnico
                     ]);
                 break;
             default:

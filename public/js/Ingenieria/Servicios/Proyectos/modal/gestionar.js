@@ -413,6 +413,7 @@ function obtenerEstados(opcion){
 function modificarModalVerPartesEstadoFechaLimite(id){
     let fecha_limite = document.getElementById('m-ver-parte-fecha-limite');
     let estado = document.getElementById('m-ver-parte-estado');
+    let estado_tecnico = [1, 6, 7];
     $.when($.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id, 
@@ -420,9 +421,29 @@ function modificarModalVerPartesEstadoFechaLimite(id){
             
         },
     success: function (response) {
-        // console.log(response);
+
         estado.value= response[0].id_estado;
         fecha_limite.value= response[0].fecha_limite;
+
+        if (response[0].tec){ //Si es tecnico
+
+            if (estado_tecnico.includes(response[0].id_estado)) { //si el estado del orden es uno de los validos para el tecnico
+                document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
+                    if (!estado_tecnico.includes(parseInt(opt.value))) {
+                        opt.style.display = 'none';
+                    }
+                });
+            }
+            else{
+                document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
+                    if (opt.value != response[0].id_estado) {
+                        opt.style.display = 'none';
+                    }
+                });
+
+            }
+
+        }
     },
     error: function (error) {
         console.log(error);
