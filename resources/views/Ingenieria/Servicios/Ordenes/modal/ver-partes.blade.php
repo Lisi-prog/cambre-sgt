@@ -93,17 +93,29 @@
                                 <option selected="selected" value="">Seleccionar</option>
                             </select>
                         </div>
+                        
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                                 {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                {!! Form::date('fecha_limite', null, [
-                                    'min' => '2023-01-01',
-                                    'max' => \Carbon\Carbon::now()->year . '-12',
-                                    'id' => 'm-ver-parte-fecha-limite',
-                                    'class' => 'form-control'
-                                ]) !!}
+                                @role('SUPERVISOR')
+                                    {!! Form::date('fecha_limite', null, [
+                                        'min' => '2023-01-01',
+                                        'max' => \Carbon\Carbon::now()->year . '-12',
+                                        'id' => 'm-ver-parte-fecha-limite',
+                                        'class' => 'form-control'
+                                    ]) !!}
+                                @else
+                                    {!! Form::date('fecha_limite', null, [
+                                        'min' => '2023-01-01',
+                                        'max' => \Carbon\Carbon::now()->year . '-12',
+                                        'id' => 'm-ver-parte-fecha-limite',
+                                        'class' => 'form-control',
+                                        'readonly'
+                                    ]) !!}
+                                @endrole
                             </div>
                         </div>
+                       
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
