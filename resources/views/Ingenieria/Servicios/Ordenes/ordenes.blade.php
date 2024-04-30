@@ -191,6 +191,7 @@
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Responsable</th>
+                                    <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
@@ -218,6 +219,8 @@
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td>
                                             
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td>
+
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>

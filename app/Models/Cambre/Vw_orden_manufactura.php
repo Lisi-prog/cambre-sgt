@@ -4,7 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Casts\HoraMinutoCast;
 
 class Vw_orden_manufactura extends Model
 {
@@ -31,7 +31,12 @@ class Vw_orden_manufactura extends Model
         'id_empleado_responsable',
         'supervisor',
         'id_empleado_supervisor',
-        'nombre_estado'
+        'nombre_estado',
+        'total_horas'
+    ];
+
+    protected $casts = [
+        'total_horas' => HoraMinutoCast::class
     ];
 
     public function scopeResponsable($query, $responsable)

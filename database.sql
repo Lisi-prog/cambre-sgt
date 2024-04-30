@@ -612,7 +612,21 @@ SELECT
     act_se.id_actualizacion,
     act.fecha_limite,
     est.id_estado,
-    est.nombre_estado
+    est.nombre_estado,
+    case
+      when si.tot_ord is null then 0
+      else si.tot_ord
+    end as total_ord,
+    
+    case
+		  when si.tot_ord_completa is null then 0
+      else si.tot_ord_completa
+	  end as total_ord_completa,
+    
+    case
+		  when si.progreso is null then 0
+      else si.progreso
+	  end as progreso
 FROM servicio AS se
 INNER JOIN subtipo_servicio AS stb ON stb.id_subtipo_servicio = se.id_subtipo_servicio
 INNER JOIN tipo_servicio AS tb ON stb.id_tipo_servicio = tb.id_tipo_servicio
@@ -620,7 +634,8 @@ INNER JOIN responsabilidad AS res ON se.id_responsabilidad = res.id_responsabili
 INNER JOIN empleado AS emp ON res.id_empleado = emp.id_empleado
 INNER JOIN ActualizacionRanked AS act_se ON act_se.id_servicio = se.id_servicio AND act_se.rn = 1
 INNER JOIN actualizacion AS act ON act.id_actualizacion = act_se.id_actualizacion
-INNER JOIN estado AS est ON act.id_estado = est.id_estado;
+INNER JOIN estado AS est ON act.id_estado = est.id_estado
+LEFT JOIN servicio_info si ON si.id_servicio = se.id_servicio;
 
 CREATE VIEW vw_orden_trabajo AS
 WITH 
@@ -665,15 +680,17 @@ select
     roo.id_empleado as id_empleado_responsable,
     ro.nombre_empleado as supervisor,
     ro.id_empleado as id_empleado_supervisor,
-    p_rank.nombre_estado
+    p_rank.nombre_estado,
+	th.total_horas
     from orden as o
 	inner join orden_trabajo as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa
 	inner join servicio as se on se.id_servicio = et.id_servicio
-    INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
-    inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
-    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
-    order by se.prioridad_servicio;
+  INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+  inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+  inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+  inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+  order by se.prioridad_servicio;
 
 
 CREATE VIEW vw_orden_manufactura AS
@@ -719,7 +736,8 @@ select
     roo.id_empleado as id_empleado_responsable,
     ro.nombre_empleado as supervisor,
     ro.id_empleado as id_empleado_supervisor,
-    p_rank.nombre_estado_manufactura as nombre_estado
+    p_rank.nombre_estado_manufactura as nombre_estado,
+    th.total_horas
     from orden as o
 	inner join orden_manufactura as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa
@@ -727,6 +745,7 @@ select
   INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
   inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
   inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+  inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
     order by se.prioridad_servicio;
 
 
@@ -773,7 +792,8 @@ select
     roo.id_empleado as id_empleado_responsable,
     ro.nombre_empleado as supervisor,
     ro.id_empleado as id_empleado_supervisor,
-    p_rank.nombre_estado_mecanizado as nombre_estado
+    p_rank.nombre_estado_mecanizado as nombre_estado,
+    th.total_horas
     from orden as o
 	inner join orden_mecanizado as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa
@@ -781,6 +801,7 @@ select
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
     inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
     inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+    inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
     order by se.prioridad_servicio;
 
 
