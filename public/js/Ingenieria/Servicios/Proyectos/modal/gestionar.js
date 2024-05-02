@@ -270,11 +270,16 @@ function cargarModalVerPartes(id, tipo_orden){
     document.getElementById('m-ver-parte-orden-btn').hidden = true;
     
     document.getElementById('body_ver_parte').innerHTML = '';
+    try {
+        let tablaa = document.getElementById('verPartes')
+        tablaa.querySelectorAll('th').forEach(encabezado => {
+            encabezado.style.backgroundColor = color_encabezado;
+        });
+    } catch (error) {
+        
+    }
     document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
-    let tablaa = document.getElementById('verPartes')
-    tablaa.querySelectorAll('th').forEach(encabezado => {
-        encabezado.style.backgroundColor = color_encabezado;
-      });
+    
 
     if(tipo_orden == 3){
         document.getElementById('column-maq').hidden = false;
