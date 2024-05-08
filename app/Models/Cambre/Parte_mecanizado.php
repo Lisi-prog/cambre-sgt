@@ -52,4 +52,8 @@ class Parte_mecanizado extends Model
     public function getParteMecxMaq(){
         return $this->hasMany(Parte_mecanizado_x_maquinaria::class, 'id_parte_mecanizado');
     }
+
+    public function getTipoParte(){
+        return 3;
+    }
 }

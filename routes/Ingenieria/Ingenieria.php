@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::resource('partes', ParteController::class);
         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
+        Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
+        Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
     Route::resource('ordenes', OrdenController::class);
     //------------------
@@ -121,10 +123,12 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
      Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
          //RUTAS PARTES
-         Route::resource('partes', ParteController::class);
-         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
-         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
-         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
+        Route::resource('partes', ParteController::class);
+        Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
+        Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
+        Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
+        Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
+        Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
 
      //------------------
 });

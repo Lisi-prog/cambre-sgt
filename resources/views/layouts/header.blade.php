@@ -19,8 +19,10 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title">
                     Bienvenido, {{\Illuminate\Support\Facades\Auth::user()->name}}</div>
+                @role('SUPERVISOR')
                 <a class="dropdown-item has-icon edit-profile" href="#" data-id="{{ \Auth::id() }}">
                     <i class="fa fa-user"></i>Editar Perfil</a>
+                @endrole
                 <a class="dropdown-item has-icon" data-toggle="modal" data-target="#changePasswordModal" href="#" data-id="{{ \Auth::id() }}"><i
                             class="fa fa-lock"> </i>Cambiar Contraseña</a>
                 <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"

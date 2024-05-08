@@ -48,4 +48,8 @@ class Parte_trabajo extends Model
         }
         return 0;
     }
+
+    public function getTipoParte(){
+        return 1;
+    }
 }

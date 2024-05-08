@@ -116,30 +116,17 @@ class EtapaController extends Controller
     
     public function show($id)
     {
-        $proyecto = Servicio::find($id);
-        return view('Ingenieria.Servicios.Proyectos.show',compact('proyecto'));
+        
     }
     
     public function edit($id)
     {
-        $permiso = Permission::findOrFail($id);
-    
-        return view('Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
+        
     }
     
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-    
-        $permiso = Permission::find($id);
-
-        $permiso->update([
-            'name' => strtoupper($request->input('name'))
-        ]);
-    
-        return redirect()->route('permisos.index')->with('mensaje',$permiso->name.' editado exitosamente.');                        
+                               
     }
     
     public function destroy($id)
@@ -230,10 +217,10 @@ class EtapaController extends Controller
             'fecha_inicio' => $fecha_inicio
         ]);
 
-        if ($etapa->getResponsable->getEmpleado->id_empleado != $responsable) {
-            $ultima_act_etapa = Actualizacion_etapa::where('id_etapa', $id_etapa)->orderBy('id_actualizacion_etapa', 'desc')->first();
-            $nuevo_responsable = Empleado::find($responsable);
 
+        if ($etapa->getResponsable->getEmpleado->id_empleado != $responsable) {
+            $nuevo_responsable = Empleado::find($responsable);
+            $ultima_act_etapa = Actualizacion_etapa::where('id_etapa', $id_etapa)->orderBy('id_actualizacion_etapa', 'desc')->first();
             $res = Responsabilidad::find($etapa->getResponsable->id_responsabilidad);
             $descripcion = "Se cambio el responsable de la etapa de ".$etapa->getResponsable->getEmpleado->nombre_empleado." a ".$nuevo_responsable->nombre_empleado;
             $res->id_empleado = $responsable;

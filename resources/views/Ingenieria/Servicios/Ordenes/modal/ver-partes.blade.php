@@ -53,6 +53,7 @@
                     <div class="table-responsive tableFixHead">
                         <table class="table table-striped" id="verPartes" >
                             <thead id="encabezado_tabla_parte" style="background: #558540">
+                                <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
@@ -62,6 +63,7 @@
                                 <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
                                 <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody id="body_ver_parte">
 
@@ -70,12 +72,15 @@
                     </div>
                 <div class="row mb-2">
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-2">
-                        <button type="button" class="btn btn-warning" onclick="verCargarParteModalParte()">Nuevo parte</button>
+                        <button type="button" class="btn btn-warning" onclick="nuevoParte()">Nuevo parte</button>
                     </div>
                 </div>             
-                <div class="row" id="m-ver-parte-div" hidden>
-                    {!! Form::open(['route' => 'partes.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+                <div class="row rounded border border-3 border-warning" id="m-ver-parte-div">
+                    <h5 class="text-center control-label pt-2" id="titulo-parte">Nuevo parte</h5>
+                    {!! Form::open(['route' => 'partes.guardar.act', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec nuevo-editar-parte', 'id' => 'form-nuevo-parte']) !!}
                     {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
+                    {!! Form::text('id_parte', null, ['class' => 'form-control', 'hidden', 'id' => 'm-id-parte']) !!}
+                    {!! Form::text('editar', 0, ['class' => 'form-control', 'hidden', 'id' => 'm-editar']) !!}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
@@ -146,12 +151,24 @@
                     </div>
                 </div>
             </div>
+
+            <div id="alert" class="mx-3">
+                
+            </div>
+
             <div class="modal-footer">
                 {{-- <button type="submit" class="btn btn-success">Guardar</button> --}}
-                <button type="submit" class="btn btn-success button-prevent-multiple-submits" id="m-ver-parte-orden-btn" hidden>Guardar</button>
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits-3sec" id="m-ver-parte-orden-btn">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}
+            
+            {{-- <div class="alert alert-success alert-dismissible fade show " role="alert">
+                'Parte creado con exito'
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div> --}}
         </div>
     </div>
 </div>

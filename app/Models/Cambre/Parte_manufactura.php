@@ -48,4 +48,8 @@ class Parte_manufactura extends Model
         }
         return 0;
     }
+
+    public function getTipoParte(){
+        return 2;
+    }
 }

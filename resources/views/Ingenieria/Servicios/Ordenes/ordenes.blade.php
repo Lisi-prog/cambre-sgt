@@ -278,10 +278,19 @@
             </div>
         </div>
     </div>
+    @role('SUPERVISOR')
+        @php
+            $es_sup = 1;
+        @endphp
+    @else
+        @php
+            $es_sup = 0;
+        @endphp
+    @endrole
     <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
     
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
@@ -299,7 +308,10 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
 <script>
     let x = '';
+    let id_emp = {{Auth::user()->getEmpleado->id_empleado}};
+    let es_super = {{$es_sup}};
     $(document).ready( function () {
+        
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
