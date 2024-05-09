@@ -586,6 +586,22 @@ class ProyectoController extends Controller
             $flt_eta_ord_mec = [];
         }
         
+        return $info_proyecto = DB::select('WITH ActualizacionRanked AS (
+                                                SELECT
+                                                    act_s.id_servicio,
+                                                    act_s.id_actualizacion_servicio,
+                                                    act_s.id_actualizacion,
+                                                    ROW_NUMBER() OVER (PARTITION BY act_s.id_servicio ORDER BY act_s.id_actualizacion DESC) AS rn
+                                                FROM actualizacion_servicio AS act_s
+                                            )
+                                            select s.prioridad_servicio, s.id_servicio, s.codigo_servicio, s.nombre_servicio, stp.nombre_subtipo_servicio, s.fecha_inicio, emp.nombre_empleado, act.fecha_limite, est.nombre_estado from servicio s
+                                            inner join subtipo_servicio stp on stp.id_subtipo_servicio = s.id_subtipo_servicio
+                                            inner join responsabilidad res on res.id_responsabilidad = s.id_responsabilidad
+                                            inner join empleado emp on emp.id_empleado = res.id_empleado
+                                            INNER JOIN ActualizacionRanked AS act_se ON act_se.id_servicio = s.id_servicio AND act_se.rn = 1
+                                            INNER JOIN actualizacion AS act ON act.id_actualizacion = act_se.id_actualizacion
+                                            inner join estado est on est.id_estado = act.id_estado
+                                            where s.id_servicio = ?;', [$id]);
 
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion'));
     }
