@@ -383,6 +383,7 @@ class ParteController extends Controller
                         'observaciones' => $parte->observaciones,
                         'fecha' => $parte->fecha,
                         'fecha_limite' => $parte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
                         'horas' => $parte->horas,
                         'estado' => $parte->getParteDe->getNombreEstado(),
                         'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
@@ -445,6 +446,7 @@ class ParteController extends Controller
                         'observaciones' => $parte->observaciones,
                         'fecha' => $parte->fecha,
                         'fecha_limite' => $parte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
                         'horas' => $parte->horas,
                         'estado' => $parte->getParteDe->getNombreEstado(),
                         'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
@@ -501,6 +503,7 @@ class ParteController extends Controller
                         'observaciones' => $parte->observaciones,
                         'fecha' => $parte->fecha,
                         'fecha_limite' => $parte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
                         'horas' => $parte->horas,
                         'estado' => $parte->getParteDe->getNombreEstado(),
                         'responsable_cambio' => Auth::user()->getEmpleado->id_empleado

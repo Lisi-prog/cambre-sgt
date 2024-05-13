@@ -24,6 +24,7 @@ class Log_parte extends Model
         'observaciones',
         'fecha',
         'fecha_limite',
+        'fecha_carga',
         'horas',
         'estado',
         'id_maquinaria',

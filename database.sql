@@ -434,6 +434,7 @@ CREATE TABLE `log_parte`(
   `observaciones` varchar(500),
   `fecha` date not null,
   `fecha_limite` date not null,
+  `fecha_carga` datetime not null,
   `horas` time not null,
   `estado` varchar(100),
   `id_maquinaria` int,
