@@ -66,7 +66,7 @@
                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody id="body_ver_parte">
-
+                                
                             </tbody>
                         </table>
                     </div>

@@ -126,6 +126,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
          //RUTAS PARTES
         Route::resource('partes', ParteController::class);
         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
+        Route::get('parte/{id}/logs', [ParteController::class, 'logsParte'])->name('parte.logs');
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);

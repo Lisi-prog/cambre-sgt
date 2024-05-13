@@ -232,8 +232,10 @@ class ParteController extends Controller
         return 1;                      
     }
     
-    public function show($id)
+    public function show($idParte)
     {
+        $logs = Log_parte::where('id_parte', $idParte)->get();
+        return view('Ingenieria.Servicios.Partes.logs', compact('logs', 'idParte'));
     }
     
     public function edit(Request $request, $id)

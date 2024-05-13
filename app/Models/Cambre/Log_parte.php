@@ -36,4 +36,17 @@ class Log_parte extends Model
     {
         return $this->belongsTo(Parte::class, 'id_parte');
     }
+
+    public function getResponsabilidad()
+    {
+        return Responsabilidad::where('id_responsabilidad', $this->id_responsabilidad)->first();
+    }
+
+    public function getNombreResponsable(){
+        return $this->getResponsabilidad()->getEmpleado->nombre_empleado;
+    }
+
+    public function getNombreEditor(){
+        return Empleado::where('id_empleado', $this->responsable_cambio)->first()->nombre_empleado;
+    }
 }
