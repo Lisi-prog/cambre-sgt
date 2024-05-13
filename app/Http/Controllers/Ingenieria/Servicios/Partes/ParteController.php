@@ -26,6 +26,8 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Parte_mecanizado_x_maquinaria;
+use App\Models\Cambre\Log_parte;
+
 class ParteController extends Controller
 {
     function __construct()
@@ -315,6 +317,15 @@ class ParteController extends Controller
         }
     }
 
+    public function ultimoParteOrden($id){
+        $orden = Orden::find($id);
+        $ultimo_parte = $orden->getPartes->last();
+        return [
+            'fecha_limite' => $ultimo_parte->fecha_limite,
+            'estado' => $ultimo_parte->getParteDe->getEstado->nombre_estado
+        ];
+    }
+
     public function guardarActualizarParte(Request $request)
     {
 
@@ -366,6 +377,17 @@ class ParteController extends Controller
             case 1:
                 if ($editar){
                     //return 2;
+                    Log_parte::create([
+                        'id_parte' => $parte->id_parte,
+                        'id_responsabilidad' => $parte->id_responsabilidad,
+                        'observaciones' => $parte->observaciones,
+                        'fecha' => $parte->fecha,
+                        'fecha_limite' => $parte->fecha_limite,
+                        'horas' => $parte->horas,
+                        'estado' => $parte->getParteDe->getNombreEstado(),
+                        'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+                    ]);
+                    
                     $parte->update([
                         'observaciones' => $observaciones,
                         'fecha' => $fecha,
@@ -417,6 +439,17 @@ class ParteController extends Controller
             case 2:
                 if ($editar) {
 
+                    Log_parte::create([
+                        'id_parte' => $parte->id_parte,
+                        'id_responsabilidad' => $parte->id_responsabilidad,
+                        'observaciones' => $parte->observaciones,
+                        'fecha' => $parte->fecha,
+                        'fecha_limite' => $parte->fecha_limite,
+                        'horas' => $parte->horas,
+                        'estado' => $parte->getParteDe->getNombreEstado(),
+                        'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+                    ]);
+
                     $parte->update([
                         'observaciones' => $observaciones,
                         'fecha_limite' => $fecha_limite,
@@ -462,6 +495,24 @@ class ParteController extends Controller
             
             case 3:
                 if ($editar) {
+                    $log_parte = Log_parte::create([
+                        'id_parte' => $parte->id_parte,
+                        'id_responsabilidad' => $parte->id_responsabilidad,
+                        'observaciones' => $parte->observaciones,
+                        'fecha' => $parte->fecha,
+                        'fecha_limite' => $parte->fecha_limite,
+                        'horas' => $parte->horas,
+                        'estado' => $parte->getParteDe->getNombreEstado(),
+                        'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+                    ]);
+
+                    if ($parte->getParteDe->getParteMecxMaq->first()) {
+                        $log_parte->update([
+                            'id_maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->id_maquinaria,
+                            'horas_maquina' => $parte->getParteDe->getParteMecxMaq->first()->horas_maquina
+                        ]);
+                    }
+
                     $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
                     $maquina = $request->input('maquina');
 

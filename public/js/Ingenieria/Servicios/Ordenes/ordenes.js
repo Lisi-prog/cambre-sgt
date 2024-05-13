@@ -1,70 +1,3 @@
-$(document).ready(function () { 
-    $('#verPartesModal').on('hidden.bs.modal', function (e) {
-        nuevoParte();
-    })
-
-    $(".nuevo-editar-parte").on('submit', function(evt){
-        //     if (BanderaFormulario) {
-        //         return;
-        //     }
-            evt.preventDefault();     
-            var url_php = $(this).attr("action"); 
-            var type_method = $(this).attr("method"); 
-            var form_data = $(this).serialize();
-            let html = '';
-            let id_orden = document.getElementById('m-ver-parte-orden').value;
-            $.ajax({
-                type: type_method,
-                url: url_php,
-                data: form_data,
-                success: function(data) {
-                    //console.log(data);
-                    opcion = parseInt(data.resultado);
-                    switch (opcion) {
-                        case 1:
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte creado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 2:
-                            id = document.getElementById('m-id-parte').value;
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte cod. `+id+` actualizado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 6:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        No se puede actualizar un parte de la cual no eres responsable.
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                        default:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        Ocurrio un error
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                    }
-                    $('#alert').html(html)
-                    recargarPartes(id_orden, data.tipo_orden);
-                    nuevoParte();
-                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-
-                }
-            });
-    });
-});
-
 function verCargarParteModalParte(){
      let cuadro_oculto_de_cargar_parte = document.getElementById('m-ver-parte-div');
      let btn_oculto_de_cargar_parte = document.getElementById('m-ver-parte-orden-btn');
@@ -226,6 +159,7 @@ function cargarModalVerPartes(id, tipo_orden){
     let orden = document.getElementById('m-ver-parte-orden');
     orden.value = id;
     let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
+    
     
     // document.getElementById('m-ver-parte-div').hidden = true;
     // document.getElementById('m-ver-parte-orden-btn').hidden = true;
@@ -445,4 +379,27 @@ function obtenerMaquinaria(){
     }
     }));
 } 
+
+function actRow(){
+    let id_orden = document.getElementById('m-ver-parte-orden').value;
+
+    $.when($.ajax({
+        type: "post",
+        url: '/parte/obtener-ultimo/'+id_orden, 
+        data: {
+            
+        },
+        success: function (response) {
+            // console.log(response);
+            var temp = table.row(ind_rw).data();
+            temp[0] = response.fecha_limite;
+            // table.row(ind_rw).data(temp).draw();
+            table.cell(ind_rw, 5).data(response.estado).draw();
+            table.cell(ind_rw, 8).data(response.fecha_limite).draw();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+}
 

@@ -426,6 +426,22 @@ CREATE TABLE `doc_documento`(
   `ubicacion_documento` varchar(200),
   PRIMARY KEY(`id_documento`)
 );
+
+CREATE TABLE `log_parte`(
+  `id_log_parte` int AUTO_INCREMENT,
+  `id_parte` int not null,
+  `id_responsabilidad` int,
+  `observaciones` varchar(500),
+  `fecha` date not null,
+  `fecha_limite` date not null,
+  `horas` time not null,
+  `estado` varchar(100),
+  `id_maquinaria` int,
+  `horas_maquina` time,
+  `responsable_cambio` int not null,
+  PRIMARY KEY(`id_log_parte`),
+  CONSTRAINT `id_log_parte_x_id_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
+);
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)

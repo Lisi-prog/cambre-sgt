@@ -227,7 +227,7 @@
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
                                                     <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
+                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
                                                             Opciones
                                                         </button>
                                                     </div>
@@ -308,8 +308,10 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
 <script>
     let x = '';
+    let ind_rw = '';
     let id_emp = {{Auth::user()->getEmpleado->id_empleado}};
     let es_super = {{$es_sup}};
+    var table;
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -414,7 +416,7 @@
             return false;
             }
         );
-    var table = $('#example').DataTable({
+    table = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
@@ -436,9 +438,82 @@
     $('input:checkbox').on('change', function () {
         table.draw();
     });
-    table.on('draw',function () {
+    
+    table.on('draw', function () {
         changeTdColor();
-    } )
+    })
+
+    $('#example tbody').on('click', 'tr', function () {
+        ind_rw = table.row(this).index();
+        // let a = table.row(this).index();
+        // var temp = table.row(a).data();
+        // temp[0] = 'Tom';
+        // table.row(this)
+        // .data(temp)
+        // .draw();
+   });
+
+    $('#verPartesModal').on('hidden.bs.modal', function (e) {
+        nuevoParte();
+        actRow();
+    })
+
+    $(".nuevo-editar-parte").on('submit', function(evt){
+            evt.preventDefault();     
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+            let html = '';
+            let id_orden = document.getElementById('m-ver-parte-orden').value;
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    //console.log(data);
+                    opcion = parseInt(data.resultado);
+                    switch (opcion) {
+                        case 1:
+                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Parte creado con exito
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                            break;
+                        case 2:
+                            id = document.getElementById('m-id-parte').value;
+                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Parte cod. `+id+` actualizado con exito
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                            break;
+                        case 6:
+                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        No se puede actualizar un parte de la cual no eres responsable.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                            break;
+                        default:
+                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        Ocurrio un error
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                            break;
+                    }
+                    $('#alert').html(html)
+                    recargarPartes(id_orden, data.tipo_orden);
+                    nuevoParte();
+                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                }
+            });
+    });
 
     } );
     
