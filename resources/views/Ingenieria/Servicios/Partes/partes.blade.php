@@ -45,13 +45,13 @@
 <section class="section">
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Partes</h5>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
+                <h4 class="titulo page__heading my-auto">Partes de {{$tipo}}</h5>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
     
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
                 {{-- {!! Form::open(['method' => 'GET', 'route' => ['partes.create'], 'class' => '']) !!}
                     {!! Form::submit('Nuevo', ['class' => 'btn btn-success col-9']) !!}
                 {!! Form::close() !!} --}}
@@ -71,7 +71,7 @@
                         </div> --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead id="encabezado_tabla_parte" style="background-color:#2970c1">
+                                <thead id="encabezado_partes">
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Cod.</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Fecha</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Fecha limite</th>
@@ -135,6 +135,10 @@
             </div>
         </div>
     </div>
+    <script type="module" > 
+        import {colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        window.colorEncabezadoPorTipoDeOrden = colorEncabezadoPorTipoDeOrden;
+    </script>
 </section>
 
 {{-- @include('Ingenieria.Servicios.Etapas.modal.editar-etapa') --}}
@@ -172,6 +176,8 @@
     $(document).ready(function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
+        let tipo_orden = window.location.pathname.substring(12, 13);
+        document.getElementById('encabezado_partes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
         document.getElementById('volver').href = url;
         // Setup - add a text input to each footer cell
         $('#example thead tr')

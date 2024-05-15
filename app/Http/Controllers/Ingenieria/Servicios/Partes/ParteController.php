@@ -28,6 +28,7 @@ use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Parte_mecanizado_x_maquinaria;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Log_parte;
+use App\Models\Cambre\Servicio;
 
 class ParteController extends Controller
 {
@@ -108,9 +109,9 @@ class ParteController extends Controller
                 break;
             case 3:
                 //ORDEN DE MECANIZADO
-                foreach ($array_partes as $partes) {
+                foreach ($array_partes as $parte) {
                     try {
-                        if (count(Parte_mecanizado::where('id_parte', $orden->id_parte)->get()) == 1) {
+                        if (count(Parte_mecanizado::where('id_parte', $parte->id_parte)->get()) == 1) {
                             array_push($partes, $parte);
                         }
                     } catch (\Throwable $th) {
@@ -158,6 +159,28 @@ class ParteController extends Controller
         }
         
         return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
+    }
+
+    public function obtenerCodigoServicio(){
+        return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
+    }
+    public function obtenerEmpleados(){
+        return Empleado::orderBy('nombre_empleado')->get();
+    }
+    public function obtenerSupervisores(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
     }
 
     public function listarTodosLosEstadosDe($opcion){
