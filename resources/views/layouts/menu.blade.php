@@ -119,6 +119,34 @@
         </li>
     @endcan
 
+    @can('VER-MENU-ORDENES') {{-- PARTES --}}
+        <li class="dropdown">
+            <a href="" class="nav-link has-dropdown menu-hover">
+                <i class="fas fa-pencil-alt"></i><span>Partes</span>
+            </a>
+            <ul class="dropdown-menu borde-menu border border-primary border-2" style="display: none;">
+                <li class="dropdown-title pt-3">
+                    Partes
+                </li>
+                <li>
+                    <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                        <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                        <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                        <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    @endcan
+
     @can('VER-MENU-INGENIERIA')
     <li class="dropdown ">
         <a href="" class="nav-link has-dropdown menu-hover">
