@@ -26,6 +26,7 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Parte_mecanizado_x_maquinaria;
+use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Log_parte;
 
 class ParteController extends Controller
@@ -41,9 +42,11 @@ class ParteController extends Controller
 
     }
 
-    public function index(Request $request)
+    public function index()
     {  
-        
+        $partes = Parte::orderBy('id_parte')->get();
+        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Servicios.Partes.index', compact('partes', 'empleados'));
     }
     
     public function indexOrden($id, $tipo_orden){
