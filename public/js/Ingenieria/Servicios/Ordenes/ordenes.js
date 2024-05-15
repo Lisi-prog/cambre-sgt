@@ -107,6 +107,8 @@ function recargarPartes(id, tipo_orden){
         success: function (response) {
             // console.log(response)
             let maq_y_hora = '';
+            let idCount = 0;
+            let urlLogParte = "/partes/";
             response.forEach(element => {
                 if (element.fecha_limite) {
                     fecha_lim = element.fecha_limite;
@@ -139,9 +141,33 @@ function recargarPartes(id, tipo_orden){
                             `+maq_y_hora+`
                             <td class="text-center">`+element.supervisor+`</td>
                             <td class="text-center">
-                                `+btn_editar+`
+                                <div class="row justify-content-center" >
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                        Opciones
+                                    </button>
+                                </div>
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href='`+urlLogParte+element.id_parte+`' target="_blank">
+                                                <button type="button" class="btn btn-warning w-100" >
+                                                    Logs
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>`
+                        idCount++;
             });
             document.getElementById('body_ver_parte').innerHTML = html;
             document.getElementById('mv-estado').value = response[0].estado_orden;
@@ -189,6 +215,8 @@ function cargarModalVerPartes(id, tipo_orden){
     success: function (response) {
         // console.log(response)
         let maq_y_hora = '';
+        let idCount = 0;
+        let urlLogParte = "/partes/";
         response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
@@ -221,9 +249,33 @@ function cargarModalVerPartes(id, tipo_orden){
                         `+maq_y_hora+`
                         <td class="text-center">`+element.supervisor+`</td>
                         <td class="text-center">
-                            `+btn_editar+`
-                        </td>
+                                <div class="row justify-content-center" >
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                        Opciones
+                                    </button>
+                                </div>
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+
+                                    <div class="row my-2">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href='`+urlLogParte+element.id_parte+`' target="_blank">
+                                                <button type="button" class="btn btn-warning w-100" >
+                                                    Logs
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                     </tr>`
+            idCount++;
         });
         document.getElementById('body_ver_parte').innerHTML = html;
         document.getElementById('mv-orden').value = response[0].orden;
