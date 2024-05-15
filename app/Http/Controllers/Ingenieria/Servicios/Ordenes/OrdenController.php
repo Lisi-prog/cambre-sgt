@@ -45,6 +45,9 @@ use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Parte_mecanizado;
 use App\Models\Cambre\Tipo_relacion_gantt;
 use App\Models\Cambre\Orden_gantt;
+use App\Models\Cambre\Vw_orden_trabajo;
+use App\Models\Cambre\Vw_orden_mecanizado;
+use App\Models\Cambre\Vw_orden_manufactura;
 
 class OrdenController extends Controller
 {
@@ -856,64 +859,53 @@ class OrdenController extends Controller
         $array_ordenes = array();
         $ordenes = array();
                         
-        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-            $array_ordenes = Orden::orderBy('id_orden', 'asc')->get();
-        }else{
-            //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-            $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
-            foreach ($responsabilidades as $responsabilidad) {
-                is_null($responsabilidad->getResponsabilidadOrden) ? '' : array_push($array_responsabilidades_ordenes, $responsabilidad->getResponsabilidadOrden);
-            }
-            foreach ($array_responsabilidades_ordenes as $responsabilidad_orden) {
-                array_push($array_ordenes, $responsabilidad_orden->getOrden);
-            }
-        }
+        
        
         //FILTRAMOS LAS ORDENES POR TIP0
         switch ($tipo_orden) {           
             case 1:
-                //ORDEN DE TRABAJO
-                foreach ($array_ordenes as $orden) {
-                    try {
-                        if (count(Orden_trabajo::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden);
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                    
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                    $ordenes = Vw_orden_trabajo::get();
+        }else{
+            //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $ordenes = Vw_orden_trabajo::responsable($id_empleado)->get();
                 }
+                $servicios = Vw_orden_trabajo::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $tipo = 'Trabajo';
+                $tipo_orden = 1;
                 $estados = $this->listarTodosLosEstadosDe(1);
                 break;
+
             case 2:
                 //ORDEN DE MANUFACTURA
-                foreach ($array_ordenes as $orden) {
-                    try {
-                        if (count(Orden_manufactura::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden);
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                    
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                    $ordenes = Vw_orden_manufactura::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
                 }
+                $servicios = Vw_orden_manufactura::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $tipo = 'Manufactura';
+                $tipo_orden = 2;
                 $estados = $this->listarTodosLosEstadosDe(2);
                 break;
+
             case 3:
-                //ORDEN DE MECANIZADO
-                foreach ($array_ordenes as $orden) {
-                    try {
-                        if (count(Orden_mecanizado::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden);
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                    
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                    $ordenes = Vw_orden_mecanizado::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
                 }
+                $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $tipo = 'Mecanizado';
+                $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
                 break;
+
             case 4:
                 //ORDEN DE MANTENIMIENTO
                 foreach ($array_ordenes as $orden) {
@@ -927,31 +919,9 @@ class OrdenController extends Controller
                 $tipo = 'Mantenimiento';
                 $estados = $this->listarTodosLosEstadosDe(1);
                 break;
-            default:
-                # code...
-                break;
         }
         
-        if(count($ordenes) != 0){
-            foreach ($ordenes as $orden) {
-                $servicios_ids[] = $orden->getEtapa->getServicio->id_servicio;
-            }
-    
-            $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('codigo_servicio')->get();
-        }else{
-            $servicios = [];
-        }
-
-        foreach ($ordenes as $orden) {
-            $id_de_ordenes[] = $orden->id_orden;
-        }
-        try {
-            $ordenes = Orden::whereIn('id_orden', $id_de_ordenes)->get();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-        
-        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
+        return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));
     }
 
     public function editarOrden(Request $request){

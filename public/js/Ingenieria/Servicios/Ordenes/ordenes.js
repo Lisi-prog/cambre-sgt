@@ -447,7 +447,7 @@ function actRow(){
             temp[0] = response.fecha_limite;
             // table.row(ind_rw).data(temp).draw();
             table.cell(ind_rw, 5).data(response.estado).draw();
-            table.cell(ind_rw, 8).data(response.fecha_limite).draw();
+            table.cell(ind_rw, 9).data(response.fecha_limite).draw();
         },
         error: function (error) {
             console.log(error);
