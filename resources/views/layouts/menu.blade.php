@@ -129,17 +129,17 @@
                     Partes
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                    <a class="nav-link" href="{{route('partes.tipo', 1)}}" title="Trabajo">
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                    <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                    <a class="nav-link" href="{{route('partes.tipo', 3)}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>

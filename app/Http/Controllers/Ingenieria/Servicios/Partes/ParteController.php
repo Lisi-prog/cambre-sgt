@@ -48,7 +48,153 @@ class ParteController extends Controller
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         return view('Ingenieria.Servicios.Partes.index', compact('partes', 'empleados'));
     }
-    
+
+    // VISTAS DE PARTES
+    public function obtenerPartes($tipo_orden){
+        $id_empleado = Auth::user()->getEmpleado->id_empleado;
+        $supervisores = $this->obtenerSupervisores();
+        $responsables = $this->obtenerEmpleados();
+        $codigos_servicio = $this->obtenerCodigoServicio();
+        //$estados = $this->listarTodosLosEstados();
+        $tipo = '';
+        $servicios = '';
+        // $array_responsabilidades_partes = array();
+        $array_partes = array();
+        $partes = array();
+
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+            $array_partes = Parte::orderBy('id_parte', 'asc')->get();
+        }else{
+            //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+            $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
+            foreach ($responsabilidades as $responsabilidad) {
+                is_null($responsabilidad->getParte) ? '' : array_push($array_partes, $responsabilidad->getParte);
+            }
+            // foreach ($array_responsabilidades_partes as $responsabilidad_parte) {
+            //     array_push($array_partes, $responsabilidad_parte->getOrden);
+            // }
+        }
+       
+        //FILTRAMOS LAS ORDENES POR TIP0
+        switch ($tipo_orden) {           
+            case 1:
+                //ORDEN DE TRABAJO
+                foreach ($array_partes as $parte) {
+                    try {
+                        if (count(Parte_trabajo::where('id_parte', $parte->id_parte)->get()) == 1) {
+                            array_push($partes, $parte);
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                    
+                }
+                $tipo = 'Trabajo';
+                $estados = $this->listarTodosLosEstadosDe(1);
+                break;
+            case 2:
+                //ORDEN DE MANUFACTURA
+                foreach ($array_partes as $parte) {
+                    try {
+                        if (count(Parte_manufactura::where('id_parte', $parte->id_parte)->get()) == 1) {
+                            array_push($partes, $parte);
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                    
+                }
+                $tipo = 'Manufactura';
+                $estados = $this->listarTodosLosEstadosDe(2);
+                break;
+            case 3:
+                //ORDEN DE MECANIZADO
+                foreach ($array_partes as $partes) {
+                    try {
+                        if (count(Parte_mecanizado::where('id_parte', $orden->id_parte)->get()) == 1) {
+                            array_push($partes, $parte);
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                    
+                }
+                $tipo = 'Mecanizado';
+                $estados = $this->listarTodosLosEstadosDe(3);
+                break;
+            case 4:
+                //ORDEN DE MANTENIMIENTO
+                foreach ($array_partes as $parte) {
+                    try {
+                        if (count(Parte_mantenimiento::where('id_parte', $parte->id_parte)->get()) == 1) {
+                            array_push($partes, $parte);
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                $tipo = 'Mantenimiento';
+                $estados = $this->listarTodosLosEstadosDe(1);
+                break;
+            default:
+                # code...
+                break;
+        }
+        
+        if(count($partes) != 0){
+            foreach ($partes as $parte) {
+                $servicios_ids[] = $parte->getOrden->getEtapa->getServicio->id_servicio;
+            }
+
+            $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('codigo_servicio')->get();
+        }else{
+            $servicios = [];
+        }
+
+        foreach ($partes as $parte) {
+            $id_de_partes[] = $parte->id_parte;
+        }
+        try {
+            $partes = Parte::whereIn('id_parte', $id_de_partes)->get();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
+    }
+
+    public function listarTodosLosEstadosDe($opcion){
+        $estados_arr = array();
+
+        switch ($opcion) {
+            case 1:
+                foreach (Estado::get() as $estado) {
+                    array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado,
+                        'nombre' => $estado->nombre_estado
+                    ]);
+                }
+                break; 
+            case 2:
+                foreach (Estado_manufactura::get() as $estado) {
+                    array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado_manufactura,
+                        'nombre' => $estado->nombre_estado_manufactura
+                    ]);
+                }
+                break;
+            case 3:
+                foreach (Estado_mecanizado::get() as $estado) {
+                    array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado_mecanizado,
+                        'nombre' => $estado->nombre_estado_mecanizado
+                    ]);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        return $estados_arr;
+    }
+
     public function indexOrden($id, $tipo_orden){
         $orden = Orden::find(base64url_decode($id));
 
@@ -236,6 +382,11 @@ class ParteController extends Controller
     }
     
     public function show($idParte)
+    {
+        // $logs = Log_parte::where('id_parte', $idParte)->get();
+        // return view('Ingenieria.Servicios.Partes.logs', compact('logs', 'idParte'));
+    }
+    public function obtenerLogs($idParte)
     {
         $logs = Log_parte::where('id_parte', $idParte)->get();
         return view('Ingenieria.Servicios.Partes.logs', compact('logs', 'idParte'));

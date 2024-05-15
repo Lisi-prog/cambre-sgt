@@ -41,4 +41,8 @@ class Responsabilidad extends Model
     public function getResponsabilidadOrden(){  
         return $this->hasOne(Responsabilidad_orden::class, 'id_responsabilidad');
     }
+
+    public function getParte(){
+        return $this->hasOne(Parte::class, 'id_responsabilidad');
+    }
 }

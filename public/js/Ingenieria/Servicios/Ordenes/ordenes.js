@@ -157,7 +157,7 @@ function recargarPartes(id, tipo_orden){
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <a href='`+urlLogParte+element.id_parte+`' target="_blank">
+                                            <a href='`+urlLogParte+element.id_parte+`log' target="_blank">
                                                 <button type="button" class="btn btn-warning w-100" >
                                                     Logs
                                                 </button>
@@ -216,7 +216,7 @@ function cargarModalVerPartes(id, tipo_orden){
         // console.log(response)
         let maq_y_hora = '';
         let idCount = 0;
-        let urlLogParte = "/partes/";
+        let urlLogParte = "/parte/";
         response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
@@ -265,7 +265,7 @@ function cargarModalVerPartes(id, tipo_orden){
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <a href='`+urlLogParte+element.id_parte+`' target="_blank">
+                                            <a href='`+urlLogParte+element.id_parte+`/logs' target="_blank">
                                                 <button type="button" class="btn btn-warning w-100" >
                                                     Logs
                                                 </button>
