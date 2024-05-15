@@ -427,6 +427,14 @@ CREATE TABLE `doc_documento`(
   PRIMARY KEY(`id_documento`)
 );
 
+CREATE TABLE `servicio_info`(
+  `id_servicio` int NOT NULL,
+  `tot_ord` int NOT NULL,
+  `tot_ord_completa` int NOT NULL,
+  `progreso` int NOT NULL,
+  PRIMARY KEY(`id_servicio`)
+);
+
 CREATE TABLE `log_parte`(
   `id_log_parte` int AUTO_INCREMENT,
   `id_parte` int not null,
@@ -629,7 +637,315 @@ INNER JOIN responsabilidad AS res ON se.id_responsabilidad = res.id_responsabili
 INNER JOIN empleado AS emp ON res.id_empleado = emp.id_empleado
 INNER JOIN ActualizacionRanked AS act_se ON act_se.id_servicio = se.id_servicio AND act_se.rn = 1
 INNER JOIN actualizacion AS act ON act.id_actualizacion = act_se.id_actualizacion
-INNER JOIN estado AS est ON act.id_estado = est.id_estado;
+INNER JOIN estado AS est ON act.id_estado = est.id_estado
+LEFT JOIN servicio_info si ON si.id_servicio = se.id_servicio;
+
+CREATE VIEW vw_orden_trabajo AS
+WITH 
+ParteRanked AS (
+    SELECT
+        p.id_parte,
+        pt.id_estado,
+        p.fecha_limite,
+        p.id_orden,
+        est.nombre_estado,
+        CASE
+			WHEN est.id_estado = 9 THEN p.fecha
+            ELSE "____-__-__"
+		END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+    FROM parte p
+    inner join parte_trabajo pt on pt.id_parte = p.id_parte
+    inner join estado est on est.id_estado = pt.id_estado
+),
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+
+select 
+	se.prioridad_servicio,
+    se.id_servicio,
+	se.codigo_servicio,
+    se.nombre_servicio,
+    o.id_orden,
+	o.nombre_orden,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    roo.nombre_empleado as responsable,
+    roo.id_empleado as id_empleado_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_empleado_supervisor,
+    p_rank.nombre_estado,
+	th.total_horas
+    from orden as o
+	inner join orden_trabajo as ot on o.id_orden = ot.id_orden
+	inner join etapa as et on et.id_etapa = o.id_etapa
+	inner join servicio as se on se.id_servicio = et.id_servicio
+  INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+  inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+  inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+  inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+  order by se.prioridad_servicio;
+
+
+CREATE VIEW vw_orden_manufactura AS
+WITH 
+ParteRanked AS (
+    SELECT
+        p.id_parte,
+        pt.id_estado_manufactura,
+        p.fecha_limite,
+        p.id_orden,
+        est.nombre_estado_manufactura,
+        CASE
+			WHEN est.id_estado_manufactura = 5 THEN p.fecha
+            ELSE "____-__-__"
+		END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+    FROM parte p
+    inner join parte_manufactura pt on pt.id_parte = p.id_parte
+    inner join estado_manufactura est on est.id_estado_manufactura = pt.id_estado_manufactura
+),
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+
+select 
+	se.prioridad_servicio,
+    se.id_servicio,
+	se.codigo_servicio,
+    se.nombre_servicio,
+    o.id_orden,
+	o.nombre_orden,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    roo.nombre_empleado as responsable,
+    roo.id_empleado as id_empleado_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_empleado_supervisor,
+    p_rank.nombre_estado_manufactura as nombre_estado,
+    th.total_horas
+    from orden as o
+	inner join orden_manufactura as ot on o.id_orden = ot.id_orden
+	inner join etapa as et on et.id_etapa = o.id_etapa
+	inner join servicio as se on se.id_servicio = et.id_servicio
+  INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+  inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+  inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+  inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+    order by se.prioridad_servicio;
+
+
+CREATE VIEW vw_orden_mecanizado AS
+WITH 
+ParteRanked AS (
+    SELECT
+        p.id_parte,
+        pt.id_estado_mecanizado,
+        p.fecha_limite,
+        p.id_orden,
+        est.nombre_estado_mecanizado,
+        CASE
+			WHEN est.id_estado_mecanizado = 6 THEN p.fecha
+            ELSE "____-__-__"
+		END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+    FROM parte p
+    inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+    inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
+),
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+
+select 
+	se.prioridad_servicio,
+    se.id_servicio,
+	se.codigo_servicio,
+    se.nombre_servicio,
+    o.id_orden,
+	o.nombre_orden,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    roo.nombre_empleado as responsable,
+    roo.id_empleado as id_empleado_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_empleado_supervisor,
+    p_rank.nombre_estado_mecanizado as nombre_estado,
+    th.total_horas
+    from orden as o
+	inner join orden_mecanizado as ot on o.id_orden = ot.id_orden
+	inner join etapa as et on et.id_etapa = o.id_etapa
+	inner join servicio as se on se.id_servicio = et.id_servicio
+    INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+    inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+    inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+    order by se.prioridad_servicio;
+
+
+DELIMITER //
+
+CREATE FUNCTION TotalOrdenTrabajoCompleto(servicio int)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+    WITH 
+	ParteRanked AS (
+		SELECT
+				p.id_orden,
+				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+			FROM parte p
+			inner join parte_trabajo pt on pt.id_parte = p.id_parte
+			inner join estado est on est.id_estado = pt.id_estado
+			where est.id_estado = 9
+	)
+	select count(o.id_orden) as total_completo into x from orden_trabajo o
+	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
+	where o.id_orden in (select id_orden 
+								from orden o
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalOrdenMecCompleto(servicio int)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+	WITH 
+	ParteRanked AS (
+		SELECT
+				p.id_orden,
+				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+			FROM parte p
+			inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+			inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
+			where est.id_estado_mecanizado = 6
+	)
+	select count(o.id_orden) as total_completo into x from orden_mecanizado o
+	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
+	where o.id_orden in (select id_orden 
+							from orden o
+						where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalOrdenManCompleto(servicio int)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+	WITH
+	ParteRanked AS (
+		SELECT
+				p.id_orden,
+				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+			FROM parte p
+			inner join parte_manufactura pt on pt.id_parte = p.id_parte
+			inner join estado_manufactura est on est.id_estado_manufactura = pt.id_estado_manufactura
+			where est.id_estado_manufactura = 5
+	)
+	select count(o.id_orden) as total_completo into x from orden_manufactura o
+	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
+	where o.id_orden in (select id_orden 
+							from orden o
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE Act_info_servicio ()
+BEGIN
+    DECLARE vtotOrdTra INT;
+    DECLARE vtotOrdMan INT;
+    DECLARE vtotOrdMec INT;
+    DECLARE vTotCompleto INT;
+    DECLARE vTotal INT;
+    DECLARE vProgreso INT;
+    DECLARE x INT;
+    DECLARE e INT;
+    DECLARE b INT DEFAULT 0;
+    DECLARE cur1 CURSOR FOR SELECT id_servicio FROM servicio;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET b = 1;
+    
+    
+    OPEN cur1;
+    
+    read_loop: LOOP
+        FETCH cur1 INTO x;
+        
+		IF b THEN
+		 LEAVE read_loop;
+		END IF;
+        
+        SELECT COUNT(id_servicio) INTO e FROM servicio_info WHERE id_servicio = x;
+        
+        SELECT TotalOrdenTrabajoCompleto(x) INTO vtotOrdTra;
+        SELECT TotalOrdenMecCompleto(x) INTO vtotOrdMan;
+        SELECT TotalOrdenManCompleto(x) INTO vtotOrdMec;
+        
+        SET vTotCompleto = vtotOrdTra + vtotOrdMan + vtotOrdMec;
+        
+        SELECT COUNT(id_orden) AS total_orden INTO vTotal FROM orden o WHERE id_etapa IN (SELECT id_etapa FROM etapa WHERE id_servicio = x);
+        
+        IF vTotal = 0 THEN
+            SET vProgreso = 0;
+        ELSE
+            SET vProgreso = ROUND((vTotCompleto * 100) / vTotal);
+        END IF;
+        
+        IF e = 0 THEN
+            INSERT INTO servicio_info (id_servicio, tot_ord, tot_ord_completa, progreso) VALUES (x, vTotal, vTotCompleto, vProgreso);
+        ELSE
+            UPDATE servicio_info SET tot_ord = vTotal, tot_ord_completa = vTotCompleto, progreso = vProgreso WHERE id_servicio = x;
+        END IF;
+        
+    END LOOP read_loop;
+    
+    CLOSE cur1;
+END;
+//
+DELIMITER ;
 
 
 DROP TABLE parte_mantenimiento;

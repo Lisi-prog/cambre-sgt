@@ -191,6 +191,7 @@
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Responsable</th>
+                                    <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
@@ -202,27 +203,27 @@
                                     @endphp
                                     @foreach ($ordenes as $orden)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getEtapa->getServicio->prioridad_servicio ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->getServicio->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->getEtapa->getServicio->codigo_servicio ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->codigo_servicio ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
 
-                                            {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->getEtapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->nombre_orden, 0, 15) ?? '-'}} <i class="fas fa-eye"></i></abbr></td> --}}
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->getEtapa->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->getEtapa->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->getOrdenDe->getNombreTipoOrden()}}</td> --}}
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getPartes->sortByDesc('id_parte')->first()->getParteDe->getNombreEstado() ?? ''}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_estado ?? ''}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getSupervisor() ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->supervisor ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getNombreResponsable() ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaLimite() ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getFechaFinalizacion()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -234,7 +235,7 @@
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
                                                                     Ver
                                                                 </button>
                                                             </div>
@@ -248,7 +249,7 @@
                                                         </div> --}}
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
+                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
                                                                     Partes
                                                                 </button>
                                                             </div>
@@ -256,7 +257,7 @@
                                                         <div class="row my-2">
                                                             @can('EDITAR-ORDENES')
                                                             <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->getEtapa->descripcion_etapa}}')">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
                                                                     Editar
                                                                 </button> 
                                                             </div>
