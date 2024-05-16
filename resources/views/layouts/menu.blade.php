@@ -119,7 +119,7 @@
         </li>
     @endcan
 
-    @can('VER-MENU-ORDENES') {{-- PARTES --}}
+    @can('VER-MENU-PARTES') {{-- PARTES --}}
         <li class="dropdown">
             <a href="" class="nav-link has-dropdown menu-hover">
                 <i class="fas fa-pencil-alt"></i><span>Partes</span>
