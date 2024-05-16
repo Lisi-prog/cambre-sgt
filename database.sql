@@ -629,7 +629,21 @@ SELECT
     act_se.id_actualizacion,
     act.fecha_limite,
     est.id_estado,
-    est.nombre_estado
+    est.nombre_estado,
+    case
+      when si.tot_ord is null then 0
+      else si.tot_ord
+    end as total_ord,
+    
+    case
+		  when si.tot_ord_completa is null then 0
+      else si.tot_ord_completa
+	  end as total_ord_completa,
+    
+    case
+		  when si.progreso is null then 0
+      else si.progreso
+	  end as progreso
 FROM servicio AS se
 INNER JOIN subtipo_servicio AS stb ON stb.id_subtipo_servicio = se.id_subtipo_servicio
 INNER JOIN tipo_servicio AS tb ON stb.id_tipo_servicio = tb.id_tipo_servicio
