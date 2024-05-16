@@ -821,6 +821,101 @@ select
     inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
     order by se.prioridad_servicio;
 
+CREATE VIEW vw_parte_trabajo AS
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+select 
+	p.id_parte,
+	o.nombre_orden,
+	p.fecha, p.fecha_limite,
+	e.nombre_estado as estado,
+	p.horas, p.observaciones,
+	emp.nombre_empleado as responsable,
+  emp.id_empleado as id_responsable,
+  ro.nombre_empleado as supervisor,
+  ro.id_empleado as id_supervisor
+from parte p 
+inner join parte_trabajo pt on pt.id_parte = p.id_parte
+inner join estado e on e.id_estado = pt.id_estado
+inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+inner join empleado emp on emp.id_empleado = res.id_empleado
+inner join orden o on o.id_orden = p.id_orden
+inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
+
+CREATE VIEW vw_parte_manufactura AS
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+select 
+	p.id_parte,
+	o.nombre_orden,
+	p.fecha, p.fecha_limite,
+	e.nombre_estado_manufactura as estado,
+	p.horas, p.observaciones,
+	emp.nombre_empleado as responsable,
+    emp.id_empleado as id_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_supervisor
+from parte p 
+inner join parte_manufactura pt on pt.id_parte = p.id_parte
+inner join estado_manufactura e on e.id_estado_manufactura = pt.id_estado_manufactura
+inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+inner join empleado emp on emp.id_empleado = res.id_empleado
+inner join orden o on o.id_orden = p.id_orden
+inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
+
+
+CREATE VIEW vw_parte_mecanizado AS
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+select 
+	p.id_parte,
+	o.nombre_orden,
+	p.fecha, p.fecha_limite,
+	e.nombre_estado_mecanizado as estado,
+	p.horas, p.observaciones,
+	emp.nombre_empleado as responsable,
+    emp.id_empleado as id_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_supervisor,
+    pmm.horas_maquina,
+    pmm.id_maquinaria,
+    m.codigo_maquinaria
+from parte p 
+inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+left join parte_mecanizado_x_maquinaria pmm on pmm.id_parte_mecanizado = pt.id_parte_mecanizado
+left join maquinaria m on m.id_maquinaria = pmm.id_maquinaria
+inner join estado_mecanizado e on e.id_estado_mecanizado = pt.id_estado_mecanizado
+inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+inner join empleado emp on emp.id_empleado = res.id_empleado
+inner join orden o on o.id_orden = p.id_orden
+inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
 DELIMITER //
 

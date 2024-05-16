@@ -251,13 +251,9 @@
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
                                                 
                                                 <td class= 'text-center' style="vertical-align: middle;">
-                                                    @php
-                                                        $progreso = $proyecto->getOrdenesRealizadas();
-                                                    @endphp
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
-                                                        
-                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$progreso->porcentaje}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$progreso->barra}}</span>
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->progreso}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->total_ord_completa.'/'.$proyecto->total_ord}}</span>
                                                         </div>
                                                     </div>
                                                 </td>

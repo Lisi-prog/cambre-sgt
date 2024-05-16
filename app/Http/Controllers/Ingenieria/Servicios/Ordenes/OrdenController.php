@@ -864,18 +864,18 @@ class OrdenController extends Controller
         //FILTRAMOS LAS ORDENES POR TIP0
         switch ($tipo_orden) {           
             case 1:
-        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                    $ordenes = Vw_orden_trabajo::get();
-        }else{
-            //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    $ordenes = Vw_orden_trabajo::responsable($id_empleado)->get();
-                }
-                $servicios = Vw_orden_trabajo::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
-                $tipo = 'Trabajo';
-                $tipo_orden = 1;
-                $estados = $this->listarTodosLosEstadosDe(1);
-                break;
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                            $ordenes = Vw_orden_trabajo::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->get();
+                        }
+                        $servicios = Vw_orden_trabajo::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
+                        $tipo = 'Trabajo';
+                        $tipo_orden = 1;
+                        $estados = $this->listarTodosLosEstadosDe(1);
+                        break;
 
             case 2:
                 //ORDEN DE MANUFACTURA

@@ -29,6 +29,9 @@ use App\Models\Cambre\Parte_mecanizado_x_maquinaria;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Log_parte;
 use App\Models\Cambre\Servicio;
+use App\Models\Cambre\Vw_parte_trabajo;
+use App\Models\Cambre\Vw_parte_manufactura;
+use App\Models\Cambre\Vw_parte_mecanizado;
 
 class ParteController extends Controller
 {
@@ -77,59 +80,53 @@ class ParteController extends Controller
             // }
         }
        
-        //FILTRAMOS LAS ORDENES POR TIP0
+        //FILTRAMOS LAS PARTES POR TIP0
         switch ($tipo_orden) {           
             case 1:
-                //ORDEN DE TRABAJO
-                foreach ($array_partes as $parte) {
-                    try {
-                        if (count(Parte_trabajo::where('id_parte', $parte->id_parte)->get()) == 1) {
-                            array_push($partes, $parte);
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                    
+                //PARTE DE TRABAJO
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
+                    $partes = Vw_parte_trabajo::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $partes = Vw_parte_trabajo::responsable($id_empleado)->get();
                 }
                 $tipo = 'Trabajo';
                 $estados = $this->listarTodosLosEstadosDe(1);
                 break;
+                
             case 2:
-                //ORDEN DE MANUFACTURA
-                foreach ($array_partes as $parte) {
-                    try {
-                        if (count(Parte_manufactura::where('id_parte', $parte->id_parte)->get()) == 1) {
-                            array_push($partes, $parte);
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                    
+                //PARTE DE MANUFACTURA
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
+                    $partes = Vw_parte_manufactura::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $partes = Vw_parte_manufactura::responsable($id_empleado)->get();
                 }
                 $tipo = 'Manufactura';
                 $estados = $this->listarTodosLosEstadosDe(2);
                 break;
             case 3:
-                //ORDEN DE MECANIZADO
-                foreach ($array_partes as $parte) {
-                    try {
-                        if (count(Parte_mecanizado::where('id_parte', $parte->id_parte)->get()) == 1) {
-                            array_push($partes, $parte);
-                        }
-                    } catch (\Throwable $th) {
-                    }
-                    
+                //PARTE DE MECANIZADO
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
+                    $partes = Vw_parte_mecanizado::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $partes = Vw_parte_mecanizado::responsable($id_empleado)->get();
                 }
                 $tipo = 'Mecanizado';
                 $estados = $this->listarTodosLosEstadosDe(3);
                 break;
             case 4:
-                //ORDEN DE MANTENIMIENTO
-                foreach ($array_partes as $parte) {
-                    try {
-                        if (count(Parte_mantenimiento::where('id_parte', $parte->id_parte)->get()) == 1) {
-                            array_push($partes, $parte);
-                        }
-                    } catch (\Throwable $th) {
-                    }
+                //PARTE DE MANTENIMIENTO
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
+                    $partes = Vw_parte_mantenimiento::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $partes = Vw_parte_mantenimiento::responsable($id_empleado)->get();
                 }
                 $tipo = 'Mantenimiento';
                 $estados = $this->listarTodosLosEstadosDe(1);
@@ -137,25 +134,6 @@ class ParteController extends Controller
             default:
                 # code...
                 break;
-        }
-        
-        if(count($partes) != 0){
-            foreach ($partes as $parte) {
-                $servicios_ids[] = $parte->getOrden->getEtapa->getServicio->id_servicio;
-            }
-
-            $servicios = Servicio::whereIn('id_servicio', array_unique($servicios_ids))->orderBy('codigo_servicio')->get();
-        }else{
-            $servicios = [];
-        }
-
-        foreach ($partes as $parte) {
-            $id_de_partes[] = $parte->id_parte;
-        }
-        try {
-            $partes = Parte::whereIn('id_parte', $id_de_partes)->get();
-        } catch (\Throwable $th) {
-            //throw $th;
         }
         
         return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));

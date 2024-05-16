@@ -88,15 +88,17 @@
                                     @php
                                         $idCount = 0;
                                     @endphp
+                                    {{-- id_parte, nombre_orden, fecha, fecha_limite, estado, horas, observaciones, responsable, id_responsable, supervisor, id_supervisor, horas_maquina, id_maquinaria, codigo_maquinaria --}}
                                     @foreach ($partes as $parte)
                                         <tr>
                                             <td class="text-center">{{$parte->id_parte}}</td>
                                             <td class="text-center">{{$parte->fecha}}</td>
                                             <td class="text-center">{{$parte->fecha_limite}}</td>
-                                            <td class="text-center">{{$parte->getParteDe->getNombreEstado()}}</td>
+                                            <td class="text-center">{{$parte->estado}}</td>
                                             <td class="text-center">{{$parte->horas}}</td>
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 80)}} <i class="fas fa-eye"></i></abbr></td>                                            <td class="text-center">{{$parte->getResponsable->getEmpleado->nombre_empleado}}</td>
-                                            <td class="text-center">{{$parte->getOrden->getSupervisor()}}</td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 80)}} <i class="fas fa-eye"></i></abbr></td>                                            
+                                            <td class="text-center">{{$parte->responsable}}</td>
+                                            <td class="text-center">{{$parte->supervisor}}</td>
                                             <td class="text-center">
                                                 <div class="row justify-content-center" >
                                                     <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartes{{$idCount}}" aria-expanded="false" aria-controls="collapsePartes{{$idCount}}">

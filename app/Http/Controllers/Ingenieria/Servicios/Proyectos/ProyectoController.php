@@ -142,7 +142,7 @@ class ProyectoController extends Controller
                 break;
         }
 
-        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite']);
+        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
         
         
         //Para el filtro
@@ -156,7 +156,7 @@ class ProyectoController extends Controller
             $flt_lid = $request->input('lid');
             $flt_est = $request->input('estados');
         //------------------
-
+        
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion'));
     }
 
