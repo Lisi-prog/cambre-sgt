@@ -78,9 +78,11 @@
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Estado</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Horas</th>
                                     <th class="text-center" scope="col" style="color:#fff;mi-width:13vw">Observaciones</th>
+                                    @if($tipo_orden == 3) {{-- Mecanizado --}}
+                                        <th id="column-maq" class="text-center" scope="col" style="color:#fff;">Maquina</th>
+                                        <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;">Hora maquina</th>
+                                    @endif
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Responsable</th>
-                                    {{-- <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
-                                    <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th> --}}
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Supervisor</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Acciones</th>
                                 </thead>
@@ -97,6 +99,10 @@
                                             <td class="text-center">{{$parte->estado}}</td>
                                             <td class="text-center">{{$parte->horas}}</td>
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 80)}} <i class="fas fa-eye"></i></abbr></td>                                            
+                                             @if($tipo_orden == 3) {{-- Mecanizado --}}
+                                                <td class="text-center">{{$parte->codigo_maquina ?? '-'}}</td>
+                                                <td class="text-center">{{$parte->horas_maquina ?? '--:--'}}</td>
+                                            @endif
                                             <td class="text-center">{{$parte->responsable}}</td>
                                             <td class="text-center">{{$parte->supervisor}}</td>
                                             <td class="text-center">
@@ -183,8 +189,8 @@
         document.getElementById('volver').href = url;
         // Setup - add a text input to each footer cell
         $('#example thead tr')
-            .clone(true)
-            .addClass('filters')
+            //.clone(true)
+            //.addClass('filters')
             .appendTo('#example thead');
     
         var table = $('#example').DataTable({
