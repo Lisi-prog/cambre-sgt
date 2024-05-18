@@ -503,7 +503,7 @@
                     [25, 50, 100, 500, -1],
                     [25, 50, 100, 500, 'Todo']
                 ],
-                "pageLength": -1
+                "pageLength": 100
         });
         tabla.on('draw',function () {
             changeTdColor();
