@@ -576,6 +576,22 @@
                 var url = '{{route('proyecto.indexprefijo', ':opcion')}}';
                 url = url.replace(':opcion', opcion);
                 document.getElementById('volver').href = url;
+                document.getElementById('ayudin').hidden = false;
+                let nombreArchivo = 'gestionar';
+
+                $.when($.ajax({
+                    type: "post",
+                    url: '/documentacion/obtener/'+nombreArchivo, 
+                    data: {
+                        nombreArchivo: nombreArchivo,
+                    },
+                    success: function (response) {
+                        document.getElementById('ayudin').href = "{{url('/')}}"+'/'+response;
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                }));
                 // document.getElementById('volver').href = '{{route('proyectos.index')}}';
                $('#tablaEtapas').DataTable({
                     paging: false,
