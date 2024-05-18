@@ -73,10 +73,10 @@
                     {!! Form::text('editar', 0, ['class' => 'form-control', 'hidden', 'id' => 'm-editar']) !!}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
+                            <div class="form-group" >
                                 {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                 <span class="obligatorio">*</span>
-                                <textarea name='observaciones' id="observaciones" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh"  required></textarea>
                             </div>
                         </div>
                     </div>
