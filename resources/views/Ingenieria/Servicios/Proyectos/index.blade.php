@@ -467,7 +467,22 @@
         var url = '{{url('/')}}';
         document.getElementById('volver').href = url;
         document.getElementById('ayudin').hidden = false;
-        
+        let nombreArchivo = 'proyecto';
+
+        $.when($.ajax({
+            type: "post",
+            url: '/documentacion/obtener/'+nombreArchivo, 
+            data: {
+                nombreArchivo: nombreArchivo,
+            },
+            success: function (response) {
+                document.getElementById('ayudin').href = "{{url('/')}}"+'/'+response;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        }));
+
         var tabla = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -484,7 +499,11 @@
                     },
                 },
                 order: [[0, 'asc']],
-                "pageLength": 25
+                lengthMenu: [
+                    [25, 50, 100, 500, -1],
+                    [25, 50, 100, 500, 'Todo']
+                ],
+                "pageLength": 100
         });
         tabla.on('draw',function () {
             changeTdColor();
