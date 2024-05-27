@@ -491,7 +491,7 @@ function cargarModalVerOrdenMecanizado(id_orden){
 }
 
 export function cargarModalEditarParte(id_parte){
-    console.log("CargarModalEditarParte")
+    // console.log("CargarModalEditarParte")
     document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id_parte;
     let input_observaciones = document.getElementById("observaciones");
     let input_fecha_limite = document.getElementById("fec_limite");
@@ -507,6 +507,7 @@ export function cargarModalEditarParte(id_parte){
             id_parte: id_parte,
         },
     success: function (response) {
+            // console.log(response);
             input_observaciones.value = response.observaciones;
             input_fecha_limite.value = response.fecha_limite;
             input_fecha.value = response.fecha;
@@ -803,7 +804,7 @@ export function cargarModalCrearMecanizado(){
 }
 
 export function colorEncabezadoPorTipoDeOrden(tipo_orden){
-    console.log('COLOR');
+    //console.log('COLOR');
     switch (Number(tipo_orden)) {
         case 1:
             return '#558540';

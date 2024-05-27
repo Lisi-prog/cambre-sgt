@@ -61,12 +61,14 @@
                         <div class="form-group">
                             {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::select('estado', $estados, null, [
-                                'placeholder' => 'Seleccionar',
-                                'class' => 'form-select form-group',
-                                'required',
-                                'id' => 'estado'
-                            ]) !!} 
+
+                            <select class="form-select form-group" id="estado" name="estado" required> 
+                                <option selected="selected" value="">Seleccionar</option> 
+                                @foreach($estados as $estado)
+                                    <option value="{{$estado->id_estado}}">{{$estado->nombre}}</option> 
+                                @endforeach
+                            </select> 
+
                         </div>
                     </div>
                 </div>

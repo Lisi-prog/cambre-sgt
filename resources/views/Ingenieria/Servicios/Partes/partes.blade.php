@@ -95,21 +95,21 @@
                                     {{-- id_parte, nombre_orden, fecha, fecha_limite, estado, horas, observaciones, responsable, id_responsable, supervisor, id_supervisor, horas_maquina, id_maquinaria, codigo_maquinaria --}}
                                     @foreach ($partes as $parte)
                                         <tr>
-                                            <td class="text-center">{{$parte->id_parte}}</td>
-                                            <td class="text-center">{{$parte->fecha}}</td>
-                                            <td class="text-center">{{$parte->fecha_limite}}</td>
-                                            <td class="text-center">{{$parte->estado}}</td>
-                                            <td class="text-center">{{$parte->horas}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->fecha_limite}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->estado}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->horas}}</td>
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 80)}} <i class="fas fa-eye"></i></abbr></td>                                            
-                                             @if($tipo_orden == 3) {{-- Mecanizado --}}
-                                                <td class="text-center">{{$parte->codigo_maquina ?? '-'}}</td>
-                                                <td class="text-center">{{$parte->horas_maquina ?? '--:--'}}</td>
+                                            @if($tipo_orden == 3) {{-- Mecanizado --}}
+                                                <td class='text-center' style="vertical-align: middle;">{{$parte->codigo_maquina ?? '-'}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$parte->horas_maquina ?? '--:--'}}</td>
                                             @endif
                                             @if($rol == 'SUPERVISOR')
-                                                <td class="text-center">{{$parte->responsable}}</td>
-                                                <td class="text-center">{{$parte->supervisor}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$parte->responsable}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$parte->supervisor}}</td>
                                             @endif
-                                            <td class="text-center">
+                                            <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
                                                     <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartes{{$idCount}}" aria-expanded="false" aria-controls="collapsePartes{{$idCount}}">
                                                         Opciones
@@ -155,6 +155,7 @@
 </section>
 
 @include('Ingenieria.Servicios.Partes.modal.editar-parte')
+
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script type="module"> 
@@ -192,64 +193,28 @@
         let tipo_orden = window.location.pathname.substring(12, 13);
         document.getElementById('encabezado_partes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
         document.getElementById('volver').href = url;
-        // Setup - add a text input to each footer cell
-        $('#example thead tr')
-            //.clone(true)
-            //.addClass('filters')
-            .appendTo('#example thead');
-    
-        var table = $('#example').DataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
-            initComplete: function () {
-                var api = this.api();
-    
-                // For each column
-                api
-                    .columns()
-                    .eq(0)
-                    .each(function (colIdx) {
-                        // Set the header cell to contain the input element
-                        var cell = $('.filters th').eq(
-                            $(api.column(colIdx).header()).index()
-                        );
-                        var title = $(cell).text();
-                        $(cell).html('<input type="text" placeholder="' + title + '" />');
-    
-                        // On every keypress in this input
-                        $(
-                            'input',
-                            $('.filters th').eq($(api.column(colIdx).header()).index())
-                        )
-                            .off('keyup change')
-                            .on('change', function (e) {
-                                // Get the search value
-                                $(this).attr('title', $(this).val());
-                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
-    
-                                var cursorPosition = this.selectionStart;
-                                // Search the column for that value
-                                api
-                                    .column(colIdx)
-                                    .search(
-                                        this.value != ''
-                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                            : '',
-                                        this.value != '',
-                                        this.value == ''
-                                    )
-                                    .draw();
-                            })
-                            .on('keyup', function (e) {
-                                e.stopPropagation();
-    
-                                $(this).trigger('change');
-                                $(this)
-                                    .focus()[0]
-                                    .setSelectionRange(cursorPosition, cursorPosition);
-                            });
-                    });
-            },
+        
+    var tabla = $('#example').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                order: [[0, 'asc']],
+                lengthMenu: [
+                    [25, 50, 100, 500, -1],
+                    [25, 50, 100, 500, 'Todo']
+                ],
+                "pageLength": 500
         });
         table.on('draw', function () {
             changeTdColor();
