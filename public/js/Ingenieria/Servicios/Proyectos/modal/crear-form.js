@@ -490,6 +490,53 @@ function cargarModalVerOrdenMecanizado(id_orden){
     }));
 }
 
+export function cargarModalEditarParte(id_parte){
+    console.log("CargarModalEditarParte")
+    document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id_parte;
+    let input_observaciones = document.getElementById("observaciones");
+    let input_fecha_limite = document.getElementById("fec_limite");
+    let input_fecha = document.getElementById("fecha");
+    let input_horas = document.getElementById("horas");
+    let input_minutos = document.getElementById("minutos");
+    let cbx_estado = document.getElementById("estado");
+    let arrayHoras =[];
+    $.when($.ajax({
+        type: "post",
+        url: '/parte/obtener-una/'+id_parte,
+        data: {
+            id_parte: id_parte,
+        },
+    success: function (response) {
+            input_observaciones.value = response.observaciones;
+            input_fecha_limite.value = response.fecha_limite;
+            input_fecha.value = response.fecha;
+
+            arrayHoras = response.horas.split(':');
+            
+            input_horas.value = arrayHoras[0];
+            input_minutos.value = arrayHoras[1];
+            cbx_estado.value = response.estado;
+            //document.querySelector('estado') ? document.querySelector('estado').value = respones.estado : '';
+            if (response.maquinaria) {
+                if (response.maquinaria != '-') {
+                    document.getElementById('m-ver-parte-maquina').value = response.maquinaria;
+                    [hora_maquina, minutos_maquina] = response.horas_maquinaria.split(':');
+                    document.getElementById('horas_maquina').value = hora_maquina;
+                    document.getElementById('minutos_maquina').value = minutos_maquina;
+                }else{
+                    document.getElementById('m-ver-parte-maquina').value = 0;
+                    document.getElementById('horas_maquina').value = '00';
+                    document.getElementById('minutos_maquina').value = '00';
+                }
+            }
+    },      
+    error: function (error) {
+        console.log(error);
+    }
+    }));
+    return ''
+}
+
 export function cargarModalNuevaActProyecto(actualizacion, responsabilidad_servicio){
     // console.log(actualizacion);
     let input_fecha_limite = document.getElementById('fecha_limite');

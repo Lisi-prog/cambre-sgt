@@ -82,8 +82,10 @@
                                         <th id="column-maq" class="text-center" scope="col" style="color:#fff;">Maquina</th>
                                         <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;">Hora maquina</th>
                                     @endif
-                                    <th class="text-center" scope="col" style="color:#fff;width:6vw">Responsable</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:6vw">Supervisor</th>
+                                    @if($rol == 'SUPERVISOR')
+                                        <th class="text-center" scope="col" style="color:#fff;width:6vw">Responsable</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:6vw">Supervisor</th>
+                                    @endif
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -103,8 +105,10 @@
                                                 <td class="text-center">{{$parte->codigo_maquina ?? '-'}}</td>
                                                 <td class="text-center">{{$parte->horas_maquina ?? '--:--'}}</td>
                                             @endif
-                                            <td class="text-center">{{$parte->responsable}}</td>
-                                            <td class="text-center">{{$parte->supervisor}}</td>
+                                            @if($rol == 'SUPERVISOR')
+                                                <td class="text-center">{{$parte->responsable}}</td>
+                                                <td class="text-center">{{$parte->supervisor}}</td>
+                                            @endif
                                             <td class="text-center">
                                                 <div class="row justify-content-center" >
                                                     <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartes{{$idCount}}" aria-expanded="false" aria-controls="collapsePartes{{$idCount}}">
@@ -113,11 +117,11 @@
                                                 </div>
                                                 <div class="collapse" data-bs-parent="#accordion" id="collapsePartes{{$idCount}}">
                                                     <div class="row my-2">
-                                                        {{-- <div class="col-12">
-                                                            <button type="button" class="btn btn-primary w-100" onclick={{editarParte($parte->id_parte)}}>
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarParteModal" onclick="cargarModalEditarParte({{$parte->id_parte}})">
                                                                 Editar
                                                             </button>
-                                                        </div> --}}
+                                                        </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
@@ -144,12 +148,13 @@
         </div>
     </div>
     <script type="module" > 
-        import {colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        import {colorEncabezadoPorTipoDeOrden, cargarModalEditarParte} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.colorEncabezadoPorTipoDeOrden = colorEncabezadoPorTipoDeOrden;
+        window.cargarModalEditarParte = cargarModalEditarParte;
     </script>
 </section>
 
-{{-- @include('Ingenieria.Servicios.Etapas.modal.editar-etapa') --}}
+@include('Ingenieria.Servicios.Partes.modal.editar-parte')
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script type="module"> 

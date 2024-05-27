@@ -65,11 +65,14 @@ class ParteController extends Controller
         // $array_responsabilidades_partes = array();
         $array_partes = array();
         $partes = array();
+        $rol = '';
 
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            $rol = 'SUPERVISOR';
             //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
             $array_partes = Parte::orderBy('id_parte', 'asc')->get();
         }else{
+            $rol = 'TECNICO';
             //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
             $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
             foreach ($responsabilidades as $responsabilidad) {
@@ -136,7 +139,7 @@ class ParteController extends Controller
                 break;
         }
         
-        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios'));
+        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'rol'));
     }
 
     public function obtenerCodigoServicio(){

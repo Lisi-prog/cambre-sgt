@@ -78,9 +78,9 @@
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Estado</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Horas</th>
                                     <th class="text-center" scope="col" style="color:#fff;mi-width:13vw">Observaciones</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:6vw">Responsable</th>
                                     {{-- <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
                                     <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th> --}}
+                                    <th class="text-center" scope="col" style="color:#fff;width:6vw">Responsable</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Supervisor</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Acciones</th>
                                 </thead>
@@ -105,11 +105,11 @@
                                                 </div>
                                                 <div class="collapse" data-bs-parent="#accordion" id="collapsePartes{{$idCount}}">
                                                     <div class="row my-2">
-                                                        {{-- <div class="col-12">
-                                                            <button type="button" class="btn btn-primary w-100" onclick={{editarParte($parte->id_parte)}}>
+                                                        <div class="col-12">
+                                                            {{-- <button type="button" class="btn btn-primary w-100" onclick={{editarParte($parte->id_parte)}}>
                                                                 Editar
-                                                            </button>
-                                                        </div> --}}
+                                                            </button> --}}
+                                                        </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
@@ -137,7 +137,7 @@
     </div>
 </section>
 
-{{-- @include('Ingenieria.Servicios.Etapas.modal.editar-etapa') --}}
+@include('Ingenieria.Servicios.Partes.modal.editar-parte')
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script type="module"> 
