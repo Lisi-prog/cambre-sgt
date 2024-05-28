@@ -32,7 +32,9 @@ use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Vw_parte_trabajo;
 use App\Models\Cambre\Vw_parte_manufactura;
 use App\Models\Cambre\Vw_parte_mecanizado;
-
+use App\Models\Cambre\Vw_orden_trabajo;
+use App\Models\Cambre\Vw_orden_manufactura;
+use App\Models\Cambre\Vw_orden_mecanizado;
 class ParteController extends Controller
 {
     function __construct()
@@ -456,10 +458,12 @@ class ParteController extends Controller
         $parte = Parte::find($id);
         if ($parte->getParteDe->getTipoParte() != 3) {
             return [
+                'id_orden' => $parte->id_orden,
                 'id_parte' => $parte->id_parte,
                 'observaciones' => $parte->observaciones,
                 'horas' => $parte->horas,
                 'estado' => $parte->getParteDe->getIdEstado(),
+                'nombre_estado' => $parte->getParteDe->getNombreEstado(),
                 'fecha' => $parte->fecha,
                 'fecha_limite' => $parte->fecha_limite 
             ];
@@ -469,6 +473,7 @@ class ParteController extends Controller
                 'observaciones' => $parte->observaciones,
                 'horas' => $parte->horas,
                 'estado' => $parte->getParteDe->getIdEstado(),
+                'nombre_estado' => $parte->getParteDe->getNombreEstado(),
                 'fecha' => $parte->fecha,
                 'fecha_limite' => $parte->fecha_limite,
                 'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->id_maquinaria ?? '-',
@@ -480,9 +485,24 @@ class ParteController extends Controller
     public function ultimoParteOrden($id){
         $orden = Orden::find($id);
         $ultimo_parte = $orden->getPartes->last();
+        switch ($orden->getOrdenDe->getTipoOrden()) {
+            case 1:
+                $orden = Vw_orden_trabajo::find($id);
+                break;
+            case 2:
+                $orden = Vw_orden_manufactura::find($id);
+                break;
+            case 3:
+                $orden = Vw_orden_mecanizado::find($id);
+                break;
+            default:
+                # code...
+                break;
+        }
         return [
             'fecha_limite' => $ultimo_parte->fecha_limite,
-            'estado' => $ultimo_parte->getParteDe->getEstado->nombre_estado
+            'estado' => $ultimo_parte->getParteDe->getEstado->nombre_estado,
+            'total_horas' => $orden->total_horas
         ];
     }
 

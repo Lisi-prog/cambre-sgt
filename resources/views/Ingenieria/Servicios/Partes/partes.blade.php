@@ -158,6 +158,8 @@
 
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
+
 <script type="module"> 
     // import {cargarModalVerEtapa, cargarModalEditarEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
     // window.cargarModalVerEtapa = cargarModalVerEtapa;
@@ -187,39 +189,118 @@
 </script> --}}
 
 <script>
+    let ind_rw = '';
+    var table;
     $(document).ready(function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
         let tipo_orden = window.location.pathname.substring(12, 13);
         document.getElementById('encabezado_partes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
         document.getElementById('volver').href = url;
-        
-    var tabla = $('#example').DataTable({
-            language: {
-                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                    zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
-                    infoEmpty: 'No se ha encontrado registros',
-                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                    search: 'Buscar',
-                    paginate:{
-                        first:"Prim.",
-                        last: "Ult.",
-                        previous: 'Ant.',
-                        next: 'Sig.',
+        table = $('#example').DataTable({
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
                     },
-                },
-                order: [[0, 'asc']],
-                lengthMenu: [
-                    [25, 50, 100, 500, -1],
-                    [25, 50, 100, 500, 'Todo']
-                ],
-                "pageLength": 500
+                    order: [[0, 'asc']],
+                    lengthMenu: [
+                        [25, 50, 100, 500, -1],
+                        [25, 50, 100, 500, 'Todo']
+                    ],
+                    "pageLength": 500
         });
+
         table.on('draw', function () {
             changeTdColor();
         })
+
+        $('#example tbody').on('click', 'tr', function () {
+            ind_rw = table.row(this).index();
+            // let a = table.row(this).index();
+            // var temp = table.row(a).data();
+            // temp[0] = 'Tom';
+            // table.row(this)
+            // .data(temp)
+            // .draw();
+        });
+
+        $('#editarParteModal').on('hidden.bs.modal', function (e) {
+            //nuevoParte();
+            actRowEditarParte();
+        });
+
+        $(".nuevo-editar-parte").on('submit', function(evt){
+        
+        evt.preventDefault();     
+        var url_php = $(this).attr("action"); 
+        var type_method = $(this).attr("method"); 
+        var form_data = $(this).serialize();
+        let html = '';
+        let id_orden = document.getElementById('m-ver-parte-orden').value;
+        $.ajax({
+            type: type_method,
+            url: url_php,
+            data: form_data,
+            success: function(data) {
+                //console.log(data);
+                opcion = parseInt(data.resultado);
+                switch (opcion) {
+                    case 1:
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                        Parte creado con exito
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                        break;
+                    case 2:
+                        id = document.getElementById('m-id-parte').value;
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                        Parte cod. `+id+` actualizado con exito
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                        break;
+                    case 6:
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                    No se puede actualizar un parte de la cual no eres responsable.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>`;
+                        break;
+                    default:
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                    Ocurrio un error
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>`;
+                        break;
+                }
+                $('#alert').html(html)
+                //recargarPartes(id_orden, data.tipo_orden);
+                //nuevoParte();
+                setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+            }
+        });
     });
+    });
+
+    
+
+    
 </script>
 
     

@@ -190,7 +190,7 @@ function cargarModalVerPartes(id, tipo_orden){
     // document.getElementById('m-ver-parte-div').hidden = true;
     // document.getElementById('m-ver-parte-orden-btn').hidden = true;
     
-    document.getElementById('body_ver_parte').innerHTML = '';
+    document.getElementById('body_ver_parte').innerHTML ? document.getElementById('body_ver_parte').innerHTML = '' : "";
     document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
 
     let tablaa = document.getElementById('verPartes')
@@ -434,19 +434,15 @@ function obtenerMaquinaria(){
 
 function actRow(){
     let id_orden = document.getElementById('m-ver-parte-orden').value;
-
     $.when($.ajax({
         type: "post",
-        url: '/parte/obtener-ultimo/'+id_orden, 
+        url: '/parte/obtener-ultimo/'+id_orden,
         data: {
-            
         },
-        success: function (response) {
-            // console.log(response);
-            var temp = table.row(ind_rw).data();
-            temp[0] = response.fecha_limite;
-            // table.row(ind_rw).data(temp).draw();
+        success: function (response) { 
+            console.log(response) 
             table.cell(ind_rw, 5).data(response.estado).draw();
+            table.cell(ind_rw, 8).data(response.total_horas).draw();
             table.cell(ind_rw, 9).data(response.fecha_limite).draw();
         },
         error: function (error) {
@@ -454,4 +450,26 @@ function actRow(){
         }
     }));
 }
+
+function actRowEditarParte(){
+    let id_parte = document.getElementById('m-id-parte').value;
+    $.when($.ajax({
+        type: "post",
+        url: '/parte/obtener-una/'+id_parte, 
+        data: {
+        },
+        success: function (response) {
+            console.log(response)
+            table.cell(ind_rw, 1).data(response.fecha).draw();
+            table.cell(ind_rw, 2).data(response.fecha_limite).draw();
+            table.cell(ind_rw, 3).data(response.nombre_estado).draw();
+            table.cell(ind_rw, 4).data(response.horas).draw();
+            table.cell(ind_rw, 5).data(response.observaciones).draw();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+}
+
 

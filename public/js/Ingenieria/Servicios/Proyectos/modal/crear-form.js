@@ -493,6 +493,9 @@ function cargarModalVerOrdenMecanizado(id_orden){
 export function cargarModalEditarParte(id_parte){
     // console.log("CargarModalEditarParte")
     document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id_parte;
+    let input_editar = document.getElementById("m-editar");
+    let input_id_orden = document.getElementById("m-ver-parte-orden");
+    let input_id_parte = document.getElementById("m-id-parte");
     let input_observaciones = document.getElementById("observaciones");
     let input_fecha_limite = document.getElementById("fec_limite");
     let input_fecha = document.getElementById("fecha");
@@ -508,6 +511,9 @@ export function cargarModalEditarParte(id_parte){
         },
     success: function (response) {
             // console.log(response);
+            input_editar.value = 1;
+            input_id_parte.value = response.id_parte;
+            input_id_orden.value = response.id_orden;
             input_observaciones.value = response.observaciones;
             input_fecha_limite.value = response.fecha_limite;
             input_fecha.value = response.fecha;
