@@ -16,7 +16,7 @@
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            <textarea name='observaciones' id="observaciones" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='observaciones' id="observaciones" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>
