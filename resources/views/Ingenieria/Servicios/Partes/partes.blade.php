@@ -99,9 +99,9 @@
                                     @foreach ($partes as $parte)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 30)}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->nombre_servicio}}" style="text-decoration:none; font-variant: none;">{{$parte->codigo_servicio}} <i class="fas fa-eye"></i></abbr></td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->nombre_orden}}</td>
-                                            <td class='text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->descripcion_etapa}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->fecha_limite}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->estado}}</td>
