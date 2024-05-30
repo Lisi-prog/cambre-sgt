@@ -25,6 +25,8 @@ class Vw_parte_manufactura extends Model
         'estado',
         'horas',
         'observaciones',
+        'codigo_servicio',
+        'descripcion_etapa',
         'responsable',
         'id_responsable',
         'supervisor',

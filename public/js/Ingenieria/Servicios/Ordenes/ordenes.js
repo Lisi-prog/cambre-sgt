@@ -441,9 +441,9 @@ function actRow(){
         },
         success: function (response) { 
             console.log(response) 
-            table.cell(ind_rw, 5).data(response.estado).draw();
-            table.cell(ind_rw, 8).data(response.total_horas).draw();
-            table.cell(ind_rw, 9).data(response.fecha_limite).draw();
+            table.cell(ind_rw, 5).data(response.estado).draw(false);
+            table.cell(ind_rw, 8).data(response.total_horas).draw(false);
+            table.cell(ind_rw, 9).data(response.fecha_limite).draw(false);
         },
         error: function (error) {
             console.log(error);

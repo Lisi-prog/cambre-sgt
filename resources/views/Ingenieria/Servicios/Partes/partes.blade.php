@@ -218,7 +218,7 @@
                             next: 'Sig.',
                         },
                     },
-                    order: [[0, 'asc']],
+                    order: [[0, 'desc']],
                     lengthMenu: [
                         [25, 50, 100, 500, -1],
                         [25, 50, 100, 500, 'Todo']
