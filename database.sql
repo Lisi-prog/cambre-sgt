@@ -838,7 +838,10 @@ select
 	o.nombre_orden,
 	p.fecha, p.fecha_limite,
 	e.nombre_estado as estado,
-	p.horas, p.observaciones,
+	p.horas, 
+    p.observaciones,
+    se.codigo_servicio,
+    et.descripcion_etapa,
 	emp.nombre_empleado as responsable,
   emp.id_empleado as id_responsable,
   ro.nombre_empleado as supervisor,
@@ -849,6 +852,8 @@ inner join estado e on e.id_estado = pt.id_estado
 inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
 inner join empleado emp on emp.id_empleado = res.id_empleado
 inner join orden o on o.id_orden = p.id_orden
+inner join etapa et on et.id_etapa = o.id_etapa
+inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
 CREATE VIEW vw_parte_manufactura AS
@@ -868,7 +873,10 @@ select
 	o.nombre_orden,
 	p.fecha, p.fecha_limite,
 	e.nombre_estado_manufactura as estado,
-	p.horas, p.observaciones,
+	p.horas,
+    p.observaciones,
+    se.codigo_servicio,
+    et.descripcion_etapa,
 	emp.nombre_empleado as responsable,
     emp.id_empleado as id_responsable,
     ro.nombre_empleado as supervisor,
@@ -879,6 +887,8 @@ inner join estado_manufactura e on e.id_estado_manufactura = pt.id_estado_manufa
 inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
 inner join empleado emp on emp.id_empleado = res.id_empleado
 inner join orden o on o.id_orden = p.id_orden
+inner join etapa et on et.id_etapa = o.id_etapa
+inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
 
@@ -899,7 +909,10 @@ select
 	o.nombre_orden,
 	p.fecha, p.fecha_limite,
 	e.nombre_estado_mecanizado as estado,
-	p.horas, p.observaciones,
+	p.horas,
+    p.observaciones,
+    se.codigo_servicio,
+    et.descripcion_etapa,
 	emp.nombre_empleado as responsable,
     emp.id_empleado as id_responsable,
     ro.nombre_empleado as supervisor,
@@ -915,6 +928,8 @@ inner join estado_mecanizado e on e.id_estado_mecanizado = pt.id_estado_mecaniza
 inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
 inner join empleado emp on emp.id_empleado = res.id_empleado
 inner join orden o on o.id_orden = p.id_orden
+inner join etapa et on et.id_etapa = o.id_etapa
+inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
 DELIMITER //
@@ -1056,6 +1071,130 @@ END;
 //
 DELIMITER ;
 
+
+DELIMITER //
+
+CREATE FUNCTION `tiempoAMinutos`(`timeValue` TIME) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE hours INT;
+    DECLARE minutes INT;
+    DECLARE totalMinutes INT;
+
+    SET hours = HOUR(timeValue);
+    SET minutes = MINUTE(timeValue);
+    SET totalMinutes = hours * 60 + minutes;
+
+    RETURN totalMinutes;
+END
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalCostoEstimadoServicio(servicio int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+    DECLARE x float;
+	with
+	Res_ord AS (
+		select 
+			res_ord.id_orden,
+			res.id_rol_empleado,
+			emp.nombre_empleado,
+			emp.id_empleado,
+			emp.costo_hora
+		from responsabilidad_orden res_ord
+		inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+		inner join empleado emp on res.id_empleado = emp.id_empleado
+	)
+	select
+		sum(round(round(tiempoAMinutos(o.duracion_estimada) / 60, 2) * roo.costo_hora, 2)) as total_costo_hora into x
+	from orden o 
+	inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+	where o.id_etapa in (select e.id_etapa from etapa e where e.id_servicio = servicio);
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalCostoRealServicio(servicio int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+    DECLARE x float;
+	select 
+	sum(
+        case
+			when round(round(tiempoAMinutos(p.horas) / 60, 2) * p.costo, 2) is null then 0
+            else round(round(tiempoAMinutos(p.horas) / 60, 2) * p.costo, 2)
+        end
+        ) as costo_total_parte into x
+        from parte p 
+        where p.id_orden in (select o.id_orden from orden o where o.id_etapa in (select et.id_etapa from etapa et where et.id_servicio = servicio));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalCostoRealEtapa(etapa int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+    DECLARE x float;
+	select 
+	sum(
+        case
+			when round(round(tiempoAMinutos(p.horas) / 60, 2) * p.costo, 2) is null then 0
+            else round(round(tiempoAMinutos(p.horas) / 60, 2) * p.costo, 2)
+        end
+        ) as costo_total_parte into x
+        from parte p 
+        where p.id_orden in (select o.id_orden from orden o where o.id_etapa = etapa);
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalCostoEstimadoEtapa(etapa int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+    DECLARE x float;
+	with
+	Res_ord AS (
+		select 
+			res_ord.id_orden,
+			res.id_rol_empleado,
+			emp.nombre_empleado,
+			emp.id_empleado,
+			emp.costo_hora
+		from responsabilidad_orden res_ord
+		inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+		inner join empleado emp on res.id_empleado = emp.id_empleado
+	)
+	select
+		sum(round(round(tiempoAMinutos(o.duracion_estimada) / 60, 2) * roo.costo_hora, 2)) as total_costo_hora into x
+	from orden o 
+	inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+	where o.id_etapa = etapa;
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
 
 DROP TABLE parte_mantenimiento;
 DROP TABLE orden_mantenimiento;

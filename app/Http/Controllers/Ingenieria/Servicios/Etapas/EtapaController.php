@@ -211,18 +211,37 @@ class EtapaController extends Controller
         $nombre_etapa = $request->input('nom_etapa');
         $etapa = Etapa::find($id_etapa);
         $descripcion = '';
-        
-        $etapa->update([
-            'descripcion_etapa' => $nombre_etapa,
-            'fecha_inicio' => $fecha_inicio
-        ]);
-
+        $bandera = 0;
 
         if ($etapa->getResponsable->getEmpleado->id_empleado != $responsable) {
+            $bandera = 1;
+        }
+
+        if (strcmp($etapa->descripcion_etapa, $nombre_etapa) !== 0) {
+            $bandera = 1;
+        }
+
+        if ($etapa->fecha_inicio != $fecha_inicio) {
+            $bandera = 1;
+        }
+
+        if ($bandera) {
             $nuevo_responsable = Empleado::find($responsable);
             $ultima_act_etapa = Actualizacion_etapa::where('id_etapa', $id_etapa)->orderBy('id_actualizacion_etapa', 'desc')->first();
             $res = Responsabilidad::find($etapa->getResponsable->id_responsabilidad);
-            $descripcion = "Se cambio el responsable de la etapa de ".$etapa->getResponsable->getEmpleado->nombre_empleado." a ".$nuevo_responsable->nombre_empleado;
+
+            if ($etapa->getResponsable->getEmpleado->id_empleado != $responsable) {
+                $descripcion = "Se cambio el responsable de la etapa de ".$etapa->getResponsable->getEmpleado->nombre_empleado." a ".$nuevo_responsable->nombre_empleado.".";
+            }
+    
+            if (strcmp($etapa->descripcion_etapa, $nombre_etapa) !== 0) {
+                $descripcion = $descripcion." Se cambio el nombre de la etapa de ".$etapa->descripcion_etapa." a ".$nombre_etapa.".";
+            }
+    
+            if ($etapa->fecha_inicio != $fecha_inicio) {
+                $descripcion = $descripcion." Se cambio la fecha inicio de la etapa de ".$etapa->fecha_inicio." a ".$fecha_inicio.".";
+            }
+
             $res->id_empleado = $responsable;
             $res->save();
 
@@ -246,6 +265,11 @@ class EtapaController extends Controller
             Actualizacion_etapa::create([
                 'id_actualizacion' => $actualizacion->id_actualizacion,
                 'id_etapa' => $id_etapa
+            ]);
+
+            $etapa->update([
+                'descripcion_etapa' => $nombre_etapa,
+                'fecha_inicio' => $fecha_inicio
             ]);
         }
 
