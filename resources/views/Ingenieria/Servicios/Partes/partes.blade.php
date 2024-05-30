@@ -73,7 +73,7 @@
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_partes">
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Cod. Parte</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:4vw">Proyecto</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:6vw">Proyecto</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Orden</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Etapa</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Fecha</th>
@@ -124,12 +124,19 @@
                                                 <div class="collapse" data-bs-parent="#accordion" id="collapsePartes{{$idCount}}">
                                                     <div class="row my-2">
                                                         <div class="col-12">
+                                                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verParteModal" onclick="cargarModalVerParte({{$parte->id_parte}})">
+                                                                Ver
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
                                                             <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarParteModal" onclick="cargarModalEditarParte({{$parte->id_parte}})">
                                                                 Editar
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
+                                                    <div class="row my-2">
                                                         <div class="col-12">
                                                             <a href='/parte/{{$parte->id_parte}}/logs' target="_blank">
                                                                 <button type="button" class="btn btn-warning w-100" >
@@ -154,13 +161,15 @@
         </div>
     </div>
     <script type="module" > 
-        import {colorEncabezadoPorTipoDeOrden, cargarModalEditarParte} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        import {colorEncabezadoPorTipoDeOrden, cargarModalEditarParte, cargarModalVerParte} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.colorEncabezadoPorTipoDeOrden = colorEncabezadoPorTipoDeOrden;
         window.cargarModalEditarParte = cargarModalEditarParte;
+        window.cargarModalVerParte = cargarModalVerParte;
     </script>
 </section>
 
 @include('Ingenieria.Servicios.Partes.modal.editar-parte')
+@include('Ingenieria.Servicios.Partes.modal.ver-parte')
 
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
