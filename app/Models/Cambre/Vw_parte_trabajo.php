@@ -26,6 +26,7 @@ class Vw_parte_trabajo extends Model
         'horas',
         'observaciones',
         'codigo_servicio',
+        'nombre_servicio',
         'descripcion_etapa',
         'responsable',
         'id_responsable',
