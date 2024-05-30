@@ -72,12 +72,15 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_partes">
-                                    <th class="text-center" scope="col" style="color:#fff;width:4vw">Cod.</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:4vw">Cod. Parte</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:4vw">Proyecto</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:4vw">Orden</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:4vw">Etapa</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Fecha</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Fecha limite</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5vw">Estado</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:4vw">Horas</th>
-                                    <th class="text-center" scope="col" style="color:#fff;mi-width:13vw">Observaciones</th>
+                                    {{-- <th class="text-center" scope="col" style="color:#fff;mi-width:8vw">Observaciones</th> --}}
                                     @if($tipo_orden == 3) {{-- Mecanizado --}}
                                         <th id="column-maq" class="text-center" scope="col" style="color:#fff;">Maquina</th>
                                         <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;">Hora maquina</th>
@@ -96,11 +99,14 @@
                                     @foreach ($partes as $parte)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 30)}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->nombre_orden}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->fecha_limite}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->estado}}</td>
                                             <td class='text-center' style="vertical-align: middle;">{{$parte->horas}}</td>
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 80)}} <i class="fas fa-eye"></i></abbr></td>                                            
+                                            {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$parte->observaciones}}" style="text-decoration:none; font-variant: none;">{{substr($parte->observaciones, 0, 30)}} <i class="fas fa-eye"></i></abbr></td>                                             --}}
                                             @if($tipo_orden == 3) {{-- Mecanizado --}}
                                                 <td class='text-center' style="vertical-align: middle;">{{$parte->codigo_maquina ?? '-'}}</td>
                                                 <td class='text-center' style="vertical-align: middle;">{{$parte->horas_maquina ?? '--:--'}}</td>
@@ -125,7 +131,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <a href='/' target="_blank">
+                                                            <a href='/parte/{{$parte->id_parte}}/logs' target="_blank">
                                                                 <button type="button" class="btn btn-warning w-100" >
                                                                     Logs
                                                                 </button>
