@@ -231,31 +231,12 @@ function cargarModalVerPartes(id, tipo_orden){
             }
 
             if (id_emp === element.id_res || es_super === 1) {
-                btn_editar = `<button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
-                                    Editar
-                                </button>`
-            } else {
-                btn_editar = '-';
-            }
-
-            html += `<tr>
-                        <td class="text-center">`+element.id_parte+`</td>
-                        <td class="text-center">`+element.fecha+`</td>
-                        <td class="text-center">`+fecha_lim+`</td>
-                        <td class="text-center">`+element.estado+`</td>
-                        <td class="text-center">`+element.horas+`</td>
-                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>
-                        `+maq_y_hora+`
-                        <td class="text-center">`+element.supervisor+`</td>
-                        <td class="text-center">
-                                <div class="row justify-content-center" >
+                btn_editar = `<div class="row justify-content-center" >
                                     <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
                                         Opciones
                                     </button>
                                 </div>
                                 <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
-
                                     <div class="row my-2">
                                         <div class="col-12">
                                             <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
@@ -272,8 +253,24 @@ function cargarModalVerPartes(id, tipo_orden){
                                             </a>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
+                                </div>`
+            } else {
+                btn_editar = '-';
+            }
+
+            html += `<tr>
+                        <td class="text-center">`+element.id_parte+`</td>
+                        <td class="text-center">`+element.fecha+`</td>
+                        <td class="text-center">`+fecha_lim+`</td>
+                        <td class="text-center">`+element.estado+`</td>
+                        <td class="text-center">`+element.horas+`</td>
+                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                        <td class="text-center">`+element.responsable+`</td>
+                        `+maq_y_hora+`
+                        <td class="text-center">`+element.supervisor+`</td>
+                        <td class="text-center">
+                                `+btn_editar+`
+                        </td>
                     </tr>`
             idCount++;
         });
@@ -440,7 +437,7 @@ function actRow(){
         data: {
         },
         success: function (response) { 
-            console.log(response) 
+            // console.log(response) 
             table.cell(ind_rw, 5).data(response.estado).draw(false);
             table.cell(ind_rw, 8).data(response.total_horas).draw(false);
             table.cell(ind_rw, 9).data(response.fecha_limite).draw(false);
@@ -459,17 +456,20 @@ function actRowEditarParte(){
         data: {
         },
         success: function (response) {
-            console.log(response)
-            table.cell(ind_rw, 1).data(response.fecha).draw();
-            table.cell(ind_rw, 2).data(response.fecha_limite).draw();
-            table.cell(ind_rw, 3).data(response.nombre_estado).draw();
-            table.cell(ind_rw, 4).data(response.horas).draw();
-            table.cell(ind_rw, 5).data(response.observaciones).draw();
+            // console.log(response)
+            table.cell(ind_rw, 4).data(response.fecha).draw();
+            table.cell(ind_rw, 5).data(response.fecha_limite).draw();
+            table.cell(ind_rw, 6).data(response.nombre_estado).draw();
+            table.cell(ind_rw, 7).data(response.horas).draw();
+            //table.cell(ind_rw, 5).data(response.observaciones).draw();
         },
         error: function (error) {
             console.log(error);
         }
     }));
+    document.querySelectorAll("#m-editar-parte-estado option").forEach(opt => {
+        opt.style.display = '';  
+    });
 }
 
 

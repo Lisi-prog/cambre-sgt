@@ -48,7 +48,7 @@ function resetHoras(document){
     let resetElements = document.getElementsByClassName('reset-horas')
         //console.log(resetElements)
         for(var i = 0; i < resetElements.length; i++){
-            console.log(resetElements[i].value);
+            // console.log(resetElements[i].value);
             resetElements[i].value = '00';
         }
 }

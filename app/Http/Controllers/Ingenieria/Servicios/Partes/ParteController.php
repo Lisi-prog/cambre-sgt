@@ -63,28 +63,7 @@ class ParteController extends Controller
         $codigos_servicio = $this->obtenerCodigoServicio();
         //$estados = $this->listarTodosLosEstados();
         $tipo = '';
-        $servicios = '';
-        // $array_responsabilidades_partes = array();
-        $array_partes = array();
-        $partes = array();
-        $rol = '';
-
-        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            $rol = 'SUPERVISOR';
-            //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-            $array_partes = Parte::orderBy('id_parte', 'asc')->get();
-        }else{
-            $rol = 'TECNICO';
-            //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-            $responsabilidades = Responsabilidad::where('id_empleado', $id_empleado)->get();
-            foreach ($responsabilidades as $responsabilidad) {
-                is_null($responsabilidad->getParte) ? '' : array_push($array_partes, $responsabilidad->getParte);
-            }
-            // foreach ($array_responsabilidades_partes as $responsabilidad_parte) {
-            //     array_push($array_partes, $responsabilidad_parte->getOrden);
-            // }
-        }
-       
+        $editable = '';
         //FILTRAMOS LAS PARTES POR TIP0
         switch ($tipo_orden) {           
             case 1:
@@ -94,6 +73,7 @@ class ParteController extends Controller
                     $partes = Vw_parte_trabajo::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $editable = 'readonly';
                     $partes = Vw_parte_trabajo::responsable($id_empleado)->get();
                 }
                 $tipo = 'Trabajo';
@@ -107,6 +87,7 @@ class ParteController extends Controller
                     $partes = Vw_parte_manufactura::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $editable = 'readonly';
                     $partes = Vw_parte_manufactura::responsable($id_empleado)->get();
                 }
                 $tipo = 'Manufactura';
@@ -119,6 +100,7 @@ class ParteController extends Controller
                     $partes = Vw_parte_mecanizado::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $editable = 'readonly';
                     $partes = Vw_parte_mecanizado::responsable($id_empleado)->get();
                 }
                 $tipo = 'Mecanizado';
@@ -131,6 +113,7 @@ class ParteController extends Controller
                     $partes = Vw_parte_mantenimiento::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $editable = 'readonly';
                     $partes = Vw_parte_mantenimiento::responsable($id_empleado)->get();
                 }
                 $tipo = 'Mantenimiento';
@@ -141,7 +124,7 @@ class ParteController extends Controller
                 break;
         }
         
-        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'rol'));
+        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'editable'));
     }
 
     public function obtenerCodigoServicio(){
@@ -456,6 +439,13 @@ class ParteController extends Controller
 
     public function obtenerParte($id){
         $parte = Parte::find($id);
+
+        if (Auth::user()->hasRole('TECNICO')) {
+            $es_tecnico = 1;
+        } else {
+            $es_tecnico = 0;
+        }
+
         if ($parte->getParteDe->getTipoParte() != 3) {
             return [
                 'id_orden' => $parte->id_orden,
@@ -465,7 +455,8 @@ class ParteController extends Controller
                 'estado' => $parte->getParteDe->getIdEstado(),
                 'nombre_estado' => $parte->getParteDe->getNombreEstado(),
                 'fecha' => $parte->fecha,
-                'fecha_limite' => $parte->fecha_limite 
+                'fecha_limite' => $parte->fecha_limite,
+                'tec' => $es_tecnico
             ];
         } else {
             return [
@@ -477,7 +468,8 @@ class ParteController extends Controller
                 'fecha' => $parte->fecha,
                 'fecha_limite' => $parte->fecha_limite,
                 'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->id_maquinaria ?? '-',
-                'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-'
+                'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-',
+                'tec' => $es_tecnico
             ];
         }
     }

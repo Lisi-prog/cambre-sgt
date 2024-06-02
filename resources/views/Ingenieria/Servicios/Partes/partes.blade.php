@@ -85,10 +85,10 @@
                                         <th id="column-maq" class="text-center" scope="col" style="color:#fff;">Maquina</th>
                                         <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;">Hora maquina</th>
                                     @endif
-                                    @if($rol == 'SUPERVISOR')
+                                    @role('SUPERVISOR')
                                         <th class="text-center" scope="col" style="color:#fff;width:6vw">Responsable</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:6vw">Supervisor</th>
-                                    @endif
+                                    @endrole
                                     <th class="text-center" scope="col" style="color:#fff;width:6vw">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -111,10 +111,10 @@
                                                 <td class='text-center' style="vertical-align: middle;">{{$parte->codigo_maquina ?? '-'}}</td>
                                                 <td class='text-center' style="vertical-align: middle;">{{$parte->horas_maquina ?? '--:--'}}</td>
                                             @endif
-                                            @if($rol == 'SUPERVISOR')
+                                            @role('SUPERVISOR')
                                                 <td class='text-center' style="vertical-align: middle;">{{$parte->responsable}}</td>
                                                 <td class='text-center' style="vertical-align: middle;">{{$parte->supervisor}}</td>
-                                            @endif
+                                            @endrole
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
                                                     <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartes{{$idCount}}" aria-expanded="false" aria-controls="collapsePartes{{$idCount}}">

@@ -491,7 +491,7 @@ function cargarModalVerOrdenMecanizado(id_orden){
 }
 
 export function cargarModalEditarParte(id_parte){
-    // console.log("CargarModalEditarParte")
+    // console.log("entro en la funcion en crear form")
     document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id_parte;
     let input_editar = document.getElementById("m-editar");
     let input_id_orden = document.getElementById("m-ver-parte-orden");
@@ -501,8 +501,10 @@ export function cargarModalEditarParte(id_parte){
     let input_fecha = document.getElementById("fecha");
     let input_horas = document.getElementById("horas");
     let input_minutos = document.getElementById("minutos");
-    let cbx_estado = document.getElementById("estado");
+    let cbx_estado = document.getElementById("m-editar-parte-estado");
     let arrayHoras =[];
+    let estado_tecnico = [1, 6, 7];
+
     $.when($.ajax({
         type: "post",
         url: '/parte/obtener-una/'+id_parte,
@@ -535,6 +537,25 @@ export function cargarModalEditarParte(id_parte){
                     document.getElementById('horas_maquina').value = '00';
                     document.getElementById('minutos_maquina').value = '00';
                 }
+            }
+
+            if (response.tec){ //Si es tecnico
+                if (estado_tecnico.includes(response.estado)) { //si el estado del orden es uno de los validos para el tecnico
+                    document.querySelectorAll("#m-editar-parte-estado option").forEach(opt => {
+                        if (!estado_tecnico.includes(parseInt(opt.value))) {
+                            opt.style.display = 'none';
+                        }
+                    });
+                }
+                else{
+                    document.querySelectorAll("#m-editar-parte-estado option").forEach(opt => {
+                        if (opt.value != response.estado) {
+                            opt.style.display = 'none';
+                        }
+                    });
+    
+                }
+    
             }
     },      
     error: function (error) {

@@ -30,7 +30,7 @@
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_limite',
                                 'class' => 'form-control',
-                                // $editable
+                                $editable
                             ]) !!}
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                             {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
 
-                            <select class="form-select form-group" id="estado" name="estado" required> 
+                            <select class="form-select form-group" id="m-editar-parte-estado" name="estado" required> 
                                 <option selected="selected" value="">Seleccionar</option> 
                                 @foreach($estados as $estado)
                                     <option value="{{$estado->id_estado}}">{{$estado->nombre}}</option> 
