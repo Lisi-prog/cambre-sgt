@@ -75,7 +75,7 @@
                                 <div class="form-group">
                                     {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <span class="obligatorio">*</span>
-                                    {!! Form::text('m-ver-act-eta-descripcion', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! Form::text('m-ver-act-eta-descripcion', null, ['class' => 'form-control', 'required', 'id' => 'm-ver-act-eta-descripcion']) !!}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">

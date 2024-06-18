@@ -157,6 +157,7 @@
                 id: id,
             },
             success: function (response) {
+                // console.log(response);
                 if (response) {
                     let numeroDeProy = response.codigo_servicio.substr(e.options[e.selectedIndex].text.length);
                     let numeroDeProyLengInicial;
@@ -166,8 +167,14 @@
                     while(numeroDeProy.length < numeroDeProyLengInicial){
                         numeroDeProy = '0' + numeroDeProy
                     }
-                    let prefijoMasNumero = e.options[e.selectedIndex].text + numeroDeProy
-                    input_codigo_proyecto.value = prefijoMasNumero + response.codigo_servicio.substr(prefijoMasNumero.length);
+                    let prefijoMasNumero = e.options[e.selectedIndex].text + numeroDeProy;
+
+                    if (numeroDeProyLengInicial > 1) {
+                        input_codigo_proyecto.value = prefijoMasNumero + response.codigo_servicio.substr(prefijoMasNumero.length);
+                    } else {
+                        input_codigo_proyecto.value = e.options[e.selectedIndex].text + '000' + numeroDeProy + response.codigo_servicio.substr(prefijoMasNumero.length);
+                    }
+                    
                 }else{
                     input_codigo_proyecto.value = e.options[e.selectedIndex].text;
                 }

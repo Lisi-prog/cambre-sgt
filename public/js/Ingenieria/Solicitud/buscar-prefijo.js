@@ -25,7 +25,11 @@ function obtenerValorPrefijo(){
                         numeroDeProy = '0' + numeroDeProy
                     }
                     let prefijoMasNumero = e.options[e.selectedIndex].text + numeroDeProy
-                    input_codigo_proyecto.value = prefijoMasNumero + response.codigo_servicio.substr(prefijoMasNumero.length);
+                    if (numeroDeProyLengInicial > 1) {
+                        input_codigo_proyecto.value = prefijoMasNumero + response.codigo_servicio.substr(prefijoMasNumero.length);
+                    } else {
+                        input_codigo_proyecto.value = e.options[e.selectedIndex].text + '000' + numeroDeProy + response.codigo_servicio.substr(prefijoMasNumero.length);
+                    }
                 }else{
                     input_codigo_proyecto.value = e.options[e.selectedIndex].text;
                 }

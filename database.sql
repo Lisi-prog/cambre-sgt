@@ -840,6 +840,7 @@ select
 	e.nombre_estado as estado,
 	p.horas, 
     p.observaciones,
+    se.id_servicio,
     se.codigo_servicio,
     se.nombre_servicio,
     et.descripcion_etapa,
@@ -876,6 +877,7 @@ select
 	e.nombre_estado_manufactura as estado,
 	p.horas,
     p.observaciones,
+    se.id_servicio,
     se.codigo_servicio,
     se.nombre_servicio,
     et.descripcion_etapa,
@@ -913,6 +915,7 @@ select
 	e.nombre_estado_mecanizado as estado,
 	p.horas,
     p.observaciones,
+    se.id_servicio,
     se.codigo_servicio,
     se.nombre_servicio,
     et.descripcion_etapa,
@@ -934,6 +937,239 @@ inner join orden o on o.id_orden = p.id_orden
 inner join etapa et on et.id_etapa = o.id_etapa
 inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
+
+CREATE VIEW vw_etapa AS
+WITH 
+ActualizacionRanked AS (
+	SELECT
+		act_s.id_etapa,
+		act_s.id_actualizacion_etapa,
+		act_s.id_actualizacion,
+		ROW_NUMBER() OVER (PARTITION BY act_s.id_etapa ORDER BY act_s.id_actualizacion DESC) AS rn
+	FROM actualizacion_etapa AS act_s
+)
+    select
+		et.id_etapa, 
+		se.id_servicio,
+        et.descripcion_etapa, 
+        case 
+			when et.fecha_inicio is null then '-'
+            else et.fecha_inicio
+		end as fecha_inicio,
+        est.id_estado,
+        est.nombre_estado,
+        emp.id_empleado as id_responsable,
+        emp.nombre_empleado as responsable,
+        case 
+			when act.fecha_limite is null then '-'
+            else act.fecha_limite
+		end as fecha_limite,
+        act.fecha_carga as fecha_ult_act,
+		ObtenerFechaFinalizacionEtapa(et.id_etapa) as fecha_finalizacion,
+        case
+			when round(TotalCostoRealEtapa(et.id_etapa), 2) is null then 0
+            else round(TotalCostoRealEtapa(et.id_etapa), 2)
+        end as costo_real,
+        case
+			when round(TotalCostoEstimadoEtapa(et.id_etapa), 2) is null then 0
+            else round(TotalCostoEstimadoEtapa(et.id_etapa), 2)
+        end as costo_etimado
+        from etapa et
+        INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+        INNER JOIN ActualizacionRanked AS act_se ON act_se.id_etapa = et.id_etapa AND act_se.rn = 1
+        INNER JOIN actualizacion AS act ON act.id_actualizacion = act_se.id_actualizacion
+        INNER JOIN estado AS est ON act.id_estado = est.id_estado
+        INNER JOIN responsabilidad AS res ON et.id_responsabilidad = res.id_responsabilidad
+		INNER JOIN empleado AS emp ON res.id_empleado = emp.id_empleado;
+
+
+CREATE VIEW vw_gest_orden_trabajo AS
+WITH 
+ParteRanked AS (
+    SELECT
+        p.id_parte,
+        pt.id_estado,
+        p.fecha_limite,
+        p.id_orden,
+        est.nombre_estado,
+        CASE
+			WHEN est.id_estado = 9 THEN p.fecha
+            ELSE "____-__-__"
+		END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+    FROM parte p
+    inner join parte_trabajo pt on pt.id_parte = p.id_parte
+    inner join estado est on est.id_estado = pt.id_estado
+),
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+
+select 
+	se.prioridad_servicio,
+    se.id_servicio,
+	se.codigo_servicio,
+    se.nombre_servicio,
+    o.id_orden,
+	o.nombre_orden,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    roo.nombre_empleado as responsable,
+    roo.id_empleado as id_empleado_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_empleado_supervisor,
+    p_rank.id_estado,
+    p_rank.nombre_estado,
+	th.total_horas,
+    round(TotalCostoEstimadoOrden(o.id_orden), 2) as costo_estimado,
+    round(TotalCostoRealOrden(o.id_orden), 2) as costo_real
+    from orden as o
+	inner join orden_trabajo as ot on o.id_orden = ot.id_orden
+	inner join etapa as et on et.id_etapa = o.id_etapa
+	inner join servicio as se on se.id_servicio = et.id_servicio
+  INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+  inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+  inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+  inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+  order by se.prioridad_servicio;
+
+CREATE VIEW vw_gest_orden_manufactura AS
+WITH 
+ParteRanked AS (
+    SELECT
+        p.id_parte,
+        pt.id_estado_manufactura,
+        p.fecha_limite,
+        p.id_orden,
+        est.nombre_estado_manufactura,
+        CASE
+			WHEN est.id_estado_manufactura = 5 THEN p.fecha
+            ELSE "____-__-__"
+		END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+    FROM parte p
+    inner join parte_manufactura pt on pt.id_parte = p.id_parte
+    inner join estado_manufactura est on est.id_estado_manufactura = pt.id_estado_manufactura
+),
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+select 
+	se.prioridad_servicio,
+    se.id_servicio,
+	se.codigo_servicio,
+    se.nombre_servicio,
+    o.id_orden,
+	o.nombre_orden,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    roo.nombre_empleado as responsable,
+    roo.id_empleado as id_empleado_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_empleado_supervisor,
+    p_rank.nombre_estado_manufactura as nombre_estado,
+    p_rank.id_estado_manufactura as id_estado,
+    th.total_horas,
+    round(TotalCostoEstimadoOrden(o.id_orden), 2) as costo_estimado,
+    round(TotalCostoRealOrden(o.id_orden), 2) as costo_real,
+    ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura) as tot_mec,
+    ObtenerTotalOrdenMecxManCompleto(ot.id_orden_manufactura) as tot_mec_completo,
+    case
+		when ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura) = 0 then 0
+        else truncate((ObtenerTotalOrdenMecxManCompleto(ot.id_orden_manufactura) * 100 )/ ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura), 0)
+    end as tot_mec_porcentaje
+    from orden as o
+	inner join orden_manufactura as ot on o.id_orden = ot.id_orden
+	inner join etapa as et on et.id_etapa = o.id_etapa
+	inner join servicio as se on se.id_servicio = et.id_servicio
+  INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+  inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+  inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+  inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+  order by se.prioridad_servicio;
+
+
+CREATE VIEW vw_gest_orden_mecanizado AS
+WITH 
+ParteRanked AS (
+    SELECT
+        p.id_parte,
+        pt.id_estado_mecanizado,
+        p.fecha_limite,
+        p.id_orden,
+        est.nombre_estado_mecanizado,
+        CASE
+			WHEN est.id_estado_mecanizado = 6 THEN p.fecha
+            ELSE "____-__-__"
+		END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+    FROM parte p
+    inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+    inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
+),
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+
+select 
+	se.prioridad_servicio,
+    se.id_servicio,
+	se.codigo_servicio,
+    se.nombre_servicio,
+    o.id_orden,
+	o.nombre_orden,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    roo.nombre_empleado as responsable,
+    roo.id_empleado as id_empleado_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_empleado_supervisor,
+    p_rank.id_estado_mecanizado as id_estado,
+    p_rank.nombre_estado_mecanizado as nombre_estado,
+    th.total_horas,
+    round(TotalCostoEstimadoOrden(o.id_orden), 2) as costo_estimado,
+    round(TotalCostoRealOrden(o.id_orden), 2) as costo_real,
+    oman.id_orden_manufactura,
+    case
+		when oo.nombre_orden is null then '-'
+        else oo.nombre_orden
+    end as nombre_manufactura
+    from orden as o
+	inner join orden_mecanizado as ot on o.id_orden = ot.id_orden
+	inner join etapa as et on et.id_etapa = o.id_etapa
+	inner join servicio as se on se.id_servicio = et.id_servicio
+    INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+    inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+    inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
+    left join orden_manufactura oman on oman.id_orden_manufactura = ot.id_orden_manufactura
+    left join orden oo on oo.id_orden = oman.id_orden
+    order by se.prioridad_servicio;
+
 
 DELIMITER //
 
@@ -1090,8 +1326,7 @@ BEGIN
     SET totalMinutes = hours * 60 + minutes;
 
     RETURN totalMinutes;
-END
-//
+END//
 
 DELIMITER ;
 
@@ -1193,6 +1428,142 @@ BEGIN
 	from orden o 
 	inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
 	where o.id_etapa = etapa;
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION ObtenerFechaFinalizacionEtapa(etapa int)
+	RETURNS varchar(20)
+	DETERMINISTIC
+	BEGIN
+		DECLARE fecha varchar(20);
+		DECLARE estado_etapa int;
+            
+		select est.id_estado into estado_etapa from etapa et 
+			inner join actualizacion_etapa act_et on act_et.id_etapa = et.id_etapa
+            inner join actualizacion act on act.id_actualizacion = act_et.id_actualizacion
+            inner join estado est on est.id_estado = act.id_estado
+				where et.id_etapa = etapa
+            order by act_et.id_actualizacion_etapa desc limit 1;
+        
+        IF estado_etapa = 9 THEN
+            select Date(act.fecha_carga) into fecha
+				from actualizacion_etapa act_et 
+				inner join actualizacion act on act.id_actualizacion = act_et.id_actualizacion
+				where act_et.id_etapa = etapa and act.id_estado = 9
+				order by act_et.id_actualizacion_etapa limit 1;
+        ELSE
+            SET fecha = '____-__-__';
+        END IF;
+        
+        IF fecha is null THEN
+			set fecha = '____-__-__';
+        END IF;
+        
+		RETURN fecha;
+	END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalCostoEstimadoOrden(orden int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+    DECLARE x float;
+	with
+	Res_ord AS (
+		select 
+			res_ord.id_orden,
+			res.id_rol_empleado,
+			emp.nombre_empleado,
+			emp.id_empleado,
+			emp.costo_hora
+		from responsabilidad_orden res_ord
+		inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+		inner join empleado emp on res.id_empleado = emp.id_empleado
+	)
+	select
+		sum(round(round(tiempoAMinutos(o.duracion_estimada) / 60, 2) * roo.costo_hora, 2)) as total_costo_hora into x
+        -- sum(round(round(tiempoAMinutos(o.duracion_estimada), 2) * (roo.costo_hora/60), 2)) as total_costo_hora into x
+	from orden o 
+	inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
+	where o.id_orden = orden;
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalCostoRealOrden(orden int)
+RETURNS float
+DETERMINISTIC
+BEGIN
+    DECLARE x float;
+	select 
+	sum(
+        case
+			when round(round(tiempoAMinutos(p.horas) / 60, 2) * p.costo, 2) is null then 0
+            else round(round(tiempoAMinutos(p.horas) / 60, 2) * p.costo, 2)
+        end
+        ) as costo_total_parte into x
+        from parte p 
+        where p.id_orden = orden;
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION ObtenerTotalOrdenMecxMan(orden int)
+RETURNS int
+DETERMINISTIC
+BEGIN
+    DECLARE x int;
+	select 
+		count(ome.id_orden_mecanizado) as costo_total_parte into x
+        from orden_mecanizado ome 
+        where ome.id_orden_manufactura = orden;
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION ObtenerTotalOrdenMecxManCompleto(orden int)
+RETURNS int
+DETERMINISTIC
+BEGIN
+    DECLARE x int;
+	WITH 
+	ParteRanked AS (
+		SELECT
+			p.id_parte,
+			pt.id_estado_mecanizado,
+			p.fecha_limite,
+			p.id_orden,
+			est.nombre_estado_mecanizado,
+			ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+		FROM parte p
+		inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+		inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
+	)
+		select 
+			count(omec.id_orden_mecanizado) as total_mecanizado into x
+		from orden_mecanizado omec 
+		INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = omec.id_orden AND p_rank.rn = 1
+		where omec.id_orden_manufactura = orden and p_rank.id_estado_mecanizado = 6;
                         
     RETURN x;
 END //

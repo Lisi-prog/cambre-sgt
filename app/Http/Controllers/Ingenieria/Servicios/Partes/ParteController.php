@@ -56,25 +56,32 @@ class ParteController extends Controller
     }
 
     // VISTAS DE PARTES
-    public function obtenerPartes($tipo_orden){
+    public function obtenerPartes(Request $request, $tipo_orden){
+        // return $request;
         $id_empleado = Auth::user()->getEmpleado->id_empleado;
         $supervisores = $this->obtenerSupervisores();
         $responsables = $this->obtenerEmpleados();
         $codigos_servicio = $this->obtenerCodigoServicio();
+        $servicios = $request->input('cod_serv');
+        $respo = $request->input('lid');
+        $from = $request->input('fecha_desde');
+        $to = $request->input('fecha_hasta');   
+        $super = $request->input('sup');   
         //$estados = $this->listarTodosLosEstados();
         $tipo = '';
         $editable = '';
+        // return Vw_parte_trabajo::whereBetween('fecha', [$from, $to])->get();
         //FILTRAMOS LAS PARTES POR TIP0
         switch ($tipo_orden) {           
             case 1:
                 //PARTE DE TRABAJO
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_trabajo::get();
+                    $partes = Vw_parte_trabajo::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_trabajo::responsable($id_empleado)->get();
+                    $partes = Vw_parte_trabajo::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
                 }
                 $tipo = 'Trabajo';
                 $estados = $this->listarTodosLosEstadosDe(1);
@@ -84,11 +91,11 @@ class ParteController extends Controller
                 //PARTE DE MANUFACTURA
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_manufactura::get();
+                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_manufactura::responsable($id_empleado)->get();
+                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
                 }
                 $tipo = 'Manufactura';
                 $estados = $this->listarTodosLosEstadosDe(2);
@@ -97,11 +104,11 @@ class ParteController extends Controller
                 //PARTE DE MECANIZADO
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_mecanizado::get();
+                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_mecanizado::responsable($id_empleado)->get();
+                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
                 }
                 $tipo = 'Mecanizado';
                 $estados = $this->listarTodosLosEstadosDe(3);
@@ -123,8 +130,12 @@ class ParteController extends Controller
                 # code...
                 break;
         }
-        
-        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'editable'));
+
+        $flt_serv = Servicio::orderBy('codigo_servicio')->get(['id_servicio', 'codigo_servicio']);
+        $flt_resp = $this->obtenerEmpleados();
+        $flt_sup = $this->obtenerSupervisores();
+
+        return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'editable', 'flt_serv', 'flt_resp', 'flt_sup', 'servicios', 'respo', 'super', 'from', 'to'));
     }
 
     public function obtenerCodigoServicio(){

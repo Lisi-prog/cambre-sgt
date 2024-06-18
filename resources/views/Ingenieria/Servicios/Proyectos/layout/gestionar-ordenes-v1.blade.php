@@ -141,7 +141,68 @@ table.dataTable tbody td {
                         @php 
                             $idCount = 0;
                         @endphp
-                        @foreach ($proyecto->getEtapas as $etapa)
+                        @foreach ($ordenes_trabajo as $orden)
+                            @if ($orden->id_estado < 9)
+                                <tr>
+                            @else
+                                <tr style="display: none;">
+                            @endif   
+                                    <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+
+                                    <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 16).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+                                    
+                                    <td class= 'text-center' >{{$orden->nombre_estado}}</td>
+                                    
+                                    <td class= 'text-center' >{{$orden->supervisor}}</td>
+
+                                    <td class= 'text-center' >{{$orden->responsable}}</td>
+
+                                    <td class= 'text-center' >{{$orden->fecha_limite}}</td>
+
+                                    <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
+
+                                    <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                            
+                                    <td class= 'text-center' >{{$orden->costo_real}}</td>
+
+                                    <td>
+                                        <div class="row justify-content-center" >
+                                            <div class="row justify-content-center" >
+                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenTrabajo{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenTrabajo{{$idCount}}">
+                                                    Opciones
+                                                </button>
+                                            </div>
+                                            <div class="collapse" data-bs-parent="#cuadro-ordenes-trabajo" id="collapseOrdenTrabajo{{$idCount}}">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarTrabajo({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                            Editar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, 1)">
+                                                            Partes
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @php 
+                                $idCount += 1;
+                            @endphp
+                        @endforeach
+                        {{-- @foreach ($proyecto->getEtapas as $etapa)
                             @foreach ($etapa->getOrden as $orden)
                                 @if ($orden->getOrdenDe->getTipoOrden() == 1)
                                 @if ($orden->getIdEstado() < 9)
@@ -152,16 +213,12 @@ table.dataTable tbody td {
                                         <td class= 'text-center' >{{$orden->nombre_orden}}</td>
 
                                         <td class='text-center' style="vertical-align: middle;"><abbr title="{{$etapa->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($etapa->descripcion_etapa, 0, 16).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
-
-                                        {{-- <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td> --}}
                                         
                                         <td class= 'text-center' >{{$orden->getEstado()}}</td>
                                         
                                         <td class= 'text-center' >{{$orden->getSupervisor()}}</td>
 
                                         <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
-
-                                        {{-- <td class= 'text-center' >{{$orden->getPartes->sortByDesc('id_parte_trabajo')->first()->fecha_limite ? \Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_parte_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y') : '-'}}</td> --}}
 
                                         <td class= 'text-center' >{{$orden->getFechaLimite() ?? '-'}}</td>
 
@@ -209,7 +266,7 @@ table.dataTable tbody td {
                                     $idCount += 1;
                                 @endphp
                             @endforeach
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
             {{-- </div> --}}
@@ -349,7 +406,84 @@ table.dataTable tbody td {
                         @php 
                             $idCount = 0;
                         @endphp
-                        @foreach ($proyecto->getEtapas as $etapa)
+                        @foreach ($ordenes_manufactura as $orden)
+                            @if ($orden->id_estado < 5)
+                                <tr>
+                            @else
+                                <tr style="display: none;">
+                            @endif     
+
+                                <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+
+                                <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 16).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+
+                                <td class= 'text-center' >{{$orden->nombre_estado}}</td>
+
+                                <td class= 'text-center' style="vertical-align: middle;">
+                                    <div class="progress position-relative" style="background-color: #b2baf8; z-index:1">
+                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->tot_mec_porcentaje}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$orden->tot_mec_completo}} / {{$orden->tot_mec}}</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class= 'text-center' >{{$orden->supervisor}}</td>
+
+                                <td class= 'text-center' >{{$orden->responsable}}</td>
+
+                                <td class= 'text-center' >{{$orden->fecha_limite}}</td>
+
+                                <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
+
+                                <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                        
+                                <td class= 'text-center' >{{$orden->costo_real}}</td>
+
+                                <td>
+                                    <div class="row justify-content-center" >
+                                        <div class="row justify-content-center" >
+                                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenManufactura{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenManufactura{{$idCount}}">
+                                                Opciones
+                                            </button>
+                                        </div>
+                                        <div class="collapse" data-bs-parent="#cuadro-ordenes-manufactura"id="collapseOrdenManufactura{{$idCount}}">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                        Editar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row ">
+                                                <div class="col-12">
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.manufacturamecanizado', $orden->id_orden], 'style' => '']) !!}
+                                                        {!! Form::submit('Agregar mecanizado', ['class' => 'btn btn-success w-100']) !!}
+                                                    {!! Form::close() !!}
+                                                </div>
+                                            </div>
+                                            <div class="row ">
+                                                <div class="col-12">
+                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, 2)">
+                                                        Partes
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row ">
+                                                <div class="col-12">
+                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                    {!! Form::close() !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @php 
+                            $idCount += 1;
+                        @endphp
+                        @endforeach
+                        {{-- @foreach ($proyecto->getEtapas as $etapa)
                             @foreach ($etapa->getOrden as $orden)
                                 @if ($orden->getOrdenDe->getTipoOrden() == 2)
                                     @if ($orden->getIdEstado() < 5)
@@ -357,7 +491,6 @@ table.dataTable tbody td {
                                     @else
                                         <tr style="display: none;">
                                     @endif     
-                                        {{-- <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td> --}}
 
                                         <td class= 'text-center' >{{$orden->nombre_orden}}</td>
 
@@ -376,8 +509,6 @@ table.dataTable tbody td {
                                         <td class= 'text-center' >{{$orden->getSupervisor()}}</td>
 
                                         <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
-
-                                        {{-- <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td> --}}
 
                                         <td class= 'text-center' >{{$orden->getFechaLimite() ?? '-'}}</td>
 
@@ -432,7 +563,7 @@ table.dataTable tbody td {
                                     $idCount += 1;
                                 @endphp
                             @endforeach
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
             {{-- </div> --}}
@@ -571,7 +702,70 @@ table.dataTable tbody td {
                         @php
                             $idCount = 0;
                         @endphp
-                        @foreach ($proyecto->getEtapas as $etapa)
+                        @foreach ($ordenes_mecanizado as $orden)
+                            @if ($orden->id_estado < 6)
+                                <tr>
+                            @else
+                                <tr style="display: none;">
+                            @endif     
+                                    <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+
+                                    <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
+
+                                    <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 6).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+
+                                    <td class= 'text-center' >{{$orden->nombre_estado}}</td>
+
+                                    <td class= 'text-center' >{{$orden->supervisor}}</td>
+
+                                    <td class= 'text-center' >{{$orden->responsable}}</td>
+
+                                    <td class= 'text-center' >{{$orden->fecha_limite ?? '-'}}</td>
+
+                                    <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
+
+                                    <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                            
+                                    <td class= 'text-center' >{{$orden->costo_real}}</td>
+                                    
+                                    <td class='text-center'>
+                                        <div class="row justify-content-center" >
+                                            <div class="row justify-content-center" >
+                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenMecanizado{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenMecanizado{{$idCount}}">
+                                                    Opciones
+                                                </button>
+                                            </div>
+                                            <div class="collapse" data-bs-parent="#cuadro-ordenes-mecanizado" id="collapseOrdenMecanizado{{$idCount}}">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                            Editar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, 3)">
+                                                            Partes
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @php
+                            $idCount += 1;
+                            @endphp
+                        @endforeach
+                        {{-- @foreach ($proyecto->getEtapas as $etapa)
                             @foreach ($etapa->getOrden as $orden)
                                 @if ($orden->getOrdenDe->getTipoOrden() == 3)
                                 @if ($orden->getIdEstado() < 6)
@@ -590,8 +784,6 @@ table.dataTable tbody td {
                                         <td class= 'text-center' >{{$orden->getSupervisor()}}</td>
 
                                         <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
-
-                                        {{-- <td class= 'text-center' >{{\Carbon\Carbon::parse($orden->getPartes->sortByDesc('id_orden_trabajo')->first()->fecha_limite ?? '')->format('d-m-Y')}}</td> --}}
 
                                         <td class= 'text-center' >{{$orden->getFechaLimite() ?? '-'}}</td>
 
@@ -639,7 +831,7 @@ table.dataTable tbody td {
                                 $idCount += 1;
                                 @endphp
                             @endforeach
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>
             {{-- </div> --}}

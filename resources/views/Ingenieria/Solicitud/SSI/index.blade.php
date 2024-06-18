@@ -3,7 +3,7 @@
 @section('content')
 
 @include('layouts.modal.delete', ['modo' => 'Agregar'])
-<style>
+{{-- <style>
     .table {
         zoom: 100%;
     }
@@ -13,7 +13,7 @@
     .col-4 {
         padding: 5px;
     }
-</style>
+</style> --}}
 <section class="section">
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
@@ -37,10 +37,10 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead style="height:50px;">
+                                <thead>
                                     <th class='text-center' style="color:#fff;">Fecha</th>
                                     <th class='ml-3 text-center' style="color:#fff;">Codigo</th>
-                                    <th class='text-center' style="color:#fff;">Empleado</th>
+                                    <th class='text-center' style="color:#fff;">Usuario</th>
                                     <th class='text-center' style="color:#fff;">Sector</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color:#fff;">Fecha requerida</th>

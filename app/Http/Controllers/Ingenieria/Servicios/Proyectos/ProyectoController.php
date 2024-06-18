@@ -38,6 +38,10 @@ use App\Models\Cambre\Cambio_de_prioridad;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Activo;
 use App\Models\Cambre\Vw_servicio;
+use App\Models\Cambre\Vw_etapa;
+use App\Models\Cambre\Vw_gest_orden_trabajo;
+use App\Models\Cambre\Vw_gest_orden_manufactura;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
 
 class ProyectoController extends Controller
 {
@@ -452,7 +456,7 @@ class ProyectoController extends Controller
             'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
             'id_etapa' => $etapa->id_etapa
         ]);
-
+       
         return redirect()->route('proyectos.gestionar', $proyecto->id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
         // return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.'); 
     }
@@ -546,6 +550,12 @@ class ProyectoController extends Controller
         $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
+        $costo_estimado = DB::select('SELECT TotalCostoEstimadoServicio(?) as costo_estimado;',[$id])[0]->costo_estimado;
+        $costo_real = DB::select('SELECT TotalCostoRealServicio(?) as costo_real;',[$id])[0]->costo_real;
+        $etapas = Vw_etapa::where('id_servicio', $id)->get();
+        $ordenes_trabajo = Vw_gest_orden_trabajo::where('id_servicio', $id)->get();
+        $ordenes_manufactura = Vw_gest_orden_manufactura::where('id_servicio', $id)->get();
+        $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
 
         $flt_estados = Estado::orderBy('id_estado')->get();
         $flt_supervisores = $this->obtenerSupervisoresNoPluck();
@@ -587,8 +597,7 @@ class ProyectoController extends Controller
             $flt_eta_ord_mec = [];
         }
         
-
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion', 'costo_estimado', 'costo_real', 'etapas', 'ordenes_trabajo', 'ordenes_manufactura', 'ordenes_mecanizado'));
     }
 
     public function costos($id)
@@ -736,28 +745,24 @@ class ProyectoController extends Controller
 
     public function obtenerMayorCodigoServicioPrefijo($id){
         try {
+            $bandera = 1;
             $prefijo = Prefijo_proyecto::find($id);
             $prefijos_recortados_array = array();
             $total_char = strlen($prefijo->nombre_prefijo_proyecto);
-            return $servicio_candidato = Servicio::where('codigo_servicio', 'like', '%'.$prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->get('codigo_servicio')->first();
+
+            $servicios = Servicio::where('codigo_servicio', 'like', '%'.$prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->limit(3)->get('codigo_servicio');
+            $codigo = $prefijo->nombre_prefijo_proyecto;
+            foreach ($servicios as $servicio) {
+                if(is_numeric(substr($servicio->codigo_servicio, $total_char)) && $bandera == 1){
+                    $codigo = $servicio->codigo_servicio;
+                    $bandera = 0;
+                }
+            }
+            return ['codigo_servicio' => $codigo];
+           // return $servicio_candidato = Servicio::where('codigo_servicio', 'like', '%'.$prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->get('codigo_servicio')->first();
         } catch (\Throwable $th) {
             return '';
         }
-        
-
-        /*foreach ($servicios_candidatos as $servicio_candidato) {
-            array_push($prefijos_recortados_array, substr($servicio_candidato->codigo_servicio, $total_char));
-        }
-        rsort($prefijos_recortados_array);
-        return $prefijos_recortados_array[0];*/
-
-        /*foreach ($servicios_candidatos as $servicio_candidato) {
-            array_push($prefijos_recortados_array, (object)[
-                'codigo_servicio' => $servicio_candidato->codigo_servicio,
-                'codigo_servicio_recortado' => substr($servicio_candidato->codigo_servicio, $total_char),
-            ]);
-        }
-        return collect($prefijos_recortados_array)->orderBy('codigo_servicio_recortado');*/
     }
 
     public function obtenerUltimaActualizacion($id){

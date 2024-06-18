@@ -65,6 +65,122 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
+                        </div>
+                        {!! Form::open(['method' => 'GET', 'route' => ['partes.tipo', $tipo_orden], 'style' => 'display:inline']) !!}
+                        <div class="row" id="demo" hidden>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Proyectos:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                            <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
+                                                            @foreach ($flt_serv as $proyecto)
+                                                                @if (is_null($servicios) || in_array($proyecto->id_servicio, $servicios))
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                @else
+                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                @endif
+                                                            @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Fecha desde:</label>
+                                                    </div>
+                                                    {!! Form::date('fecha_desde', $from, [
+                                                        'min' => '2023-01-01',
+                                                        'max' => \Carbon\Carbon::now()->year . '-12',
+                                                        'id' => 'fecha-desde-flt',
+                                                        'class' => 'form-control'
+                                                    ]) !!}
+                                                    <div class="pt-3">
+                                                        <label>Fecha hasta:</label>
+                                                    </div>
+                                                    {!! Form::date('fecha_hasta', $to, [
+                                                        'min' => '2023-01-01',
+                                                        'max' => \Carbon\Carbon::now()->year . '-12',
+                                                        'id' => 'fecha-hasta-flt',
+                                                        'class' => 'form-control'
+                                                    ]) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @role('SUPERVISOR')
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row" id='res-opcion'>
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Responsable:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="lid[]" checked> (Seleccionar todo)</label>
+                                                        @foreach ($flt_resp as $resp)
+                                                            @if (is_null($respo) || in_array($resp->id_empleado, $respo))
+                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$resp->id_empleado}}" checked> {{$resp->nombre_empleado}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$resp->id_empleado}}"> {{$resp->nombre_empleado}}</label>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Supervisor:</label>
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="sup[]" checked> (Seleccionar todo)</label>
+                                                        @foreach ($flt_sup as $sup)
+                                                            @if (is_null($super) || in_array($sup->id_empleado, $super))
+                                                                <label><input class="input-filter" name="sup[]" type="checkbox" value="{{$sup->id_empleado}}" checked> {{$sup->nombre_empleado}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="sup[]" type="checkbox" value="{{$sup->id_empleado}}"> {{$sup->nombre_empleado}}</label>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endrole
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
+                                
+                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100', 'id' => 'btn-filtrar']) !!}
+                                {!! Form::close() !!}
+                            </div>
+                        </div>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
                         {{-- <div class="pagination justify-content-end">
                                 {!! $CategoriasLaborales->links() !!}
@@ -166,6 +282,7 @@
         window.cargarModalEditarParte = cargarModalEditarParte;
         window.cargarModalVerParte = cargarModalVerParte;
     </script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Partes/filter.js') }}"></script>
 </section>
 
 @include('Ingenieria.Servicios.Partes.modal.editar-parte')
@@ -227,7 +344,7 @@
                             next: 'Sig.',
                         },
                     },
-                    order: [[0, 'desc']],
+                    order: [[4, 'desc']],
                     lengthMenu: [
                         [25, 50, 100, 500, -1],
                         [25, 50, 100, 500, 'Todo']

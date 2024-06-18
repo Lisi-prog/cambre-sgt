@@ -230,11 +230,16 @@ function mostrarActEtapaAlt(id){
         },
         success: function (response) {
             response.forEach(element => {
+                if (element.fecha_limite) {
+                    fecha_lim = element.fecha_limite;
+                }else{
+                    fecha_lim = '-';
+                }
                 html_act += `<tr>
                                 <td class="text-center">`+element.codigo+`</td>
                                 <td class="text-center">`+element.fecha_carga+`</td>
                                 <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+fecha_lim+`</td>
                                 <td class="text-center">`+element.estado+`</td>
                                 <td class="text-center">`+element.responsable+`</td>
                                 </tr>`
@@ -246,7 +251,7 @@ function mostrarActEtapaAlt(id){
         }
     }));
 
-    let fecha_lim = document.getElementById('m-crear-act-eta-feclimite');
+    let fecha_lim_etapa = document.getElementById('m-crear-act-eta-feclimite');
     let estado_actual = document.getElementById('m-crear-act-eta-idestado');
     let etapa_desc = document.getElementById("m-ver-act-etapa");
     let nombre_estado = document.getElementById("m-ver-act-eta-orden");
@@ -261,7 +266,7 @@ function mostrarActEtapaAlt(id){
         },
         success: function (response) {
             // console.log(response);
-            fecha_lim.value = response.fecha_limite;
+            fecha_lim_etapa.value = response.fecha_limite;
             estado_actual.value = response.id_estado;
             etapa_desc.value = response.descripcion_etapa;
             nombre_estado.value = response.estado;
