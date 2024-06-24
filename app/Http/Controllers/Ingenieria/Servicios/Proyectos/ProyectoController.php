@@ -21,6 +21,7 @@ use App\Models\Cambre\Sol_requerimiento_de_ingenieria;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Servicio;
+use App\Models\Cambre\Servicio_info;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Prioridad;
 use App\Models\Cambre\Responsabilidad;
@@ -420,6 +421,13 @@ class ProyectoController extends Controller
             'id_activo' => $activo
         ]);
 
+        Servicio_info::create([
+            'id_servicio' => $proyecto->id_servicio, 
+            'tot_ord' => 0,
+            'tot_ord_completa' => 0,
+            'progreso' => 0
+        ]);
+
         $solicitud->update([
             'id_servicio' => $proyecto->id_servicio
         ]);
@@ -544,7 +552,7 @@ class ProyectoController extends Controller
 
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $proyecto = Servicio::find($id);
-        $etapas = $proyecto->getEtapas->pluck('descripcion_etapa', 'id_etapa');
+        $etapas_plk = $proyecto->getEtapas->sortBy('descripcion_etapa')->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $supervisores_admin = $this->obtenerSupervisoresAdmin();
         $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
@@ -597,7 +605,7 @@ class ProyectoController extends Controller
             $flt_eta_ord_mec = [];
         }
         
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion', 'costo_estimado', 'costo_real', 'etapas', 'ordenes_trabajo', 'ordenes_manufactura', 'ordenes_mecanizado'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas_plk', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion', 'costo_estimado', 'costo_real', 'etapas', 'ordenes_trabajo', 'ordenes_manufactura', 'ordenes_mecanizado'));
     }
 
     public function costos($id)

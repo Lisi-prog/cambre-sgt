@@ -33,7 +33,7 @@
                         <div class="form-group">
                             {!! Form::label('num_etapa', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::select('num_etapa', $etapas, null, [
+                            {!! Form::select('num_etapa', $etapas_plk, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group reset-input',
                                     'required',

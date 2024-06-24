@@ -26,6 +26,7 @@ class Sol_solicitud extends Model
         'fecha_carga',
         'fecha_requerida',
         'descripcion_urgencia',
+        'id_servicio',
         'id_empleado'
     ];
 
