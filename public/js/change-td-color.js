@@ -28,7 +28,7 @@ function changeTdColor() {
     for (let y = 0; y < indexColumnaEstados.length; y++) {
         for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) {
             values[x].children[indexColumnaEstados[y]].style.color = "#fff";
-            if (values[x].children[indexColumnaEstados[y]].innerHTML == "Continua") { // check if td has desired value
+                    if (values[x].children[indexColumnaEstados[y]].innerHTML == "Continua") { // check if td has desired value
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#746cd6"; // if matches, change color
                      }
             
@@ -103,6 +103,17 @@ function changeTdColor() {
                      if (values[x].children[indexColumnaEstados[y]].innerHTML == "Temple") { // check if td has desired value
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#ebd577"; // if matches, change color
                      }
+
+                    //----------------
+                    if (values[x].children[indexColumnaEstados[y]].innerHTML == "En espera") { // check if td has desired value
+                        values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#ff8001"; // if matches, change color
+                    }
+                    if (values[x].children[indexColumnaEstados[y]].innerHTML == "Rechazado") { // check if td has desired value
+                        values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#d2cab5"; // if matches, change color
+                    }
+                    if (values[x].children[indexColumnaEstados[y]].innerHTML == "Aceptado") { // check if td has desired value
+                        values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#92d050"; // if matches, change color
+                    }
         }
     }
     

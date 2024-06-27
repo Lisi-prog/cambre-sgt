@@ -40,14 +40,8 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
                                         {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
                                         {{--    ACTIVOS    --}}
-                                        {!! Form::select('id_activo', $activos, $pm->id_activo, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'id_activo',
-                                            'disabled'
-                                        ]) !!}
+                                        {!! Form::text('id_activo', $pm->getActivo->nombre_activo ?? '-', ['class' => 'form-control', 'readonly']) !!}
                                     </div>
                                 </div>
                             </div>

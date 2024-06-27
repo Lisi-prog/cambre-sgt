@@ -41,7 +41,17 @@ class ServicioDeIngenieriaController extends Controller
         $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
-        return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos'));
+
+        $flt_users = $this->obtenerEmpleadosActivos();
+        $flt_sectores = Sector::orderBy('nombre_sector')->get();
+        $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
+        
+        return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos', 'flt_users', 'flt_sectores', 'flt_estados', 'flt_prioridades'));
+    }
+
+    public function obtenerEmpleadosActivos(){
+        return Empleado::orderBy('nombre_empleado')->activo()->get();
     }
 
     public function create()

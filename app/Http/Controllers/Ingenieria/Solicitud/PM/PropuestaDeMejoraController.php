@@ -151,8 +151,7 @@ class PropuestaDeMejoraController extends Controller
             'an-i-propuesta' => 'required',
             'bene-propuesta' => 'required',
             'prob-propuesta' => 'required',
-            'eva-propuesta' => 'required',
-            'id_activo' => 'required'
+            'eva-propuesta' => 'required'
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
             'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',

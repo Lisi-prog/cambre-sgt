@@ -786,4 +786,31 @@ class ProyectoController extends Controller
     }
    
 
+    public function obtener_progreso($id){
+        $etapas_arr = [];
+        $solicitud = Sol_solicitud::find($id);
+        $servicio = Vw_servicio::find($solicitud->id_servicio);
+        $etapas = Vw_etapa::where('id_servicio', $solicitud->id_servicio)->get();
+
+        foreach ($etapas as $etapa) {
+            array_push($etapas_arr, (object)[
+                'descripcion_etapa' => $etapa->descripcion_etapa,
+                'nombre_estado' => $etapa->nombre_estado,
+                'fecha_inicio' => $etapa->fecha_inicio,
+                'fecha_limite' => $etapa->fecha_limite,
+                'progreso' => round($etapa->getProgreso())
+            ]);
+        }
+        
+        return [
+            'cod_serv' => $servicio->codigo_servicio,
+            'nom_serv' => $servicio->nombre_servicio,
+            'lider' => $servicio->lider,
+            'fec_ini' => $servicio->fecha_inicio,
+            'fec_lim' => $servicio->fecha_limite ?? '-',
+            'estado' => $servicio->nombre_estado,
+            'progreso' => $servicio->progreso,
+            'etapas' => $etapas_arr
+        ];
+    }
 }

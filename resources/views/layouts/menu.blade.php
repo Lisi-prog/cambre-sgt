@@ -72,7 +72,7 @@
 
                 <li>
                     <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Servicio de ingenieria">
-                        <i class="fas fa-tape" style="font-size:1.2em;"></i><span>SSI</span>
+                        <i class="fas fa-tape" style="font-size:1.2em;"></i><span>SI</span>
                     </a>
                 </li>
 
@@ -240,7 +240,62 @@
         </ul>
     </li>
     @endcan
-    
+
+    @can('VER-MENU-INFORMES')
+    <li class="dropdown ">
+        <a href="" class="nav-link has-dropdown menu-hover">
+            <i class="fas fa-chart-bar"></i><span>Informes</span>
+        </a>
+        <ul class="dropdown-menu border border-primary border-2 borde-menu" style="display: none;">
+            <li class="dropdown-title pt-3">
+                Informes
+            </li>
+
+            {{-- <li>
+                <a class="nav-link" href="{{route('usuarios.index')}}" title="Usuarios">
+                    <i class="fas fa-user"style="font-size:1.2em; "></i><span>Usuarios</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('tecnicos.index')}}" title="Tecnicos">
+                    <i class="fas fa-hard-hat"style="font-size:1.2em; "></i><span>Técnicos</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('roles.index')}}" title="Roles">
+                    <i class="fas fa-user-cog"style="font-size:1.2em; "></i><span>Roles</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('permisos.index')}}" title="Permisos">
+                    <i class="fas fa-user-shield"style="font-size:1.2em; "></i><span>Permisos</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('sectores.index')}}" title="Sectores">
+                    <i class="fas fa-bezier-curve"></i><span>Sectores</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('documentacion.index')}}" title="Documentacion">
+                    <i class="fas fa-scroll"style="font-size:1.2em; "></i><span>Documentacion</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="nav-link" href="{{route('phpmyinfo')}}" title="PHPinfo">
+                    <i class="fas fa-tools"style="font-size:1.2em; "></i><span>PHPinfo</span>
+                </a>
+            </li> --}}
+        </ul>
+    </li>
+    @endcan
+
     {{-- @role('SUPERVISOR') --}}
     <li class="side-menus">
         <a class="nav-link menu-hover" href="" target="_blank" id="ayudin" hidden>
