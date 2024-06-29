@@ -8,196 +8,146 @@
         <div class="section-header">
             <h3 class="page__heading">CAMBRE SGI</h3>
         </div>
-        <div class="section-body" >
+        <div class="section-body">
             @include('layouts.modal.mensajes')
             <div style="display:flex;">
-                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> --}}
-                    {{-- <div class="row my-auto p-0"> --}}
-                        {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-                            <div class="row"> --}}
-                                <ul>
-                                    <div style="display:flex; flex-direction:column;  ">
-                                    @can('VER-MENU-SERVICIOS')
-                                    <div class="row" style="margin-bottom:2vh">
-                                        <li class="menu-hover card rounded-4 mx-2" style="height:150px; width:150px; margin:auto">
-                                            <div class="m-auto rounded-4">
-                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', 2)}}" title="Proyectos">
-                                                <div class="row m-auto text-center" style="">
-                                                    <i class="fas fa-sitemap m-auto p-2" style="font-size:1.2em;"></i>
-                                                </div>
-                                                <div class="m-auto " style="">
-                                                    {!! Form::label('proyectos', 'Proyectos', ['class' => 'text-center fs-7 my-auto']) !!}
-                                                    {{-- 'style' => 'font-size:0.9em;' --}}
-                                                </div>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px;margin:auto">
-                                            <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Servicio de ingenieria">
-                                                <div class="row m-auto text-center" style="">
-                                                    <i class="fas fa-tape m-auto p-2" style="font-size:1.2em;"></i>
-                                                </div>
-                                                <div class="row m-auto" style="">
-                                                    {!! Form::label('ssi', 'SSI', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                                </div>
-                                                </a>
-                                            </div>
-                                        </li>
-        
-                                        <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
-                                            <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('proyecto.indexprefijo', 4)}}" title="Mejora continua">
-                                                <div class="row m-auto text-center" style="">
-                                                    <i class="fas fa-star m-auto p-2" style="font-size:1.2em;"></i>
-                                                </div>
-                                                <div class="row m-auto" style="">
-                                                    {!! Form::label('tmc', 'TMC', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                                </div>
-                                                </a>
-                                            </div>
-                                        </li>
+                <ul>
+                    @can('VER-MENU-SERVICIOS')
+                    <div class="row" style="margin-bottom:2vh;">
+                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:70vw">
+                            <h4>Servicios</h4>
+                            <li class="menu-hover card rounded-4 mx-2" style="height:150px; width:150px; margin:auto">
+                                <div class="m-auto rounded-4">
+                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 2)}}" title="Proyectos">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-sitemap m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>
-                                    @endcan
-                                    @can('VER-MENU-ORDENES')
-                                    <div class="row" style="margin-bottom:2vh">
-                                        <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px; margin:auto">
-                                            <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
-                                                <div class="row m-auto text-center" style="">
-                                                    <i class="fas fa-tasks m-auto p-2" style="font-size:1.2em;"></i>
-                                                </div>
-                                                <div class="row m-auto" style="">
-                                                    {!! Form::label('trabajo', 'Trabajo', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                                </div>
-                                                </a>
-                                            </div>
-                                        </li>
-        
-                                        <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
-                                            <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
-                                                <div class="row m-auto text-center" style="">
-                                                    <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1.2em;"></i>
-                                                </div>
-                                                <div class="row m-auto" style="">
-                                                    {!! Form::label('manufactura', 'Manufactura', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                                </div>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
-                                        <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto"> 
-                                            <div class=" m-auto rounded-4" style="">
-                                                <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
-                                                <div class="row m-auto text-center" style="">
-                                                    <i class="fas fa-screwdriver m-auto p-2" style="font-size:1.2em;"></i>
-                                                </div>
-                                                <div class="row m-auto" style="">
-                                                    {!! Form::label('mecanizado', 'Mecanizado', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                                </div>
-                                                </a>
-                                            </div>
-                                        </li>
+                                    <div class="m-auto " style="">
+                                        {!! Form::label('proyectos', 'Proyectos', ['class' => 'text-center fs-7 my-auto']) !!}
+                                        {{-- 'style' => 'font-size:0.9em;' --}}
                                     </div>
-                                    @endcan
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px;margin:auto">
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Servicio de ingenieria">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-tape m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>
-                                </ul>
-                            {{-- </div>
-                            
-                        </div> --}}
-                    {{-- </div> --}}
-                {{-- </div> --}}
-
-                {{-- <div class="card col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="row my-auto">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <ul class="p-0 my-3">
-                                @can('VER-MENU-SERVICIOS')
-                                <li style="display: inline-block;">
-                                    <div class="menu-hover m-auto rounded-4">
-                                        <a class="nav-link" href="{{route('proyecto.indexprefijo', ['PROY', 'Proyectos'])}}" title="Proyectos">
-                                        <div class="row m-auto text-center" style="">
-                                            <i class="fas fa-sitemap m-auto p-2" style="font-size:1.2em;"></i>
-                                        </div>
-                                        <div class="row m-auto" style="">
-                                            {!! Form::label('proyectos', 'Proyectos', ['class' => 'text-center fs-7 my-auto']) !!}
-                                            {{-- 'style' => 'font-size:0.9em;'
-                                        </div>
-                                        </a>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('ssi', 'SI', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
                                     </div>
-                                </li>
-
-                                <li style="display: inline-block;">
-                                    <div class="menu-hover m-auto rounded-4">
-                                        <a class="nav-link" href="{{route('proyecto.indexprefijo', ['SSI', 'Servicio de ingenieria'])}}" title="Servicio de ingenieria">
-                                        <div class="row m-auto text-center" style="">
-                                            <i class="fas fa-tape m-auto p-2" style="font-size:1.2em;"></i>
-                                        </div>
-                                        <div class="row m-auto" style="">
-                                            {!! Form::label('ssi', 'SSI', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                        </div>
-                                        </a>
+                                    </a>
+                                </div>
+                            </li>
+    
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 4)}}" title="Mejora continua">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-star m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>
-                                </li>
-
-                                <li style="display: inline-block;">
-                                    <div class="menu-hover m-auto rounded-4">
-                                        <a class="nav-link" href="{{route('proyecto.indexprefijo', ['TMC', 'Mejora continua'])}}" title="Mejora continua">
-                                        <div class="row m-auto text-center" style="">
-                                            <i class="fas fa-star m-auto p-2" style="font-size:1.2em;"></i>
-                                        </div>
-                                        <div class="row m-auto" style="">
-                                            {!! Form::label('tmc', 'TMC', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                        </div>
-                                        </a>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('tmc', 'TMC', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
                                     </div>
-                                </li>
-                                @endcan
-                                @can('VER-MENU-ORDENES')
-                                <li style="display: inline-block;">
-                                    <div class="menu-hover m-auto rounded-4">
-                                        <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
-                                        <div class="row m-auto text-center" style="">
-                                            <i class="fas fa-tasks m-auto p-2" style="font-size:1.2em;"></i>
-                                        </div>
-                                        <div class="row m-auto" style="">
-                                            {!! Form::label('trabajo', 'Trabajo', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                        </div>
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li style="display: inline-block;">
-                                    <div class="menu-hover m-auto rounded-4">
-                                        <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
-                                        <div class="row m-auto text-center" style="">
-                                            <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1.2em;"></i>
-                                        </div>
-                                        <div class="row m-auto" style="">
-                                            {!! Form::label('manufactura', 'Manufactura', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                        </div>
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li style="display: inline-block;">
-                                    <div class="menu-hover m-auto rounded-4">
-                                        <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
-                                        <div class="row m-auto text-center" style="">
-                                            <i class="fas fa-screwdriver m-auto p-2" style="font-size:1.2em;"></i>
-                                        </div>
-                                        <div class="row m-auto" style="">
-                                            {!! Form::label('mecanizado', 'Mecanizado', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                        </div>
-                                        </a>
-                                    </div>
-                                </li>
-                                @endcan
-                            </ul>
+                                    </a>
+                                </div>
+                            </li>
                         </div>
                     </div>
-                </div> --}}
+                    @endcan
+                    @can('VER-MENU-ORDENES')
+                    <div class="row" style="margin-bottom:2vh">
+                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:70vw">
+                            <h4>Ordenes</h4>
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px; margin:auto">
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-tasks m-auto p-2" style="font-size:1.2em;"></i>
+                                    </div>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('trabajo', 'Trabajo', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
+
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1.2em;"></i>
+                                    </div>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('manufactura', 'Manufactura', ['class' => 'text-center my-auto', 'style' => '']) !!}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
+                            {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto"> 
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-screwdriver m-auto p-2" style="font-size:1.2em;"></i>
+                                    </div>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('mecanizado', 'Mecanizado', ['class' => 'text-center my-auto', 'style' => '']) !!}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                    @endcan
+                    @can('VER-MENU-SOLICITUDES')
+                    <div class="row" style="margin-bottom:2vh;">
+                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:70vw">
+                            <h4>Solicitudes</h4>
+                            <li class="menu-hover card rounded-4 mx-2" style="height:150px; width:150px; margin:auto">
+                                <div class="m-auto rounded-4">
+                                    <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1.2em; "></i>
+                                    </div>
+                                    <div class="m-auto " style="">
+                                        {!! Form::label('ssi', 'S.S.I', ['class' => 'text-center fs-7 my-auto']) !!}
+                                        {{-- 'style' => 'font-size:0.9em;' --}}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px;margin:auto">
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('p_m.index')}}" title="Propuesta de mejora">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1.2em;"></i>
+                                    </div>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('pm', 'P.M', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
+
+                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('r_i.index')}}" title="Requerimiento de ingenieria">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1.2em;"></i>
+                                    </div>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('ri', 'R.I', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                    @endcan
+                </ul>
             </div>
         </div>
         @role('SUPERVISOR')

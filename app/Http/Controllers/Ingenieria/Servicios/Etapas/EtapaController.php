@@ -67,18 +67,23 @@ class EtapaController extends Controller
         $this->validate($request, [
             'nom_etapa' => 'required',
             'responsable' => 'required',
-            'fecha_ini' => 'required',
-            'id_servicio' => 'required'
+            //'fecha_ini' => 'required',
+            'id_servicio' => 'required',
+            'm-crear-eta-idestado' => 'required'
         ]);
         
         $nombre_etapa = $request->input('nom_etapa');
         $responsable = $request->input('responsable');
         $servicio = $request->input('id_servicio');
-        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_ini = $request->input('fecha_ini');
+        if (!is_null($fecha_ini)) {
+            $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        }
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-
+        $id_estado = $request->input('m-crear-eta-idestado');
+        
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-        $estado = Estado::where('nombre_estado', 'espera')->first();
+        $estado = Estado::where('id_estado', $id_estado)->first();
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $responsable,
