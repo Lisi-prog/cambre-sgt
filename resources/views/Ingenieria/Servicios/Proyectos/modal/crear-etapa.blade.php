@@ -60,6 +60,22 @@
                             {!! Form::text('id_servicio', $proyecto->id_servicio, ['class' => 'form-control']) !!}
                         </div>
                     </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('fecha_lim', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        {{-- <span class="obligatorio">*</span> --}}
+                            {!! Form::date('fecha_lim', \Carbon\Carbon::now(), [
+                                'min' => '2023-01-01',
+                                'max' => \Carbon\Carbon::now()->year . '-12',
+                                'id' => 'fec_ini',
+                                'class' => 'form-control reset-fecha',
+                                // 'required'
+                            ]) !!}
+                        </div>
+                        <div class="" hidden>
+                            {!! Form::text('id_servicio', $proyecto->id_servicio, ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

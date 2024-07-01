@@ -48,10 +48,10 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             {!! Form::label('fec_ini', 'Fecha inicio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
+                                        {{-- <span class="obligatorio">*</span> --}}
                             {!! Form::date('fecha_ini', \Carbon\Carbon::now(), [
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',

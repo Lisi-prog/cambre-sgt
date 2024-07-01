@@ -79,6 +79,10 @@ class EtapaController extends Controller
         if (!is_null($fecha_ini)) {
             $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         }
+        $fecha_limite = $request->input('fecha_lim');
+        if (!is_null($fecha_limite)) {
+            $fecha_limite = Carbon::parse($request->input('fecha_lim'))->format('Y-m-d');
+        }
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $id_estado = $request->input('m-crear-eta-idestado');
         
@@ -105,7 +109,7 @@ class EtapaController extends Controller
 
         $actualizacionEtapa = Actualizacion::create([
             'descripcion' => 'Creacion de etapa.',
-            'fecha_limite' => $fecha_ini,
+            'fecha_limite' => $fecha_limite,
             'fecha_carga' => $fecha_carga,
             'id_estado' => $estado->id_estado,
             'id_responsabilidad' => $responsabilidad_act->id_responsabilidad
@@ -205,8 +209,8 @@ class EtapaController extends Controller
         
         $this->validate($request, [
             'nom_etapa' => 'required',
-            'responsable' => 'required',
-            'fecha_ini' => 'required'
+            'responsable' => 'required'
+            //'fecha_ini' => 'required'
         ]);
 
         $id_etapa = $request->input('id_etapa');
@@ -322,7 +326,7 @@ class EtapaController extends Controller
         $this->validate($request, [
             'm-ver-act-eta-descripcion' => 'required',
             'm-crear-act-eta-idestado' => 'required',
-            'm-crear-act-eta-feclimite' => 'required',
+            //'m-crear-act-eta-feclimite' => 'required',
             //'cbx_responsable_etapa' => 'required',
             'm-crear-act-eta-id_etapa' => 'required'
         ]);
@@ -332,7 +336,9 @@ class EtapaController extends Controller
         $id_estado = $request->input('m-crear-act-eta-idestado');
 
         $fecha_limite = $request->input('m-crear-act-eta-feclimite');
-
+        if (!is_null($fecha_limite)) {
+            $fecha_limite = Carbon::parse($fecha_limite)->format('Y-m-d');
+        }
         $id_etapa = $request->input('m-crear-act-eta-id_etapa');
 
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
