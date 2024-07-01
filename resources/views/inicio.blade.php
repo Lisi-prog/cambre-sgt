@@ -3,7 +3,11 @@
 @section('titulo', 'Inicio')
 
 @section('content')
-    
+    <style>
+        .sombra{
+            box-shadow: 2px 2px 5px;
+        }
+    </style>
     <section class="section">
         <div class="section-header">
             <h3 class="page__heading">CAMBRE SGI</h3>
@@ -14,9 +18,9 @@
                 <ul>
                     @can('VER-MENU-SERVICIOS')
                     <div class="row" style="margin-bottom:2vh;">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:70vw">
+                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
                             <h4>Servicios</h4>
-                            <li class="menu-hover card rounded-4 mx-2" style="height:150px; width:150px; margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="height:150px; width:150px; margin:auto;">
                                 <div class="m-auto rounded-4">
                                     <a class="nav-link" href="{{route('proyecto.indexprefijo', 2)}}" title="Proyectos">
                                     <div class="row m-auto text-center" style="">
@@ -29,7 +33,7 @@
                                     </a>
                                 </div>
                             </li>
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px;margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px;margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Servicio de ingenieria">
                                     <div class="row m-auto text-center" style="">
@@ -42,7 +46,7 @@
                                 </div>
                             </li>
     
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('proyecto.indexprefijo', 4)}}" title="Mejora continua">
                                     <div class="row m-auto text-center" style="">
@@ -59,9 +63,9 @@
                     @endcan
                     @can('VER-MENU-ORDENES')
                     <div class="row" style="margin-bottom:2vh">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:70vw">
+                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
                             <h4>Ordenes</h4>
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px; margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px; margin:auto;">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
                                     <div class="row m-auto text-center" style="">
@@ -74,7 +78,7 @@
                                 </div>
                             </li>
 
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
                                     <div class="row m-auto text-center" style="">
@@ -87,7 +91,7 @@
                                 </div>
                             </li>
                             {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto"> 
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
                                     <div class="row m-auto text-center" style="">
@@ -104,9 +108,9 @@
                     @endcan
                     @can('VER-MENU-SOLICITUDES')
                     <div class="row" style="margin-bottom:2vh;">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:70vw">
+                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
                             <h4>Solicitudes</h4>
-                            <li class="menu-hover card rounded-4 mx-2" style="height:150px; width:150px; margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="height:150px; width:150px; margin:auto">
                                 <div class="m-auto rounded-4">
                                     <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
                                     <div class="row m-auto text-center" style="">
@@ -119,7 +123,7 @@
                                     </a>
                                 </div>
                             </li>
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex;height:150px; width:150px;margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px;margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('p_m.index')}}" title="Propuesta de mejora">
                                     <div class="row m-auto text-center" style="">
@@ -132,7 +136,7 @@
                                 </div>
                             </li>
 
-                            <li class="menu-hover card rounded-4 mx-2" style="display: flex; height:150px; width:150px; margin:auto">
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('r_i.index')}}" title="Requerimiento de ingenieria">
                                     <div class="row m-auto text-center" style="">
