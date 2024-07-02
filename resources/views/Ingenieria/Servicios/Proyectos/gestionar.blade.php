@@ -572,6 +572,10 @@
                     document.getElementById('m-ver-act-eta-descripcion').value = '';
                     document.getElementById('m-ver-act-eta-div').hidden = true;
                 });
+                $('#crearEtapaModal').on('hidden.bs.modal', function (e) {
+                    // console.log('holi');
+                    document.getElementById('m-crear-eta-idestado').value = 2;
+                });
             });
         </script>
 

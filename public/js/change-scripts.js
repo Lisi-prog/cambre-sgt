@@ -23,6 +23,7 @@ $(document).ready(function () {
     $('.modal').on('hidden.bs.modal', function (e) {
         resetInputs(this)
         resetHoras(this)
+        resetFechaHoy(this)
         //resetFechas(this) //Pendiente
         // $('form').trigger('reset');
         $(this)
@@ -53,11 +54,11 @@ function resetHoras(document){
         }
 }
 
-function resetFechas(document){
-    let resetElements = document.getElementsByClassName('reset-fecha')
+function resetFechaHoy(document){
+    let resetElements = document.getElementsByClassName('reset-fecha-hoy')
         //console.log(resetElements)
         for(var i = 0; i < resetElements.length; i++){
             //console.log(resetElements[i].value);
-            //resetElements[i].value = ''; 
+            resetElements[i].value = new Date().toISOString().slice(0, 10); 
         }
 }

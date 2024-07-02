@@ -51,8 +51,8 @@
                             {!! Form::date('fecha_ini', \Carbon\Carbon::now(), [
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
-                                'id' => 'fec_ini',
-                                'class' => 'form-control reset-fecha',
+                                'id' => 'fecha_ini',
+                                'class' => 'form-control reset-fecha-hoy',
                                 // 'required'
                             ]) !!}
                         </div>
@@ -67,8 +67,8 @@
                             {!! Form::date('fecha_lim', \Carbon\Carbon::now(), [
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
-                                'id' => 'fec_ini',
-                                'class' => 'form-control reset-fecha',
+                                'id' => 'fecha_lim',
+                                'class' => 'form-control reset-fecha-hoy',
                                 // 'required'
                             ]) !!}
                         </div>
