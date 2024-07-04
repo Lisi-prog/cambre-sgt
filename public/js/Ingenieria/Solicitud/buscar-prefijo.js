@@ -3,8 +3,8 @@ $(function(){
 });
 
 function obtenerValorPrefijo(){
-    id = $(this).val();
-        input_codigo_proyecto = document.getElementById('codigo_proyecto');
+    let id = $(this).val();
+        let input_codigo_proyecto = document.getElementById('codigo_proyecto');
         let e = document.getElementById('prefijo_proyecto');
         input_codigo_proyecto.value = '';
         if (id) {
