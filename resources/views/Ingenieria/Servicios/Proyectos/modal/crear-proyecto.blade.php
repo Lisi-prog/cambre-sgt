@@ -110,7 +110,7 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_ini',
-                                'class' => 'form-control reset-fecha'
+                                'class' => 'form-control reset-fecha-hoy'
                             ]) !!}
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_req',
-                                'class' => 'form-control reset-fecha'
+                                'class' => 'form-control reset-fecha-hoy'
                             ]) !!}
                         </div>
                     </div>

@@ -105,7 +105,7 @@ function changeTdColor() {
                      }
 
                     //----------------
-                    if (values[x].children[indexColumnaEstados[y]].innerHTML == "En espera") { // check if td has desired value
+                    if (values[x].children[indexColumnaEstados[y]].innerHTML == "A Evaluar") { // check if td has desired value
                         values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#ff8001"; // if matches, change color
                     }
                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Rechazado") { // check if td has desired value

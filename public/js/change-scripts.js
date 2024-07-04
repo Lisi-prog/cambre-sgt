@@ -50,15 +50,15 @@ function resetHoras(document){
         //console.log(resetElements)
         for(var i = 0; i < resetElements.length; i++){
             // console.log(resetElements[i].value);
-            resetElements[i].value = '00';
+            //resetElements[i].value = '00';
         }
 }
 
 function resetFechaHoy(document){
     let resetElements = document.getElementsByClassName('reset-fecha-hoy')
-        //console.log(resetElements)
         for(var i = 0; i < resetElements.length; i++){
-            //console.log(resetElements[i].value);
-            resetElements[i].value = new Date().toISOString().slice(0, 10); 
+            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+            var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+            resetElements[i].value = localISOTime.slice(0, 10); 
         }
 }

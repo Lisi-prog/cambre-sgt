@@ -64,4 +64,9 @@ class Sol_solicitud extends Model
     {
         return $this->belongsTo(Empleado::class, 'id_empleado');
     }
+
+    public function getServicio()
+    {
+        return $this->belongsTo(Servicio::class, 'id_servicio');
+    }
 }

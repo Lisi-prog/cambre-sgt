@@ -200,8 +200,7 @@
                                                 <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d')}}</td>
                                             @endif
                                             
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getServicio ? $Ssi->getSolicitud->getServicio->getEstado() : $Ssi->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
                                             
