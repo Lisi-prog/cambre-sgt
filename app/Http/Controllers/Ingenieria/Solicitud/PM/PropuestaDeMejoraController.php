@@ -43,9 +43,19 @@ class PropuestaDeMejoraController extends Controller
         $ListaPM = Sol_propuesta_de_mejora::get();
         $supervisores = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos'));
+
+        $flt_users = $this->obtenerEmpleadosActivos();
+        // $flt_sectores = Sector::orderBy('nombre_sector')->get();
+        $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
+
+        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
     }
 
+    public function obtenerEmpleadosActivos(){
+        return Empleado::orderBy('nombre_empleado')->activo()->get();
+    }
+    
     public function guardarAlt(Request $request)
     {        
         $this->validate($request, [
@@ -221,8 +231,7 @@ class PropuestaDeMejoraController extends Controller
         $this->validate($request, [
             'titulo-propuesta' => 'required',
             'nombre_emisor' => 'required',
-            'obj-propuesta' => 'required',
-            'id_activo' => 'required'
+            'obj-propuesta' => 'required'
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
             'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',

@@ -58,13 +58,12 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
                                         {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
+                                        {{-- <span class="obligatorio">*</span> --}}
                                         {{--    ACTIVOS    --}}
                                         {!! Form::select('id_activo', $activos, $pm->id_activo, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
-                                            'id' => 'id_activo',
-                                            'required'
+                                            'id' => 'id_activo'
                                         ]) !!}
                                     </div>
                                 </div>
