@@ -77,6 +77,9 @@ class ServicioDeIngenieriaController extends Controller
                 'nombre_estado_solicitud' => $estado_servicio->nombre_estado
             ]);
         }
+
+        sort($array_estados);
+
         return $array_estados;
     }
 
