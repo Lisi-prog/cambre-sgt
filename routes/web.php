@@ -25,12 +25,12 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-route::get('emailprueba', function (){
-    try {
-        $response = Mail::to('lisandrosilvero@gmail.com')->send(new ContactanosMailable("Juan"));
-    } catch (\Throwable $th) {
-        echo $th->getMessage();
-    }
+// route::get('emailprueba', function (){
+//     try {
+//         $response = Mail::to('lisandrosilvero@gmail.com')->send(new ContactanosMailable("Juan"));
+//     } catch (\Throwable $th) {
+//         echo $th->getMessage();
+//     }
 
-    // dump($response);
-});
+//     // dump($response);
+// });
