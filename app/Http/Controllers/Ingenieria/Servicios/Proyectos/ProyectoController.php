@@ -50,14 +50,14 @@ class ProyectoController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('permission:VER-MENU-PROYECTO', ['only' => ['index']]);
-        $this->middleware('permission:MODIFICAR-PRIORIDAD-PROYECTO', ['only' => ['actualizarPrioridadServicio']]);
+        $this->middleware('permission:MODIFICAR-PRIORIDAD-PROYECTO', ['only' => ['actualizarPrioridadServicio']]); 
         //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
         //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
     }
-
+    
     public function index(Request $request)
-    {
+    {        
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
 
         if($tipo_servicio){
@@ -68,20 +68,20 @@ class ProyectoController extends Controller
         }else{
             $proyectos = [];
         }
-
-
+        
+        
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridades = [];
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-
+        
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos'));
     }
 
     public function indexPorTipo(Request $request, $opcion)
-    {
+    {   
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $tipo = Subtipo_servicio::where('id_subtipo_servicio', $opcion)->first();
 
@@ -122,7 +122,7 @@ class ProyectoController extends Controller
                 $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
                                                                                         foreach ($prefijos_busq as $prefijo){
                                                                                             $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                                                                                        }
+                                                                                        }      
                                                                                     })->orderBy('prioridad_servicio')->get();
                 break;
 
@@ -132,7 +132,7 @@ class ProyectoController extends Controller
                 $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere(function ($query) use($prefijos_busq) {
                                                                                                                 foreach ($prefijos_busq as $prefijo){
                                                                                                                     $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                                                                                                                }
+                                                                                                                }      
                                                                                                             })->orderBy('prioridad_servicio')->get();
                 break;
 
@@ -142,14 +142,14 @@ class ProyectoController extends Controller
                 $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
                                                                                         foreach ($prefijos_busq as $prefijo){
                                                                                             $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                                                                                        }
+                                                                                        }      
                                                                                     })->orderBy('prioridad_servicio')->get();
                 break;
         }
 
         $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
-
-
+        
+        
         //Para el filtro
             $supervisores = $this->obtenerSupervisoresFiltro();
             $codigos_servicio = $this->obtenerCodigoServicio();
@@ -161,7 +161,7 @@ class ProyectoController extends Controller
             $flt_lid = $request->input('lid');
             $flt_est = $request->input('estados');
         //------------------
-
+        
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion'));
     }
 
@@ -175,11 +175,11 @@ class ProyectoController extends Controller
         if ($usuariosSupervisor) {
             foreach ($usuariosSupervisor as $userSupervisor) {
                 try {
-                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado;
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
                 } catch (\Throwable $th) {
-                    $id_supervisores[] = null;
+                    $id_supervisores[] = null; 
                 }
-
+                  
             }
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
@@ -217,16 +217,16 @@ class ProyectoController extends Controller
             'fecha_req.required' => 'Se necesita la fecha requerida',
             'prioridad.required' => 'Se necesita la prioridad'
         ]);
-
+        
         $id_servicio = $this->guardarProyecto($request);
 
         if ($request->input('gesti')) {
             return redirect()->route('proyectos.gestionar', $id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
         } else {
-            return redirect()->back()->with('mensaje','El proyecto se ha creado con exito.');
-        }
-        //return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');
-
+            return redirect()->back()->with('mensaje','El proyecto se ha creado con exito.');  
+        }     
+        //return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');   
+                        
     }
 
     public function guardarProyecto(Request $request){
@@ -254,7 +254,7 @@ class ProyectoController extends Controller
             'id_empleado' => $lider,
             'id_rol_empleado' => $rol_empleado->id_rol_empleado
         ]);
-
+        
         $proyecto = Servicio::create([
             'codigo_servicio' => $codigo_proyecto,
             'nombre_servicio' => $nombre_proyecto,
@@ -266,7 +266,7 @@ class ProyectoController extends Controller
         ]);
 
         Servicio_info::create([
-            'id_servicio' => $proyecto->id_servicio,
+            'id_servicio' => $proyecto->id_servicio, 
             'tot_ord' => 0,
             'tot_ord_completa' => 0,
             'progreso' => 0
@@ -329,7 +329,7 @@ class ProyectoController extends Controller
         $id_servicio = $request->input('id_proyecto');
 
 
-
+        
 
         $motivo = $request->input('motivo');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
@@ -372,15 +372,15 @@ class ProyectoController extends Controller
             'prioridad_servicio' => $prioridad
         ]);
 
-        return redirect()->back()->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');
+        return redirect()->back()->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
     }
 
     public function actualizarPrioridades($prioridadActual, $prioridadAnterior){
         DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio - 1 WHERE prioridad_servicio <= ? AND prioridad_servicio > ?'  , [$prioridadActual, $prioridadAnterior]);
         DB::UPDATE('UPDATE servicio SET prioridad_servicio = prioridad_servicio + 1 WHERE prioridad_servicio >= ? AND prioridad_servicio < ?', [$prioridadActual, $prioridadAnterior]);
-
+        
     }
-
+    
     public function aceptar_solicitud(Request $request, $id){
 
         $this->validate($request, [
@@ -413,61 +413,13 @@ class ProyectoController extends Controller
 
         $id_servicio = $this->guardarProyecto($request);
 
-        $responsabilidad = Responsabilidad::create([
-            'id_empleado' => $lider,
-            'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        ]);
-
-        $proyecto = Servicio::create([
-            'codigo_servicio' => $codigo_proyecto,
-            'nombre_servicio' => $nombre_proyecto,
-            'id_subtipo_servicio' => $tipo_servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-            'fecha_inicio' => $fecha_ini,
-            'prioridad_servicio' => $prioridadMax,
-            'id_activo' => $activo
-        ]);
-
 
         $solicitud->update([
             'id_servicio' => $id_servicio
         ]);
 
-        $actualizacionServicio = Actualizacion::create([
-            'descripcion' => 'Creacion de proyecto.',
-            'fecha_limite' => $fecha_req,
-            'fecha_carga' => $fecha_carga,
-            'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacion_servicio = Actualizacion_servicio::create([
-            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
-            'id_servicio' => $proyecto->id_servicio
-        ]);
-
-        $etapa = Etapa::create([
-            'descripcion_etapa' => 'Creacion de etapa.',
-            'fecha_inicio' => $fecha_ini,
-            'id_servicio' => $proyecto->id_servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacionEtapa = Actualizacion::create([
-            'descripcion' => 'Creacion de etapa.',
-            'fecha_limite' => $fecha_req,
-            'fecha_carga' => $fecha_carga,
-            'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        $actualizacion_etapa = Actualizacion_etapa::create([
-            'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
-            'id_etapa' => $etapa->id_etapa
-        ]);
-
-        return redirect()->route('proyectos.gestionar', $proyecto->id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
-        // return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.');
+        return redirect()->route('proyectos.gestionar', $id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
+        // return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.'); 
     }
 
     public function show($id)
@@ -475,16 +427,16 @@ class ProyectoController extends Controller
         $proyecto = Servicio::find($id);
         return view('Ingenieria.Servicios.Proyectos.show',compact('proyecto'));
     }
-
+    
     public function obtenerProyecto($id){
         return Servicio::find($id);
     }
 
     public function edit($id)
     {
-
+        
     }
-
+    
     public function update(Request $request, $id)
     {
         //return $request;
@@ -522,13 +474,13 @@ class ProyectoController extends Controller
            $res->id_empleado = $lider;
            $res->save();
         }
-
-        return redirect()->back()->with('mensaje', 'Proyecto editado exitosamente.');
+    
+        return redirect()->back()->with('mensaje', 'Proyecto editado exitosamente.');                        
     }
-
+    
     public function destroy($id)
     {
-
+                      
     }
 
     public function gestionar(Request $request, $id)
@@ -571,7 +523,7 @@ class ProyectoController extends Controller
         $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
         $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
         $flt_estados_mec = Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
-
+ 
         foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa) {
             foreach ($etapa->getOrden as $orden) {
                 if ($orden->getOrdenDe->getTipoOrden() == 1) {
@@ -593,19 +545,19 @@ class ProyectoController extends Controller
         } catch (\Throwable $th) {
             $flt_eta_ord_tra = [];
         }
-
+    
         try {
             $flt_eta_ord_man = array_unique($eta_ord_manufactura);
         } catch (\Throwable $th) {
             $flt_eta_ord_man = [];
         }
-
+        
         try {
             $flt_eta_ord_mec = array_unique($eta_ord_mecanizado);
         } catch (\Throwable $th) {
             $flt_eta_ord_mec = [];
         }
-
+        
         return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas_plk', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion', 'costo_estimado', 'costo_real', 'etapas', 'ordenes_trabajo', 'ordenes_manufactura', 'ordenes_mecanizado'));
     }
 
@@ -642,7 +594,7 @@ class ProyectoController extends Controller
 
         return $actualizacion_arr;
     }
-
+    
     public function verActualizaciones($id){
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $proyecto = Servicio::find($id);
@@ -655,7 +607,7 @@ class ProyectoController extends Controller
     }
 
     public function guardarActualizacion(Request $request, $id){
-
+        
         //return $request;
         $this->validate($request, [
             'm-ver-act-descripcion' => 'required',
@@ -701,7 +653,7 @@ class ProyectoController extends Controller
             $responsable_proyecto->id_empleado = $lider;
             $responsable_proyecto->save();
         }
-        return redirect()->back()->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');
+        return redirect()->back()->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 
     public function obtenerSupervisores(){
@@ -710,11 +662,11 @@ class ProyectoController extends Controller
         if ($usuariosSupervisor) {
             foreach ($usuariosSupervisor as $userSupervisor) {
                 try {
-                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado;
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
                 } catch (\Throwable $th) {
-                    $id_supervisores[] = null;
+                    $id_supervisores[] = null; 
                 }
-
+                  
             }
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
@@ -726,11 +678,11 @@ class ProyectoController extends Controller
         if ($usuariosSupervisor) {
             foreach ($usuariosSupervisor as $userSupervisor) {
                 try {
-                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado;
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
                 } catch (\Throwable $th) {
-                    $id_supervisores[] = null;
+                    $id_supervisores[] = null; 
                 }
-
+                  
             }
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->get();
@@ -742,11 +694,11 @@ class ProyectoController extends Controller
         if ($usuariosSupervisor) {
             foreach ($usuariosSupervisor as $userSupervisor) {
                 try {
-                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado;
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
                 } catch (\Throwable $th) {
-                    $id_supervisores[] = null;
+                    $id_supervisores[] = null; 
                 }
-
+                  
             }
         }
         return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
@@ -785,7 +737,7 @@ class ProyectoController extends Controller
         ]);
         return $ultima_act;
     }
-
+   
 
     public function obtener_progreso($id){
         $etapas_arr = [];
@@ -802,7 +754,7 @@ class ProyectoController extends Controller
                 'progreso' => round($etapa->getProgreso())
             ]);
         }
-
+        
         return [
             'cod_serv' => $servicio->codigo_servicio,
             'nom_serv' => $servicio->nombre_servicio,
