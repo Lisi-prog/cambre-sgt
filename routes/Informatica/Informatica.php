@@ -23,7 +23,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER
     Route::resource('puesto_tecnico', PuestoEmpleadoController::class);
 });
 
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNICO']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNICO|VER-DOCUMENTACION']], function () {
     Route::post('usuario/editar', [UsuarioController::class, 'editarUsuario'])->name('usuario.editar');
     Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
     Route::post('/documentacion/obtener/{nombreArchivo}', [DocumentoController::class, 'rutaDelArchivo']);

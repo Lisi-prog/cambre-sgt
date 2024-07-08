@@ -45,7 +45,7 @@
                         <div class="form-group">
                             {!! Form::label('id_tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::select('id_tipo_proyecto', $Tipos_servicios, null, [
+                            {!! Form::select('id_tipo_proyecto', $Tipos_servicios, 5, [
                                 'placeholder' => 'Seleccionar',
                                 'class' => 'form-select form-control',
                                 'id' => 'id_tipo_proyecto',
@@ -117,7 +117,7 @@
                         <div class="form-group">
                             {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
+                            {!! Form::date('fecha_req', \Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d'), [
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
                                 'id' => 'fec_req',

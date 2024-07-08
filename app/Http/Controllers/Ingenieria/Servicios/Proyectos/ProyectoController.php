@@ -217,6 +217,19 @@ class ProyectoController extends Controller
             'fecha_req.required' => 'Se necesita la fecha requerida',
             'prioridad.required' => 'Se necesita la prioridad'
         ]);
+
+        $id_servicio = $this->guardarProyecto($request);
+
+        if ($request->input('gesti')) {
+            return redirect()->route('proyectos.gestionar', $id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
+        } else {
+            return redirect()->back()->with('mensaje','El proyecto se ha creado con exito.');
+        }
+        //return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');
+
+    }
+
+    public function guardarProyecto(Request $request){
         $activo = $request->input('id_activo');
         $codigo_proyecto = strtoupper($request->input('codigo_proyecto'));
         $nombre_proyecto = $request->input('nombre_proyecto');
@@ -250,6 +263,13 @@ class ProyectoController extends Controller
             'fecha_inicio' => $fecha_ini,
             'prioridad_servicio' => $prioridadMax,
             'id_activo' => $activo
+        ]);
+
+        Servicio_info::create([
+            'id_servicio' => $proyecto->id_servicio,
+            'tot_ord' => 0,
+            'tot_ord_completa' => 0,
+            'progreso' => 0
         ]);
 
         $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
@@ -291,8 +311,7 @@ class ProyectoController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
-        //return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');
-        return redirect()->back()->with('mensaje','El proyecto se ha creado con exito.');
+        return $proyecto->id_servicio;
     }
 
     public function actualizarPrioridadServicio(Request $request){
@@ -392,19 +411,7 @@ class ProyectoController extends Controller
             'id_estado_solicitud' => $id_estado_solicitud
         ]);
 
-        $codigo_proyecto = $request->input('codigo_proyecto');
-        $nombre_proyecto = $request->input('nombre_proyecto');
-        $tipo_proyecto = $request->input('id_tipo_proyecto');
-        $activo = $request->input('id_activo');
-        $lider = $request->input('lider');
-        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
-        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
-        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
-        $estado = Estado::where('nombre_estado', 'espera')->first();
-
-        $tipo_servicio = $request->input('id_tipo_proyecto');
+        $id_servicio = $this->guardarProyecto($request);
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $lider,
@@ -421,15 +428,9 @@ class ProyectoController extends Controller
             'id_activo' => $activo
         ]);
 
-        Servicio_info::create([
-            'id_servicio' => $proyecto->id_servicio,
-            'tot_ord' => 0,
-            'tot_ord_completa' => 0,
-            'progreso' => 0
-        ]);
 
         $solicitud->update([
-            'id_servicio' => $proyecto->id_servicio
+            'id_servicio' => $id_servicio
         ]);
 
         $actualizacionServicio = Actualizacion::create([

@@ -24,6 +24,7 @@ use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Prefijo_proyecto;
+use App\Models\Cambre\Estado;
 
 class ServicioDeIngenieriaController extends Controller
 {
@@ -44,7 +45,8 @@ class ServicioDeIngenieriaController extends Controller
 
         $flt_users = $this->obtenerEmpleadosActivos();
         $flt_sectores = Sector::orderBy('nombre_sector')->get();
-        $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $flt_estados = $this->estadosParaSolicitud();
         $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
         
         return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos', 'flt_users', 'flt_sectores', 'flt_estados', 'flt_prioridades'));
@@ -57,6 +59,28 @@ class ServicioDeIngenieriaController extends Controller
     public function create()
     {
         return view('Informatica.GestionUsuarios.permisos.crear');
+    }
+
+    public function estadosParaSolicitud(){
+        $estados_solicitud = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $estados_servicio = Estado::orderBy('nombre_estado')->get();
+        $array_estados = [];
+
+        foreach ($estados_solicitud as $estado_solicitud) {
+            array_push($array_estados, (object)[
+                'nombre_estado_solicitud' => $estado_solicitud->nombre_estado_solicitud
+            ]);
+        }
+
+        foreach ($estados_servicio as $estado_servicio) {
+            array_push($array_estados, (object)[
+                'nombre_estado_solicitud' => $estado_servicio->nombre_estado
+            ]);
+        }
+
+        sort($array_estados);
+
+        return $array_estados;
     }
 
     public function store(Request $request)

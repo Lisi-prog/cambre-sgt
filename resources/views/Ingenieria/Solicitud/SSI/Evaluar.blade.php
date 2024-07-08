@@ -26,7 +26,7 @@
     <section class="section">
         <div class="section-header d-flex">
             <div class="">
-                <div class="titulo page__heading py-1 fs-5">Evaluar Servicio de ingenieria</div>
+                <div class="titulo page__heading py-1 fs-5">Evaluar solicitud de servicio de ingenieria</div>
             </div>
         </div>
         <div class="section-body">
@@ -37,7 +37,7 @@
                     <div class="card">
                         <div class="card-head">
                             <br>
-                            <div class="text-center"><h5>Servicio de ingenieria</h5></div>
+                            <div class="text-center"><h5>Solicitud de servicio de ingenieria</h5></div>
                         </div>
                         <div class="card-body">
                             {!! Form::open(['route' => ['solicitud.aceptar', $Ssi->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario']) !!}

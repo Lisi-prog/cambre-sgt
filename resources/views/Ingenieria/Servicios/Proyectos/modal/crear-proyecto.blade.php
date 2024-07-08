@@ -130,6 +130,12 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <div class="form-check pe-3">
+                    <input class="form-check-input" type="checkbox" value=1 id="siGestionar" checked name="gesti">
+                    <label class="form-check-label" for="siGestionar">
+                      Gestionar despues de guardar.
+                    </label>
+                  </div>
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>

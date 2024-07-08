@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo', 'S.I.')
+@section('titulo', 'S.S.I.')
 @section('content')
 <style>
     .tableFixHead {
@@ -33,7 +33,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 my-auto">
-                <h4 class="titulo page__heading my-auto">Servicio de ingenieria</h5>
+                <h4 class="titulo page__heading my-auto">Solicitud de servicio de ingenieria</h5>
             </div>
             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
             </div>
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @role('SUPERVISOR')
+                            {{-- @role('SUPERVISOR') --}}
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endrole
+                            {{-- @endrole --}}
                             
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
@@ -413,7 +413,6 @@
 
         $('#avanceProyectoModal').on('hidden.bs.modal', function (e) {
             limpiarModal();
-            console.log('hoa'); 
         });
     });
 </script>

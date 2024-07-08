@@ -26,6 +26,7 @@ use App\Models\Cambre\Activo;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Prefijo_proyecto;
+use App\Models\Cambre\Estado;
 
 class PropuestaDeMejoraController extends Controller
 {
@@ -43,7 +44,40 @@ class PropuestaDeMejoraController extends Controller
         $ListaPM = Sol_propuesta_de_mejora::get();
         $supervisores = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos'));
+
+        $flt_users = $this->obtenerEmpleadosActivos();
+        // $flt_sectores = Sector::orderBy('nombre_sector')->get();
+        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $flt_estados = $this->estadosParaSolicitud();
+        // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
+
+        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
+    }
+
+    public function obtenerEmpleadosActivos(){
+        return Empleado::orderBy('nombre_empleado')->activo()->get();
+    }
+    
+    public function estadosParaSolicitud(){
+        $estados_solicitud = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $estados_servicio = Estado::orderBy('nombre_estado')->get();
+        $array_estados = [];
+
+        foreach ($estados_solicitud as $estado_solicitud) {
+            array_push($array_estados, (object)[
+                'nombre_estado_solicitud' => $estado_solicitud->nombre_estado_solicitud
+            ]);
+        }
+
+        foreach ($estados_servicio as $estado_servicio) {
+            array_push($array_estados, (object)[
+                'nombre_estado_solicitud' => $estado_servicio->nombre_estado
+            ]);
+        }
+
+        sort($array_estados);
+
+        return $array_estados;
     }
 
     public function guardarAlt(Request $request)
@@ -221,8 +255,7 @@ class PropuestaDeMejoraController extends Controller
         $this->validate($request, [
             'titulo-propuesta' => 'required',
             'nombre_emisor' => 'required',
-            'obj-propuesta' => 'required',
-            'id_activo' => 'required'
+            'obj-propuesta' => 'required'
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
             'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',
