@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Mail\ContactanosMailable;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,3 +24,13 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('in
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+route::get('emailprueba', function (){
+    try {
+        $response = Mail::to('lisandrosilvero@gmail.com')->send(new ContactanosMailable("Juan"));
+    } catch (\Throwable $th) {
+        echo $th->getMessage();
+    }
+
+    // dump($response);
+});
