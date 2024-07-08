@@ -26,6 +26,7 @@ use App\Models\Cambre\Activo;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Prefijo_proyecto;
+use App\Models\Cambre\Estado;
 
 class PropuestaDeMejoraController extends Controller
 {
@@ -46,7 +47,8 @@ class PropuestaDeMejoraController extends Controller
 
         $flt_users = $this->obtenerEmpleadosActivos();
         // $flt_sectores = Sector::orderBy('nombre_sector')->get();
-        $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $flt_estados = $this->estadosParaSolicitud();
         // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
 
         return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
@@ -56,6 +58,28 @@ class PropuestaDeMejoraController extends Controller
         return Empleado::orderBy('nombre_empleado')->activo()->get();
     }
     
+    public function estadosParaSolicitud(){
+        $estados_solicitud = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $estados_servicio = Estado::orderBy('nombre_estado')->get();
+        $array_estados = [];
+
+        foreach ($estados_solicitud as $estado_solicitud) {
+            array_push($array_estados, (object)[
+                'nombre_estado_solicitud' => $estado_solicitud->nombre_estado_solicitud
+            ]);
+        }
+
+        foreach ($estados_servicio as $estado_servicio) {
+            array_push($array_estados, (object)[
+                'nombre_estado_solicitud' => $estado_servicio->nombre_estado
+            ]);
+        }
+
+        sort($array_estados);
+
+        return $array_estados;
+    }
+
     public function guardarAlt(Request $request)
     {        
         $this->validate($request, [

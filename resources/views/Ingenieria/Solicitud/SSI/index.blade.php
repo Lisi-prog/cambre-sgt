@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @role('SUPERVISOR')
+                            {{-- @role('SUPERVISOR') --}}
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endrole
+                            {{-- @endrole --}}
                             
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
