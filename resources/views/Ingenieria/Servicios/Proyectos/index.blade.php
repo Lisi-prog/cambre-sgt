@@ -23,7 +23,7 @@
      }*/
      #viv th {
        background: #ee9b27;
-     } 
+     }
 
     #example thead input {
         width: 100%;
@@ -47,7 +47,7 @@
 
     <div class="d-flex section-header justify-content-center" >
         <div class="d-flex flex-row col-12">
-        
+
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
                 <h4 class="titulo page__heading my-auto">{{$tipo ?? ''}}</h5>
             </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="d-flex col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
                 <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
-                    Nuevo   
+                    Nuevo
                 </button>
             </div>
         </div>
@@ -67,7 +67,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button> 
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button>
                         </div>
                         {!! Form::open(['method' => 'GET', 'route' => ['proyecto.indexprefijo', $opcion], 'style' => 'display:inline']) !!}
                         <div class="row" id="demo" hidden>
@@ -124,7 +124,7 @@
                                                                 <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
                                                             @endif
                                                             {{-- <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label> --}}
-                                                        @endforeach 
+                                                        @endforeach
                                                         {{-- @foreach ($supervisores as $supervisor)
                                                             <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
                                                         @endforeach --}}
@@ -147,7 +147,7 @@
                                                             @if (is_null($flt_lid) || in_array($supervisor->id_empleado, $flt_lid))
                                                                 <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
                                                             @else
-                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label> 
+                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
                                                             @endif
                                                         @endforeach
                                                         {{-- @foreach ($responsables as $responsable)
@@ -183,7 +183,7 @@
                                                                     <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
                                                                 @endif
                                                             @endif
-                                                    
+
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -194,17 +194,17 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
-                                
+
                                 {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100', 'id' => 'btn-filtrar']) !!}
                                 {!! Form::close() !!}
                             </div>
-                        </div>                     
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        
+
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -240,16 +240,16 @@
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
-    
+
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
-    
+
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
-                                                
+
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
-                                                
+
                                                 {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
-                                                
+
                                                 <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
                                                         <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->progreso}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
@@ -257,11 +257,11 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                
+
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
-    
+
                                                 <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
-                                                
+
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
 
                                                 <td>
@@ -276,7 +276,7 @@
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
-                                                                        Prioridad  
+                                                                        Prioridad
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -297,15 +297,15 @@
                                             </tr>
                                             {{-- <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
-    
+
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
-    
+
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
-    
+
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
-    
+
                                                 <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
-    
+
                                                 <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
                                                         <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
@@ -315,9 +315,9 @@
                                                 </td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
-    
+
                                                 <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
-                                                
+
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
                                                 <td>
                                                     <div class="row justify-content-center">
@@ -331,7 +331,7 @@
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
-                                                                        Prioridad  
+                                                                        Prioridad
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -365,104 +365,10 @@
     <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/filter.js') }}"></script>
 </section>
-    {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
-{{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
-{{-- <script src="{{ asset('js/modal/success.js') }}"></script> --}}
-
-{{-- <script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            language: {
-                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                    zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
-                    infoEmpty: 'No se ha encontrado registros',
-                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                    search: 'Buscar',
-                    paginate:{
-                        first:"Prim.",
-                        last: "Ult.",
-                        previous: 'Ant.',
-                        next: 'Sig.',
-                    },
-                },
-                order: [[ 0, 'asc' ]],
-                "aaSorting": []
-        });
-    });
-</script> --}}
-
-{{-- <script>
-    $(document).ready(function () {
-        var url = '{{url('/')}}';
-        //url = url.replace(':id_servicio', id_servicio);
-        document.getElementById('volver').href = url;
-        // Setup - add a text input to each footer cell
-        $('#example thead tr')
-            .clone(true)
-            .addClass('filters')
-            .appendTo('#example thead');
-    
-        var table = $('#example').DataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
-            initComplete: function () {
-                var api = this.api();
-    
-                // For each column
-                api
-                    .columns()
-                    .eq(0)
-                    .each(function (colIdx) {
-                        // Set the header cell to contain the input element
-                        var cell = $('.filters th').eq(
-                            $(api.column(colIdx).header()).index()
-                        );
-                        var title = $(cell).text();
-                        $(cell).html('<input type="text" placeholder="' + title + '" />');
-    
-                        // On every keypress in this input
-                        $(
-                            'input',
-                            $('.filters th').eq($(api.column(colIdx).header()).index())
-                        )
-                            .off('keyup change')
-                            .on('change', function (e) {
-                                // Get the search value
-                                $(this).attr('title', $(this).val());
-                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
-    
-                                var cursorPosition = this.selectionStart;
-                                // Search the column for that value
-                                api
-                                    .column(colIdx)
-                                    .search(
-                                        this.value != ''
-                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                            : '',
-                                        this.value != '',
-                                        this.value == ''
-                                    )
-                                    .draw();
-                            })
-                            .on('keyup', function (e) {
-                                e.stopPropagation();
-    
-                                $(this).trigger('change');
-                                $(this)
-                                    .focus()[0]
-                                    .setSelectionRange(cursorPosition, cursorPosition);
-                            });
-                    });
-            },
-        });
-    });
-</script> --}}
 
 <script>
     let x = '';
-
     $(document).ready(function () {
         var url = '{{url('/')}}';
         document.getElementById('volver').href = url;
@@ -471,7 +377,7 @@
 
         $.when($.ajax({
             type: "post",
-            url: '/documentacion/obtener/'+nombreArchivo, 
+            url: '/documentacion/obtener/'+nombreArchivo,
             data: {
                 nombreArchivo: nombreArchivo,
             },
@@ -509,102 +415,6 @@
             changeTdColor();
         } )
     });
-    
-    /*$(document).ready( function () {
-        var url = '{{url('/')}}';
-        //url = url.replace(':id_servicio', id_servicio);
-        document.getElementById('volver').href = url;
-        //dudoso
-
-        document.getElementById('ayudin').hidden = false;
-        // let tipo_orden = window.location.pathname.substring(9, 10);
-        // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
-        // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-            var positions = $('input:checkbox[name="lid"]:checked').map(function() {
-                return this.value;
-            }).get();
-        
-            if (positions.length === 0) {
-                return true;
-            }
-            
-            if (positions.indexOf(searchData[4]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-        
-            var offices = $('input:checkbox[name="subtip"]:checked').map(function() {
-                return this.value;
-            }).get();
-        
-
-            if (offices.length === 0) {
-                return true;
-            }
-            
-            if (offices.indexOf(searchData[3]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-        
-            var offices = $('input:checkbox[name="est"]:checked').map(function() {
-                return this.value;
-            }).get();
-        
-
-            if (offices.length === 0) {
-                return true;
-            }
-            
-            if (offices.indexOf(searchData[6]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-        
-            var offices = $('input:checkbox[name="cod_serv"]:checked').map(function() {
-                return this.value;
-            }).get();
-        
-
-            if (offices.length === 0) {
-                return true;
-            }
-
-
-            if (offices.indexOf(searchData[1]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
-    var table = $('#example').DataTable();
-  
-    $('input:checkbox').on('change', function () {
-        table.draw();
-    });
-
-    } ); */
 </script>
 
 <script>
@@ -623,7 +433,7 @@
                         .parent()
                         .find(".fa-chevron-right")
                         .removeClass("fa-chevron-right")
-                        .addClass("fa-chevron-down");          
+                        .addClass("fa-chevron-down");
                 });
         });
 </script>
@@ -634,10 +444,10 @@
         let nombre = document.getElementById('m-nombre_proyecto');
         let id_proyecto = document.getElementById('id_proyecto');
         let num_prioridad = document.getElementById('num_prioridad');
-        
+
         $.when($.ajax({
             type: "post",
-            url: '/proyectos/obtener-proyecto/'+id, 
+            url: '/proyectos/obtener-proyecto/'+id,
             data: {
                 id: id
             },
@@ -654,12 +464,12 @@
                 console.log(error);
             }
             }));
-        
+
         id_proyecto.value = id;
     }
-    
-</script>
 
-@include('Ingenieria.Servicios.Proyectos.modal.crear-proyecto')
+</script>
 @include('Ingenieria.Servicios.Proyectos.modal.modificar-prioridad')
+@include('Ingenieria.Servicios.Proyectos.modal.crear-proyecto')
+
 @endsection
