@@ -13,6 +13,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\Cambre\Sol_prioridad_solicitud;
 use App\Models\Cambre\Sol_servicio_de_ingenieria;
@@ -25,6 +26,7 @@ use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
+use App\Mail\Solicitud\SsiMailable;
 
 class ServicioDeIngenieriaController extends Controller
 {
@@ -126,6 +128,15 @@ class ServicioDeIngenieriaController extends Controller
             'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
         ]);
 
+        try {
+            $nombre = $Solicitud->getEmpleado->nombre_empleado;
+            $codigo = $Solicitud->id_solicitud;
+            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            Mail::to($email)->send(new SsiMailable($nombre, $codigo, 1));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
         return redirect()->route('s_s_i.index')->with('mensaje', 'Servicio de ingenieria creado con exito.');                    
     }
     
@@ -201,6 +212,16 @@ class ServicioDeIngenieriaController extends Controller
         $solicitud = Sol_solicitud::find($id);
         $solicitud->id_estado_solicitud = 3;
         $solicitud->save();
+
+        try {
+            $nombre = $solicitud->getEmpleado->nombre_empleado;
+            $codigo = $solicitud->id_solicitud;
+            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            Mail::to($email)->send(new SsiMailable($nombre, $codigo, 3));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
         return redirect()->route('s_s_i.index')->with('mensaje', 'Solicitud de servicio de ingenieria rechazada con exito.');  
     }
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Mail\ContactanosMailable;
+use App\Mail\Solicitud\AceptarSolicitud;
 use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +26,14 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// route::get('emailprueba', function (){
-//     try {
-//         $response = Mail::to('lisandrosilvero@gmail.com')->send(new ContactanosMailable("Juan"));
-//     } catch (\Throwable $th) {
-//         echo $th->getMessage();
-//     }
-
-//     // dump($response);
-// });
+//route::get('emailprueba', function (){
+    /* try {
+        $email = strval('lisandrosilvero@gmail.com');
+        $response = Mail::to($email)->send(new AceptarSolicitud("Juan"));
+        dump($response);
+    } catch (\Throwable $th) {
+        echo $th->getMessage();
+    } */
+    //return view('emails.Solicitud.aceptarSolicitud')->with(['codigo' => '100', 'name' => 'Lisandro Manuel Silvero']);
+    // dump($response);
+//});

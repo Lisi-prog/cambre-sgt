@@ -43,6 +43,8 @@ use App\Models\Cambre\Vw_etapa;
 use App\Models\Cambre\Vw_gest_orden_trabajo;
 use App\Models\Cambre\Vw_gest_orden_manufactura;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
+use App\Mail\Solicitud\SsiMailable;
+use Illuminate\Support\Facades\Mail;
 
 class ProyectoController extends Controller
 {
@@ -417,6 +419,16 @@ class ProyectoController extends Controller
         $solicitud->update([
             'id_servicio' => $id_servicio
         ]);
+
+        try {
+            $nombre = $solicitud->getEmpleado->nombre_empleado;
+            $codigo = $solicitud->id_solicitud;
+            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            
+            Mail::to($email)->send(new SsiMailable($nombre, $codigo, 2));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
         return redirect()->route('proyectos.gestionar', $id_servicio)->with('mensaje', 'El proyecto se ha creado con exito.');
         // return redirect()->back()->with('mensaje', 'El proyecto se ha creado con exito.'); 
