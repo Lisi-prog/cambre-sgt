@@ -164,7 +164,7 @@
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>codigo n°: {{$codigo}}</b> fue aceptada y podras comprobar el avance del servicio asociado <a href="{{route('s_s_i.index')}}" target="_blank">aqui</a>.
+                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>codigo n° {{$codigo}}</b> fue aceptada y podras comprobar el avance del servicio asociado <a href="{{route('s_s_i.index')}}" target="_blank">aqui</a>.
                                                       
                                                       </p><br/>
                                                       {{-- <div style="width: 100%; display: grid; align-content: center; justify-content: center;">

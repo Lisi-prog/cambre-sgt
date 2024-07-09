@@ -164,7 +164,7 @@
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>codigo n°: {{$codigo}}</b> fue rechazada.
+                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>codigo n° {{$codigo}}</b> fue rechazada.
                                                       
                                                       </p><br/>
                                                       {{-- <div style="width: 100%; display: grid; align-content: center; justify-content: center;">
