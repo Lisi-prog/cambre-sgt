@@ -1257,6 +1257,62 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE FUNCTION TotalOrdenTrabajoCancelado(servicio int)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+    WITH 
+	ParteRanked AS (
+		SELECT
+				p.id_orden,
+				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+			FROM parte p
+			inner join parte_trabajo pt on pt.id_parte = p.id_parte
+			inner join estado est on est.id_estado = pt.id_estado
+			where est.id_estado = 10
+	)
+	select count(o.id_orden) as total_completo into x from orden_trabajo o
+	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
+	where o.id_orden in (select id_orden 
+								from orden o
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalOrdenMecCancelado(servicio int)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+	WITH 
+	ParteRanked AS (
+		SELECT
+				p.id_orden,
+				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+			FROM parte p
+			inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+			inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
+			where est.id_estado_mecanizado = 7
+	)
+	select count(o.id_orden) as total_completo into x from orden_mecanizado o
+	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
+	where o.id_orden in (select id_orden 
+							from orden o
+						where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
 CREATE PROCEDURE Act_info_servicio ()
 BEGIN
     DECLARE vtotOrdTra INT;

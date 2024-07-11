@@ -106,7 +106,7 @@ function changeTdColor() {
 
                     //----------------
                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "A Evaluar") { // check if td has desired value
-                        values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#ff8001"; // if matches, change color
+                        values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#d1d424"; // if matches, change color
                     }
                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Rechazado") { // check if td has desired value
                         values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#d2cab5"; // if matches, change color
