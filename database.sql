@@ -1313,12 +1313,44 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE FUNCTION TotalOrdenManCancelado(servicio int)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE x INT;
+	WITH
+	ParteRanked AS (
+		SELECT
+				p.id_orden,
+				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+			FROM parte p
+			inner join parte_manufactura pt on pt.id_parte = p.id_parte
+			inner join estado_manufactura est on est.id_estado_manufactura = pt.id_estado_manufactura
+			where est.id_estado_manufactura = 6
+	)
+	select count(o.id_orden) as total_completo into x from orden_manufactura o
+	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
+	where o.id_orden in (select id_orden 
+							from orden o
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+                        
+    RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
 CREATE PROCEDURE Act_info_servicio ()
 BEGIN
     DECLARE vtotOrdTra INT;
     DECLARE vtotOrdMan INT;
     DECLARE vtotOrdMec INT;
+    DECLARE vtotOrdTraCan INT;
+    DECLARE vtotOrdManCan INT;
+    DECLARE vtotOrdMecCan INT;
     DECLARE vTotCompleto INT;
+    DECLARE vTotCancelado INT;
     DECLARE vTotal INT;
     DECLARE vProgreso INT;
     DECLARE x INT;
@@ -1343,9 +1375,16 @@ BEGIN
         SELECT TotalOrdenMecCompleto(x) INTO vtotOrdMan;
         SELECT TotalOrdenManCompleto(x) INTO vtotOrdMec;
         
+        SELECT TotalOrdenTrabajoCancelado(x) INTO vtotOrdTraCan;
+        SELECT TotalOrdenMecCancelado(x) INTO vtotOrdManCan;
+        SELECT TotalOrdenManCancelado(x) INTO vtotOrdMecCan;
+        
         SET vTotCompleto = vtotOrdTra + vtotOrdMan + vtotOrdMec;
+        SET vTotCancelado = vtotOrdTraCan + vtotOrdManCan + vtotOrdMecCan;
         
         SELECT COUNT(id_orden) AS total_orden INTO vTotal FROM orden o WHERE id_etapa IN (SELECT id_etapa FROM etapa WHERE id_servicio = x);
+        
+        SET vTotal = vTotal - vTotCancelado;
         
         IF vTotal = 0 THEN
             SET vProgreso = 0;
