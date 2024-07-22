@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="row">
                     {!! Form::open(['route' => 's_s_i.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
-                    @include('layouts.modal.mensajes')
+                    {{-- @include('layouts.modal.mensajes') --}}
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
