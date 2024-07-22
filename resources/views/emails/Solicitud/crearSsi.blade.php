@@ -126,7 +126,7 @@
                                               style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;padding:25px 0;text-align:center"
                                             >
                                               <a
-                                                href="{{ url('/') }}"
+                                                href="http://192.168.137.26:8080"
                                                 style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;color:#3d4852;font-size:19px;font-weight:bold;text-decoration:none;display:inline-block"
                                                 target="_blank"
                                                 data-saferedirecturl="https://www.google.com/url?hl=es-419&amp;q=https://iprodha.misiones.gob.ar&amp;source=gmail&amp;ust=1680789792867000&amp;usg=AOvVaw36mawvdtZwIyIz7_kQl50q"
@@ -179,7 +179,7 @@
                                                                 <table cellspacing="0" cellpadding="0" style="margin: auto;">
                                                                     <tr>
                                                                         <td style="border-radius: 2px; background-color: #04AA6D;">
-                                                                            <a href="{{route('s_s_i.index')}}" target="_blank" style="padding: 8px 12px; border: 1px solid #04AA6D; border-radius: 12px; font-family: Helvetica, Arial, sans-serif; font-size: 20px; color: #ffffff; text-decoration: none; font-weight: bold; display: inline-block;">
+                                                                            <a href="http://192.168.137.26:8080/s_s_i" target="_blank" style="padding: 8px 12px; border: 1px solid #04AA6D; border-radius: 12px; font-family: Helvetica, Arial, sans-serif; font-size: 20px; color: #ffffff; text-decoration: none; font-weight: bold; display: inline-block;">
                                                                                 Ver SSI
                                                                             </a>
                                                                         </td>
