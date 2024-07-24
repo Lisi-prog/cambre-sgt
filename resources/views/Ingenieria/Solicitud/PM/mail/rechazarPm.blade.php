@@ -164,7 +164,7 @@
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>código N° {{$codigo}}</b> fue aceptada y podras comprobar el avance del servicio asociado <a href="http://192.168.137.26:8080/s_s_i" target="_blank">aqui</a>.
+                                                      La <u>propuesta de mejora</u> con el <b>código N° {{$codigo}}</b> fue rechazada.
                                                       
                                                       </p><br/>
                                                       {{-- <div style="width: 100%; display: grid; align-content: center; justify-content: center;">
@@ -179,8 +179,8 @@
                                                                 <table cellspacing="0" cellpadding="0" style="margin: auto;">
                                                                     <tr>
                                                                         <td style="border-radius: 2px; background-color: #04AA6D;">
-                                                                            <a href="http://192.168.137.26:8080/s_s_i" target="_blank" style="padding: 8px 12px; border: 1px solid #04AA6D; border-radius: 12px; font-family: Helvetica, Arial, sans-serif; font-size: 20px; color: #ffffff; text-decoration: none; font-weight: bold; display: inline-block;">
-                                                                                Ver SSI
+                                                                            <a href="http://192.168.137.26:8080/p_m" target="_blank" style="padding: 8px 12px; border: 1px solid #04AA6D; border-radius: 12px; font-family: Helvetica, Arial, sans-serif; font-size: 20px; color: #ffffff; text-decoration: none; font-weight: bold; display: inline-block;">
+                                                                                Ver PM
                                                                             </a>
                                                                         </td>
                                                                     </tr>

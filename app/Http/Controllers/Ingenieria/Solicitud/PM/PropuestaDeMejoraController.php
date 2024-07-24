@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\Cambre\Sol_prioridad_solicitud;
 use App\Models\Cambre\Sol_estado_solicitud;
@@ -27,6 +28,7 @@ use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
+use App\Mail\Solicitud\PmMailable;
 
 class PropuestaDeMejoraController extends Controller
 {
@@ -223,6 +225,16 @@ class PropuestaDeMejoraController extends Controller
         $solicitud = Sol_solicitud::find($id);
         $solicitud->id_estado_solicitud = 3;
         $solicitud->save();
+
+        try {
+            $nombre = $solicitud->getEmpleado->nombre_empleado;
+            $codigo = $solicitud->id_solicitud;
+            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            Mail::to($email)->send(new PmMailable($nombre, $codigo, 3));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
         return redirect()->route('p_m.index')->with('mensaje', 'Propuesta de mejora rechazada con exito.');  
     }
 
@@ -291,6 +303,16 @@ class PropuestaDeMejoraController extends Controller
                                 'id_activo' => $id_activo
                             ]); 
 
+        
+        try {
+            $nombre = $solicitud->getEmpleado->nombre_empleado;
+            $codigo = $solicitud->id_solicitud;
+            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            Mail::to($email)->send(new PmMailable($nombre, $codigo, 1));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
         return redirect()->route('p_m.index')->with('mensaje', 'Propuesta de mejora creado exitosamente.');                      
     }
     

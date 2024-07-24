@@ -61,7 +61,7 @@
                             <div class="text-center"><h5>Propuesta de mejora</h5></div>
                         </div>
                         <div class="card-body">
-                            {!! Form::open(['route' => ['solicitud.aceptar', $pm->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario']) !!}
+                            {{-- {!! Form::open(['route' => ['solicitud.aceptar', $pm->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario']) !!} --}}
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                                     <div class="form-group">
@@ -258,7 +258,7 @@
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearServicioModal">
                                                 Aceptar   
                                             </button>
-                                            {!! Form::close() !!}
+                                            {{-- {!! Form::close() !!} --}}
                                         </div>
                                         <div class="col-6">
                                             {!! Form::open(['method' => 'GET', 'route' => ['pm.rechazar', $pm->getSolicitud->id_solicitud], 'style' => '']) !!}
@@ -325,7 +325,7 @@
 
             document.getElementById("nece_id").value = {{$pm->interes}};
 
-            document.getElementById("ca-rate"+{{$pm->v_tecnica}}).checked = true;
+            document.getElementById("ca-rate"+{{$pm->calificacion}}).checked = true;
         })
     </script>
 @endsection

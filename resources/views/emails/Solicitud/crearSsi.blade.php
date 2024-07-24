@@ -164,7 +164,7 @@
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>codigo n° {{$codigo}}</b> fue recibida con exito y proximamente sera evaluada. Se notificara si la <u>solicitud de servicio de ingenieria</u> fue aceptada o rechazada.
+                                                      La <u>solicitud de servicio de ingenieria</u> con el <b>código N° {{$codigo}}</b> fue recibida con exito y proximamente sera evaluada. Se notificara si la <u>solicitud de servicio de ingenieria</u> fue aceptada o rechazada.
                                                       
                                                       </p><br/>
                                                       {{-- <div style="width: 100%; display: grid; align-content: center; justify-content: center;">

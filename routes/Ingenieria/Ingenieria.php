@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|VER-MENU-SOLICITUDES']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
-    Route::post('r_i/evaluar/aceptar/{id}', [ProyectoController::class, 'aceptar_solicitud'])->name('solicitud.aceptar');
+    Route::post('r_i/evaluar/aceptar/{id}/{opcion}', [ProyectoController::class, 'aceptar_solicitud'])->name('solicitud.aceptar');
     Route::post('/solicitud/obtener-datos-proyecto/{id}', [ProyectoController::class, 'obtener_progreso']);
     Route::get('p_m/evaluar/{id}', [PropuestaDeMejoraController::class, 'evaluar'])->name('pm.evaluar');
     Route::get('p_m/calificar/{id}', [PropuestaDeMejoraController::class, 'calificar'])->name('pm.calificar');

@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Servicio</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => ['solicitud.aceptar', $Ssi->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+            {!! Form::open(['route' => ['solicitud.aceptar', $Ssi->getSolicitud->id_solicitud, 1], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">

@@ -44,6 +44,7 @@ use App\Models\Cambre\Vw_gest_orden_trabajo;
 use App\Models\Cambre\Vw_gest_orden_manufactura;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Mail\Solicitud\SsiMailable;
+use App\Mail\Solicitud\PmMailable;
 use Illuminate\Support\Facades\Mail;
 
 class ProyectoController extends Controller
@@ -383,7 +384,7 @@ class ProyectoController extends Controller
         
     }
     
-    public function aceptar_solicitud(Request $request, $id){
+    public function aceptar_solicitud(Request $request, $id, $opcion){
 
         $this->validate($request, [
             'codigo_proyecto' => 'required',
@@ -424,8 +425,20 @@ class ProyectoController extends Controller
             $nombre = $solicitud->getEmpleado->nombre_empleado;
             $codigo = $solicitud->id_solicitud;
             $email = strval(Auth::user()->getEmpleado->email_empleado);
+
+            switch ($opcion) {
+                case 1:
+                    Mail::to($email)->send(new SsiMailable($nombre, $codigo, 2));
+                    break;
+                case 2:
+                    Mail::to($email)->send(new PmMailable($nombre, $codigo, 2));
+                    break;
+                case 3:
+                    //Mail::to($email)->send(new SsiMailable($nombre, $codigo, 2));
+                    break;
+                
+            }
             
-            Mail::to($email)->send(new SsiMailable($nombre, $codigo, 2));
         } catch (\Throwable $th) {
             //throw $th;
         }

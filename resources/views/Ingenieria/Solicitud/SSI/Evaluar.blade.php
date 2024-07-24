@@ -40,7 +40,7 @@
                             <div class="text-center"><h5>Solicitud de servicio de ingenieria</h5></div>
                         </div>
                         <div class="card-body">
-                            {!! Form::open(['route' => ['solicitud.aceptar', $Ssi->getSolicitud->id_solicitud], 'method' => 'POST', 'class' => 'formulario']) !!}
+                            {{-- {!! Form::open(['route' => ['solicitud.aceptar', $Ssi->getSolicitud->id_solicitud, 1], 'method' => 'POST', 'class' => 'formulario']) !!} --}}
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
@@ -133,7 +133,7 @@
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearServicioModal">
                                                 Aceptar   
                                             </button>
-                                            {!! Form::close() !!}
+                                            {{-- {!! Form::close() !!} --}}
                                         </div>
                                         <div class="col-6">
                                             {!! Form::open(['method' => 'GET', 'route' => ['ssi.rechazar', $Ssi->getSolicitud->id_solicitud], 'style' => '']) !!}
