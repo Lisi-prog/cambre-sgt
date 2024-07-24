@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo', 'Evaluar P.M.')
+@section('titulo', 'Calificar P.M.')
 
 @section('content')
     <style>
@@ -31,7 +31,7 @@
             /* border-right: 1px solid #e4e6fc; */
         }
 
-        
+        .rating input[type="radio"]:hover ~ label,
         .rating input[type="radio"]:checked ~ label{
             background: transparent;
         }
@@ -47,14 +47,14 @@
     <section class="section">
         <div class="section-header d-flex">
             <div class="">
-                <div class="titulo page__heading py-1 fs-5">Evaluar Propuesta de mejora #{{$pm->getSolicitud->id_solicitud}}</div>
+                <div class="titulo page__heading py-1 fs-5">Calificar Propuesta de mejora #{{$pm->getSolicitud->id_solicitud}}</div>
             </div>
         </div>
         <div class="section-body">
             <div class="row">
                 @include('layouts.modal.mensajes')
-                {{-- Informacion del Requerimiento de ingenieria --}}
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+                {{-- Informacion de la Propuesta de mejora --}}
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                     <div class="card">
                         <div class="card-head">
                             <br>
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
-                                        {!! Form::label('idactivo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        {!! Form::label('idctivo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         {{--    ACTIVOS    --}}
                                         {!! Form::text('idactivo', $pm->getActivo->nombre_activo ?? '-', ['class' => 'form-control', 'readonly']) !!}
                                     </div>
@@ -239,22 +239,43 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-4">
+
+                                </div>
+                                <div class="col-4">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button id="btn_guardar" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#guardaCaliModal" onclick="cargarModalGuardarCali()" disabled>
+                                                Guardar   
+                                            </button>
+                                            {!! Form::close() !!}
+                                        </div>
+                                        <div class="col-6">
+                                            {!! Form::open(['method' => 'GET', 'route' => ['pm.rechazar', $pm->getSolicitud->id_solicitud], 'style' => '']) !!}
+                                            {!! Form::submit('Rechazar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea RECHAZAR la propuesta de mejora?');"]) !!}
+                                            {!! Form::close() !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {{-- ------------- --}}
 
-                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
+                {{-- <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-5">
-
                                 </div>
                                 <div class="col-2">
                                     <div class="row">
                                         <div class="col-6">
-                                            {{-- {!! Form::submit('Aceptar', ['class' => 'btn btn-success']) !!} --}}
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearServicioModal">
                                                 Aceptar   
                                             </button>
@@ -267,65 +288,151 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-5 d-flex">
-                                    {{-- <div class="ms-auto">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'p_m.index', 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
-                                    </div> --}}
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
        
     </section>
-    @include('Ingenieria.Solicitud.PM.modal.m-crear-servicio')
+    @include('Ingenieria.Solicitud.PM.modal.m-guardar-cali')
+    <script src="{{ asset('js/Ingenieria/Solicitud/calificar.js') }}"></script>
     <script>
         $(document).ready(function () {
             var url = '{{url('p_m')}}';
             //url = url.replace(':id_servicio', id_servicio);
             document.getElementById('volver').href = url;
-
-            $('input[name="rating"]').click(function() {
-                return false;
-            });
-
-            $('input[name="ve-rating"]').click(function() {
-                return false;
-            });
-
-            $('input[name="vte-rating"]').click(function() {
-                return false;
-            });
-
+            
             $('input[name="vto-rating"]').click(function() {
                 return false;
             });
 
-            $('input[name="ne-rating"]').click(function() {
-                return false;
+            document.querySelectorAll('input[name="rating"]').forEach(item => {
+                item.addEventListener('click', event => {
+                    calculoViabilidadTotal();
+                })
             });
 
-            $('input[name="ca-rating"]').click(function() {
-                return false;
+            document.querySelectorAll('input[name="ve-rating"]').forEach(item => {
+                item.addEventListener('click', event => {
+                    calculoViabilidadTotal();
+                })
             });
 
-            document.getElementById("rate"+{{$pm->v_tecnica}}).checked = true;
+            document.querySelectorAll('input[name="vte-rating"]').forEach(item => {
+                item.addEventListener('click', event => {
+                    calculoViabilidadTotal();
+                })
+            });
 
-            document.getElementById("ve-rate"+{{$pm->v_economica}}).checked = true;
+            document.querySelectorAll('input[name="ne-rating"]').forEach(item => {
+                item.addEventListener('click', event => {
+                    calculoInteresTotal();
+                })
+            });
 
-            document.getElementById("vte-rate"+{{$pm->v_temporal}}).checked = true;
+            document.querySelectorAll('input[name="ca-rating"]').forEach(item => {
+                item.addEventListener('click', event => {
+                    validarBtn();
+                })
+            });
 
-            document.getElementById("vto-rate"+{{$pm->v_total}}).checked = true;
+            function calculoViabilidadTotal(){
+                // console.log($('input[name="rating"]:checked').val());
+                let v_tec = $('input[name="rating"]:checked').val();
+                let v_eco = $('input[name="ve-rating"]:checked').val();
+                let v_temp = $('input[name="vte-rating"]:checked').val();
+                let v_tot = 0;
 
-            document.getElementById("ne-rate"+{{$pm->necesidad}}).checked = true;
+                v_tec ??= 0;
+                v_eco ??= 0;
+                v_temp ??= 0;
 
-            document.getElementById("nece_id").value = {{$pm->interes}};
+                v_tot = Math.round(Math.cbrt(v_tec * v_eco * v_temp));
+                
+                
+                if (v_tot) {
+                    document.getElementById("vto-rate"+v_tot).checked = true;
+                    calculoInteresTotal();
+                }
+                validarBtn();
+            }
 
-            document.getElementById("ca-rate"+{{$pm->v_tecnica}}).checked = true;
+            function calculoInteresTotal(){
+                let v_tot = $('input[name="vto-rating"]:checked').val();
+                let nec = $('input[name="ne-rating"]:checked').val();
+                let input_nec = document.getElementById('nece_id');
+                let inte = 0;
+
+                v_tot ??= 0;
+                nec ??= 0;
+
+                inte = v_tot * nec;
+
+                input_nec.value = inte;
+                validarBtn();
+            }
+
+            function validarBtn() {
+                let v_tec = $('input[name="rating"]:checked').val();
+                let v_eco = $('input[name="ve-rating"]:checked').val();
+                let v_temp = $('input[name="vte-rating"]:checked').val();
+                let v_tot = $('input[name="vto-rating"]:checked').val();
+                let nece = $('input[name="ne-rating"]:checked').val();
+                let inte = $('#nece_id').val();
+                let cali = $('input[name="ca-rating"]:checked').val();
+                let btn_guardar = document.getElementById('btn_guardar');
+
+                v_tec ??= 0;
+                v_eco ??= 0;
+                v_temp ??= 0;
+                v_tot ??= 0;
+                nece ??= 0;
+                inte ??= 0;
+                cali ??= 0; 
+
+                if (v_tec && v_eco && v_temp && v_tot && nece && inte && cali) {
+                    btn_guardar.disabled = false;
+                }else{
+                    btn_guardar.disabled = true;
+                }
+            }
+            
         })
+
+        function cargarModalGuardarCali() {
+            let v_tec = $('input[name="rating"]:checked').val();
+            let v_eco = $('input[name="ve-rating"]:checked').val();
+            let v_temp = $('input[name="vte-rating"]:checked').val();
+            let v_tot = $('input[name="vto-rating"]:checked').val();
+            let nece = $('input[name="ne-rating"]:checked').val();
+            let inte = $('#nece_id').val();
+            let cali = $('input[name="ca-rating"]:checked').val();
+
+            let input_v_tec = document.getElementById('input_vi_tec');
+            let input_v_eco = document.getElementById('input_vi_eco');
+            let input_v_temp = document.getElementById('input_vi_temp');
+            let input_v_tot = document.getElementById('input_vi_tot');
+            let input_nece = document.getElementById('input_nece');
+            let input_inte = document.getElementById('input_inte');
+            let input_cali = document.getElementById('input_cali');
+
+            v_tec ??= 0;
+            v_eco ??= 0;
+            v_temp ??= 0;
+            v_tot ??= 0;
+            nece ??= 0;
+            inte ??= 0;
+            cali ??= 0;
+
+            input_v_tec.value = v_tec;
+            input_v_eco.value =  v_eco;
+            input_v_temp.value = v_temp;
+            input_v_tot.value = v_tot;
+            input_nece.value = nece;
+            input_inte.value = inte;
+            input_cali.value = cali;
+        }
     </script>
 @endsection

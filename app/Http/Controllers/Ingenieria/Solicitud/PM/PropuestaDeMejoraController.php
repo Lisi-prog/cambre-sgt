@@ -51,7 +51,11 @@ class PropuestaDeMejoraController extends Controller
         $flt_estados = $this->estadosParaSolicitud();
         // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
 
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            return view('Ingenieria.Solicitud.PM.index_su', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
+        }else{
+            return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
+        }   
     }
 
     public function obtenerEmpleadosActivos(){
@@ -143,6 +147,60 @@ class PropuestaDeMejoraController extends Controller
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
 
         return view('Ingenieria.Solicitud.PM.evaluar',compact('pm', 'activos', 'prioridadMax', 'empleados', 'Tipos_servicios', 'prefijos'));
+    }
+
+    public function calificar($id){
+        $pm = Sol_propuesta_de_mejora::find($id);
+        
+        $Tipos_servicios = Subtipo_servicio::orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        
+        $supervisores_user = User::role('SUPERVISOR')->get();
+
+        foreach ($supervisores_user as $supervisor_user) {
+            $id_supervisor[] = $supervisor_user->id;
+        }
+
+        $empleados = $this->obtenerSupervisoresAdmin();
+        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
+        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
+
+        return view('Ingenieria.Solicitud.PM.calificar',compact('pm', 'activos', 'prioridadMax', 'empleados', 'Tipos_servicios', 'prefijos'));
+    }
+
+    public function calificarGuardar($id, Request $request){
+        $this->validate($request, [
+            'vi_tec' => 'required|numeric|min:1',
+            'vi_eco' => 'required|numeric|min:1',
+            'vi_temp' => 'required|numeric|min:1',
+            'vi_tot' => 'required|numeric|min:1',
+            'nece' => 'required|numeric|min:1',
+            'inte' => 'required|numeric|min:1',
+            'cali' => 'required|numeric|min:1'
+        ],
+        [
+            'vi_tec.min' => 'La viabilidad técnica no puede ser 0.',
+            'vi_eco.min' => 'La viabilidad económica no puede ser 0.',
+            'vi_temp.min' => 'La viabilidad temporal no puede ser 0.',
+            'vi_tot.min' => 'La viabilidad total no puede ser 0.',
+            'nece.min' => 'La necesidad no puede ser 0.',  
+            'inte.min' => 'El interés no puede ser 0.',
+            'cali.min' => 'La calificación no puede ser 0.',
+        ]);
+
+        $pm = Sol_propuesta_de_mejora::find($id);
+
+        $pm->update([
+            'v_tecnica' => $request->input('vi_tec'),
+            'v_economica' => $request->input('vi_eco'),
+            'v_temporal' => $request->input('vi_temp'),
+            'v_total' => $request->input('vi_tot'),
+            'necesidad' => $request->input('nece'),
+            'interes' => $request->input('inte'),
+            'calificacion' => $request->input('cali')
+        ]);
+        
+        return redirect()->route('p_m.index')->with('mensaje', 'Propuesta de mejora #'.$pm->getSolicitud->id_solicitud.' calificada exitosamente.');
     }
 
     public function obtenerSupervisoresAdmin(){

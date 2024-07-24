@@ -84,6 +84,13 @@ CREATE TABLE `sol_propuesta_de_mejora` (
   `beneficio_propuesta` varchar(500) DEFAULT NULL,
   `problema_propuesta` varchar(500) DEFAULT NULL,
   `evaluacion_propuesta` varchar(500) DEFAULT NULL,
+  `v_tecnica` int DEFAULT NULL,
+  `v_economica` int DEFAULT NULL,
+  `v_temporal` int DEFAULT NULL,
+  `v_total` int DEFAULT NULL,
+  `necesidad` int DEFAULT NULL,
+  `calificacion` int DEFAULT NULL,
+  `interes` int DEFAULT NULL,
   PRIMARY KEY (`id_propuesta_de_mejora`),
   CONSTRAINT `pk_id_prop_de_mejora_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );

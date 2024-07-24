@@ -30,7 +30,14 @@ class Sol_propuesta_de_mejora extends Model
         'analisis_propuesta',
         'beneficio_propuesta',
         'problema_propuesta',
-        'evaluacion_propuesta'
+        'evaluacion_propuesta',
+        'v_tecnica',
+        'v_economica',
+        'v_temporal',
+        'v_total',
+        'necesidad',
+        'calificacion',
+        'interes',
     ];
 
     public function getSolicitud()
