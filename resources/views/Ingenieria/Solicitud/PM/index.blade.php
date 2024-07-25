@@ -207,17 +207,9 @@
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapsePM{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                @if ($Pm->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['p_m.show', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['p_m.show', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
                                                                     {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                @else
-                                                                    @can('EVALUAR-SOLICITUD')
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['pm.evaluar', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
-                                                                        {!! Form::close() !!}
-                                                                    @endcan
-                                                                @endif
+                                                                {!! Form::close() !!}
                                                             </div>
                                                         </div> 
 

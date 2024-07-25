@@ -143,9 +143,9 @@
                                 </div>
                                 <div class="col-5 d-flex">
                                     <div class="ms-auto">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'p_m.index', 'style' => '']) !!}
+                                        {{-- {!! Form::open(['method' => 'GET', 'route' => 'p_m.index', 'style' => '']) !!}
                                         {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
+                                        {!! Form::close() !!} --}}
                                     </div>
                                 </div>
                             </div>

@@ -51,10 +51,11 @@ class PropuestaDeMejoraController extends Controller
         // $flt_sectores = Sector::orderBy('nombre_sector')->get();
         // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
         $flt_estados = $this->estadosParaSolicitud();
+        $flt_estados_sol = Sol_estado_solicitud::orderBy('id_estado_solicitud')->get();
         // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
 
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            return view('Ingenieria.Solicitud.PM.index_su', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
+            return view('Ingenieria.Solicitud.PM.index_su', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados', 'flt_estados_sol'));
         }else{
             return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados'));
         }   
