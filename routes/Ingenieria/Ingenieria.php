@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
     Route::post('/orden/obtener-orden-etapa-tipo/{id}/{tipo}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapaTipo']);
     Route::post('/orden/obtener-tipo-orden',[OrdenController::class, 'obtenerTipoTrabajo']);
-    Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleados']);
+    Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleadosActivos']);
     Route::post('/orden/obtener-estados',[OrdenController::class, 'obtenerEstados']);
     Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
     Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
@@ -117,7 +117,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::post('/orden/obtener-orden-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapa']);
      Route::post('/orden/obtener-orden-etapa-tipo/{id}/{tipo}',[OrdenController::class, 'obtenerOrdenesDeUnaEtapaTipo']);
      Route::post('/orden/obtener-tipo-orden',[OrdenController::class, 'obtenerTipoTrabajo']);
-     Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleados']);
+     Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleadosActivos']);
      Route::post('/orden/obtener-estados',[OrdenController::class, 'obtenerEstados']);
      Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
      Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);

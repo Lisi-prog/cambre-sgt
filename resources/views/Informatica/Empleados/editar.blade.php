@@ -113,6 +113,7 @@
                                         <span class="obligatorio">*</span>
                                         {!! Form::text('costo_hora', $empleado->costo_hora, [
                                             'class' => 'form-control',
+                                            'required',
                                             'id' => 'costo_hora'
                                         ]) !!}
                                     </div>
