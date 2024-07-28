@@ -216,3 +216,45 @@ function dameIndexColumnas(trValues,indexFilaEncabezados, text_encabezado){
     //console.log(indexColumnas)
     return indexColumnas;
 }
+
+function changeInteresColor() {
+    const values = document.querySelectorAll("tr");
+    var text_var = "Interes"
+    var indexFilaEncabezados = [];
+    var indexColumnaEstados = []
+    for (let x = 0; x < values.length; x++) {
+        for (let y = 0; y < values[x].cells.length; y++) {
+            if(values[x].cells[y].innerText == text_var){
+                indexFilaEncabezados.push(x);
+            }
+        }
+    }
+
+    indexFilaEncabezados.push(values.length);
+    indexColumnaEstados = dameIndexColumnas(values,indexFilaEncabezados, text_var);
+
+    for (let y = 0; y < indexColumnaEstados.length; y++) {
+        for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) {
+            values[x].children[indexColumnaEstados[y]].style.color = "#fff";
+            if (values[x].children[indexColumnaEstados[y]].innerHTML >= 1 && values[x].children[indexColumnaEstados[y]].innerHTML < 8) { // check if td has desired value
+                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#e41111"; // if matches, change color
+            }
+
+            if (values[x].children[indexColumnaEstados[y]].innerHTML >= 8 && values[x].children[indexColumnaEstados[y]].innerHTML < 13) { // check if td has desired value
+                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#ff8001"; // if matches, change color
+            }
+
+            if (values[x].children[indexColumnaEstados[y]].innerHTML >= 13 && values[x].children[indexColumnaEstados[y]].innerHTML < 15) { // check if td has desired value
+                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#ffc000"; // if matches, change color
+            }
+
+            if (values[x].children[indexColumnaEstados[y]].innerHTML >= 15 && values[x].children[indexColumnaEstados[y]].innerHTML < 20) { // check if td has desired value
+                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#109e09"; // if matches, change color
+            }
+
+            if (values[x].children[indexColumnaEstados[y]].innerHTML >= 20) { // check if td has desired value
+                values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#109e09"; // if matches, change color
+            }
+        }
+    }
+}

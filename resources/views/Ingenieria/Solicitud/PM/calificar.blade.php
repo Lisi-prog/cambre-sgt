@@ -187,16 +187,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('v-total', 'Viabilidad total:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <div class="form-control rating p-0">
+                                        {!! Form::text('number', 0, ['class' => 'form-control fs-5', 'id'=> 'viv_tot_id', 'readonly']) !!}
+                                        {{-- <div class="form-control rating p-0">
                                             <input type="radio" name="vto-rating" id="vto-rate5" value=5><label for="vto-rate5">5</label>
                                             <input type="radio" name="vto-rating" id="vto-rate4" value=4><label for="vto-rate4">4</label> 
                                             <input type="radio" name="vto-rating" id="vto-rate3" value=3><label for="vto-rate3">3</label> 
                                             <input type="radio" name="vto-rating" id="vto-rate2" value=2><label for="vto-rate2">2</label> 
                                             <input type="radio" name="vto-rating" id="vto-rate1" value=1><label for="vto-rate1">1</label> 
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -304,9 +305,9 @@
             //url = url.replace(':id_servicio', id_servicio);
             document.getElementById('volver').href = url;
             
-            $('input[name="vto-rating"]').click(function() {
-                return false;
-            });
+            // $('input[name="vto-rating"]').click(function() {
+            //     return false;
+            // });
 
             document.querySelectorAll('input[name="rating"]').forEach(item => {
                 item.addEventListener('click', event => {
@@ -353,14 +354,14 @@
                 
                 
                 if (v_tot) {
-                    document.getElementById("vto-rate"+v_tot).checked = true;
+                    document.getElementById("viv_tot_id").value = v_tot;
                     calculoInteresTotal();
                 }
                 validarBtn();
             }
 
             function calculoInteresTotal(){
-                let v_tot = $('input[name="vto-rating"]:checked').val();
+                let v_tot = document.getElementById("viv_tot_id").value;
                 let nec = $('input[name="ne-rating"]:checked').val();
                 let input_nec = document.getElementById('nece_id');
                 let inte = 0;
@@ -378,7 +379,7 @@
                 let v_tec = $('input[name="rating"]:checked').val();
                 let v_eco = $('input[name="ve-rating"]:checked').val();
                 let v_temp = $('input[name="vte-rating"]:checked').val();
-                let v_tot = $('input[name="vto-rating"]:checked').val();
+                let v_tot = document.getElementById("viv_tot_id").value;
                 let nece = $('input[name="ne-rating"]:checked').val();
                 let inte = $('#nece_id').val();
                 let cali = $('input[name="ca-rating"]:checked').val();
@@ -405,7 +406,7 @@
             let v_tec = $('input[name="rating"]:checked').val();
             let v_eco = $('input[name="ve-rating"]:checked').val();
             let v_temp = $('input[name="vte-rating"]:checked').val();
-            let v_tot = $('input[name="vto-rating"]:checked').val();
+            let v_tot = document.getElementById("viv_tot_id").value;
             let nece = $('input[name="ne-rating"]:checked').val();
             let inte = $('#nece_id').val();
             let cali = $('input[name="ca-rating"]:checked').val();

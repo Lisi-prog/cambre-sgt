@@ -67,8 +67,8 @@ function buscarYfiltrarPM(tabla){
 
     for (i = 0; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td")[0];
-        td2 = tr[i].getElementsByTagName("td")[4];
-        td3 = tr[i].getElementsByTagName("td")[9];
+        td2 = tr[i].getElementsByTagName("td")[5];
+        td3 = tr[i].getElementsByTagName("td")[7];
         if (td) {
             txtValu2 = td2.innerText;
             txtValu3 = td3.innerText;

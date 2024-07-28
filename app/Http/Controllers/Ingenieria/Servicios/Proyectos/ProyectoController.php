@@ -734,7 +734,7 @@ class ProyectoController extends Controller
             $bandera = 1;
             $prefijo = Prefijo_proyecto::find($id);
             $total_char = strlen($prefijo->nombre_prefijo_proyecto);
-            $servicios = Servicio::where('codigo_servicio', 'like', '%'.$prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->get('codigo_servicio');
+            $servicios = Servicio::where('codigo_servicio', 'like', $prefijo->nombre_prefijo_proyecto.'%')->orderBy('codigo_servicio', 'desc')->get('codigo_servicio');
             $codigo = $prefijo->nombre_prefijo_proyecto;
             foreach ($servicios as $servicio) {
                 if(is_numeric(substr($servicio->codigo_servicio, $total_char)) && $bandera == 1){
