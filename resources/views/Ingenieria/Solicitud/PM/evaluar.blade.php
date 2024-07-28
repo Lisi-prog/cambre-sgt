@@ -187,16 +187,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('v-total', 'Viabilidad total:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <div class="form-control rating p-0">
+                                        {!! Form::text('number', 0, ['class' => 'form-control fs-5', 'id'=> 'viv_tot_id', 'readonly']) !!}
+                                        {{-- <div class="form-control rating p-0">
                                             <input type="radio" name="vto-rating" id="vto-rate5" value=5><label for="vto-rate5">5</label>
                                             <input type="radio" name="vto-rating" id="vto-rate4" value=4><label for="vto-rate4">4</label> 
                                             <input type="radio" name="vto-rating" id="vto-rate3" value=3><label for="vto-rate3">3</label> 
                                             <input type="radio" name="vto-rating" id="vto-rate2" value=2><label for="vto-rate2">2</label> 
                                             <input type="radio" name="vto-rating" id="vto-rate1" value=1><label for="vto-rate1">1</label> 
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -301,9 +302,9 @@
                 return false;
             });
 
-            $('input[name="vto-rating"]').click(function() {
-                return false;
-            });
+            // $('input[name="vto-rating"]').click(function() {
+            //     return false;
+            // });
 
             $('input[name="ne-rating"]').click(function() {
                 return false;
@@ -319,7 +320,9 @@
 
             document.getElementById("vte-rate"+{{$pm->v_temporal}}).checked = true;
 
-            document.getElementById("vto-rate"+{{$pm->v_total}}).checked = true;
+            // document.getElementById("vto-rate"+{{$pm->v_total}}).checked = true;
+
+            document.getElementById("viv_tot_id").value = {{$pm->v_total}};
 
             document.getElementById("ne-rate"+{{$pm->necesidad}}).checked = true;
 
