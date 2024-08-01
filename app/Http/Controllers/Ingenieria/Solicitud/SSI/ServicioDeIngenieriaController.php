@@ -132,12 +132,14 @@ class ServicioDeIngenieriaController extends Controller
             $nombre = $Solicitud->getEmpleado->nombre_empleado;
             $codigo = $Solicitud->id_solicitud;
             $email = strval(Auth::user()->getEmpleado->email_empleado);
+            $email_aviso = explode(',', config('myconfig.ssi_email_admin'));
             Mail::to($email)->send(new SsiMailable($nombre, $codigo, 1));
+            Mail::to($email_aviso)->send(new SsiMailable($nombre, $codigo, 4));
         } catch (\Throwable $th) {
             //throw $th;
         }
 
-        return redirect()->route('s_s_i.index')->with('mensaje', 'Servicio de ingenieria creado con exito.');                    
+        return redirect()->route('s_s_i.index')->with('mensaje', 'Solicitud de servicio de ingenieria creado con exito.');                    
     }
     
     public function show($id)
@@ -216,7 +218,7 @@ class ServicioDeIngenieriaController extends Controller
         try {
             $nombre = $solicitud->getEmpleado->nombre_empleado;
             $codigo = $solicitud->id_solicitud;
-            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            $email = strval($solicitud->getEmpleado->email_empleado);
             Mail::to($email)->send(new SsiMailable($nombre, $codigo, 3));
         } catch (\Throwable $th) {
             //throw $th;

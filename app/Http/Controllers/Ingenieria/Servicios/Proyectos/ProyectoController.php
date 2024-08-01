@@ -424,7 +424,7 @@ class ProyectoController extends Controller
         try {
             $nombre = $solicitud->getEmpleado->nombre_empleado;
             $codigo = $solicitud->id_solicitud;
-            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            $email = strval($solicitud->getEmpleado->email_empleado);
 
             switch ($opcion) {
                 case 1:

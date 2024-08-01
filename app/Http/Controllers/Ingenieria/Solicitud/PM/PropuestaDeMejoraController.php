@@ -226,7 +226,7 @@ class PropuestaDeMejoraController extends Controller
         try {
             $nombre = $solicitud->getEmpleado->nombre_empleado;
             $codigo = $solicitud->id_solicitud;
-            $email = strval(Auth::user()->getEmpleado->email_empleado);
+            $email = strval($solicitud->getEmpleado->email_empleado);
             Mail::to($email)->send(new PmMailable($nombre, $codigo, 3));
         } catch (\Throwable $th) {
             //throw $th;

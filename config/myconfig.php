@@ -7,5 +7,6 @@ return [
     'orden_de_mantenimiento' => 4,
     'estado_solicitud_aceptado' => 2,
     'formato_fecha' => 'Y-m-d',
-    'formato_fecha_hora' => 'Y-m-d H:i'
+    'formato_fecha_hora' => 'Y-m-d H:i',
+    'ssi_email_admin' => 'andres.battisti@cambre.com.ar,ariel.heinze@cambre.com.ar'
 ];

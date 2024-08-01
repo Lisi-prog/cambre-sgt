@@ -46,6 +46,10 @@ class SsiMailable extends Mailable implements ShouldQueue
                 return $this->subject('Cambio de estado SSI #'.$this->codigo)
                         ->view('emails.Solicitud.rechazarSsi');
                 break;
+            case 4:
+                return $this->subject('Nuevo SSI #'.$this->codigo)
+                        ->view('emails.Solicitud.avisoSsi');
+                break;
         }
     }
 }
