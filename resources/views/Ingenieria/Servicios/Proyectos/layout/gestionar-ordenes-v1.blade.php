@@ -44,7 +44,7 @@ table.dataTable tbody td {
                                     <label style="font-style: italic"><input class="ote-ckb" name="filter" type="checkbox" value="ot_etapa" checked> (Seleccionar todo)</label>
 
                                     @foreach ($flt_eta_ord_tra as $item)
-                                        <label><input class="input-filter ote-ckb" name="ot_etapa" type="checkbox" value="{{$item}}" checked> {{$item}}</label>
+                                        <label><input class="input-filter ote-ckb flt_x_eta" name="ot_etapa" type="checkbox" value="{{$item}}" checked> {{$item}}</label>
                                     @endforeach
                                     
                                     {{-- @foreach ($proyecto->getEtapas as $etapa)
@@ -308,7 +308,7 @@ table.dataTable tbody td {
                                     <label style="font-style: italic"><input class="om-ckb" name="filter" type="checkbox" value="om_etapa" checked> (Seleccionar todo)</label>
 
                                     @foreach ($flt_eta_ord_man as $item)
-                                        <label><input class="input-filter om-ckb" name="om_etapa" type="checkbox" value="{{$item}}" checked> {{$item}}</label>
+                                        <label><input class="input-filter om-ckb flt_x_eta" name="om_etapa" type="checkbox" value="{{$item}}" checked> {{$item}}</label>
                                     @endforeach
 
                                     {{-- @foreach ($proyecto->getEtapas as $etapa)
@@ -604,7 +604,7 @@ table.dataTable tbody td {
                                     <label style="font-style: italic"><input class="ome-ckb" name="filter" type="checkbox" value="ome_etapa" checked> (Seleccionar todo)</label>
 
                                     @foreach ($flt_eta_ord_mec as $item)
-                                        <label><input class="input-filter ome-ckb" name="ome_etapa" type="checkbox" value="{{$item}}" checked> {{$item}}</label>                                      
+                                        <label><input class="input-filter ome-ckb flt_x_eta" name="ome_etapa" type="checkbox" value="{{$item}}" checked> {{$item}}</label>                                      
                                     @endforeach
 
                                     {{-- @foreach ($proyecto->getEtapas as $etapa)

@@ -19,6 +19,7 @@ use App\Models\Cambre\Sol_prioridad_solicitud;
 use App\Models\Cambre\Sol_servicio_de_ingenieria;
 use App\Models\Cambre\Sol_estado_solicitud;
 use App\Models\Cambre\Sol_solicitud;
+use App\Models\Cambre\Sol_archivo_solicitud;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Activo;
 use App\Models\Cambre\Empleado;
@@ -89,7 +90,8 @@ class ServicioDeIngenieriaController extends Controller
     {
         $this->validate($request, [
             'id_prioridad' => 'required',
-            'descripcion' => 'required|string|max:500'
+            'descripcion' => 'required|string|max:500',
+            'archivo' => 'file|mimes:pdf,doc,docx'
         ]);
 
         $nombre = Auth::user()->getEmpleado->nombre_empleado;
@@ -115,6 +117,17 @@ class ServicioDeIngenieriaController extends Controller
             'fecha_requerida' => $fecha_requerida,
             'id_empleado' => Auth::user()->getEmpleado->id_empleado
         ]);
+
+        if ($request->file('archivo')) {
+            $filename = $Solicitud->id_solicitud . '-ssi_' . str_replace(" " ,"-", $nombre) . '.' . $request->file('archivo')->extension();
+            $path = $request->file('archivo')->storeAs('', $filename, 'public_arc_sol');
+            
+            Sol_archivo_solicitud::create([
+                'id_solicitud' => $Solicitud->id_solicitud,
+                'nombre_archivo' => $filename,
+                'ruta' => 'storage/solicitud/'.$path
+            ]);
+        }
 
         if($request->input('descripcion_urgencia')){
             $Solicitud->update([

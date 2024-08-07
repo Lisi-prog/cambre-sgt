@@ -187,4 +187,8 @@ class Vw_servicio extends Model
         // return ceil(($totalOrdenesFinalizados*100)/$totalOrdenes);
     }
 
+    public function getSolicitud(){
+        return $this->hasOne(Sol_solicitud::class, 'id_servicio');
+    }
+
 }

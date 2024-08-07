@@ -6,6 +6,7 @@ function cargarModalProgresoServicio(id){
     let fec_ini = document.getElementById('fec_ini_input');
     let fec_lim = document.getElementById('fec_lim_input');
     let estado = document.getElementById('est_input');
+    let btn_gest = document.getElementById('btn-avance-gest');
     let div_cuadro_etapas = document.getElementById("cuadro-ver-etapas");
     let html_etapa = '';
     let barra_progreso = document.getElementById('barra-progreso');
@@ -18,13 +19,19 @@ function cargarModalProgresoServicio(id){
             id: id,
         },
         success: function (response) {
-            // console.log(response);
             codigo.value = response.cod_serv;
             nombre.value = response.nom_serv;
             lider.value = response.lider;
             fec_ini.value = response.fec_ini;
             fec_lim.value = response.fec_lim;
             estado.value = response.estado;
+
+            try {
+                btn_gest.href = window.location.protocol + "//" + window.location.host +"/proyectos/gestionar/"+ response.id_serv;
+            } catch (error) {
+                
+            }
+    
             barra_progreso.style.width = response.progreso+'%';
             numero_progreso.innerHTML = response.progreso+'%';
             response.etapas.forEach(element => {

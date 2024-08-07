@@ -220,6 +220,9 @@
                                 <table class="table table-striped mt-2" id="example">
                                     <thead style="height:50px;background-color:#28587d;">
                                         <th class='text-center' style="color:#fff;width: 1vw">Prioridad</th>
+                                        @if ($opcion == 3)
+                                            <th class='text-center' style="color:#fff;width: 2vw">SSI</th>
+                                        @endif
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                         <th class='ml-3 text-center' style="color:#fff;width: 10vw">ID</th>
                                         <th class='text-center' style="color:#fff;width: 8vw">Nombre</th>
@@ -240,6 +243,10 @@
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
+
+                                                @if ($opcion == 3)
+                                                    <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSolicitud->id_solicitud ?? '-'}}</td>
+                                                @endif
 
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
 

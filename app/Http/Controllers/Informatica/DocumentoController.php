@@ -49,7 +49,7 @@ class DocumentoController extends Controller
         $this->validate($request, [
             'nombre_documento' => 'required',
             'descripcion' => 'required',
-            'archivo' => 'required|file'
+            'archivo' => 'required|file|mimes:pdf'
         ]);
 
         $nombre = $request->input('nombre_documento');

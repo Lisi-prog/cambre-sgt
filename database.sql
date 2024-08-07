@@ -94,6 +94,15 @@ CREATE TABLE `sol_propuesta_de_mejora` (
   PRIMARY KEY (`id_propuesta_de_mejora`),
   CONSTRAINT `pk_id_prop_de_mejora_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );
+
+CREATE TABLE `sol_archivo_solicitud` (
+  `id_archivo_solicitud` int NOT NULL AUTO_INCREMENT,
+  `id_solicitud` int NOT NULL,
+  `nombre_archivo` varchar(250),
+  `ruta` varchar(500),
+  PRIMARY KEY (`id_archivo_solicitud`),
+  CONSTRAINT `pk_id_archivo_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
+);
 -- --------------------------------------------------
 
 CREATE TABLE `tipo_servicio` (

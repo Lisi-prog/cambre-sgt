@@ -70,6 +70,11 @@ class Sol_solicitud extends Model
         return $this->belongsTo(Servicio::class, 'id_servicio');
     }
 
+    public function getArchivo()
+    {
+        return $this->hasOne(Sol_archivo_solicitud::class, 'id_solicitud');
+    }
+
     /* public function getSolicitudDe(){
         if (count(Sol_requerimiento_de_ingenieria::where('id_solicitud', $this->id_solicitud)->get()) == 1) {
             return $this->hasOne(Sol_requerimiento_de_ingenieria::class, 'id_solicitud');

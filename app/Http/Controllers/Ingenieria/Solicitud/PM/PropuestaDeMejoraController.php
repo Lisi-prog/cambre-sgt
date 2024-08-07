@@ -19,6 +19,7 @@ use App\Models\Cambre\Sol_prioridad_solicitud;
 use App\Models\Cambre\Sol_estado_solicitud;
 use App\Models\Cambre\Sol_solicitud;
 use App\Models\Cambre\Sol_propuesta_de_mejora;
+use App\Models\Cambre\Sol_archivo_solicitud;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Rol_empleado;
@@ -252,7 +253,8 @@ class PropuestaDeMejoraController extends Controller
             'an-i-propuesta' => 'required',
             'bene-propuesta' => 'required',
             'prob-propuesta' => 'required',
-            'eva-propuesta' => 'required'
+            'eva-propuesta' => 'required',
+            'archivo' => 'file|mimes:pdf,doc,docx'
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
             'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',
@@ -285,6 +287,18 @@ class PropuestaDeMejoraController extends Controller
                         'fecha_carga' => $fecha_carga,
                         'id_empleado' => Auth::user()->getEmpleado->id_empleado
                     ]);
+
+        if ($request->file('archivo')) {
+            $nombre = Auth::user()->getEmpleado->nombre_empleado;
+            $filename = $solicitud->id_solicitud . '-pm_' . str_replace(" " ,"-", $nombre) . '.' . $request->file('archivo')->extension();
+            $path = $request->file('archivo')->storeAs('', $filename, 'public_arc_sol');
+            
+            Sol_archivo_solicitud::create([
+                'id_solicitud' => $solicitud->id_solicitud,
+                'nombre_archivo' => $filename,
+                'ruta' => 'storage/solicitud/'.$path
+            ]);
+        }
 
         $propuestaMejora =  Sol_propuesta_de_mejora::create([
                                 'nombre_emisor' => $nombre_emisor,

@@ -8,7 +8,7 @@
             </div>
 
             <div class="modal-body">
-                {!! Form::open(['route' => 'p_m.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+                {!! Form::open(['route' => 'p_m.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="form-group">
@@ -27,6 +27,13 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+                        <div class="form-group">
+                            {!! Form::label('archivo', 'Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <div class="input-group mb-3">
+                                <input name="archivo" type="file" class="form-control" id="inputGroupFile02" accept=".pdf, .doc, .docx">
+                                <label class="input-group-text" for="inputGroupFile02">Subir</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">

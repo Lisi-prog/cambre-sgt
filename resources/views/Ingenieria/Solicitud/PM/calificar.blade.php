@@ -78,6 +78,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+                                    @if ($pm->getSolicitud->getArchivo)
+                                        <div class="form-group">
+                                            {!! Form::label('archivo', "Archivo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" aria-describedby="button-addon2" value="{{$pm->getSolicitud->getArchivo->nombre_archivo}}" readonly>
+                                                <a class="btn btn-primary" type="button" id="button-addon2" href="{{asset($pm->getSolicitud->getArchivo->ruta)}}" download="{{$pm->getSolicitud->getArchivo->nombre_archivo}}">Descargar</a>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">

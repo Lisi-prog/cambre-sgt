@@ -90,6 +90,9 @@
                 </div>
             </div>
             <div class="modal-footer">
+                @role('SUPERVISOR')
+                    <a id="btn-avance-gest" href="" class="btn btn-primary" target="_blank">Gestionar</a>
+                @endrole
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>

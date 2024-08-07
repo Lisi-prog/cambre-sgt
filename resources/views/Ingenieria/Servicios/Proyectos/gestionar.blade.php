@@ -329,7 +329,7 @@
                                                     <div class="row justify-content-center">
                                                         <div class="row justify-content-center">
                                                             <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEtapa{{$idCount}}" aria-expanded="false" aria-controls="collapseEtapa{{$idCount}}">
-                                                                Opciones
+                                                                Opciones <i class="fas fa-filter" hidden></i>
                                                             </button>
                                                         </div>
                                                         <div class="collapse" data-bs-parent="#accordion" id="collapseEtapa{{$idCount}}">
@@ -347,6 +347,15 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="form-check form-switch">
+                                                                        <input name="flt-for-eta" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault{{$idCount}}" value="{{$etapa->descripcion_etapa}}">
+                                                                        <label class="form-check-label" for="flexSwitchCheckDefault{{$idCount}}">Filtrar</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </td>
@@ -449,6 +458,8 @@
         <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/FilterGestionar.js') }}"></script>
 
         <script>
+            // let oord = Array();
+
             $(document).ready(function () {
                 let opcion = '{{$opcion}}';
                 var url = '{{route('proyecto.indexprefijo', ':opcion')}}';
@@ -592,6 +603,70 @@
                     // validarFiltro();
                 })
             });
+
+            document.querySelectorAll('input[name=flt-for-eta]').forEach(item => {
+                item.addEventListener('change', event => {
+                    if (item.checked) {
+                        //console.log("Checkbox is checked..");
+                        filtrarAllOrdenes(item, 1);
+                    } else {
+                        //console.log("Checkbox is not checked..");
+                        filtrarAllOrdenes(item, 0);
+                    }
+                    // validarFiltro();
+                })
+            });
+
+            function filtrarAllOrdenes(b, chk_opt){
+                let ord = document.getElementsByName('flt-for-eta');
+                let flt_ord = document.getElementsByClassName("flt_x_eta");
+                let est = [];
+                est = arrayForMe(ord);
+                deSelect('ot_etapa');
+                deSelect('om_etapa');
+                deSelect('ome_etapa');
+
+                // if(est.length !== 0){
+                //     oord.push(est);
+                // }
+
+                if (chk_opt) {
+                    b.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[0].children[0].hidden = false;
+                } else {
+                    b.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[0].children[0].hidden = true;
+                }
+
+                if (est.length !== 0) {
+                    for (let i = 0; i < flt_ord.length; i++) {
+                        for (let j = 0; j < est.length; j++) {
+                            if (String(flt_ord[i].value) == String(est[j])) {
+                                flt_ord[i].checked = true;
+                            }
+                        } 
+                    }
+                    buscarYfiltrarOrdTrabajo('tablaOrdenTrabajo');
+                    buscarYfiltrarOrdMan('tablaOrdenMan');
+                    buscarYfiltrarOrdMec('tablaOrdenMec');
+                } else {
+                    selects('ot_etapa');
+                    selects('om_etapa');
+                    selects('ome_etapa');
+                    buscarYfiltrarOrdTrabajo('tablaOrdenTrabajo');
+                    buscarYfiltrarOrdMan('tablaOrdenMan');
+                    buscarYfiltrarOrdMec('tablaOrdenMec');
+                }
+                // console.log(est);
+
+                /* document.getElementsByName('cod_serv').forEach(item => {
+                    // console.log(item.value);
+                    for (let index = 0; index < est.length; index++) {
+                        // const element = est[index];
+                        console.log(est[index]);
+                        // if(est[index] === item.value)  
+                        //     item[i].checked=true;
+                    }
+                }); */
+            }
 
             function selects(name){  
                 var ele=document.getElementsByName(name);  

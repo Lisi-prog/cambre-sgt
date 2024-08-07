@@ -162,4 +162,8 @@ class Servicio extends Model
         }
         return round($costo_estimado, 2);
     }
+
+    public function getSolicitud(){
+        return $this->hasOne(Sol_solicitud::class, 'id_servicio');
+    }
 }

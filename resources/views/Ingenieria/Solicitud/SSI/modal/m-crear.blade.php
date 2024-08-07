@@ -9,7 +9,7 @@
 
             <div class="modal-body">
                 <div class="row">
-                    {!! Form::open(['route' => 's_s_i.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+                    {!! Form::open(['route' => 's_s_i.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
                     {{-- @include('layouts.modal.mensajes') --}}
 
                     <div class="row">
@@ -34,6 +34,17 @@
                                     'class' => 'form-select reset-input',
                                     'id' => 'activo',
                                 ]) !!}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                            <div class="form-group">
+                                {!! Form::label('archivo', 'Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <div class="input-group mb-3">
+                                    <input name="archivo" type="file" class="form-control" id="inputGroupFile02" accept=".pdf, .doc, .docx">
+                                    <label class="input-group-text" for="inputGroupFile02">Subir</label>
+                                </div>
+                            </div> 
                         </div>
                     </div>
                     <div class="row">

@@ -34,6 +34,10 @@ return [
             'driver' => 'local',
             'root' => public_path().'/storage/documentacion',
         ],
+        'public_arc_sol' => [
+            'driver' => 'local',
+            'root' => public_path().'/storage/solicitud',
+        ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

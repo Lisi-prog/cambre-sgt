@@ -85,15 +85,17 @@
                                     </div>
                                 @endif
                                 
-
+                                
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('empleado', "Empleado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::select('id_empleado', $Empleados, $Ssi->getEmpleado->id_empleado, [
-                                            'class' => 'form-select form-control',
-                                            'required',
-                                        ]) !!}
-                                    </div> --}}
+                                    @if ($Ssi->getSolicitud->getArchivo)
+                                        <div class="form-group">
+                                            {!! Form::label('archivo', "Archivo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" aria-describedby="button-addon2" value="{{$Ssi->getSolicitud->getArchivo->nombre_archivo}}" readonly>
+                                                <a class="btn btn-primary" type="button" id="button-addon2" href="{{asset($Ssi->getSolicitud->getArchivo->ruta)}}" download="{{$Ssi->getSolicitud->getArchivo->nombre_archivo}}">Descargar</a>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
