@@ -70,9 +70,9 @@ class Sol_solicitud extends Model
         return $this->belongsTo(Servicio::class, 'id_servicio');
     }
 
-    public function getArchivo()
+    public function getArchivos()
     {
-        return $this->hasOne(Sol_archivo_solicitud::class, 'id_solicitud');
+        return $this->hasMany(Sol_archivo_solicitud::class, 'id_solicitud');
     }
 
     /* public function getSolicitudDe(){
@@ -88,4 +88,18 @@ class Sol_solicitud extends Model
             return $this->hasOne(Sol_servicio_de_ingenieria::class, 'id_solicitud');
         }
     } */
+
+    public function getTipoDeSolicitud(){
+        if (count(Sol_servicio_de_ingenieria::where('id_solicitud', $this->id_solicitud)->get()) == 1) {
+            return 1;
+        }
+
+        if (count(Sol_propuesta_de_mejora::where('id_solicitud', $this->id_solicitud)->get()) == 1) {
+            return 2;
+        }
+
+        if (count(Sol_requerimiento_de_ingenieria::where('id_solicitud', $this->id_solicitud)->get()) == 1) {
+            return 3;
+        }    
+    }
 }

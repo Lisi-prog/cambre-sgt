@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 //agregamos 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -35,6 +36,8 @@ use App\Models\Cambre\Vw_parte_mecanizado;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_manufactura;
 use App\Models\Cambre\Vw_orden_mecanizado;
+use App\Mail\Solicitud\ParteMailable;
+
 class ParteController extends Controller
 {
     function __construct()
@@ -297,6 +300,7 @@ class ParteController extends Controller
                     'id_estado' => $estado,
                     'id_parte' => $parte->id_parte
                 ]);
+
                 return redirect()->back()->with('mensaje','Parte de trabajo creado con éxito!.');
                 // return redirect()->route('orden.partes', [base64url_encode($orden->id_orden), 1])->with('mensaje','Parte de trabajo creado con éxito!.');                       
                 break;
@@ -523,6 +527,8 @@ class ParteController extends Controller
         ]);
 
         $orden = Orden::find($request->input('id_orden'));
+
+        $estado_actual = $orden->getIdEstado();
        
         $editar = $request->input('editar');
 
@@ -612,6 +618,11 @@ class ParteController extends Controller
                         'id_estado' => $estado,
                         'id_parte' => $parte->id_parte
                     ]);
+
+                    if ($estado_actual != $estado) {
+                        $this->enviarEmail($parte->id_parte, $estado, $opcion);
+                    }
+
                     $result = 1;
                 }
                 return[
@@ -770,5 +781,68 @@ class ParteController extends Controller
 
         }
         return 1;    
+    }
+
+    public function pruebaEmail(){
+        $email = "lisandrosilvero@gmail.com";
+        $tipo = 'Trabajo';
+        $responsable = 'Juan';
+        $proyecto = 'Proyecto titulo';
+        $codigo = 123;
+        $estado = 'revisar';
+        $nombre = 'luciano';
+        $codigo_pr = 140;
+        Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado, $codigo_pr,  1));
+    }
+
+    public function enviarEmail($id_parte, $estado, $opcion){
+
+        $parte = Parte::find($id_parte);
+        $responsable = $parte->getOrden->getNombreResponsable();
+        $nombre = $parte->getOrden->getSupervisor();
+        $proyecto = $parte->getOrden->getEtapa->getServicio->codigo_servicio;
+        $codigo = 123;
+        $estado_nom = Estado::find($estado)->nombre_estado;
+        $codigo_pr = $parte->getOrden->getEtapa->getServicio->id_servicio;
+        $etapa = $parte->getOrden->getEtapa->descripcion_etapa;
+        $orden = $parte->getOrden->nombre_orden;
+
+        switch ($opcion) {
+            case 1:
+                $tipo_ord = 1;
+                $tipo = 'trabajo';
+                
+                if ($estado == 6 || $estado == 7) {
+                    try {
+                        $email = $parte->getOrden->getEmailSupervisor();
+                        Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $orden, $tipo_ord, 1));
+                    } catch (\Throwable $th) {
+                         //throw $th;
+                    }
+                }
+        
+                if ($estado == 1 || $estado == 9 || $estado == 10) {
+                    try {
+                        $email = $parte->getOrden->getEmailResponsable();
+                        Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $orden, $tipo_ord, 2));
+                    } catch (\Throwable $th) {
+                         //throw $th;
+                    }
+                }
+                break;
+
+            case 2:
+                $tipo_ord = 2;
+                $tipo = 'Manufactura';
+                break;
+            case 3:
+                $tipo_ord = 3;
+                $tipo = 'Mecanizado';
+                break;
+            default:
+                # code...
+                break;
+        }
+
     }
 }

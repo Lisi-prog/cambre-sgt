@@ -254,11 +254,12 @@ class PropuestaDeMejoraController extends Controller
             'bene-propuesta' => 'required',
             'prob-propuesta' => 'required',
             'eva-propuesta' => 'required',
-            'archivo' => 'file|mimes:pdf,doc,docx'
+            'archivos.*' => 'file|mimes:pdf,doc,docx'
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
             'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',
-            'obj-propuesta.required' => 'El objetivo de la propuesta no puede estar vacio.'
+            'obj-propuesta.required' => 'El objetivo de la propuesta no puede estar vacio.',
+            'archivos.*.mimes' => 'El tipo de archivo solo puede ser un .pdf, .doc o .docx'
         ]);
 
         $titulo = $request->input('titulo-propuesta');
@@ -275,6 +276,7 @@ class PropuestaDeMejoraController extends Controller
         $id_activo = $request->input('id_activo');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $estado = Sol_estado_solicitud::where('id_estado_solicitud', 1)->first()->id_estado_solicitud;
+        $nombre = Auth::user()->getEmpleado->nombre_empleado;
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $lider,
@@ -288,16 +290,20 @@ class PropuestaDeMejoraController extends Controller
                         'id_empleado' => Auth::user()->getEmpleado->id_empleado
                     ]);
 
-        if ($request->file('archivo')) {
-            $nombre = Auth::user()->getEmpleado->nombre_empleado;
-            $filename = $solicitud->id_solicitud . '-pm_' . str_replace(" " ,"-", $nombre) . '.' . $request->file('archivo')->extension();
-            $path = $request->file('archivo')->storeAs('', $filename, 'public_arc_sol');
-            
-            Sol_archivo_solicitud::create([
-                'id_solicitud' => $solicitud->id_solicitud,
-                'nombre_archivo' => $filename,
-                'ruta' => 'storage/solicitud/'.$path
-            ]);
+        if ($request->hasFile('archivos')) {
+            $cont = 1;
+            foreach ($request->file('archivos') as $file) {
+
+                $filename = $solicitud->id_solicitud . '-pm_archivo_' . $cont . '_' . str_replace(" " ,"-", $nombre) . '.' . $file->extension();
+                $path = $file->storeAs('', $filename, 'public_arc_sol');
+                
+                Sol_archivo_solicitud::create([
+                    'id_solicitud' => $solicitud->id_solicitud,
+                    'nombre_archivo' => $filename,
+                    'ruta' => 'storage/solicitud/'.$path
+                ]);
+                $cont++;
+            }
         }
 
         $propuestaMejora =  Sol_propuesta_de_mejora::create([

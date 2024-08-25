@@ -77,14 +77,34 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
-                                    @if ($pm->getSolicitud->getArchivo)
-                                        <div class="form-group">
-                                            {!! Form::label('archivo', "Archivo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" aria-describedby="button-addon2" value="{{$pm->getSolicitud->getArchivo->nombre_archivo}}" readonly>
-                                                <a class="btn btn-primary" type="button" id="button-addon2" href="{{asset($pm->getSolicitud->getArchivo->ruta)}}" download="{{$pm->getSolicitud->getArchivo->nombre_archivo}}">Descargar</a>
-                                            </div>
-                                        </div>
+                                    @if (sizeof($pm->getSolicitud->getArchivos) != 0)
+                                    <div class="form-group">
+                                        {!! Form::label('archivo', "Archivo/s:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        <table class="table table-light table-striped">
+                                            <thead>
+                                              <tr>
+                                                <th class='text-center' scope="col" style="color: #fff; width: 5%;">N°</th>
+                                                <th class='text-center' scope="col" style="color: #fff; width: 50%;">Nombre</th>
+                                                <th class='text-center' scope="col" style="color: #fff; width: 10%;">Accion</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $count = 1;
+                                                @endphp
+                                                @foreach ($pm->getSolicitud->getArchivos as $archivo)
+                                                    <tr>
+                                                        <td class='text-center' style="vertical-align: middle;">{{$count}}</td>
+                                                        <td class='text-center' style="vertical-align: middle;">{{$archivo->nombre_archivo}}</td>
+                                                        <td class='text-center' style="vertical-align: middle;"><a class="btn btn-primary" type="button" id="button-addon2" href="{{asset($archivo->ruta)}}" download="{{$archivo->nombre_archivo}}">Descargar</a></td>
+                                                    </tr>
+                                                    @php
+                                                        $count++;
+                                                    @endphp
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     @endif
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">

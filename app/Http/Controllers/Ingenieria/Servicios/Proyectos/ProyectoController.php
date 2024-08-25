@@ -679,6 +679,23 @@ class ProyectoController extends Controller
             $responsable_proyecto->id_empleado = $lider;
             $responsable_proyecto->save();
         }
+        
+
+        if($servicio->getSolicitud){
+            if ($id_estado == 9) {
+                try {
+                    $nombre = $servicio->getSolicitud->getEmpleado->nombre_empleado;
+                    $codigo = $servicio->getSolicitud->id_solicitud;
+                    $email = strval($servicio->getSolicitud->getEmpleado->email_empleado);
+
+                    Mail::to($email)->send(new SsiMailable($nombre, $codigo, 5));    
+                           
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+            }
+        }
+
         return redirect()->back()->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 

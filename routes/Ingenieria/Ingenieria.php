@@ -16,6 +16,7 @@ use App\Http\Controllers\Ingenieria\Activos\ActivoController;
 use App\Http\Controllers\Ingenieria\Sector\SectorController;
 use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 use App\Http\Controllers\Ingenieria\Servicios\Proyectos\PrefijoProyectoController;
+
 //Gestion de proyectos
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     // RUTAS PROYECTOS
@@ -66,6 +67,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
+        Route::get('/parte/prueba/email', [ParteController::class, 'pruebaEmail']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
     Route::resource('ordenes', OrdenController::class);

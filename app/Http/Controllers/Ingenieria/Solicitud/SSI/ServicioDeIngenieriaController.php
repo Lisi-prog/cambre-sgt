@@ -91,7 +91,9 @@ class ServicioDeIngenieriaController extends Controller
         $this->validate($request, [
             'id_prioridad' => 'required',
             'descripcion' => 'required|string|max:500',
-            'archivo' => 'file|mimes:pdf,doc,docx'
+            'archivos.*' => 'file|mimes:pdf,doc,docx'
+        ],[
+            'archivos.*.mimes' => 'El tipo de archivo solo puede ser un .pdf, .doc o .docx'
         ]);
 
         $nombre = Auth::user()->getEmpleado->nombre_empleado;
@@ -118,15 +120,20 @@ class ServicioDeIngenieriaController extends Controller
             'id_empleado' => Auth::user()->getEmpleado->id_empleado
         ]);
 
-        if ($request->file('archivo')) {
-            $filename = $Solicitud->id_solicitud . '-ssi_' . str_replace(" " ,"-", $nombre) . '.' . $request->file('archivo')->extension();
-            $path = $request->file('archivo')->storeAs('', $filename, 'public_arc_sol');
-            
-            Sol_archivo_solicitud::create([
-                'id_solicitud' => $Solicitud->id_solicitud,
-                'nombre_archivo' => $filename,
-                'ruta' => 'storage/solicitud/'.$path
-            ]);
+        if ($request->hasFile('archivos')) {
+            $cont = 1;
+            foreach ($request->file('archivos') as $file) {
+
+                $filename = $Solicitud->id_solicitud . '-ssi_archivo_' . $cont . '_' . str_replace(" " ,"-", $nombre) . '.' . $file->extension();
+                $path = $file->storeAs('', $filename, 'public_arc_sol');
+                
+                Sol_archivo_solicitud::create([
+                    'id_solicitud' => $Solicitud->id_solicitud,
+                    'nombre_archivo' => $filename,
+                    'ruta' => 'storage/solicitud/'.$path
+                ]);
+                $cont++;
+            }
         }
 
         if($request->input('descripcion_urgencia')){
