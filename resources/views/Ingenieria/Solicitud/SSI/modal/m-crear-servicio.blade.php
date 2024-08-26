@@ -46,7 +46,6 @@
                             {!! Form::label('id_tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::select('id_tipo_proyecto', $Tipos_servicios, 5, [
-                                'placeholder' => 'Seleccionar',
                                 'class' => 'form-select form-control',
                                 'id' => 'id_tipo_proyecto',
                                 'required'
