@@ -98,8 +98,13 @@
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                    
                                                     @foreach ($flt_estados as $flt_estado)
-                                                        <label><input name="res" type="checkbox" value="{{$flt_estado->nombre_estado_solicitud}}" checked> {{$flt_estado->nombre_estado_solicitud}}</label>
+                                                        @if ($flt_estado->nombre_estado_solicitud === 'Completo' || $flt_estado->nombre_estado_solicitud === 'Rechazado')
+                                                            <label><input name="res" type="checkbox" value="{{$flt_estado->nombre_estado_solicitud}}"> {{$flt_estado->nombre_estado_solicitud}}</label>  
+                                                        @else
+                                                            <label><input name="res" type="checkbox" value="{{$flt_estado->nombre_estado_solicitud}}" checked> {{$flt_estado->nombre_estado_solicitud}}</label>                              
+                                                        @endif
                                                     @endforeach
                                                 </div>
                                             </div>
