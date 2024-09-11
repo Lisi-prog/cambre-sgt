@@ -14,7 +14,8 @@ use App\Models\User;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Puesto_empleado;
-
+use App\Models\Cambre\Em_not_x_empleado;
+use App\Models\Cambre\Em_notificacion;
 
 class EmpleadoController extends Controller
 {
@@ -118,7 +119,10 @@ class EmpleadoController extends Controller
         $empleado = Empleado::find($id);
         $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
         $puestos = Puesto_empleado::orderBy('titulo_puesto_empleado')->pluck('titulo_puesto_empleado', 'id_puesto_empleado');
-        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos'));
+        $es_supervisor = $empleado->getUser->hasRole('SUPERVISOR');
+        $per_avisos = collect(Em_not_x_empleado::where('id_empleado', $id)->get())->pluck('id_em_notificacion')->all();
+        $op_nots = Em_notificacion::orderBy('nombre_em_notificacion')->get();
+        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos', 'es_supervisor', 'per_avisos', 'op_nots'));
     }
     
     public function update(Request $request, $id)
@@ -137,6 +141,14 @@ class EmpleadoController extends Controller
         $sector = $request->input('sector');
         $costo_hora = $request->input('costo_hora');
         $esta_activo = $request->input('esta_activo');
+        // $not_email_new = collect($request->input('notificaciones_email'));
+
+        $not_emails_new  = collect($request->input('notificaciones_email'))->map(function ($value) {
+            return (int) $value;
+        });
+
+        // $not_email_old = collect(Em_not_x_empleado::where('id_empleado', $id)->get())->pluck('id_em_notificacion')->all();
+        // $diff_not_email = $not_email_new->diff($not_email_old);
 
         if ($request->input('telefono')) {
             $telefono = $request->input('telefono');
@@ -144,6 +156,20 @@ class EmpleadoController extends Controller
             $telefono = null;
         }
         $empleado = Empleado::find($id);
+
+        try {
+                Em_not_x_empleado::where('id_empleado', $id)->delete();
+
+                foreach ($not_emails_new as $noti_mail) {
+                    Em_not_x_empleado::create([
+                        'id_em_notificacion' =>$noti_mail,
+                        'id_empleado' => $id
+                    ]);
+                }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
 
         $empleado->update([
             'nombre_empleado' => $nombre,

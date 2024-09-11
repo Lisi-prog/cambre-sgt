@@ -12,11 +12,11 @@
             <div class="row">
                 {!! Form::model($empleado,['method' => 'PUT', 'route' => ['tecnicos.update', $empleado->id_empleado], 'class' => 'd-flex justify-content-start']) !!}
                 @include('layouts.modal.mensajes')
-                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                                     <div class="form-group">
                                         {!! Form::label('nom_comp', 'Nombre completo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -28,9 +28,7 @@
                                     </div>
                                 </div>
 
-                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                </div> --}}
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                     <div class="form-group">
                                         {!! Form::label('puesto', 'Puesto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         <span class="obligatorio">*</span>
@@ -42,23 +40,10 @@
                                         ]) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('user_wb', '¿Crear usuario web?', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
-                                        {!! Form::select('user_wb', [0 => 'NO', 1 => 'SI'], 1, [
-                                            'class' => 'form-select form-control',
-                                            'id' => 'user_wb',
-                                            'required'
-                                        ]) !!}
-                                    </div> --}}
-                                </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                                     <div class="form-group">
                                         {!! Form::label('email', 'Email:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -69,9 +54,8 @@
                                         ]) !!}
                                     </div>
                                 </div>
-                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                </div> --}}
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                    
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                     <div class="form-group">
                                         {!! Form::label('sector', 'Sector:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                         <span class="obligatorio">*</span>
@@ -83,21 +67,10 @@
                                         ]) !!}
                                     </div>
                                 </div>
-
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
-
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('pass', 'Contraseña:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
-                                        <input id='pass-input' type="password" class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" placeholder="Ingrese la contraseña" name="password" tabindex="2" required>
-                                    </div> --}}
-                                </div>
                             </div>
 
                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         {!! Form::label('telefono', 'Telefono:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         {{-- <span class="obligatorio">*</span> --}}
@@ -107,7 +80,7 @@
                                         ]) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('costo_hora', 'Costo hora:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -118,7 +91,7 @@
                                         ]) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('esta_activo', '¿Se encuentra activo?:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -128,11 +101,25 @@
                                         ]) !!}
                                     </div>
                                 </div>
+                            </div>        
 
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    
+                            @if ($es_supervisor)
+                                <div class="row">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            {!! Form::label('not_em', 'Notificaciones email:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                            @foreach ($op_nots as $not)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value={{$not->id_em_notificacion}} id="flexCheckDefault{{$not->id_em_notificacion}}" {{in_array($not->id_em_notificacion, $per_avisos) ? 'checked' : ''}} name='notificaciones_email[]'>
+                                                        <label class="form-check-label" for="flexCheckDefault{{$not->id_em_notificacion}}">
+                                                        {{$not->nombre_em_notificacion}}
+                                                        </label>
+                                                    </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>                            
+                            @endif
                             
                             
                     

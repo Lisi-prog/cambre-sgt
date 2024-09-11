@@ -64,6 +64,8 @@ $(document).ready(function () {
                 }
             });
     });
+
+    $('#m-ver-act-id_estado').on('change', mostrarOpcionComEtp);
 });
 
 function mostrarActProyecto(id){
@@ -724,6 +726,17 @@ function verCargarActEtaModal(){
     }else{
         cuadro_oculto_de_cargar_act_eta.hidden = true;
         btn_oculto_de_cargar_act_eta.hidden = true;
+    }
+}
+
+function mostrarOpcionComEtp() {
+    let div_act_eta = document.getElementById('eta_act_td_dv');
+    let estado = $(this).val();
+
+    if (estado == 9) {
+        div_act_eta.hidden = false;
+    }else{
+        div_act_eta.hidden = true;
     }
 }
 

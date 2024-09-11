@@ -866,10 +866,12 @@ class OrdenController extends Controller
             case 1:
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                            $ordenes = Vw_orden_trabajo::get();
+                            $ordenes = Vw_orden_trabajo::orderBy('prioridad_servicio', 'asc')->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->get();
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                                                                                ->orderBy('prioridad_servicio', 'asc')
+                                                                                ->get();
                         }
                         $servicios = Vw_orden_trabajo::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                         $tipo = 'Trabajo';

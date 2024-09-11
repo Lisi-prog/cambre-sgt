@@ -83,6 +83,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" id="eta_act_td_dv" hidden>
+                            <div class="col-xs-9 col-sm-9 col-md-9 col-lg9">
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg3">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="1" id="flexRadioEtp" name="eta_p">
+                                        <label class="form-check-label" for="flexRadioEtp">
+                                            Completar etapas
+                                        </label>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -633,8 +633,6 @@ class ProyectoController extends Controller
     }
 
     public function guardarActualizacion(Request $request, $id){
-        
-        //return $request;
         $this->validate($request, [
             'm-ver-act-descripcion' => 'required',
             'm-ver-act-id_estado' => 'required',
@@ -653,6 +651,8 @@ class ProyectoController extends Controller
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $act_eta_com = $request->input('eta_p');
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
@@ -674,6 +674,33 @@ class ProyectoController extends Controller
 
         //Actualizamos el lider del proyecto
         $servicio = Servicio::where('id_servicio', $id)->first();
+
+        if ($act_eta_com) {
+            $etapas_a_actualizar = Vw_etapa::where('id_servicio', $id)->whereNotIn('id_estado', [9, 10])->get();
+
+            foreach ($etapas_a_actualizar as $etapa_act) {
+                
+                $responsabilidad_eta = Responsabilidad::create([
+                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $actualizacion_eta = Actualizacion::create([
+                                    'descripcion' => $descripcion,
+                                    'fecha_limite' => $fecha_limite,
+                                    'fecha_carga' => $fecha_carga,
+                                    'id_estado' => $id_estado,
+                                    'id_responsabilidad' => $responsabilidad_eta->id_responsabilidad
+                                ]);
+
+                Actualizacion_etapa::create([
+                    'id_actualizacion' => $actualizacion_eta->id_actualizacion,
+                    'id_etapa' => $etapa_act->id_etapa
+                ]);
+            }
+        }
+       
+
         $responsable_proyecto = $servicio->getResponsabilidad;
         if($responsable_proyecto->id_empleado != $lider){
             $responsable_proyecto->id_empleado = $lider;

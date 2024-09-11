@@ -467,6 +467,22 @@ CREATE TABLE `log_parte`(
   PRIMARY KEY(`id_log_parte`),
   CONSTRAINT `id_log_parte_x_id_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
+
+CREATE TABLE `em_notificacion` (
+    `id_em_notificacion` INT AUTO_INCREMENT,
+    `nombre_em_notificacion` VARCHAR(255) NOT NULL,
+    `descripcion_em_notificacion` VARCHAR(500),
+    primary key(`id_em_notificacion`)
+);
+
+CREATE TABLE `em_not_x_empleado` (
+    `id_not_x_empleado` INT AUTO_INCREMENT,
+    `id_em_notificacion` INT,
+    `id_empleado` INT,
+    PRIMARY KEY (`id_not_x_empleado`),
+    CONSTRAINT `pk_id_em_not_emp_x_emp` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`),
+    CONSTRAINT `pk_id_em_not_emp_x_em_noti` FOREIGN KEY (`id_em_notificacion`) REFERENCES `em_notificacion` (`id_em_notificacion`)
+);
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)

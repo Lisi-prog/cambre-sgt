@@ -28,6 +28,7 @@ use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
 use App\Mail\Solicitud\SsiMailable;
+use App\Models\Cambre\Em_not_x_empleado;
 
 class ServicioDeIngenieriaController extends Controller
 {
@@ -148,11 +149,21 @@ class ServicioDeIngenieriaController extends Controller
             'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
         ]);
 
+        // $data =  Em_not_x_empleado::where('id_em_notificacion', 1)->get();
+        // $id_empleados = collect($data)->pluck('id_empleado')->all();
+        // $emp = Empleado::whereIn('id_empleado', $id_empleados)->get();
+        // $emails_para_aviso = collect($emp)->pluck('email_empleado')->all();
+        
         try {
+            $email_aviso = Em_not_x_empleado::where('id_em_notificacion', 1)
+                                                    ->with('getEmpleado:id_empleado,email_empleado') // Cargar la relación con solo los campos necesarios
+                                                    ->get()
+                                                    ->pluck('getEmpleado.email_empleado')
+                                                    ->all();
             $nombre = $Solicitud->getEmpleado->nombre_empleado;
             $codigo = $Solicitud->id_solicitud;
             $email = strval(Auth::user()->getEmpleado->email_empleado);
-            $email_aviso = explode(',', config('myconfig.ssi_email_admin'));
+            // $email_aviso = explode(',', config('myconfig.ssi_email_admin'));
             Mail::to($email)->send(new SsiMailable($nombre, $codigo, 1));
             Mail::to($email_aviso)->send(new SsiMailable($nombre, $codigo, 4));
         } catch (\Throwable $th) {

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('titulo', 'Ordenes')
 @section('content')
-
 <style>
     .tableFixHead {
        overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
@@ -34,9 +33,8 @@
     }
 
     .table {
-        zoom: 100%;
+        zoom: 90%;
     }
-
     table.dataTable tbody td {
         padding: 0px 10px;
     }
@@ -44,6 +42,7 @@
         padding: 5px;
     }
 </style>
+@include('layouts.modal.delete', ['modo' => 'Agregar'])
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
@@ -57,11 +56,9 @@
             </div>
         </div>
     </div>
-
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
-
     <div class="section-body">
-
+        
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -165,12 +162,14 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- <div class="row">
+                                <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
+                            </div> --}}
                         </div>   
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -280,7 +279,6 @@
             </div>
         </div>
     </div>
-
     @role('SUPERVISOR')
         @php
             $es_sup = 1;
@@ -309,7 +307,6 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
-
 <script>
     let x = '';
     let ind_rw = '';
@@ -435,8 +432,8 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": [],
-                "pageLength": 100
+                order: [[0, 'asc']],
+                "pageLength": 25
         });
         
     $('input:checkbox').on('change', function () {
@@ -539,4 +536,5 @@
         table.draw();
     }
 </script>
+
 @endsection
