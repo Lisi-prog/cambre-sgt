@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -48,6 +49,7 @@ use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_manufactura;
+use App\Mail\Solicitud\OrdenMailable;
 
 class OrdenController extends Controller
 {
@@ -376,6 +378,25 @@ class OrdenController extends Controller
             'id_estado' => $estado->id_estado,
             'id_parte' => $parte->id_parte
         ]);
+
+        if ($id_estado == 1) {
+            $responsable = $orden->getNombreResponsable();
+            $nombre = $orden->getSupervisor();
+            $proyecto = $orden->getEtapa->getServicio->codigo_servicio;
+            $codigo = 123;
+            $estado_nom = $estado->nombre_estado;
+            $codigo_pr = $orden->getEtapa->getServicio->id_servicio;
+            $etapa = $orden->getEtapa->descripcion_etapa;
+            $nom_orden = $orden->nombre_orden;
+            $tipo_ord = 1;
+            $tipo = 'trabajo';
+            try {
+                $email = $orden->getEmailResponsable();
+                Mail::to($email)->send(new OrdenMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $nom_orden, $tipo_ord, 1));
+            } catch (\Throwable $th) {
+                 //throw $th;
+            }
+        }
     }
 
     public function crearOrdenManufactura($request){

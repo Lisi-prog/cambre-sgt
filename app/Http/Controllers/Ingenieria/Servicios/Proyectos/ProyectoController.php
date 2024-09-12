@@ -244,10 +244,18 @@ class ProyectoController extends Controller
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
-        $estado = Estado::where('nombre_estado', 'espera')->first();
+
+        $opt_est = $request->input('op_act_se_eta');
+        if ($opt_est) {
+            $estado = Estado::where('nombre_estado', 'En proceso')->first();
+        } else {
+            $estado = Estado::where('nombre_estado', 'espera')->first();
+        }
+        
+        
         // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $tipo_servicio = $request->input('id_tipo_proyecto');
-
+        
         // if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
         //     $this->actualizarPrioridades($prioridad);
         // }

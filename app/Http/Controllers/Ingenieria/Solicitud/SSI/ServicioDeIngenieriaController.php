@@ -92,9 +92,9 @@ class ServicioDeIngenieriaController extends Controller
         $this->validate($request, [
             'id_prioridad' => 'required',
             'descripcion' => 'required|string|max:500',
-            'archivos.*' => 'file|mimes:pdf,doc,docx'
+            'archivos.*' => 'file|max:2048' //Max size in kilobytes (2 MB)
         ],[
-            'archivos.*.mimes' => 'El tipo de archivo solo puede ser un .pdf, .doc o .docx'
+            'archivos.*.max' => 'El archivo es muy grande.'
         ]);
 
         $nombre = Auth::user()->getEmpleado->nombre_empleado;

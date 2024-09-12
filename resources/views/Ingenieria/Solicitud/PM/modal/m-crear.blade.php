@@ -30,7 +30,7 @@
                         <div class="form-group">
                             {!! Form::label('archivo', 'Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <div class="input-group mb-3">
-                                <input name="archivos[]" type="file" class="form-control" id="inputGroupFile02" accept=".pdf, .doc, .docx" multiple>
+                                <input name="archivos[]" type="file" class="form-control" id="inputGroupFile02" multiple>
                                 <label class="input-group-text" for="inputGroupFile02">Subir</label>
                             </div>
                         </div>

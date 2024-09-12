@@ -254,12 +254,12 @@ class PropuestaDeMejoraController extends Controller
             'bene-propuesta' => 'required',
             'prob-propuesta' => 'required',
             'eva-propuesta' => 'required',
-            'archivos.*' => 'file|mimes:pdf,doc,docx'
+            'archivos.*' => 'file|max:2048' //Max size in kilobytes (2 MB)
         ], [
             'titulo-propuesta.required' => 'El titulo de la propuesta no puede estar vacio.',
             'nombre_emisor.required' => 'Escriba el nombre del emisor de la propuesta.',
             'obj-propuesta.required' => 'El objetivo de la propuesta no puede estar vacio.',
-            'archivos.*.mimes' => 'El tipo de archivo solo puede ser un .pdf, .doc o .docx'
+            'archivos.*.max' => 'El archivo es muy grande.'
         ]);
 
         $titulo = $request->input('titulo-propuesta');
