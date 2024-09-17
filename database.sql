@@ -868,7 +868,9 @@ Res_ord AS (
 select 
 	p.id_parte,
 	o.nombre_orden,
-	p.fecha, p.fecha_limite,
+	p.fecha, 
+  p.fecha_limite,
+  p.fecha_carga,
 	e.nombre_estado as estado,
 	p.horas, 
     p.observaciones,
