@@ -24,6 +24,7 @@ class ScheduledMail extends Mailable
     }
 
 
+
     /**
      * Build the message.
      *
@@ -31,8 +32,9 @@ class ScheduledMail extends Mailable
      */
     public function build()
     {
+        
         return $this->view('emails.scheduled')
-                    ->subject('Correo Programado')
+                    ->subject('Resumen semanal')
                     ->with('data', $this->data);
     }
 }

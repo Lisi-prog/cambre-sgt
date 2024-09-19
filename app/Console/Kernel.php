@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $users = [];
-        $schedule->job(new SendScheduledMail($users))->dailyAt('02:32');
+        $schedule->job(new SendScheduledMail($users))->dailyAt('01:31');
     }
 
     /**
