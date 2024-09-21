@@ -17,10 +17,12 @@ class ScheduledMail extends Mailable
      * @return void
      */
     public $data;
+    public $opcion;
 
-    public function __construct($data)
+    public function __construct($data, $opcion)
     {
         $this->data = $data;
+        $this->opcion = $opcion;
     }
 
 
@@ -32,9 +34,21 @@ class ScheduledMail extends Mailable
      */
     public function build()
     {
-        
-        return $this->view('emails.scheduled')
+        switch ($this->opcion) {
+            case 1:
+                return $this->view('emails.scheduled')
                     ->subject('Resumen semanal')
                     ->with('data', $this->data);
+                break;
+            case 2:
+                return $this->view('emails.noAvances')
+                    ->subject('Resumen semanal')
+                    ->with('data', $this->data);
+                break;
+            default:
+                # code...
+                break;
+        }
+        
     }
 }

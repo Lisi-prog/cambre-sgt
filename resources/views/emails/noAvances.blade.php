@@ -164,107 +164,18 @@
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      Este es un <u>resumen</u> de la semana desde {{ $data['fecha_desde'] }} hasta {{ $data['fecha_hasta'] }}. En este rango de fechas el total fue de {{ $data['total_horas'] }} horas.
+                                                      Este es un <u>resumen</u> de la semana desde {{ $data['fecha_desde'] }} hasta {{ $data['fecha_hasta'] }}. No hemos recibido <b>"partes"</b> sobre tus avances en los proyectos en esta semana.
                                                       
-                                                      </p><br/>
-                                                      <table width="100%" cellspacing="0" cellpadding="0" >
-                                                        <tr>
-                                                            <td>
-                                                                <table cellspacing="0" cellpadding="0">
-                                                                  <tbody>
-                                                                    <tr>
-                                                                      <td style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left;"><b style="margin-right: 20px">Total de horas:</b></td>
-                                                                      <td style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left">{{ $data['total_horas'] }} hs.</td>
-                                                                    </tr>
-                                                                  </tbody>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                      </table>
-                                                      <br/>
+                                                      </p>
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      Que se distribuyeron en: 
-                                                      </p>
-                                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                                        <tr>
-                                                            <td style="text-align: center;">
-                                                              <table style="border: 1px solid black; border-collapse: collapse; width: 100%;">
-                                                                <thead style="height:50px;">
-                                                                    <th class='ml-3 text-center' style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Proyecto</th>
-                                                                    <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Horas</th>
-                                                                    <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Porcentaje</th>
-                                                                </thead>
-                                                                <tbody >
-                                                                    @foreach ($data['info'] as $item)
-                                                                        <tr style="">
-                                                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->codigo_servicio}}</td>
-                                                        
-                                                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->h_total}}</td>
-                                                        
-                                                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->porcentaje}}%</td>
-                                                        
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                              </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
+                                                      Recuerda cargar tus progresos, muchas gracias.
                                                       
-                                         
-
-                                                      <table
-                                                        align="center"
-                                                        width="100%"
-                                                        cellpadding="0"
-                                                        cellspacing="0"
-                                                        role="presentation"
-                                                        style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;margin:30px auto;padding:0;text-align:center;width:100%"
-                                                      >
-                                                        <tbody>
-                                                          <tr>
-                                                            <td
-                                                              align="center"
-                                                              style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;"
-                                                            >
-                                                              <table
-                                                                width="100%"
-                                                                border="0"
-                                                                cellpadding="0"
-                                                                cellspacing="0"
-                                                                role="presentation"
-                                                                style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;"
-                                                              >
-                                                                <tbody>
-                                                                  <tr>
-                                                                    <td
-                                                                      align="center"
-                                                                      style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;"
-                                                                    >
-                                                                    </td>
-                                                                  </tr>
-                                                                </tbody>
-                                                              </table>
-                                                            </td>
-                                                          </tr>
-                                                        </tbody>
-                                                      </table>
-                                                    </br>
-                                                      <div>
-                                                        <canvas id="myChart"></canvas>
-                                                      </div>
-                                                      <section style="margin-top: 10px">
-                                                        <div class="section-header">
-                                                            {{-- <h4 class="m-auto" >CURVA DE DESEMBOLSOS</h4> --}}
-                                                        </div>
-                                                        <div class="section-body" style="width: 30vw; height: 10vw; position: relative;">
-                                                            {{-- <img src="http://quickchart.io/chart?c={type:'bar',data:{labels:[2012,2013,2014,2015,2016],datasets:[{label:'Users',data:[120,60,50,180,120]}]}}"> --}}
-                                                            {{-- <img class= "logo column-2" alt="image"  src="{{asset('img/logo_iprodha.jpg') }}"> --}}
-                                                            <img src="{{$data['chart']}}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-                                                        </div>
-                                                    </section> 
+                                                      </p>
+                                                      <br/>
+                                                      
+                                                      
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >

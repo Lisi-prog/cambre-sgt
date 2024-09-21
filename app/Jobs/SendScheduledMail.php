@@ -43,48 +43,71 @@ class SendScheduledMail implements ShouldQueue
             ];
             Mail::to($user->email)->send(new ScheduledMail($data));
         } */
-        $us = 18;
-        $datos = DB::select('CALL ObtenerTotalHorasServicio(?, 15)',[$us]);
 
         $codigo = [];
-        $porc = [];  
+        $porc = [];
+        $fechaHoy = date("Y-m-d");
+        $fechaHace7Dias = date("Y-m-d", strtotime("-7 days", strtotime($fechaHoy)));
 
-        foreach ($datos as $ite) {
-            $codigo[] = $ite->codigo_servicio;
-            $porc[] = $ite->porcentaje;
-        }
-        $chartData = ['type' =>'pie',
-                        'data' => ['labels' => $codigo, 'datasets' => [['data' =>$porc]]],
-                        'options' =>  [
-                    'plugins' =>  [
-                    'datalabels' =>  [
-                    'display' =>  true,
-                    'align' =>  'bottom',
-                    'backgroundColor' =>  '#ccc',
-                    'borderRadius' =>  3,
-                    'font' =>  [
-                    'size' =>  18,
+        foreach ($this->users as $user){
+
+            if ($user->getEmpleado) {
+                $datos = DB::select('CALL ObtenerTotalHorasServicio(?, ?, ?)', [$user->getEmpleado->id_empleado, $fechaHace7Dias, $fechaHoy]);
+
+                foreach ($datos as $ite) {
+                    $codigo[] = $ite->codigo_servicio;
+                    $porc[] = $ite->porcentaje;
+                }
+                $chartData = ['type' =>'pie',
+                            'data' => ['labels' => $codigo, 'datasets' => [['data' =>$porc]]],
+                            'options' =>  [
+                        'plugins' =>  [
+                        'datalabels' =>  [
+                        'display' =>  true,
+                        'align' =>  'bottom',
+                        'backgroundColor' =>  '#ccc',
+                        'borderRadius' =>  3,
+                        'font' =>  [
+                        'size' =>  18,
+                        ],
                     ],
-                ],
-                ],
-            ]];
-        $chartData = json_encode($chartData);
-        // return $chartData;
-        $chartURL = "https://quickchart.io/chart?width=600&height=200&c=".urlencode($chartData);
-        $chartData = file_get_contents($chartURL); 
-        $chart = 'data:image/png;base64, '.base64_encode($chartData);
+                    ],
+                ]];
+                $chartData = json_encode($chartData);
+                // return $chartData;
+                $chartURL = "https://quickchart.io/chart?width=600&height=200&c=".urlencode($chartData);
+                $chartData = file_get_contents($chartURL); 
+                $chart = 'data:image/png;base64, '.base64_encode($chartData);
 
+                if ($datos) {
+                    $data = [
+                        'name' => $user->name,
+                        'message' => 'prueba',
+                        'info' =>  $datos,
+                        'fecha_desde' => $fechaHace7Dias,
+                        'fecha_hasta' => $fechaHoy,
+                        'total_horas' => substr($datos[0]->total_ac, 0, -3),
+                        'chart' => $chartURL
+                    ];
+                    Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 1));
+                } else {
+                    $data = [
+                        'name' => $user->name,
+                        'message' => 'prueba',
+                        'fecha_desde' => $fechaHace7Dias,
+                        'fecha_hasta' => $fechaHoy,
+                    ];
+                    Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 2));
+                }
+                
+                
+            }
+            
+            $codigo = [];
+            $porc = [];
+        }
 
-        $data = [
-            'name' => User::find(2)->name,
-            'message' => 'prueba',
-            'info' =>  $datos,
-            'fecha_desde' => $datos[0]->fecha_desde,
-            'fecha_hasta' => $datos[0]->fecha_hasta,
-            'total_horas' => substr($datos[0]->total_ac, 0, -3),
-            'chart' => $chartURL
-        ];
-
-        Mail::to('lisandrosilvero@gmail.com')->send(new ScheduledMail($data));
+        
+    
     }
 }

@@ -1439,6 +1439,47 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE ObtenerTotalHorasServicio(IN usuario INT, IN fecha_d DATE, IN fecha_h DATE)
+BEGIN
+    DECLARE vTotHo INT DEFAULT 0;
+
+    -- Calcular el total de horas
+    SELECT 
+        SUM(TIME_TO_SEC(p.horas)) INTO vTotHo
+    FROM parte p
+    INNER JOIN responsabilidad res ON res.id_responsabilidad = p.id_responsabilidad
+    INNER JOIN empleado emp ON emp.id_empleado = res.id_empleado
+    INNER JOIN orden o ON o.id_orden = p.id_orden
+    INNER JOIN etapa et ON et.id_etapa = o.id_etapa
+    INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+    WHERE fecha_carga >= fecha_d and fecha_carga <= fecha_h
+      AND emp.id_empleado = usuario;
+
+    -- Devolver todos los resultados en un solo conjunto
+    SELECT 
+        p.fecha_carga,
+        se.id_servicio,
+        se.codigo_servicio,
+        TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(p.horas))), '%H:%i') AS h_total,
+        emp.id_empleado AS id_responsable,
+        case when ROUND((SUM(TIME_TO_SEC(p.horas)) * 100) / vTotHo) is null then 0
+			else ROUND((SUM(TIME_TO_SEC(p.horas)) * 100) / vTotHo)
+		end AS porcentaje,
+        SEC_TO_TIME(vTotHo) as total_ac
+    FROM parte p
+    INNER JOIN responsabilidad res ON res.id_responsabilidad = p.id_responsabilidad
+    INNER JOIN empleado emp ON emp.id_empleado = res.id_empleado
+    INNER JOIN orden o ON o.id_orden = p.id_orden
+    INNER JOIN etapa et ON et.id_etapa = o.id_etapa
+    INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+    WHERE fecha_carga >= fecha_d and fecha_carga <= fecha_h 
+      AND emp.id_empleado = usuario 
+    GROUP BY se.id_servicio;
+END //
+
+DELIMITER ;
 
 DELIMITER //
 

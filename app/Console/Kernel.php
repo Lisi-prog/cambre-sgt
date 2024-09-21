@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\SendScheduledMail;
+use App\Models\User;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,8 +18,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $users = [];
-        $schedule->job(new SendScheduledMail($users))->dailyAt('01:31');
+        $users = User::role('TECNICO')->get();
+        // $users = [];
+        $schedule->job(new SendScheduledMail($users))->dailyAt('20:16');
     }
 
     /**
