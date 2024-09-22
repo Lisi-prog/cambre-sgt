@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $users = User::role('TECNICO')->get();
         // $users = [];
-        $schedule->job(new SendScheduledMail($users))->dailyAt('20:16');
+        $schedule->job(new SendScheduledMail($users))->weekly();
     }
 
     /**
