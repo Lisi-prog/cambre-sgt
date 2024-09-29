@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
         $users = User::role('TECNICO')->get();
         // $users = [];
         // $schedule->job(new SendScheduledMail($users))->weekly();
-        $schedule->job(new SendScheduledMail($users))->dailyAt('19:26');
+        $schedule->job(new SendScheduledMail($users))->dailyAt('19:53');
     }
 
     /**
