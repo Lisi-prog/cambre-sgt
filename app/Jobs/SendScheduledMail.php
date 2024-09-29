@@ -89,7 +89,8 @@ class SendScheduledMail implements ShouldQueue
                         'total_horas' => substr($datos[0]->total_ac, 0, -3),
                         'chart' => $chartURL
                     ];
-                    Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 1));
+                    //Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 1));
+                    Mail::to(User::find(2)->getEmpleado->email_empleado)->send(new ScheduledMail($data, 1));
                 } else {
                     $data = [
                         'name' => $user->name,
@@ -97,7 +98,8 @@ class SendScheduledMail implements ShouldQueue
                         'fecha_desde' => $fechaHace7Dias,
                         'fecha_hasta' => $fechaHoy,
                     ];
-                    Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 2));
+                    //Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 2));
+                    Mail::to(User::find(2)->getEmpleado->email_empleado)->send(new ScheduledMail($data, 2));
                 }
                 
                 
