@@ -54,8 +54,8 @@ class PropuestaDeMejoraController extends Controller
         $flt_estados = $this->estadosParaSolicitud();
         $flt_estados_sol = Sol_estado_solicitud::orderBy('id_estado_solicitud')->get();
         // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
-
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados', 'flt_estados_sol'));
+        $estados_a_buscar = ["Completo", "Cancelado", "Rechazado", "Aceptado"];
+        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados', 'flt_estados_sol', 'estados_a_buscar'));
     }
 
     public function obtenerEmpleadosActivos(){

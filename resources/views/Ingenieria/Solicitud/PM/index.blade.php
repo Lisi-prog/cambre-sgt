@@ -214,7 +214,11 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input class="pm" name="filter" type="checkbox" value="est1" checked> (Seleccionar todo)</label>
                                                 @foreach ($flt_estados as $estado)
-                                                    <label><input class="pm" name="est1" type="checkbox" value="{{$estado->nombre_estado_solicitud}}" checked> {{$estado->nombre_estado_solicitud}}</label>
+                                                    @if (in_array($estado->nombre_estado_solicitud, $estados_a_buscar))
+                                                        <label><input class="pm" name="est1" type="checkbox" value="{{$estado->nombre_estado_solicitud}}"> {{$estado->nombre_estado_solicitud}}</label>
+                                                    @else
+                                                        <label><input class="pm" name="est1" type="checkbox" value="{{$estado->nombre_estado_solicitud}}" checked> {{$estado->nombre_estado_solicitud}}</label>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>
@@ -246,7 +250,11 @@
                                     @endphp
                                     @foreach ($ListaPM as $Pm)
                                         @if (!is_null($Pm->calificacion))
-                                            <tr>
+                                            @if (in_array($Pm->getSolicitud->getServicio ? $Pm->getSolicitud->getServicio->getEstado() : $Pm->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-', $estados_a_buscar))
+                                                <tr style="display: none">
+                                            @else
+                                                <tr>
+                                            @endif
                                                 <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Pm->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
 
                                                 <td class='text-center' style="vertical-align: middle;">{{$Pm->interes ?? '-'}}</td>
