@@ -243,7 +243,7 @@
                                     <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:1vw">Estado</th>
                                     <th class="text-center" scope="col" style="color:#fff; min-width:3vw">Acciones</th>                                                           
                                 </thead>
-                                <tbody id="accordion">
+                                <tbody id="accordionB">
                                     @php
                                         $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado');
                                         $idCount = 0;
@@ -283,7 +283,7 @@
                                                                 Opciones
                                                             </button>
                                                         </div>
-                                                        <div class="collapse" data-bs-parent="#accordion" id="collapsePM{{$idCount}}">
+                                                        <div class="collapse" data-bs-parent="#accordionB" id="collapsePM{{$idCount}}">
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     @if ($Pm->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
