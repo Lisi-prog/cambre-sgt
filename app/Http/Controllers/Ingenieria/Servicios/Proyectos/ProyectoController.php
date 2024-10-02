@@ -556,7 +556,18 @@ class ProyectoController extends Controller
         $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
         $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
         $flt_estados_mec = Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
- 
+
+        $filtros = [
+            'responsables_etapa' => Vw_etapa::where('id_servicio', $id)->distinct()->pluck('responsable'),
+            'supervisores_trabajo' => Vw_gest_orden_trabajo::where('id_servicio', $id)->distinct()->pluck('supervisor'),
+            'responsables_trabajo' => Vw_gest_orden_trabajo::where('id_servicio', $id)->distinct()->pluck('responsable'),
+            'supervisores_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('supervisor'),
+            'responsables_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('responsable'),
+            'supervisores_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('supervisor'),
+            'responsables_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('responsable')
+        ];
+
+
         foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa) {
             foreach ($etapa->getOrden as $orden) {
                 if ($orden->getOrdenDe->getTipoOrden() == 1) {
@@ -591,7 +602,30 @@ class ProyectoController extends Controller
             $flt_eta_ord_mec = [];
         }
         
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact('proyecto', 'empleados', 'etapas_plk', 'tipo_orden', 'Tipos_servicios', 'estados', 'supervisores', 'supervisores_admin', 'flt_estados', 'flt_supervisores', 'flt_responsables', 'flt_estados_man', 'flt_estados_mec', 'flt_eta_ord_tra', 'flt_eta_ord_man', 'flt_eta_ord_mec', 'opcion', 'costo_estimado', 'costo_real', 'etapas', 'ordenes_trabajo', 'ordenes_manufactura', 'ordenes_mecanizado'));
+        return view('Ingenieria.Servicios.Proyectos.gestionar',compact( 'proyecto',
+                                                                        'empleados',
+                                                                        'etapas_plk',
+                                                                        'tipo_orden',
+                                                                        'Tipos_servicios',
+                                                                        'estados',
+                                                                        'supervisores',
+                                                                        'supervisores_admin',
+                                                                        'flt_estados',
+                                                                        'flt_supervisores',
+                                                                        'flt_responsables',
+                                                                        'flt_estados_man',
+                                                                        'flt_estados_mec',
+                                                                        'flt_eta_ord_tra',
+                                                                        'flt_eta_ord_man',
+                                                                        'flt_eta_ord_mec',
+                                                                        'opcion',
+                                                                        'costo_estimado',
+                                                                        'costo_real',
+                                                                        'etapas',
+                                                                        'ordenes_trabajo',
+                                                                        'ordenes_manufactura',
+                                                                        'ordenes_mecanizado',
+                                                                        'filtros'));
     }
 
     public function costos($id)
@@ -619,7 +653,7 @@ class ProyectoController extends Controller
                 'codigo' => $act_servicio->getActualizacion->id_actualizacion,
                 'fecha_carga' => Carbon::parse($act_servicio->getActualizacion->fecha_carga)->format('Y-m-d H:i'),
                 'descripcion' => $act_servicio->getActualizacion->descripcion,
-                'fecha_limite' => $act_servicio->getActualizacion->fecha_limite,
+                'fecha_limite' => $act_servicio->getActualizacion->fecha_limite ?? '-',
                 'estado' => $act_servicio->getActualizacion->getEstado->nombre_estado,
                 'responsable' => $act_servicio->getActualizacion->getResponsable->getEmpleado->nombre_empleado
             ]);

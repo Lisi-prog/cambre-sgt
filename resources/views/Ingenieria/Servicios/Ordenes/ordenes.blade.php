@@ -462,6 +462,11 @@
         actRow();
     })
 
+    $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
+        actRow();
+    })
+
+
     $(".nuevo-editar-parte").on('submit', function(evt){
             evt.preventDefault();     
             var url_php = $(this).attr("action"); 
@@ -519,6 +524,74 @@
             });
     });
 
+    $(".nuevo-editar-orden").on('submit', function(evt){
+            evt.preventDefault();     
+            // console.log('hola');
+
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    // console.log(data);
+                    html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                            `+data+`
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                    $('#alertOrd').html(html)
+                    setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                    /*
+                    opcion = parseInt(data.resultado);
+                    switch (opcion) {
+                        case 1:
+                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Parte creado con exito
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                            break;
+                        case 2:
+                            id = document.getElementById('m-id-parte').value;
+                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Parte cod. `+id+` actualizado con exito
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                            break;
+                        case 6:
+                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        No se puede actualizar un parte de la cual no eres responsable.
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                            break;
+                        default:
+                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        Ocurrio un error
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                            break;
+                    }
+                    $('#alert').html(html)
+                    recargarPartes(id_orden, data.tipo_orden);
+                    nuevoParte();
+                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                    */
+                }
+            });
+            actRow();
+    });
     } );
     
 </script>

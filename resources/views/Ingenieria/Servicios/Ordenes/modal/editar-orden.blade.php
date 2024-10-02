@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Orden</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'orden.editar', 'method' => 'POST', 'class' => 'formulario']) !!}
+            {!! Form::open(['route' => 'orden.editar', 'method' => 'POST', 'class' => 'formulario nuevo-editar-orden']) !!}
             <div class="modal-body" id="modal-body-editar-orden">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -55,8 +55,11 @@
                     
                 </div>
             </div>
+            <div id="alertOrd" class="mx-3">
+                
+            </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="submit" class="btn btn-success" id="btn-editar-orden">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

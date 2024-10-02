@@ -1085,7 +1085,8 @@ class OrdenController extends Controller
                 # code...
                 break;
         }
-        return redirect()->back()->with('mensaje', 'La orden ha sido editada con exito.');
+        // return redirect()->back()->with('mensaje', 'La orden ha sido editada con exito.');
+        return 'La orden ha sido editada con exito.';
     }
 
     public function eliminarOrden($id_orden){

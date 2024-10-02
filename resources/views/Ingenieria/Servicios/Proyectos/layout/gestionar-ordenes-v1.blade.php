@@ -94,8 +94,8 @@ table.dataTable tbody td {
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ote-ckb" name="filter" type="checkbox" value="ot_sup" checked> (Seleccionar todo)</label>
-                                    @foreach ($flt_supervisores as $supervisor)
-                                        <label><input class="ote-ckb" name="ot_sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                    @foreach ($filtros['supervisores_trabajo'] as $supervisor)
+                                        <label><input class="ote-ckb" name="ot_sup" type="checkbox" value="{{$supervisor}}" checked> {{$supervisor}}</label>
                                     @endforeach
                                 </div>
                             </div>
@@ -112,8 +112,8 @@ table.dataTable tbody td {
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ote-ckb" name="filter" type="checkbox" value="ot_res" checked> (Seleccionar todo)</label>
-                                    @foreach ($flt_responsables as $responsable)
-                                        <label><input class="ote-ckb" name="ot_res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
+                                    @foreach ($filtros['responsables_trabajo'] as $responsable)
+                                        <label><input class="ote-ckb" name="ot_res" type="checkbox" value="{{$responsable}}" checked> {{$responsable}}</label>
                                     @endforeach
                                 </div>
                             </div>
@@ -358,8 +358,8 @@ table.dataTable tbody td {
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="om-ckb" name="filter" type="checkbox" value="om_sup" checked> (Seleccionar todo)</label>
-                                    @foreach ($flt_supervisores as $supervisor)
-                                        <label><input class="om-ckb" name="om_sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                    @foreach ($filtros['supervisores_manufactura'] as $supervisor)
+                                        <label><input class="om-ckb" name="om_sup" type="checkbox" value="{{$supervisor}}" checked> {{$supervisor}}</label>
                                     @endforeach
                                 </div>
                             </div>
@@ -376,8 +376,8 @@ table.dataTable tbody td {
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="om-ckb" name="filter" type="checkbox" value="om_res" checked> (Seleccionar todo)</label>
-                                    @foreach ($flt_responsables as $responsable)
-                                        <label><input class="om-ckb" name="om_res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
+                                    @foreach ($filtros['responsables_manufactura'] as $responsable)
+                                        <label><input class="om-ckb" name="om_res" type="checkbox" value="{{$responsable}}" checked> {{$responsable}}</label>
                                     @endforeach
                                 </div>
                             </div>
@@ -654,8 +654,8 @@ table.dataTable tbody td {
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ome-ckb" name="filter" type="checkbox" value="ome_sup" checked> (Seleccionar todo)</label>
-                                    @foreach ($flt_supervisores as $supervisor)
-                                        <label><input class="ome-ckb" name="ome_sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                    @foreach ($filtros['supervisores_mecanizado'] as $supervisor)
+                                        <label><input class="ome-ckb" name="ome_sup" type="checkbox" value="{{$supervisor}}" checked> {{$supervisor}}</label>
                                     @endforeach
                                 </div>
                             </div>
@@ -672,8 +672,8 @@ table.dataTable tbody td {
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ome-ckb" name="filter" type="checkbox" value="ome_res" checked> (Seleccionar todo)</label>
-                                    @foreach ($flt_responsables as $responsable)
-                                        <label><input class="ome-ckb" name="ome_res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
+                                    @foreach ($filtros['responsables_mecanizado'] as $responsable)
+                                        <label><input class="ome-ckb" name="ome_res" type="checkbox" value="{{$responsable}}" checked> {{$responsable}}</label>
                                     @endforeach
                                 </div>
                             </div>

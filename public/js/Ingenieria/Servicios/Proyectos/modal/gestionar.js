@@ -66,6 +66,32 @@ $(document).ready(function () {
     });
 
     $('#m-ver-act-id_estado').on('change', mostrarOpcionComEtp);
+
+    $(".nuevo-editar-orden").on('submit', function(evt){
+        evt.preventDefault();     
+        // console.log('hola');
+
+        var url_php = $(this).attr("action"); 
+        var type_method = $(this).attr("method"); 
+        var form_data = $(this).serialize();
+
+        $.ajax({
+            type: type_method,
+            url: url_php,
+            data: form_data,
+            success: function(data) {
+                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                        `+data+`
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                $('#alertOrd').html(html)
+                setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+            }
+        });
+        // actRow();
+    });
 });
 
 function mostrarActProyecto(id){

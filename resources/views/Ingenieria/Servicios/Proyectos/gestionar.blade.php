@@ -265,8 +265,8 @@
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                    @foreach ($flt_supervisores as $supervisor)
-                                                        <label><input class="eta-ckb" name="res" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                                    @foreach ($filtros['responsables_etapa'] as $responsable)
+                                                        <label><input class="eta-ckb" name="res" type="checkbox" value="{{$responsable}}" checked> {{$responsable}}</label>
                                                     @endforeach
                                                 </div>
                                             </div>

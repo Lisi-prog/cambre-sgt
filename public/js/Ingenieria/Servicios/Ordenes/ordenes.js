@@ -430,7 +430,9 @@ function obtenerMaquinaria(){
 } 
 
 function actRow(){
-    let id_orden = document.getElementById('m-ver-parte-orden').value;
+    let id_orden = document.getElementById('m-ver-parte-orden').value 
+                    ? document.getElementById('m-ver-parte-orden').value 
+                    : document.getElementById('id_orden_edit').value;
     $.when($.ajax({
         type: "post",
         url: '/parte/obtener-ultimo/'+id_orden,
@@ -438,7 +440,9 @@ function actRow(){
         },
         success: function (response) { 
             // console.log(response) 
+            table.cell(ind_rw, 3).data(response.nombre_orden).draw(false);
             table.cell(ind_rw, 5).data(response.estado).draw(false);
+            table.cell(ind_rw, 7).data(response.responsable).draw(false);
             table.cell(ind_rw, 8).data(response.total_horas).draw(false);
             table.cell(ind_rw, 9).data(response.fecha_limite).draw(false);
         },

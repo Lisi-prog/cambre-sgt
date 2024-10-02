@@ -507,9 +507,11 @@ class ParteController extends Controller
                 break;
         }
         return [
+            'nombre_orden' => $orden->nombre_orden,
             'fecha_limite' => $ultimo_parte->fecha_limite,
             'estado' => $ultimo_parte->getParteDe->getEstado->nombre_estado,
-            'total_horas' => $orden->total_horas
+            'total_horas' => $orden->total_horas,
+            'responsable' => $orden->responsable
         ];
     }
 
