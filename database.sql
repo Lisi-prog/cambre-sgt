@@ -1454,7 +1454,7 @@ BEGIN
     INNER JOIN orden o ON o.id_orden = p.id_orden
     INNER JOIN etapa et ON et.id_etapa = o.id_etapa
     INNER JOIN servicio se ON se.id_servicio = et.id_servicio
-    WHERE fecha_carga >= fecha_d and fecha_carga <= fecha_h
+    WHERE fecha >= fecha_d and fecha <= fecha_h
       AND emp.id_empleado = usuario;
 
     -- Devolver todos los resultados en un solo conjunto
@@ -1474,7 +1474,7 @@ BEGIN
     INNER JOIN orden o ON o.id_orden = p.id_orden
     INNER JOIN etapa et ON et.id_etapa = o.id_etapa
     INNER JOIN servicio se ON se.id_servicio = et.id_servicio
-    WHERE fecha_carga >= fecha_d and fecha_carga <= fecha_h 
+    WHERE fecha >= fecha_d and fecha <= fecha_h 
       AND emp.id_empleado = usuario 
     GROUP BY se.id_servicio;
 END //
