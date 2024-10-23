@@ -483,6 +483,25 @@ CREATE TABLE `em_not_x_empleado` (
     CONSTRAINT `pk_id_em_not_emp_x_emp` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`),
     CONSTRAINT `pk_id_em_not_emp_x_em_noti` FOREIGN KEY (`id_em_notificacion`) REFERENCES `em_notificacion` (`id_em_notificacion`)
 );
+
+CREATE TABLE `not_notificacion` (
+    `id_notificacion` INT AUTO_INCREMENT,
+    `user_id` bigint unsigned,
+    `id_not_cuerpo` int,
+    `tipo` VARCHAR(50),
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(`id_notificacion`),
+    CONSTRAINT `pk_id_not_x_us` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    CONSTRAINT `pk_id_not_x_not_tmp` FOREIGN KEY (`id_not_cuerpo`) REFERENCES `not_notificacion_cuerpo`(`id_not_cuerpo`)
+);
+
+CREATE TABLE `not_notificacion_cuerpo` (
+    `id_not_cuerpo` INT AUTO_INCREMENT,
+    `titulo` VARCHAR(100),
+    `mensaje` VARCHAR(255),
+    `url` VARCHAR(300),
+    primary key(`id_not_cuerpo`)
+);
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)
