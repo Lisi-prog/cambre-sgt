@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Cambre\Empleado;
+use App\Models\Cambre\Not_notificacion;
 
 class User extends Authenticatable
 {
@@ -47,5 +48,10 @@ class User extends Authenticatable
     public function getEmpleado()
     {
         return $this->hasOne(Empleado::class, 'user_id' ,'id');
+    }
+
+    public function getNotificaciones()
+    {
+        return $this->hasMany(Not_notificacion::class, 'user_id' ,'id');
     }
 }

@@ -22,6 +22,7 @@ class Not_notificacion extends Model
         'user_id', 
         'id_not_cuerpo',
         'tipo',
+        'leido',
         'created_at'
     ];
 

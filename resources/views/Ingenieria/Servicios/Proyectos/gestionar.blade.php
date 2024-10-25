@@ -449,11 +449,13 @@
             window.cargarModalNuevaActProyecto = cargarModalNuevaActProyecto;
             window.cargarModalEditarEtapa = cargarModalEditarEtapa;
         </script>
+        
+        <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js')) }}"></script>
 
-        <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
-            
-        </script>
-        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script>
+        {{-- <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script> --}}
+
+        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js')) }}"></script>
+        {{-- <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script> --}}
         <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/FilterGestionar.js') }}"></script>
 
         <script>
@@ -675,7 +677,7 @@
     @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-servicio')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-etapa')
-{{-- @include('layouts.modal.confirmation') --}}
+    {{-- @include('layouts.modal.confirmation') --}}
 @endsection
 
 @section('js')

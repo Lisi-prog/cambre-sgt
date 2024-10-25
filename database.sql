@@ -489,6 +489,7 @@ CREATE TABLE `not_notificacion` (
     `user_id` bigint unsigned,
     `id_not_cuerpo` int,
     `tipo` VARCHAR(50),
+    `leido` boolean default 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id_notificacion`),
     CONSTRAINT `pk_id_not_x_us` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),

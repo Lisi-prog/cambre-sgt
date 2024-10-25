@@ -74,6 +74,7 @@
 <script src="{{ asset('assets/js/prevent_multiple_submits.js') }}"></script>
 <script src="{{ asset('js/change-scripts.js') }}"></script>
 <script src="{{asset('assets/js/excel-bootstrap-table-filter-bundle.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
 <!-- Template JS File -->
 <script src="{{ asset('web/js/stisla.js') }}"></script>

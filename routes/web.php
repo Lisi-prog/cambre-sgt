@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificacionController;
 use App\Mail\ContactanosMailable;
 use App\Mail\Solicitud\AceptarSolicitud;
 use Illuminate\Support\Facades\Mail;
@@ -25,6 +26,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('in
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::post('/notificacion/leido/{id}', [NotificacionController::class, 'marcarComoLeidoNotUsuario'])->name('notificacion.leido');
 
 //route::get('emailprueba', function (){
     /* try {

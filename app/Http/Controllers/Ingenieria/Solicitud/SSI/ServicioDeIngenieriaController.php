@@ -27,6 +27,8 @@ use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Not_notificacion_cuerpo;
+use App\Models\Cambre\Not_notificacion;
 use App\Mail\Solicitud\SsiMailable;
 use App\Models\Cambre\Em_not_x_empleado;
 
@@ -166,6 +168,23 @@ class ServicioDeIngenieriaController extends Controller
             // $email_aviso = explode(',', config('myconfig.ssi_email_admin'));
             Mail::to($email)->send(new SsiMailable($nombre, $codigo, 1));
             Mail::to($email_aviso)->send(new SsiMailable($nombre, $codigo, 4));
+
+            //notificaciones web a supervisores
+            $not_avs = Em_not_x_empleado::where('id_em_notificacion', 1)->get('id_empleado');
+            foreach ($not_avs as $not_av) {
+
+                $notif = Not_notificacion_cuerpo::create([
+                    'titulo' => 'Nuevo SSI',
+                    'mensaje' => $nombre.' ha creado un nuevo ssi con el codigo #'.$codigo.'.',
+                    'url' => '/s_s_i'
+                ]);
+
+                Not_notificacion::create([
+                    'user_id' =>  Empleado::find($not_av->id_empleado)->user_id,
+                    'id_not_cuerpo' => $notif->id_not_cuerpo,
+                    'tipo' => 'noti_web',
+                ]);
+            }
         } catch (\Throwable $th) {
             //throw $th;
         }
