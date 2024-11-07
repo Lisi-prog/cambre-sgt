@@ -503,6 +503,15 @@ CREATE TABLE `not_notificacion_cuerpo` (
     `url` VARCHAR(300),
     primary key(`id_not_cuerpo`)
 );
+
+CREATE TABLE `og_organigrama` (
+    `id_organigrama` INT AUTO_INCREMENT,
+    `id_empleado` INT,
+    `id_supervisor_directo` INT,
+    PRIMARY KEY (`id_organigrama`),
+    CONSTRAINT `pk_id_og_x_emp` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`),
+    CONSTRAINT `pk_id_og_x_supervisor` FOREIGN KEY (`id_supervisor_directo`) REFERENCES `empleado` (`id_empleado`)
+);
 --------------------------------------------------
 -- Insert iniciales
 INSERT INTO tipo_orden_trabajo (nombre_tipo_orden_trabajo)
@@ -741,7 +750,8 @@ select
 	se.codigo_servicio,
     se.nombre_servicio,
     o.id_orden,
-	o.nombre_orden,
+	  o.nombre_orden,
+    et.id_etapa,
     et.descripcion_etapa,
     p_rank.fecha_limite,
     p_rank.fecha_finalizacion,

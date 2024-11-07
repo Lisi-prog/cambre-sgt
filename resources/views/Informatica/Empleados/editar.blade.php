@@ -70,7 +70,7 @@
                             </div>
 
                            <div class="row">
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('telefono', 'Telefono:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         {{-- <span class="obligatorio">*</span> --}}
@@ -80,7 +80,7 @@
                                         ]) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('costo_hora', 'Costo hora:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                         <span class="obligatorio">*</span>
@@ -98,6 +98,15 @@
                                         {!! Form::select('esta_activo', [1 => 'SI', 0 => 'NO'], $empleado->esta_activo, [
                                             'class' => 'form-select form-control',
                                             'required'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        {!! Form::label('sup_di', 'Supervisor directo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::select('sup_di', $supervisores, $empleado->getOrganigrama->getSupervisorDirecto->id_empleado ?? null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control'
                                         ]) !!}
                                     </div>
                                 </div>

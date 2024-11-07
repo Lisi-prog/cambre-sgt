@@ -16,6 +16,7 @@ use App\Models\Cambre\Sector;
 use App\Models\Cambre\Puesto_empleado;
 use App\Models\Cambre\Em_not_x_empleado;
 use App\Models\Cambre\Em_notificacion;
+use App\Models\Cambre\Og_organigrama;
 
 class EmpleadoController extends Controller
 {
@@ -122,11 +123,18 @@ class EmpleadoController extends Controller
         $es_supervisor = $empleado->getUser->hasRole('SUPERVISOR');
         $per_avisos = collect(Em_not_x_empleado::where('id_empleado', $id)->get())->pluck('id_em_notificacion')->all();
         $op_nots = Em_notificacion::orderBy('nombre_em_notificacion')->get();
-        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos', 'es_supervisor', 'per_avisos', 'op_nots'));
+        $supervisores = $this->obtenerSupervisores();
+        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos', 'es_supervisor', 'per_avisos', 'op_nots', 'supervisores'));
     }
     
+    public function obtenerSupervisores(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->pluck('id')->toArray();
+        return Empleado::whereIn('user_id', $usuariosSupervisor)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+    }
+
     public function update(Request $request, $id)
     {
+        // return $request;
         $this->validate($request, [
             'nombre_completo' => 'required',
             'email' => 'required',
@@ -170,6 +178,17 @@ class EmpleadoController extends Controller
             //throw $th;
         }
         
+        if ($request->input('sup_di')) {
+            Og_organigrama::create([
+                'id_empleado' => $id, 
+                'id_supervisor_directo' => $request->input('sup_di')
+            ]);
+        }else{
+            $existe = Og_organigrama::where('id_empleado', $id)->first();
+            if ($existe) {
+                $existe->delete();
+            }
+        }
 
         $empleado->update([
             'nombre_empleado' => $nombre,

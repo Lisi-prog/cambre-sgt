@@ -24,6 +24,7 @@ class Vw_orden_trabajo extends Model
         'codigo_servicio',
         'nombre_servicio',
         'nombre_orden',
+        'id_etapa',
         'descripcion_etapa',
         'fecha_limite',
         'fecha_finalizacion',

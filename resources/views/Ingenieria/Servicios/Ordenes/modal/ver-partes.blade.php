@@ -92,11 +92,13 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                            {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            <span class="obligatorio">*</span>
-                            <select class="form-select" id="m-ver-parte-estado" name="estado">
-                                <option selected="selected" value="">Seleccionar</option>
-                            </select>
+                            <div class="form-group">
+                                {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <span class="obligatorio">*</span>
+                                <select class="form-select" id="m-ver-parte-estado" name="estado">
+                                    <option selected="selected" value="">Seleccionar</option>
+                                </select>
+                            </div>
                         </div>
                         
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">

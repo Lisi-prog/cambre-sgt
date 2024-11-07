@@ -39,10 +39,13 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/etapas/obtener-actualizaciones-etapa/{id}', [EtapaController::class, 'obtenerActualizacionesEtapa']);
     Route::post('/etapa/obtener-una-etapa/{id}',[EtapaController::class, 'obtenerUnaEtapa']);
     Route::post('etapa/actualizar-etapa',[EtapaController::class, 'actualizarEtapa'])->name('etapa.actualizar');
+    Route::post('etapa/etapas-de-servicio/{id}',[EtapaController::class, 'obtenerEtapasDeUnServicio'])->name('etapa.obtenerdeservicio');
+
     Route::resource('etapas', EtapaController::class);
     // RUTAS DE ORDENES
     
     Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
+    Route::get('orden/multiple-parte', [OrdenController::class, 'cargaMultipleParte'])->name('ordenes.multipleparte');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
     Route::post('orden/editar', [OrdenController::class, 'editarOrden'])->name('orden.editar');
@@ -57,6 +60,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
     Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
     Route::post('/orden/obtener-estados-de/{opcion}',[OrdenController::class, 'listarTodosLosEstadosDe']);
+    Route::post('/orden/obtener-ordenes-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeTrabajoUnaEtapa']);
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
     Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
@@ -109,6 +113,7 @@ Route::post('no_au/requerimiento_servicio_mantenimiento/guardar', [Requerimiento
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], function () {
      // RUTAS DE ORDENES
      Route::resource('ordenes', OrdenController::class);
+     Route::get('orden/multiple-parte', [OrdenController::class, 'cargaMultipleParte'])->name('ordenes.multipleparte');
      Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
      Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
      Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
@@ -124,10 +129,12 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
      Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
      Route::post('/orden/obtener-estados-de/{opcion}',[OrdenController::class, 'listarTodosLosEstadosDe']);
+     Route::post('/orden/obtener-ordenes-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeTrabajoUnaEtapa']);
      Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
      Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
      Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
      Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
+     Route::post('etapa/etapas-de-servicio/{id}',[EtapaController::class, 'obtenerEtapasDeUnServicio'])->name('etapa.obtenerdeservicio');
          //RUTAS PARTES
         Route::resource('partes', ParteController::class);
         Route::get('partes/ver/{tipo_orden}', [ParteController::class, 'obtenerPartes'])->name('partes.tipo');

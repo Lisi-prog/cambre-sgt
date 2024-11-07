@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\ScheduledMail;
+use App\Mail\ScheduleMailResSuper;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
-class SendScheduledMail implements ShouldQueue
+class SendScheduledMailResSuper implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -22,11 +23,11 @@ class SendScheduledMail implements ShouldQueue
      *
      * @return void
      */
-    protected $users;
+    protected $user;
     
     public function __construct($users)
     {
-        $this->users = $users;
+        $this->user = $users;
     }
 
     /**
@@ -36,23 +37,15 @@ class SendScheduledMail implements ShouldQueue
      */
     public function handle()
     {
-        /* foreach ($this->users as $user) {
-            $data = [
-                'name' => $user->name,
-                'message' => $user->custom_message
-            ];
-            Mail::to($user->email)->send(new ScheduledMail($data));
-        } */
-
         $codigo = [];
         $porc = [];
         $fechaHoy = date("Y-m-d");
         $fechaHace7Dias = date("Y-m-d", strtotime("-7 days", strtotime($fechaHoy)));
 
-        foreach ($this->users as $user){
+        // foreach ($this->users as $user){
 
-            if ($user->getEmpleado) {
-                $datos = DB::select('CALL ObtenerTotalHorasServicio(?, ?, ?)', [$user->getEmpleado->id_empleado, $fechaHace7Dias, $fechaHoy]);
+            if ($this->user->getEmpleado) {
+                $datos = DB::select('CALL ObtenerTotalHorasServicio(?, ?, ?)', [$this->user->getEmpleado->id_empleado, $fechaHace7Dias, $fechaHoy]);
 
                 foreach ($datos as $ite) {
                     $codigo[] = $ite->codigo_servicio;
@@ -81,7 +74,7 @@ class SendScheduledMail implements ShouldQueue
 
                 if ($datos) {
                     $data = [
-                        'name' => $user->name,
+                        'name' => $this->user->name,
                         'message' => 'prueba',
                         'info' =>  $datos,
                         'fecha_desde' => $fechaHace7Dias,
@@ -89,16 +82,16 @@ class SendScheduledMail implements ShouldQueue
                         'total_horas' => substr($datos[0]->total_ac, 0, -3),
                         'chart' => $chartURL
                     ];
-                    Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 1));
+                    Mail::to('lisandrosilvero@gmail.com')->send(new ScheduleMailResSuper($data, 1));
                     //Mail::to(User::find(2)->getEmpleado->email_empleado)->send(new ScheduledMail($data, 1));
                 } else {
                     $data = [
-                        'name' => $user->name,
+                        'name' => $this->user->name,
                         'message' => 'prueba',
                         'fecha_desde' => $fechaHace7Dias,
                         'fecha_hasta' => $fechaHoy,
                     ];
-                    Mail::to($user->getEmpleado->email_empleado)->send(new ScheduledMail($data, 2));
+                    Mail::to('lisandrosilvero@gmail.com')->send(new ScheduleMailResSuper($data, 2));
                     //Mail::to(User::find(2)->getEmpleado->email_empleado)->send(new ScheduledMail($data, 2));
                 }
                 
@@ -107,6 +100,6 @@ class SendScheduledMail implements ShouldQueue
             
             $codigo = [];
             $porc = [];
-        }
+        // }
     }
 }

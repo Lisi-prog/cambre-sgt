@@ -31,6 +31,7 @@ use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
+use App\Models\Cambre\Vw_orden_trabajo;
 
 class EtapaController extends Controller
 {
@@ -363,5 +364,17 @@ class EtapaController extends Controller
             'id_etapa' => $id_etapa
         ]);
         return redirect()->back()->with('mensaje', 'Actualizacion de la etapa creado exitosamente.');  
+    }
+
+    public function obtenerEtapasDeUnServicio($id){
+
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            return Etapa::where('id_servicio', $id)->orderBy('descripcion_etapa')->get(['descripcion_etapa', 'id_etapa']);
+        } else {
+            $id_empleado = Auth::user()->getEmpleado->id_empleado;
+            $eta_ids = array_unique(Vw_orden_trabajo::responsable($id_empleado)->pluck('id_etapa')->toArray());
+            return Etapa::whereIn('id_etapa', $eta_ids)->where('id_servicio', $id)->orderBy('descripcion_etapa')->get(['descripcion_etapa', 'id_etapa']);
+        }
+        
     }
 }

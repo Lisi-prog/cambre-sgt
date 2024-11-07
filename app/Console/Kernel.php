@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\SendScheduledMail;
+use App\Jobs\SendScheduledMailResSuper;
 use App\Models\User;
 
 class Kernel extends ConsoleKernel
@@ -22,6 +23,9 @@ class Kernel extends ConsoleKernel
         // $users = [];
         $schedule->job(new SendScheduledMail($users))->weekly();
         //$schedule->job(new SendScheduledMail($users))->dailyAt('19:53');
+
+        // $userPrue = User::find(22);
+        // $schedule->job(new SendScheduledMailResSuper($userPrue))->dailyAt('22:18');
     }
 
     /**

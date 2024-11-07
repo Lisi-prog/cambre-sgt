@@ -64,4 +64,8 @@ class Empleado extends Model
     {
         return $query->where('esta_activo', 1);
     }
+    
+    public function getOrganigrama(){
+        return $this->hasOne(Og_organigrama::class, 'id_empleado');
+    }
 }

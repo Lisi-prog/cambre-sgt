@@ -1110,4 +1110,89 @@ class OrdenController extends Controller
             $orden->delete();
             return redirect()->back()->with('mensaje','Se elimino la orden con exito.');
     }
+
+    public function cargaMultipleParte(){
+        $tipo_orden = 1;
+        $id_empleado = Auth::user()->getEmpleado->id_empleado;
+        switch ($tipo_orden) {           
+            case 1:
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                            $ordenes = Vw_orden_trabajo::orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                                                        ->orderBy('prioridad_servicio', 'asc')
+                                                        ->get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                                                                                ->orderBy('prioridad_servicio', 'asc')
+                                                                                ->get();
+                        }
+                        $servicios = Vw_orden_trabajo::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
+                        $tipo = 'Trabajo';
+                        $tipo_orden = 1;
+                        $estados = $this->listarTodosLosEstadosDe(1);
+                        break;
+
+            case 2:
+                //ORDEN DE MANUFACTURA
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                    $ordenes = Vw_orden_manufactura::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
+                }
+                $servicios = Vw_orden_manufactura::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
+                $tipo = 'Manufactura';
+                $tipo_orden = 2;
+                $estados = $this->listarTodosLosEstadosDe(2);
+                break;
+
+            case 3:
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                    $ordenes = Vw_orden_mecanizado::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
+                }
+                $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
+                $tipo = 'Mecanizado';
+                $tipo_orden = 3;
+                $estados = $this->listarTodosLosEstadosDe(3);
+                break;
+
+            case 4:
+                //ORDEN DE MANTENIMIENTO
+                foreach ($array_ordenes as $orden) {
+                    try {
+                        if (count(Orden_mantenimiento::where('id_orden', $orden->id_orden)->get()) == 1) {
+                            array_push($ordenes, $orden);
+                        }
+                    } catch (\Throwable $th) {
+                    }
+                }
+                $tipo = 'Mantenimiento';
+                $estados = $this->listarTodosLosEstadosDe(1);
+                break;
+        }
+        $serv_ids = array_unique($ordenes->pluck('id_servicio')->toArray());
+        $servicios = Servicio::whereIn('id_servicio', $serv_ids)->orderBy('codigo_servicio')->pluck('codigo_servicio','id_servicio');
+        $etapas = Etapa::whereIn('id_servicio', $serv_ids)->pluck('descripcion_etapa', 'id_etapa');
+
+        $etapas_ids = Etapa::whereIn('id_servicio', $serv_ids)->pluck('id_etapa')->toArray();
+        $ordenes = $ordenes->sortBy('nombre_orden')->pluck('nombre_orden','id_orden');
+
+        $estados = $this->listarTodosLosEstadosDe(1);
+        return view('Ingenieria.Servicios.Ordenes.crear-parte-multiple', compact('ordenes', 'servicios', 'etapas', 'estados'));
+    }
+
+    public function obtenerOrdenesDeTrabajoUnaEtapa($id){
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            return Vw_orden_trabajo::where('id_etapa', $id)->orderBy('nombre_orden')->get(['nombre_orden', 'id_orden']);
+        } else {
+            $id_empleado = Auth::user()->getEmpleado->id_empleado;
+            return Vw_orden_trabajo::responsable($id_empleado)->where('id_etapa', $id)->orderBy('nombre_orden')->get(['nombre_orden', 'id_orden']);
+        }
+    }
 }
