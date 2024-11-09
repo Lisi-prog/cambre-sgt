@@ -31,8 +31,38 @@ class EmpleadoController extends Controller
     
     public function index(Request $request)
     {        
+        // Obtener la estructura del organigrama con los empleados y sus supervisores
+        $organigrama = Og_organigrama::with(['empleado', 'supervisor'])->get();
+
+        // Convertir los datos a un formato que Google Charts pueda entender
+        $datosOrganigrama = [];
+
+        $sup_su = Empleado::find(1);
+
+        $datosOrganigrama[] = [
+            'id' => '1',
+            'nombre' => $sup_su->nombre_empleado,
+            'supervisor' => ''
+        ];
+
+        foreach ($organigrama as $relacion) {
+            $empleado = $relacion->empleado;
+            $supervisor = $relacion->supervisor;
+
+            $idEmpleado = (string)$empleado->id_empleado;
+            $nombreEmpleado = $empleado->nombre_empleado;
+            $idSupervisor = $supervisor ? (string)$supervisor->id_empleado : '';
+
+            // Añadir al array de datos
+            $datosOrganigrama[] = [
+                'id' => $idEmpleado,
+                'nombre' => $nombreEmpleado,
+                'supervisor' => $idSupervisor
+            ];
+        }
+        
         $empleados = Empleado::orderBy('id_empleado')->get();
-        return view('Informatica.Empleados.index',compact('empleados'));
+        return view('Informatica.Empleados.index',compact('empleados', 'datosOrganigrama'));
     }
 
     public function create()
@@ -179,10 +209,19 @@ class EmpleadoController extends Controller
         }
         
         if ($request->input('sup_di')) {
-            Og_organigrama::create([
-                'id_empleado' => $id, 
-                'id_supervisor_directo' => $request->input('sup_di')
-            ]);
+            $existe = Og_organigrama::where('id_empleado', $id)->first();
+            if ($existe) {
+                $existe->update([
+                    'id_supervisor_directo' => $request->input('sup_di')
+                ]);
+            } else {
+                Og_organigrama::create([
+                    'id_empleado' => $id, 
+                    'id_supervisor_directo' => $request->input('sup_di')
+                ]);
+            }
+            
+            
         }else{
             $existe = Og_organigrama::where('id_empleado', $id)->first();
             if ($existe) {

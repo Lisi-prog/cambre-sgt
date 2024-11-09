@@ -17,7 +17,7 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-7">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orgChartModal">
-                    Ver Organigrama
+                    Organigrama
                 </button>
             </div>
             

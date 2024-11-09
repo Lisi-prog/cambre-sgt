@@ -31,4 +31,17 @@ class Og_organigrama extends Model
     public function getSupervisorDirecto(){
         return $this->belongsTo(Empleado::class, 'id_supervisor_directo' ,'id_empleado');
     }
+    
+    public function empleado()
+    {
+        return $this->belongsTo(Empleado::class, 'id_empleado');
+    }
+
+    /**
+     * Relación con el modelo Empleado para obtener el supervisor directo
+     */
+    public function supervisor()
+    {
+        return $this->belongsTo(Empleado::class, 'id_supervisor_directo');
+    }
 }

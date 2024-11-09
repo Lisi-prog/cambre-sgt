@@ -1,3 +1,9 @@
+<style>
+  #orgChartContainer {
+    max-height: 400px; /* Ajusta la altura máxima si es necesario */
+    overflow-y: auto; /* Permite el desplazamiento vertical si es necesario */
+  }
+</style>
 <!-- Modal HTML -->
 <div class="modal fade" id="orgChartModal" tabindex="-1" aria-labelledby="orgChartModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -7,10 +13,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="orgChartContainer" style="width: 100%; height: 400px;"></div>
+        <div id="orgChartContainer" style="width: 100%; height: 100%;"></div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      <div class="modal-footer m-auto">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
@@ -25,19 +31,12 @@
     const data = new google.visualization.DataTable();
     data.addColumn('string', 'Name');
     data.addColumn('string', 'Manager');
-    data.addColumn('string', 'ToolTip');
 
-    // Datos del organigrama (Nombre, Supervisor, Tooltip)
-    data.addRows([
-      // (Nombre, Supervisor, Descripción o Tooltip)
-      [{ v: '1', f: 'Juan Pérez<div style="color:red; font-style:italic">Supervisor</div>' }, '', 'CEO'],
-      [{ v: '2', f: 'Carlos García<div style="color:blue; font-style:italic">Supervisor</div>' }, '1', 'Jefe de Tecnología'],
-      [{ v: '3', f: 'María López<div style="color:green; font-style:italic">Supervisor</div>' }, '1', 'Jefa de Finanzas'],
-      [{ v: '4', f: 'Ana Martínez<div style="color:purple; font-style:italic">Supervisor</div>' }, '1', 'Jefa de Operaciones'],
-      [{ v: '5', f: 'Luis Fernández<div>Tecnología</div>' }, '2', 'Desarrollador'],
-      [{ v: '6', f: 'Elena Gómez<div>Contabilidad</div>' }, '3', 'Contadora'],
-      [{ v: '7', f: 'Jorge Ramírez<div>Operaciones</div>' }, '4', 'Gerente de Operaciones']
-    ]);
+    let jsonData = @json($datosOrganigrama);
+
+    jsonData.forEach(row => data.addRows([
+      [{ v: String(row.id), f: String(row.nombre)}, String(row.supervisor)]
+    ]));
 
     const chart = new google.visualization.OrgChart(document.getElementById('orgChartContainer'));
     chart.draw(data, { allowHtml: true });
