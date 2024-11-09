@@ -41,7 +41,7 @@ class ScheduleMailResSuper extends Mailable
                     ->with('data', $this->data);
                 break;
             case 2:
-                return $this->view('emails.noAvances')
+                return $this->view('emails.scheduleSupNoAvan')
                     ->subject('Resumen semanal')
                     ->with('data', $this->data);
                 break;

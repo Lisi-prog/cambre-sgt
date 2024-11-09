@@ -133,9 +133,10 @@ function agregarRenglon(){
     const tabla = document.getElementById('accordion'); 
     const nuevaFila = tabla.insertRow(); // Añadir la primera celda 
     let html_act = '';
-    let element = 'holi'
+    let element = '-'
+    let proyectoRw = document.getElementById('id_servicio').options[document.getElementById('id_servicio').selectedIndex].text;
     html_act += `<tr>
-                    <td class="text-center">`+element+`</td>
+                    <td class="text-center">`+proyectoRw+`</td>
                     <td class="text-center">`+element+`</td>
                     <td class="text-center"><abbr title="`+element+`" style="text-decoration:none; font-variant: none;">`+element.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                     <td class="text-center">`+element+`</td>
@@ -145,5 +146,5 @@ function agregarRenglon(){
                     <td class="text-center">`+element+`</td>
                     <td class="text-center">`+element+`</td>
                 </tr>`
-    tabla.innerHTML = html_act;
+    tabla.innerHTML += html_act;
 }

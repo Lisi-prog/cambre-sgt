@@ -164,9 +164,10 @@
                                                       <p
                                                         style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
                                                       >
-                                                      Este es un <u>resumen</u> de la semana desde {{ $data['fecha_desde'] }} hasta {{ $data['fecha_hasta'] }}. En este rango de fechas el total fue de {{ $data['total_horas'] }} horas.
+                                                      Este es un <u>resumen</u> de la semana desde {{ $data['fecha_desde'] }} hasta {{ $data['fecha_hasta'] }}. En este rango de fechas el total fue de {{ 0 }} horas.
                                                       
-                                                      </p></br>
+                                                      </p>
+                                                    </br>
                                                       <table width="100%" cellspacing="0" cellpadding="0" >
                                                         <tr>
                                                             <td>
@@ -174,7 +175,7 @@
                                                                   <tbody>
                                                                     <tr>
                                                                       <td style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left;"><b style="margin-right: 20px">Total de horas:</b></td>
-                                                                      <td style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left">{{ $data['total_horas'] }} hs.</td>
+                                                                      <td style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left">{{0}} hs.</td>
                                                                     </tr>
                                                                   </tbody>
                                                                 </table>
@@ -182,44 +183,7 @@
                                                         </tr>
                                                       </table>
                                                     </br>
-                                                      <p
-                                                        style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left"
-                                                      >
-                                                      Que se distribuyeron en: 
-                                                      </p>
-                                                      <table width="100%" cellspacing="0" cellpadding="0">
-                                                        <tr>
-                                                            <td style="text-align: center;">
-                                                              <table style="border: 1px solid black; border-collapse: collapse; width: 100%;">
-                                                                <thead style="height:50px;">
-                                                                    <th class='ml-3 text-center' style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Proyecto</th>
-                                                                    <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Horas</th>
-                                                                    <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Porcentaje</th>
-                                                                </thead>
-                                                                <tbody >
-                                                                    @foreach ($data['info'] as $item)
-                                                                        <tr style="">
-                                                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->codigo_servicio}}</td>
-                                                        
-                                                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->h_total}}</td>
-                                                        
-                                                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->porcentaje}}%</td>
-                                                        
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                              </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    </br>
-                                                    <section style="margin-top: 10px">
-                                                      <div class="section-header">
-                                                      </div>
-                                                      <div class="section-body" style="width: 30vw; height: 10vw; position: relative;">
-                                                          <img src="{{$data['chart']}}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-                                                      </div>
-                                                    </section>
+                                                      
 
                                                     @foreach ($data['datos_sub'] as $dsub)
                                                       </br>
@@ -242,7 +206,7 @@
                                                               </td>
                                                           </tr>
                                                         </table>
-                                                      </br>
+                                                        </br>
                                                         @if ($dsub['total_horas']  != 0 || $dsub['total_horas'] === '00:00')
                                                           <p
                                                           style="box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Roboto,Helvetica,Arial,sans-serif,&#39;Apple Color Emoji&#39;,&#39;Segoe UI Emoji&#39;,&#39;Segoe UI Symbol&#39;;font-size:16px;line-height:1.5em;margin-top:0;text-align:left">

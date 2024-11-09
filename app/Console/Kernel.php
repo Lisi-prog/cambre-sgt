@@ -24,8 +24,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SendScheduledMail($users))->weekly();
         //$schedule->job(new SendScheduledMail($users))->dailyAt('19:53');
 
-        // $userPrue = User::find(22);
-        // $schedule->job(new SendScheduledMailResSuper($userPrue))->dailyAt('22:18');
+        $userPrue = User::role('SUPERVISOR')->get();
+        // $schedule->job(new SendScheduledMailResSuper($userPrue))->dailyAt('00:35');
+        $schedule->job(new SendScheduledMailResSuper($userPrue))->weekly();
     }
 
     /**
