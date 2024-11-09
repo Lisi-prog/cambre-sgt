@@ -16,6 +16,9 @@
                 {!! Form::close() !!}
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-7">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orgChartModal">
+                    Ver Organigrama
+                </button>
             </div>
             
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
@@ -120,7 +123,9 @@
             </div>
         </div>
     </div>
+    
 </section>
+@include('Informatica.Empleados.modal.m-org')
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
 
 {{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}

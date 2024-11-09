@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.css')}}" />
     @yield('css')
     <link rel="stylesheet" href="{{asset('assets/css/excel-bootstrap-table-filter-style.css')}}"/>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body id="body" class="sidebar-mini">
