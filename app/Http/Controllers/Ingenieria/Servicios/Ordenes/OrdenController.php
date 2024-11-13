@@ -50,6 +50,8 @@ use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_manufactura;
 use App\Mail\Solicitud\OrdenMailable;
+use App\Models\Cambre\Not_notificacion_cuerpo;
+use App\Models\Cambre\Not_notificacion;
 
 class OrdenController extends Controller
 {
@@ -393,6 +395,19 @@ class OrdenController extends Controller
             try {
                 $email = $orden->getEmailResponsable();
                 Mail::to($email)->send(new OrdenMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $nom_orden, $tipo_ord, 1));
+                $nom_not_cr = Auth::user()->getEmpleado->nombre_empleado;
+                $notif = Not_notificacion_cuerpo::create([
+                    'titulo' => 'Nueva Orden de trabajo',
+                    'mensaje' => $nom_not_cr.' ha creado una nueva orden de trabajo: "'.$nom_orden.'".',
+                    'url' => '/ordenes/1'
+                ]);
+                
+                Not_notificacion::create([
+                    'user_id' =>  Empleado::find($id_responsable)->user_id,
+                    'id_not_cuerpo' => $notif->id_not_cuerpo,
+                    'tipo' => 'noti_web',
+                ]);
+                
             } catch (\Throwable $th) {
                  //throw $th;
             }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 //agregamos
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Cambre\Not_notificacion;
 
@@ -22,7 +23,9 @@ class NotificacionController extends Controller
     }
     
     public function index(Request $request)
-    {        
+    {   
+        $notificaciones = Not_notificacion::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        return view('Informatica.Notificaciones.index', compact('notificaciones'));
     }
 
     public function create()

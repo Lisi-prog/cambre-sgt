@@ -76,7 +76,9 @@
         border-radius: 20px; /* Redondear las esquinas del thumb */
         border: 3px solid #fff; /* Espacio entre el thumb y el track */
     }
-    
+    .ir-not:hover{
+        color: #555758;
+    }
 
 </style>
 <form class="form-inline mr-auto" action="#">
@@ -106,7 +108,17 @@
                         @endif
                     </a>
                     <ul class="dropdown-menu notify">
-                        <li class="dropdown-title">Notificaciones</li> 
+                        <div class="row my-auto">
+                            <div class="col-10 my-auto">
+                                <li class="dropdown-title">Notificaciones</li> 
+                            </div>
+                            <div class="col-2 my-auto">
+                                <a href="/notificaciones" class="" style="color: #191d21; text-decoration: none;">
+                                    <i class="fas fa-expand-arrows-alt fs-6 ir-not"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
                         <div class="notification-container">
                             @if (count(\Illuminate\Support\Facades\Auth::user()->getNotificaciones) != 0)
                                 @foreach (\Illuminate\Support\Facades\Auth::user()->getNotificaciones->sortByDesc('created_at') as $not)

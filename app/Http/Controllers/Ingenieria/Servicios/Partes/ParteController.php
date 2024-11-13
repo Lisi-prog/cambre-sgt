@@ -37,6 +37,8 @@ use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_manufactura;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Mail\Solicitud\ParteMailable;
+use App\Models\Cambre\Not_notificacion_cuerpo;
+use App\Models\Cambre\Not_notificacion;
 
 class ParteController extends Controller
 {
@@ -808,25 +810,50 @@ class ParteController extends Controller
         $codigo_pr = $parte->getOrden->getEtapa->getServicio->id_servicio;
         $etapa = $parte->getOrden->getEtapa->descripcion_etapa;
         $orden = $parte->getOrden->nombre_orden;
-
+        $empleado = $parte->getOrden->getObjSupervisor();
+        $obj_res = $parte->getOrden->getObjResponsable();
         switch ($opcion) {
             case 1:
                 $tipo_ord = 1;
                 $tipo = 'trabajo';
                 
-                if ($estado == 6 || $estado == 7) {
+                if ($estado == 6 || $estado == 7) { //Revisar y problema se notifica al supervisor
                     try {
                         $email = $parte->getOrden->getEmailSupervisor();
                         Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $orden, $tipo_ord, 1));
+
+                        $notif = Not_notificacion_cuerpo::create([
+                            'titulo' => 'Cambio estado Orden de trabajo',
+                            'mensaje' => $responsable.' ha cambiado el estado de la orden "'.$orden.'" a '.$estado_nom.'.',
+                            'url' => '/ordenes/1'
+                        ]);
+                        
+                        Not_notificacion::create([
+                            'user_id' =>  $empleado->user_id,
+                            'id_not_cuerpo' => $notif->id_not_cuerpo,
+                            'tipo' => 'noti_web',
+                        ]);
                     } catch (\Throwable $th) {
                          //throw $th;
                     }
                 }
         
-                if ($estado == 1 || $estado == 9 || $estado == 10) {
+                if ($estado == 1 || $estado == 9 || $estado == 10) { //En proceso, Completo y cancelado se notifica al responsable
                     try {
                         $email = $parte->getOrden->getEmailResponsable();
                         Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $orden, $tipo_ord, 2));
+
+                        $notif = Not_notificacion_cuerpo::create([
+                            'titulo' => 'Cambio estado Orden de trabajo',
+                            'mensaje' => $nombre.' ha cambiado el estado de la orden "'.$orden.'" a '.$estado_nom.'.',
+                            'url' => '/ordenes/1'
+                        ]);
+                        
+                        Not_notificacion::create([
+                            'user_id' =>  $obj_res->user_id,
+                            'id_not_cuerpo' => $notif->id_not_cuerpo,
+                            'tipo' => 'noti_web',
+                        ]);
                     } catch (\Throwable $th) {
                          //throw $th;
                     }

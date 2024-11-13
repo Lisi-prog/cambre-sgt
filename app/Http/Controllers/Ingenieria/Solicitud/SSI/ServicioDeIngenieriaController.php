@@ -171,14 +171,12 @@ class ServicioDeIngenieriaController extends Controller
 
             //notificaciones web a supervisores
             $not_avs = Em_not_x_empleado::where('id_em_notificacion', 1)->get('id_empleado');
+            $notif = Not_notificacion_cuerpo::create([
+                'titulo' => 'Nuevo SSI',
+                'mensaje' => $nombre.' ha creado un nuevo ssi con el codigo #'.$codigo.'.',
+                'url' => '/s_s_i'
+            ]);
             foreach ($not_avs as $not_av) {
-
-                $notif = Not_notificacion_cuerpo::create([
-                    'titulo' => 'Nuevo SSI',
-                    'mensaje' => $nombre.' ha creado un nuevo ssi con el codigo #'.$codigo.'.',
-                    'url' => '/s_s_i'
-                ]);
-
                 Not_notificacion::create([
                     'user_id' =>  Empleado::find($not_av->id_empleado)->user_id,
                     'id_not_cuerpo' => $notif->id_not_cuerpo,

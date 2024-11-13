@@ -28,6 +28,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/notificacion/leido/{id}', [NotificacionController::class, 'marcarComoLeidoNotUsuario'])->name('notificacion.leido');
+Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificacion.index');
 
 //route::get('emailprueba', function (){
     /* try {
