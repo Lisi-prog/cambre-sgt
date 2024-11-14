@@ -460,8 +460,11 @@
 
         <script>
             // let oord = Array();
+            let ind_rw = '';
+            let opt_act = 0;
             $(document).ready(function () {
                 let opcion = '{{$opcion}}';
+                
                 var url = '{{route('proyecto.indexprefijo', ':opcion')}}';
                 url = url.replace(':opcion', opcion);
                 document.getElementById('volver').href = url;
@@ -504,7 +507,7 @@
                         order: [[4, 'asc']],
                 });
 
-                $('#tablaOrdenTrabajo').DataTable({
+                var tableOrdTra = $('#tablaOrdenTrabajo').DataTable({
                     paging: false,
                     scrollCollapse: true,
                     scrollY: '400px',
@@ -524,6 +527,10 @@
                         },
                         "aaSorting": []
                 });
+
+                tableOrdTra.on('draw',function () {
+                    changeTdColor();
+                } )
 
                 $('#tablaOrdenMan').DataTable({
                     paging: false,
@@ -567,28 +574,68 @@
                         "aaSorting": []
                 });
 
-                //Excel filter
-                /* var noCheck = [
-                    'Cancelado',
-                    'Completo',
-                ];
-                var colSelect = [
-                    'Etapa'
-                ]
-                $('#tablaEtapas').excelTableFilter({
-                    no_check: noCheck,
-                    columnSelector: '.apply-filter',
-                }); */
+                $('#tablaOrdenTrabajo tbody').on('click', 'tr', function () {
+                        ind_rw = tableOrdTra.row(this).index();
+                        opt_act = 1;
+                });
+
+                $('#verPartesModal').on('hidden.bs.modal', function (e) {
+                    switch (opt_act) {
+                        case 1:
+                            actRowOrdTra(tableOrdTra);
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                })
+
+                $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
+                    switch (opt_act) {
+                        case 1:
+                            actRowOrdTra(tableOrdTra);
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                })
+                
                 $('#verActEtapaOrdenModal').on('hidden.bs.modal', function (e) {
                     // console.log('holi');
                     document.getElementById('m-ver-act-eta-descripcion').value = '';
                     document.getElementById('m-ver-act-eta-div').hidden = true;
                 });
+
                 $('#crearEtapaModal').on('hidden.bs.modal', function (e) {
                     // console.log('holi');
                     document.getElementById('m-crear-eta-idestado').value = 2;
                 });
             });
+
+            function actRowOrdTra(LaTabla){
+                let id_orden = document.getElementById('m-ver-parte-orden').value 
+                                ? document.getElementById('m-ver-parte-orden').value 
+                                : document.getElementById('id_orden_edit').value;
+                $.when($.ajax({
+                    type: "post",
+                    url: '/orden/obtener-orden-tra/'+id_orden,
+                    data: {
+                    },
+                    success: function (response) { 
+                        // console.log(response)
+                        LaTabla.cell(ind_rw, 0).data(response.nombre_orden).draw(false);
+                        LaTabla.cell(ind_rw, 2).data(response.nombre_estado).draw(false);
+                        LaTabla.cell(ind_rw, 3).data(response.supervisor).draw(false);
+                        LaTabla.cell(ind_rw, 4).data(response.responsable).draw(false);
+                        LaTabla.cell(ind_rw, 5).data(response.fecha_limite).draw(false);
+                        LaTabla.cell(ind_rw, 6).data(response.fecha_finalizacion).draw(false);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                }));
+            }
         </script>
 
         <script>

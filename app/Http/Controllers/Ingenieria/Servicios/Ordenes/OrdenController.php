@@ -1210,4 +1210,8 @@ class OrdenController extends Controller
             return Vw_orden_trabajo::responsable($id_empleado)->where('id_etapa', $id)->orderBy('nombre_orden')->get(['nombre_orden', 'id_orden']);
         }
     }
+
+    public function obtenerUnaOrdenDeLaVista($id){
+        return Vw_orden_trabajo::find($id);
+    }
 }
