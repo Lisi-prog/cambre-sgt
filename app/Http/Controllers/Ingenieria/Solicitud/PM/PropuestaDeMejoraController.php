@@ -25,11 +25,14 @@ use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Activo;
+use App\Models\Cambre\Not_notificacion_cuerpo;
+use App\Models\Cambre\Not_notificacion;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
 use App\Mail\Solicitud\PmMailable;
+use App\Models\Cambre\Em_not_x_empleado;
 
 class PropuestaDeMejoraController extends Controller
 {
@@ -124,9 +127,6 @@ class PropuestaDeMejoraController extends Controller
             'id_sector' => $sector
         ]);
 
-        //return $Solicitud;
-        //$permisos = Permission::orderBy('name', 'asc')->get();
-        //$Prioridades = Prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
         return redirect()->route('p_m.index')->with('mensaje', 'Propuesta de mejora creada exitosamente.');
     }
     
@@ -320,14 +320,40 @@ class PropuestaDeMejoraController extends Controller
                                 'id_activo' => $id_activo
                             ]); 
 
-        
+
         try {
+            $email_aviso = Em_not_x_empleado::where('id_em_notificacion', 2)
+                                                    ->with('getEmpleado:id_empleado,email_empleado')
+                                                    ->get()
+                                                    ->pluck('getEmpleado.email_empleado')
+                                                    ->all();
+
             $nombre = $solicitud->getEmpleado->nombre_empleado;
             $codigo = $solicitud->id_solicitud;
             $email = strval(Auth::user()->getEmpleado->email_empleado);
             Mail::to($email)->send(new PmMailable($nombre, $codigo, 1));
+
+            Mail::to($email_aviso)->send(new PmMailable($nombre, $codigo, 4));
+
+            //notificaciones web a supervisores
+            $not_avs = Em_not_x_empleado::where('id_em_notificacion', 2)->get('id_empleado');
+
+            $notif = Not_notificacion_cuerpo::create([
+                'titulo' => 'Nuevo PM',
+                'mensaje' => $nombre.' ha creado un nuevo pm con el codigo #'.$codigo.'.',
+                'url' => '/p_m'
+            ]);
+
+            foreach ($not_avs as $not_av) {
+                Not_notificacion::create([
+                    'user_id' =>  Empleado::find($not_av->id_empleado)->user_id,
+                    'id_not_cuerpo' => $notif->id_not_cuerpo,
+                    'tipo' => 'noti_web',
+                ]);
+            }
+
         } catch (\Throwable $th) {
-            //throw $th;
+            
         }
         
         return redirect()->route('p_m.index')->with('mensaje', 'Propuesta de mejora creado exitosamente.');                      
@@ -403,11 +429,7 @@ class PropuestaDeMejoraController extends Controller
     
     public function destroy($id)
     {
-        $permiso = Permission::findOrFail($id);
-
-        Permission::destroy($id);
-
-        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
+                    
     }
 
     public function verEvaluar($id){

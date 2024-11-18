@@ -46,6 +46,10 @@ class PmMailable extends Mailable implements ShouldQueue
                 return $this->subject('Cambio de estado PM #'.$this->codigo)
                         ->view('Ingenieria.Solicitud.PM.mail.rechazarPm');
                 break;
+            case 4:
+                return $this->subject('Nuevo PM #'.$this->codigo)
+                        ->view('Ingenieria.Solicitud.PM.mail.crearPmSup');
+                break;
         }
     }
 }
