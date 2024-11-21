@@ -24,10 +24,11 @@ function changeTdColor() {
 
     indexFilaEncabezados.push(values.length);
     indexColumnaEstados = dameIndexColumnas(values,indexFilaEncabezados, text_var);
-
+    
     for (let y = 0; y < indexColumnaEstados.length; y++) {
         for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) {
-            values[x].children[indexColumnaEstados[y]].style.color = "#fff";
+            if (values[x].children[indexColumnaEstados[y]]) {
+                values[x].children[indexColumnaEstados[y]].style.color = "#fff";
                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Continua") { // check if td has desired value
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#746cd6"; // if matches, change color
                      }
@@ -114,6 +115,7 @@ function changeTdColor() {
                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Aceptado") { // check if td has desired value
                         values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#92d050"; // if matches, change color
                     }
+            }
         }
     }
     
@@ -159,30 +161,32 @@ function calcularDiferenciaFechas(){
 
     for (let y = 0; y < indexColumnaFechaLimite.length; y++) {
         for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) { // iterate all thorugh td
-            values[x].children[indexColumnaFechaLimite[y]].style.color = "#fff";
-            fechaLimite = new Date(values[x].children[indexColumnaFechaLimite[y]].innerHTML).getTime();
-            try {
-                fechaFinalizacion = new Date(values[x].children[indexColumnaFechaFinalizacion[y]].innerHTML).getTime();                
-            } catch (error) {
+            if (values[x].children[indexColumnaFechaLimite[y]]) {
+                values[x].children[indexColumnaFechaLimite[y]].style.color = "#fff";
+                fechaLimite = new Date(values[x].children[indexColumnaFechaLimite[y]].innerHTML).getTime();
+                try {
+                    fechaFinalizacion = new Date(values[x].children[indexColumnaFechaFinalizacion[y]].innerHTML).getTime();                
+                } catch (error) {
 
-            }            
-            estado = values[x].children[indexColumnaEstados[y]].innerHTML
-            diff = fechaLimite - fechaHoy;
-            diasDife = diff/(1000*60*60*24);
-            if(fechaFinalizacion || estado =='Completo'){
-                values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#bebebe";
-               
-            }else{
-                if (diasDife >= 10) {
-                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#109E09";
-                }
+                }            
+                estado = values[x].children[indexColumnaEstados[y]].innerHTML
+                diff = fechaLimite - fechaHoy;
+                diasDife = diff/(1000*60*60*24);
+                if(fechaFinalizacion || estado =='Completo'){
+                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#bebebe";
+                
+                }else{
+                    if (diasDife >= 10) {
+                        values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#109E09";
+                    }
 
-                if (diasDife < 10) {
-                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E46B11";
-                }
+                    if (diasDife < 10) {
+                        values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E46B11";
+                    }
 
-                if (diasDife <= 5) {
-                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E41111";
+                    if (diasDife <= 5) {
+                        values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E41111";
+                    }
                 }
             }
         }
