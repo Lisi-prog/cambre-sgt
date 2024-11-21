@@ -155,7 +155,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('prioridad', "Prioridad Nº:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', $proyecto->prioridad_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('prioridad', $proyecto->prioridad_servicio ?? 'S/P', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -179,14 +179,18 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('costo_estimado', "Costo estimado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_estimado', $costo_estimado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {{-- {!! Form::label('costo_estimado', "Costo estimado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('costo_estimado', $costo_estimado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
+                                        {!! Form::label('horas_estimada', "Horas estimadas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('horas_estimada', $horas_estimada ?? '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('costo_real', "Costo real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_real', $costo_real, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {{-- {!! Form::label('costo_real', "Costo real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('costo_real', $costo_real, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
+                                        {!! Form::label('horas_real', "Horas real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        {!! Form::text('horas_real', $horas_real ?? '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -290,8 +294,8 @@
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Ultima actualizacion</th>
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo estimado</th>
-                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Costo real</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Horas estimadas</th>
+                                        <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Horas reales</th>
                                         <th class="text-center" scope="col" style="color:#fff; min-width:6vw">Acciones</th>                                                           
                                     </thead>
                                     <tbody id="accordion">
@@ -321,9 +325,9 @@
 
                                                 <td class= 'text-center' style="vertical-align: middle;">{{$etapa->fecha_ult_act}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->costo_etimado}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->horas_estimada}}</td>
                                                 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->costo_real}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->horas_real}}</td>
 
                                                 <td class='text-center' style="vertical-align: middle;">
                                                     <div class="row justify-content-center">

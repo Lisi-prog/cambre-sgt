@@ -242,7 +242,7 @@
                                         @endphp
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio ?? 'S/P'}}</td>
 
                                                 @if ($opcion == 3)
                                                     <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSolicitud->id_solicitud ?? '-'}}</td>

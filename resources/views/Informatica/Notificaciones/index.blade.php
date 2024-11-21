@@ -35,7 +35,7 @@
                             <table id="tabla-not" class="table table-striped mt-2">
                                 <thead style="background-color: #00628c">
                                     <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:3vw">Fecha</th>
-                                    <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:3vw">Cod.</th>
+                                    {{-- <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:3vw">Cod.</th> --}}
                                     <th class="text-center apply-filter" scope="col" style="color:#fff;min-width:1vw">Titulo</th>
                                     <th class="text-center apply-filter" scope="col" style="color:#fff;min-width:6vw">Mensaje</th>
                                     <th class="text-center apply-filter" scope="col" style="color:#fff;min-width:6vw">Leido</th>
@@ -49,7 +49,7 @@
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($not->created_at)->format('Y-m-d H:i')}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$not->id_notificacion ?? '-'}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$not->id_notificacion ?? '-'}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$not->getCuerpo->titulo ?? '-'}}</td>
 

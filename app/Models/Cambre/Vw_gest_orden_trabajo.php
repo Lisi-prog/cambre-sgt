@@ -4,6 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Casts\HoraMinutoCast;
 
 
 class Vw_gest_orden_trabajo extends Model
@@ -36,7 +37,12 @@ class Vw_gest_orden_trabajo extends Model
         'nombre_estado',
         'total_horas',
         'costo_estimado',
-        'costo_real'
+        'costo_real',
+        'horas_estimada',
+        'horas_real'
     ];
 
+    protected $casts = [
+        'horas_estimada' => HoraMinutoCast::class
+    ];
 }

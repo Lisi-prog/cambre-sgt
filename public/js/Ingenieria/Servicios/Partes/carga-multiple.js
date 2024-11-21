@@ -130,21 +130,31 @@ function vaciarComboSinPlaceholder(comboId) {
 }
 
 function agregarRenglon(){
-    const tabla = document.getElementById('accordion'); 
+    const tabla = document.getElementById('accordionParte'); 
     const nuevaFila = tabla.insertRow(); // Añadir la primera celda 
     let html_act = '';
-    let element = '-'
-    let proyectoRw = document.getElementById('id_servicio').options[document.getElementById('id_servicio').selectedIndex].text;
+    let element = '-';
+    let pr = 'proyecto'
+    let et = 'etapa'
+    let ord = 'orden'
+    let obs = 'observaciones'
+    let est = 'estado'
+    let fc_li = 'fecha limite'
+    let fc = 'fecha'
+    let ho = '00:00'
+    // let proyectoRw = document.getElementById('id_servicio').options[document.getElementById('id_servicio').selectedIndex].text;
     html_act += `<tr>
-                    <td class="text-center">`+proyectoRw+`</td>
-                    <td class="text-center">`+element+`</td>
-                    <td class="text-center"><abbr title="`+element+`" style="text-decoration:none; font-variant: none;">`+element.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                    <td class="text-center">`+element+`</td>
-                    <td class="text-center">`+element+`</td>
-                    <td class="text-center">`+element+`</td>
-                    <td class="text-center">`+element+`</td>
-                    <td class="text-center">`+element+`</td>
+                    <td class="text-center">`+pr+`</td>
+                    <td class="text-center">`+et+`</td>
+                    <td class="text-center"><abbr title="`+ord+`" style="text-decoration:none; font-variant: none;">`+ord.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                    <td class="text-center">`+obs+`</td>
+                    <td class="text-center">`+est+`</td>
+                    <td class="text-center">`+fc_li+`</td>
+                    <td class="text-center">`+fc+`</td>
+                    <td class="text-center">`+ho+`</td>
                     <td class="text-center">`+element+`</td>
                 </tr>`
     tabla.innerHTML += html_act;
 }
+
+

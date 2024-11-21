@@ -31,7 +31,9 @@ class Vw_etapa extends Model
         'fecha_ult_act',
         'fecha_finalizacion',
         'costo_real',
-        'costo_etimado'
+        'costo_etimado',
+        'horas_estimada',
+        'horas_real'
     ];
 
     public function getProgreso(){

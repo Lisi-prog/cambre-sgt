@@ -902,12 +902,12 @@ class OrdenController extends Controller
             case 1:
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                            $ordenes = Vw_orden_trabajo::orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                            $ordenes = Vw_orden_trabajo::orderByRaw("CASE WHEN nombre_estado = 'Continua' OR prioridad_servicio IS NULL THEN 1 ELSE 0 END")
                                                         ->orderBy('prioridad_servicio', 'asc')
                                                         ->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' OR prioridad_servicio IS NULL THEN 1 ELSE 0 END")
                                                                                 ->orderBy('prioridad_servicio', 'asc')
                                                                                 ->get();
                         }
@@ -1127,8 +1127,21 @@ class OrdenController extends Controller
     }
 
     public function cargaMultipleParte(){
-        $tipo_orden = 1;
         $id_empleado = Auth::user()->getEmpleado->id_empleado;
+        $supervisores = $this->obtenerSupervisores();
+        $responsables = $this->obtenerEmpleados();
+        $codigos_servicio = $this->obtenerCodigoServicio();
+        //$estados = $this->listarTodosLosEstados();
+        $tipo = '';
+        $servicios = '';
+        $array_responsabilidades_ordenes = array();
+        $array_ordenes = array();
+        $ordenes = array();
+
+        $tipo_orden = 1;
+        
+       
+        //FILTRAMOS LAS ORDENES POR TIP0
         switch ($tipo_orden) {           
             case 1:
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
@@ -1191,15 +1204,9 @@ class OrdenController extends Controller
                 $estados = $this->listarTodosLosEstadosDe(1);
                 break;
         }
-        $serv_ids = array_unique($ordenes->pluck('id_servicio')->toArray());
-        $servicios = Servicio::whereIn('id_servicio', $serv_ids)->orderBy('codigo_servicio')->pluck('codigo_servicio','id_servicio');
-        $etapas = Etapa::whereIn('id_servicio', $serv_ids)->pluck('descripcion_etapa', 'id_etapa');
-
-        $etapas_ids = Etapa::whereIn('id_servicio', $serv_ids)->pluck('id_etapa')->toArray();
-        $ordenes = $ordenes->sortBy('nombre_orden')->pluck('nombre_orden','id_orden');
-
-        $estados = $this->listarTodosLosEstadosDe(1);
-        return view('Ingenieria.Servicios.Ordenes.crear-parte-multiple', compact('ordenes', 'servicios', 'etapas', 'estados'));
+        
+        return view('Ingenieria.Servicios.Ordenes.crear-parte-multiple', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));
+        // return view('Ingenieria.Servicios.Ordenes.crear-parte-multiple', compact('ordenes', 'servicios', 'etapas', 'estados'));
     }
 
     public function obtenerOrdenesDeTrabajoUnaEtapa($id){

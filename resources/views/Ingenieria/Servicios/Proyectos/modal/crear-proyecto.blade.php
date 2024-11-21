@@ -128,13 +128,35 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                        <div class="form-group">
+                            {!! Form::label('opt', 'Opciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=1 id="siGestionar" checked name="gesti">
+                                <label class="form-check-label" for="siGestionar">
+                                Gestionar despues de guardar.
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=1 id="siGestionar" name="sin-pri">
+                                <label class="form-check-label" for="siGestionar">
+                                    Sin prioridad.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    </div>
+                </div>
             </div>
+            
             <div class="modal-footer">
                 <div class="form-check pe-3">
-                    <input class="form-check-input" type="checkbox" value=1 id="siGestionar" checked name="gesti">
+                    {{-- <input class="form-check-input" type="checkbox" value=1 id="siGestionar" checked name="gesti">
                     <label class="form-check-label" for="siGestionar">
                       Gestionar despues de guardar.
-                    </label>
+                    </label> --}}
                   </div>
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

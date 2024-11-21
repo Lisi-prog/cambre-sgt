@@ -204,7 +204,7 @@
                                     @endphp
                                     @foreach ($ordenes as $orden)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             

@@ -1003,48 +1003,49 @@ inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
 CREATE VIEW vw_etapa AS
-WITH 
-ActualizacionRanked AS (
-	SELECT
-		act_s.id_etapa,
-		act_s.id_actualizacion_etapa,
-		act_s.id_actualizacion,
-		ROW_NUMBER() OVER (PARTITION BY act_s.id_etapa ORDER BY act_s.id_actualizacion DESC) AS rn
-	FROM actualizacion_etapa AS act_s
-)
-    select
-		et.id_etapa, 
-		se.id_servicio,
-        et.descripcion_etapa, 
-        case 
-			when et.fecha_inicio is null then '-'
-            else et.fecha_inicio
-		end as fecha_inicio,
-        est.id_estado,
-        est.nombre_estado,
-        emp.id_empleado as id_responsable,
-        emp.nombre_empleado as responsable,
-        case 
-			when act.fecha_limite is null then '-'
-            else act.fecha_limite
-		end as fecha_limite,
-        act.fecha_carga as fecha_ult_act,
-		ObtenerFechaFinalizacionEtapa(et.id_etapa) as fecha_finalizacion,
-        case
-			when round(TotalCostoRealEtapa(et.id_etapa), 2) is null then 0
-            else round(TotalCostoRealEtapa(et.id_etapa), 2)
-        end as costo_real,
-        case
-			when round(TotalCostoEstimadoEtapa(et.id_etapa), 2) is null then 0
-            else round(TotalCostoEstimadoEtapa(et.id_etapa), 2)
-        end as costo_etimado
-        from etapa et
-        INNER JOIN servicio se ON se.id_servicio = et.id_servicio
-        INNER JOIN ActualizacionRanked AS act_se ON act_se.id_etapa = et.id_etapa AND act_se.rn = 1
-        INNER JOIN actualizacion AS act ON act.id_actualizacion = act_se.id_actualizacion
-        INNER JOIN estado AS est ON act.id_estado = est.id_estado
-        INNER JOIN responsabilidad AS res ON et.id_responsabilidad = res.id_responsabilidad
-		INNER JOIN empleado AS emp ON res.id_empleado = emp.id_empleado;
+  WITH 
+    ActualizacionRanked AS (
+      SELECT
+      act_s.id_etapa,
+      act_s.id_actualizacion_etapa,
+      act_s.id_actualizacion,
+      ROW_NUMBER() OVER (PARTITION BY act_s.id_etapa ORDER BY act_s.id_actualizacion DESC) AS rn
+      FROM actualizacion_etapa AS act_s
+      )
+  select
+    et.id_etapa, 
+    se.id_servicio,
+    et.descripcion_etapa, 
+    case 
+      when et.fecha_inicio is null then '-'
+          else et.fecha_inicio
+      end as fecha_inicio,
+    est.id_estado,
+    est.nombre_estado,
+    emp.id_empleado as id_responsable,
+    emp.nombre_empleado as responsable,
+    case 
+      when act.fecha_limite is null then '-'
+          else act.fecha_limite
+      end as fecha_limite,
+    act.fecha_carga as fecha_ult_act,
+    ObtenerFechaFinalizacionEtapa(et.id_etapa) as fecha_finalizacion,
+    case
+      when round(TotalCostoRealEtapa(et.id_etapa), 2) is null then 0
+          else round(TotalCostoRealEtapa(et.id_etapa), 2)
+      end as costo_real,
+    case
+      when round(TotalCostoEstimadoEtapa(et.id_etapa), 2) is null then 0
+          else round(TotalCostoEstimadoEtapa(et.id_etapa), 2)
+      end as costo_etimado,
+    TotalHorasRealEtapa(et.id_etapa) as horas_real
+  from etapa et
+  INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+  INNER JOIN ActualizacionRanked AS act_se ON act_se.id_etapa = et.id_etapa AND act_se.rn = 1
+  INNER JOIN actualizacion AS act ON act.id_actualizacion = act_se.id_actualizacion
+  INNER JOIN estado AS est ON act.id_estado = est.id_estado
+  INNER JOIN responsabilidad AS res ON et.id_responsabilidad = res.id_responsabilidad
+  INNER JOIN empleado AS emp ON res.id_empleado = emp.id_empleado;
 
 
 CREATE VIEW vw_gest_orden_trabajo AS
@@ -1094,7 +1095,9 @@ select
     p_rank.nombre_estado,
 	th.total_horas,
     round(TotalCostoEstimadoOrden(o.id_orden), 2) as costo_estimado,
-    round(TotalCostoRealOrden(o.id_orden), 2) as costo_real
+    round(TotalCostoRealOrden(o.id_orden), 2) as costo_real,
+    o.duracion_estimada as horas_estimada,
+    TotalHorasRealOrden(o.id_orden) as horas_real
     from orden as o
 	inner join orden_trabajo as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa
@@ -1157,7 +1160,9 @@ select
     case
 		when ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura) = 0 then 0
         else truncate((ObtenerTotalOrdenMecxManCompleto(ot.id_orden_manufactura) * 100 )/ ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura), 0)
-    end as tot_mec_porcentaje
+    end as tot_mec_porcentaje,
+    o.duracion_estimada as horas_estimada,
+    TotalHorasRealOrden(o.id_orden) as horas_real
     from orden as o
 	inner join orden_manufactura as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa
@@ -1221,7 +1226,9 @@ select
     case
 		when oo.nombre_orden is null then '-'
         else oo.nombre_orden
-    end as nombre_manufactura
+    end as nombre_manufactura,
+    o.duracion_estimada as horas_estimada,
+    TotalHorasRealOrden(o.id_orden) as horas_real
     from orden as o
 	inner join orden_mecanizado as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa
@@ -1403,6 +1410,58 @@ END //
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE FUNCTION TotalHorasRealOrden(orden INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(p.horas)), 0)
+    INTO total_segundos
+    FROM 
+        parte p
+    WHERE 
+        p.id_orden = orden;
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION TotalHorasRealEtapa(etapa INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(p.horas)), 0)
+    INTO total_segundos
+    FROM 
+        parte p
+    WHERE 
+        p.id_orden in (select o.id_orden from orden o where o.id_etapa = etapa);
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END$$
+
+DELIMITER ;
+
 DELIMITER //
 
 CREATE PROCEDURE Act_info_servicio ()
@@ -1556,6 +1615,57 @@ BEGIN
 	where o.id_etapa in (select e.id_etapa from etapa e where e.id_servicio = servicio);
                         
     RETURN x;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalHorasEstimadoServicio(servicio int)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(o.duracion_estimada)), 0)
+    INTO total_segundos
+    FROM 
+        orden o
+    WHERE 
+        o.id_etapa in (select et.id_etapa from etapa et where et.id_servicio = servicio);
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalHorasRealServicio(servicio int)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(p.horas)), 0)
+    INTO total_segundos
+    FROM 
+        parte p
+    WHERE 
+        p.id_orden in (select o.id_orden from orden o where o.id_etapa in (select et.id_etapa from etapa et where et.id_servicio = servicio ));
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
 END //
 
 DELIMITER ;

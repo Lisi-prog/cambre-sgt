@@ -133,8 +133,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas reales</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:6vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-trabajo">
@@ -161,9 +161,9 @@ table.dataTable tbody td {
 
                                     <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
 
-                                    <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                    <td class= 'text-center' >{{$orden->horas_estimada}}</td>
                                             
-                                    <td class= 'text-center' >{{$orden->costo_real}}</td>
+                                    <td class= 'text-center' >{{$orden->horas_real}}</td>
 
                                     <td>
                                         <div class="row justify-content-center" >
@@ -398,8 +398,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas reales</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:6vw;">Acciones</th>                                                            
                     </thead>
                     <tbody id="cuadro-ordenes-manufactura">
@@ -435,9 +435,9 @@ table.dataTable tbody td {
 
                                 <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
 
-                                <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                <td class= 'text-center' >{{$orden->horas_estimada}}</td>
                                         
-                                <td class= 'text-center' >{{$orden->costo_real}}</td>
+                                <td class= 'text-center' >{{$orden->horas_real}}</td>
 
                                 <td>
                                     <div class="row justify-content-center" >
@@ -694,8 +694,8 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Costo estimado</th>
-                        <th class="text-center" scope="col" style="color:#fff;">Costo real</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Horas reales</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:8vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-mecanizado">
@@ -724,9 +724,9 @@ table.dataTable tbody td {
 
                                     <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
 
-                                    <td class= 'text-center' >{{$orden->costo_estimado}}</td>
+                                    <td class= 'text-center' >{{$orden->horas_estimada}}</td>
                                             
-                                    <td class= 'text-center' >{{$orden->costo_real}}</td>
+                                    <td class= 'text-center' >{{$orden->horas_real}}</td>
                                     
                                     <td class='text-center'>
                                         <div class="row justify-content-center" >

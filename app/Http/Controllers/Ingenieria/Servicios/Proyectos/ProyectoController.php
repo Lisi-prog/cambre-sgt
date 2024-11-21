@@ -242,7 +242,13 @@ class ProyectoController extends Controller
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         // $prioridad = $request->input('prioridad');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+
+        if ($request->input('sin-pri')) {
+            $prioridadMax = null;
+        }else{
+            $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        }
+        
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
 
         $opt_est = $request->input('op_act_se_eta');
@@ -545,7 +551,9 @@ class ProyectoController extends Controller
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
         $costo_estimado = DB::select('SELECT TotalCostoEstimadoServicio(?) as costo_estimado;',[$id])[0]->costo_estimado;
+        $horas_estimada = DB::select('SELECT TotalHorasEstimadoServicio(?) as horas_estimada;',[$id])[0]->horas_estimada;
         $costo_real = DB::select('SELECT TotalCostoRealServicio(?) as costo_real;',[$id])[0]->costo_real;
+        $horas_real = DB::select('SELECT TotalHorasRealServicio(?) as horas_real;',[$id])[0]->horas_real;
         $etapas = Vw_etapa::where('id_servicio', $id)->get();
         $ordenes_trabajo = Vw_gest_orden_trabajo::where('id_servicio', $id)->get();
         $ordenes_manufactura = Vw_gest_orden_manufactura::where('id_servicio', $id)->get();
@@ -621,6 +629,8 @@ class ProyectoController extends Controller
                                                                         'opcion',
                                                                         'costo_estimado',
                                                                         'costo_real',
+                                                                        'horas_estimada',
+                                                                        'horas_real',
                                                                         'etapas',
                                                                         'ordenes_trabajo',
                                                                         'ordenes_manufactura',
