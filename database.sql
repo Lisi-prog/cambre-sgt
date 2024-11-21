@@ -1038,6 +1038,7 @@ CREATE VIEW vw_etapa AS
       when round(TotalCostoEstimadoEtapa(et.id_etapa), 2) is null then 0
           else round(TotalCostoEstimadoEtapa(et.id_etapa), 2)
       end as costo_etimado,
+    TotalHorasEstimadasEtapa(et.id_etapa) as horas_estimada,
     TotalHorasRealEtapa(et.id_etapa) as horas_real
   from etapa et
   INNER JOIN servicio se ON se.id_servicio = et.id_servicio

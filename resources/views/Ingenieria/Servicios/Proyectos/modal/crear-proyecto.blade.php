@@ -139,8 +139,8 @@
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value=1 id="siGestionar" name="sin-pri">
-                                <label class="form-check-label" for="siGestionar">
+                                <input class="form-check-input" type="checkbox" value=1 id="sin-pri" name="sin-pri">
+                                <label class="form-check-label" for="sin-pri">
                                     Sin prioridad.
                                 </label>
                             </div>

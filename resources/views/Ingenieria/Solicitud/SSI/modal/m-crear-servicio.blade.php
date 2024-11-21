@@ -134,7 +134,13 @@
                                 <label class="form-check-label" for="flexRadioEtp">
                                     Crear Servicio y etapa con estado "En proceso".
                                 </label>
-                              </div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="sin-pri" name="sin-pri">
+                                <label class="form-check-label" for="sin-pri">
+                                    Sin prioridad.
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
