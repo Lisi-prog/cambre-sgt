@@ -1464,6 +1464,32 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE FUNCTION TotalHorasEstimadasEtapa(etapa INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(o.duracion_estimada)), 0)
+    INTO total_segundos
+    FROM 
+        orden o
+    WHERE 
+        o.id_etapa = etapa;
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
 CREATE PROCEDURE Act_info_servicio ()
 BEGIN
     DECLARE vtotOrdTra INT;
