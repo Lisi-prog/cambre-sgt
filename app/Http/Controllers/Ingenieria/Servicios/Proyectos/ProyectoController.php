@@ -356,38 +356,60 @@ class ProyectoController extends Controller
         $prioridadAnterior = $servicio->prioridad_servicio;
         $prioridadActual = $request->input('prioridad');
 
-        if($request->input('prioridad') >= $minima_prioridad){
-            if($servicio->prioridad_servicio == $minima_prioridad){
-                return redirect()->back()->with('error', 'La prioridad del proyecto ya es la menor posible');
+        if ($request->input('sin-pri')) {
+            $ultima_act = Actualizacion_servicio::where('id_servicio', $servicio->id_servicio)->orderBy('id_actualizacion_servicio', 'desc')->first();
+    
+            $act = Actualizacion::create([
+                'descripcion' => $motivo.'  ( '.$servicio->prioridad_servicio.' a sin prioridad )',
+                'fecha_limite' => $ultima_act->getActualizacion->fecha_limite,
+                'fecha_carga' => $fecha_carga,
+                'id_estado' => $ultima_act->getActualizacion->id_estado,
+                'id_responsabilidad' => $ultima_act->getActualizacion->id_responsabilidad
+                    ]);
+    
+            Actualizacion_servicio::create([
+                'id_actualizacion' => $act->id_actualizacion,
+                'id_servicio' => $ultima_act->id_servicio
+            ]);
+    
+            $servicio->update([
+                'prioridad_servicio' => null
+            ]);
+        } else {
+            if($request->input('prioridad') >= $minima_prioridad){
+                if($servicio->prioridad_servicio == $minima_prioridad){
+                    return redirect()->back()->with('error', 'La prioridad del proyecto ya es la menor posible');
+                }else{
+                    $prioridad = $minima_prioridad;
+                }
             }else{
-                $prioridad = $minima_prioridad;
+                $prioridad = $request->input('prioridad');
             }
-        }else{
-            $prioridad = $request->input('prioridad');
+    
+            $ultima_act = Actualizacion_servicio::where('id_servicio', $servicio->id_servicio)->orderBy('id_actualizacion_servicio', 'desc')->first();
+    
+            $act = Actualizacion::create([
+                'descripcion' => $motivo.'  ( '.$servicio->prioridad_servicio.' a '.$prioridad.' )',
+                'fecha_limite' => $ultima_act->getActualizacion->fecha_limite,
+                'fecha_carga' => $fecha_carga,
+                'id_estado' => $ultima_act->getActualizacion->id_estado,
+                'id_responsabilidad' => $ultima_act->getActualizacion->id_responsabilidad
+                    ]);
+    
+            Actualizacion_servicio::create([
+                'id_actualizacion' => $act->id_actualizacion,
+                'id_servicio' => $ultima_act->id_servicio
+            ]);
+    
+            if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
+                $this->actualizarPrioridades($prioridadActual, $prioridadAnterior);
+            }
+    
+            $servicio->update([
+                'prioridad_servicio' => $prioridad
+            ]);
         }
-
-        $ultima_act = Actualizacion_servicio::where('id_servicio', $servicio->id_servicio)->orderBy('id_actualizacion_servicio', 'desc')->first();
-
-        $act = Actualizacion::create([
-            'descripcion' => $motivo.'  ( '.$servicio->prioridad_servicio.' a '.$prioridad.' )',
-            'fecha_limite' => $ultima_act->getActualizacion->fecha_limite,
-            'fecha_carga' => $fecha_carga,
-            'id_estado' => $ultima_act->getActualizacion->id_estado,
-            'id_responsabilidad' => $ultima_act->getActualizacion->id_responsabilidad
-                ]);
-
-        Actualizacion_servicio::create([
-            'id_actualizacion' => $act->id_actualizacion,
-            'id_servicio' => $ultima_act->id_servicio
-        ]);
-
-        if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
-            $this->actualizarPrioridades($prioridadActual, $prioridadAnterior);
-        }
-
-        $servicio->update([
-            'prioridad_servicio' => $prioridad
-        ]);
+        
 
         return redirect()->back()->with('mensaje', 'La prioridad del proyecto actualizado exitosamente.');  
     }
