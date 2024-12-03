@@ -57,7 +57,7 @@ table.dataTable tbody td {
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                 <div class="">
-                                    <label>Estados:</label> {{-- <input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('ot_est', this)"> --}}
+                                    <label>Estados:</label> <input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('ot_est', this)">
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ote-ckb" name="filter" type="checkbox" value="ot_est" checked> (Seleccionar todo)</label>
@@ -79,7 +79,7 @@ table.dataTable tbody td {
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                 <div class="">
-                                    <label>Supervisor:</label> {{-- <input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('ot_sup', this)"> --}}
+                                    <label>Supervisor:</label> <input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('ot_sup', this)">
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ote-ckb" name="filter" type="checkbox" value="ot_sup" checked> (Seleccionar todo)</label>
@@ -246,7 +246,7 @@ table.dataTable tbody td {
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                 <div class="">
-                                    <label>Estados:</label>
+                                    <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('om_est', this)">
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="om-ckb" name="filter" type="checkbox" value="om_est" checked> (Seleccionar todo)</label>
@@ -268,7 +268,7 @@ table.dataTable tbody td {
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                 <div class="">
-                                    <label>Supervisor:</label>
+                                    <label>Supervisor:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('om_sup', this)">
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="om-ckb" name="filter" type="checkbox" value="om_sup" checked> (Seleccionar todo)</label>
@@ -452,7 +452,7 @@ table.dataTable tbody td {
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                 <div class="">
-                                    <label>Estados:</label>
+                                    <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('ome_est', this)">
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ome-ckb" name="filter" type="checkbox" value="ome_est" checked> (Seleccionar todo)</label>
@@ -474,7 +474,7 @@ table.dataTable tbody td {
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                 <div class="">
-                                    <label>Supervisor:</label>
+                                    <label>Supervisor:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('ome_sup', this)">
                                 </div>
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ome-ckb" name="filter" type="checkbox" value="ome_sup" checked> (Seleccionar todo)</label>

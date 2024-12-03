@@ -75,7 +75,7 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Proyectos:</label>
+                                                <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
@@ -92,7 +92,7 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Supervisor:</label>
+                                                <label>Supervisor:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
@@ -110,7 +110,7 @@
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
-                                                    <label>Responsable:</label>
+                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
@@ -129,7 +129,7 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Estados:</label>
+                                                <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
@@ -294,7 +294,7 @@
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
-    
+    <script src="{{ asset('js/filter-to-filter.js') }}"></script>
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;

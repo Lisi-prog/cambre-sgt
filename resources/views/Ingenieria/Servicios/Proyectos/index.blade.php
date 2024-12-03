@@ -78,7 +78,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Proyectos:</label>
+                                                        <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                             <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
@@ -113,7 +113,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Tipo:</label>
+                                                        <label>Tipo:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('tipos[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="tipos[]" checked> (Seleccionar todo)</label>
@@ -139,7 +139,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Lider:</label>
+                                                        <label>Lider:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('lid[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="lid[]" checked> (Seleccionar todo)</label>
@@ -164,7 +164,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Estados:</label>
+                                                        <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('estados[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="estados[]" checked> (Seleccionar todo)</label>
@@ -242,7 +242,7 @@
                                         @endphp
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio ?? 'S/P'}}</td>
+                                                <td class='text-center' style="vertical-align: middle;" data-order={{$proyecto->prioridad_servicio ?? 9999999999999}}>{{$proyecto->prioridad_servicio ?? 'S/P'}}</td>
 
                                                 @if ($opcion == 3)
                                                     <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSolicitud->id_solicitud ?? '-'}}</td>
@@ -371,6 +371,7 @@
     </div>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/filter.js') }}"></script>
+    <script src="{{ asset('js/filter-to-filter.js') }}"></script>
 </section>
 
 

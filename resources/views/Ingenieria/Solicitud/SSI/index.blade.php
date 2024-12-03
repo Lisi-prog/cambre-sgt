@@ -59,7 +59,7 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Usuario:</label>
+                                                <label>Usuario:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
@@ -76,7 +76,7 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Sector:</label>
+                                                <label>Sector:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
@@ -94,7 +94,7 @@
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
-                                                    <label>Estado:</label>
+                                                    <label>Estado:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
@@ -118,7 +118,7 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Prioridad:</label>
+                                                <label>Prioridad:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
@@ -422,5 +422,5 @@
     });
 </script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
-    
+<script src="{{ asset('js/filter-to-filter.js') }}"></script>
 @endsection

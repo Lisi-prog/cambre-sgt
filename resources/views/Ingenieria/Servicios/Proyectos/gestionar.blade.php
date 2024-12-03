@@ -225,7 +225,7 @@
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                                 <div class="">
-                                                    <label>Etapa:</label>
+                                                    <label>Etapa:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
@@ -243,7 +243,7 @@
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                                 <div class="">
-                                                    <label>Estados:</label>
+                                                    <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
@@ -265,7 +265,7 @@
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 170px;">
                                                 <div class="">
-                                                    <label>Responsable:</label>
+                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>

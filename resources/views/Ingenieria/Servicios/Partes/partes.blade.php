@@ -77,7 +77,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Proyectos:</label>
+                                                        <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                             <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
@@ -125,7 +125,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Responsable:</label>
+                                                        <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('lid[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="lid[]" checked> (Seleccionar todo)</label>
@@ -147,7 +147,7 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Supervisor:</label>
+                                                        <label>Supervisor:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup[]', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="sup[]" checked> (Seleccionar todo)</label>
@@ -283,6 +283,7 @@
         window.cargarModalVerParte = cargarModalVerParte;
     </script>
     <script src="{{ asset('js/Ingenieria/Servicios/Partes/filter.js') }}"></script>
+    <script src="{{ asset('js/filter-to-filter.js') }}"></script>
 </section>
 
 @include('Ingenieria.Servicios.Partes.modal.editar-parte')
