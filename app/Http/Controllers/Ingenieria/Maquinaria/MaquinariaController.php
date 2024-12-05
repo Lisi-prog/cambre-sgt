@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Tipo_maquinaria;
 
 class MaquinariaController extends Controller
 {
@@ -110,4 +111,40 @@ class MaquinariaController extends Controller
         return Maquinaria::orderBy('codigo_maquinaria')->get();
     }
 
+    public function tipo_maquinaria_index(){
+        $tipos_maq = Tipo_maquinaria::orderBy('tipo_maquinaria')->get();
+        return view('Ingenieria.Maquinaria.Tipo_maquinaria.index', compact('tipos_maq'));
+    }
+
+    public function tipo_maquinaria_store(Request $request){
+        $tipo = $request->input('tipo_maquinaria');
+
+        Tipo_maquinaria::create([
+            'tipo_maquinaria' => $tipo
+        ]);
+
+        return redirect()->route('tipo_maquinaria.index')->with('mensaje', 'El tipo maquinaria creado exitosamente.');
+    }
+
+    public function tipo_maquinaria_edit($id){
+        $tip_maq = Tipo_maquinaria::find($id);
+        return view('Ingenieria.Maquinaria.Tipo_maquinaria.edit', compact('tip_maq'));
+    }
+
+    public function tipo_maquinaria_update($id, Request $request){
+        $tip_maq = Tipo_maquinaria::find($id);
+        $tipo = $request->input('tipo_maquinaria');
+
+        $tip_maq->update([
+            'tipo_maquinaria' => $tipo
+        ]);
+
+        return redirect()->route('tipo_maquinaria.index')->with('mensaje', 'El tipo maquinaria editado exitosamente.');
+    }
+
+    public function tipo_maquinaria_destroy($id){
+        Tipo_maquinaria::destroy($id);
+
+        return redirect()->route('tipo_maquinaria.index')->with('mensaje', 'El tipo maquinaria se elimino exitosamente.');  
+    }
 }

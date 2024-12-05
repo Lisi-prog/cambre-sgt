@@ -42,12 +42,14 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                        <div class="form-group">
                             {!! Form::label('id_sector', 'Sector:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::select('id_sector', $sectores, null, [
                                 'placeholder' => 'Seleccionar',
                                 'class' => 'form-select reset-input',
                                 'id' => 'id_sector'
                             ]) !!}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -195,6 +195,17 @@ CREATE TABLE `servicio` (
   CONSTRAINT `pk_id_servicio_x_subtipo_servicio` FOREIGN KEY (`id_subtipo_servicio`) REFERENCES `subtipo_servicio`(`id_subtipo_servicio`)
 );
 -- -----------------------//
+CREATE TABLE `operacion` (
+  `id_operacion` int NOT NULL AUTO_INCREMENT,
+  `nombre_operacion` varchar(100),
+  PRIMARY KEY (`id_operacion`)
+);
+
+CREATE TABLE `tipo_maquinaria` (
+  `id_tipo_maquinaria` int NOT NULL AUTO_INCREMENT,
+  `tipo_maquinaria` varchar(100),
+  PRIMARY KEY (`id_tipo_maquinaria`)
+);
 
 CREATE TABLE `maquinaria` (
   `id_maquinaria` int NOT NULL AUTO_INCREMENT,
@@ -202,7 +213,9 @@ CREATE TABLE `maquinaria` (
   `alias_maquinaria` varchar(50) DEFAULT NULL,
   `descripcion_maquinaria` varchar(300),
   `id_sector` int,
-  PRIMARY KEY (`id_maquinaria`)
+  `id_tipo_maquinaria` int
+  PRIMARY KEY (`id_maquinaria`),
+  CONSTRAINT `pk_id_maquinaria_x_tipo_maquinaria` FOREIGN KEY (`id_tipo_maquinaria`) REFERENCES `tipo_maquinaria`(`id_tipo_maquinaria`)
 );
 
 CREATE TABLE `etapa` (

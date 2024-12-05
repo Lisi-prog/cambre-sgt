@@ -14,6 +14,7 @@ use App\Http\Controllers\Ingenieria\Solicitud\RSM\RequerimientoServicioMantenimi
 use App\Http\Controllers\Ingenieria\Solicitud\PM\PropuestaDeMejoraController;
 use App\Http\Controllers\Ingenieria\Activos\ActivoController;
 use App\Http\Controllers\Ingenieria\Sector\SectorController;
+use App\Http\Controllers\Ingenieria\Operacion\OperacionController;
 use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 use App\Http\Controllers\Ingenieria\Servicios\Proyectos\PrefijoProyectoController;
 
@@ -83,6 +84,12 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('maquinarias', MaquinariaController::class);
     Route::resource('activos', ActivoController::class);
     Route::resource('sectores', SectorController::class);
+    Route::resource('operacion', OperacionController::class);
+    Route::get('maquinaria/tipo', [MaquinariaController::class, 'tipo_maquinaria_index'])->name('tipo_maquinaria.index');
+    Route::post('maquinaria/tipo/guardar', [MaquinariaController::class, 'tipo_maquinaria_store'])->name('tipo_maquinaria.store');
+    Route::get('maquinaria/tipo/editar/{id}', [MaquinariaController::class, 'tipo_maquinaria_edit'])->name('tipo_maquinaria.edit');
+    Route::put('maquinaria/tipo/actualizar/{id}', [MaquinariaController::class, 'tipo_maquinaria_update'])->name('tipo_maquinaria.update');
+    Route::delete('maquinaria/tipo/borrar/{id}', [MaquinariaController::class, 'tipo_maquinaria_destroy'])->name('tipo_maquinaria.destroy');
  });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|VER-MENU-SOLICITUDES']], function () {
