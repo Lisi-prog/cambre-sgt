@@ -9,7 +9,7 @@
             {!! Form::open(['route' => 'maquinarias.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group">
                             {!! Form::label('codigo_maquinaria', 'Codigo maquinaria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
@@ -20,7 +20,7 @@
                             ]) !!}
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('alias_maquinaria', 'Alias maquinaria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
@@ -31,17 +31,27 @@
                             ]) !!}
                         </div>
                     </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            {!! Form::label('id_tipo', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            {!! Form::select('id_tipo', $tipos, null, [
+                                'placeholder' => 'Seleccionar',
+                                'class' => 'form-select reset-input',
+                                'id' => 'id_tipo'
+                            ]) !!}
+                        </div>
+                    </div>
                 </div>
 
 
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                         <div class="form-group">
                             {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <textarea name='descripcion' id="descripcion" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group">
                             {!! Form::label('id_sector', 'Sector:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::select('id_sector', $sectores, null, [

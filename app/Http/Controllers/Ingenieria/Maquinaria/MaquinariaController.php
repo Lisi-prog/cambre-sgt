@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Tipo_maquinaria;
+use App\Models\Cambre\Ope_x_maq;
 
 class MaquinariaController extends Controller
 {
@@ -26,7 +28,8 @@ class MaquinariaController extends Controller
     {        
         $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
         $maquinarias = Maquinaria::orderBy('id_maquinaria')->get();
-        return view('Ingenieria.Maquinaria.index', compact('sectores', 'maquinarias'));
+        $tipos = Tipo_maquinaria::orderBy('tipo_maquinaria')->pluck('tipo_maquinaria', 'id_tipo_maquinaria');
+        return view('Ingenieria.Maquinaria.index', compact('sectores', 'maquinarias', 'tipos'));
     }
 
     public function create()

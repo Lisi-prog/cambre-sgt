@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Cambre\Operacion;
+use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Ope_x_maq;
 
 class OperacionController extends Controller
 {
