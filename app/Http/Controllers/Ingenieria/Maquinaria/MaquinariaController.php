@@ -29,7 +29,8 @@ class MaquinariaController extends Controller
         $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
         $maquinarias = Maquinaria::orderBy('id_maquinaria')->get();
         $tipos = Tipo_maquinaria::orderBy('tipo_maquinaria')->pluck('tipo_maquinaria', 'id_tipo_maquinaria');
-        return view('Ingenieria.Maquinaria.index', compact('sectores', 'maquinarias', 'tipos'));
+        $operaciones = Operacion::orderBy('nombre_operacion')->get();
+        return view('Ingenieria.Maquinaria.index', compact('sectores', 'maquinarias', 'tipos', 'operaciones'));
     }
 
     public function create()
@@ -38,6 +39,7 @@ class MaquinariaController extends Controller
 
     public function store(Request $request)
     {            
+        //return $request;
         $this->validate($request, [
             'codigo_maquinaria' => 'required',
             'alias_maquinaria' => 'required'
@@ -48,16 +50,29 @@ class MaquinariaController extends Controller
         $codigo = $request->input('codigo_maquinaria');
         $descripcion = $request->input('descripcion');
         $sector = $request->input('id_sector');
+        $tipo = $request->input('id_tipo');
         //-----------------------------------
 
         //Crear maquinaria
-        Maquinaria::create([
+        $maquina = Maquinaria::create([
             'codigo_maquinaria' => $codigo,
             'alias_maquinaria' => $alias,
             'descripcion_maquinaria' => $descripcion,
+            'id_tipo_maquinaria' => $tipo,
             'id_sector' => $sector
         ]);
         //------------------------------------
+
+        if ($request->input('operaciones')) {
+            $operaciones = $request->input('operaciones');
+            foreach ($operaciones as $value) {
+                Ope_x_maq::create([
+                    'id_maquinaria' => $maquina->id_maquinaria,
+                    'id_operacion' => $value
+                ]);
+            }      
+        }
+
         return redirect()->route('maquinarias.index')->with('mensaje', 'Maquinaria codigo '.$codigo.' creado exitosamente.'); 
     }
     
@@ -67,9 +82,11 @@ class MaquinariaController extends Controller
     
     public function edit($id)
     {
+        $tipos = Tipo_maquinaria::orderBy('tipo_maquinaria')->pluck('tipo_maquinaria', 'id_tipo_maquinaria');
         $maquinaria = Maquinaria::find($id);
         $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
-        return view('Ingenieria.Maquinaria.editar', compact('maquinaria', 'sectores'));
+        $operaciones = Operacion::orderBy('nombre_operacion')->get();
+        return view('Ingenieria.Maquinaria.editar', compact('maquinaria', 'sectores', 'tipos', 'operaciones'));
     }
     
     public function update(Request $request, $id)
@@ -84,6 +101,7 @@ class MaquinariaController extends Controller
         $codigo = $request->input('codigo_maquinaria');
         $descripcion = $request->input('descripcion');
         $sector = $request->input('id_sector');
+        $tipo = $request->input('id_tipo');
         //-----------------------------------
 
         $maquinaria = Maquinaria::find($id);
@@ -92,13 +110,35 @@ class MaquinariaController extends Controller
             'codigo_maquinaria' => $codigo,
             'alias_maquinaria' => $alias,
             'descripcion_maquinaria' => $descripcion,
+            'id_tipo_maquinaria' => $tipo,
             'id_sector' => $sector
         ]);
+
+        foreach ($maquinaria->getOpemaq as $opemaq) {
+            $opemaq->delete();
+        }
+
+        if ($request->input('operaciones')) {
+            $operaciones = $request->input('operaciones');
+            foreach ($operaciones as $value) {
+                Ope_x_maq::create([
+                    'id_maquinaria' => $maquinaria->id_maquinaria,
+                    'id_operacion' => $value
+                ]);
+            }      
+        }
+
         return redirect()->route('maquinarias.index')->with('mensaje', 'Maquinaria editada exitosamente.'); 
     }
     
     public function destroy($id)
     {
+        $maquinaria = Maquinaria::find($id);
+        
+        foreach ($maquinaria->getOpemaq as $opemaq) {
+            $opemaq->delete();
+        }
+
         Maquinaria::destroy($id);
 
         return redirect()->route('maquinarias.index')->with('mensaje', 'La maquinaria se elimino exitosamente.');       

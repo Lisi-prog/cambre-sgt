@@ -227,6 +227,15 @@ CREATE TABLE `ope_x_maq` (
   CONSTRAINT `pk_ope_x_maq_x_operacion` FOREIGN KEY (`id_operacion`) REFERENCES `operacion`(`id_operacion`)
 );
 
+CREATE TABLE `emp_x_maq` (
+  `id_emp_x_maq` int NOT NULL AUTO_INCREMENT,
+  `id_maquinaria` int,
+  `id_empleado` int,
+  PRIMARY KEY (`id_emp_x_maq`),
+  CONSTRAINT `pk_emp_x_maq_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
+  CONSTRAINT `pk_emp_x_maq_x_empleado` FOREIGN KEY (`id_empleado`) REFERENCES `empleado`(`id_empleado`)
+);
+
 CREATE TABLE `etapa` (
   `id_etapa` int NOT NULL AUTO_INCREMENT,
   `descripcion_etapa` varchar(50) DEFAULT NULL,

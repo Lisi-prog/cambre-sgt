@@ -68,4 +68,8 @@ class Empleado extends Model
     public function getOrganigrama(){
         return $this->hasOne(Og_organigrama::class, 'id_empleado');
     }
+
+    public function getEmpmaq(){
+        return $this->hasMany(Emp_x_maq::class, 'id_empleado');
+    }
 }

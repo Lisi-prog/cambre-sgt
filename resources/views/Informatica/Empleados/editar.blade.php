@@ -127,6 +127,37 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            {!! Form::label('maq', 'Maquinaria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                            
+                                            @if (!empty($empleado->getEmpmaq))
+                                                @foreach ($maquinas as $maq)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" 
+                                                            type="checkbox" 
+                                                            value="{{ $maq->id_maquinaria }}" 
+                                                            id="maq{{ $maq->id_maquinaria }}" 
+                                                            {{ in_array($maq->id_maquinaria, $empleado->getEmpmaq->pluck('id_maquinaria')->toArray()) ? 'checked' : '' }} 
+                                                            name="maquinas[]">
+                                                        <label class="form-check-label" for="maq{{ $maq->id_maquinaria }}">
+                                                            {{ $maq->alias_maquinaria }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                @foreach ($maquinas as $maq)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value={{$maq->id_maquinaria}} id="maq{{$maq->id_maquinaria}}" name='maquinas[]'>
+                                                        <label class="form-check-label" for="maq{{$maq->id_maquinaria}}">
+                                                            {{$maq->alias_maquinaria}}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                             

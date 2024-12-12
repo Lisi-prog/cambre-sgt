@@ -17,6 +17,8 @@ use App\Models\Cambre\Puesto_empleado;
 use App\Models\Cambre\Em_not_x_empleado;
 use App\Models\Cambre\Em_notificacion;
 use App\Models\Cambre\Og_organigrama;
+use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Emp_x_maq;
 
 class EmpleadoController extends Controller
 {
@@ -154,7 +156,8 @@ class EmpleadoController extends Controller
         $per_avisos = collect(Em_not_x_empleado::where('id_empleado', $id)->get())->pluck('id_em_notificacion')->all();
         $op_nots = Em_notificacion::orderBy('nombre_em_notificacion')->get();
         $supervisores = $this->obtenerSupervisores();
-        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos', 'es_supervisor', 'per_avisos', 'op_nots', 'supervisores'));
+        $maquinas = Maquinaria::orderBy('codigo_maquinaria')->get();
+        return view('Informatica.Empleados.editar',compact('empleado', 'sectores', 'puestos', 'es_supervisor', 'per_avisos', 'op_nots', 'supervisores', 'maquinas'));
     }
     
     public function obtenerSupervisores(){
@@ -238,6 +241,20 @@ class EmpleadoController extends Controller
             'costo_hora' => $costo_hora,
             'esta_activo' => $esta_activo
         ]);
+
+        foreach ($empleado->getEmpmaq as $empmaq) {
+            $empmaq->delete();
+        }
+
+        if ($request->input('maquinas')) {
+            $maquinas = $request->input('maquinas');
+            foreach ($maquinas as $value) {
+                Emp_x_maq::create([
+                    'id_maquinaria' => $value,
+                    'id_empleado' => $empleado->id_empleado
+                ]);
+            }      
+        }
     
         return redirect()->route('tecnicos.index')->with('mensaje','El usuario '.$nombre.' editado exitosamente.');                        
     }

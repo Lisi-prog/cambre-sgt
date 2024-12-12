@@ -62,6 +62,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <div class="form-group">
+                            {!! Form::label('ope', 'Operaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <div class="d-flex flex-column overflow-auto"
+                            style="height: 100px;">
+                                @foreach ($operaciones as $op)
+                                    <div class="form-check">
+                                        <input name="operaciones[]" class="form-check-input" type="checkbox" value="{{$op->id_operacion}}" id="ope{{$op->id_operacion}}">
+                                        <label class="form-check-label" for="ope{{$op->id_operacion}}">
+                                        {{$op->nombre_operacion}}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>

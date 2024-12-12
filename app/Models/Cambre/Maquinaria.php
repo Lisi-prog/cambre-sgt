@@ -29,4 +29,9 @@ class Maquinaria extends Model
     {
         return $this->belongsTo(Sector::class, 'id_sector');
     }
+
+    public function getOpemaq(){
+        return $this->hasMany(Ope_x_maq::class, 'id_maquinaria');
+    }
+    
 }
