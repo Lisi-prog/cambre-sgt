@@ -22,7 +22,8 @@ class Maquinaria extends Model
         'codigo_maquinaria',
         'alias_maquinaria',
         'descripcion_maquinaria',
-        'id_sector'
+        'id_sector',
+        'id_tipo_maquinaria'
     ];
 
     public function getSector()
