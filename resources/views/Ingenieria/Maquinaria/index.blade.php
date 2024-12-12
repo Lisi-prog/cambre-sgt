@@ -62,6 +62,7 @@
                                     <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Alias</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
+                                    <th class='text-center' style="color:#fff;">Tipo</th>
                                     <th class='text-center' style="color:#fff;">Sector</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
@@ -76,6 +77,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$maquinaria->alias_maquinaria}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$maquinaria->descripcion_maquinaria}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$maquinaria->getTipo->tipo_maquinaria ?? 'sin tipo'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$maquinaria->getSector->nombre_sector ?? 'sin sector'}}</td>
 

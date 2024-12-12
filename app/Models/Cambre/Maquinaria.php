@@ -35,4 +35,7 @@ class Maquinaria extends Model
         return $this->hasMany(Ope_x_maq::class, 'id_maquinaria');
     }
     
+    public function getTipo(){
+        return $this->belongsTo(Tipo_maquinaria::class, 'id_tipo_maquinaria');
+    }
 }
