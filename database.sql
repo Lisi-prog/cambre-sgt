@@ -376,6 +376,56 @@ CREATE TABLE `parte_mecanizado` (
   CONSTRAINT `pk_id_parte_mecanizado_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte`(`id_parte`)
 );
 
+CREATE TABLE `estado_hdr` (
+  `id_estado_hdr` int NOT NULL AUTO_INCREMENT,
+  `nombre_estado_hdr` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_estado_hdr`)
+);
+
+CREATE TABLE `hoja_de_ruta` (
+  `id_hoja_de_ruta` int NOT NULL AUTO_INCREMENT,
+  `fecha_carga` datetime,
+  `observaciones` varchar(500),
+  `id_responsabilidad` int,
+  `id_orden_mecanizado` int,
+  PRIMARY KEY (`id_hoja_de_ruta`),
+  CONSTRAINT `pk_hoja_de_ruta_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
+  CONSTRAINT `pk_hoja_de_ruta_x_orden_mec` FOREIGN KEY (`id_orden_mecanizado`) REFERENCES `orden_mecanizado`(`id_orden_mecanizado`)
+);
+
+CREATE TABLE `operaciones_de_hdr` (
+  `id_ope_de_hdr` int NOT NULL AUTO_INCREMENT,
+  `id_hoja_de_ruta` int,
+  `numero` int,
+  `fecha_carga` datetime,
+  `fecha` date,
+  `id_maquinaria` int,
+  `id_operacion` int,
+  `id_responsabilidad` int,
+  `horas_estimada` time,
+  `medidas` varchar(500),
+  `ruta_cam` varchar(100),
+  PRIMARY KEY (`id_ope_de_hdr`),
+  CONSTRAINT `pk_ope_de_hdr_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
+  CONSTRAINT `pk_ope_de_hdr_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
+  CONSTRAINT `pk_ope_de_hdr_x_operacion` FOREIGN KEY (`id_operacion`) REFERENCES `operacion`(`id_operacion`),
+  CONSTRAINT `pk_ope_de_hdr_x_hdr` FOREIGN KEY (`id_hoja_de_ruta`) REFERENCES `hoja_de_ruta`(`id_hoja_de_ruta`)
+);
+
+CREATE TABLE `parte_ope_hdr` (
+  `id_parte_ope_hdr` int NOT NULL AUTO_INCREMENT,
+  `id_ope_de_hdr` int,
+  `fecha_carga` datetime,
+  `fecha` date,
+  `observaciones` varchar(500),
+  `id_responsabilidad` int,
+  `horas` time,
+  PRIMARY KEY (`id_parte_ope_hdr`),
+  CONSTRAINT `pk_parte_ope_hdr_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
+  CONSTRAINT `pk_parte_ope_hdr_x_ope_hdr` FOREIGN KEY (`id_ope_de_hdr`) REFERENCES `operaciones_de_hdr`(`id_ope_de_hdr`)
+);
+
+
 CREATE TABLE `parte_mecanizado_x_maquinaria`(
   `id_parte_mecanizado_x_maquinaria` int NOT NULL AUTO_INCREMENT,
   `id_parte_mecanizado` int,

@@ -152,7 +152,13 @@ class EmpleadoController extends Controller
         $empleado = Empleado::find($id);
         $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
         $puestos = Puesto_empleado::orderBy('titulo_puesto_empleado')->pluck('titulo_puesto_empleado', 'id_puesto_empleado');
-        $es_supervisor = $empleado->getUser->hasRole('SUPERVISOR');
+
+        if ($empleado->getUser) {
+            $es_supervisor = $empleado->getUser->hasRole('SUPERVISOR');
+        } else {
+            $es_supervisor = false;
+        }
+        
         $per_avisos = collect(Em_not_x_empleado::where('id_empleado', $id)->get())->pluck('id_em_notificacion')->all();
         $op_nots = Em_notificacion::orderBy('nombre_em_notificacion')->get();
         $supervisores = $this->obtenerSupervisores();

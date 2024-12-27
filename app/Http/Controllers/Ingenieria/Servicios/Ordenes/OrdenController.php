@@ -1221,4 +1221,9 @@ class OrdenController extends Controller
     public function obtenerUnaOrdenDeLaVista($id){
         return Vw_orden_trabajo::find($id);
     }
+
+    public function ordenHDR($id){
+        $orden = Orden::find($id);
+        return view('Ingenieria.Servicios.HDR.index', compact('orden'));
+    }
 }

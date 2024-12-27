@@ -181,6 +181,13 @@
             </li>
             @endcan
 
+            {{-- @can('VER-MENU-OPERACION')
+            <li>
+                <a class="nav-link" href="{{route('operacion.index')}}" title="Operacion">
+                    <i class="fas fa-pencil-ruler"style="font-size:1.2em; "></i><span>Operacion</span>
+                </a>
+            </li>
+            @endcan --}}
             
         </ul>
     </li>

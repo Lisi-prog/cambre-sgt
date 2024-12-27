@@ -241,13 +241,17 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        {{-- <div class="row my-2">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', base64url_encode($orden->id_orden), $tipo_orden], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
-                                                                {!! Form::close() !!}
+
+                                                        @if ($tipo_orden === 3)
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
                                                             </div>
-                                                        </div> --}}
+                                                        @endif
+                                                        
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">

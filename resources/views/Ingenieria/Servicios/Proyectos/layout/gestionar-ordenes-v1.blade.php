@@ -562,6 +562,13 @@ table.dataTable tbody td {
                                             <div class="collapse" data-bs-parent="#cuadro-ordenes-mecanizado" id="collapseOrdenMecanizado{{$idCount}}">
                                                 <div class="row">
                                                     <div class="col-12">
+                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
                                                         <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
                                                             Editar
                                                         </button>

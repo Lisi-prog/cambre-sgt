@@ -112,8 +112,9 @@
                                 </div>
                             </div>        
 
-                            @if ($es_supervisor)
+                            
                                 <div class="row">
+                                    @if ($es_supervisor)
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             {!! Form::label('not_em', 'Notificaciones email:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
@@ -127,6 +128,7 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    @endif
                                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             {!! Form::label('maq', 'Maquinaria:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
@@ -159,7 +161,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            
                             
                             
                     

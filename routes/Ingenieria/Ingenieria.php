@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     
     Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
     Route::get('orden/multiple-parte', [OrdenController::class, 'cargaMultipleParte'])->name('ordenes.multipleparte');
+    Route::get('ordenes/mec/{id}/hdr', [OrdenController::class, 'ordenHDR'])->name('ordenes.hdr');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
     Route::post('orden/editar', [OrdenController::class, 'editarOrden'])->name('orden.editar');
