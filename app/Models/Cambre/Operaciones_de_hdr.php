@@ -26,7 +26,6 @@ class Operaciones_de_hdr extends Model
         'id_maquinaria',
         'id_operacion',
         'id_responsabilidad',
-        'horas_estimada',
         'medidas',
         'ruta_cam'
     ];

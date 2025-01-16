@@ -52,6 +52,9 @@ use App\Models\Cambre\Vw_orden_manufactura;
 use App\Mail\Solicitud\OrdenMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
+use App\Models\Cambre\Actualizacion_orden;
+use App\Models\Cambre\Actualizacion_orden_man;
+use App\Models\Cambre\Actualizacion_orden_mec;
 
 class OrdenController extends Controller
 {
@@ -243,7 +246,7 @@ class OrdenController extends Controller
                     'nom_orden' => 'required',
                     'horas_estimadas' => 'required',
                     'minutos_estimados' => 'required',
-                    'responsable' => 'required',
+                    // 'responsable' => 'required',
                     'supervisor' => 'required',
                     'revision' => 'required',
                     'cantidad' => 'required',
@@ -256,7 +259,7 @@ class OrdenController extends Controller
                     'nom_orden.required' => 'Falta el nombre de la orden.',
                     'horas_estimadas.required' => 'Faltan las horas estimadas.',
                     'minutos_estimados.required' => 'Faltan los minutos estimados.',
-                    'responsable.required' => 'Seleccione un responsable',
+                    // 'responsable.required' => 'Seleccione un responsable',
                     'supervisor.required' => 'Seleccione un supervisor',
                     'revision.required' => 'Falta el numero de revision',
                     'cantidad.required' => 'Falta la cantidad',
@@ -420,7 +423,7 @@ class OrdenController extends Controller
         $revision = $request->input('revision');
         $cantidad = $request->input('cantidad');
         $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
-        $id_responsable = $request->input('responsable');
+        // $id_responsable = $request->input('responsable');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
         $id_estado_man = $request->input('estado_manufactura');
@@ -431,10 +434,10 @@ class OrdenController extends Controller
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
         $id_supervisor = $request->input('supervisor');
 
-        $responsabilidad = Responsabilidad::create([
-            'id_empleado' => $id_responsable,
-            'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        ]);
+        // $responsabilidad = Responsabilidad::create([
+        //     'id_empleado' => $id_responsable,
+        //     'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        // ]);
 
         $responsabilidad_supervisor = Responsabilidad::create([
             'id_empleado' => $id_supervisor,
@@ -449,10 +452,10 @@ class OrdenController extends Controller
                     'observaciones' => $observaciones
                 ]);
 
-        Responsabilidad_orden::create([
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-            'id_orden' => $orden->id_orden
-        ]);
+        // Responsabilidad_orden::create([
+        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+        //     'id_orden' => $orden->id_orden
+        // ]);
 
         Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
@@ -460,17 +463,29 @@ class OrdenController extends Controller
         ]);
 
         //Calculamos los costos despues de asignar responsabilidades
-        $orden->costo_estimado = $orden->getCostoEstimado();
+        // $orden->costo_estimado = $orden->getCostoEstimado();
         $orden->save();
 
-        Orden_manufactura::create([
+        $ord_man = Orden_manufactura::create([
             'revision' => $revision,
             'cantidad' => $cantidad,
             'ruta_plano' => $ruta_plano,
             'id_orden' => $orden->id_orden
         ]);
 
-        $parte = Parte::create([
+        $act_ord = Actualizacion_orden::create([
+            'descripcion' => 'Generacion de orden de manufactura',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad
+        ]);
+
+        Actualizacion_orden_man::create([
+            'id_actualizacion_orden' => $act_ord->id_actualizacion_orden,
+            'id_orden_manufactura' => $ord_man->id_orden_manufactura,
+            'id_estado_manufactura' => $id_estado_man
+        ]);
+        /*$parte = Parte::create([
             'observaciones' => 'Generacion de orden de manufactura',
             'fecha' => $fecha_ini,
             'fecha_limite' => $fecha_req,
@@ -483,7 +498,9 @@ class OrdenController extends Controller
         Parte_manufactura::create([
             'id_estado_manufactura' => $id_estado_man,
             'id_parte' => $parte->id_parte
-        ]);
+        ]); */
+
+
 
     }
 

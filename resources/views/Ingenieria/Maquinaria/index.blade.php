@@ -26,7 +26,7 @@
                 {!! Form::close() !!}
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-7">
-                <a href="{{route('tipo_maquinaria.index')}}" class="btn btn-primary">Operacion</a>
+                <a href="{{route('operacion.index')}}" class="btn btn-primary">Operacion</a>
             </div>
             
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 d-flex justify-content-end">

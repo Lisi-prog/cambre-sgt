@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Actualizacion extends Model
+class Actualizacion_orden extends Model
 {
     use HasFactory;
     
     public $timestamps = false;
     
-    protected $table = 'actualizacion';
+    protected $table = 'actualizacion_orden';
 
-    protected $primaryKey = 'id_actualizacion';
+    protected $primaryKey = 'id_actualizacion_orden';
 
     public $incrementing = true;
 
@@ -22,14 +22,8 @@ class Actualizacion extends Model
         'descripcion',
         'fecha_limite',
         'fecha_carga',
-        'id_estado',
         'id_responsabilidad'
     ];
-
-    public function getEstado()
-    {
-        return $this->belongsTo(Estado::class, 'id_estado');
-    }
 
     public function getResponsable()
     {

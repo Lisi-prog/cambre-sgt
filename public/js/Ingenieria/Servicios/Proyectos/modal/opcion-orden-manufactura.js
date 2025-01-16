@@ -50,15 +50,7 @@ export default
 </div>
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-        <div class="form-group"> 
-            <div class="form-group"> 
-                <label for="responsable" class="control-label fs-7" style="white-space: nowrap;">Responsable:</label> 
-                <span class="obligatorio">*</span> 
-                <select class="form-select form-group reset-input" id="cbx_responsable" name="responsable" required>
-                    <option selected="selected" value="">Seleccionar</option>
-                </select>
-            </div>
-        </div>
+        
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
         <div class="form-group">
