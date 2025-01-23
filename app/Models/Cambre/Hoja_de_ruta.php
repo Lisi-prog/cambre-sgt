@@ -25,4 +25,13 @@ class Hoja_de_ruta extends Model
         'id_orden_mecanizado'
     ];
 
+    public function getOperacionesHdr()
+    {
+        return $this->hasMany(Operaciones_de_hdr::class, 'id_hoja_de_ruta');
+    }
+
+    // public function getEstado()
+    // {
+    //     return 
+    // }
 }

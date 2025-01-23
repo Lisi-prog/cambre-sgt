@@ -30,4 +30,7 @@ class Operaciones_de_hdr extends Model
         'ruta_cam'
     ];
 
+    // public function getEstado(){
+    //     return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('')->first()->estado_mecanizado;
+    // }
 }

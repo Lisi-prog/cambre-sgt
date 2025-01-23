@@ -309,7 +309,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;width:10vw">Progreso Mecanizado</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th>
-                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
+                        {{-- <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th> --}}
                         <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff; min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
@@ -343,15 +343,15 @@ table.dataTable tbody td {
 
                                 <td class= 'text-center' >{{$orden->supervisor}}</td>
 
-                                <td class= 'text-center' >{{$orden->responsable}}</td>
+                                {{-- <td class= 'text-center' >{{$orden->responsable}}</td> --}}
 
                                 <td class= 'text-center' >{{$orden->fecha_limite}}</td>
 
                                 <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
 
-                                <td class= 'text-center' >{{$orden->horas_estimada}}</td>
+                                <td class= 'text-center' >{{$orden->horas_estimada ?? '00:00'}}</td>
                                         
-                                <td class= 'text-center' >{{$orden->horas_real}}</td>
+                                <td class= 'text-center' >{{$orden->horas_real ?? '00:00'}}</td>
 
                                 <td>
                                     <div class="row justify-content-center" >
@@ -515,7 +515,7 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th>
-                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th>
+                        {{-- <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th> --}}
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
                         <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                         <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
@@ -542,7 +542,7 @@ table.dataTable tbody td {
 
                                     <td class= 'text-center' >{{$orden->supervisor}}</td>
 
-                                    <td class= 'text-center' >{{$orden->responsable}}</td>
+                                    {{-- <td class= 'text-center' >{{$orden->responsable}}</td> --}}
 
                                     <td class= 'text-center' >{{$orden->fecha_limite ?? '-'}}</td>
 

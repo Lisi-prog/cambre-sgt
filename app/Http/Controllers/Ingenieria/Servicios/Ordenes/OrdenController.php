@@ -55,6 +55,11 @@ use App\Models\Cambre\Not_notificacion;
 use App\Models\Cambre\Actualizacion_orden;
 use App\Models\Cambre\Actualizacion_orden_man;
 use App\Models\Cambre\Actualizacion_orden_mec;
+use App\Models\Cambre\Operacion;
+use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Hoja_de_ruta;
+use App\Models\Cambre\Operaciones_de_hdr;
+use App\Models\Cambre\Parte_ope_hdr;
 
 class OrdenController extends Controller
 {
@@ -280,7 +285,7 @@ class OrdenController extends Controller
                     'nom_orden' => 'required',
                     'horas_estimadas' => 'required',
                     'minutos_estimados' => 'required',
-                    'responsable' => 'required',
+                    // 'responsable' => 'required',
                     'supervisor' => 'required',
                     'fecha_ini' => 'required',
                     'estado_mecanizado' => 'required',
@@ -291,7 +296,7 @@ class OrdenController extends Controller
                     'nom_orden.required' => 'Falta el nombre de la orden.',
                     'horas_estimadas.required' => 'Faltan las horas estimadas.',
                     'minutos_estimados.required' => 'Faltan los minutos estimados.',
-                    'responsable.required' => 'Seleccione un responsable',
+                    // 'responsable.required' => 'Seleccione un responsable',
                     'supervisor.required' => 'Seleccione un supervisor',
                     'fecha_ini.required' => 'Seleccione una fecha de inicio.',
                     'estado_mecanizado.required' => 'Seleccione una etapa.',
@@ -522,10 +527,10 @@ class OrdenController extends Controller
         $id_supervisor = $request->input('supervisor');
         $id_orden_manufactura = $request->input('id_orden_manuf');
 
-        $responsabilidad = Responsabilidad::create([
-            'id_empleado' => $id_responsable,
-            'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        ]);
+        // $responsabilidad = Responsabilidad::create([
+        //     'id_empleado' => $id_responsable,
+        //     'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        // ]);
 
         $responsabilidad_supervisor = Responsabilidad::create([
             'id_empleado' => $id_supervisor,
@@ -541,10 +546,10 @@ class OrdenController extends Controller
                 ]);
         
 
-        Responsabilidad_orden::create([
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-            'id_orden' => $orden->id_orden
-        ]);
+        // Responsabilidad_orden::create([
+        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+        //     'id_orden' => $orden->id_orden
+        // ]);
 
         Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
@@ -552,10 +557,10 @@ class OrdenController extends Controller
         ]);
 
         //Calculamos los costos despues de asignar responsabilidades
-        $orden->costo_estimado = $orden->getCostoEstimado();
+        // $orden->costo_estimado = $orden->getCostoEstimado();
         $orden->save();
 
-        Orden_mecanizado::create([
+        $ord_mec = Orden_mecanizado::create([
             'revision' => $revision,
             'cantidad' => $cantidad,
             'ruta_pieza' => $ruta_plano,
@@ -563,20 +568,32 @@ class OrdenController extends Controller
             'id_orden_manufactura' => $id_orden_manufactura
         ]);
 
-        $parte = Parte::create([
-            'observaciones' => 'Generacion de orden de mecanizado',
-            'fecha' => $fecha_ini,
+        $act_ord = Actualizacion_orden::create([
+            'descripcion' => 'Generacion de orden de mecanizado',
             'fecha_limite' => $fecha_req,
             'fecha_carga' => $fecha_carga,
-            'horas' => '00:00',
-            'id_orden' => $orden->id_orden,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad
         ]);
 
-        Parte_mecanizado::create([
-            'id_estado_mecanizado' => $id_estado_mec,
-            'id_parte' => $parte->id_parte
+        Actualizacion_orden_mec::create([
+            'id_actualizacion_orden' => $act_ord->id_actualizacion_orden,
+            'id_orden_mecanizado' => $ord_mec->id_orden_mecanizado,
+            'id_estado_mecanizado' => $id_estado_mec
         ]);
+        // $parte = Parte::create([
+        //     'observaciones' => 'Generacion de orden de mecanizado',
+        //     'fecha' => $fecha_ini,
+        //     'fecha_limite' => $fecha_req,
+        //     'fecha_carga' => $fecha_carga,
+        //     'horas' => '00:00',
+        //     'id_orden' => $orden->id_orden,
+        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        // ]);
+
+        // Parte_mecanizado::create([
+        //     'id_estado_mecanizado' => $id_estado_mec,
+        //     'id_parte' => $parte->id_parte
+        // ]);
 
     }
 
@@ -588,7 +605,7 @@ class OrdenController extends Controller
             'nom_orden' => 'required',
             'horas_estimadas' => 'required',
             'minutos_estimados' => 'required',
-            'responsable' => 'required',
+            // 'responsable' => 'required',
             'supervisor' => 'required',
             'fecha_ini' => 'required',
             'estado_mecanizado' => 'required',
@@ -599,7 +616,7 @@ class OrdenController extends Controller
             'nom_orden.required' => 'Falta el nombre de la orden.',
             'horas_estimadas.required' => 'Faltan las horas estimadas.',
             'minutos_estimados.required' => 'Faltan los minutos estimados.',
-            'responsable.required' => 'Seleccione un responsable',
+            // 'responsable.required' => 'Seleccione un responsable',
             'fecha_ini.required' => 'Seleccione una fecha de inicio.',
             'estado_mecanizado.required' => 'Seleccione una etapa.',
             'fecha_req.required' => 'Seleccione una fecha limite.',
@@ -1241,6 +1258,133 @@ class OrdenController extends Controller
 
     public function ordenHDR($id){
         $orden = Orden::find($id);
-        return view('Ingenieria.Servicios.HDR.index', compact('orden'));
+        $operaciones = Operacion::orderBy('nombre_operacion')->get();
+        $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
+        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta'));
+    }
+
+    public function index_hdr(){
+        $operaciones = [];
+        return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones'));
+    }
+
+    public function guardar_hdr(Request $request, $id){
+        // return $request;
+
+        /*$this->validate($request, [
+            
+        ], [
+            
+        ]);*/
+        $ubi = $request->input('m_ubi');
+        $cant = $request->input('m_cant');
+        $fec_carga = $request->input('m_fec_carga');
+        $obse = $request->input('observaciones');
+        $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $contador = 1;
+        
+
+        $operaciones = $request->input('operacion');
+        
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+        ]);
+
+        $hdr = Hoja_de_ruta::create([
+            'fecha_carga' => $fec_carga,
+            'observaciones' => $obse,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden_mecanizado' => $id,
+        ]);
+
+        if (count($operaciones) != 0) {
+            $tecnicos = $request->input('tecnico');
+            $maquinarias = $request->input('maq');
+            $total_op = count($operaciones);
+
+            for ($i=0; $i < $total_op; $i++) { 
+
+                $responsabilidad_hdr = Responsabilidad::create([
+                    'id_empleado' => User::find($tecnicos[$i])->getEmpleado->id_empleado,
+                    'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                ]);
+
+                $responsabilidad_parte_hdr = Responsabilidad::create([
+                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                    'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                ]);
+
+                $ope = Operaciones_de_hdr::create([
+                            'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
+                            'numero' => $contador,
+                            'fecha_carga' => $fec_carga,
+                            'id_maquinaria' => $maquinarias[$i],
+                            'id_operacion' => $operaciones[$i],
+                            'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
+                            // 'medidas',
+                            // 'ruta_cam'
+                    ]);
+
+                Parte_ope_hdr::create([
+                    'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                    'fecha_carga' => $fec_carga,
+                    'fecha' => $fec_carga,
+                    'observaciones' => 'Generacion de operacion de hoja de ruta.',
+                    'id_responsabilidad' => $responsabilidad_parte_hdr->id_responsabilidad,
+                    'horas' => '00:00'
+                ]);
+            }
+        }
+        
+
+        // foreach ($operaciones as $ope) {
+        //     Operaciones_de_hdr::create([
+        //         'id_hoja_de_ruta',
+        //         'numero',
+        //         'fecha_carga',
+        //         'id_maquinaria',
+        //         'id_operacion',
+        //         'id_responsabilidad',
+        //         // 'medidas',
+        //         // 'ruta_cam'
+        //     ]);
+        // }
+        return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido creado con exito.');
+    }
+
+    public function saveOperations(Request $request)
+{
+        $validated = $request->validate([
+            'operations' => 'required|array',
+            'operations.*.numero' => 'required|integer',
+            'operations.*.operacion' => 'required|string|max:255',
+            'operations.*.asignado' => 'nullable|string|max:255',
+            'operations.*.maquina' => 'nullable|string|max:255',
+            'operations.*.medidas' => 'nullable|string|max:255',
+        ]);
+
+        foreach ($validated['operations'] as $operation) {
+            Operation::create($operation);
+        }
+
+        return response()->json(['message' => 'Datos guardados exitosamente']);
+    }
+
+    public function obtenerOperacionesyTecnicos(){
+        // return 'holi';
+        return [
+                'operaciones' => Operacion::orderBy('nombre_operacion')->get(),
+                'tecnicos' => $this->obtenerEmpleadosActivos()
+                ];
+    }
+
+    public function obtenerMaquinas(Request $request){
+        // return 'holi';
+        $idOperacion = $request->input('id_operacion');
+        return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
+                ->where('oxm.id_operacion', $idOperacion)
+                ->get();
     }
 }

@@ -12,7 +12,7 @@ class Vw_gest_orden_manufactura extends Model
     
     public $timestamps = false;
     
-    protected $table = 'vw_gest_orden_manufactura';
+    protected $table = 'vw_gest_orden_manufactura_new';
 
     protected $primaryKey = 'vw_gest_orden_manufactura';
 
@@ -28,7 +28,7 @@ class Vw_gest_orden_manufactura extends Model
         'descripcion_etapa',
         'fecha_limite',
         'fecha_finalizacion',
-        'responsable',
+        // 'responsable',
         'id_empleado_responsable',
         'supervisor',
         'id_empleado_supervisor',
@@ -44,8 +44,8 @@ class Vw_gest_orden_manufactura extends Model
         'horas_real'
     ];
 
-    protected $casts = [
-        'horas_estimada' => HoraMinutoCast::class
-    ];
+    // protected $casts = [
+    //     'horas_estimada' => HoraMinutoCast::class
+    // ];
 
 }

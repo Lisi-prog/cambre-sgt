@@ -83,6 +83,7 @@
                                 <div>
                                 <table id="example" class="table table-hover mt-2" class="display">
                                     <thead style="">
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Numero</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
@@ -90,27 +91,29 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
-                                        {{-- @foreach ($orden->getPartes as $parte)
+                                        @php
+                                            $contador = 1;
+                                        @endphp
+                                        @foreach ($hojas_de_ruta as $hdr)
                                         <tr>
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$contador ?? '-'}}</td>
 
-                                            <td class= 'text-center'style="vertical-align: middle;">{{$parte->observaciones}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->id_hoja_de_ruta ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
+                                            <td class= 'text-center'style="vertical-align: middle;">{{$hdr->fecha_carga ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{ $parte->fecha_limite ?? '-'}}</td>
+                                            {{-- <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getEstado() ?? '-'}}</td> --}}
+                                            <td class= 'text-center' style="vertical-align: middle;">{{'-'}}</td>
 
-                                            
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getNombreEstado()}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->horas}}
+                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
 
-                                            @if ($orden->getOrdenDe->getTipoOrden() == 3)
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-'}}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getParteMecxMaq->first()->horas_maquina ?? '-'}}</td>
-                                            @endif
                                         </tr>
-                                        @endforeach --}}
+                                            @php
+                                                $contador += 1;
+                                            @endphp
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 </div>

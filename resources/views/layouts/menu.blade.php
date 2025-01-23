@@ -115,6 +115,11 @@
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
+                        <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Operaciones</span>
+                    </a>
+                </li>
             </ul>
         </li>
     @endcan

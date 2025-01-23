@@ -100,13 +100,13 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fec_limite_manuf', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {{-- {!! Form::text('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('estado_manuf', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado_manuf', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {{-- {!! Form::text('estado_manuf', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
                                     </div>
                                 </div>
                                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -159,17 +159,17 @@
                                         @endphp
                                         @foreach ($orden_manufactura->getOrdenesMecanizado as $orden_mecanizado)
                                             <tr>
-                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->nombre_orden}}</td> 
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->nombre_orden ?? '-'}}</td> 
 
-                                                <td class= 'text-center' >{{$orden_mecanizado->cantidad}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->cantidad ?? '-'}}</td>
 
-                                                <td class= 'text-center' >{{$orden_mecanizado->revision}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->revision ?? '-'}}</td>
 
-                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->fecha_inicio}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->fecha_inicio ?? '-'}}</td>
 
-                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite ?? '-'}}</td>
                                                 
-                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->getduracionHoraMinuto()}}</td>
+                                                <td class= 'text-center' >{{$orden_mecanizado->getOrden->getduracionHoraMinuto() ?? '-'}}</td>
 
                                                 <td>
                                                     <div class="row justify-content-center" >

@@ -592,9 +592,11 @@ class ProyectoController extends Controller
             'supervisores_trabajo' => Vw_gest_orden_trabajo::where('id_servicio', $id)->distinct()->pluck('supervisor'),
             'responsables_trabajo' => Vw_gest_orden_trabajo::where('id_servicio', $id)->distinct()->pluck('responsable'),
             'supervisores_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('supervisor'),
-            'responsables_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('responsable'),
+            'responsables_manufactura' => [],
+            // 'responsables_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('responsable'),
             'supervisores_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('supervisor'),
-            'responsables_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('responsable')
+            // 'responsables_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('responsable')
+            'responsables_mecanizado' => []
         ];
 
 

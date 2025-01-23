@@ -24,7 +24,8 @@ class Parte_ope_hdr extends Model
         'fecha',
         'observaciones',
         'id_responsabilidad',
-        'horas'
+        'horas',
+        'id_estado_hdr'
     ];
 
 }
