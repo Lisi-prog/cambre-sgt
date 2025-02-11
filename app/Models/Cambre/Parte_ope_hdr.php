@@ -25,7 +25,15 @@ class Parte_ope_hdr extends Model
         'observaciones',
         'id_responsabilidad',
         'horas',
-        'id_estado_hdr'
+        'id_estado_hdr',
+        'medidas'
     ];
 
+    public function getEstado(){
+        return $this->hasOne(Estado_hdr::class, 'id_estado_hdr');
+    }
+
+    public function getNombreEstado(){
+        return Estado_hdr::where('id_estado_hdr', $this->id_estado_hdr)->first()->nombre_estado_hdr;
+    }
 }

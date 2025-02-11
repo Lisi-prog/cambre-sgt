@@ -75,7 +75,6 @@
                                     <th class='text-center' style="color:#fff;">Operación</th>
                                     <th class='text-center' style="color:#fff;">Asignado</th>
                                     <th class='text-center' style="color:#fff;">Máquina</th>
-                                    <th class='text-center' style="color:#fff;">Medidas</th>
                                     <th class='text-center' style="color:#fff;">Acciones</th>
                                   </tr>
                                 </thead>
@@ -159,7 +158,6 @@
                         <option value="">Seleccionar</option>
                     </select>
                 </td>
-                <td contenteditable="true"></td>
                 <td class="text-center">
                     <button class="btn btn-danger btn-sm deleteRow">Eliminar</button>
                 </td>

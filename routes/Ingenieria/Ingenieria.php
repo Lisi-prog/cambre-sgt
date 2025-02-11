@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::put('ordenes/mec/{id}/hdr/guardar', [OrdenController::class, 'guardar_hdr'])->name('hdr.crear');
     Route::post('/orden/mec/hdr/obtenerope',[OrdenController::class, 'obtenerOperacionesyTecnicos']);
     Route::post('/orden/mec/hdr/obtenermaq',[OrdenController::class, 'obtenerMaquinas']);
+    Route::post('/orden/mec/hdr/obtener-ope-hdr',[OrdenController::class, 'obtenerOperacionHdr']);
     Route::get('ordenes/mec/operaciones', [OrdenController::class, 'index_hdr'])->name('ordenes.indexhdr');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
@@ -80,6 +81,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
         Route::get('/parte/prueba/email', [ParteController::class, 'pruebaEmail']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
+        Route::post('/parte-multiple/guardar-multiple', [ParteController::class, 'guardarMultipleParte'])->name('partes.guardar.multiple');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
     Route::resource('ordenes', OrdenController::class);
     //------------------

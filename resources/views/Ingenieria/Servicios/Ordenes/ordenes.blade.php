@@ -53,7 +53,14 @@
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
+                    Carga Multiple
+                </button>
             </div>
         </div>
     </div>
@@ -184,6 +191,7 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
+                                    <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Prioridad</th>
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
@@ -204,6 +212,8 @@
                                     @endphp
                                     @foreach ($ordenes as $orden)
                                         <tr>
+                                            <td class='text-center chk-input' style="vertical-align: middle;" hidden><input class="form-check-input m-auto" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]"></td>
+
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
@@ -313,6 +323,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
+@include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
 
 <script>
     let x = '';
@@ -356,7 +367,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[6]) !== -1) {
+            if (positions.indexOf(searchData[7]) !== -1) {
                 return true;
             }
             
@@ -376,7 +387,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[7]) !== -1) {
+            if (offices.indexOf(searchData[8]) !== -1) {
                 return true;
             }
             
@@ -396,7 +407,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[5]) !== -1) {
+            if (offices.indexOf(searchData[6]) !== -1) {
                 return true;
             }
             
@@ -417,7 +428,7 @@
             }
 
 
-            if (offices.indexOf(searchData[2]) !== -1) {
+            if (offices.indexOf(searchData[3]) !== -1) {
                 return true;
             }
             
@@ -596,6 +607,7 @@
             });
             actRow();
     });
+        $('#id_selec').on('change', mostrarSelec);
     } );
     
 </script>
@@ -614,6 +626,34 @@
         $('input[type=checkbox]').prop("checked", false);
         var table = $('#example').DataTable();
         table.draw();
+    }
+
+
+    function mostrarSelec() {
+        let colum_sel = document.getElementsByClassName('chk-input');
+        let enca = document.getElementById('enc_sel');
+        let btn = document.getElementById('btn-sel-mul'); 
+
+        if ($("#id_selec").is(":checked")) {
+            enca.hidden = false;
+            btn.hidden = false;
+            for (let index = 0; index < colum_sel.length; index++) {
+                colum_sel[index].hidden = false;
+            }
+        } else {
+            enca.hidden = true;
+            btn.hidden = true;
+            for (let index = 0; index < colum_sel.length; index++) {
+                colum_sel[index].hidden = true;
+            }
+        }
+
+    }
+
+    function cargarMMultiple(){
+        let ids = document.getElementById('m-parte-multiple-ids');
+        let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
+        ids.value = valores;
     }
 </script>
 @endsection

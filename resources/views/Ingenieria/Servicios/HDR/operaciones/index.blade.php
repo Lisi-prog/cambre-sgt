@@ -184,9 +184,9 @@
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
-                                    <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
+                                    <th class='text-center' style="color:#fff;min-width:14vw">Operacion</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
-                                    <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
@@ -198,29 +198,29 @@
                                     @php
                                         $idCount = 0;
                                     @endphp
-                                    {{-- @foreach ($ordenes as $orden)
+                                    @foreach ($operaciones as $ope)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad_servicio ?? 'S/P'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$ope->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$ope->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->codigo_servicio ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$ope->codigo_servicio ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->nombre_orden ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_estado ?? ''}}</td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->supervisor ?? '-'}}</td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->nombre_operacion ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td> --}}
+                                            
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->nombre_estado_hdr ?? '-'}}</td>
+                                            
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->responsable ?? '-'}}</td>
+                                            
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->total_horas ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_limite ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_finalizacion ?? '-'}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -229,15 +229,15 @@
                                                             Opciones
                                                         </button>
                                                     </div>
-                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Ver
+                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="">
+                                                                    Partes
                                                                 </button>
                                                             </div>
                                                         </div>
-
+{{--
                                                         @if ($tipo_orden === 3)
                                                             <div class="row my-2">
                                                                 <div class="col-12">
@@ -263,15 +263,15 @@
                                                                 </button> 
                                                             </div>
                                                             @endcan
-                                                        </div>
-                                                    </div>
+                                                        </div> --}}
+                                                    </div> 
                                                 </div>
                                             </td>
                                         </tr>
                                         @php
                                         $idCount += 1;
                                         @endphp
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -298,8 +298,8 @@
     </script> --}}
 </section>
 
-{{-- @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
+@include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
+{{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
 
 <script>

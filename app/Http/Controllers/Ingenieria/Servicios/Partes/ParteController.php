@@ -874,4 +874,9 @@ class ParteController extends Controller
         }
 
     }
+
+    public function guardarMultipleParte(Request $request){
+        // return 'holi';
+       return $ids_orden = $request->input('ids');
+    }
 }

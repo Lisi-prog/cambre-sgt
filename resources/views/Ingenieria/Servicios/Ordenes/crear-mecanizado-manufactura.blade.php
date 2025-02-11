@@ -100,13 +100,13 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('fec_limite_manuf', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {{-- {!! Form::text('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
+                                        {!! Form::text('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
                                         {!! Form::label('estado_manuf', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {{-- {!! Form::text('estado_manuf', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
+                                        {!! Form::text('estado_manuf', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
                                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">

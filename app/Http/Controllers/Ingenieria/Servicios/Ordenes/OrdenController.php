@@ -52,14 +52,13 @@ use App\Models\Cambre\Vw_orden_manufactura;
 use App\Mail\Solicitud\OrdenMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
-use App\Models\Cambre\Actualizacion_orden;
-use App\Models\Cambre\Actualizacion_orden_man;
-use App\Models\Cambre\Actualizacion_orden_mec;
 use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Hoja_de_ruta;
 use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Parte_ope_hdr;
+use App\Models\Cambre\Vw_operaciones_de_hdr;
+
 
 class OrdenController extends Controller
 {
@@ -462,7 +461,7 @@ class OrdenController extends Controller
         //     'id_orden' => $orden->id_orden
         // ]);
 
-        Responsabilidad_orden::create([
+        $responsabilidad = Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
             'id_orden' => $orden->id_orden
         ]);
@@ -478,19 +477,7 @@ class OrdenController extends Controller
             'id_orden' => $orden->id_orden
         ]);
 
-        $act_ord = Actualizacion_orden::create([
-            'descripcion' => 'Generacion de orden de manufactura',
-            'fecha_limite' => $fecha_req,
-            'fecha_carga' => $fecha_carga,
-            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad
-        ]);
-
-        Actualizacion_orden_man::create([
-            'id_actualizacion_orden' => $act_ord->id_actualizacion_orden,
-            'id_orden_manufactura' => $ord_man->id_orden_manufactura,
-            'id_estado_manufactura' => $id_estado_man
-        ]);
-        /*$parte = Parte::create([
+        $parte = Parte::create([
             'observaciones' => 'Generacion de orden de manufactura',
             'fecha' => $fecha_ini,
             'fecha_limite' => $fecha_req,
@@ -503,9 +490,7 @@ class OrdenController extends Controller
         Parte_manufactura::create([
             'id_estado_manufactura' => $id_estado_man,
             'id_parte' => $parte->id_parte
-        ]); */
-
-
+        ]);
 
     }
 
@@ -551,7 +536,7 @@ class OrdenController extends Controller
         //     'id_orden' => $orden->id_orden
         // ]);
 
-        Responsabilidad_orden::create([
+        $responsabilidad = Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
             'id_orden' => $orden->id_orden
         ]);
@@ -568,32 +553,21 @@ class OrdenController extends Controller
             'id_orden_manufactura' => $id_orden_manufactura
         ]);
 
-        $act_ord = Actualizacion_orden::create([
-            'descripcion' => 'Generacion de orden de mecanizado',
+        
+        $parte = Parte::create([
+            'observaciones' => 'Generacion de orden de mecanizado',
+            'fecha' => $fecha_ini,
             'fecha_limite' => $fecha_req,
             'fecha_carga' => $fecha_carga,
-            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad
+            'horas' => '00:00',
+            'id_orden' => $orden->id_orden,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
         ]);
 
-        Actualizacion_orden_mec::create([
-            'id_actualizacion_orden' => $act_ord->id_actualizacion_orden,
-            'id_orden_mecanizado' => $ord_mec->id_orden_mecanizado,
-            'id_estado_mecanizado' => $id_estado_mec
+        Parte_mecanizado::create([
+            'id_estado_mecanizado' => $id_estado_mec,
+            'id_parte' => $parte->id_parte
         ]);
-        // $parte = Parte::create([
-        //     'observaciones' => 'Generacion de orden de mecanizado',
-        //     'fecha' => $fecha_ini,
-        //     'fecha_limite' => $fecha_req,
-        //     'fecha_carga' => $fecha_carga,
-        //     'horas' => '00:00',
-        //     'id_orden' => $orden->id_orden,
-        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        // ]);
-
-        // Parte_mecanizado::create([
-        //     'id_estado_mecanizado' => $id_estado_mec,
-        //     'id_parte' => $parte->id_parte
-        // ]);
 
     }
 
@@ -1264,8 +1238,13 @@ class OrdenController extends Controller
     }
 
     public function index_hdr(){
-        $operaciones = [];
+        $operaciones = Vw_operaciones_de_hdr::get();
         return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones'));
+    }
+
+    public function obtenerOperacionHdr(Request $request){
+        $id = $request->input('id');
+        return Vw_operaciones_de_hdr::where('id_hoja_de_ruta', $id)->orderBy('numero')->get();
     }
 
     public function guardar_hdr(Request $request, $id){
@@ -1306,10 +1285,10 @@ class OrdenController extends Controller
 
             for ($i=0; $i < $total_op; $i++) { 
 
-                $responsabilidad_hdr = Responsabilidad::create([
-                    'id_empleado' => User::find($tecnicos[$i])->getEmpleado->id_empleado,
-                    'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
-                ]);
+                // $responsabilidad_hdr = Responsabilidad::create([
+                //     'id_empleado' => $tecnicos[$i],
+                //     'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                // ]);
 
                 $responsabilidad_parte_hdr = Responsabilidad::create([
                     'id_empleado' => Auth::user()->getEmpleado->id_empleado,
@@ -1322,7 +1301,7 @@ class OrdenController extends Controller
                             'fecha_carga' => $fec_carga,
                             'id_maquinaria' => $maquinarias[$i],
                             'id_operacion' => $operaciones[$i],
-                            'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
+                            // 'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
                             // 'medidas',
                             // 'ruta_cam'
                     ]);
@@ -1333,8 +1312,13 @@ class OrdenController extends Controller
                     'fecha' => $fec_carga,
                     'observaciones' => 'Generacion de operacion de hoja de ruta.',
                     'id_responsabilidad' => $responsabilidad_parte_hdr->id_responsabilidad,
-                    'horas' => '00:00'
+                    'horas' => '00:00',
+                    'medidas' => 0,
+                    'id_estado_hdr' => 1
                 ]);
+
+                $contador += 1;
+
             }
         }
         

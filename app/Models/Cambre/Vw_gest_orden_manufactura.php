@@ -12,7 +12,7 @@ class Vw_gest_orden_manufactura extends Model
     
     public $timestamps = false;
     
-    protected $table = 'vw_gest_orden_manufactura_new';
+    protected $table = 'vw_gest_orden_manufactura';
 
     protected $primaryKey = 'vw_gest_orden_manufactura';
 

@@ -574,3 +574,51 @@ select
     left join orden_manufactura oman on oman.id_orden_manufactura = ot.id_orden_manufactura
     left join orden oo on oo.id_orden = oman.id_orden
     order by se.prioridad_servicio;
+
+
+    CREATE VIEW vw_operaciones_de_hdr AS
+    with
+    ParteRanked AS (
+        SELECT
+            p.id_parte_ope_hdr,
+            est.id_estado_hdr,
+            p.id_ope_de_hdr,
+            est.nombre_estado_hdr,
+            CASE
+                WHEN est.id_estado_hdr = 3 THEN p.fecha
+                ELSE "____-__-__"
+            END as fecha_finalizacion,
+            ROW_NUMBER() OVER (PARTITION BY p.id_ope_de_hdr ORDER BY p.id_parte_ope_hdr DESC) AS rn
+        FROM parte_ope_hdr p
+        inner join estado_hdr est on est.id_estado_hdr = p.id_estado_hdr
+    )
+    select 
+        se.prioridad_servicio,
+        se.codigo_servicio,
+        se.nombre_servicio,
+        et.descripcion_etapa,
+        o.nombre_orden,
+        hdr.id_hoja_de_ruta,
+        op.nombre_operacion,
+        case
+            when op_hdr.id_responsabilidad is null then '-'
+            else emp.nombre_empleado
+        end as responsable,
+        maq.codigo_maquinaria,
+        op_hdr.id_ope_de_hdr,
+        op_hdr.numero,
+        p_rank.id_estado_hdr,
+        p_rank.nombre_estado_hdr,
+        th.total_horas
+    from servicio se
+    inner join etapa et on et.id_servicio = se.id_servicio
+    inner join orden o on o.id_etapa = et.id_etapa
+    inner join orden_mecanizado om on om.id_orden = o.id_orden
+    inner join hoja_de_ruta hdr on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+    inner join operaciones_de_hdr op_hdr on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
+    inner join operacion op on op.id_operacion = op_hdr.id_operacion
+    left join responsabilidad res on res.id_responsabilidad = op_hdr.id_responsabilidad
+    inner join empleado emp on emp.id_empleado = res.id_empleado
+    inner join maquinaria maq on maq.id_maquinaria = op_hdr.id_maquinaria
+    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr
+    inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1;

@@ -25,12 +25,16 @@ class Operaciones_de_hdr extends Model
         'fecha',
         'id_maquinaria',
         'id_operacion',
-        'id_responsabilidad',
-        'medidas',
         'ruta_cam'
     ];
 
-    // public function getEstado(){
-    //     return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('')->first()->estado_mecanizado;
-    // }
+    public function getPartes()
+    {
+        return $this->hasMany(Parte_ope_hdr::class, 'id_ope_de_hdr');
+    }
+
+    public function getEstado()
+    {
+        return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->getNombreEstado();
+    }
 }

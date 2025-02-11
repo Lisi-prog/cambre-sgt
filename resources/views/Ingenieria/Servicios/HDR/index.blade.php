@@ -15,7 +15,7 @@
     <section class="section">
         <div class="section-header d-flex">
             <div class="">
-                <div class="titulo page__heading py-1 fs-5">Hoja de Ruta</div>
+                <div class="titulo page__heading py-1 fs-5">Hojas de Ruta</div>
             </div>
         </div>
         <div class="section-body">
@@ -42,12 +42,12 @@
                                         {!! Form::text('nombre-orden', $orden->nombre_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('responsable', "Responsable:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                         {!! Form::text('responsable', $orden->getNombreResponsable(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('supervisor', "Supervisor:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
@@ -88,11 +88,13 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
                                         @php
                                             $contador = 1;
+                                            $idCount = 0;
                                         @endphp
                                         @foreach ($hojas_de_ruta as $hdr)
                                         <tr>
@@ -107,11 +109,30 @@
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->uli ?? '-'}}</td>
 
+                                            <td class='text-center' style="vertical-align: middle;">
+                                                <div class="row justify-content-center" >
+                                                    <div class="row justify-content-center" >
+                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHdr{{$idCount}}" aria-expanded="false" aria-controls="collapseHdr{{$idCount}}">
+                                                            Opciones
+                                                        </button>
+                                                    </div>
+                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseHdr{{$idCount}}">
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-warning w-100" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})">
+                                                                    Operaciones
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                             @php
                                                 $contador += 1;
+                                                $idCount += 1;
                                             @endphp
                                         @endforeach
                                     </tbody>
@@ -157,7 +178,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Medidas</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="body_ope">
                                         {{-- @foreach ($orden->getPartes as $parte)
                                         <tr>
                                             <td class= 'text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
@@ -193,12 +214,13 @@
     </section>
     @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
     @include('Ingenieria.Servicios.HDR.modal.crear-ope')
+    @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
     <script>
         $(document).ready(function () {
-            let tipo_orden = document.getElementById('tipo_orden').value;
-            var url = '{{route('ordenes.tipo',':tipo_orden')}}';
-            url = url.replace(':tipo_orden', tipo_orden);
-            document.getElementById('volver').href = url;
+            // let tipo_orden = document.getElementById('tipo_orden').value;
+            // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
+            // url = url.replace(':tipo_orden', tipo_orden);
+            // document.getElementById('volver').href = url;
             $('#example').DataTable({
                 language: {
                         lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -218,5 +240,49 @@
                     "pageLength": 25
             });
         });
+
+        function cargarOperaciones(id) {
+            let body_tb = document.getElementById('body_ope');
+            body_tb.innerHTML = '';
+            let fila_ope = '';
+            console.log('aaasd')
+            $.ajax({
+                type: "post",
+                url: '/orden/mec/hdr/obtener-ope-hdr', 
+                data: {
+                    id: id,
+                },
+                success: function (response) {
+                    console.log(response);
+                    response.forEach((op) => {
+                        fila_ope += `<tr>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.responsable}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                            <td class='text-center' style="vertical-align: middle;">
+                                                
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="">
+                                                                    Partes
+                                                                </button>
+                                                            </div>
+                                                        
+                                            </td>
+                                        </tr>
+                                        `; 
+                    });
+                    body_tb.innerHTML += fila_ope;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
     </script>
 @endsection

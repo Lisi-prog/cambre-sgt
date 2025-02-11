@@ -12,7 +12,7 @@ class Vw_gest_orden_mecanizado extends Model
     
     public $timestamps = false;
     
-    protected $table = 'vw_gest_orden_mecanizado_new';
+    protected $table = 'vw_gest_orden_mecanizado';
 
     protected $primaryKey = 'vw_gest_orden_mecanizado';
 

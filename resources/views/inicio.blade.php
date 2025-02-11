@@ -103,6 +103,18 @@
                                     </a>
                                 </div>
                             </li>
+                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
+                                <div class=" m-auto rounded-4" style="">
+                                    <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
+                                    <div class="row m-auto text-center" style="">
+                                        <i class="fas fa-hammer m-auto p-2" style="font-size:1.2em;"></i>
+                                    </div>
+                                    <div class="row m-auto" style="">
+                                        {!! Form::label('operaciones', 'Operaciones', ['class' => 'text-center my-auto', 'style' => '']) !!}
+                                    </div>
+                                    </a>
+                                </div>
+                            </li>
                         </div>
                     </div>
                     @endcan
