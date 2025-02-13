@@ -89,7 +89,14 @@
 <ul class="navbar-nav navbar-right">
 
     @if(\Illuminate\Support\Facades\Auth::user())
-        
+                @php
+                    $env = env('APP_ENV');
+                @endphp
+
+                @if ($env == 'development')
+                    <h6 class="my-auto text-white fs-1 bg-danger rounded">VERSION DE PRUEBA DEL SGI</h6>
+                @endif
+
                 <li class="nav-item dropdown dropstart my-auto" style='$dropdown-min-width: 25rem;'>
                     @php
                             $alMenosUnaLeida = \Illuminate\Support\Facades\Auth::user()->getNotificaciones->contains('leido', 0);
@@ -97,7 +104,7 @@
 
                             if ($alMenosUnaLeida) {
                                 $not_act = 1;
-                            } 
+                            }
                     @endphp
                     
                     <a href="#" id="mydrop" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: #f9f9f9;" onclick="marcarComoLeido({{\Illuminate\Support\Facades\Auth::user()->id}})">
