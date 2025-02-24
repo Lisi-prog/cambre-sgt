@@ -184,12 +184,12 @@
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
-                                    <th class='text-center' style="color:#fff;min-width:14vw">Operacion</th>
-                                    {{-- <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th> --}}
+                                    <th class='text-center' style="color:#fff;min-width:10vw">Operacion</th>
+                                    <th class='text-center' style="color:#fff;min-width:10vw">Maquina</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
-                                    <th class='text-center' style="color:#fff;min-width:6vw">Responsable</th>
+                                    <th class='text-center' style="color:#fff;min-width:6vw">Ultimo res.</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
@@ -210,15 +210,17 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->nombre_operacion ?? '-'}}</td>
 
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->codigo_maquinaria ?? '-'}}</td>
+
                                             {{-- <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td> --}}
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->nombre_estado_hdr ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$ope->responsable ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->ultimo_res ?? '-'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->total_horas ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_limite ?? '-'}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_limite ?? '-'}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_finalizacion ?? '-'}}</td>
         

@@ -89,6 +89,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Progreso</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
@@ -108,6 +109,8 @@
                                             <td class= 'text-center' style="vertical-align: middle;">{{'-'}}</td>
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->uli ?? '-'}}</td>
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->uli ?? '-'}}</td>
 
@@ -170,7 +173,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Asignado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Ultimo res.</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Maquina</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Operacion</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
@@ -259,7 +262,7 @@
                                             <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.responsable}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">-</td>

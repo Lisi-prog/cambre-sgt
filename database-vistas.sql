@@ -319,14 +319,9 @@ select
 	emp.nombre_empleado as responsable,
     emp.id_empleado as id_responsable,
     ro.nombre_empleado as supervisor,
-    ro.id_empleado as id_supervisor,
-    pmm.horas_maquina,
-    pmm.id_maquinaria,
-    m.codigo_maquinaria
+    ro.id_empleado as id_supervisor
 from parte p 
 inner join parte_mecanizado pt on pt.id_parte = p.id_parte
-left join parte_mecanizado_x_maquinaria pmm on pmm.id_parte_mecanizado = pt.id_parte_mecanizado
-left join maquinaria m on m.id_maquinaria = pmm.id_maquinaria
 inner join estado_mecanizado e on e.id_estado_mecanizado = pt.id_estado_mecanizado
 inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
 inner join empleado emp on emp.id_empleado = res.id_empleado

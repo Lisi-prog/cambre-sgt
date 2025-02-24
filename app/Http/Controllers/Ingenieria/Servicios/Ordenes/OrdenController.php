@@ -1366,7 +1366,10 @@ class OrdenController extends Controller
 
     public function obtenerMaquinas(Request $request){
         // return 'holi';
-        $idOperacion = $request->input('id_operacion');
+        $nom_ope = $request->input('nom_operacion');
+        $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
+        // $idOperacion = $request->input('id_operacion');
+
         return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
                 ->where('oxm.id_operacion', $idOperacion)
                 ->get();

@@ -9,6 +9,18 @@
             {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <div class="form-group">
+                            {!! Form::label('hdr_ant', 'HDR anteriores:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::select('hdr_ant', [], null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'hdr_ant'
+                                        ]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <div class="form-group">
                             {!! Form::label('m_id_pieza', 'ID PIEZA:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
@@ -100,6 +112,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('archivo', 'Adjuntar archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            {!! Form::file('archivo', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload', 'required')) !!}
+                            {{-- <input type="file" class="form-control" name="archivo" required> --}}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
@@ -132,31 +153,31 @@
             let opt_tec = '';
 
             response.operaciones.forEach((ope) => {
-                options += `<option value="${ope.id_operacion}">${ope.nombre_operacion}</option>`;
+                options += `<option value="${ope.nombre_operacion}">`;
             });
 
             response.tecnicos.forEach((tec) => {
-                opt_tec += `<option value="${tec.id_empleado}">${tec.nombre_empleado}</option>`;
+                opt_tec += `<option value="${tec.nombre_empleado}">`;
             });
 
             row.innerHTML = `
-                <td contenteditable="false" class="text-center">${rowCount}</td>
-                <td contenteditable="true">
-                    <select class="form-control m-0 opt-ope" style="" name="operacion[]" required>
-                        <option value="">Seleccionar</option>
+                <td class="text-center">${rowCount}</td>
+                <td>
+                    <input type="text" class="form-select input-ope" name="operacion[]" id="input-pe" list="lista-ope">
+                    <datalist id="lista-ope">
                         ${options}
-                    </select>
+                    </datalist>
                 </td>
-                <td contenteditable="true">
-                    <select class="form-control" name="tecnico[]">
-                        <option value="">Seleccionar</option>
+                <td>
+                    <input type="text" class="form-control input-ope" name="tecnico[]" id="input-pe" list="lista-tec">
+                    <datalist id="lista-tec">
                         ${opt_tec}
-                    </select>
+                    </datalist>
                 </td>
-                <td contenteditable="true">
-                    <select class="form-control opt-maq" id="opt_maq" name="maq[]" required>
-                        <option value="">Seleccionar</option>
-                    </select>
+                <td>
+                    <input type="text" class="form-control input-ope" name="maq[]" id="opt_maq" list="lista-maq">
+                    <datalist class="opt-maq" id="lista-maq">
+                    </datalist>
                 </td>
                 <td class="text-center">
                     <button class="btn btn-danger btn-sm deleteRow">Eliminar</button>
@@ -168,7 +189,7 @@
             const optMaq = row.querySelector('.opt-maq');
 
             // Agregar evento de cambio al primer select
-            optOpe.addEventListener('change', function () {
+            /* optOpe.addEventListener('change', function () {
                 const selectedOperation = this.value;
 
                 // Hacer una nueva solicitud AJAX para obtener las máquinas basadas en la operación seleccionada
@@ -190,6 +211,67 @@
                         console.log(error);
                     }
                 });
+            }); */
+            // Selecciona todos los inputs con la clase 'input-permiso'
+            const inputs = document.querySelectorAll('.input-ope');
+
+            inputs.forEach(input => {
+            const datalist = document.getElementById(input.getAttribute('list'));
+
+            function obtenerOpcionesFiltradas() {
+                const query = input.value.toLowerCase();
+                const opcionesFiltradas = [];
+
+                for (let i = 0; i < datalist.options.length; i++) {
+                const opcion = datalist.options[i].value.toLowerCase();
+                if (opcion.startsWith(query)) {
+                    opcionesFiltradas.push(datalist.options[i].value);
+                }
+                }
+                return opcionesFiltradas;
+            }
+
+            function seleccionarPrimeraOpcion() {
+                const opcionesFiltradas = obtenerOpcionesFiltradas();
+                if (opcionesFiltradas.length > 0) {
+                input.value = opcionesFiltradas[0];
+                }
+            }
+
+            // Detectar cuando se presiona Enter o Tab en cada input
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'Tab' || event.key === 'Click') {
+                    seleccionarPrimeraOpcion();
+                    const selectedOperation = this.value;
+                    console.log(this.name);
+                    if (this.name == 'operacion[]') {
+                        // Hacer una nueva solicitud AJAX para obtener las máquinas basadas en la operación seleccionada
+                        $.ajax({
+                            type: "post",
+                            url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
+                            data: { nom_operacion: selectedOperation },
+                            success: function (response) {
+                                console.log(response)
+                                // Limpiar las opciones actuales
+                                optMaq.innerHTML = `<option value="">Seleccionar</option>`;
+                                
+                                // Agregar las nuevas opciones al combobox
+                                response.forEach((maq) => {
+                                    optMaq.innerHTML += `<option value="${maq.codigo_maquinaria}">`;
+                                });
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                
+                }
+            });
+
+            // input.addEventListener('input', function() {
+            //     console.log('adawdad')
+            // });
             });
         },
         error: function (error) {
@@ -242,3 +324,7 @@
 });
 
 </script>
+
+<script>
+    
+  </script>
