@@ -90,9 +90,9 @@
                                     <th class='text-center' style="color:#fff;">Acciones</th>
                                   </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="table-body">
                                 </tbody>
-                              </table>
+                            </table>
                               
                               <!-- Botón para agregar filas -->
                               <button id="addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
@@ -133,198 +133,147 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
-    
-    // Agregar una nueva fila
+    // document.getElementById("addRow").addEventListener("click", addRow(e));
     document.getElementById('addRow').addEventListener('click', (e) => {
-    e.preventDefault();
-    const rowCount = table.rows.length + 1;
-    const row = table.insertRow();
+        e.preventDefault();
+        addRow();
+    })
+
+    function addRow() {
+        const tableBody = document.getElementById("editableTable");
+        const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
+        // const rowCount = tableBody.rows.length;
+        const rowCount = table.rows.length + 1;
+        const row = table.insertRow();
+
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtenerope', 
+            data: {
+                id: 'hola',
+            },
+            success: function (response) {
+                let options = '';
+                let opt_tec = '';
+                response.operaciones.forEach((ope) => {
+                    options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
+                });
+
+                response.tecnicos.forEach((tec) => {
+                    opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
+                });
+
+                // const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td class="text-center">${rowCount}</td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select custom-input-1" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
+                            <div class="dropdown-list-auto">
+                                ${options}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
+                            <div class="dropdown-list-auto">
+                                ${opt_tec}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select" placeholder="Seleccionar" autocomplete="off" name="maq[]" required>
+                            <div class="dropdown-list-auto">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                    </td>
+                `;
+
+                // Aplicar el dropdown a la nueva fila
+                row.querySelectorAll(".dropdown-container").forEach(dropdown => {
+                    const customDropdown = new CustomDropdown(dropdown); // Guardamos la instancia
+
+                    // Detectar cuando se selecciona una opción
+                    customDropdown.options.forEach(option => {
+                        option.addEventListener("click", () => {
+                            if (option.classList.contains("custom-option-1")) {
+                                const rowElement = dropdown.closest("tr"); // Obtener la fila actual
+                                const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
+                                thirdInput.value = '';
+                                if (thirdInput) {
+                                    cargarMaquinas(customDropdown.input.value, thirdInput);
+                                }
+                            }
+                        });
+                    });
+
+                    // Detectar cuando el valor cambia manualmente (al escribir y presionar Enter o perder foco)
+                    customDropdown.input.addEventListener("change", () => {
+                        if (customDropdown.input.classList.contains("custom-input-1")) {
+                            const rowElement = dropdown.closest("tr"); // Obtener la fila actual
+                            const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
+
+                            if (thirdInput) {
+                                cargarMaquinas(customDropdown.input.value, thirdInput);
+                            }
+                        }
+                    });
+                });
+
+                // Agregar evento para eliminar fila
+                row.querySelector(".delete-btn").addEventListener("click", () => {
+                    row.remove();
+
+                    // Reordenar los números de la primera celda de cada fila
+                    Array.from(table.rows).forEach((row, index) => {
+                         row.cells[0].innerText = index + 1;
+                    });
+                });
+                
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function cargarMaquinas(operacion, targetInput) {
+    const selectedOperation = operacion;
 
     $.ajax({
         type: "post",
-        url: '/orden/mec/hdr/obtenerope', 
-        data: {
-            id: 'hola',
-        },
+        url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
+        data: { nom_operacion: selectedOperation },
         success: function (response) {
-            let options = '';
-            let opt_tec = '';
+            // console.log(response);
+            
+            // Obtener la lista del dropdown correspondiente al tercer input
+            const dropdownList = targetInput.nextElementSibling;
+            if (dropdownList && dropdownList.classList.contains("dropdown-list-auto")) {
+                dropdownList.innerHTML = ""; // Limpiar opciones
 
-            response.operaciones.forEach((ope) => {
-                options += `<option value="${ope.nombre_operacion}">`;
-            });
-
-            response.tecnicos.forEach((tec) => {
-                opt_tec += `<option value="${tec.nombre_empleado}">`;
-            });
-
-            row.innerHTML = `
-                <td class="text-center">${rowCount}</td>
-                <td>
-                    <input type="text" class="form-select input-ope" name="operacion[]" id="input-pe" list="lista-ope">
-                    <datalist id="lista-ope">
-                        ${options}
-                    </datalist>
-                </td>
-                <td>
-                    <input type="text" class="form-control input-ope" name="tecnico[]" id="input-pe" list="lista-tec">
-                    <datalist id="lista-tec">
-                        ${opt_tec}
-                    </datalist>
-                </td>
-                <td>
-                    <input type="text" class="form-control input-ope" name="maq[]" id="opt_maq" list="lista-maq">
-                    <datalist class="opt-maq" id="lista-maq">
-                    </datalist>
-                </td>
-                <td class="text-center">
-                    <button class="btn btn-danger btn-sm deleteRow">Eliminar</button>
-                </td>
-            `;
-
-            // Obtener el combobox del primer select (operaciones)
-            const optOpe = row.querySelector('.opt-ope');
-            const optMaq = row.querySelector('.opt-maq');
-
-            // Agregar evento de cambio al primer select
-            /* optOpe.addEventListener('change', function () {
-                const selectedOperation = this.value;
-
-                // Hacer una nueva solicitud AJAX para obtener las máquinas basadas en la operación seleccionada
-                $.ajax({
-                    type: "post",
-                    url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
-                    data: { id_operacion: selectedOperation },
-                    success: function (response) {
-                        console.log(response)
-                        // Limpiar las opciones actuales
-                        optMaq.innerHTML = `<option value="">Seleccionar</option>`;
-                        
-                        // Agregar las nuevas opciones al combobox
-                        response.forEach((maq) => {
-                            optMaq.innerHTML += `<option value="${maq.id_maquinaria}">${maq.codigo_maquinaria}</option>`;
-                        });
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
+                // Agregar nuevas opciones
+                response.forEach((maq) => {
+                    const div = document.createElement("div");
+                    div.classList.add("dropdown-item");
+                    div.textContent = maq.codigo_maquinaria;
+                    div.dataset.value = maq.codigo_maquinaria;
+                    dropdownList.appendChild(div);
                 });
-            }); */
-            // Selecciona todos los inputs con la clase 'input-permiso'
-            const inputs = document.querySelectorAll('.input-ope');
 
-            inputs.forEach(input => {
-            const datalist = document.getElementById(input.getAttribute('list'));
-
-            function obtenerOpcionesFiltradas() {
-                const query = input.value.toLowerCase();
-                const opcionesFiltradas = [];
-
-                for (let i = 0; i < datalist.options.length; i++) {
-                const opcion = datalist.options[i].value.toLowerCase();
-                if (opcion.startsWith(query)) {
-                    opcionesFiltradas.push(datalist.options[i].value);
-                }
-                }
-                return opcionesFiltradas;
+                // Volver a aplicar CustomDropdown para actualizar las opciones
+                new CustomDropdown(targetInput.closest(".dropdown-container"));
             }
-
-            function seleccionarPrimeraOpcion() {
-                const opcionesFiltradas = obtenerOpcionesFiltradas();
-                if (opcionesFiltradas.length > 0) {
-                input.value = opcionesFiltradas[0];
-                }
-            }
-
-            // Detectar cuando se presiona Enter o Tab en cada input
-            input.addEventListener('keydown', function(event) {
-                if (event.key === 'Tab' || event.key === 'Click') {
-                    seleccionarPrimeraOpcion();
-                    const selectedOperation = this.value;
-                    console.log(this.name);
-                    if (this.name == 'operacion[]') {
-                        // Hacer una nueva solicitud AJAX para obtener las máquinas basadas en la operación seleccionada
-                        $.ajax({
-                            type: "post",
-                            url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
-                            data: { nom_operacion: selectedOperation },
-                            success: function (response) {
-                                console.log(response)
-                                // Limpiar las opciones actuales
-                                optMaq.innerHTML = `<option value="">Seleccionar</option>`;
-                                
-                                // Agregar las nuevas opciones al combobox
-                                response.forEach((maq) => {
-                                    optMaq.innerHTML += `<option value="${maq.codigo_maquinaria}">`;
-                                });
-                            },
-                            error: function (error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-                
-                }
-            });
-
-            // input.addEventListener('input', function() {
-            //     console.log('adawdad')
-            // });
-            });
         },
         error: function (error) {
             console.log(error);
         }
     });
-});
-
-
-    // Eliminar una fila
-    table.addEventListener('click', (e) => {
-        if (e.target.classList.contains('deleteRow')) {
-            const row = e.target.closest('tr');
-            row.remove();
-
-            // Reordenar los números
-            Array.from(table.rows).forEach((row, index) => {
-                row.cells[0].innerText = index + 1;
-            });
-        }
-    });
-
-    // Guardar datos (Enviar al servidor)
-    /* document.getElementById('saveData').addEventListener('click', () => {
-        const rows = Array.from(table.rows).map(row => {
-            return {
-                numero: row.cells[0].innerText,
-                operacion: row.cells[1].innerText,
-                asignado: row.cells[2].innerText,
-                maquina: row.cells[3].innerText,
-                medidas: row.cells[4].innerText,
-            };
-        });
-
-        // Enviar datos al servidor
-        fetch('/save-operations', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            },
-            body: JSON.stringify({ operations: rows }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Datos guardados exitosamente.');
-        })
-        .catch(error => console.error('Error:', error));
-    }); */
-});
+}
 
 </script>
-
-<script>
-    
-  </script>

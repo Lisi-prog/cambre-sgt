@@ -248,8 +248,8 @@ class OrdenController extends Controller
                 $this->validate($request, [
                     'num_etapa' => 'required',
                     'nom_orden' => 'required',
-                    'horas_estimadas' => 'required',
-                    'minutos_estimados' => 'required',
+                    // 'horas_estimadas' => 'required',
+                    // 'minutos_estimados' => 'required',
                     // 'responsable' => 'required',
                     'supervisor' => 'required',
                     'revision' => 'required',
@@ -261,8 +261,8 @@ class OrdenController extends Controller
                 ], [
                     'num_etapa.required' => 'Seleccione una etapa.',
                     'nom_orden.required' => 'Falta el nombre de la orden.',
-                    'horas_estimadas.required' => 'Faltan las horas estimadas.',
-                    'minutos_estimados.required' => 'Faltan los minutos estimados.',
+                    // 'horas_estimadas.required' => 'Faltan las horas estimadas.',
+                    // 'minutos_estimados.required' => 'Faltan los minutos estimados.',
                     // 'responsable.required' => 'Seleccione un responsable',
                     'supervisor.required' => 'Seleccione un supervisor',
                     'revision.required' => 'Falta el numero de revision',
@@ -282,8 +282,8 @@ class OrdenController extends Controller
                 $this->validate($request, [
                     'num_etapa' => 'required',
                     'nom_orden' => 'required',
-                    'horas_estimadas' => 'required',
-                    'minutos_estimados' => 'required',
+                    // 'horas_estimadas' => 'required',
+                    // 'minutos_estimados' => 'required',
                     // 'responsable' => 'required',
                     'supervisor' => 'required',
                     'fecha_ini' => 'required',
@@ -293,8 +293,8 @@ class OrdenController extends Controller
                 ], [
                     'num_etapa.required' => 'Seleccione una etapa.',
                     'nom_orden.required' => 'Falta el nombre de la orden.',
-                    'horas_estimadas.required' => 'Faltan las horas estimadas.',
-                    'minutos_estimados.required' => 'Faltan los minutos estimados.',
+                    // 'horas_estimadas.required' => 'Faltan las horas estimadas.',
+                    // 'minutos_estimados.required' => 'Faltan los minutos estimados.',
                     // 'responsable.required' => 'Seleccione un responsable',
                     'supervisor.required' => 'Seleccione un supervisor',
                     'fecha_ini.required' => 'Seleccione una fecha de inicio.',
@@ -426,7 +426,7 @@ class OrdenController extends Controller
         $nombre_orden = $request->input('nom_orden');
         $revision = $request->input('revision');
         $cantidad = $request->input('cantidad');
-        $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
+        // $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
         // $id_responsable = $request->input('responsable');
         $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
         $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
@@ -450,7 +450,8 @@ class OrdenController extends Controller
 
         $orden = Orden::create([
                     'nombre_orden' => $nombre_orden,
-                    'duracion_estimada' => $duracion_estimada,
+                    // 'duracion_estimada' => $duracion_estimada,
+                    'duracion_estimada' => '00:00',
                     'fecha_inicio' => $fecha_ini,
                     'id_etapa' => $id_etapa,
                     'observaciones' => $observaciones
@@ -524,7 +525,8 @@ class OrdenController extends Controller
 
         $orden = Orden::create([
                     'nombre_orden' => $nombre_orden,
-                    'duracion_estimada' => $duracion_estimada,
+                    // 'duracion_estimada' => $duracion_estimada,
+                    'duracion_estimada' => '00:00',
                     'fecha_inicio' => $fecha_ini,
                     'id_etapa' => $id_etapa,
                     'observaciones' => $observaciones
@@ -577,8 +579,8 @@ class OrdenController extends Controller
         $this->validate($request, [
             'num_etapa' => 'required',
             'nom_orden' => 'required',
-            'horas_estimadas' => 'required',
-            'minutos_estimados' => 'required',
+            // 'horas_estimadas' => 'required',
+            // 'minutos_estimados' => 'required',
             // 'responsable' => 'required',
             'supervisor' => 'required',
             'fecha_ini' => 'required',
@@ -588,8 +590,8 @@ class OrdenController extends Controller
         ], [
             'num_etapa.required' => 'Seleccione una etapa.',
             'nom_orden.required' => 'Falta el nombre de la orden.',
-            'horas_estimadas.required' => 'Faltan las horas estimadas.',
-            'minutos_estimados.required' => 'Faltan los minutos estimados.',
+            // 'horas_estimadas.required' => 'Faltan las horas estimadas.',
+            // 'minutos_estimados.required' => 'Faltan los minutos estimados.',
             // 'responsable.required' => 'Seleccione un responsable',
             'fecha_ini.required' => 'Seleccione una fecha de inicio.',
             'estado_mecanizado.required' => 'Seleccione una etapa.',
@@ -938,6 +940,7 @@ class OrdenController extends Controller
                 $tipo = 'Manufactura';
                 $tipo_orden = 2;
                 $estados = $this->listarTodosLosEstadosDe(2);
+                return view('Ingenieria.Servicios.Ordenes.ordenes-manufactura', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));
                 break;
 
             case 3:
@@ -952,6 +955,7 @@ class OrdenController extends Controller
                 $tipo = 'Mecanizado';
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));
                 break;
 
             case 4:
@@ -1284,23 +1288,30 @@ class OrdenController extends Controller
             $total_op = count($operaciones);
 
             for ($i=0; $i < $total_op; $i++) { 
+                $res = null;
 
-                // $responsabilidad_hdr = Responsabilidad::create([
-                //     'id_empleado' => $tecnicos[$i],
-                //     'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
-                // ]);
+                $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
+                $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
 
-                $responsabilidad_parte_hdr = Responsabilidad::create([
-                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-                    'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
-                ]);
+                if (!is_null($tecnicos[$i])) {
+                    $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+
+                    $responsabilidad_parte_hdr = Responsabilidad::create([
+                        'id_empleado' => $id_emp,
+                        'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                    ]);
+                    
+                    $res = $responsabilidad_parte_hdr->id_responsabilidad;
+                }
+                
+                
 
                 $ope = Operaciones_de_hdr::create([
                             'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
                             'numero' => $contador,
                             'fecha_carga' => $fec_carga,
-                            'id_maquinaria' => $maquinarias[$i],
-                            'id_operacion' => $operaciones[$i],
+                            'id_maquinaria' => $id_maq,
+                            'id_operacion' => $id_ope,
                             // 'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
                             // 'medidas',
                             // 'ruta_cam'
@@ -1311,7 +1322,7 @@ class OrdenController extends Controller
                     'fecha_carga' => $fec_carga,
                     'fecha' => $fec_carga,
                     'observaciones' => 'Generacion de operacion de hoja de ruta.',
-                    'id_responsabilidad' => $responsabilidad_parte_hdr->id_responsabilidad,
+                    'id_responsabilidad' => $res,
                     'horas' => '00:00',
                     'medidas' => 0,
                     'id_estado_hdr' => 1

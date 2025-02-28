@@ -200,8 +200,6 @@ select
     et.descripcion_etapa,
     p_rank.fecha_limite,
     p_rank.fecha_finalizacion,
-    roo.nombre_empleado as responsable,
-    roo.id_empleado as id_empleado_responsable,
     ro.nombre_empleado as supervisor,
     ro.id_empleado as id_empleado_supervisor,
     p_rank.nombre_estado_mecanizado as nombre_estado,
@@ -212,7 +210,6 @@ select
 	inner join servicio as se on se.id_servicio = et.id_servicio
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
     inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
-    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
     inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
     order by se.prioridad_servicio;
 
@@ -579,6 +576,8 @@ select
             est.id_estado_hdr,
             p.id_ope_de_hdr,
             est.nombre_estado_hdr,
+            res.id_empleado,
+            emp.nombre_empleado,
             CASE
                 WHEN est.id_estado_hdr = 3 THEN p.fecha
                 ELSE "____-__-__"
@@ -586,6 +585,8 @@ select
             ROW_NUMBER() OVER (PARTITION BY p.id_ope_de_hdr ORDER BY p.id_parte_ope_hdr DESC) AS rn
         FROM parte_ope_hdr p
         inner join estado_hdr est on est.id_estado_hdr = p.id_estado_hdr
+        left join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+        left join empleado emp on emp.id_empleado = res.id_empleado
     )
     select 
         se.prioridad_servicio,
@@ -595,15 +596,12 @@ select
         o.nombre_orden,
         hdr.id_hoja_de_ruta,
         op.nombre_operacion,
-        case
-            when op_hdr.id_responsabilidad is null then '-'
-            else emp.nombre_empleado
-        end as responsable,
         maq.codigo_maquinaria,
         op_hdr.id_ope_de_hdr,
         op_hdr.numero,
         p_rank.id_estado_hdr,
         p_rank.nombre_estado_hdr,
+        p_rank.nombre_empleado as ultimo_res,
         th.total_horas
     from servicio se
     inner join etapa et on et.id_servicio = se.id_servicio
@@ -612,8 +610,7 @@ select
     inner join hoja_de_ruta hdr on hdr.id_orden_mecanizado = om.id_orden_mecanizado
     inner join operaciones_de_hdr op_hdr on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
     inner join operacion op on op.id_operacion = op_hdr.id_operacion
-    left join responsabilidad res on res.id_responsabilidad = op_hdr.id_responsabilidad
-    inner join empleado emp on emp.id_empleado = res.id_empleado
+    inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1
+    left join empleado emp on emp.id_empleado = p_rank.id_empleado
     inner join maquinaria maq on maq.id_maquinaria = op_hdr.id_maquinaria
-    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr
-    inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1;
+    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr;

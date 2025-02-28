@@ -220,6 +220,9 @@
     @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
     <script>
         $(document).ready(function () {
+            $("#asd").on("change",function(){
+        console.log('adwada')
+    });
             // let tipo_orden = document.getElementById('tipo_orden').value;
             // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
             // url = url.replace(':tipo_orden', tipo_orden);
@@ -248,7 +251,6 @@
             let body_tb = document.getElementById('body_ope');
             body_tb.innerHTML = '';
             let fila_ope = '';
-            console.log('aaasd')
             $.ajax({
                 type: "post",
                 url: '/orden/mec/hdr/obtener-ope-hdr', 
@@ -262,7 +264,7 @@
                                             <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">-</td>

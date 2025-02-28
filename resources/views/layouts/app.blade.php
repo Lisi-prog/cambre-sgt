@@ -15,6 +15,7 @@
     <link href="{{ asset('assets/css/@fortawesome/fontawesome-free/css/all.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
     <link href="{{ asset('assets/css/change-style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/css/input-autocomplete.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/css/sweetalert.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -74,6 +75,13 @@
 <script src="{{ asset('assets/js/jquery.nicescroll.js') }}"></script>
 <script src="{{ asset('assets/js/prevent_multiple_submits.js') }}"></script>
 <script src="{{ asset('js/change-scripts.js') }}"></script>
+<script src="{{ asset('js/input-autocomplete.js') }}"></script>
+<script>
+    // Inicializar los dropdowns en todos los inputs
+    document.querySelectorAll(".dropdown-container").forEach(container => {
+        new CustomDropdown(container);
+    });
+</script>
 <script src="{{asset('assets/js/excel-bootstrap-table-filter-bundle.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 
