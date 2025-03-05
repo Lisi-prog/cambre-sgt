@@ -795,8 +795,12 @@ class ParteController extends Controller
         $codigo = 123;
         $estado = 'revisar';
         $nombre = 'luciano';
+        $estado_nom = 'Espera';
         $codigo_pr = 140;
-        Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado, $codigo_pr,  1));
+        $etapa = 'etapa';
+        $orden = 'orden';
+        $tipo_ord = 1;
+        Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $orden, $tipo_ord, 1));
     }
 
     public function enviarEmail($id_parte, $estado, $opcion){

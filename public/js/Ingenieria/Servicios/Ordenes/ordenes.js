@@ -31,7 +31,7 @@ function nuevoParte(){
     
 }
 
-function guardarParte(){
+/* function guardarParte(){
     $.when($.ajax({
         type: "post",
         url: '/parte/guardar-o-act-parte', 
@@ -45,7 +45,7 @@ function guardarParte(){
             console.log(error);
         }
     }));
-}
+} */
 
 
 function editarParte(id){

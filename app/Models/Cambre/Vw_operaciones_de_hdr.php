@@ -32,7 +32,8 @@ class Vw_operaciones_de_hdr extends Model
         'id_estado',
         'nombre_estado_hdr',
         'total_horas',
-        'ultimo_res'
+        'ultimo_res',
+        'medidas'
     ];
 
    /* protected $casts = [

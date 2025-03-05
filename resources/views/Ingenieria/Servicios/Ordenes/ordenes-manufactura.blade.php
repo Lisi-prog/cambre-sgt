@@ -69,7 +69,7 @@
 
     <div class="section-body">
 
-        {{-- <div class="row">
+        <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -111,25 +111,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @role('SUPERVISOR')
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="row">
-                                        <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                <div class="">
-                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
-                                                </div>
-                                                <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                    @foreach ($responsables as $responsable)
-                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endrole
                             
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
@@ -141,31 +122,11 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($estados as $estado)
-                                                    @switch($tipo_orden)
-                                                        @case(1)
-                                                            @if ($estado->id_estado < 9 && $estado->id_estado != 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(2)
-                                                            @if ($estado->id_estado < 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(3)
-                                                            @if ($estado->id_estado < 6)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                            
-                                                    @endswitch
-                                                        
+                                                    @if ($estado->id_estado < 7)
+                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                    @else
+                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>
@@ -176,7 +137,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -325,7 +286,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
-@include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
+{{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
     let x = '';
@@ -359,7 +320,8 @@
         let tipo_orden = window.location.pathname.substring(9, 10);
         modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
-        /*$.fn.dataTable.ext.search.push(
+        
+        $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {
                 return this.value;
@@ -369,27 +331,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[7]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-        
-            var offices = $('input:checkbox[name="res"]:checked').map(function() {
-                return this.value;
-            }).get();
-        
-
-            if (offices.length === 0) {
-                return true;
-            }
-            
-            if (offices.indexOf(searchData[8]) !== -1) {
+            if (positions.indexOf(searchData[8]) !== -1) {
                 return true;
             }
             
@@ -409,7 +351,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[6]) !== -1) {
+            if (offices.indexOf(searchData[7]) !== -1) {
                 return true;
             }
             
@@ -436,7 +378,7 @@
             
             return false;
             }
-        ); */
+        );
     table = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -496,7 +438,7 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    //console.log(data);
+                    console.log(data);
                     opcion = parseInt(data.resultado);
                     switch (opcion) {
                         case 1:

@@ -25,7 +25,8 @@ class Operaciones_de_hdr extends Model
         'fecha',
         'id_maquinaria',
         'id_operacion',
-        'ruta_cam'
+        'ruta_cam',
+        'activo'
     ];
 
     public function getPartes()
@@ -36,5 +37,9 @@ class Operaciones_de_hdr extends Model
     public function getEstado()
     {
         return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->getNombreEstado();
+    }
+
+    public function getOperacion(){
+        return $this->belongsTo(Operacion::class, 'id_operacion');
     }
 }

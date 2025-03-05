@@ -438,10 +438,10 @@ class OrdenController extends Controller
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
         $id_supervisor = $request->input('supervisor');
 
-        // $responsabilidad = Responsabilidad::create([
-        //     'id_empleado' => $id_responsable,
-        //     'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        // ]);
+        $responsabilidad = Responsabilidad::create([
+             'id_empleado' => $id_supervisor,
+             'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
 
         $responsabilidad_supervisor = Responsabilidad::create([
             'id_empleado' => $id_supervisor,
@@ -457,10 +457,10 @@ class OrdenController extends Controller
                     'observaciones' => $observaciones
                 ]);
 
-        // Responsabilidad_orden::create([
-        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-        //     'id_orden' => $orden->id_orden
-        // ]);
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
 
         $responsabilidad = Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
@@ -513,10 +513,10 @@ class OrdenController extends Controller
         $id_supervisor = $request->input('supervisor');
         $id_orden_manufactura = $request->input('id_orden_manuf');
 
-        // $responsabilidad = Responsabilidad::create([
-        //     'id_empleado' => $id_responsable,
-        //     'id_rol_empleado' => $rol_empleado->id_rol_empleado
-        // ]);
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $id_supervisor,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
 
         $responsabilidad_supervisor = Responsabilidad::create([
             'id_empleado' => $id_supervisor,
@@ -533,10 +533,10 @@ class OrdenController extends Controller
                 ]);
         
 
-        // Responsabilidad_orden::create([
-        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-        //     'id_orden' => $orden->id_orden
-        // ]);
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
 
         $responsabilidad = Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
@@ -912,12 +912,14 @@ class OrdenController extends Controller
             case 1:
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                            $ordenes = Vw_orden_trabajo::orderByRaw("CASE WHEN nombre_estado = 'Continua' OR prioridad_servicio IS NULL THEN 1 ELSE 0 END")
+                            $ordenes = Vw_orden_trabajo::orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                                                        ->orderByRaw("CASE WHEN prioridad_servicio IS NULL THEN 1 ELSE 0 END")
                                                         ->orderBy('prioridad_servicio', 'asc')
                                                         ->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' OR prioridad_servicio IS NULL THEN 1 ELSE 0 END")
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
+                                                                                    ->orderByRaw("CASE WHEN prioridad_servicio IS NULL THEN 1 ELSE 0 END")
                                                                                 ->orderBy('prioridad_servicio', 'asc')
                                                                                 ->get();
                         }

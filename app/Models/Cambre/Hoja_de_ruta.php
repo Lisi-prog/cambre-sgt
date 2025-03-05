@@ -30,6 +30,9 @@ class Hoja_de_ruta extends Model
         return $this->hasMany(Operaciones_de_hdr::class, 'id_hoja_de_ruta');
     }
 
+    public function getUltOpeActiva(){
+        return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first()->getOperacion->nombre_operacion;
+    }
     // public function getEstado()
     // {
     //     return 

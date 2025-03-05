@@ -110,9 +110,15 @@
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->uli ?? '-'}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{'-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->uli ?? '-'}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">
+                                                <div class="progress position-relative" style="background-color: #b2baf8">
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{100}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{'10'.'/'.'10'}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -267,9 +273,9 @@
                                             <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.nombre_estado_hdr}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">${op.total_horas ? "NO":"SI" }</td>
                                             <td class='text-center' style="vertical-align: middle;">
                                                 
                                                             <div class="col-12">
