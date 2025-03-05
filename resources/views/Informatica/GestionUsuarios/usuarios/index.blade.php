@@ -21,7 +21,22 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
+            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                <div class="card">
+                    <div class="card-body">
+                        {!! Form::label('Opciones:') !!}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexOpc1" checked>
+                            <label class="form-check-label" for="flexOpc1">
+                              Solo activos.
+                            </label>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -41,7 +56,7 @@
                                         $idCount = 0;   
                                     @endphp
                                     @foreach ($usuarios as $usuario)
-                                        <tr>
+                                        <tr {{$usuario->getEmpleado->esta_activo ? '' : 'hidden'}} class="{{$usuario->getEmpleado->esta_activo ? '' : 'no-activo'}}">
                                             <td class='text-center' style="vertical-align: middle;">{{$usuario->id}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$usuario->name}}</td>
@@ -135,6 +150,19 @@
                 },
                 "aaSorting": []
         });
+
+        $('#flexOpc1').on('change', mostrarOculto);
+
+        function mostrarOculto() {
+            document.querySelectorAll('.no-activo').forEach(element => {
+                if (element.hidden) {
+                    element.hidden = false;
+                } else {
+                    element.hidden = true;
+                }
+            });
+
+        }
     });
 </script>
 
