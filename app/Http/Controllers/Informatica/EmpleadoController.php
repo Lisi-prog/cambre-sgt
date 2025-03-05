@@ -48,13 +48,18 @@ class EmpleadoController extends Controller
         ];
 
         foreach ($organigrama as $relacion) {
-            $empleado = $relacion->empleado;
-            $supervisor = $relacion->supervisor;
-
-            $idEmpleado = (string)$empleado->id_empleado;
+            $empleado = $relacion->empleado;  // Puede ser NULL si el empleado no está activo
+            $supervisor = $relacion->supervisor; // Puede ser NULL si el supervisor no está activo
+        
+            // Saltar iteración si no hay empleado (porque fue filtrado por where en la relación)
+            if (!$empleado) {
+                continue;
+            }
+        
+            $idEmpleado = (string) $empleado->id_empleado;
             $nombreEmpleado = $empleado->nombre_empleado;
-            $idSupervisor = $supervisor ? (string)$supervisor->id_empleado : '';
-
+            $idSupervisor = $supervisor ? (string) $supervisor->id_empleado : '';
+        
             // Añadir al array de datos
             $datosOrganigrama[] = [
                 'id' => $idEmpleado,
