@@ -440,11 +440,11 @@ function actRow(){
         },
         success: function (response) { 
             // console.log(response) 
-            table.cell(ind_rw, 3).data(response.nombre_orden).draw(false);
-            table.cell(ind_rw, 5).data(response.estado).draw(false);
-            table.cell(ind_rw, 7).data(response.responsable).draw(false);
-            table.cell(ind_rw, 8).data(response.total_horas).draw(false);
-            table.cell(ind_rw, 9).data(response.fecha_limite).draw(false);
+            table.cell(ind_rw, 4).data(response.nombre_orden).draw(false);
+            table.cell(ind_rw, 6).data(response.estado).draw(false);
+            table.cell(ind_rw, 8).data(response.responsable).draw(false);
+            table.cell(ind_rw, 9).data(response.total_horas).draw(false);
+            table.cell(ind_rw, 10).data(response.fecha_limite).draw(false);
         },
         error: function (error) {
             console.log(error);
