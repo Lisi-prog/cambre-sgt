@@ -323,7 +323,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
-@include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
+{{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
     let x = '';

@@ -918,8 +918,7 @@ class OrdenController extends Controller
                                                         ->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
-                                                                                    ->orderByRaw("CASE WHEN prioridad_servicio IS NULL THEN 1 ELSE 0 END")
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' OR prioridad_servicio IS NULL THEN 1 ELSE 0 END")
                                                                                 ->orderBy('prioridad_servicio', 'asc')
                                                                                 ->get();
                         }

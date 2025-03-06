@@ -31,6 +31,21 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        {!! Form::label('Opciones:') !!}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexOpc1" checked>
+                            <label class="form-check-label" for="flexOpc1">
+                              Solo activos.
+                            </label>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -39,7 +54,7 @@
                                 {!! $CategoriasLaborales->links() !!}
                         </div> --}}
                         <div class="table-responsive">
-                            <table class="table table-striped mt-2" id="example">
+                            <table class="table table-hover mt-2" id="example">
                                 <thead>
                                     <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
@@ -55,7 +70,7 @@
                                         $idCount = 0;   
                                     @endphp
                                     @foreach ($empleados as $empleado)
-                                        <tr class="my-auto">
+                                        <tr class="my-auto {{$empleado->esta_activo ? '' : 'no-activo'}}" {{$empleado->esta_activo ? '' : 'hidden'}}>
                                             <td class='text-center' style="vertical-align: middle;">{{$empleado->id_empleado}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$empleado->nombre_empleado}}</td>
@@ -170,6 +185,19 @@
                 order: [[0, 'asc']],
                 "pageLength": 25
         });
+
+        $('#flexOpc1').on('change', mostrarOculto);
+
+        function mostrarOculto() {
+            document.querySelectorAll('.no-activo').forEach(element => {
+                if (element.hidden) {
+                    element.hidden = false;
+                } else {
+                    element.hidden = true;
+                }
+            });
+
+        }
     });
 </script>
 
