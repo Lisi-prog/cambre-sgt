@@ -9,17 +9,17 @@ BEGIN
 	ParteRanked AS (
 		SELECT
 				p.id_orden,
+                est.id_estado,
 				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
 			FROM parte p
 			inner join parte_trabajo pt on pt.id_parte = p.id_parte
 			inner join estado est on est.id_estado = pt.id_estado
-			where est.id_estado = 9
 	)
 	select count(o.id_orden) as total_completo into x from orden_trabajo o
 	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
 	where o.id_orden in (select id_orden 
 								from orden o
-							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio))) and pr.id_estado = 9; -- 9 completo en estado
                         
     RETURN x;
 END //
@@ -37,17 +37,17 @@ BEGIN
 	ParteRanked AS (
 		SELECT
 				p.id_orden,
+                est.id_estado_mecanizado,
 				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
 			FROM parte p
 			inner join parte_mecanizado pt on pt.id_parte = p.id_parte
 			inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
-			where est.id_estado_mecanizado = 6
 	)
 	select count(o.id_orden) as total_completo into x from orden_mecanizado o
 	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
 	where o.id_orden in (select id_orden 
 							from orden o
-						where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+						where id_etapa in (select id_etapa from etapa where id_servicio in (servicio))) and pr.id_estado_mecanizado=5; -- 5 completo en estado_mecanizado
                         
     RETURN x;
 END //
@@ -65,17 +65,17 @@ BEGIN
 	ParteRanked AS (
 		SELECT
 				p.id_orden,
+                est.id_estado_manufactura,
 				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
 			FROM parte p
 			inner join parte_manufactura pt on pt.id_parte = p.id_parte
 			inner join estado_manufactura est on est.id_estado_manufactura = pt.id_estado_manufactura
-			where est.id_estado_manufactura = 5
 	)
 	select count(o.id_orden) as total_completo into x from orden_manufactura o
 	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
 	where o.id_orden in (select id_orden 
 							from orden o
-							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio))) and pr.id_estado_manufactura = 7; -- 7 completo en estado_manufactura
                         
     RETURN x;
 END //
@@ -93,17 +93,17 @@ BEGIN
 	ParteRanked AS (
 		SELECT
 				p.id_orden,
+				est.id_estado,
 				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
 			FROM parte p
 			inner join parte_trabajo pt on pt.id_parte = p.id_parte
 			inner join estado est on est.id_estado = pt.id_estado
-			where est.id_estado = 10
 	)
 	select count(o.id_orden) as total_completo into x from orden_trabajo o
 	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
 	where o.id_orden in (select id_orden 
 								from orden o
-							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio))) and pr.id_estado = 10; -- 10 cancelado en estado
                         
     RETURN x;
 END //
@@ -121,17 +121,17 @@ BEGIN
 	ParteRanked AS (
 		SELECT
 				p.id_orden,
+                est.id_estado_mecanizado,
 				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
 			FROM parte p
 			inner join parte_mecanizado pt on pt.id_parte = p.id_parte
 			inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
-			where est.id_estado_mecanizado = 7
 	)
 	select count(o.id_orden) as total_completo into x from orden_mecanizado o
 	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
 	where o.id_orden in (select id_orden 
 							from orden o
-						where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+						where id_etapa in (select id_etapa from etapa where id_servicio in (servicio))) and pr.id_estado_mecanizado = 6; -- 6 cancelado en estado_mecanizado
                         
     RETURN x;
 END //
@@ -149,17 +149,17 @@ BEGIN
 	ParteRanked AS (
 		SELECT
 				p.id_orden,
+                est.id_estado_manufactura,
 				ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
 			FROM parte p
 			inner join parte_manufactura pt on pt.id_parte = p.id_parte
 			inner join estado_manufactura est on est.id_estado_manufactura = pt.id_estado_manufactura
-			where est.id_estado_manufactura = 6
 	)
 	select count(o.id_orden) as total_completo into x from orden_manufactura o
 	inner join ParteRanked pr on pr.id_orden = o.id_orden AND pr.rn = 1
 	where o.id_orden in (select id_orden 
 							from orden o
-							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio)));
+							where id_etapa in (select id_etapa from etapa where id_servicio in (servicio))) and pr.id_estado_manufactura = 8; -- 8 cancelado de estado_manufactura
                         
     RETURN x;
 END //

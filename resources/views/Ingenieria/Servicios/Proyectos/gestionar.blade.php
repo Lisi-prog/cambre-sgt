@@ -518,7 +518,7 @@
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',
                             zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                            info: 'Mostrando pagina _PAGE_ de _PAGES_ de _TOTAL_ registros.',
                             infoEmpty: 'No se ha encontrado registros',
                             infoFiltered: '(Filtrado de _MAX_ registros totales)',
                             search: 'Buscar',
