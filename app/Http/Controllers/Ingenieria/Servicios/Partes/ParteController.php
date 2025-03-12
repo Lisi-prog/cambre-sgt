@@ -368,13 +368,13 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
                 
-                if ($maquina) {
+                /* if ($maquina) {
                     Parte_mecanizado_x_maquinaria::create([
                         'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
                         'id_maquinaria' => $maquina,
                         'horas_maquina' => $horas_maquina
                     ]);
-                }
+                } */
                 
 
                 return redirect()->back()->with('mensaje','Parte de mecanizado creado con éxito!.');
@@ -416,7 +416,24 @@ class ParteController extends Controller
         $partes_arr = array();
 
         foreach ($orden->getPartes as $parte) {
-            if ($orden->getOrdenDe->getTipoOrden() == 3) {
+            // if ($orden->getOrdenDe->getTipoOrden() == 3) {
+            //     array_push($partes_arr, (object)[
+            //         'id_parte' => $parte->id_parte,
+            //         'observaciones' => $parte->observaciones,
+            //         'estado' => $parte->getParteDe->getNombreEstado(),
+            //         'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+            //         'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
+            //         'fecha' => $parte->fecha,
+            //         'fecha_limite' => $parte->fecha_limite ?? '-',
+            //         'horas' => $parte->horas,
+            //         'supervisor' => $parte->getOrden->getSupervisor(),
+            //         'orden' => $orden->nombre_orden,
+            //         'etapa' => $orden->getEtapa->descripcion_etapa,
+            //         'estado_orden' => $orden->getEstado(),
+            //         'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-',
+            //         'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-'
+            //         ]);
+            // } else {
                 array_push($partes_arr, (object)[
                     'id_parte' => $parte->id_parte,
                     'observaciones' => $parte->observaciones,
@@ -430,25 +447,8 @@ class ParteController extends Controller
                     'orden' => $orden->nombre_orden,
                     'etapa' => $orden->getEtapa->descripcion_etapa,
                     'estado_orden' => $orden->getEstado(),
-                    'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-',
-                    'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-'
                     ]);
-            } else {
-                array_push($partes_arr, (object)[
-                    'id_parte' => $parte->id_parte,
-                    'observaciones' => $parte->observaciones,
-                    'estado' => $parte->getParteDe->getNombreEstado(),
-                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
-                    'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
-                    'fecha' => $parte->fecha,
-                    'fecha_limite' => $parte->fecha_limite ?? '-',
-                    'horas' => $parte->horas,
-                    'supervisor' => $parte->getOrden->getSupervisor(),
-                    'orden' => $orden->nombre_orden,
-                    'etapa' => $orden->getEtapa->descripcion_etapa,
-                    'estado_orden' => $orden->getEstado(),
-                    ]);
-            } 
+            // } 
         }
 
         return $partes_arr;
@@ -463,7 +463,7 @@ class ParteController extends Controller
             $es_tecnico = 0;
         }
 
-        if ($parte->getParteDe->getTipoParte() != 3) {
+        // if ($parte->getParteDe->getTipoParte() != 3) {
             return [
                 'id_orden' => $parte->id_orden,
                 'id_parte' => $parte->id_parte,
@@ -475,20 +475,20 @@ class ParteController extends Controller
                 'fecha_limite' => $parte->fecha_limite,
                 'tec' => $es_tecnico
             ];
-        } else {
-            return [
-                'id_parte' => $parte->id_parte,
-                'observaciones' => $parte->observaciones,
-                'horas' => $parte->horas,
-                'estado' => $parte->getParteDe->getIdEstado(),
-                'nombre_estado' => $parte->getParteDe->getNombreEstado(),
-                'fecha' => $parte->fecha,
-                'fecha_limite' => $parte->fecha_limite,
-                'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->id_maquinaria ?? '-',
-                'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-',
-                'tec' => $es_tecnico
-            ];
-        }
+        // } else {
+        //     return [
+        //         'id_parte' => $parte->id_parte,
+        //         'observaciones' => $parte->observaciones,
+        //         'horas' => $parte->horas,
+        //         'estado' => $parte->getParteDe->getIdEstado(),
+        //         'nombre_estado' => $parte->getParteDe->getNombreEstado(),
+        //         'fecha' => $parte->fecha,
+        //         'fecha_limite' => $parte->fecha_limite,
+        //         'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->id_maquinaria ?? '-',
+        //         'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-',
+        //         'tec' => $es_tecnico
+        //     ];
+        // }
     }
 
     public function ultimoParteOrden($id){
@@ -707,15 +707,15 @@ class ParteController extends Controller
                         'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
                     ]);
 
-                    if ($parte->getParteDe->getParteMecxMaq->first()) {
-                        $log_parte->update([
-                            'id_maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->id_maquinaria,
-                            'horas_maquina' => $parte->getParteDe->getParteMecxMaq->first()->horas_maquina
-                        ]);
-                    }
+                    // if ($parte->getParteDe->getParteMecxMaq->first()) {
+                    //     $log_parte->update([
+                    //         'id_maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->id_maquinaria,
+                    //         'horas_maquina' => $parte->getParteDe->getParteMecxMaq->first()->horas_maquina
+                    //     ]);
+                    // }
 
-                    $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
-                    $maquina = $request->input('maquina');
+                    // $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
+                    // $maquina = $request->input('maquina');
 
                     $parte->update([
                         'observaciones' => $observaciones,
@@ -728,18 +728,18 @@ class ParteController extends Controller
                         'id_estado_mecanizado' => $estado
                     ]);
 
-                    if ($maquina) {
-                        $parte->getParteDe->getParteMecxMaq->first()->update([
-                            'id_maquinaria' => $maquina,
-                            'horas_maquina' => $horas_maquina
-                        ]);
-                    }
+                    // if ($maquina) {
+                    //     $parte->getParteDe->getParteMecxMaq->first()->update([
+                    //         'id_maquinaria' => $maquina,
+                    //         'horas_maquina' => $horas_maquina
+                    //     ]);
+                    // }
 
                     $result = 2;
 
                 } else {
-                    $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
-                    $maquina = $request->input('maquina');
+                    // $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
+                    // $maquina = $request->input('maquina');
 
                     $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
@@ -763,13 +763,13 @@ class ParteController extends Controller
                         'id_parte' => $parte->id_parte
                     ]);
                     
-                    if ($maquina) {
-                        Parte_mecanizado_x_maquinaria::create([
-                            'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
-                            'id_maquinaria' => $maquina,
-                            'horas_maquina' => $horas_maquina
-                        ]);
-                    }
+                    // if ($maquina) {
+                    //     Parte_mecanizado_x_maquinaria::create([
+                    //         'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
+                    //         'id_maquinaria' => $maquina,
+                    //         'horas_maquina' => $horas_maquina
+                    //     ]);
+                    // }
                     $result = 1;
                 }
                 return[

@@ -72,7 +72,7 @@ function editarParte(id){
             document.getElementById('m-editar').value = 1;
             document.getElementById('m-id-parte').value = response.id_parte;
 
-            if (response.maquinaria) {
+            /*if (response.maquinaria) {
                 if (response.maquinaria != '-') {
                     document.getElementById('m-ver-parte-maquina').value = response.maquinaria;
                     [hora_maquina, minutos_maquina] = response.horas_maquinaria.split(':');
@@ -83,7 +83,7 @@ function editarParte(id){
                     document.getElementById('horas_maquina').value = '00';
                     document.getElementById('minutos_maquina').value = '00';
                 }
-            }
+            }*/
 
             if (es_super === 0) {
                 document.getElementById('m-ver-parte-fecha-limite').readonly = true;

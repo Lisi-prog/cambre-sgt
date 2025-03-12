@@ -442,11 +442,11 @@ function recargarPartes(id, tipo_orden){
                     fecha_lim = '-';
                 }
                 
-                if(tipo_orden == 3){
-                    maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                    <td class="text-center">`+element.horas_maquinaria+`</td>
-                                    `
-                }
+                // if(tipo_orden == 3){
+                //     maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
+                //                     <td class="text-center">`+element.horas_maquinaria+`</td>
+                //                     `
+                // }
 
                 html += `<tr>
                             <td class="text-center">`+element.id_parte+`</td>
@@ -456,7 +456,6 @@ function recargarPartes(id, tipo_orden){
                             <td class="text-center">`+element.horas+`</td>
                             <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                             <td class="text-center">`+element.responsable+`</td>
-                            `+maq_y_hora+`
                             <td class="text-center">`+element.supervisor+`</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
@@ -514,8 +513,8 @@ function cargarModalVerPartes(id, tipo_orden){
       });
 
     if(tipo_orden == 3){
-        document.getElementById('column-maq').hidden = false;
-        document.getElementById('column-hora-maq').hidden = false;
+        document.getElementById('column-maq').hidden = true;
+        document.getElementById('column-hora-maq').hidden = true;
     }else{
         document.getElementById('column-maq').hidden = true;
         document.getElementById('column-hora-maq').hidden = true;
@@ -553,8 +552,7 @@ function cargarModalVerPartes(id, tipo_orden){
                         <td class="text-center">`+element.estado+`</td>
                         <td class="text-center">`+element.horas+`</td>
                         <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>
-                        `+maq_y_hora+`
+                        <td class="text-center">`+element.responsable+`</td>s
                         <td class="text-center">`+element.supervisor+`</td>
                         <td class="text-center">
                             <div class="row justify-content-center" >
@@ -594,7 +592,7 @@ function cargarModalVerPartes(id, tipo_orden){
         console.log(error);
     }
     }));
-    
+    /*
     if(tipo_orden == 3){
         let maquinaria_div = document.getElementById("m-ver-parte-maquinaria");
         let maq_html = `<div class="row"> 
@@ -621,7 +619,7 @@ function cargarModalVerPartes(id, tipo_orden){
                 obtenerMaquinaria();
     }else{
         document.getElementById("m-ver-parte-maquinaria").innerHTML = '';
-    }
+    } */
 }
 
 function obtenerMaquinaria(){
