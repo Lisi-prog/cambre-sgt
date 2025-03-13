@@ -539,11 +539,11 @@ function cargarModalVerPartes(id, tipo_orden){
                 fecha_lim = '-';
             }
             
-            if(tipo_orden == 3){
-                maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                  <td class="text-center">`+element.horas_maquinaria+`</td>
-                                 `
-            }
+            // if(tipo_orden == 3){
+            //     maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
+            //                       <td class="text-center">`+element.horas_maquinaria+`</td>
+            //                      `
+            // }
 
             html += `<tr>
                         <td class="text-center">`+element.id_parte+`</td>

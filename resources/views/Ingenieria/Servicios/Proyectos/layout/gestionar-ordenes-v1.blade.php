@@ -281,7 +281,7 @@ table.dataTable tbody td {
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                     <div class="row">
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
@@ -297,7 +297,7 @@ table.dataTable tbody td {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>   
         </div>
         <div class="card-body">
@@ -487,7 +487,7 @@ table.dataTable tbody td {
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                     <div class="row">
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
@@ -503,7 +503,7 @@ table.dataTable tbody td {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>   
         </div>
         <div class="card-body">
@@ -527,7 +527,7 @@ table.dataTable tbody td {
                             $idCount = 0;
                         @endphp
                         @foreach ($ordenes_mecanizado as $orden)
-                            @if ($orden->id_estado < 6)
+                            @if ($orden->id_estado < 5)
                                 <tr>
                             @else
                                 <tr style="display: none;">
