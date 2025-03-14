@@ -110,7 +110,7 @@
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{'-'}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getUltOpeActiva() ?? '-'}}</td>
 
                                             <td class= 'text-center' style="vertical-align: middle;">
                                                 <div class="progress position-relative" style="background-color: #b2baf8">

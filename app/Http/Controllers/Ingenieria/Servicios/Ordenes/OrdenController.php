@@ -1264,6 +1264,7 @@ class OrdenController extends Controller
         $cant = $request->input('m_cant');
         $fec_carga = $request->input('m_fec_carga');
         $obse = $request->input('observaciones');
+        $ruta = $request->input('m_ruta');
         $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $contador = 1;
         
@@ -1281,6 +1282,7 @@ class OrdenController extends Controller
             'observaciones' => $obse,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'id_orden_mecanizado' => $id,
+            'ruta' => $ruta
         ]);
 
         if (count($operaciones) != 0) {
@@ -1293,6 +1295,13 @@ class OrdenController extends Controller
 
                 $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
                 $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+
+                if ($i == 0) {
+                    $activo = 1;
+                } else {
+                    $activo = 0;
+                }
+                
 
                 if (!is_null($tecnicos[$i])) {
                     $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
@@ -1313,6 +1322,7 @@ class OrdenController extends Controller
                             'fecha_carga' => $fec_carga,
                             'id_maquinaria' => $id_maq,
                             'id_operacion' => $id_ope,
+                            'activo' => $activo
                             // 'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
                             // 'medidas',
                             // 'ruta_cam'

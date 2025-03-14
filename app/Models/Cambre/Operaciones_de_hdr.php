@@ -21,6 +21,7 @@ class Operaciones_de_hdr extends Model
     protected $fillable = [ 
         'id_hoja_de_ruta',
         'numero',
+        'prioridad',
         'fecha_carga',
         'fecha',
         'id_maquinaria',

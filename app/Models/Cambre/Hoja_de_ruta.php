@@ -22,7 +22,8 @@ class Hoja_de_ruta extends Model
         'fecha_carga',
         'observaciones',
         'id_responsabilidad',
-        'id_orden_mecanizado'
+        'id_orden_mecanizado',
+        'ruta'
     ];
 
     public function getOperacionesHdr()

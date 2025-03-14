@@ -115,9 +115,18 @@
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
-                            {!! Form::label('archivo', 'Adjuntar archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            {!! Form::label('archivo', 'Adjuntar Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::file('archivo', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload', 'required')) !!}
                             {{-- <input type="file" class="form-control" name="archivo" required> --}}
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('m_ruta', 'Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            {!! Form::text('m_ruta', null, [
+                                'class' => 'form-control reset-input',
+                                'id' => 'm_ruta'
+                            ]) !!}
                         </div>
                     </div>
                 </div>

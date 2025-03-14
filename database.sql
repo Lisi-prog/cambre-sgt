@@ -448,6 +448,7 @@ CREATE TABLE `operaciones_de_hdr` (
   `id_maquinaria` int NULL,
   `id_operacion` int,
   `ruta_cam` varchar(100),
+  `activo` boolean,
   PRIMARY KEY (`id_ope_de_hdr`),
   CONSTRAINT `pk_ope_de_hdr_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
   CONSTRAINT `pk_ope_de_hdr_x_operacion` FOREIGN KEY (`id_operacion`) REFERENCES `operacion`(`id_operacion`),
