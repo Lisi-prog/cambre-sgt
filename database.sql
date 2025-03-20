@@ -421,6 +421,8 @@ CREATE TABLE `hoja_de_ruta` (
   `id_hoja_de_ruta` int NOT NULL AUTO_INCREMENT,
   `fecha_carga` datetime,
   `observaciones` varchar(500),
+  `ubicacion` varchar(100),
+  `cantidad` int,
   `id_responsabilidad` int,
   `id_orden_mecanizado` int,
   `ruta` varchar(500),

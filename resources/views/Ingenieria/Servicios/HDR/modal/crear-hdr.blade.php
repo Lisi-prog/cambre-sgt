@@ -12,11 +12,13 @@
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('hdr_ant', 'HDR anteriores:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::select('hdr_ant', [], null, [
+                            <select class="form-select form-group" id="m-hdr-ant" name="hdr-ant" onchange="autocompletahdr(this.value)">
+                            </select> 
+                            {{-- {!! Form::select('hdr_ant', [], null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
                                             'id' => 'hdr_ant'
-                                        ]) !!}
+                                        ]) !!} --}}
                         </div>
                     </div>
                 </div>
@@ -103,7 +105,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <textarea name='observaciones' id="observaciones0" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                            <textarea name='observaciones' id="m-obser" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" hidden>
@@ -177,7 +179,7 @@
                     <td class="text-center">${rowCount}</td>
                     <td>
                         <div class="dropdown-container my-auto">
-                            <input type="text" class="styled-input form-select custom-input-1" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
+                            <input type="text" class="styled-input form-select custom-input-1 input-ope" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
                             <div class="dropdown-list-auto">
                                 ${options}
                             </div>
@@ -185,7 +187,7 @@
                     </td>
                     <td>
                         <div class="dropdown-container my-auto">
-                            <input type="text" class="styled-input form-select" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
+                            <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
                             <div class="dropdown-list-auto">
                                 ${opt_tec}
                             </div>
@@ -193,7 +195,7 @@
                     </td>
                     <td>
                         <div class="dropdown-container my-auto">
-                            <input type="text" class="styled-input form-select" placeholder="Seleccionar" autocomplete="off" name="maq[]" required>
+                            <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]" required>
                             <div class="dropdown-list-auto">
                             </div>
                         </div>
@@ -249,40 +251,87 @@
                 console.log(error);
             }
         });
+        return row;
     }
 
     function cargarMaquinas(operacion, targetInput) {
-    const selectedOperation = operacion;
+        const selectedOperation = operacion;
 
-    $.ajax({
-        type: "post",
-        url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
-        data: { nom_operacion: selectedOperation },
-        success: function (response) {
-            // console.log(response);
-            
-            // Obtener la lista del dropdown correspondiente al tercer input
-            const dropdownList = targetInput.nextElementSibling;
-            if (dropdownList && dropdownList.classList.contains("dropdown-list-auto")) {
-                dropdownList.innerHTML = ""; // Limpiar opciones
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
+            data: { nom_operacion: selectedOperation },
+            success: function (response) {
+                // console.log(response);
+                
+                // Obtener la lista del dropdown correspondiente al tercer input
+                const dropdownList = targetInput.nextElementSibling;
+                if (dropdownList && dropdownList.classList.contains("dropdown-list-auto")) {
+                    dropdownList.innerHTML = ""; // Limpiar opciones
 
-                // Agregar nuevas opciones
-                response.forEach((maq) => {
-                    const div = document.createElement("div");
-                    div.classList.add("dropdown-item");
-                    div.textContent = maq.codigo_maquinaria;
-                    div.dataset.value = maq.codigo_maquinaria;
-                    dropdownList.appendChild(div);
-                });
+                    // Agregar nuevas opciones
+                    response.forEach((maq) => {
+                        const div = document.createElement("div");
+                        div.classList.add("dropdown-item");
+                        div.textContent = maq.codigo_maquinaria;
+                        div.dataset.value = maq.codigo_maquinaria;
+                        dropdownList.appendChild(div);
+                    });
 
-                // Volver a aplicar CustomDropdown para actualizar las opciones
-                new CustomDropdown(targetInput.closest(".dropdown-container"));
+                    // Volver a aplicar CustomDropdown para actualizar las opciones
+                    new CustomDropdown(targetInput.closest(".dropdown-container"));
+                }
+            },
+            error: function (error) {
+                console.log(error);
             }
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
-}
+        });
+    }
 
+    function autocompletahdr(id_hdr) {
+            // console.log(id_hdr)
+
+            if (id_hdr) {
+                $.ajax({
+                    type: "post",
+                    url: '/orden/mec/hdr/obtener-hdr/'+id_hdr, // Ruta para obtener las máquinas
+                    data: { id: id_hdr },
+                    success: function (response) {
+                        console.log(response);
+                        document.getElementById('m_ubi').value = response.ubicacion;
+                        document.getElementById('m_cant').value = response.cantidad;
+                        document.getElementById('m_ruta').value = response.ruta;
+                        document.getElementById('m-obser').value = response.observaciones;
+                        document.getElementById('table-body').innerHTML = '';
+                        response.operaciones.forEach(function (op){
+                            console.log(op);
+                            const nuevaFila = addRow();
+
+                            // Esperar un breve momento para que la fila se agregue
+                            setTimeout(() => {
+                                // console.log(nuevaFila)
+                                nuevaFila.querySelector(".input-ope").value = op.operacion;
+                                nuevaFila.querySelector(".input-asig").value = op.asignado;
+                                nuevaFila.querySelector(".input-maquina").value = op.maquina;
+                            }, 100);
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+                document.getElementById('m_ubi').value = '';
+                document.getElementById('m_cant').value = '';
+                document.getElementById('m_ruta').value = '';
+                document.getElementById('m-obser').value = '';
+                document.getElementById('table-body').innerHTML = '';
+            }
+    }
+
+    $(document).ready(function() {
+        $('#crearHdr').on('hidden.bs.modal', function (e) {
+            document.getElementById('table-body').innerHTML = '';
+        });
+    });
 </script>

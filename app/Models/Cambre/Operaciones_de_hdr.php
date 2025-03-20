@@ -43,4 +43,12 @@ class Operaciones_de_hdr extends Model
     public function getOperacion(){
         return $this->belongsTo(Operacion::class, 'id_operacion');
     }
+
+    public function getMaquinaria(){
+        return $this->belongsTo(Maquinaria::class, 'id_maquinaria');
+    }
+
+    public function getAsignado(){
+        return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable->getEmpleado->nombre_empleado;
+    }
 }

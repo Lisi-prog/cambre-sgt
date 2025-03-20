@@ -36,4 +36,9 @@ class Parte_ope_hdr extends Model
     public function getNombreEstado(){
         return Estado_hdr::where('id_estado_hdr', $this->id_estado_hdr)->first()->nombre_estado_hdr;
     }
+
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
+    }
 }

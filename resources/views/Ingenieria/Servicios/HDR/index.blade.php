@@ -72,7 +72,7 @@
                                     <h5 class="text-center">Hojas de Ruta</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
                                         Nuevo
                                     </button>
                                 </div>
@@ -264,7 +264,7 @@
                     id: id,
                 },
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     response.forEach((op) => {
                         fila_ope += `<tr>
                                             <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
@@ -295,5 +295,36 @@
                 }
             });
         }
+
+        function cargarModalCrearHDR(id, orden, sup){
+            // console.log(id, orden, sup);
+            document.getElementById('m_id_pieza').value = orden;
+            document.getElementById('m_confec').value = sup;
+            let select_hdr = document.getElementById('m-hdr-ant');
+            select_hdr.innerHTML = '';
+            let html_hdr = '<option selected="selected" value="">Seleccionar</option>';
+            $.ajax({
+                type: "post",
+                url: '/orden/mec/hdr/obtener-hdr-ant/'+id, 
+                data: {
+                    id: id,
+                },
+                success: function (response) {
+                    // console.log(response)
+                    
+                    response.forEach(element => {
+                        html_hdr += `
+                                            <option value="`+element.id_hoja_de_ruta+`">Cod: `+element.id_hoja_de_ruta+` Fecha: `+element.fecha_carga
+                                            +`</option> 
+                                            `
+                    });
+                    select_hdr.innerHTML += html_hdr;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
     </script>
 @endsection

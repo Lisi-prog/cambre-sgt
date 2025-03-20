@@ -1280,6 +1280,8 @@ class OrdenController extends Controller
         $hdr = Hoja_de_ruta::create([
             'fecha_carga' => $fec_carga,
             'observaciones' => $obse,
+            'ubicacion' => $ubi,
+            'cantidad' => $cant,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'id_orden_mecanizado' => $id,
             'ruta' => $ruta
@@ -1395,5 +1397,32 @@ class OrdenController extends Controller
         return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
                 ->where('oxm.id_operacion', $idOperacion)
                 ->get();
+    }
+
+    public function obtenerHdrAnt($id){
+        return Hoja_de_ruta::where('id_orden_mecanizado', $id)->orderBy('fecha_carga')->get();
+    }
+
+    public function obtenerHdr($id){
+        $operaciones_arr = [];
+        $hdr = Hoja_de_ruta::find($id);
+        $opes = Operaciones_de_hdr::where('id_hoja_de_ruta', $id)->get();
+
+        foreach ($opes as $op) {
+            array_push($operaciones_arr, (object)[
+                'numero' => $op->numero,
+                'operacion' => $op->getOperacion->nombre_operacion,
+                'asignado' => $op->getAsignado(),
+                'maquina' => $op->getMaquinaria->codigo_maquinaria
+            ]);
+        }
+
+        return [
+            'ubicacion' => $hdr->ubicacion,
+            'cantidad' => $hdr->cantidad,
+            'ruta' => $hdr->ruta,
+            'observaciones' => $hdr->observaciones,
+            'operaciones' => $operaciones_arr
+        ];
     }
 }

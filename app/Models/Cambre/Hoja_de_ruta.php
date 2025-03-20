@@ -4,6 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 
 class Hoja_de_ruta extends Model
@@ -21,6 +22,8 @@ class Hoja_de_ruta extends Model
     protected $fillable = [ 
         'fecha_carga',
         'observaciones',
+        'ubicacion',
+        'cantidad',
         'id_responsabilidad',
         'id_orden_mecanizado',
         'ruta'
@@ -38,4 +41,9 @@ class Hoja_de_ruta extends Model
     // {
     //     return 
     // }
+
+    public function getFechaCargaAttribute($value)
+     {
+         return Carbon::parse($value)->format('Y-m-d'); // Formato: 10-05-2024
+     }
 }
