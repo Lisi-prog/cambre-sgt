@@ -51,4 +51,8 @@ class Operaciones_de_hdr extends Model
     public function getAsignado(){
         return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable->getEmpleado->nombre_empleado;
     }
+
+    public function getHdr(){
+        return $this->belongsTo(Hoja_de_ruta::class, 'id_hoja_de_ruta');
+    }
 }

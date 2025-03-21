@@ -46,4 +46,8 @@ class Hoja_de_ruta extends Model
      {
          return Carbon::parse($value)->format('Y-m-d'); // Formato: 10-05-2024
      }
+
+     public function getOrdMec(){
+        return $this->belongsTo(Orden_mecanizado::class, 'id_orden_mecanizado');
+     }
 }

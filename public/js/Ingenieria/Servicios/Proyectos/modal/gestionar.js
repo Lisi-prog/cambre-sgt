@@ -552,7 +552,7 @@ function cargarModalVerPartes(id, tipo_orden){
                         <td class="text-center">`+element.estado+`</td>
                         <td class="text-center">`+element.horas+`</td>
                         <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>s
+                        <td class="text-center">`+element.responsable+`</td>
                         <td class="text-center">`+element.supervisor+`</td>
                         <td class="text-center">
                             <div class="row justify-content-center" >

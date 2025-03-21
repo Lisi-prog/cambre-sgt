@@ -31,6 +31,7 @@ use App\Models\Cambre\Tipo_servicio;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
+use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
@@ -145,6 +146,14 @@ class OrdenController extends Controller
                     array_push($estados_arr, (object)[
                         'id_estado' => $estado->id_estado_mecanizado,
                         'nombre' => $estado->nombre_estado_mecanizado
+                    ]);
+                }
+                break;
+            case 5:
+                foreach (Estado_hdr::get() as $estado) {
+                    array_push($estados_arr, (object)[
+                        'id_estado' => $estado->id_estado_hdr,
+                        'nombre' => $estado->nombre_estado_hdr
                     ]);
                 }
                 break;
@@ -1363,7 +1372,7 @@ class OrdenController extends Controller
     }
 
     public function saveOperations(Request $request)
-{
+    {
         $validated = $request->validate([
             'operations' => 'required|array',
             'operations.*.numero' => 'required|integer',
@@ -1424,5 +1433,29 @@ class OrdenController extends Controller
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr
         ];
+    }
+
+    public function obtenerParteHdr($id){
+        $op = Operaciones_de_hdr::find($id);
+        $partes_arr = array();
+
+        foreach ($op->getPartes as $parte) {
+                array_push($partes_arr, (object)[
+                    'id_parte' => $parte->id_parte_ope_hdr,
+                    'observaciones' => $parte->observaciones,
+                    'estado' => $parte->getNombreEstado(),
+                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+                    'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
+                    'fecha' => $parte->fecha,
+                    // 'fecha_limite' => $parte->fecha_limite ?? '-',
+                    'horas' => $parte->horas,
+                    // 'supervisor' => $parte->getOrden->getSupervisor(),
+                    'operacion' => $op->getOperacion->nombre_operacion,
+                    'orden_mec' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
+                    'estado_op' => $op->getEstado(),
+                    ]);
+        }
+
+        return $partes_arr;
     }
 }

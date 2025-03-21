@@ -226,9 +226,6 @@
     @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
     <script>
         $(document).ready(function () {
-            $("#asd").on("change",function(){
-        console.log('adwada')
-    });
             // let tipo_orden = document.getElementById('tipo_orden').value;
             // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
             // url = url.replace(':tipo_orden', tipo_orden);
@@ -252,79 +249,6 @@
                     "pageLength": 25
             });
         });
-
-        function cargarOperaciones(id) {
-            let body_tb = document.getElementById('body_ope');
-            body_tb.innerHTML = '';
-            let fila_ope = '';
-            $.ajax({
-                type: "post",
-                url: '/orden/mec/hdr/obtener-ope-hdr', 
-                data: {
-                    id: id,
-                },
-                success: function (response) {
-                    // console.log(response);
-                    response.forEach((op) => {
-                        fila_ope += `<tr>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.nombre_estado_hdr}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.total_horas ? "NO":"SI" }</td>
-                                            <td class='text-center' style="vertical-align: middle;">
-                                                
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="">
-                                                                    Partes
-                                                                </button>
-                                                            </div>
-                                                        
-                                            </td>
-                                        </tr>
-                                        `; 
-                    });
-                    body_tb.innerHTML += fila_ope;
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
-
-        function cargarModalCrearHDR(id, orden, sup){
-            // console.log(id, orden, sup);
-            document.getElementById('m_id_pieza').value = orden;
-            document.getElementById('m_confec').value = sup;
-            let select_hdr = document.getElementById('m-hdr-ant');
-            select_hdr.innerHTML = '';
-            let html_hdr = '<option selected="selected" value="">Seleccionar</option>';
-            $.ajax({
-                type: "post",
-                url: '/orden/mec/hdr/obtener-hdr-ant/'+id, 
-                data: {
-                    id: id,
-                },
-                success: function (response) {
-                    // console.log(response)
-                    
-                    response.forEach(element => {
-                        html_hdr += `
-                                            <option value="`+element.id_hoja_de_ruta+`">Cod: `+element.id_hoja_de_ruta+` Fecha: `+element.fecha_carga
-                                            +`</option> 
-                                            `
-                    });
-                    select_hdr.innerHTML += html_hdr;
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
-
     </script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
 @endsection

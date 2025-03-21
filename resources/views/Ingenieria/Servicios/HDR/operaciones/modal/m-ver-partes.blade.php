@@ -46,14 +46,14 @@
                             <thead id="encabezado_tabla_parte" style="background: #558540">
                                 <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
+                                {{-- <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th> --}}
                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Horas</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                                 <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
                                 <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
+                                {{-- <th class="text-center" scope="col" style="color:#fff;">Supervisor</th> --}}
                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody id="body_ver_parte">
