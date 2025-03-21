@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo', 'Ordenes')
+@section('titulo', 'Ordenes Manufactura')
 @section('content')
 
 <style>
@@ -49,18 +49,18 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Ordenes de {{$tipo}}</h5>
+                <h4 class="">Ordenes de Manufactura</h5>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
-                {{-- <div class="form-check form-switch">
+                <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion multiple</label>
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
                     Carga Multiple
-                </button> --}}
+                </button>
             </div>
         </div>
     </div>
@@ -111,25 +111,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @role('SUPERVISOR')
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="row">
-                                        <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                <div class="">
-                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
-                                                </div>
-                                                <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                    @foreach ($responsables as $responsable)
-                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endrole
                             
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
@@ -141,31 +122,11 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($estados as $estado)
-                                                    @switch($tipo_orden)
-                                                        @case(1)
-                                                            @if ($estado->id_estado < 9 && $estado->id_estado != 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(2)
-                                                            @if ($estado->id_estado < 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(3)
-                                                            @if ($estado->id_estado < 6)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                            
-                                                    @endswitch
-                                                        
+                                                    @if ($estado->id_estado < 7)
+                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                    @else
+                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>
@@ -182,12 +143,6 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <!-- Centramos la paginacion a la derecha -->
-                        {{-- @if (count($ordenes) != 0)
-                            <div class="pagination justify-content-end">
-                                {!! $ordenes->links() !!}
-                            </div>
-                        @endif --}}
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
@@ -197,9 +152,9 @@
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
                                     <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
-                                    <th class='text-center' style="color:#fff;min-width:6vw">Responsable</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
@@ -224,11 +179,19 @@
 
                                             <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
                                             
+                                            <td class= 'text-center' style="vertical-align: middle;">
+                                                <div class="progress position-relative" style="background-color: #b2baf8">
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{100}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{'10'.'/'.'10'}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_estado ?? ''}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->supervisor ?? '-'}}</td>
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td> --}}
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td>
 
@@ -357,6 +320,7 @@
         let tipo_orden = window.location.pathname.substring(9, 10);
         modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
+        
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {
@@ -367,27 +331,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[7]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
-
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-        
-            var offices = $('input:checkbox[name="res"]:checked').map(function() {
-                return this.value;
-            }).get();
-        
-
-            if (offices.length === 0) {
-                return true;
-            }
-            
-            if (offices.indexOf(searchData[8]) !== -1) {
+            if (positions.indexOf(searchData[8]) !== -1) {
                 return true;
             }
             
@@ -407,7 +351,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[6]) !== -1) {
+            if (offices.indexOf(searchData[7]) !== -1) {
                 return true;
             }
             
@@ -439,7 +383,7 @@
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_ ',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
                     infoEmpty: 'No se ha encontrado registros',
                     infoFiltered: '(Filtrado de _MAX_ registros totales)',
                     search: 'Buscar',
@@ -494,7 +438,7 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    //console.log(data);
+                    console.log(data);
                     opcion = parseInt(data.resultado);
                     switch (opcion) {
                         case 1:

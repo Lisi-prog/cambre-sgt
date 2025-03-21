@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="crearOrdenModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" id="m-crear-orden">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Orden</h1>
@@ -17,9 +17,9 @@
                                             'id' => 'id_servicio',
                                             'hidden' => true
                                         ]) !!}
-                            {!! Form::label('tipo_orden', "Tipo orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('tipo_orden', "Tipo Orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
-                            {!! Form::select('tipo_orden', [1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 3 => 'Orden de mecanizado',4 => 'Orden de mantenimiento'], null, [
+                            {!! Form::select('tipo_orden', [1 => 'Orden de Trabajo', 2 => 'Orden de Manufactura', 3 => 'Orden de Mecanizado'], null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select form-group',
                                     'id' => 'selected-tipo-orden',

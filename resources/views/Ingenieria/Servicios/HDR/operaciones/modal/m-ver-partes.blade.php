@@ -46,14 +46,14 @@
                             <thead id="encabezado_tabla_parte" style="background: #558540">
                                 <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
+                                {{-- <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th> --}}
                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Horas</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                                 <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
                                 <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
+                                {{-- <th class="text-center" scope="col" style="color:#fff;">Supervisor</th> --}}
                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody id="body_ver_parte">
@@ -68,8 +68,8 @@
                 </div>             
                 <div class="row rounded border border-3 border-warning" id="m-ver-parte-div">
                     <h5 class="text-center control-label pt-2" id="titulo-parte">Nuevo parte</h5>
-                    {!! Form::open(['route' => 'partes.guardar.act', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec nuevo-editar-parte', 'id' => 'form-nuevo-parte']) !!}
-                    {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
+                    {!! Form::open(['route' => 'partesope.guardar.act', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec nuevo-editar-parte', 'id' => 'form-nuevo-parte']) !!}
+                    {!! Form::text('id_op', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-hdr']) !!}
                     {!! Form::text('id_parte', null, ['class' => 'form-control', 'hidden', 'id' => 'm-id-parte']) !!}
                     {!! Form::text('editar', 0, ['class' => 'form-control', 'hidden', 'id' => 'm-editar']) !!}
                     <div class="row">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                        {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                                 {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 @role('SUPERVISOR')
@@ -112,7 +112,7 @@
                                     ]) !!}
                                 @endrole
                             </div>
-                        </div>
+                        </div> --}}
                        
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">

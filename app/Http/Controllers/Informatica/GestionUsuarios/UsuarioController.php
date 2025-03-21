@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\Cambre\Empleado;
 
 
 class UsuarioController extends Controller
@@ -32,7 +33,8 @@ class UsuarioController extends Controller
 
     public function index(Request $request)
     {  
-        $usuarios = User::orderBy('name', 'asc')->get();
+        $emp_ids = Empleado::orderBy('nombre_empleado')->activo()->pluck('user_id')->toArray();
+        $usuarios = User::whereIn('id',$emp_ids )->orderBy('name', 'asc')->get();
         return view('Informatica.GestionUsuarios.usuarios.index', compact('usuarios'));
     }
     

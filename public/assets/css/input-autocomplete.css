@@ -1,0 +1,53 @@
+/* Estilo para el contenedor */
+.dropdown-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Estiliza el input como un select */
+.styled-input {
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Agregar un icono de flecha */
+/* .dropdown-container::after {
+    content: "▼";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #495057;
+    font-size: 0.8rem;
+} */
+
+/* Lista desplegable */
+.dropdown-list-auto {
+    position: absolute;
+    width: inherit;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+}
+
+/* Elementos de la lista */
+.dropdown-list-auto div {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.dropdown-list-auto div:hover,
+.dropdown-list-auto div.selected {
+    background-color: #f8f9fa;
+}

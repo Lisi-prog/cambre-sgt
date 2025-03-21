@@ -72,7 +72,7 @@
                                     <h5 class="text-center">Hojas de Ruta</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
                                         Nuevo
                                     </button>
                                 </div>
@@ -89,6 +89,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Progreso</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
                                     </thead>
                                     <tbody>
@@ -109,7 +110,15 @@
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
 
-                                            <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->uli ?? '-'}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getUltOpeActiva() ?? '-'}}</td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">
+                                                <div class="progress position-relative" style="background-color: #b2baf8">
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$hdr->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$hdr->getTotalOpeCompleto().'/'.$hdr->getTotalOpe()}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -170,7 +179,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Asignado</th>
+                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Ultimo res.</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Maquina</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Operacion</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
@@ -240,49 +249,6 @@
                     "pageLength": 25
             });
         });
-
-        function cargarOperaciones(id) {
-            let body_tb = document.getElementById('body_ope');
-            body_tb.innerHTML = '';
-            let fila_ope = '';
-            console.log('aaasd')
-            $.ajax({
-                type: "post",
-                url: '/orden/mec/hdr/obtener-ope-hdr', 
-                data: {
-                    id: id,
-                },
-                success: function (response) {
-                    console.log(response);
-                    response.forEach((op) => {
-                        fila_ope += `<tr>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.responsable}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                            <td class='text-center' style="vertical-align: middle;">
-                                                
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="">
-                                                                    Partes
-                                                                </button>
-                                                            </div>
-                                                        
-                                            </td>
-                                        </tr>
-                                        `; 
-                    });
-                    body_tb.innerHTML += fila_ope;
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
     </script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
 @endsection

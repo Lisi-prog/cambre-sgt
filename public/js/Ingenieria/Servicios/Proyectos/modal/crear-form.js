@@ -27,6 +27,7 @@ function modificarFormulario(){
 //    console.log(fecha_de_hoy);
    switch (tipo_orden) {
     case 1:
+        document.getElementById('selected-tipo-orden').style.border = "3px solid #558540";
         formulario.innerHTML = '';
         html = opcion1
         formulario.innerHTML += html;
@@ -37,6 +38,7 @@ function modificarFormulario(){
         $('#cbx_estado').on('change', mostrarOcultarFechaRequerida);
         break;
     case 2:
+        document.getElementById('selected-tipo-orden').style.border = "3px solid #982b37";
         formulario.innerHTML = '';
         html = opcion2
         formulario.innerHTML += html;
@@ -45,6 +47,7 @@ function modificarFormulario(){
         cargarEstadosManufacturas();
         break;
     case 3:
+        document.getElementById('selected-tipo-orden').style.border = "3px solid #d37c00";
         formulario.innerHTML = '';
         html = opcion3
         formulario.innerHTML += html;
@@ -56,6 +59,7 @@ function modificarFormulario(){
         formulario.innerHTML = '';
         break;    
     default:
+        document.getElementById('selected-tipo-orden').style.border = "1px solid #ced4da";
         formulario.innerHTML = '';
         break;
    }

@@ -421,22 +421,36 @@ CREATE TABLE `hoja_de_ruta` (
   `id_hoja_de_ruta` int NOT NULL AUTO_INCREMENT,
   `fecha_carga` datetime,
   `observaciones` varchar(500),
+  `ubicacion` varchar(100),
+  `cantidad` int,
   `id_responsabilidad` int,
   `id_orden_mecanizado` int,
+  `ruta` varchar(500),
   PRIMARY KEY (`id_hoja_de_ruta`),
   CONSTRAINT `pk_hoja_de_ruta_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_hoja_de_ruta_x_orden_mec` FOREIGN KEY (`id_orden_mecanizado`) REFERENCES `orden_mecanizado`(`id_orden_mecanizado`)
 );
 
+CREATE TABLE `archivo_hdr` (
+  `id_archivo_hdr` int NOT NULL AUTO_INCREMENT,
+  `id_hoja_de_ruta` int NOT NULL,
+  `nombre_archivo` varchar(250),
+  `ruta` varchar(500),
+  PRIMARY KEY (`id_archivo_hdr`),
+  CONSTRAINT `pk_id_archivo_x_hdr` FOREIGN KEY (`id_hoja_de_ruta`) REFERENCES `hoja_de_ruta`(`id_hoja_de_ruta`)
+);
+
 CREATE TABLE `operaciones_de_hdr` (
   `id_ope_de_hdr` int NOT NULL AUTO_INCREMENT,
   `id_hoja_de_ruta` int,
+  `prioridad` int,
   `numero` int,
   `fecha_carga` datetime,
   `fecha` date,
   `id_maquinaria` int NULL,
   `id_operacion` int,
   `ruta_cam` varchar(100),
+  `activo` boolean,
   PRIMARY KEY (`id_ope_de_hdr`),
   CONSTRAINT `pk_ope_de_hdr_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
   CONSTRAINT `pk_ope_de_hdr_x_operacion` FOREIGN KEY (`id_operacion`) REFERENCES `operacion`(`id_operacion`),

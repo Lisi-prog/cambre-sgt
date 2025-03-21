@@ -34,7 +34,7 @@ class Og_organigrama extends Model
     
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class, 'id_empleado');
+        return $this->belongsTo(Empleado::class, 'id_empleado')->where('esta_activo', 1);
     }
 
     /**

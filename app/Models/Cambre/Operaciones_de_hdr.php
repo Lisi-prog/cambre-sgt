@@ -21,11 +21,13 @@ class Operaciones_de_hdr extends Model
     protected $fillable = [ 
         'id_hoja_de_ruta',
         'numero',
+        'prioridad',
         'fecha_carga',
         'fecha',
         'id_maquinaria',
         'id_operacion',
-        'ruta_cam'
+        'ruta_cam',
+        'activo'
     ];
 
     public function getPartes()
@@ -36,5 +38,31 @@ class Operaciones_de_hdr extends Model
     public function getEstado()
     {
         return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->getNombreEstado();
+    }
+
+    public function getOperacion(){
+        return $this->belongsTo(Operacion::class, 'id_operacion');
+    }
+
+    public function getMaquinaria(){
+        return $this->belongsTo(Maquinaria::class, 'id_maquinaria');
+    }
+
+    public function getAsignado(){
+        return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable->getEmpleado->nombre_empleado;
+    }
+
+    public function getHdr(){
+        return $this->belongsTo(Hoja_de_ruta::class, 'id_hoja_de_ruta');
+    }
+
+    public function getFinalizado()
+    {   
+        return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->getFinalizado();
+    }
+
+    public function getIdEstado()
+    {
+        return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->id_estado_hdr;
     }
 }
