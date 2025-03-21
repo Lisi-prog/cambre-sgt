@@ -23,6 +23,8 @@ use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_trabajo;
 use App\Models\Cambre\Parte_mecanizado;
 use App\Models\Cambre\Parte_manufactura;
+use App\Models\Cambre\Parte_ope_hdr;
+use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Maquinaria;
@@ -785,6 +787,340 @@ class ParteController extends Controller
 
         }
         return 1;    
+    }
+
+    public function guardarActualizarParteOpe(Request $request)
+    {
+        // return $request;
+        $this->validate($request, [
+            'id_op' => 'required',
+            'observaciones' => 'required',
+            // 'fecha_limite' => 'required',
+            'fecha' => 'required',
+            'horas' => 'required',
+            'minutos' => 'required',
+            'estado' => 'required'
+        ]);
+
+        $ope = Operaciones_de_hdr::find($request->input('id_op'));
+
+        $estado_actual = $ope->getIdEstado();
+       
+        $editar = $request->input('editar');
+
+        // if ($request->input('id_parte')) {
+        //     $parte = Parte::find($request->input('id_parte'));
+        //     $res = $parte->getResponsable->id_empleado;
+
+        //     if ($editar == 1 && $res != Auth::user()->getEmpleado->id_empleado && !Auth::user()->hasRole('SUPERVISOR')) {
+        //         return 6;
+        //         return 'No se puede editar un parte de la cual no es responsable';
+        //     }
+        // }     
+
+        // $responsable = $orden->getObjResponsable();
+
+        // $puesto = $responsable->getPuestoEmpleado;
+
+        $estado = $request->input('estado');
+        
+        // $fecha_limite = $request->input('fecha_limite');
+
+        $fecha = $request->input('fecha');
+
+        $observaciones = $request->input('observaciones');
+
+        // $opcion =  $orden->getOrdenDe->getTipoOrden();
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $horas = $request->input('horas') . ':' . $request->input('minutos');
+        
+        // $costo = $request->input('horas')*$puesto->costo_hora + $request->input('minutos') * ($puesto->costo_hora/60);
+
+        if ($editar){
+            //return 2;
+            Log_parte::create([
+                'id_parte' => $parte->id_parte,
+                'id_responsabilidad' => $parte->id_responsabilidad,
+                'observaciones' => $parte->observaciones,
+                'fecha' => $parte->fecha,
+                'fecha_limite' => $parte->fecha_limite,
+                'fecha_carga' => $fecha_carga,
+                'horas' => $parte->horas,
+                'estado' => $parte->getParteDe->getNombreEstado(),
+                'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+            ]);
+            
+            $parte->update([
+                'observaciones' => $observaciones,
+                'fecha' => $fecha,
+                'horas' => $horas
+            ]);
+
+            if (Auth::user()->hasRole('SUPERVISOR')) {
+                $parte->update([
+                    'fecha_limite' => $fecha_limite
+                ]);
+            }
+
+            $parte->getParteDe->update([
+                'id_estado' => $estado
+            ]);
+            $result = 2;
+        }else{
+            // $estado = $request->input('estado');
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte_ope_hdr::create([
+                        'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                        'observaciones' => $observaciones,
+                        'fecha' => $fecha,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => $horas,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                        'medidas' => 0,
+                        'id_estado_hdr' => $estado
+                    ]);
+           
+
+            // if ($estado_actual != $estado) {
+            //     $this->enviarEmail($parte->id_parte, $estado, $opcion);
+            // }
+
+            $result = 1;
+        }
+
+        return [
+            'resultado' => $result,
+            // 'tipo_orden' => $opcion
+        ];
+
+        // switch ($opcion) {
+        //     case 1:
+        //         if ($editar){
+        //             //return 2;
+        //             Log_parte::create([
+        //                 'id_parte' => $parte->id_parte,
+        //                 'id_responsabilidad' => $parte->id_responsabilidad,
+        //                 'observaciones' => $parte->observaciones,
+        //                 'fecha' => $parte->fecha,
+        //                 'fecha_limite' => $parte->fecha_limite,
+        //                 'fecha_carga' => $fecha_carga,
+        //                 'horas' => $parte->horas,
+        //                 'estado' => $parte->getParteDe->getNombreEstado(),
+        //                 'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+        //             ]);
+                    
+        //             $parte->update([
+        //                 'observaciones' => $observaciones,
+        //                 'fecha' => $fecha,
+        //                 'horas' => $horas
+        //             ]);
+
+        //             if (Auth::user()->hasRole('SUPERVISOR')) {
+        //                 $parte->update([
+        //                     'fecha_limite' => $fecha_limite
+        //                 ]);
+        //             }
+
+        //             $parte->getParteDe->update([
+        //                 'id_estado' => $estado
+        //             ]);
+        //             $result = 2;
+        //         }else{
+        //             $estado = $request->input('estado');
+
+        //             $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        //             $responsabilidad = Responsabilidad::create([
+        //                 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+        //                 'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        //             ]);
+
+        //             $parte = Parte::create([
+        //                         'observaciones' => $observaciones,
+        //                         'fecha' => $fecha,
+        //                         'fecha_limite' => $fecha_limite,
+        //                         'fecha_carga' => $fecha_carga,
+        //                         'horas' => $horas,
+        //                         'costo' => $costo,
+        //                         'id_orden' => $orden->id_orden,
+        //                         'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        //                     ]);
+        //             Parte_trabajo::create([
+        //                 'id_estado' => $estado,
+        //                 'id_parte' => $parte->id_parte
+        //             ]);
+
+        //             if ($estado_actual != $estado) {
+        //                 $this->enviarEmail($parte->id_parte, $estado, $opcion);
+        //             }
+
+        //             $result = 1;
+        //         }
+        //         return[
+        //             'resultado' => $result,
+        //             'tipo_orden' => $opcion
+        //         ];
+        //         break;
+
+        //     case 2:
+        //         if ($editar) {
+
+        //             Log_parte::create([
+        //                 'id_parte' => $parte->id_parte,
+        //                 'id_responsabilidad' => $parte->id_responsabilidad,
+        //                 'observaciones' => $parte->observaciones,
+        //                 'fecha' => $parte->fecha,
+        //                 'fecha_limite' => $parte->fecha_limite,
+        //                 'fecha_carga' => $fecha_carga,
+        //                 'horas' => $parte->horas,
+        //                 'estado' => $parte->getParteDe->getNombreEstado(),
+        //                 'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+        //             ]);
+
+        //             $parte->update([
+        //                 'observaciones' => $observaciones,
+        //                 'fecha_limite' => $fecha_limite,
+        //                 'fecha' => $fecha,
+        //                 'horas' => $horas
+        //             ]);
+
+        //             $parte->getParteDe->update([
+        //                 'id_estado_manufactura' => $estado
+        //             ]);
+
+        //             $result = 2;
+        //         } else {
+        //             $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        //             $responsabilidad = Responsabilidad::create([
+        //                 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+        //                 'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        //             ]);
+
+        //             $parte = Parte::create([
+        //                         'observaciones' => $observaciones,
+        //                         'fecha' => $fecha,
+        //                         'fecha_limite' => $fecha_limite,
+        //                         'fecha_carga' => $fecha_carga,
+        //                         'horas' => $horas,
+        //                         'costo' => $costo,
+        //                         'id_orden' => $orden->id_orden,
+        //                         'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        //                     ]);
+        //             Parte_manufactura::create([
+        //                 'id_estado_manufactura' => $estado,
+        //                 'id_parte' => $parte->id_parte
+        //             ]);
+        //             $result = 1;
+        //         }
+
+        //         return[
+        //             'resultado' => $result,
+        //             'tipo_orden' => $opcion
+        //         ];                      
+        //         break;
+            
+        //     case 3:
+        //         if ($editar) {
+        //             $log_parte = Log_parte::create([
+        //                 'id_parte' => $parte->id_parte,
+        //                 'id_responsabilidad' => $parte->id_responsabilidad,
+        //                 'observaciones' => $parte->observaciones,
+        //                 'fecha' => $parte->fecha,
+        //                 'fecha_limite' => $parte->fecha_limite,
+        //                 'fecha_carga' => $fecha_carga,
+        //                 'horas' => $parte->horas,
+        //                 'estado' => $parte->getParteDe->getNombreEstado(),
+        //                 'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
+        //             ]);
+
+        //             // if ($parte->getParteDe->getParteMecxMaq->first()) {
+        //             //     $log_parte->update([
+        //             //         'id_maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->id_maquinaria,
+        //             //         'horas_maquina' => $parte->getParteDe->getParteMecxMaq->first()->horas_maquina
+        //             //     ]);
+        //             // }
+
+        //             // $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
+        //             // $maquina = $request->input('maquina');
+
+        //             $parte->update([
+        //                 'observaciones' => $observaciones,
+        //                 'fecha_limite' => $fecha_limite,
+        //                 'fecha' => $fecha,
+        //                 'horas' => $horas
+        //             ]);
+
+        //             $parte->getParteDe->update([
+        //                 'id_estado_mecanizado' => $estado
+        //             ]);
+
+        //             // if ($maquina) {
+        //             //     $parte->getParteDe->getParteMecxMaq->first()->update([
+        //             //         'id_maquinaria' => $maquina,
+        //             //         'horas_maquina' => $horas_maquina
+        //             //     ]);
+        //             // }
+
+        //             $result = 2;
+
+        //         } else {
+        //             // $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
+        //             // $maquina = $request->input('maquina');
+
+        //             $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        //             $responsabilidad = Responsabilidad::create([
+        //                 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+        //                 'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        //             ]);
+
+        //             $parte = Parte::create([
+        //                         'observaciones' => $observaciones,
+        //                         'fecha' => $fecha,
+        //                         'fecha_limite' => $fecha_limite,
+        //                         'fecha_carga' => $fecha_carga,
+        //                         'horas' => $horas,
+        //                         'costo' => $costo,
+        //                         'id_orden' => $orden->id_orden,
+        //                         'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        //                     ]);
+        //             $parte_mecanizado = Parte_mecanizado::create([
+        //                 'id_estado_mecanizado' => $estado,
+        //                 'id_parte' => $parte->id_parte
+        //             ]);
+                    
+        //             // if ($maquina) {
+        //             //     Parte_mecanizado_x_maquinaria::create([
+        //             //         'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
+        //             //         'id_maquinaria' => $maquina,
+        //             //         'horas_maquina' => $horas_maquina
+        //             //     ]);
+        //             // }
+        //             $result = 1;
+        //         }
+        //         return[
+        //             'resultado' => $result,
+        //             'tipo_orden' => $opcion
+        //         ];        
+                             
+        //         break;
+
+        //     default:
+        //         # code...
+        //         break;
+
+        // }
+        // return 1;    
     }
 
     public function pruebaEmail(){

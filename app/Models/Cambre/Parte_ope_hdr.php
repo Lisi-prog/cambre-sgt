@@ -41,4 +41,12 @@ class Parte_ope_hdr extends Model
     {
         return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
+
+    public function getFinalizado()
+    {
+        if ($this->id_estado_hdr == 3) {
+            return 1;
+        }
+        return 0;
+    }
 }

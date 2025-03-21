@@ -50,4 +50,42 @@ class Hoja_de_ruta extends Model
      public function getOrdMec(){
         return $this->belongsTo(Orden_mecanizado::class, 'id_orden_mecanizado');
      }
+
+     public function getTotalOpe(){
+        return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->count();
+     }
+
+     public function getTotalOpeCompleto(){
+        // return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->count();
+        $ops = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->get();
+        $totalOpeFinalizadas = 0;
+
+        foreach ($ops as $op) {
+
+           if ($op->getFinalizado() == 1) {
+                $totalOpeFinalizadas +=1;
+           }
+
+        }
+
+        return $totalOpeFinalizadas;
+     }
+
+     public function getProgreso(){
+        $ops = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->get();
+        $progreso = 0;
+        
+        try {
+            $total = 100 / count($ops);
+            foreach ($ops as $op) {
+                if ($op->getFinalizado() == 1) {
+                     $progreso += $total;
+                } ;
+             }
+        } catch (\Throwable $th) {
+            $total = 0;
+        }
+
+        return $progreso;     
+    }
 }

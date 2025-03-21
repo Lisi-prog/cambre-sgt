@@ -598,6 +598,7 @@ select
         op.nombre_operacion,
         maq.codigo_maquinaria,
         op_hdr.id_ope_de_hdr,
+        op_hdr.activo,
         op_hdr.numero,
         p_rank.id_estado_hdr,
         p_rank.nombre_estado_hdr,

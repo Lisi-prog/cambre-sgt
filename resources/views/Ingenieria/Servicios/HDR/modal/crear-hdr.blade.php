@@ -118,7 +118,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             {!! Form::label('archivo', 'Adjuntar Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            {!! Form::file('archivo', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload', 'required')) !!}
+                            {!! Form::file('archivo', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload')) !!}
                             {{-- <input type="file" class="form-control" name="archivo" required> --}}
                         </div>
                     </div>

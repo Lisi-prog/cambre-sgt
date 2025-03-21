@@ -1253,7 +1253,17 @@ class OrdenController extends Controller
 
     public function index_hdr(){
         $operaciones = Vw_operaciones_de_hdr::get();
-        return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones'));
+
+        $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
+        $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
+        $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        $flt_proyectos = Servicio::orderBy('codigo_servicio')->pluck('codigo_servicio');
+        // $flt_supervisores = $this->obtenerSupervisoresNoPluck();
+        // $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
+        // $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
+        // $flt_estados_mec = Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
+
+        return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones', 'flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos'));
     }
 
     public function obtenerOperacionHdr(Request $request){

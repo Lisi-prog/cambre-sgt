@@ -55,4 +55,14 @@ class Operaciones_de_hdr extends Model
     public function getHdr(){
         return $this->belongsTo(Hoja_de_ruta::class, 'id_hoja_de_ruta');
     }
+
+    public function getFinalizado()
+    {   
+        return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->getFinalizado();
+    }
+
+    public function getIdEstado()
+    {
+        return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->id_estado_hdr;
+    }
 }

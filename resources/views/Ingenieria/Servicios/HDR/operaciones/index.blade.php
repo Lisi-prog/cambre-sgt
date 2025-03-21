@@ -75,9 +75,9 @@
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                {{-- @foreach ($servicios as $servicio)
-                                                    <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
-                                                @endforeach --}}
+                                                @foreach ($flt_proyectos as $proyecto)
+                                                    <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$proyecto}}" checked> {{$proyecto}}</label>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -88,10 +88,13 @@
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Supervisor:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
+                                                <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
+                                                @foreach ($flt_operaciones as $operacion)
+                                                    <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
+                                                @endforeach
                                                 {{-- @foreach ($supervisores as $supervisor)
                                                     <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
                                                 @endforeach --}}
@@ -106,10 +109,13 @@
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
-                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                                    <label>Maquina:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                    @foreach ($flt_maquinas as $maquina)
+                                                        <label><input name="res" type="checkbox" value="{{$maquina}}" checked> {{$maquina}}</label>
+                                                    @endforeach
                                                     {{-- @foreach ($responsables as $responsable)
                                                         <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
                                                     @endforeach --}}
@@ -129,6 +135,9 @@
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
+                                                @foreach ($flt_estados as $estado)
+                                                    <label><input name="est" type="checkbox" value="{{$estado}}" checked> {{$estado}}</label>
+                                                @endforeach
                                                 {{-- @foreach ($estados as $estado)
                                                     @switch($tipo_orden)
                                                         @case(1)
@@ -333,9 +342,9 @@
             }
         }));
         
-        let tipo_orden = window.location.pathname.substring(9, 10);
-        modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
-        document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
+        // let tipo_orden = window.location.pathname.substring(9, 10);
+        // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
+        // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {
@@ -346,7 +355,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[6]) !== -1) {
+            if (positions.indexOf(searchData[4]) !== -1) {
                 return true;
             }
             
@@ -366,7 +375,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[7]) !== -1) {
+            if (offices.indexOf(searchData[5]) !== -1) {
                 return true;
             }
             
@@ -386,7 +395,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[5]) !== -1) {
+            if (offices.indexOf(searchData[6]) !== -1) {
                 return true;
             }
             
