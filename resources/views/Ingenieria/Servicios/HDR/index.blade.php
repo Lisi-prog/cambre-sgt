@@ -115,7 +115,7 @@
                                             <td class= 'text-center' style="vertical-align: middle;">
                                                 <div class="progress position-relative" style="background-color: #b2baf8">
                                                     <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$hdr->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$hdr->getTotalOpeCompleto().'/'.$hdr->getTotalOpe()}}</span>
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$hdr->getTotalOpeCompleto() ?? 0.'/'.$hdr->getTotalOpe() ?? 0}}</span>
                                                     </div>
                                                 </div>
                                             </td>
