@@ -171,7 +171,7 @@ ParteRanked AS (
         p.id_orden,
         est.nombre_estado_mecanizado,
         CASE
-			WHEN est.id_estado_mecanizado = 5 THEN p.fecha --completo en estado_mecanizado
+			WHEN est.id_estado_mecanizado = 5 THEN p.fecha -- completo en estado_mecanizado
             ELSE "____-__-__"
 		END as fecha_finalizacion,
         ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
