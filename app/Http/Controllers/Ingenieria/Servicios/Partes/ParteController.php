@@ -82,11 +82,11 @@ class ParteController extends Controller
                 //PARTE DE TRABAJO
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_trabajo::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_trabajo::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_trabajo::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_trabajo::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }
                 $tipo = 'Trabajo';
                 $estados = $this->listarTodosLosEstadosDe(1);
