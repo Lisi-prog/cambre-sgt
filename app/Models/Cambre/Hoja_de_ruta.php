@@ -26,7 +26,7 @@ class Hoja_de_ruta extends Model
         'cantidad',
         'id_responsabilidad',
         'id_orden_mecanizado',
-        'ruta'
+        'ruta',
     ];
 
     public function getOperacionesHdr()
@@ -35,7 +35,14 @@ class Hoja_de_ruta extends Model
     }
 
     public function getUltOpeActiva(){
-        return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first()->getOperacion->nombre_operacion;
+        $ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first();
+        if ($ope_act) {
+            return $ope_act->getOperacion->nombre_operacion;
+        } else {
+            return '-';
+        }
+        
+        // return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first()->getOperacion->nombre_operacion;
     }
     // public function getEstado()
     // {
@@ -87,5 +94,24 @@ class Hoja_de_ruta extends Model
         }
 
         return $progreso;     
+    }
+
+    public function getEstadoActual(){
+        $ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first();
+        if ($ope_act) {
+            return $ope_act->getEstado();
+        } else {
+            return '-';
+        }
+        // return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first()->getEstado();
+    }
+
+    public function getEstaActivo(){
+        $ope_activa = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first();
+        if ($ope_activa) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

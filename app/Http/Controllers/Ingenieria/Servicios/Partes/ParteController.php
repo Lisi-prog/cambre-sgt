@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use App\Models\Cambre\Orden;
+use App\Models\Cambre\Orden_mecanizado;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
@@ -889,7 +890,14 @@ class ParteController extends Controller
                         'id_estado_hdr' => $estado
                     ]);
            
-
+            if ($estado == 4) { //orden completado
+                $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
+                if ($opeSgt) {
+                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
+                    $opeSgt->activo = 1;
+                    $opeSgt->save();
+                }
+            }
             // if ($estado_actual != $estado) {
             //     $this->enviarEmail($parte->id_parte, $estado, $opcion);
             // }
@@ -1216,7 +1224,66 @@ class ParteController extends Controller
     }
 
     public function guardarMultipleParte(Request $request){
-        // return 'holi';
-       return $ids_orden = $request->input('ids');
+        // return $request;
+        $this->validate($request, [
+            'ids' => 'required',
+            'observaciones' => 'required'
+        ]);
+
+        $estado = $request->input('estado');
+        
+        //$fecha_limite = $request->input('fecha_limite');
+
+        $fecha = $request->input('fecha');
+
+        $observaciones = $request->input('observaciones');
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $horas = $request->input('horas') . ':' . $request->input('minutos');
+
+        $ids_orden = explode(',', $request->input('ids')[0]);
+
+        $ordenes = Orden::whereIn('id_orden', $ids_orden)->get();
+
+        foreach ($ordenes as $orden) {
+            $opcion = $orden->getOrdenDe->getTipoOrden();
+
+            switch ($opcion) {
+                case 3:
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                    $responsabilidad = Responsabilidad::create([
+                                            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                        ]);
+
+                    $ultParte = Parte::where('id_orden', $orden->id_orden)->orderBy('id_parte', 'desc')->first();
+                                        
+                    $parte = Parte::create([
+                                'observaciones' => $observaciones,
+                                'fecha' => $fecha,
+                                'fecha_limite' => $ultParte->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => $horas,
+                                'costo' => 0,
+                                'id_orden' => $orden->id_orden,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+                    $parte_mecanizado = Parte_mecanizado::create([
+                                            'id_estado_mecanizado' => $estado,
+                                            'id_parte' => $parte->id_parte
+                                        ]);
+                    // return 1;
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
+        }
+        return 1;
     }
 }

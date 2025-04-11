@@ -188,6 +188,7 @@
                                 {!! $ordenes->links() !!}
                             </div>
                         @endif --}}
+                        @include('layouts.loanding')
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
@@ -331,6 +332,7 @@
     let id_emp = {{Auth::user()->getEmpleado->id_empleado}};
     let es_super = {{$es_sup}};
     var table;
+    $("#loading").show();
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -608,6 +610,7 @@
             actRow();
     });
         $('#id_selec').on('change', mostrarSelec);
+        $("#loading").hide();
     } );
     
 </script>

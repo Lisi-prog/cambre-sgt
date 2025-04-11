@@ -49,4 +49,10 @@ class Vw_orden_mecanizado extends Model
         
     }
 
+    public function getHdrActivo(){
+        return $hojasDeRuta = Hoja_de_ruta::where('id_orden_mecanizado', $this->id_orden_mecanizado)->whereHas('getOperacionesHdr', function ($query) {
+            $query->where('activo', 1);
+        })->first();
+    }
+
 }
