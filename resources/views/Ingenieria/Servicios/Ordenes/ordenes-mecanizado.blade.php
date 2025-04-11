@@ -207,7 +207,8 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ordenes as $orden)
-                                        <tr>
+                                    {{$orden->getHdrActivo()}}
+                                        <tr data-id="{{$orden->id_orden}}">
                                             <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
                                                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                                                   <input class="form-check-input" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]">
@@ -618,6 +619,48 @@
                 });
                 actRow();
         });
+
+        $("#npm-form-multi").on('submit', function(evt){
+                evt.preventDefault();     
+                // console.log('hola');
+
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        // console.log(data);
+                        switch (data) {
+                            case '1':
+                                document.getElementById('alert-mp').innerHTML = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                                                    Parte creado con exito
+                                                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>`;
+                                document.getElementById('alert-mp').hidden = false;
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                        setTimeout(function(){document.getElementById('alert-mp').hidden = true;},3000);
+                        // html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                        //                         `+data+`
+                        //                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        //                             <span aria-hidden="true">&times;</span>
+                        //                         </button>
+                        //                     </div>`;
+                        // $('#alertOrd').html(html)
+                        // setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                    }
+                });
+        });
+
             $('#id_selec').on('change', mostrarSelec);
             $("#loading").hide();
     } );

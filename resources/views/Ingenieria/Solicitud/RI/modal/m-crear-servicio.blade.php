@@ -126,6 +126,7 @@
                         </div>
                     </div>
                 </div>
+                @include('Ingenieria.Servicios.Proyectos.layout.opciones')
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Aceptar y crear servicio</button>

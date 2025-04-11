@@ -9,7 +9,7 @@
 
             <div class="modal-body" id="npm-modal-body-ver-partes">          
                 <div class="row rounded" id="npm-m-ver-parte-div">
-                    {!! Form::open(['route' => 'partes.guardar.multiple', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec', 'id' => 'npm-form']) !!}
+                    {!! Form::open(['route' => 'partes.guardar.multiple', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec', 'id' => 'npm-form-multi']) !!}
                     {!! Form::text('ids[]', null, ['class' => 'form-control', 'hidden', 'id' => 'm-parte-multiple-ids']) !!}
                     <div class="row">
                         
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <div id="alert" class="mx-3">
+            <div id="alert-mp" class="mx-3">
                 
             </div>
 
@@ -119,6 +119,42 @@
             document.getElementById('npm-horas').value = '00';
             document.getElementById('npm-minutos').value = '00';
             document.getElementById('npm_body_ord').innerHTML = '';
+
+            let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
+
+            $.ajax({
+                type: "post",
+                url: '/orden/obtener-mul-orden-act',
+                data: {
+                    id: valores,
+                },
+                success: function (response) {
+                    console.log(response)
+                    response.forEach(e => {
+                        let fila = $('#example tbody tr[data-id="' + e.id_orden + '"]');
+                        let rowIndex = table.row(fila).index();
+
+                        table.cell(rowIndex, 7).data(e.nombre_estado).draw();
+
+                        // table.row(rowIndex).data([
+                        //     e.id_orden,
+                        //     e.nombre_orden,
+                        //     `<button class="btnEditar" data-id="${e.id_orden}">Editar</button>`
+                        // ]).draw();
+                    });
+                    // response.forEach(e => {
+                    //     html += `<tr>
+                    //                 <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
+                    //                 <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                    //             </tr>`;
+                    // });
+
+                    // document.getElementById('npm_body_ord').innerHTML = html;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         });
     });
   </script>

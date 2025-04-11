@@ -799,6 +799,11 @@ class ProyectoController extends Controller
             }
         }
 
+        if ($id_estado == 9) {
+            $servicio->prioridad_servicio = null;
+            $servicio->save();
+        }
+
         return redirect()->back()->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 

@@ -1485,4 +1485,9 @@ class OrdenController extends Controller
 
         return $ord_arr;
     }
+
+    public function obtenerInfoOrdenMultipleAct(Request $request){
+        $ids = $request->input('id');
+        return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+    }
 }

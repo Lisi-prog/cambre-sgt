@@ -48,4 +48,10 @@ class Orden_mecanizado extends Model
     public function getNombreTipoOrden(){
         return 'Mecanizado';
     }
+
+    public function getHdrActivo(){
+        return $hojasDeRuta = HojaDeRuta::where('id_orden_mecanizado', $this->id_orden_mecanizado)->whereHas('getOperacionesHdr', function ($query) {
+            $query->where('activo', 1);
+        })->first();
+    }
 }
