@@ -209,7 +209,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
                                             
-                                            @if ($Ssi->getSolicitud->getEmpleado->id_empleado ==  Auth::user()->getEmpleado->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
+                                            @if (optional($Ssi->getSolicitud->getEmpleado)->id_empleado == optional(Auth::user()->getEmpleado)->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
