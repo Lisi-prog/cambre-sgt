@@ -1,10 +1,38 @@
 @extends('layouts.app')
 @section('titulo', 'Hoja de Ruta')
-@section('content') 
+@section('content')
+
 <style>
+    .tableFixHead {
+       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+       height: 300px; /* gives an initial height of 200px to the table */
+     }
+     .tableFixHead thead th {
+       position: sticky; /* make the table heads sticky */
+       top: 0px; /* table head will be placed from the top of the table and sticks to it */
+     }
+     #viv table {
+       border-collapse: collapse; /* make the table borders collapse to each other */
+       width: 100%;
+     }
+     
+     #viv th {
+       background: #ee9b27;
+     } 
+
+    #example thead input {
+        width: 100%;
+    }
+
+    .btn-primary-outline {
+        background-color: transparent;
+        border-color: transparent;
+    }
+
     .table {
         zoom: 100%;
     }
+
     table.dataTable tbody td {
         padding: 0px 10px;
     }
@@ -12,92 +40,63 @@
         padding: 5px;
     }
 </style>
-    <section class="section">
-        <div class="section-header d-flex">
-            <div class="">
-                <div class="titulo page__heading py-1 fs-5">Hojas de Ruta</div>
+
+<section class="section">
+    <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
+                <h4 class="">Hoja de Ruta</h5>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
+                <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
             </div>
         </div>
-        <div class="section-body">
-            <div class="row">
-                @include('layouts.modal.mensajes')
+    </div>
 
-                {{-- Informacion del proyecto --}}
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                {!! Form::label('orden', "Orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+    @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    <div class="form-group">
-                                        {!! Form::label('tipo', "Tipo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('tipo', $orden->getOrdenDe->getNombreTipoOrden() ?? '', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                                    <div class="form-group">
-                                        {!! Form::label('nombre-orden', "Nombre:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nombre-orden', $orden->nombre_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
-                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="form-group">
-                                        {!! Form::label('responsable', "Responsable:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('responsable', $orden->getNombreResponsable(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div> --}}
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="form-group">
-                                        {!! Form::label('supervisor', "Supervisor:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('supervisor', $orden->getSupervisor(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-head">
+                        <br>
+                        <div class="d-flex justify-content-between">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 my-auto text-center">
+                                <h5 class="text-center">Hojas de Ruta</h5>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
+                                    Nueva HDR
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
-                {{-- ------------- --}}
-
-                {{-- Hoja de ruta --}}
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-head">
-                            <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 my-auto text-center">
-                                    <h5 class="text-center">Hojas de Ruta</h5>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
-                                        Nuevo
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <div>
-                                <table id="example" class="table table-hover mt-2" class="display">
-                                    <thead style="">
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Numero</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Progreso</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $contador = 1;
-                                            $idCount = 0;
-                                        @endphp
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped mt-2" id="example">
+                                <thead style="">
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Numero</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Progreso</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
+                                </thead>
+                                
+                                <tbody id="accordion">
+                                    @php
+                                        $contador = 1;
+                                        $idCount = 0;
+                                    @endphp
                                         @foreach ($hojas_de_ruta as $hdr)
+                                        {{$hdr->getEstaActivo()}}
                                         <tr>
                                             <td class= 'text-center' style="vertical-align: middle;">{{$contador ?? '-'}}</td>
 
@@ -106,7 +105,7 @@
                                             <td class= 'text-center'style="vertical-align: middle;">{{$hdr->fecha_carga ?? '-'}}</td>
 
                                             {{-- <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getEstado() ?? '-'}}</td> --}}
-                                            <td class= 'text-center' style="vertical-align: middle;">{{'-'}}</td>
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getEstadoActual() ?? '-'}}</td>
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{ $hdr->observaciones ?? '-'}}</td>
 
@@ -144,111 +143,88 @@
                                                 $idCount += 1;
                                             @endphp
                                         @endforeach
-                                    </tbody>
-                                </table>
-                                </div>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                {{-- ------------- --}}
-
-                {{-- Hoja de ruta --}}
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="card-head">
-                            <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 my-auto text-center">
-                                    <h5 class="text-center">Operaciones</h5>
-                                </div>
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOpe">
-                                        Nuevo
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <div>
-                                <table id="example" class="table table-hover mt-2" class="display">
-                                    <thead style="">
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%;">Ultimo res.</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%">Maquina</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%">Operacion</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Medidas</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>
-                                    </thead>
-                                    <tbody id="body_ope">
-                                        {{-- @foreach ($orden->getPartes as $parte)
-                                        <tr>
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->id_parte}}</td>
-
-                                            <td class= 'text-center'style="vertical-align: middle;">{{$parte->observaciones}}</td>
-
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->fecha}}</td>
-
-                                            <td class= 'text-center' style="vertical-align: middle;">{{ $parte->fecha_limite ?? '-'}}</td>
-
-                                            
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getNombreEstado()}}</td>
-
-                                            <td class= 'text-center' style="vertical-align: middle;">{{$parte->horas}}
-
-                                            @if ($orden->getOrdenDe->getTipoOrden() == 3)
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-'}}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$parte->getParteDe->getParteMecxMaq->first()->horas_maquina ?? '-'}}</td>
-                                            @endif
-                                        </tr>
-                                        @endforeach --}}
-                                    </tbody>
-                                </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- ------------- --}}
-                
             </div>
         </div>
-    </section>
-    @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
-    @include('Ingenieria.Servicios.HDR.modal.crear-ope')
-    @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
-    <script>
-        $(document).ready(function () {
-            // let tipo_orden = document.getElementById('tipo_orden').value;
-            // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
-            // url = url.replace(':tipo_orden', tipo_orden);
-            // document.getElementById('volver').href = url;
-            $('#example').DataTable({
-                language: {
-                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                        zeroRecords: 'No se ha encontrado registros',
-                        info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
-                        infoEmpty: 'No se ha encontrado registros',
-                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                        search: 'Buscar',
-                        paginate:{
-                            first:"Prim.",
-                            last: "Ult.",
-                            previous: 'Ant.',
-                            next: 'Sig.',
-                        },
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="card">
+                    <div class="card-head">
+                        <br>
+                        <div class="d-flex justify-content-between">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 my-auto text-center">
+                                <h5 class="text-center">Operaciones</h5>
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
+                                {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOpe">
+                                    Nuevo
+                                </button> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div>
+                            <table id="example" class="table table-hover mt-2" class="display">
+                                <thead style="">
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Ultimo res.</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Operacion</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Medidas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>
+                                </thead>
+                                <tbody id="body_ope">
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@include('Ingenieria.Servicios.HDR.modal.crear-hdr')
+@include('Ingenieria.Servicios.HDR.modal.crear-ope')
+@include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
+<script>
+    $(document).ready(function () {
+        // let tipo_orden = document.getElementById('tipo_orden').value;
+        // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
+        // url = url.replace(':tipo_orden', tipo_orden);
+        // document.getElementById('volver').href = url;
+        $('#example').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
                     },
-                    order: [[0, 'asc']],
-                    "pageLength": 25
-            });
+                },
+                order: [[0, 'asc']],
+                "pageLength": 25
         });
-    </script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
+    });
+</script>
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
 @endsection

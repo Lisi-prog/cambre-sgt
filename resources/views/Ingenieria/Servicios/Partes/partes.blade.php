@@ -185,6 +185,7 @@
                         {{-- <div class="pagination justify-content-end">
                                 {!! $CategoriasLaborales->links() !!}
                         </div> --}}
+                        @include('layouts.loanding')
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_partes">
@@ -324,6 +325,7 @@
 <script>
     let ind_rw = '';
     var table;
+    $("#loading").show();
     $(document).ready(function () {
         var url = '{{url('/')}}';
         //url = url.replace(':id_servicio', id_servicio);
@@ -429,11 +431,8 @@
             }
         });
     });
+    $("#loading").hide();
     });
-
-    
-
-    
 </script>
 
     

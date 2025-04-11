@@ -1454,6 +1454,7 @@ class OrdenController extends Controller
                     'id_parte' => $parte->id_parte_ope_hdr,
                     'observaciones' => $parte->observaciones,
                     'estado' => $parte->getNombreEstado(),
+                    'id_estado' => $parte->id_estado_hdr,
                     'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
                     'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
                     'fecha' => $parte->fecha,
@@ -1467,5 +1468,21 @@ class OrdenController extends Controller
         }
 
         return $partes_arr;
+    }
+
+    public function obtenerInfoOrdenMultiple(Request $request){
+        $ord_arr = [];
+        $ids = $request->input('id');
+        $ordenes = Orden::whereIn('id_orden', $ids)->get();
+
+        foreach ($ordenes as $orden) {
+            array_push($ord_arr, (object)[
+                'orden' => $orden->nombre_orden,
+                'proyecto' => $orden->getEtapa->getServicio->codigo_servicio
+            ]);
+        }
+        
+
+        return $ord_arr;
     }
 }

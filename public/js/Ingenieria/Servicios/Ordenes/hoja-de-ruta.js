@@ -202,6 +202,7 @@ function cargarModalVerPartesOpe(id){
         },
         success: function (response) {
             console.log(response)
+            let ultParte = response.length - 1;
             response.forEach(element => {
             if (element.fecha_limite) {
                 fecha_lim = element.fecha_limite;
@@ -242,6 +243,7 @@ function cargarModalVerPartesOpe(id){
         document.getElementById('mv-operacion').value = response[0].operacion;
         document.getElementById('mv-ord-mec').value = response[0].orden_mec;
         document.getElementById('mv-estado').value = response[0].estado;
+        document.getElementById('m-ver-parte-estado').value = response[ultParte].id_estado;
         /*let maq_y_hora = '';
         let idCount = 0;
         let urlLogParte = "/parte/";

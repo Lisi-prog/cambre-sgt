@@ -182,6 +182,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        @include('layouts.loanding')
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
@@ -207,7 +208,11 @@
                                     @endphp
                                     @foreach ($ordenes as $orden)
                                         <tr>
-                                            <td class='text-center chk-input' style="vertical-align: middle;" hidden><input class="form-check-input m-auto" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]"></td>
+                                            <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
+                                                <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                                                  <input class="form-check-input" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]">
+                                                </div>
+                                            </td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
                                             
@@ -328,7 +333,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
-{{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
+@include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
 
 <script>
     let x = '';
@@ -336,6 +341,7 @@
     let id_emp = {{Auth::user()->getEmpleado->id_empleado}};
     let es_super = {{$es_sup}};
     var table;
+    $("#loading").show();
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -440,179 +446,180 @@
             return false;
             }
         ); */
-    table = $('#example').DataTable({
-            language: {
-                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                    zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
-                    infoEmpty: 'No se ha encontrado registros',
-                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                    search: 'Buscar',
-                    paginate:{
-                        first:"Prim.",
-                        last: "Ult.",
-                        previous: 'Ant.',
-                        next: 'Sig.',
+        table = $('#example').DataTable({
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
                     },
-                },
-                "aaSorting": [],
-                "pageLength": 100
+                    "aaSorting": [],
+                    "pageLength": 100
+            });
+            
+        $('input:checkbox').on('change', function () {
+            table.draw();
         });
-        
-    $('input:checkbox').on('change', function () {
-        table.draw();
-    });
     
-    table.on('draw', function () {
-        changeTdColor();
-    })
+        table.on('draw', function () {
+            changeTdColor();
+        })
 
-    $('#example tbody').on('click', 'tr', function () {
-        ind_rw = table.row(this).index();
-        // let a = table.row(this).index();
-        // var temp = table.row(a).data();
-        // temp[0] = 'Tom';
-        // table.row(this)
-        // .data(temp)
-        // .draw();
-   });
+        $('#example tbody').on('click', 'tr', function () {
+            ind_rw = table.row(this).index();
+            // let a = table.row(this).index();
+            // var temp = table.row(a).data();
+            // temp[0] = 'Tom';
+            // table.row(this)
+            // .data(temp)
+            // .draw();
+        });
 
-    $('#verPartesModal').on('hidden.bs.modal', function (e) {
-        nuevoParte();
-        actRow();
-    })
-
-    $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
-        actRow();
-    })
-
-
-    $(".nuevo-editar-parte").on('submit', function(evt){
-            evt.preventDefault();     
-            var url_php = $(this).attr("action"); 
-            var type_method = $(this).attr("method"); 
-            var form_data = $(this).serialize();
-            let html = '';
-            let id_orden = document.getElementById('m-ver-parte-orden').value;
-            $.ajax({
-                type: type_method,
-                url: url_php,
-                data: form_data,
-                success: function(data) {
-                    //console.log(data);
-                    opcion = parseInt(data.resultado);
-                    switch (opcion) {
-                        case 1:
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte creado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 2:
-                            id = document.getElementById('m-id-parte').value;
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte cod. `+id+` actualizado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 6:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        No se puede actualizar un parte de la cual no eres responsable.
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                        default:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        Ocurrio un error
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                    }
-                    $('#alert').html(html)
-                    recargarPartes(id_orden, data.tipo_orden);
-                    nuevoParte();
-                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-                }
-            });
-    });
-
-    $(".nuevo-editar-orden").on('submit', function(evt){
-            evt.preventDefault();     
-            // console.log('hola');
-
-            var url_php = $(this).attr("action"); 
-            var type_method = $(this).attr("method"); 
-            var form_data = $(this).serialize();
-
-            $.ajax({
-                type: type_method,
-                url: url_php,
-                data: form_data,
-                success: function(data) {
-                    // console.log(data);
-                    html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
-                                            `+data+`
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                    $('#alertOrd').html(html)
-                    setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
-                    /*
-                    opcion = parseInt(data.resultado);
-                    switch (opcion) {
-                        case 1:
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte creado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 2:
-                            id = document.getElementById('m-id-parte').value;
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte cod. `+id+` actualizado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 6:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        No se puede actualizar un parte de la cual no eres responsable.
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                        default:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        Ocurrio un error
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                    }
-                    $('#alert').html(html)
-                    recargarPartes(id_orden, data.tipo_orden);
-                    nuevoParte();
-                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-                    */
-                }
-            });
+        $('#verPartesModal').on('hidden.bs.modal', function (e) {
+            nuevoParte();
             actRow();
-    });
-        $('#id_selec').on('change', mostrarSelec);
+        })
+
+        $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
+            actRow();
+        })
+
+
+        $(".nuevo-editar-parte").on('submit', function(evt){
+                evt.preventDefault();     
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+                let html = '';
+                let id_orden = document.getElementById('m-ver-parte-orden').value;
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        //console.log(data);
+                        opcion = parseInt(data.resultado);
+                        switch (opcion) {
+                            case 1:
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte creado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 2:
+                                id = document.getElementById('m-id-parte').value;
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte cod. `+id+` actualizado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 6:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            No se puede actualizar un parte de la cual no eres responsable.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                            default:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            Ocurrio un error
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                        }
+                        $('#alert').html(html)
+                        recargarPartes(id_orden, data.tipo_orden);
+                        nuevoParte();
+                        setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                    }
+                });
+        });
+
+        $(".nuevo-editar-orden").on('submit', function(evt){
+                evt.preventDefault();     
+                // console.log('hola');
+
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        // console.log(data);
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                                `+data+`
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                        $('#alertOrd').html(html)
+                        setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                        /*
+                        opcion = parseInt(data.resultado);
+                        switch (opcion) {
+                            case 1:
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte creado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 2:
+                                id = document.getElementById('m-id-parte').value;
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte cod. `+id+` actualizado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 6:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            No se puede actualizar un parte de la cual no eres responsable.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                            default:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            Ocurrio un error
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                        }
+                        $('#alert').html(html)
+                        recargarPartes(id_orden, data.tipo_orden);
+                        nuevoParte();
+                        setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                        */
+                    }
+                });
+                actRow();
+        });
+            $('#id_selec').on('change', mostrarSelec);
+            $("#loading").hide();
     } );
     
 </script>
@@ -659,6 +666,108 @@
         let ids = document.getElementById('m-parte-multiple-ids');
         let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
         ids.value = valores;
+        cargarEstadosMecanizados();
+        let html = '';
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-info-orden-mul',
+            data: {
+                id: valores,
+            },
+            success: function (response) {
+                console.log(response)
+                response.forEach(e => {
+                    html += `<tr>
+                                <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                            </tr>`;
+                });
+
+                document.getElementById('npm_body_ord').innerHTML = html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function cargarEstados(){
+        let c_bx_estados = document.getElementById("cbx_estado") ? document.getElementById("cbx_estado") : '';
+        let c_bx_estados_edit = document.getElementById("cbx_estado_edit") ? document.getElementById("cbx_estado_edit") : '';
+        let html_estados = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/orden/obtener-estados', 
+            data: {
+                
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_estados += `
+                                    <option value="`+element.id_estado+`">`+element.nombre_estado
+                                    +`</option> 
+                                    `
+            });
+            c_bx_estados != '' ? c_bx_estados.innerHTML += html_estados : '';
+            c_bx_estados_edit != '' ? c_bx_estados_edit.innerHTML += html_estados : '';
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+    }
+
+    function cargarEstadosMecanizados(){
+        // let c_bx_estados_mec =  document.getElementById("cbx_estado_mec") ? document.getElementById("cbx_estado_mec") : '';
+        // let c_bx_estados_mec_edit =  document.getElementById("cbx_estado_mec_edit") ? document.getElementById("cbx_estado_mec_edit") : '';
+        let html_estados_mec = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/orden/obtener-estados-mecanizados', 
+            data: {
+                
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_estados_mec += `
+                                    <option value="`+element.id_estado_mecanizado+`">`+element.nombre_estado_mecanizado
+                                    +`</option> 
+                                    `
+            });
+            // c_bx_estados_mec != '' ? c_bx_estados_mec.innerHTML += html_estados_mec : '';
+            // c_bx_estados_mec_edit != '' ? c_bx_estados_mec_edit.innerHTML += html_estados_mec : '';
+            document.getElementById('npm-m-ver-parte-estado').innerHTML += html_estados_mec;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+    }
+
+    function cargarEstadosManufacturas(){
+        let c_bx_estados_man = document.getElementById("cbx_estado_man") ? document.getElementById("cbx_estado_man") : '';
+        let c_bx_estados_man_edit = document.getElementById("cbx_estado_man_edit") ? document.getElementById("cbx_estado_man_edit") : '';
+        let html_estados_man = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/orden/obtener-estados-manufacturas', 
+            data: {
+                
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_estados_man += `
+                                    <option value="`+element.id_estado_manufactura+`">`+element.nombre_estado_manufactura
+                                    +`</option> 
+                                    `
+            });
+            c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
+            c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : '';
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
     }
 </script>
 @endsection

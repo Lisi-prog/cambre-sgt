@@ -44,7 +44,7 @@ class Parte_ope_hdr extends Model
 
     public function getFinalizado()
     {
-        if ($this->id_estado_hdr == 3) {
+        if ($this->id_estado_hdr == 4) { //orden completa
             return 1;
         }
         return 0;
