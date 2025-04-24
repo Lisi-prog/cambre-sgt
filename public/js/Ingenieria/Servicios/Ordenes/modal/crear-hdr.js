@@ -160,14 +160,14 @@ function autocompletahdr(id_hdr) {
                 url: '/orden/mec/hdr/obtener-hdr/'+id_hdr, // Ruta para obtener las máquinas
                 data: { id: id_hdr },
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     document.getElementById('m_ubi').value = response.ubicacion;
                     document.getElementById('m_cant').value = response.cantidad;
                     document.getElementById('m_ruta').value = response.ruta;
                     document.getElementById('m-obser').value = response.observaciones;
                     document.getElementById('table-body').innerHTML = '';
                     response.operaciones.forEach(function (op){
-                        console.log(op);
+                        // console.log(op);
                         const nuevaFila = addRow();
 
                         // Esperar un breve momento para que la fila se agregue
@@ -237,6 +237,7 @@ function editarParte(id){
 
 function cargarOrdenesMec() {
     document.getElementById('m-ord-ant').innerHTML = '';
+    document.getElementById('m-hdr-ant').innerHTML = '';
     let html_hdr = `<option value=''>Seleccionar</option>`;
 
     if (this.value) {

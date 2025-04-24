@@ -101,7 +101,7 @@ function cargarOperaciones(id) {
             id: id,
         },
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             response.forEach((op) => {
 
                 if (op.activo != 1) {

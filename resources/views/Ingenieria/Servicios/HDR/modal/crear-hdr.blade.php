@@ -18,8 +18,7 @@
                             {!! Form::select('proy', $proyectos, null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
-                                            'id' => 'm-proy-ant',
-                                            'required'
+                                            'id' => 'm-proy-ant'
                                         ]) !!}
                         </div>
                     </div>
