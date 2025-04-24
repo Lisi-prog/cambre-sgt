@@ -201,7 +201,7 @@ function cargarModalVerPartesOpe(id){
             id: id,
         },
         success: function (response) {
-            console.log(response)
+            // console.log(response)
             let ultParte = response.length - 1;
             response.forEach(element => {
             if (element.fecha_limite) {
@@ -225,7 +225,7 @@ function cargarModalVerPartesOpe(id){
                             </div>
                             <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-12 my-1">
                                         <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
                                             Editar
                                         </button>
@@ -330,4 +330,18 @@ function obtenerEstados(opcion){
         console.log(error);
     }
     }));
+}
+
+function nuevoParte(){
+    let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0];
+    document.getElementById('titulo-parte').innerHTML = 'Nuevo parte';
+    document.getElementById('m-ver-parte-div').className = document.getElementById('m-ver-parte-div').className.replace( /(?:^|\s)border-primary(?!\S)/g , ' border-warning');
+    document.getElementById('observaciones').value = '';
+    document.getElementById('fecha').value = fecha_de_hoy;
+    document.getElementById('horas').value = '00';
+    document.getElementById('minutos').value = '00';
+    document.getElementById('m-editar').value = 0;
+    document.getElementById('m-id-parte').value = null;
+    // modificarModalVerPartesEstadoFechaLimite(id_orden);
+    
 }

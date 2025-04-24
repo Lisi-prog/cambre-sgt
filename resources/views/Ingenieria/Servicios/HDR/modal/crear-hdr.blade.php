@@ -9,19 +9,37 @@
             {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">HDR anteriores <i class="fas fa-caret-down"></i></button> 
+                </div>
+                <div class="row" id="demo" hidden>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group">
-                            {!! Form::label('hdr_ant', 'HDR anteriores:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <select class="form-select form-group" id="m-hdr-ant" name="hdr-ant" onchange="autocompletahdr(this.value)">
-                            </select> 
-                            {{-- {!! Form::select('hdr_ant', [], null, [
+                            {!! Form::label('proy_ant', 'Proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::select('proy', $proyectos, null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
-                                            'id' => 'hdr_ant'
-                                        ]) !!} --}}
+                                            'id' => 'm-proy-ant',
+                                            'required'
+                                        ]) !!}
                         </div>
                     </div>
-                </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            {!! Form::label('ord_ant', 'Orden Mecanizado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <select class="form-select form-group" id="m-ord-ant" name="ord">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            {!! Form::label('hdr_ant', 'HDR:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <select class="form-select form-group" id="m-hdr-ant" name="hdr-ant" onchange="autocompletahdr(this.value)">
+                            </select>
+                        </div>
+                    </div>
+                </div> 
+
                 <div class="row">
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <div class="form-group">
@@ -143,195 +161,4 @@
     </div>
 </div>
 
-<script>
-    // document.getElementById("addRow").addEventListener("click", addRow(e));
-    document.getElementById('addRow').addEventListener('click', (e) => {
-        e.preventDefault();
-        addRow();
-    })
-
-    function addRow() {
-        const tableBody = document.getElementById("editableTable");
-        const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
-        // const rowCount = tableBody.rows.length;
-        const rowCount = table.rows.length + 1;
-        const row = table.insertRow();
-
-        $.ajax({
-            type: "post",
-            url: '/orden/mec/hdr/obtenerope', 
-            data: {
-                id: 'hola',
-            },
-            success: function (response) {
-                let options = '';
-                let opt_tec = '';
-                response.operaciones.forEach((ope) => {
-                    options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
-                });
-
-                response.tecnicos.forEach((tec) => {
-                    opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
-                });
-
-                // const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td class="text-center">${rowCount}</td>
-                    <td>
-                        <div class="dropdown-container my-auto">
-                            <input type="text" class="styled-input form-select custom-input-1 input-ope" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
-                            <div class="dropdown-list-auto">
-                                ${options}
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="dropdown-container my-auto">
-                            <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
-                            <div class="dropdown-list-auto">
-                                ${opt_tec}
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="dropdown-container my-auto">
-                            <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]" required>
-                            <div class="dropdown-list-auto">
-                            </div>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <button class="btn btn-danger delete-btn">Eliminar</button>
-                    </td>
-                `;
-
-                // Aplicar el dropdown a la nueva fila
-                row.querySelectorAll(".dropdown-container").forEach(dropdown => {
-                    const customDropdown = new CustomDropdown(dropdown); // Guardamos la instancia
-
-                    // Detectar cuando se selecciona una opción
-                    customDropdown.options.forEach(option => {
-                        option.addEventListener("click", () => {
-                            if (option.classList.contains("custom-option-1")) {
-                                const rowElement = dropdown.closest("tr"); // Obtener la fila actual
-                                const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
-                                thirdInput.value = '';
-                                if (thirdInput) {
-                                    cargarMaquinas(customDropdown.input.value, thirdInput);
-                                }
-                            }
-                        });
-                    });
-
-                    // Detectar cuando el valor cambia manualmente (al escribir y presionar Enter o perder foco)
-                    customDropdown.input.addEventListener("change", () => {
-                        if (customDropdown.input.classList.contains("custom-input-1")) {
-                            const rowElement = dropdown.closest("tr"); // Obtener la fila actual
-                            const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
-
-                            if (thirdInput) {
-                                cargarMaquinas(customDropdown.input.value, thirdInput);
-                            }
-                        }
-                    });
-                });
-
-                // Agregar evento para eliminar fila
-                row.querySelector(".delete-btn").addEventListener("click", () => {
-                    row.remove();
-
-                    // Reordenar los números de la primera celda de cada fila
-                    Array.from(table.rows).forEach((row, index) => {
-                         row.cells[0].innerText = index + 1;
-                    });
-                });
-                
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-        return row;
-    }
-
-    function cargarMaquinas(operacion, targetInput) {
-        const selectedOperation = operacion;
-
-        $.ajax({
-            type: "post",
-            url: '/orden/mec/hdr/obtenermaq', // Ruta para obtener las máquinas
-            data: { nom_operacion: selectedOperation },
-            success: function (response) {
-                // console.log(response);
-                
-                // Obtener la lista del dropdown correspondiente al tercer input
-                const dropdownList = targetInput.nextElementSibling;
-                if (dropdownList && dropdownList.classList.contains("dropdown-list-auto")) {
-                    dropdownList.innerHTML = ""; // Limpiar opciones
-
-                    // Agregar nuevas opciones
-                    response.forEach((maq) => {
-                        const div = document.createElement("div");
-                        div.classList.add("dropdown-item");
-                        div.textContent = maq.codigo_maquinaria;
-                        div.dataset.value = maq.codigo_maquinaria;
-                        dropdownList.appendChild(div);
-                    });
-
-                    // Volver a aplicar CustomDropdown para actualizar las opciones
-                    new CustomDropdown(targetInput.closest(".dropdown-container"));
-                }
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-
-    function autocompletahdr(id_hdr) {
-            // console.log(id_hdr)
-
-            if (id_hdr) {
-                $.ajax({
-                    type: "post",
-                    url: '/orden/mec/hdr/obtener-hdr/'+id_hdr, // Ruta para obtener las máquinas
-                    data: { id: id_hdr },
-                    success: function (response) {
-                        console.log(response);
-                        document.getElementById('m_ubi').value = response.ubicacion;
-                        document.getElementById('m_cant').value = response.cantidad;
-                        document.getElementById('m_ruta').value = response.ruta;
-                        document.getElementById('m-obser').value = response.observaciones;
-                        document.getElementById('table-body').innerHTML = '';
-                        response.operaciones.forEach(function (op){
-                            console.log(op);
-                            const nuevaFila = addRow();
-
-                            // Esperar un breve momento para que la fila se agregue
-                            setTimeout(() => {
-                                // console.log(nuevaFila)
-                                nuevaFila.querySelector(".input-ope").value = op.operacion;
-                                nuevaFila.querySelector(".input-asig").value = op.asignado;
-                                nuevaFila.querySelector(".input-maquina").value = op.maquina;
-                            }, 100);
-                        });
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                });
-            }else{
-                document.getElementById('m_ubi').value = '';
-                document.getElementById('m_cant').value = '';
-                document.getElementById('m_ruta').value = '';
-                document.getElementById('m-obser').value = '';
-                document.getElementById('table-body').innerHTML = '';
-            }
-    }
-
-    $(document).ready(function() {
-        $('#crearHdr').on('hidden.bs.modal', function (e) {
-            document.getElementById('table-body').innerHTML = '';
-        });
-    });
-</script>
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/crear-hdr.js') }}"></script>

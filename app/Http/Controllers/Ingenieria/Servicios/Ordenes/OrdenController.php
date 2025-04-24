@@ -1248,7 +1248,12 @@ class OrdenController extends Controller
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
-        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta'));
+        $proyectos = Servicio::whereHas('getEtapas.getOrden.getOrdenMecanizado.getHdr')
+                                ->with('getEtapas.getOrden.getOrdenMecanizado.getHdr')
+                                ->distinct()
+                                ->orderBy('codigo_servicio')
+                                ->pluck('codigo_servicio', 'id_servicio');
+        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'proyectos'));
     }
 
     public function index_hdr(){
@@ -1420,6 +1425,22 @@ class OrdenController extends Controller
 
     public function obtenerHdrAnt($id){
         return Hoja_de_ruta::where('id_orden_mecanizado', $id)->orderBy('fecha_carga')->get();
+    }
+
+    public function obtenerOrdMec($id){
+        // $servicio = Servicio::find($id);
+                    
+        return $ordenes =  DB::select('select s.id_servicio,
+                                                o.id_orden,
+                                                o.nombre_orden,
+                                                om.id_orden_mecanizado
+                                        from orden o 
+                                        inner join orden_mecanizado om on om.id_orden = o.id_orden
+                                        inner join hoja_de_ruta hdr on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+                                        inner join etapa et on et.id_etapa = o.id_etapa
+                                        inner join servicio s on s.id_servicio = et.id_servicio
+                                        where s.id_servicio = ?
+                                        group by om.id_orden_mecanizado;',[$id]);
     }
 
     public function obtenerHdr($id){

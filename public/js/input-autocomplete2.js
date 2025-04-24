@@ -44,8 +44,9 @@ class CustomDropdown {
                 this.moveSelection(-1);
             } else if (event.key === "Enter") {
                 event.preventDefault();
-                if (this.currentIndex >= 0 && this.options[this.currentIndex]) {
-                    this.selectOption(this.options[this.currentIndex]);
+                const visibleOptions = this.options.filter(option => option.style.display !== "none");
+                if (this.currentIndex >= 0 && visibleOptions[this.currentIndex]) {
+                    this.selectOption(visibleOptions[this.currentIndex]);
                 }
             } else if (event.key === "Tab") {
                 const firstVisible = this.dropdown.querySelector("div:not([style*='display: none'])");
@@ -69,50 +70,72 @@ class CustomDropdown {
     selectOption(option) {
         this.input.value = option.getAttribute("data-value");
         this.hideDropdown();
+    
+        // 🔔 Emitir evento personalizado con detalles de la opción seleccionada
+        const event = new CustomEvent("optionSelected", {
+            detail: {
+                selectedOption: option,
+                input: this.input
+            }
+        });
+        this.container.dispatchEvent(event);
     }
 
     filterOptions() {
         const filter = this.input.value.toLowerCase();
-        this.currentIndex = -1; // Reiniciar selección
-        let firstVisible = null;
-
-        this.options.forEach((option, index) => {
+        let hasVisibleOptions = false;
+    
+        this.options.forEach(option => {
             if (option.textContent.toLowerCase().includes(filter)) {
                 option.style.display = "block";
-                if (!firstVisible) {
-                    firstVisible = option;
-                    this.currentIndex = index; // Seleccionar el primero visible
-                }
+                hasVisibleOptions = true;
             } else {
                 option.style.display = "none";
             }
         });
-
-        this.highlightOption();
+    
+        if (hasVisibleOptions) {
+            this.showDropdown();
+        } else {
+            this.hideDropdown();
+        }
+    
+        this.highlightOption(); // esto puede seguir, se encargará de usar currentIndex si existe
     }
 
     moveSelection(direction) {
         const visibleOptions = this.options.filter(option => option.style.display !== "none");
-        
         if (visibleOptions.length === 0) return;
-        
+    
+        // Si currentIndex apunta a algo que ya no está visible, reiniciamos
+        if (!visibleOptions.includes(this.options[this.currentIndex])) {
+            this.currentIndex = -1;
+        }
+    
         this.currentIndex += direction;
-
+    
         if (this.currentIndex < 0) {
             this.currentIndex = visibleOptions.length - 1;
         } else if (this.currentIndex >= visibleOptions.length) {
             this.currentIndex = 0;
         }
-
+    
         this.highlightOption();
     }
 
     highlightOption() {
         this.options.forEach(option => option.classList.remove("selected"));
-
+    
         const visibleOptions = this.options.filter(option => option.style.display !== "none");
         if (this.currentIndex >= 0 && visibleOptions[this.currentIndex]) {
-            visibleOptions[this.currentIndex].classList.add("selected");
+            const selectedOption = visibleOptions[this.currentIndex];
+            selectedOption.classList.add("selected");
+    
+            // 👇 Asegura que se vea la opción seleccionada
+            selectedOption.scrollIntoView({
+                block: "nearest", // Solo mueve si está fuera de vista
+                behavior: "smooth" // opcional, para una transición más agradable
+            });
         }
     }
 }

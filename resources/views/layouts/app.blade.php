@@ -75,7 +75,7 @@
 <script src="{{ asset('assets/js/jquery.nicescroll.js') }}"></script>
 <script src="{{ asset('assets/js/prevent_multiple_submits.js') }}"></script>
 <script src="{{ asset('js/change-scripts.js') }}"></script>
-<script src="{{ asset('js/input-autocomplete.js') }}"></script>
+<script src="{{ asset('js/input-autocomplete2.js') }}"></script>
 <script>
     // Inicializar los dropdowns en todos los inputs
     document.querySelectorAll(".dropdown-container").forEach(container => {
