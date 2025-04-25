@@ -54,4 +54,8 @@ class Orden_mecanizado extends Model
             $query->where('activo', 1);
         })->first();
     }
+
+    public function getHdr(){
+        return $this->hasMany(Hoja_de_ruta::class, 'id_orden_mecanizado');
+    }
 }

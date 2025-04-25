@@ -70,7 +70,10 @@
                                 <h5 class="text-center">Hojas de Ruta</h5>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
+                                {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
+                                    Nueva HDR
+                                </button> --}}
+                                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr">
                                     Nueva HDR
                                 </button>
                             </div>
@@ -96,7 +99,6 @@
                                         $idCount = 0;
                                     @endphp
                                         @foreach ($hojas_de_ruta as $hdr)
-                                        {{$hdr->getEstaActivo()}}
                                         <tr>
                                             <td class= 'text-center' style="vertical-align: middle;">{{$contador ?? '-'}}</td>
 

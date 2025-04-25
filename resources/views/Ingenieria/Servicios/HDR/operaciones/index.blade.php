@@ -59,6 +59,43 @@
     <div class="section-body">
 
         <div class="row">
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('herr')">Herramientas <i class="fas fa-caret-down"></i></button> 
+                        </div>
+                        <div class="row" id="herr" hidden>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
+                                <div class="form-check" hidden id="chk-sel-all">
+                                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                                    <label class="form-check-label" for="checkDefault">
+                                      Selecc. todo
+                                    </label>
+                                  </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
+                                    Parte Multiple
+                                </button>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verEditarMulti" onclick="cargarEditMultiple()" id="btn-edit-mul" hidden >
+                                    Editar Multiple
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -189,7 +226,9 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Prioridad</th>
+                                    <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
+                                    <th class='text-center' style="color:#fff;min-width:2vw">Prio. Global</th>
+                                    <th class='text-center' style="color:#fff;min-width:2vw">Prio. Operacion</th>
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
@@ -208,8 +247,16 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($operaciones as $ope)
-                                        <tr>
+                                        <tr data-id="{{$ope->id_ope_de_hdr}}">
+                                            <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
+                                                <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                                                <input class="form-check-input" type="checkbox" value="{{$ope->id_ope_de_hdr}}" id="flexCheck{{$ope->id_ope_de_hdr}}" name="id_ope[]">
+                                                </div>
+                                            </td>
+
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad_servicio ?? 'S/P'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$ope->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$ope->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
@@ -292,7 +339,8 @@
         </div>
     </div>
 
-    
+    <script src="{{ asset('js/change-td-color.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     {{-- <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
@@ -310,8 +358,122 @@
 </section>
 
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
+@include('Ingenieria.Servicios.HDR.operaciones.modal.m-editar-multiple')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
+
+<script>
+    function mostrarFiltro(id){
+        let cuadro_filtro = document.getElementById(id);
+        if ($('#'+id).is(":hidden")) {
+            cuadro_filtro.hidden = false;
+        }else{
+            cuadro_filtro.hidden = true;
+        }
+    }
+
+    function limpiarFiltro(){
+        $('input[type=checkbox]').prop("checked", false);
+        var table = $('#example').DataTable();
+        table.draw();
+    }
+
+    function mostrarSelec() {
+        let colum_sel = document.getElementsByClassName('chk-input');
+        let enca = document.getElementById('enc_sel');
+        let btn = document.getElementById('btn-sel-mul');
+        let btn_ed = document.getElementById('btn-edit-mul'); 
+        let chk_sel_all = document.getElementById('chk-sel-all');
+
+        if ($("#id_selec").is(":checked")) {
+            enca.hidden = false;
+            btn.hidden = false;
+            btn_ed.hidden = false;
+            chk_sel_all.hidden = false;
+            table.rows().nodes().to$().find('td.chk-input').removeAttr('hidden');
+            // Mostrar la columna de checkboxes
+            table.column('.chk-input', { search: 'applied' }).visible(true);
+        } else {
+            enca.hidden = true;
+            btn.hidden = true;
+            btn_ed.hidden = true;
+            chk_sel_all.hidden = true;
+            table.rows().nodes().to$().find('td.chk-input').attr('hidden', true);
+            // Ocultar la columna de checkboxes
+            table.column('.chk-input', { search: 'applied' }).visible(false);
+        }
+
+    }
+    function cargarMultiple(){
+        let ids = document.getElementById('m-parte-multiple-ids');
+        let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
+        ids.value = valores;
+        cargarEstadosMecanizados();
+        let html = '';
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-info-orden-mul',
+            data: {
+                id: valores,
+            },
+            success: function (response) {
+                console.log(response)
+                response.forEach(e => {
+                    html += `<tr>
+                                <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                            </tr>`;
+                });
+
+                document.getElementById('npm_body_ord').innerHTML = html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function cargarEditMultiple(){
+        let ids = document.getElementById('m-edit-multiple-ids');
+        let valores = [...document.querySelectorAll('input[name="id_ope[]"]:checked')].map(input => input.value);
+        ids.value = valores;
+        // cargarEstadosMecanizados();
+        let html = '';
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-info-ope-mul',
+            data: {
+                id: valores,
+            },
+            success: function (response) {
+                console.log(response)
+                response.forEach(e => {
+                    html += `<tr>
+                                <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.operacion+`</td>
+                            </tr>`;
+                });
+
+                document.getElementById('nom_body_ope').innerHTML = html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // function DeseleccionarTodo()´{
+    //     document.querySelectorAll('input[type="checkbox"][name="id_ope[]"]').forEach(function(checkbox) {
+    //         checkbox.checked = false;
+    //     });
+    // }
+
+    // function selecDesTodo(){
+
+    // }
+
+</script>
 
 <script>
     let x = '';
@@ -355,7 +517,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[4]) !== -1) {
+            if (positions.indexOf(searchData[6]) !== -1) {
                 return true;
             }
             
@@ -375,7 +537,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[5]) !== -1) {
+            if (offices.indexOf(searchData[7]) !== -1) {
                 return true;
             }
             
@@ -395,7 +557,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[6]) !== -1) {
+            if (offices.indexOf(searchData[8]) !== -1) {
                 return true;
             }
             
@@ -416,7 +578,7 @@
             }
 
 
-            if (offices.indexOf(searchData[2]) !== -1) {
+            if (offices.indexOf(searchData[4]) !== -1) {
                 return true;
             }
             
@@ -438,7 +600,7 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": [],
+                order: [[ 2, 'asc' ]],
                 "pageLength": 100
         });
         
@@ -596,23 +758,58 @@
             actRow();
     });
     } );
+
+    $(".edit-multi-ope").on('submit', function(evt){
+            evt.preventDefault();     
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+            let html = '';
+            // let id_orden = document.getElementById('m-ver-parte-orden').value;
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    console.log(data);
+
+                    if (data) {
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Operacion/es editados con exito.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                    } else {
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        Ocurrio un error
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                    }
+                    
+                    $('#alert-edit').html(html)
+                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+
+                }
+            });
+    });
+
+    $('#id_selec').on('change', mostrarSelec);
+    // $('#checkSelAll').on('change', selecDesTodo);
+
+    document.getElementById('checkSelAll').addEventListener('change', event => {
+        if (document.getElementById('checkSelAll').checked) {
+            console.log("Checkbox is checked..");
+            table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ope[]"]').prop('checked', true);
+        } else {
+            console.log("Checkbox is not checked..");
+            table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ope[]"]').prop('checked', false);
+        }
+    })
     
 </script>
 
-<script>
-    function mostrarFiltro(){
-        let cuadro_filtro = document.getElementById("demo");
-        if ($('#demo').is(":hidden")) {
-            cuadro_filtro.hidden = false;
-        }else{
-            cuadro_filtro.hidden = true;
-        }
-    }
 
-    function limpiarFiltro(){
-        $('input[type=checkbox]').prop("checked", false);
-        var table = $('#example').DataTable();
-        table.draw();
-    }
-</script>
 @endsection

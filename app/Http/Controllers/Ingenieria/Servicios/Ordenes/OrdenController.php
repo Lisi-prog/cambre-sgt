@@ -1248,7 +1248,12 @@ class OrdenController extends Controller
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
-        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta'));
+        $proyectos = Servicio::whereHas('getEtapas.getOrden.getOrdenMecanizado.getHdr')
+                                ->with('getEtapas.getOrden.getOrdenMecanizado.getHdr')
+                                ->distinct()
+                                ->orderBy('codigo_servicio')
+                                ->pluck('codigo_servicio', 'id_servicio');
+        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'proyectos'));
     }
 
     public function index_hdr(){
@@ -1257,7 +1262,15 @@ class OrdenController extends Controller
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
-        $flt_proyectos = Servicio::orderBy('codigo_servicio')->pluck('codigo_servicio');
+        // $flt_proyectos = Servicio::orderBy('codigo_servicio')->pluck('codigo_servicio');
+        $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
+                                        from operaciones_de_hdr op_hdr
+                                        inner join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = op_hdr.id_hoja_de_ruta
+                                        inner join orden_mecanizado om on om.id_orden_mecanizado = hdr.id_orden_mecanizado
+                                        inner join orden o on o.id_orden = om.id_orden
+                                        inner join etapa et on et.id_etapa = o.id_etapa
+                                        inner join servicio s on s.id_servicio = et.id_servicio
+                                        group by s.id_servicio;'))->pluck('codigo_servicio');
         // $flt_supervisores = $this->obtenerSupervisoresNoPluck();
         // $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
         // $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
@@ -1422,6 +1435,22 @@ class OrdenController extends Controller
         return Hoja_de_ruta::where('id_orden_mecanizado', $id)->orderBy('fecha_carga')->get();
     }
 
+    public function obtenerOrdMec($id){
+        // $servicio = Servicio::find($id);
+                    
+        return $ordenes =  DB::select('select s.id_servicio,
+                                                o.id_orden,
+                                                o.nombre_orden,
+                                                om.id_orden_mecanizado
+                                        from orden o 
+                                        inner join orden_mecanizado om on om.id_orden = o.id_orden
+                                        inner join hoja_de_ruta hdr on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+                                        inner join etapa et on et.id_etapa = o.id_etapa
+                                        inner join servicio s on s.id_servicio = et.id_servicio
+                                        where s.id_servicio = ?
+                                        group by om.id_orden_mecanizado;',[$id]);
+    }
+
     public function obtenerHdr($id){
         $operaciones_arr = [];
         $hdr = Hoja_de_ruta::find($id);
@@ -1455,8 +1484,8 @@ class OrdenController extends Controller
                     'observaciones' => $parte->observaciones,
                     'estado' => $parte->getNombreEstado(),
                     'id_estado' => $parte->id_estado_hdr,
-                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
-                    'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
+                    'responsable' => $parte->getResponsable ? $parte->getResponsable->getEmpleado->nombre_empleado : '-',
+                    'id_res' => $parte->getResponsable ? $parte->getResponsable->getEmpleado->id_empleado : '',
                     'fecha' => $parte->fecha,
                     // 'fecha_limite' => $parte->fecha_limite ?? '-',
                     'horas' => $parte->horas,
@@ -1486,8 +1515,53 @@ class OrdenController extends Controller
         return $ord_arr;
     }
 
+    public function obtenerInfoOpeMultiple(Request $request){
+        $op_arr = [];
+        $ids = $request->input('id');
+        $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+
+        foreach ($operaciones as $op) {
+            array_push($op_arr, (object)[
+                'orden' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
+                'proyecto' => $op->getHdr->getOrdMec->getOrden->getEtapa->getServicio->codigo_servicio,
+                'operacion' => $op->getOperacion->nombre_operacion
+            ]);
+        }
+
+        return $op_arr;
+    }
+
     public function obtenerInfoOrdenMultipleAct(Request $request){
         $ids = $request->input('id');
         return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+    }
+
+    public function editMultipleOpe(Request $request){
+
+        $this->validate($request, [
+            'ids' => 'required'
+        ]);
+
+        try {
+            $ids_ope = explode(',', $request->input('ids')[0]);   
+            $prioridad = $request->input('prioridad');
+
+            $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids_ope)->get();
+
+            foreach ($operaciones as $op) {
+                $op->update([
+                    'prioridad' => $prioridad
+                ]);
+            }
+
+            return 1;
+        } catch (\Throwable $th) {
+            return 0;
+        }
+    }
+
+    public function obtenerInfoOpeMultipleAct(Request $request){
+        $ids = $request->input('id');
+        return Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
     }
 }

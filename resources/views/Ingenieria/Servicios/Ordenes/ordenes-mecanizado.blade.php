@@ -207,7 +207,6 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ordenes as $orden)
-                                    {{$orden->getHdrActivo()}}
                                         <tr data-id="{{$orden->id_orden}}">
                                             <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
                                                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
