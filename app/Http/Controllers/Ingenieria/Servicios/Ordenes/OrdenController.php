@@ -1262,7 +1262,15 @@ class OrdenController extends Controller
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
-        $flt_proyectos = Servicio::orderBy('codigo_servicio')->pluck('codigo_servicio');
+        // $flt_proyectos = Servicio::orderBy('codigo_servicio')->pluck('codigo_servicio');
+        $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
+                                        from operaciones_de_hdr op_hdr
+                                        inner join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = op_hdr.id_hoja_de_ruta
+                                        inner join orden_mecanizado om on om.id_orden_mecanizado = hdr.id_orden_mecanizado
+                                        inner join orden o on o.id_orden = om.id_orden
+                                        inner join etapa et on et.id_etapa = o.id_etapa
+                                        inner join servicio s on s.id_servicio = et.id_servicio
+                                        group by s.id_servicio;'))->pluck('codigo_servicio');
         // $flt_supervisores = $this->obtenerSupervisoresNoPluck();
         // $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
         // $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();

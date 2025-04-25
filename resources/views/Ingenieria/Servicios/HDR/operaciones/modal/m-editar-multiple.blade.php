@@ -27,13 +27,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                             <div class="form-group">
                                 {!! Form::label('prioridad', 'Prioridad Operacion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                 {!! Form::number('prioridad', null, [
                                     'class' => 'form-control',
                                     'min' => 1,
-                                    'required' => 'required',
                                     'id' => 'nom_prioridad'
                                     ]) !!}
                             </div>
@@ -55,6 +54,14 @@
     </div>
 </div>
 
+<script>
+    function DeseleccionarTodo(){
+        document.querySelectorAll('input[type="checkbox"][name="id_ope[]"]').forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+    }
+</script>
+
 <script> 
     $(document).ready(function() {
         $('#verEditarMulti').on('hidden.bs.modal', function (e) {
@@ -74,7 +81,7 @@
                         let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
                         let rowIndex = table.row(fila).index();
 
-                        table.cell(rowIndex, 2).data(e.prioridad).draw();
+                        table.cell(rowIndex, 2).data(e.prioridad ?? 'S/P').draw();
 
                     });
                 },
@@ -82,6 +89,7 @@
                     console.log(error);
                 }
             });
+            DeseleccionarTodo();
         });
     });
   </script>
