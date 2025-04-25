@@ -1507,8 +1507,53 @@ class OrdenController extends Controller
         return $ord_arr;
     }
 
+    public function obtenerInfoOpeMultiple(Request $request){
+        $op_arr = [];
+        $ids = $request->input('id');
+        $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+
+        foreach ($operaciones as $op) {
+            array_push($op_arr, (object)[
+                'orden' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
+                'proyecto' => $op->getHdr->getOrdMec->getOrden->getEtapa->getServicio->codigo_servicio,
+                'operacion' => $op->getOperacion->nombre_operacion
+            ]);
+        }
+
+        return $op_arr;
+    }
+
     public function obtenerInfoOrdenMultipleAct(Request $request){
         $ids = $request->input('id');
         return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+    }
+
+    public function editMultipleOpe(Request $request){
+
+        $this->validate($request, [
+            'ids' => 'required'
+        ]);
+
+        try {
+            $ids_ope = explode(',', $request->input('ids')[0]);   
+            $prioridad = $request->input('prioridad');
+
+            $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids_ope)->get();
+
+            foreach ($operaciones as $op) {
+                $op->update([
+                    'prioridad' => $prioridad
+                ]);
+            }
+
+            return 1;
+        } catch (\Throwable $th) {
+            return 0;
+        }
+    }
+
+    public function obtenerInfoOpeMultipleAct(Request $request){
+        $ids = $request->input('id');
+        return Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
     }
 }

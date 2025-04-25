@@ -20,6 +20,7 @@ class Vw_operaciones_de_hdr extends Model
 
     protected $fillable = [ 
         'prioridad_servicio',
+        'prioridad',
         'codigo_servicio',
         'nombre_servicio',
         'descripcion_etapa',

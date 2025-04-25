@@ -590,6 +590,7 @@ select
     )
     select 
         se.prioridad_servicio,
+        op_hdr.prioridad,
         se.codigo_servicio,
         se.nombre_servicio,
         et.descripcion_etapa,
