@@ -29,6 +29,15 @@ class Parte_ope_hdr extends Model
         'medidas'
     ];
 
+    public function getMedidasAttribute()
+    {
+        if ($this->attributes['medidas']) {
+            return 'SI';
+        } else {
+            return 'NO';
+        }
+    }
+
     public function getEstado(){
         return $this->hasOne(Estado_hdr::class, 'id_estado_hdr');
     }

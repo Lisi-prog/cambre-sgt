@@ -201,39 +201,7 @@ function mostrarFiltro(){
     }
 }
 
-function editarParte(id){
-    document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id;
-    document.getElementById('m-ver-parte-div').className = document.getElementById('m-ver-parte-div').className.replace( /(?:^|\s)border-warning(?!\S)/g , ' border-primary');
 
-    $.when($.ajax({
-        type: "post",
-        url: '/parte/obtener-una/'+id, 
-        data: {
-            id: id,
-        },
-        success: function (response) {
-            // console.log(response);
-            document.getElementById('observaciones').value = response.observaciones;
-            document.getElementById('m-ver-parte-estado').value = response.estado;
-            document.getElementById('fecha').value = response.fecha;
-            document.getElementById('m-ver-parte-fecha-limite').value = response.fecha_limite;
-
-            [hora, minutos] = response.horas.split(':');
-
-            document.getElementById('horas').value = hora;
-            document.getElementById('minutos').value = minutos;
-            document.getElementById('m-editar').value = 1;
-            document.getElementById('m-id-parte').value = response.id_parte;
-
-            if (es_super === 0) {
-                document.getElementById('m-ver-parte-fecha-limite').readonly = true;
-            }
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    }));
-}
 
 function cargarOrdenesMec() {
     document.getElementById('m-ord-ant').innerHTML = '';

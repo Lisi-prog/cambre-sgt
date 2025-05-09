@@ -290,7 +290,7 @@
                                                      <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="">
+                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe({{$ope->id_ope_de_hdr}})">
                                                                     Partes
                                                                 </button>
                                                             </div>
@@ -809,6 +809,170 @@
         }
     })
     
+    function cargarModalVerPartesOpe(id){
+        let html = '';
+        obtenerEstados(5);
+        document.getElementById('m-id-ope-hdr').value = id;
+        // modificarModalVerPartesEstadoFechaLimite(id);
+        // let orden = document.getElementById('m-ver-parte-orden');
+        // orden.value = id;
+        // let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
+        
+        // document.getElementById('body_ver_parte').innerHTML = '';
+        // document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
+
+        // let tablaa = document.getElementById('verPartes')
+        // tablaa.querySelectorAll('th').forEach(encabezado => {
+        //     encabezado.style.backgroundColor = color_encabezado;
+        // });
+
+        // if(tipo_orden == 3){
+        //     document.getElementById('column-maq').hidden = true;
+        //     document.getElementById('column-hora-maq').hidden = true;
+        // }else{
+        //     document.getElementById('column-maq').hidden = true;
+        //     document.getElementById('column-hora-maq').hidden = true;
+        // }
+        
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtener-hdr-parte/'+id, 
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                // console.log(response)
+                let ultParte = response.partes_ope.length - 1;
+                let idCount = 0;
+                response.partes_ope.forEach(element => {
+                    html += `<tr>
+                            <td class="text-center">`+element.id_parte+`</td>
+                            <td class="text-center">`+element.fecha+`</td>
+                            <td class="text-center">`+element.estado+`</td>
+                            <td class="text-center">`+element.horas+`</td>
+                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">`+element.responsable+`</td>
+                            <td class="text-center">`+element.medidas+`</td>
+                            <td class="text-center">
+                                <div class="row justify-content-center" >
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                        Opciones
+                                    </button>
+                                </div>
+                                <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOrdenes`+idCount+`">
+                                    <div class="row">
+                                        <div class="col-12 my-1">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`
+                    idCount ++;
+                });
+
+                if (response.medida_chk) {
+                    document.getElementById('section-medida').hidden = true;
+                } else {
+                    document.getElementById('section-medida').hidden = false;
+                }
+            document.getElementById('body_ver_parte_ope').innerHTML = html;
+            document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
+            document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
+            document.getElementById('mv-estado').value = response.partes_ope[0].estado;
+            document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
+            /*let maq_y_hora = '';
+            let idCount = 0;
+            let urlLogParte = "/parte/";
+            
+            response.forEach(element => {
+                if (element.fecha_limite) {
+                    fecha_lim = element.fecha_limite;
+                }else{
+                    fecha_lim = '-';
+                }
+
+                html += `<tr>
+                            <td class="text-center">`+element.id_parte+`</td>
+                            <td class="text-center">`+element.fecha+`</td>
+                            <td class="text-center">`+fecha_lim+`</td>
+                            <td class="text-center">`+element.estado+`</td>
+                            <td class="text-center">`+element.horas+`</td>
+                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">`+element.responsable+`</td>s
+                            <td class="text-center">`+element.supervisor+`</td>
+                            <td class="text-center">
+                                <div class="row justify-content-center" >
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                        Opciones
+                                    </button>
+                                </div>
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href='`+urlLogParte+element.id_parte+`/logs' target="_blank">
+                                                <button type="button" class="btn btn-warning w-100" >
+                                                    Logs
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`
+                idCount ++;
+            });
+            document.getElementById('body_ver_parte').innerHTML = html;
+            document.getElementById('mv-orden').value = response[0].orden;
+            document.getElementById('mv-etapa').value = response[0].etapa;
+            document.getElementById('mv-estado').value = response[0].estado_orden; */
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        });
+    }
+
+    function obtenerEstados(opcion){
+        let select_estados = document.getElementById('m-ver-parte-estado');
+        select_estados.innerHTML = '<option value="">Seleccionar</option>';
+        html_estados = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/orden/obtener-estados-de/'+opcion, 
+            data: {
+                
+            },
+        success: function (response) {
+            // console.log(response);
+            response.forEach(element => {
+                html_estados += `
+                                    <option value="`+element.id_estado+`">`+element.nombre
+                                    +`</option> 
+                                    `
+            });
+            select_estados.innerHTML += html_estados;
+        /* c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
+            c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : ''; */
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+    }
 </script>
 
 
