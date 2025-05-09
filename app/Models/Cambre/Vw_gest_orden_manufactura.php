@@ -14,7 +14,7 @@ class Vw_gest_orden_manufactura extends Model
     
     protected $table = 'vw_gest_orden_manufactura';
 
-    protected $primaryKey = 'vw_gest_orden_manufactura';
+    protected $primaryKey = 'id_orden';
 
     public $incrementing = false;
 

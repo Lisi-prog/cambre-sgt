@@ -50,6 +50,8 @@ use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_manufactura;
+use App\Models\Cambre\Vw_gest_orden_manufactura;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Mail\Solicitud\OrdenMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
@@ -1294,7 +1296,8 @@ class OrdenController extends Controller
         ]);*/
         $ubi = $request->input('m_ubi');
         $cant = $request->input('m_cant');
-        $fec_carga = $request->input('m_fec_carga');
+        $fec_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $fec = $request->input('m_fec_carga');
         $obse = $request->input('observaciones');
         $ruta = $request->input('m_ruta');
         $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
@@ -1354,6 +1357,7 @@ class OrdenController extends Controller
                             'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
                             'numero' => $contador,
                             'fecha_carga' => $fec_carga,
+                            'fecha' => $fec,
                             'id_maquinaria' => $id_maq,
                             'id_operacion' => $id_ope,
                             'activo' => $activo
@@ -1365,7 +1369,7 @@ class OrdenController extends Controller
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec_carga,
+                    'fecha' => $fec,
                     'observaciones' => 'Generacion de operacion de hoja de ruta.',
                     'id_responsabilidad' => $res,
                     'horas' => '00:00',
@@ -1493,10 +1497,14 @@ class OrdenController extends Controller
                     'operacion' => $op->getOperacion->nombre_operacion,
                     'orden_mec' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
                     'estado_op' => $op->getEstado(),
+                    'medidas' => $parte->medidas
                     ]);
         }
 
-        return $partes_arr;
+        return [
+            'partes_ope' => $partes_arr,
+            'medida_chk' => $op->getMedidaEstado()
+        ];
     }
 
     public function obtenerInfoOrdenMultiple(Request $request){
@@ -1563,5 +1571,20 @@ class OrdenController extends Controller
     public function obtenerInfoOpeMultipleAct(Request $request){
         $ids = $request->input('id');
         return Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+    }
+
+    public function obtenerProgresoOrdMan($id){
+        $ord_man =  Vw_gest_orden_manufactura::find($id);
+        $ord_mec = Orden_manufactura::where('id_orden', $id)->first();
+        $ordenes_mec = Vw_gest_orden_mecanizado::where('id_orden_manufactura', $ord_mec->id_orden_manufactura)->where('id_estado', '<', 5)->get();
+
+        return [
+            'nombre_orden' => $ord_man->nombre_orden,
+            'estado_orden' => $ord_man->nombre_estado,
+            'tot_mec' => $ord_man->tot_mec,
+            'tot_mec_completo' => $ord_man->tot_mec_completo,
+            'tot_mec_porcentaje' => $ord_man->tot_mec_porcentaje,
+            'ordenes_mecanizado' => $ordenes_mec
+        ];
     }
 }

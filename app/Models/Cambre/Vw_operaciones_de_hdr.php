@@ -27,16 +27,36 @@ class Vw_operaciones_de_hdr extends Model
         'nombre_orden',
         'id_hoja_de_ruta',
         'nombre_operacion',
-        'responsable',
         'codigo_maquinaria',
-        'id_ope_de_hdr',
-        'id_estado',
+        'activo',
+        'fecha',
+        'numero',
+        'id_estado_hdr',
         'nombre_estado_hdr',
-        'total_horas',
         'ultimo_res',
+        'total_horas',
         'medidas'
     ];
 
+    public function getMedidasAttribute()
+    {
+        if ($this->attributes['medidas']) {
+            return 'SI';
+        } else {
+            return 'NO';
+        }
+    }
+    
+    public function getMedidaEstado(){
+        $esta_validado = Parte_ope_hdr::where('medidas', 1)->where('id_ope_de_hdr', $this->id_ope_de_hdr)->first();
+
+        if ($esta_validado) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
    /* protected $casts = [
         'total_horas' => HoraMinutoCast::class
     ];

@@ -764,3 +764,35 @@ function mostrarOpcionComEtp() {
     }
 }
 
+function cargarModalProgreso(id) {
+    // console.log('')
+    let html = '';
+    $.ajax({
+        type: "post",
+        url: '/orden/man/obtener-progreso/'+id, 
+        data: {
+            id: id
+        },
+        success: function (res) {
+            // console.log(res)
+            document.getElementById('m_prg_ord_man').value = res.nombre_orden;
+            document.getElementById('m_prg_est').value = res.estado_orden;
+            document.getElementById('span_prg').innerHTML = res.tot_mec_completo+'/'+res.tot_mec;
+            document.getElementById('div-prg-bar').style.width = res.tot_mec_porcentaje+'%';
+
+            res.ordenes_mecanizado.forEach(element => {
+                html += `<tr>
+                                <td class="text-center">`+element.nombre_orden+`</td>
+                                <td class="text-center">`+element.nombre_estado+`</td>
+                                <td class="text-center">`+element.fecha_limite+`</td>    
+                        </tr>`
+            });
+            document.getElementById('cuadro-prg-orden').innerHTML = html;
+            changeTdColor();
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+

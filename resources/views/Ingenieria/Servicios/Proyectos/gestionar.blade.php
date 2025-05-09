@@ -728,6 +728,7 @@
     @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-servicio')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-etapa')
+    @include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
     {{-- @include('layouts.modal.confirmation') --}}
 @endsection
 

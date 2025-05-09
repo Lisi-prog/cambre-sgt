@@ -578,6 +578,7 @@ select
             est.nombre_estado_hdr,
             res.id_empleado,
             emp.nombre_empleado,
+            p.medidas,
             CASE
                 WHEN est.id_estado_hdr = 3 THEN p.fecha
                 ELSE "____-__-__"
@@ -600,11 +601,13 @@ select
         maq.codigo_maquinaria,
         op_hdr.id_ope_de_hdr,
         op_hdr.activo,
+        op_hdr.fecha,
         op_hdr.numero,
         p_rank.id_estado_hdr,
         p_rank.nombre_estado_hdr,
         p_rank.nombre_empleado as ultimo_res,
-        th.total_horas
+        th.total_horas,
+        p_rank.medidas
     from servicio se
     inner join etapa et on et.id_servicio = se.id_servicio
     inner join orden o on o.id_etapa = et.id_etapa
