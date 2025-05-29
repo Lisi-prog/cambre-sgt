@@ -57,6 +57,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            {!! Form::label('est_act', "¿Esta Activo?:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::select('esta_activo', [0 => 'NO', 1 => 'SI'], 1, [
+                                            'class' => 'form-select form-control',
+                                            'id' => 'est_act',
+                                            'required'
+                                        ]) !!}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

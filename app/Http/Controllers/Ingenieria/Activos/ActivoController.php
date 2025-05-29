@@ -53,13 +53,15 @@ class ActivoController extends Controller
         $nombre = $request->input('nombre_activo');
         $descripcion = $request->input('descripcion');
         $nuevo_serv = $request->input('opt_nsa');
+        $esta_activo = $request->input('esta_activo');
         //-----------------------------------
 
         //Crear activo
         $activo = Activo::create([
             'codigo_activo' => $codigo,
             'nombre_activo' => $nombre,
-            'descripcion_activo' => $descripcion
+            'descripcion_activo' => $descripcion,
+            'esta_activo' => $esta_activo
         ]);
         //------------------------------------
 
@@ -164,13 +166,15 @@ class ActivoController extends Controller
         //variables
         $nombre = $request->input('nombre_activo');
         $codigo =  strtoupper($request->input('codigo_activo'));
+        $esta_activo = $request->input('esta_activo');
         //-----------------------------------
 
         $activo = Activo::find($id);
 
         $activo->update([
             'codigo_activo' => $codigo,
-            'nombre_activo' => $nombre
+            'nombre_activo' => $nombre,
+            'esta_activo' => $esta_activo
         ]);
 
         if ($request->input('descripcion')) {

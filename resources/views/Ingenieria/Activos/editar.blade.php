@@ -52,7 +52,18 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
+                                    {!! Form::label('est_act', "¿Esta Activo?:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                    {!! Form::select('esta_activo', [0 => 'NO', 1 => 'SI'], $activo->esta_activo, [
+                                                    'class' => 'form-select form-control',
+                                                    'id' => 'est_act',
+                                                    'required'
+                                                ]) !!}
+                                </div>
+                            </div>
+                        </div>
                         <div class="row pt-3">
                             <div class="d-flex">
                                 <div class="me-auto">
