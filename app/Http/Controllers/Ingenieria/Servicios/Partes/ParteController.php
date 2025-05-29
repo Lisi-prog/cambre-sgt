@@ -871,6 +871,8 @@ class ParteController extends Controller
 
         $fecha = $request->input('fecha');
 
+        $rutaCam = $request->input('ruta_cam');
+
         $observaciones = $request->input('observaciones');
 
         if ($request->input('medidas')) {
@@ -915,8 +917,9 @@ class ParteController extends Controller
                         'fecha_carga' => $fecha_carga,
                         'horas' => $horas,
                         'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-                        'medidas' => 0,
-                        'id_estado_hdr' => $estado
+                        'medidas' => $medidas,
+                        'id_estado_hdr' => $estado,
+                        'ruta_cam' =>  $rutaCam
                     ]);
            
             if ($estado == 4) { //orden completado

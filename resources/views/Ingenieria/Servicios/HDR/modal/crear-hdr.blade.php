@@ -12,7 +12,7 @@
                     <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">HDR anteriores <i class="fas fa-caret-down"></i></button> 
                 </div>
                 <div class="row" id="demo" hidden>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    {{-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group">
                             {!! Form::label('proy_ant', 'Proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::select('proy', $proyectos, null, [
@@ -29,12 +29,17 @@
                                 
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group">
                             {!! Form::label('hdr_ant', 'HDR:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <select class="form-select form-group" id="m-hdr-ant" name="hdr-ant" onchange="autocompletahdr(this.value)">
-                            </select>
+                            {{-- <select class="form-select form-group" id="m-hdr-ant" name="hdr-ant" onchange="autocompletahdr(this.value)">
+                            </select> --}}
+                            {!! Form::select('hdr-ant', $hdrAnt, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'm-hdr-ant'
+                                        ]) !!}
                         </div>
                     </div>
                 </div> 

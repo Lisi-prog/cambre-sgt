@@ -48,7 +48,7 @@
                         <div class="form-group">
                             {!! Form::label('prg_ord_mec', 'Ordenes de Mecanizado Faltantes:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <div class="table-responsive">
-                                <table id="tablaPrg" class="table table-hover mt-2" class="display">
+                                <table id="tablaPrg" class="table table-hover table-sm mt-2" class="display">
                                     <thead style="background-color: #d37c00">
                                         <th class="text-center" scope="col" style="color:#fff;">Nombre</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>      

@@ -107,7 +107,7 @@ class ProyectoController extends Controller
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = $this->obtenerSupervisoresAdmin();
-        $Tipos_servicios = Subtipo_servicio::orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $Tipos_servicios = Subtipo_servicio::where('id_subtipo_servicio', '<', 7)->orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         // $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
@@ -166,6 +166,12 @@ class ProyectoController extends Controller
         //------------------
         
         return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'proyectosFilter', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion'));
+    }
+
+    public function indexPorActivo(Request $request)
+    {
+        $proyectos = Vw_servicio::tipo([7])->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
+        return view('Ingenieria.Servicios.Proyectos.index_activos', compact('proyectos'));
     }
 
     public function obtenerCodigoServicio(){
@@ -916,6 +922,33 @@ class ProyectoController extends Controller
             'estado' => $servicio->nombre_estado,
             'progreso' => $servicio->progreso,
             'etapas' => $etapas_arr
+        ];
+    }
+
+    public function obtenerOrdMecOrdTraUnServicio($id){
+        $ordenesMecanizado = DB::select('select 
+                                            o.id_orden,
+                                            o.nombre_orden,
+                                            ome.id_orden_mecanizado
+                                            from servicio s
+                                            inner join etapa et on et.id_servicio = s.id_servicio
+                                            inner join orden o on o.id_etapa = et.id_etapa
+                                            inner join orden_mecanizado ome on ome.id_orden = o.id_orden
+                                            where s.id_servicio = ?;',[$id]);
+        
+        $ordenesTrabajo = DB::select('select 
+                                            o.id_orden,
+                                            o.nombre_orden,
+                                            ome.id_orden_trabajo
+                                            from servicio s
+                                            inner join etapa et on et.id_servicio = s.id_servicio
+                                            inner join orden o on o.id_etapa = et.id_etapa
+                                            inner join orden_trabajo ome on ome.id_orden = o.id_orden
+                                            where s.id_servicio = ?;',[$id]);
+
+        return [
+            'ord_mec' => $ordenesMecanizado,
+            'ord_tra' => $ordenesTrabajo
         ];
     }
 }

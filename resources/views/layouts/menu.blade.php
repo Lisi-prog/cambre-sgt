@@ -83,6 +83,12 @@
                 </li>
                 
                 <li>
+                    <a class="nav-link" href="{{route('proyecto.indexactivo')}}" title="Mejora continua">
+                        <i class="fas fa-drafting-compass" style="font-size:1.2em;"></i><span>Activos</span>
+                    </a>
+                </li>
+
+                <li>
                     <a class="nav-link" href="{{route('proyecto.indexprefijo', 1)}}" title="Servicios">
                         <i class="fas fa-file-alt" style="font-size:1.2em;"></i><span>Mostrar todo</span>
                     </a>

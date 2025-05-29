@@ -149,7 +149,13 @@ select
     ro.nombre_empleado as supervisor,
     ro.id_empleado as id_empleado_supervisor,
     p_rank.nombre_estado_manufactura as nombre_estado,
-    th.total_horas
+    th.total_horas,
+    ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura) as tot_mec,
+    ObtenerTotalOrdenMecxManCompleto(ot.id_orden_manufactura) as tot_mec_completo,
+    case
+		when ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura) = 0 then 0
+        else truncate((ObtenerTotalOrdenMecxManCompleto(ot.id_orden_manufactura) * 100 )/ ObtenerTotalOrdenMecxMan(ot.id_orden_manufactura), 0)
+    end as tot_mec_porcentaje
     from orden as o
 	inner join orden_manufactura as ot on o.id_orden = ot.id_orden
 	inner join etapa as et on et.id_etapa = o.id_etapa

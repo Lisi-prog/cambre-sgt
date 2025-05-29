@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo', 'Ordenes Manufactura')
+@section('titulo', 'Ordenes')
 @section('content')
 
 <style>
@@ -49,18 +49,18 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Ordenes de Manufactura</h5>
+                <h4 class="">Servicio de Activo</h5>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
-                <div class="form-check form-switch">
+                {{-- <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion multiple</label>
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
                     Carga Multiple
-                </button>
+                </button> --}}
             </div>
         </div>
     </div>
@@ -69,7 +69,7 @@
 
     <div class="section-body">
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -111,6 +111,25 @@
                                     </div>
                                 </div>
                             </div>
+                            @role('SUPERVISOR')
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <div class="row">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                <div class="">
+                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                                </div>
+                                                <div class="d-flex flex-column overflow-auto">
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                    @foreach ($responsables as $responsable)
+                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endrole
                             
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                 <div class="row">
@@ -122,11 +141,31 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($estados as $estado)
-                                                    @if ($estado->id_estado < 7)
-                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                    @else
-                                                        <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                    @endif
+                                                    @switch($tipo_orden)
+                                                        @case(1)
+                                                            @if ($estado->id_estado < 9 && $estado->id_estado != 5)
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                            @else
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                            @endif
+                                                            @break
+                                                        @case(2)
+                                                            @if ($estado->id_estado < 5)
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                            @else
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                            @endif
+                                                            @break
+                                                        @case(3)
+                                                            @if ($estado->id_estado < 6)
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
+                                                            @else
+                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
+                                                            @endif
+                                                            @break
+                                                            
+                                                    @endswitch
+                                                        
                                                 @endforeach
                                             </div>
                                         </div>
@@ -137,144 +176,176 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <!-- Centramos la paginacion a la derecha -->
+                            {{-- @if (count($proyectos) != 0)
+                                <div class="pagination justify-content-end">
+                                    {!! $proyectos->links() !!}
+                                </div>
+                            @endif --}}
                         <div class="table-responsive">
-                            <table class="table table-striped mt-2" id="example">
-                                <thead id="encabezado_ordenes">
-                                    <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Prioridad</th>
-                                    <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
-                                    <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
-                                    <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
-                                    <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
-                                    <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
-                                    <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
-                                    <th class='text-center' style="color:#fff;">Horas</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
-                                    <th class='text-center' style="color: #fff; width:10%">Acciones</th>
-                                </thead>
-                                
-                                <tbody id="accordion">
-                                    @php
-                                        $idCount = 0;
-                                    @endphp
-                                    @foreach ($ordenes as $orden)
-                                        <tr>
-                                            <td class='text-center chk-input' style="vertical-align: middle;" hidden><input class="form-check-input m-auto" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]"></td>
+                            <div id="tableFixHead">
+                                <table class="table table-striped mt-2" id="example">
+                                    <thead style="height:50px;background-color:#28587d;">
+                                        <th class='text-center' style="color:#fff;width: 1vw">Prioridad</th>
+                                        {{-- @if ($opcion == 3)
+                                            <th class='text-center' style="color:#fff;width: 2vw">SSI</th>
+                                        @endif --}}
+                                        {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
+                                        <th class='ml-3 text-center' style="color:#fff;width: 10vw">ID</th>
+                                        <th class='text-center' style="color:#fff;width: 8vw">Nombre</th>
+                                        <th class='text-center' style="color:#fff;">Tipo</th>
+                                        {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
+                                        <th class='text-center' style="color:#fff;width: 5vw">Lider</th>
+                                        <th class='text-center' style="color:#fff;">Progreso</th>
+                                        {{-- <th class='text-center' style="color:#fff;">Ordenes</th> --}}
+                                        <th class='text-center' style="color:#fff;">Estado</th>
+                                        <th class='text-center' style="color:#fff;width: 5vw">Fecha inicio</th>
+                                        <th class='text-center' style="color:#fff;width: 5vw">Fecha limite</th>
+                                        <th class='text-center' style="color: #fff;">Acciones</th>
+                                    </thead>
+                                    <tbody  id="accordion">
+                                        @php
+                                            $idCount = 0;
+                                        @endphp
+                                        @foreach ($proyectos as $proyecto)
+                                            <tr>
+                                                <td class='text-center' style="vertical-align: middle;" data-order={{$proyecto->prioridad_servicio ?? 9999999999999}}>{{$proyecto->prioridad_servicio ?? 'S/P'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->codigo_servicio ?? '-'}}</td>
+                                                {{-- @if ($opcion == 3)
+                                                    <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSolicitud->id_solicitud ?? '-'}}</td>
+                                                @endif --}}
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
-                                            
-                                            <td class= 'text-center' style="vertical-align: middle;">
-                                                <div class="progress position-relative" style="background-color: #b2baf8">
-                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->tot_mec_porcentaje}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$orden->tot_mec_completo}} / {{$orden->tot_mec}}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_estado ?? ''}}</td>
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->supervisor ?? '-'}}</td>
-                                            
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td> --}}
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+                                                {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
-        
-                                            <td class='text-center' style="vertical-align: middle;">
-                                                <div class="row justify-content-center" >
-                                                    <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
-                                                            Opciones
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Ver
-                                                                </button>
-                                                            </div>
+                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                    <div class="progress position-relative" style="background-color: #b2baf8">
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->progreso}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->total_ord_completa.'/'.$proyecto->total_ord}}</span>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#verProgOrdenManModal" onclick="cargarModalProgreso({{$orden->id_orden}})">
-                                                                    Progreso
-                                                                </button>
-                                                            </div>
-                                                        </div>
+                                                    </div>
+                                                </td>
 
-                                                        @if ($tipo_orden === 3)
-                                                            <div class="row my-2">
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
+
+                                                <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
+
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
+
+                                                <td>
+                                                    <div class="row justify-content-center">
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
+                                                                Opciones <i class="fas fa-chevron-down m-auto"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
+                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
+                                                            <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
+                                                                        Prioridad
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            @endcan
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                                        {{-- {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} --}}
+                                                                        {{-- {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} --}}
+                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>
                                                             </div>
-                                                        @endif
-                                                        
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Partes
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            @can('EDITAR-ORDENES')
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
-                                                                    Editar
-                                                                </button> 
-                                                            </div>
-                                                            @endcan
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @php
-                                        $idCount += 1;
-                                        @endphp
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                </td>
+                                            </tr>
+                                            {{-- <tr>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
+
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
+
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
+
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
+
+                                                <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
+
+                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                    <div class="progress position-relative" style="background-color: #b2baf8">
+                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
+
+                                                <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
+
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
+                                                <td>
+                                                    <div class="row justify-content-center">
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
+                                                                Opciones <i class="fas fa-chevron-down m-auto"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
+                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
+                                                                        Prioridad
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            @endcan
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr> --}}
+                                            @php
+                                                $idCount += 1;
+                                            @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    @role('SUPERVISOR')
-        @php
-            $es_sup = 1;
-        @endphp
-    @else
-        @php
-            $es_sup = 0;
-        @endphp
-    @endrole
+    
     <script src="{{ asset('js/change-td-color.js') }}"></script>
+    
+    {{-- <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
@@ -287,21 +358,42 @@
         window.modificarFormularioConArgumentos= modificarFormularioConArgumentos;
         window.cargarModalEditarOrden = cargarModalEditarOrden;
         window.colorEncabezadoPorTipoDeOrden = colorEncabezadoPorTipoDeOrden;
-    </script>
+    </script> --}}
 </section>
 
-@include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
-@include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
+<script>
+    $(document).ready( function () {
+        table = $('#example').DataTable({
+                    language: {
+                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                            zeroRecords: 'No se ha encontrado registros',
+                            info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_ ',
+                            infoEmpty: 'No se ha encontrado registros',
+                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                            search: 'Buscar',
+                            paginate:{
+                                first:"Prim.",
+                                last: "Ult.",
+                                previous: 'Ant.',
+                                next: 'Sig.',
+                            },
+                        },
+                        "aaSorting": [],
+                        "pageLength": 100
+                });
+    });
+    
+</script>
+
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
-<script>
+{{-- <script>
     let x = '';
     let ind_rw = '';
     let id_emp = {{Auth::user()->getEmpleado->id_empleado}};
     let es_super = {{$es_sup}};
     var table;
+    $("#loading").show();
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -328,7 +420,6 @@
         let tipo_orden = window.location.pathname.substring(9, 10);
         modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
-        
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {
@@ -339,7 +430,27 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[8]) !== -1) {
+            if (positions.indexOf(searchData[7]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="res"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[8]) !== -1) {
                 return true;
             }
             
@@ -359,7 +470,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[7]) !== -1) {
+            if (offices.indexOf(searchData[6]) !== -1) {
                 return true;
             }
             
@@ -391,7 +502,7 @@
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_ ',
                     infoEmpty: 'No se ha encontrado registros',
                     infoFiltered: '(Filtrado de _MAX_ registros totales)',
                     search: 'Buscar',
@@ -446,7 +557,7 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
                     opcion = parseInt(data.resultado);
                     switch (opcion) {
                         case 1:
@@ -560,6 +671,7 @@
             actRow();
     });
         $('#id_selec').on('change', mostrarSelec);
+        $("#loading").hide();
     } );
     
 </script>
@@ -607,37 +719,5 @@
         let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
         ids.value = valores;
     }
-
-    function cargarModalProgreso(id) {
-        // console.log('')
-        let html = '';
-        $.ajax({
-            type: "post",
-            url: '/orden/man/obtener-progreso/'+id, 
-            data: {
-                id: id
-            },
-            success: function (res) {
-                // console.log(res)
-                document.getElementById('m_prg_ord_man').value = res.nombre_orden;
-                document.getElementById('m_prg_est').value = res.estado_orden;
-                document.getElementById('span_prg').innerHTML = res.tot_mec_completo+'/'+res.tot_mec;
-                document.getElementById('div-prg-bar').style.width = res.tot_mec_porcentaje+'%';
-
-                res.ordenes_mecanizado.forEach(element => {
-                    html += `<tr>
-                                    <td class="text-center">`+element.nombre_orden+`</td>
-                                    <td class="text-center">`+element.nombre_estado+`</td>
-                                    <td class="text-center">`+element.fecha_limite+`</td>    
-                            </tr>`
-                });
-                document.getElementById('cuadro-prg-orden').innerHTML = html;
-                changeTdColor();
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    }
-</script>
+</script> --}}
 @endsection

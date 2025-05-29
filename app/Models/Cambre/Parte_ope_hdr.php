@@ -26,7 +26,8 @@ class Parte_ope_hdr extends Model
         'id_responsabilidad',
         'horas',
         'id_estado_hdr',
-        'medidas'
+        'medidas',
+        'ruta_cam'
     ];
 
     public function getMedidasAttribute()

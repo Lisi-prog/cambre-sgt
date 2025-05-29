@@ -79,6 +79,24 @@ export default
             <textarea id='observaciones' class="form-control reset-input" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh"></textarea>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label for="ord-tra-asoc" class="control-label" style="white-space: nowrap; ">Orden de Trabajo COMPAR:</label> 
+            <select class="form-select form-group reset-input" id="ord-tra-asoc" name="ord-tra-asoc">
+                <option selected="selected" value="">Seleccionar</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+            <label for="ord-mec-asoc" class="control-label" style="white-space: nowrap; ">Orden de Mecanizado Asociado:</label> 
+            <select class="form-select form-group reset-input" id="ord-mec-asoc" name="ord-mec-asoc">
+                <option selected="selected" value="">Seleccionar</option>
+            </select>
+        </div>
+    </div>
 </div>`;
     
     

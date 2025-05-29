@@ -45,6 +45,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            {!! Form::label('opciones', "Opciones:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=1 id="checkCheckedOpt" checked name="opt_nsa">
+                                <label class="form-check-label" for="checkCheckedOpt">
+                                    Crear Servicio de Activo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>

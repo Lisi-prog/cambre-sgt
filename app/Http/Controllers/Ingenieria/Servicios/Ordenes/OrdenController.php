@@ -524,6 +524,9 @@ class OrdenController extends Controller
         $id_supervisor = $request->input('supervisor');
         $id_orden_manufactura = $request->input('id_orden_manuf');
 
+        $idOrdenTrabajoCompar = $request->input('ord-tra-asoc');
+        $idOrdenMecanizadoAsoc = $request->input('ord-mec-asoc');
+
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $id_supervisor,
             'id_rol_empleado' => $rol_empleado->id_rol_empleado
@@ -563,7 +566,9 @@ class OrdenController extends Controller
             'cantidad' => $cantidad,
             'ruta_pieza' => $ruta_plano,
             'id_orden' => $orden->id_orden,
-            'id_orden_manufactura' => $id_orden_manufactura
+            'id_orden_manufactura' => $id_orden_manufactura,
+            'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
+            'id_orden_trab_compar' => $idOrdenTrabajoCompar
         ]);
 
         
@@ -1250,12 +1255,8 @@ class OrdenController extends Controller
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
-        $proyectos = Servicio::whereHas('getEtapas.getOrden.getOrdenMecanizado.getHdr')
-                                ->with('getEtapas.getOrden.getOrdenMecanizado.getHdr')
-                                ->distinct()
-                                ->orderBy('codigo_servicio')
-                                ->pluck('codigo_servicio', 'id_servicio');
-        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'proyectos'));
+        $hdrAnt= Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->pluck('fecha_carga', 'id_hoja_de_ruta');
+        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt'));
     }
 
     public function index_hdr(){

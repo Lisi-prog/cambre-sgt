@@ -54,6 +54,7 @@ function modificarFormulario(){
         cargarSupervisores();
         cargarEmpleados();
         cargarEstadosMecanizados();
+        cargarOrdMecyOrdTra();
         break;
     case 4:
         formulario.innerHTML = '';
@@ -934,4 +935,38 @@ function mostrarOcultarFechaRequerida(){
         fecha_requerida_input.required = false;
         //console.log('chau');
     }
+}
+
+function  cargarOrdMecyOrdTra(){
+    let cbxOrdMec = document.getElementById('ord-mec-asoc');
+    let cbxOrdTra = document.getElementById('ord-tra-asoc');
+    let htmlOrdTra = '';
+    let htmlOrdMec = '';
+    let id = document.getElementById('id-servicio-dat').value;
+    console.log(id)
+    $.ajax({
+        type: "post",
+        url: '/servicio/'+id+'/obtener-ord-tra-mec', 
+        success: function (response) {
+            console.log(response)
+
+            response.ord_mec.forEach(element => {             
+                htmlOrdMec  += `
+                                <option value="`+element.id_orden_mecanizado+`">`+element.nombre_orden+`</option> 
+                                `    
+            });
+            
+            response.ord_tra.forEach(element => {   
+                htmlOrdTra += `
+                        <option value="`+element.id_orden_trabajo+`">`+element.nombre_orden+`</option> 
+                        `         
+            });
+
+            cbxOrdMec.innerHTML += htmlOrdMec; 
+            cbxOrdTra.innerHTML += htmlOrdTra;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }

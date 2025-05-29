@@ -31,7 +31,9 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('proyectos/guardar-actualizacion/{id}', [ProyectoController::class, 'guardarActualizacion'])->name('actualizacion.crear');
     Route::get('proyectos/obtener-proyecto-tipo/{id}', [ProyectoController::class, 'indexPorTipo'])->name('proyecto.indextipo');
     Route::get('proyectos/obtener-proyecto-prefijo/{opcion}', [ProyectoController::class, 'indexPorPrefijo'])->name('proyecto.indexprefijo');
+    Route::get('proyectos/obtener-proyecto-tipo-activo', [ProyectoController::class, 'indexPorActivo'])->name('proyecto.indexactivo');
     Route::post('/proyectos/obtener-mayor-prefijo/{id}', [ProyectoController::class, 'obtenerMayorCodigoServicioPrefijo']);
+    Route::post('/servicio/{id}/obtener-ord-tra-mec', [ProyectoController::class, 'obtenerOrdMecOrdTraUnServicio']);
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('prefijo_proyecto', PrefijoProyectoController::class);
     // RUTAS ETAPAS

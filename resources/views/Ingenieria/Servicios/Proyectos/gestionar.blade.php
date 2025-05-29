@@ -103,6 +103,7 @@
                                 </div>
                             </div>
                         </div>
+                        {!! Form::text('id_proyecto_dat', $proyecto->id_servicio, ['class' => 'form-control', 'hidden', 'id' => 'id-servicio-dat']) !!}
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
