@@ -103,7 +103,7 @@ class ProyectoController extends Controller
 
     public function indexPorPrefijo(Request $request, $opcion){
         // return $request->input('tipos');
-        // return  Vw_servicio::servicio($request->input('cod_serv'))->get();
+        // return  $request->input('cod_serv');
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = $this->obtenerSupervisoresAdmin();
@@ -170,8 +170,9 @@ class ProyectoController extends Controller
 
     public function indexPorActivo(Request $request)
     {
-        $proyectos = Vw_servicio::tipo([7])->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
-        return view('Ingenieria.Servicios.Proyectos.index_activos', compact('proyectos'));
+        $proyectos = Vw_servicio::tipo([7])->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso', 'id_activo']);
+        $opcion = 1;
+        return view('Ingenieria.Servicios.Proyectos.index_activos', compact('proyectos', 'opcion'));
     }
 
     public function obtenerCodigoServicio(){

@@ -396,6 +396,8 @@ CREATE TABLE `orden_mecanizado` (
   `ruta_pieza` varchar(500) DEFAULT NULL,
   `id_orden` int,
   `id_orden_manufactura` int,
+  `id_orden_mec_asoc` int,
+  `ord_trab_compar` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id_orden_mecanizado`),
   CONSTRAINT `pk_id_orden_mecanizado_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
 );

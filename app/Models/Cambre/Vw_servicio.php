@@ -23,6 +23,7 @@ class Vw_servicio extends Model
         'id_servicio',
         'codigo_servicio',
         'nombre_servicio',
+        'id_activo',
         'id_subtipo_servicio',
         'nombre_subtipo_servicio',
         'id_tipo_servicio',
@@ -191,4 +192,7 @@ class Vw_servicio extends Model
         return $this->hasOne(Sol_solicitud::class, 'id_servicio');
     }
 
+    public function getServiciosDeEsteActivo(){
+        return Servicio::where('id_activo', $this->id_activo)->where('id_servicio', '<>', $this->id_servicio)->pluck('id_servicio');
+    }
 }
