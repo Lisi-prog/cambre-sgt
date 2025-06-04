@@ -179,7 +179,7 @@
         </div> --}}
 
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
@@ -192,22 +192,22 @@
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
                                     <thead style="height:50px;background-color:#28587d;">
-                                        <th class='text-center' style="color:#fff;width: 1vw">Prioridad</th>
+                                        {{-- <th class='text-center' style="color:#fff;width: 1vw">Prioridad</th> --}}
                                         {{-- @if ($opcion == 3)
                                             <th class='text-center' style="color:#fff;width: 2vw">SSI</th>
                                         @endif --}}
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                         <th class='ml-3 text-center' style="color:#fff;width: 10vw">ID</th>
                                         <th class='text-center' style="color:#fff;width: 8vw">Nombre</th>
-                                        <th class='text-center' style="color:#fff;">Tipo</th>
+                                        {{-- <th class='text-center' style="color:#fff;">Tipo</th> --}}
                                         {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
-                                        <th class='text-center' style="color:#fff;width: 5vw">Lider</th>
-                                        <th class='text-center' style="color:#fff;">Progreso</th>
+                                        {{-- <th class='text-center' style="color:#fff;width: 5vw">Lider</th>
+                                        <th class='text-center' style="color:#fff;">Progreso</th> --}}
                                         {{-- <th class='text-center' style="color:#fff;">Ordenes</th> --}}
-                                        <th class='text-center' style="color:#fff;">Estado</th>
+                                        {{-- <th class='text-center' style="color:#fff;">Estado</th>
                                         <th class='text-center' style="color:#fff;width: 5vw">Fecha inicio</th>
-                                        <th class='text-center' style="color:#fff;width: 5vw">Fecha limite</th>
-                                        <th class='text-center' style="color: #fff;">Acciones</th>
+                                        <th class='text-center' style="color:#fff;width: 5vw">Fecha limite</th> --}}
+                                        <th class='text-center' style="color: #fff; width: 5vw">Acciones</th>
                                     </thead>
                                     <tbody  id="accordion">
                                         @php
@@ -215,7 +215,7 @@
                                         @endphp
                                         @foreach ($proyectos as $proyecto)
                                             <tr>
-                                                <td class='text-center' style="vertical-align: middle;" data-order={{$proyecto->prioridad_servicio ?? 9999999999999}}>{{$proyecto->prioridad_servicio ?? 'S/P'}}</td>
+                                                {{-- <td class='text-center' style="vertical-align: middle;" data-order={{$proyecto->prioridad_servicio ?? 9999999999999}}>{{$proyecto->prioridad_servicio ?? 'S/P'}}</td> --}}
 
                                                 {{-- @if ($opcion == 3)
                                                     <td class='text-center' style="vertical-align: middle;">{{$proyecto->getSolicitud->id_solicitud ?? '-'}}</td>
@@ -225,10 +225,10 @@
 
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
 
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
+                                                {{-- <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td> --}}
 
                                                 {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
+                                                {{-- <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">
                                                     <div class="progress position-relative" style="background-color: #b2baf8">
@@ -242,7 +242,7 @@
 
                                                 <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
 
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td> --}}
 
                                                 <td>
                                                     <div class="row justify-content-center">
@@ -252,7 +252,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
-                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
+                                                            {{-- @can('MODIFICAR-PRIORIDAD-PROYECTO')
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
@@ -260,7 +260,7 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                            @endcan
+                                                            @endcan --}}
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
@@ -271,6 +271,18 @@
                                                                     {!! Form::close() !!}
                                                                 </div>
                                                             </div>
+                                                            @if (count($proyecto->getServiciosDeEsteActivo()) != 0)
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyecto.indexprefijo', $opcion], 'style' => 'display:inline', 'target' => '_blank' ]) !!}
+                                                                        @foreach ($proyecto->getServiciosDeEsteActivo() as $id)
+                                                                            <input class="input-filter" name="cod_serv[]" type="text" value="{{$id}}" hidden>
+                                                                        @endforeach
+                                                                    {!! Form::submit('Servicios', ['class' => 'btn btn-info w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </td>
@@ -378,7 +390,7 @@
                                 next: 'Sig.',
                             },
                         },
-                        "aaSorting": [],
+                        order: [[ 0, 'asc' ]],
                         "pageLength": 100
                 });
     });
