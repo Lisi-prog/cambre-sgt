@@ -42,6 +42,7 @@
                                     <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
+                                    <th class='text-center' style="color:#fff;">Activo</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -58,6 +59,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
 
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->esta_activo ? 'SI' : 'NO'}}</td>
 
                                             <td>
                                                 <div class="row justify-content-center">
