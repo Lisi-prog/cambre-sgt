@@ -34,7 +34,7 @@
                     <div class="tab-content mt-3" id="myTabContent">
                         <div class="tab-pane fade show active" id="parte-multi" role="tabpanel">
                             <div class="row rounded" id="npm-m-ver-parte-div">
-                                {!! Form::open(['route' => 'partes.guardar.multiple', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec', 'id' => 'npm-form-multi']) !!}
+                                {!! Form::open(['route' => 'ope.parte.multiple', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec parte-multi-ope', 'id' => 'npm-form-multi']) !!}
                                 {!! Form::text('ids[]', null, ['class' => 'form-control', 'hidden', 'id' => 'm-parte-multiple-ids']) !!}
                                 
                                 <div class="row">
@@ -51,8 +51,8 @@
                                         <div class="form-group">
                                             {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                             <span class="obligatorio">*</span>
-                                            <select class="form-select" id="npm-m-ver-parte-estado" name="estado">
-                                                <option selected="selected" value="">Seleccionar</option>
+                                            <select class="form-select" id="m-ver-parte-ope-estado" name="estado">
+                                                {{-- <option selected="selected" value="">Seleccionar</option> --}}
                                             </select>
                                         </div>
                                     </div>
@@ -102,6 +102,11 @@
                                                 <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="npm-minutos" required>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                        <button type="submit" class="btn btn-success button-prevent-multiple-submits-3sec">Guardar</button>
                                     </div>
                                 </div>
                                 {!! Form::close() !!}
@@ -178,6 +183,7 @@
                         let rowIndex = table.row(fila).index();
 
                         table.cell(rowIndex, 2).data(e.prioridad ?? 'S/P').draw();
+                        table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
 
                     });
                 },
@@ -186,6 +192,7 @@
                 }
             });
             DeseleccionarTodo();
+            document.getElementById('m-ver-parte-ope-estado').innerHTML = '';
         });
     });
   </script>

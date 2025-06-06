@@ -30,14 +30,14 @@ class Parte_ope_hdr extends Model
         'ruta_cam'
     ];
 
-    public function getMedidasAttribute()
-    {
-        if ($this->attributes['medidas']) {
-            return 'SI';
-        } else {
-            return 'NO';
-        }
-    }
+    // public function getMedidasAttribute()
+    // {
+    //     if ($this->attributes['medidas']) {
+    //         return 'SI';
+    //     } else {
+    //         return 'NO';
+    //     }
+    // }
 
     public function getEstado(){
         return $this->hasOne(Estado_hdr::class, 'id_estado_hdr');

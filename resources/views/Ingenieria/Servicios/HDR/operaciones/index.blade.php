@@ -477,9 +477,11 @@
 
     function cargarEditMultiple(){
         let ids = document.getElementById('m-edit-multiple-ids');
+        let ids_pm = document.getElementById('m-parte-multiple-ids');
         let valores = [...document.querySelectorAll('input[name="id_ope[]"]:checked')].map(input => input.value);
         ids.value = valores;
-        // cargarEstadosMecanizados();
+        ids_pm.value = valores;
+        cargarEstadosOperaciones();
         let html = '';
         $.ajax({
             type: "post",
@@ -505,6 +507,28 @@
         });
     }
 
+    function cargarEstadosOperaciones(){
+        let cbxEstOpe = document.getElementById('m-ver-parte-ope-estado');
+        let html = '<option value="">Seleccionar</option>';
+        $.ajax({
+            type: "post",
+            url: '/parte/obtener-est-parte-ope',
+            data: {
+                id: 'a',
+            },
+            success: function (res) {
+                console.log(res)
+                res.forEach(e => {
+                    html += `<option value="${e.id_estado_hdr}">${e.nombre_estado_hdr}</option>`;
+                });
+
+                cbxEstOpe.innerHTML += html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
     // function DeseleccionarTodo()´{
     //     document.querySelectorAll('input[type="checkbox"][name="id_ope[]"]').forEach(function(checkbox) {
     //         checkbox.checked = false;
@@ -802,6 +826,43 @@
     } );
 
     $(".edit-multi-ope").on('submit', function(evt){
+            evt.preventDefault();     
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+            let html = '';
+            // let id_orden = document.getElementById('m-ver-parte-orden').value;
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    console.log(data);
+
+                    if (data) {
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Operacion/es editados con exito.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                    } else {
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        Ocurrio un error
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                    }
+                    
+                    $('#alert-edit').html(html)
+                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+
+                }
+            });
+    });
+
+    $(".parte-multi-ope").on('submit', function(evt){
             evt.preventDefault();     
             var url_php = $(this).attr("action"); 
             var type_method = $(this).attr("method"); 

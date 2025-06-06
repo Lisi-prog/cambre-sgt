@@ -1569,9 +1569,75 @@ class OrdenController extends Controller
         }
     }
 
+    public function parteMultipleOpe(Request $request){
+
+        $this->validate($request, [
+            'ids' => 'required',
+            'observaciones' => 'required'
+        ]);
+
+        $estado = $request->input('estado');
+        
+        //$fecha_limite = $request->input('fecha_limite');
+
+        $fecha = $request->input('fecha');
+
+        $observaciones = $request->input('observaciones');
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $horas = $request->input('horas') . ':' . $request->input('minutos');
+
+        try {
+            $ids_ope = explode(',', $request->input('ids')[0]);   
+            $prioridad = $request->input('prioridad');
+
+            $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids_ope)->get();
+
+            foreach ($operaciones as $op) {
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                $responsabilidad = Responsabilidad::create([
+                                            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                        ]);
+                $ultParte = Parte_ope_hdr::where('id_ope_de_hdr', $op->id_ope_de_hdr)->orderBy('id_ope_de_hdr', 'desc')->first();
+                                        
+                $parte = Parte_ope_hdr::create([
+                                'observaciones' => $observaciones,
+                                'fecha' => $fecha,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => $horas,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                                'id_ope_de_hdr' => $op->id_ope_de_hdr,
+                                'id_estado_hdr' => $estado,
+                                'medidas' => $ultParte->medidas
+                            ]);
+            }
+
+            return 1;
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    }
+
     public function obtenerInfoOpeMultipleAct(Request $request){
         $ids = $request->input('id');
-        return Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+        return Vw_operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+        /*
+        $opeArray = array();
+        $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+
+        foreach ($operaciones as $ope) {
+            array_push($opeArray, (object)[
+                'id_ope_de_hd' => $ope->id_ope_de_hd,
+                'prioridad' => $ope->prioridad,
+                'estado' => $ope->getEstado(),
+                'horas' => $ope->getHoras()
+            ]);
+        }
+
+        return $opeArray; */
     }
 
     public function obtenerProgresoOrdMan($id){

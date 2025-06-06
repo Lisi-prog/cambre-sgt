@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Orden_mecanizado;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
 use App\Models\Cambre\Parte;
@@ -1097,5 +1098,9 @@ class ParteController extends Controller
 
         }
         return 1;
+    }
+
+    public function obtenerEstadoParteOpe(){
+        return Estado_hdr::orderBy('id_estado_hdr')->get();
     }
 }

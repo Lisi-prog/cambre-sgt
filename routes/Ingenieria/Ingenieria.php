@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/obtener-mul-orden-act',[OrdenController::class, 'obtenerInfoOrdenMultipleAct']);
     Route::post('/orden/obtener-ordenes-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeTrabajoUnaEtapa']);
     Route::post('/ope-multiple/edit-multiple', [OrdenController::class, 'editMultipleOpe'])->name('ope.edit.multiple');
+    Route::post('/ope-multiple/parte-multiple', [OrdenController::class, 'parteMultipleOpe'])->name('ope.parte.multiple');
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
     Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
@@ -97,6 +98,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::get('/parte/prueba/email', [ParteController::class, 'pruebaEmail']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
         Route::post('/parte/guardar-o-act-parte-ope', [ParteController::class, 'guardarActualizarParteOpe'])->name('partesope.guardar.act');
+        Route::post('/parte/obtener-est-parte-ope', [ParteController::class, 'obtenerEstadoParteOpe']);
         Route::post('/parte-multiple/guardar-multiple', [ParteController::class, 'guardarMultipleParte'])->name('partes.guardar.multiple');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
     Route::resource('ordenes', OrdenController::class);
