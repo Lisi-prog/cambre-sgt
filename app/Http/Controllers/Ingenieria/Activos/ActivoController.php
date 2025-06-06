@@ -80,7 +80,7 @@ class ActivoController extends Controller
             $estado = Estado::where('nombre_estado', 'Continua')->first();
 
             $responsabilidad = Responsabilidad::create([
-                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_empleado' => 1,
                 // 'id_empleado' => $lider,
                 'id_rol_empleado' => $rol_empleado->id_rol_empleado
             ]);
@@ -105,7 +105,7 @@ class ActivoController extends Controller
             $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
             $responsabilidad_act = Responsabilidad::create([
-                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_empleado' => 1,
                 'id_rol_empleado' => $rol_empleado_act->id_rol_empleado
             ]);
 
