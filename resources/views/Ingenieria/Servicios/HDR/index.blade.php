@@ -73,7 +73,7 @@
                                 {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="cargarModalCrearHDR({{$orden->getOrdenDe->id_orden_mecanizado}}, '{{$orden->nombre_orden}}', '{{$orden->getSupervisor()}}')">
                                     Nueva HDR
                                 </button> --}}
-                                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr">
+                                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearHdr" onclick="">
                                     Nueva HDR
                                 </button>
                             </div>

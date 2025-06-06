@@ -32,7 +32,10 @@ class Vw_orden_manufactura extends Model
         'supervisor',
         'id_empleado_supervisor',
         'nombre_estado',
-        'total_horas'
+        'total_horas',
+        'tot_mec',
+        'tot_mec_completo',
+        'tot_mec_porcentaje',
     ];
 
     protected $casts = [

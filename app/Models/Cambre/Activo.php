@@ -21,7 +21,8 @@ class Activo extends Model
     protected $fillable = [ 
         'codigo_activo',
         'nombre_activo',
-        'descripcion_activo'
+        'descripcion_activo',
+        'esta_activo'
     ];
 
     public function getServicioDeMantenimiento()

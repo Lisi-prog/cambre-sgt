@@ -35,6 +35,7 @@ CREATE TABLE `activo` (
   `codigo_activo` varchar(150),
   `nombre_activo` varchar(100) DEFAULT NULL,
   `descripcion_activo` varchar(200),
+  `esta_activo` boolean,
   PRIMARY KEY (`id_activo`)
 );
 
@@ -395,6 +396,8 @@ CREATE TABLE `orden_mecanizado` (
   `ruta_pieza` varchar(500) DEFAULT NULL,
   `id_orden` int,
   `id_orden_manufactura` int,
+  `id_orden_mec_asoc` int,
+  `ord_trab_compar` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id_orden_mecanizado`),
   CONSTRAINT `pk_id_orden_mecanizado_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
 );
@@ -468,6 +471,7 @@ CREATE TABLE `parte_ope_hdr` (
   `horas_maquina` time,
   `medidas` boolean,
   `id_estado_hdr` int,
+  `ruta_cam` varchar(150)
   PRIMARY KEY (`id_parte_ope_hdr`),
   CONSTRAINT `pk_parte_ope_hdr_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_parte_ope_hdr_x_ope_hdr` FOREIGN KEY (`id_ope_de_hdr`) REFERENCES `operaciones_de_hdr`(`id_ope_de_hdr`),

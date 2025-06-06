@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Orden_mecanizado;
 use App\Models\Cambre\Estado;
+use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
 use App\Models\Cambre\Parte;
@@ -871,6 +872,8 @@ class ParteController extends Controller
 
         $fecha = $request->input('fecha');
 
+        $rutaCam = $request->input('ruta_cam');
+
         $observaciones = $request->input('observaciones');
 
         if ($request->input('medidas')) {
@@ -915,8 +918,9 @@ class ParteController extends Controller
                         'fecha_carga' => $fecha_carga,
                         'horas' => $horas,
                         'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-                        'medidas' => 0,
-                        'id_estado_hdr' => $estado
+                        'medidas' => $medidas,
+                        'id_estado_hdr' => $estado,
+                        'ruta_cam' =>  $rutaCam
                     ]);
            
             if ($estado == 4) { //orden completado
@@ -1094,5 +1098,9 @@ class ParteController extends Controller
 
         }
         return 1;
+    }
+
+    public function obtenerEstadoParteOpe(){
+        return Estado_hdr::orderBy('id_estado_hdr')->get();
     }
 }

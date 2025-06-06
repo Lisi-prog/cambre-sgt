@@ -39,17 +39,59 @@
     .col-4 {
         padding: 5px;
     }
+
+    #sideMenu {
+      display: flex;
+      gap: 0.5rem;
+      transition: all 0.3s ease-in-out;
+      opacity: 0;
+      transform: translateX(20px);
+      pointer-events: none;
+    }
+
+    #sideMenu.show {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
 </style>
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Operaciones de HDR</h5>
+        <div class="d-flex flex-row col-12 align-items-center justify-content-between">
+            <!-- Título -->
+            <div class="col-auto">
+                <h4 class="mb-0">Operaciones de HDR</h4>
             </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
+
+            <!-- Botón y menú desplegable -->
+            <div class="d-flex align-items-center">
+                <div id="sideMenu" class="me-2 d-flex flex-row align-items-center gap-2">
+                    <div id="herr" class="d-flex flex-row align-items-center gap-2">
+                        <button type="button" class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#verEditarMulti"
+                                onclick="cargarEditMultiple()"
+                                id="btn-edit-mul" hidden>
+                            Carga múlt.
+                        </button>
+                        <div class="form-check m-0" hidden id="chk-sel-all">
+                            <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                            <label class="form-check-label" for="checkSelAll">
+                            Selecc. todo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                        <label class="form-check-label" for="id_selec">Sel. múlt.</label>
+                    </div>
+                </div>
+
+                <button id="toggleMenu" class="btn btn-warning">
+                    <i class="fas fa-tools"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -58,7 +100,7 @@
 
     <div class="section-body">
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <div class="card">
                     <div class="card-body">
@@ -94,7 +136,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -358,7 +400,7 @@
 </section>
 
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
-@include('Ingenieria.Servicios.HDR.operaciones.modal.m-editar-multiple')
+@include('Ingenieria.Servicios.HDR.operaciones.modal.m-carga-multiple')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
 
@@ -381,13 +423,13 @@
     function mostrarSelec() {
         let colum_sel = document.getElementsByClassName('chk-input');
         let enca = document.getElementById('enc_sel');
-        let btn = document.getElementById('btn-sel-mul');
+        // let btn = document.getElementById('btn-sel-mul');
         let btn_ed = document.getElementById('btn-edit-mul'); 
         let chk_sel_all = document.getElementById('chk-sel-all');
 
         if ($("#id_selec").is(":checked")) {
             enca.hidden = false;
-            btn.hidden = false;
+            // btn.hidden = false;
             btn_ed.hidden = false;
             chk_sel_all.hidden = false;
             table.rows().nodes().to$().find('td.chk-input').removeAttr('hidden');
@@ -395,7 +437,7 @@
             table.column('.chk-input', { search: 'applied' }).visible(true);
         } else {
             enca.hidden = true;
-            btn.hidden = true;
+            // btn.hidden = true;
             btn_ed.hidden = true;
             chk_sel_all.hidden = true;
             table.rows().nodes().to$().find('td.chk-input').attr('hidden', true);
@@ -435,9 +477,11 @@
 
     function cargarEditMultiple(){
         let ids = document.getElementById('m-edit-multiple-ids');
+        let ids_pm = document.getElementById('m-parte-multiple-ids');
         let valores = [...document.querySelectorAll('input[name="id_ope[]"]:checked')].map(input => input.value);
         ids.value = valores;
-        // cargarEstadosMecanizados();
+        ids_pm.value = valores;
+        cargarEstadosOperaciones();
         let html = '';
         $.ajax({
             type: "post",
@@ -463,6 +507,28 @@
         });
     }
 
+    function cargarEstadosOperaciones(){
+        let cbxEstOpe = document.getElementById('m-ver-parte-ope-estado');
+        let html = '<option value="">Seleccionar</option>';
+        $.ajax({
+            type: "post",
+            url: '/parte/obtener-est-parte-ope',
+            data: {
+                id: 'a',
+            },
+            success: function (res) {
+                console.log(res)
+                res.forEach(e => {
+                    html += `<option value="${e.id_estado_hdr}">${e.nombre_estado_hdr}</option>`;
+                });
+
+                cbxEstOpe.innerHTML += html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
     // function DeseleccionarTodo()´{
     //     document.querySelectorAll('input[type="checkbox"][name="id_ope[]"]').forEach(function(checkbox) {
     //         checkbox.checked = false;
@@ -796,6 +862,43 @@
             });
     });
 
+    $(".parte-multi-ope").on('submit', function(evt){
+            evt.preventDefault();     
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+            let html = '';
+            // let id_orden = document.getElementById('m-ver-parte-orden').value;
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    console.log(data);
+
+                    if (data) {
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Operacion/es editados con exito.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                    } else {
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        Ocurrio un error
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                    }
+                    
+                    $('#alert-edit').html(html)
+                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+
+                }
+            });
+    });
+
     $('#id_selec').on('change', mostrarSelec);
     // $('#checkSelAll').on('change', selecDesTodo);
 
@@ -973,6 +1076,14 @@
         }
         }));
     }
+</script>
+<script>
+    const toggleButton = document.getElementById('toggleMenu');
+    const sideMenu = document.getElementById('sideMenu');
+
+    toggleButton.addEventListener('click', () => {
+      sideMenu.classList.toggle('show');
+    });
 </script>
 
 

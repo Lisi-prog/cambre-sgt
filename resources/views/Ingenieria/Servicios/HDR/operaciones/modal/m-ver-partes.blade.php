@@ -127,6 +127,15 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 mb-2" id="section-medida">
+                            <div class="form-group">
+                                {!! Form::label('arch_cam', 'Ruta Archivo CAM:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                {!! Form::text('ruta_cam', null, [
+                                    'class' => 'form-control',
+                                    'id' => 'mv-arch-cam'
+                                ]) !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
