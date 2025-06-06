@@ -568,7 +568,7 @@ class OrdenController extends Controller
             'id_orden' => $orden->id_orden,
             'id_orden_manufactura' => $id_orden_manufactura,
             'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
-            'id_orden_trab_compar' => $idOrdenTrabajoCompar
+            'orden_trab_compar' => $idOrdenTrabajoCompar
         ]);
 
         
