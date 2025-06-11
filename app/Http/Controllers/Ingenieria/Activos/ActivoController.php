@@ -157,7 +157,8 @@ class ActivoController extends Controller
     public function edit($id)
     {
         $activo = Activo::find($id);
-        return view('Ingenieria.Activos.editar', compact('activo'));
+        $tipos_activo = Tipo_activo::orderBy('nombre_tipo_activo')->pluck('nombre_tipo_activo','id_tipo_activo');
+        return view('Ingenieria.Activos.editar', compact('activo', 'tipos_activo'));
     }
     
     public function update(Request $request, $id)
@@ -171,6 +172,7 @@ class ActivoController extends Controller
         $nombre = $request->input('nombre_activo');
         $codigo =  strtoupper($request->input('codigo_activo'));
         $esta_activo = $request->input('esta_activo');
+        $tipo_activo = $request->input('tipo_activo');
         //-----------------------------------
 
         $activo = Activo::find($id);
@@ -178,7 +180,8 @@ class ActivoController extends Controller
         $activo->update([
             'codigo_activo' => $codigo,
             'nombre_activo' => $nombre,
-            'esta_activo' => $esta_activo
+            'esta_activo' => $esta_activo,
+            'id_tipo_activo' => $tipo_activo
         ]);
 
         if ($request->input('descripcion')) {

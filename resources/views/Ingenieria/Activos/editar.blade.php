@@ -45,22 +45,34 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                 <div class="form-group">
                                     {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$activo->descripcion_activo}}</textarea>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                <div class="form-group">
-                                    {!! Form::label('est_act', "¿Esta Activo?:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                    {!! Form::select('esta_activo', [0 => 'NO', 1 => 'SI'], $activo->esta_activo, [
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="form-group">
+                                            {!! Form::label('tipo_activo', "Tipo Activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            {!! Form::select('tipo_activo', $tipos_activo, $activo->id_tipo_activo ?? null, [
                                                     'class' => 'form-select form-control',
-                                                    'id' => 'est_act',
-                                                    'required'
+                                                    'id' => 'tip_act',
+                                                    'placeholder' => 'Seleccionar'
                                                 ]) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="form-group">
+                                            {!! Form::label('est_act', "¿Esta Activo?:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                            {!! Form::select('esta_activo', [0 => 'NO', 1 => 'SI'], $activo->esta_activo, [
+                                                            'class' => 'form-select form-control',
+                                                            'id' => 'est_act',
+                                                            'required'
+                                                        ]) !!}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
