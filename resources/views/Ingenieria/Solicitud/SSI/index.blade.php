@@ -100,7 +100,7 @@
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
                                                     
                                                     @foreach ($flt_estados as $flt_estado)
-                                                        @if ($flt_estado->nombre_estado_solicitud === 'Completo' || $flt_estado->nombre_estado_solicitud === 'Rechazado')
+                                                        @if ($flt_estado->nombre_estado_solicitud === 'Completo' || $flt_estado->nombre_estado_solicitud === 'Rechazado' || $flt_estado->nombre_estado_solicitud === 'Cancelado')
                                                             <label><input name="res" type="checkbox" value="{{$flt_estado->nombre_estado_solicitud}}"> {{$flt_estado->nombre_estado_solicitud}}</label>  
                                                         @else
                                                             <label><input name="res" type="checkbox" value="{{$flt_estado->nombre_estado_solicitud}}" checked> {{$flt_estado->nombre_estado_solicitud}}</label>                              
@@ -209,7 +209,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
                                             
-                                            @if ($Ssi->getSolicitud->getEmpleado->id_empleado ==  Auth::user()->getEmpleado->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
+                                            @if (optional($Ssi->getSolicitud->getEmpleado)->id_empleado == optional(Auth::user()->getEmpleado)->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >

@@ -17,6 +17,12 @@ class SendScheduledMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    //Número de intentos permitidos
+    public $tries = 1;
+
+    //Tiempo máximo que puede ejecutarse el job (en segundos)
+    public $timeout = 120;
+
     /**
      * Create a new job instance.
      *

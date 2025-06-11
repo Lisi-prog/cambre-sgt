@@ -182,10 +182,10 @@
                 <div class="card">
                     <div class="card-body">
                         <!-- Centramos la paginacion a la derecha -->
-                        {{-- <div class="pagination justify-content-end">
-                                {!! $CategoriasLaborales->links() !!}
-                        </div> --}}
                         @include('layouts.loanding')
+                        <div class="pagination justify-content-end">
+                                {!! $partes->links() !!}
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_partes">

@@ -175,6 +175,7 @@ class ProyectoController extends Controller
         return view('Ingenieria.Servicios.Proyectos.index_activos', compact('proyectos', 'opcion'));
     }
 
+    
     public function obtenerCodigoServicio(){
         return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
