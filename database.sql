@@ -30,11 +30,18 @@ CREATE TABLE `sol_servicio_requerido` (
   PRIMARY KEY (`id_servicio_requerido`)
 );
 
+CREATE TABLE `tipo_activo` (
+  `id_tipo_activo` int NOT NULL AUTO_INCREMENT,
+  `nombre_tipo_activo` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id_tipo_activo`)
+);
+
 CREATE TABLE `activo` (
   `id_activo` int NOT NULL AUTO_INCREMENT,
   `codigo_activo` varchar(150),
   `nombre_activo` varchar(100) DEFAULT NULL,
   `descripcion_activo` varchar(200),
+  `id_tipo_activo` int,
   PRIMARY KEY (`id_activo`)
 );
 

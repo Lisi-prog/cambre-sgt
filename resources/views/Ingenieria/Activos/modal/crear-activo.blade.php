@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="nuevoActivoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo activo</h1>
@@ -9,7 +9,7 @@
             {!! Form::open(['route' => 'activos.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group">
                             {!! Form::label('codigo_activo', 'Codigo activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
@@ -21,10 +21,7 @@
                             ]) !!}
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group">
                             {!! Form::label('nombre_activo', 'Nombre activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
@@ -37,11 +34,36 @@
                     </div>
                 </div>
 
+
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group">
                             {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                             <textarea name='descripcion' id="descripcion" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    {!! Form::label('tipo_activo', "Tipo Activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                    {!! Form::select('tipo_activo', $tipos_activo, null, [
+                                            'class' => 'form-select form-control',
+                                            'id' => 'tip_act',
+                                            'placeholder' => 'Seleccionar'
+                                        ]) !!}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    {!! Form::label('est_act', "¿Esta Activo?:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                    {!! Form::select('esta_activo', [0 => 'NO', 1 => 'SI'], 1, [
+                                                    'class' => 'form-select form-control',
+                                                    'id' => 'est_act',
+                                                    'required'
+                                                ]) !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,16 +77,6 @@
                                     Crear Servicio de Activo
                                 </label>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            {!! Form::label('est_act', "¿Esta Activo?:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::select('esta_activo', [0 => 'NO', 1 => 'SI'], 1, [
-                                            'class' => 'form-select form-control',
-                                            'id' => 'est_act',
-                                            'required'
-                                        ]) !!}
                         </div>
                     </div>
                 </div>
