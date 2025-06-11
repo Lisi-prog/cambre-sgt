@@ -21,7 +21,7 @@
                 <h4 class="titulo page__heading my-auto">Activos</h5>
             </div>
             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                {!! Form::open(['method' => 'GET', 'route' => ['tipo_maquinaria.index'], 'class' => 'd-flex justify-content-end']) !!}
+                {!! Form::open(['method' => 'GET', 'route' => ['tipo_activo.index'], 'class' => 'd-flex justify-content-end']) !!}
                     {!! Form::submit('Tipo Activo', ['class' => 'btn btn-primary']) !!}
                 {!! Form::close() !!}
             </div>
@@ -50,6 +50,7 @@
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color:#fff;">Activo</th>
+                                    <th class='text-center' style="color:#fff;">Tipo</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -67,6 +68,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->esta_activo ? 'SI' : 'NO'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$activo->getTipoActivo->nombre_tipo_activo ?? '-'}}</td>
 
                                             <td>
                                                 <div class="row justify-content-center">

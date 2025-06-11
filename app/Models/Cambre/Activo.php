@@ -22,7 +22,8 @@ class Activo extends Model
         'codigo_activo',
         'nombre_activo',
         'descripcion_activo',
-        'esta_activo'
+        'esta_activo',
+        'id_tipo_activo'
     ];
 
     public function getServicioDeMantenimiento()
@@ -38,5 +39,9 @@ class Activo extends Model
     public function getPropuestaDeMejora()
     {
         return $this->hasMany(Propuesta_de_mejora::class, 'id_activo');
+    }
+
+    public function getTipoActivo(){
+        return $this->belongsTo(Tipo_activo::class, 'id_tipo_activo');
     }
 }

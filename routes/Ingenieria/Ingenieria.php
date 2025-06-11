@@ -93,6 +93,13 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('activos', ActivoController::class);
     Route::resource('sectores', SectorController::class);
     Route::resource('operacion', OperacionController::class);
+
+    Route::get('activo/tipo', [ActivoController::class, 'tipo_activo_index'])->name('tipo_activo.index');
+    Route::post('activo/tipo/guardar', [ActivoController::class, 'tipo_activo_store'])->name('tipo_activo.store');
+    Route::get('activo/tipo/editar/{id}', [ActivoController::class, 'tipo_activo_edit'])->name('tipo_activo.edit');
+    Route::put('activo/tipo/actualizar/{id}', [ActivoController::class, 'tipo_activo_update'])->name('tipo_activo.update');
+    Route::delete('activo/tipo/borrar/{id}', [ActivoController::class, 'tipo_activo_destroy'])->name('tipo_activo.destroy');
+
     Route::get('maquinaria/tipo', [MaquinariaController::class, 'tipo_maquinaria_index'])->name('tipo_maquinaria.index');
     Route::post('maquinaria/tipo/guardar', [MaquinariaController::class, 'tipo_maquinaria_store'])->name('tipo_maquinaria.store');
     Route::get('maquinaria/tipo/editar/{id}', [MaquinariaController::class, 'tipo_maquinaria_edit'])->name('tipo_maquinaria.edit');

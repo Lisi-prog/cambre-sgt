@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Cambre\Activo;
+use App\Models\Cambre\Tipo_activo;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Estado;
@@ -33,8 +34,9 @@ class ActivoController extends Controller
     
     public function index(Request $request)
     {   
-        $activos = Activo::orderBy('id_activo')->get();     
-        return view('Ingenieria.Activos.index', compact('activos'));
+        $activos = Activo::orderBy('id_activo')->get();
+        $tipos_activo = Tipo_activo::orderBy('nombre_tipo_activo')->pluck('nombre_tipo_activo','id_tipo_activo');
+        return view('Ingenieria.Activos.index', compact('activos', 'tipos_activo'));
     }
 
     public function create()
@@ -54,6 +56,7 @@ class ActivoController extends Controller
         $descripcion = $request->input('descripcion');
         $nuevo_serv = $request->input('opt_nsa');
         $esta_activo = $request->input('esta_activo');
+        $tipo_activo = $request->input('tipo_activo');
         //-----------------------------------
 
         //Crear activo
@@ -61,7 +64,8 @@ class ActivoController extends Controller
             'codigo_activo' => $codigo,
             'nombre_activo' => $nombre,
             'descripcion_activo' => $descripcion,
-            'esta_activo' => $esta_activo
+            'esta_activo' => $esta_activo,
+            'id_tipo_activo' => $tipo_activo
         ]);
         //------------------------------------
 
@@ -191,6 +195,49 @@ class ActivoController extends Controller
         Activo::destroy($id);
 
         return redirect()->route('activos.index')->with('mensaje', 'El activo se elimino exitosamente.');         
+    }
+
+    public function tipo_activo_index(Request $request){
+        $tipos_activo = Tipo_activo::orderBy('nombre_tipo_activo')->get();
+        return view('Ingenieria.Activos.Tipo_activo.index', compact('tipos_activo'));
+    }
+
+    public function tipo_activo_store(Request $request){
+
+        $this->validate($request, [
+            'tipo_activo' => 'required',
+        ]); 
+
+        $tipo = $request->input('tipo_activo');
+
+        Tipo_activo::create([
+            'nombre_tipo_activo' => $tipo
+        ]);
+
+        return redirect()->route('tipo_activo.index')->with('mensaje', 'El tipo activo creado exitosamente.');
+    }
+
+    public function tipo_activo_edit($id){
+        $ta = Tipo_activo::find($id);
+        return view('Ingenieria.Activos.Tipo_activo.edit', compact('ta'));
+    }
+
+    public function tipo_activo_update(Request $request, $id){
+        $ta = Tipo_activo::find($id);
+
+        $tipo = $request->input('tipo_activo');
+
+        $ta->update([
+            'nombre_tipo_activo' => $tipo
+        ]);
+
+        return redirect()->route('tipo_activo.index')->with('mensaje', 'El tipo activo editado exitosamente.');
+    }
+
+    public function tipo_activo_destroy(){
+        Tipo_activo::destroy($id);
+
+        return redirect()->route('tipo_activo.index')->with('mensaje', 'El tipo activo se elimino exitosamente.'); 
     }
 
 }
