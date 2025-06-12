@@ -61,7 +61,7 @@ function changeTdColor() {
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#f8696b"; // if matches, change color
                      }
             
-                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Cancelado") { // check if td has desired value
+                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Cancelado" || values[x].children[indexColumnaEstados[y]].innerHTML == "Descartar") { // check if td has desired value
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#d2cab5"; // if matches, change color
                      }
                      if (values[x].children[indexColumnaEstados[y]].innerHTML == "Completo") { // check if td has desired value
