@@ -47,6 +47,45 @@
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12 align-items-center justify-content-between">
+            <!-- Título -->
+            <div class="col-auto">
+                <h4 class="mb-0">Ordenes de {{$tipo}}</h4>
+            </div>
+
+            <!-- Botón y menú desplegable -->
+            <div class="d-flex align-items-center">
+                {{-- <div id="sideMenu" class="me-2 d-flex flex-row align-items-center gap-2">
+                    <div id="herr" class="d-flex flex-row align-items-center gap-2">
+                        <button type="button" class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#verEditarMulti"
+                                onclick="cargarEditMultiple()"
+                                id="btn-edit-mul" hidden>
+                            Carga múlt.
+                        </button>
+                        <div class="form-check m-0" hidden id="chk-sel-all">
+                            <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                            <label class="form-check-label" for="checkSelAll">
+                            Selecc. todo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch my-auto">
+                        <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                        <label class="form-check-label" for="id_selec">Sel. múlt.</label>
+                    </div>
+                </div> --}}
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMultiTime" onclick="" id="btn-sel-mul-ti">
+                    Carga Multiple
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
                 <h4 class="">Ordenes de {{$tipo}}</h5>
@@ -63,7 +102,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -323,6 +362,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
+@include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple-time')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
