@@ -9,7 +9,29 @@
 
             <div class="modal-body" id="modal-body-ver-partes-time">          
                 <div class="row">
-
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            {!! Form::label('ope', 'Partes:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <table class="table table-striped mt-2" id="editableTableCPMT">
+                                <thead>
+                                  <tr>
+                                    <th class='text-center' style="color:#fff;">N°</th>
+                                    <th class='text-center' style="color:#fff;">Orden</th>
+                                    <th class='text-center' style="color:#fff;">Observaciones</th>
+                                    <th class='text-center' style="color:#fff;">H. Ini.</th>
+                                    <th class='text-center' style="color:#fff;">H. Fin</th>
+                                    <th class='text-center' style="color:#fff;">Horas</th>
+                                    <th class='text-center' style="color:#fff;"></th>
+                                  </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                </tbody>
+                            </table>
+                              
+                              <!-- Botón para agregar filas -->
+                              <button id="addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
+                        </div>
+                    </div>
                 </div>
             </div>
 

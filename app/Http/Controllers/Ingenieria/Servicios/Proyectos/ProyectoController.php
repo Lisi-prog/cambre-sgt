@@ -804,7 +804,7 @@ class ProyectoController extends Controller
             $responsable_proyecto->save();
         }
         
-        if ($id_estado == 9) {
+        if ($id_estado == 9 || $id_estado == 10) {
             $servicio->prioridad_servicio = null;
             $servicio->save();
             $this->reordenarPrioridades();

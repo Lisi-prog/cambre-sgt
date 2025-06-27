@@ -348,6 +348,7 @@
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
     <script src="{{ asset('js/filter-to-filter.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js') }}"></script>
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;
