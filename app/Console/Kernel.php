@@ -22,10 +22,10 @@ class Kernel extends ConsoleKernel
         $users = User::role('TECNICO')->get();
         // $users = [];
         $schedule->job(new SendScheduledMail($users))->weekly();
-        $schedule->job(new SendScheduledMail($users))->dailyAt('17:00');
+        // $schedule->job(new SendScheduledMail($users))->dailyAt('17:00');
 
         $userPrue = User::role('SUPERVISOR')->get();
-        $schedule->job(new SendScheduledMailResSuper($userPrue))->dailyAt('17:00');
+        // $schedule->job(new SendScheduledMailResSuper($userPrue))->dailyAt('17:00');
         $schedule->job(new SendScheduledMailResSuper($userPrue))->weekly();
     }
 
