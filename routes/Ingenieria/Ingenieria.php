@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
     Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
+    Route::post('/orden/{tipo}/carga-multiple', [OrdenController::class, 'obtenerOrdenesParaCargaMultiple']);
     Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
         //RUTAS PARTES
         Route::resource('partes', ParteController::class);
@@ -81,6 +82,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
         Route::get('/parte/prueba/email', [ParteController::class, 'pruebaEmail']);
+        Route::get('/parte/prueba/email-semanal', [ParteController::class, 'emailSemanal']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
         Route::post('/parte-multiple/guardar-multiple', [ParteController::class, 'guardarMultipleParte'])->name('partes.guardar.multiple');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
@@ -158,6 +160,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
      Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
      Route::post('etapa/etapas-de-servicio/{id}',[EtapaController::class, 'obtenerEtapasDeUnServicio'])->name('etapa.obtenerdeservicio');
+     Route::post('/orden/{tipo}/carga-multiple', [OrdenController::class, 'obtenerOrdenesParaCargaMultiple']);
          //RUTAS PARTES
         Route::resource('partes', ParteController::class);
         Route::get('partes/ver/{tipo_orden}', [ParteController::class, 'obtenerPartes'])->name('partes.tipo');
