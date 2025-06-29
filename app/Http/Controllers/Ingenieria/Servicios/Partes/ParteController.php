@@ -803,15 +803,15 @@ class ParteController extends Controller
         Mail::to($email)->send(new ParteMailable($nombre, $codigo, $tipo, $responsable, $proyecto, $estado_nom, $codigo_pr, $etapa, $orden, $tipo_ord, 1));
     }
 
-    public function emailSemanal(){
+    // public function emailSemanal(){
 
-        $users = User::role('TECNICO')->get();
-        Mail::to($email)->send(new SendScheduledMail($users));
+    //     $users = User::role('TECNICO')->get();
+    //     Mail::to($email)->send(new SendScheduledMail($users));
 
-        $userPrue = User::role('SUPERVISOR')->get();
-        Mail::to($email)->send(new SendScheduledMailResSuper($userPrue));
+    //     $userPrue = User::role('SUPERVISOR')->get();
+    //     Mail::to($email)->send(new SendScheduledMailResSuper($userPrue));
 
-    }
+    // }
 
     public function enviarEmail($id_parte, $estado, $opcion){
 
