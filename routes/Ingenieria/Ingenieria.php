@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
         Route::get('/parte/prueba/email', [ParteController::class, 'pruebaEmail']);
+        Route::get('/parte/prueba/email-semanal', [ParteController::class, 'emailSemanal']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
         Route::post('/parte-multiple/guardar-multiple', [ParteController::class, 'guardarMultipleParte'])->name('partes.guardar.multiple');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
