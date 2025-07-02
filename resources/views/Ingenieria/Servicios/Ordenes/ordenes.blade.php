@@ -78,7 +78,7 @@
                     </div>
                 </div> --}}
 
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMultiTime" onclick="" id="btn-sel-mul-ti" hidden>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMultiTime" onclick="" id="btn-sel-mul-ti">
                     Carga Multiple
                 </button>
             </div>
@@ -250,7 +250,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ordenes as $orden)
-                                        <tr>
+                                        <tr data-id="{{$orden->id_orden}}">
                                             <td class='text-center chk-input' style="vertical-align: middle;" hidden><input class="form-check-input m-auto" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]"></td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>

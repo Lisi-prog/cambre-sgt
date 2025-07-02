@@ -146,9 +146,11 @@ class ParteController extends Controller
     public function obtenerCodigoServicio(){
         return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
+
     public function obtenerEmpleados(){
         return Empleado::orderBy('nombre_empleado')->get();
     }
+
     public function obtenerSupervisores(){
         $usuariosSupervisor = User::role('SUPERVISOR')->get();
 
@@ -387,6 +389,97 @@ class ParteController extends Controller
         return 1;                      
     }
     
+    public function cargaMultipleParte(Request $request){
+        // return $request;
+        $idOrdenes = $request->input('orden');
+        $tiempos = $request->input('horas');
+        $observaciones = $request->input('observaciones');
+        $cont = 0;
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $fecha = Carbon::now()->format('Y-m-d');
+        try {
+            
+            foreach ($idOrdenes as $idOrden) {
+
+                $orden = Orden::find($idOrden);  
+
+                $responsable = $orden->getObjResponsable();
+
+                $puesto = $responsable->getPuestoEmpleado;
+
+                $observacion = $observaciones[$cont];
+
+                $opcion =  $orden->getOrdenDe->getTipoOrden();
+
+                
+
+                $tiempo = $tiempos[$cont];
+
+                list($hora, $minutos) = explode(':', $tiempo);
+
+                $hora = (int)$hora;
+                $minutos = (int)$minutos;
+                // preg_match('/(\d+)h\s+(\d+)m/', $tiempo, $matches);
+
+                // $hora = (int)$matches[1];
+                // $minutos = (int)$matches[2];
+
+                $horas = $hora . ':' . $minutos;
+                
+                $costo = $hora*$puesto->costo_hora + $minutos * ($puesto->costo_hora/60);
+            
+                switch ($opcion) {
+                    case 1:
+                        //Parte trabajo
+                        $ultParteTra = Parte::where('id_orden', $orden->id_orden)->orderBy('id_parte', 'desc')->first();
+
+                        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                        $responsabilidad = Responsabilidad::create([
+                            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                        ]);
+
+                        $parte = Parte::create([
+                                    'observaciones' => $observacion,
+                                    'fecha' => $fecha,
+                                    'fecha_limite' => $ultParteTra->fecha_limite,
+                                    'fecha_carga' => $fecha_carga,
+                                    'horas' => $horas,
+                                    'costo' => $costo,
+                                    'id_orden' => $orden->id_orden,
+                                    'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                                ]);
+
+                        Parte_trabajo::create([
+                            'id_estado' => $ultParteTra->getParteTrabajo->id_estado,
+                            'id_parte' => $parte->id_parte
+                        ]);
+
+                        break;
+                    case 2:
+                        //Parte manufactura
+                        break;
+                    case 3:
+                        //Parte mecanizado
+                        break;
+                    
+                    }
+                    $cont = $cont+1;
+                }
+                return ['resultado' => 1,
+                        'ordenes' => $idOrdenes,
+                        ];
+        } catch (\Throwable $th) {
+            // return $th->getMessage();
+            return ['resultado' => 0,
+                    'error' => $th->getMessage()
+                   ];
+        }
+        
+    }
+
     public function show($idParte)
     {
         // $logs = Log_parte::where('id_parte', $idParte)->get();
