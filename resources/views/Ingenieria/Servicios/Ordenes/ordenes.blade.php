@@ -99,10 +99,10 @@
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
                     Carga Multiple
-                </button> --}}
+                </button> 
             </div>
         </div>
-    </div> --}}
+    </div>--}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
