@@ -150,7 +150,7 @@ class ProyectoController extends Controller
                 break;
         }
 
-        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
+        $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->where('id_subtipo_servicio', '<>', 7)->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
         
         
         //Para el filtro
@@ -176,6 +176,20 @@ class ProyectoController extends Controller
     }
 
     
+    function reordenarPrioridades(){
+        DB::transaction(function (){
+            $proyectos = Servicio::whereNotNull('prioridad_servicio')->orderBy('prioridad_servicio')->get();
+            $contador = 1;
+
+            foreach ($proyectos as $proyecto) {
+                $proyecto->prioridad_servicio = $contador;
+                $proyecto->save();
+                $contador += 1;
+            }
+        });
+    }
+
+
     public function obtenerCodigoServicio(){
         return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
@@ -791,6 +805,11 @@ class ProyectoController extends Controller
             $responsable_proyecto->save();
         }
         
+        if ($id_estado == 9 || $id_estado == 10) {
+            $servicio->prioridad_servicio = null;
+            $servicio->save();
+            $this->reordenarPrioridades();
+        }
 
         if($servicio->getSolicitud){
             if ($id_estado == 9) {
