@@ -175,6 +175,20 @@ class ProyectoController extends Controller
         return view('Ingenieria.Servicios.Proyectos.index_activos', compact('proyectos', 'opcion'));
     }
     
+    function reordenarPrioridades(){
+        DB::transaction(function (){
+            $proyectos = Servicio::whereNotNull('prioridad_servicio')->orderBy('prioridad_servicio')->get();
+            $contador = 1;
+
+            foreach ($proyectos as $proyecto) {
+                $proyecto->prioridad_servicio = $contador;
+                $proyecto->save();
+                $contador += 1;
+            }
+        });
+    }
+
+
     public function obtenerCodigoServicio(){
         return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
@@ -790,6 +804,11 @@ class ProyectoController extends Controller
             $responsable_proyecto->save();
         }
         
+        if ($id_estado == 9 || $id_estado == 10) {
+            $servicio->prioridad_servicio = null;
+            $servicio->save();
+            $this->reordenarPrioridades();
+        }
 
         if($servicio->getSolicitud){
             if ($id_estado == 9) {

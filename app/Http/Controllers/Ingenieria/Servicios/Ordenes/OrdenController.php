@@ -49,6 +49,9 @@ use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_manufactura;
+use App\Models\Cambre\Vw_gest_orden_trabajo;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
+use App\Models\Cambre\Vw_gest_orden_manufactura;
 use App\Mail\Solicitud\OrdenMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
@@ -1372,5 +1375,67 @@ class OrdenController extends Controller
         return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
                 ->where('oxm.id_operacion', $idOperacion)
                 ->get();
+    }
+
+    public function obtenerOrdenesParaCargaMultiple($tipo){
+        $ordenes_arr = array();
+        switch ($tipo) {
+            case 1:
+                # Trabajo
+                if (Auth::user()->hasRole('SUPERVISOR')) {
+                    $ordenes = Vw_gest_orden_trabajo::where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
+                }else{
+                    $ordenes = Vw_gest_orden_trabajo::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
+                }
+                
+                break;
+            case 2:
+                # Manufactura
+                if (Auth::user()->hasRole('SUPERVISOR')) {
+                    $ordenes = Vw_gest_orden_manufactura::where('id_estado', '<', 7)->orderBy('nombre_orden')->get();
+                }else{
+                    $ordenes = Vw_gest_orden_manufactura::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 7)->orderBy('nombre_orden')->get();
+                }
+                break;
+            case 3:
+                # Mecanizao
+                if (Auth::user()->hasRole('SUPERVISOR')) {
+                    $ordenes = Vw_gest_orden_mecanizado::where('id_estado', '<', 5)->orderBy('nombre_orden')->get();
+                }else{
+                    $ordenes = Vw_gest_orden_mecanizado::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 5)->orderBy('nombre_orden')->get();
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        foreach ($ordenes as $orden) {
+            array_push($ordenes_arr, (object)[
+                'id_orden' => $orden->id_orden,
+                'orden' => $orden->nombre_orden.'/'.$orden->descripcion_etapa.'/'.$orden->codigo_servicio
+            ]);
+        }
+
+        return $ordenes_arr;
+    }
+
+    public function obtenerInfoOrdenMultipleAct(Request $request){
+        $ids = $request->input('id');
+        $orden = Orden::find($ids[0]);
+        $tipo = $orden->getOrdenDe->getTipoOrden();
+
+        switch ($tipo) {
+            case 1:
+                return Vw_orden_trabajo::whereIn('id_orden', $ids)->get();
+                break;
+            case 2:
+                return Vw_orden_manufactura::whereIn('id_orden', $ids)->get();
+                break;
+            case 3:
+                return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+                break;
+        }
+        
     }
 }
