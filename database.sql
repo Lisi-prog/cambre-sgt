@@ -380,6 +380,11 @@ CREATE TABLE `orden_manufactura` (
   CONSTRAINT `pk_id_orden_manufactura_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
 );
 
+CREATE TABLE `orden_manufactura_asoc`(
+  `id_orden_manufactura` int,
+  `id_orden_man_asoc` int
+);
+
 CREATE TABLE `parte_manufactura` (
   `id_parte_manufactura` int NOT NULL AUTO_INCREMENT,
   `id_estado_manufactura` int,
@@ -396,10 +401,14 @@ CREATE TABLE `orden_mecanizado` (
   `ruta_pieza` varchar(500) DEFAULT NULL,
   `id_orden` int,
   `id_orden_manufactura` int,
-  `id_orden_mec_asoc` int,
-  `ord_trab_compar` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id_orden_mecanizado`),
   CONSTRAINT `pk_id_orden_mecanizado_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
+);
+
+CREATE TABLE `orden_mecanizado_asoc`(
+  `id_orden_mecanizado` int,
+  `id_orden_mec_asoc` int,
+  `ord_tra_compar` varchar(500) DEFAULT NULL
 );
 
 -- OLD
@@ -471,7 +480,7 @@ CREATE TABLE `parte_ope_hdr` (
   `horas_maquina` time,
   `medidas` boolean,
   `id_estado_hdr` int,
-  `ruta_cam` varchar(150)
+  `ruta_cam` varchar(150),
   PRIMARY KEY (`id_parte_ope_hdr`),
   CONSTRAINT `pk_parte_ope_hdr_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_parte_ope_hdr_x_ope_hdr` FOREIGN KEY (`id_ope_de_hdr`) REFERENCES `operaciones_de_hdr`(`id_ope_de_hdr`),
@@ -908,6 +917,50 @@ BEGIN
     GROUP BY se.id_servicio;
 END //
 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE borrar_registros_orden_mec_man ()
+BEGIN
+	DECLARE v_error BOOL DEFAULT FALSE;
+    
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION 
+        SET v_error = TRUE;
+
+    START TRANSACTION;
+    -- Hoja de ruta
+   delete from parte_ope_hdr;
+   delete from operaciones_de_hdr;
+   delete from hoja_de_ruta;
+   
+   delete from log_parte where id_parte in (select id_parte from parte_mecanizado);
+   -- mecanizado
+	delete parte, parte_mecanizado from parte
+	JOIN parte_mecanizado ON parte_mecanizado.id_parte = parte.id_parte;
+
+	delete from responsabilidad_orden where id_orden in (select id_orden from orden_mecanizado);
+
+	delete orden, orden_mecanizado
+		from orden
+		join orden_mecanizado on orden_mecanizado.id_orden = orden.id_orden;
+		
+	-- manufactura
+	delete parte, parte_manufactura from parte
+	JOIN parte_manufactura ON parte_manufactura.id_parte = parte.id_parte;
+
+	delete from responsabilidad_orden where id_orden in (select id_orden from orden_manufactura);
+
+	delete orden, orden_manufactura
+		from orden
+		join orden_manufactura on orden_manufactura.id_orden = orden.id_orden;
+	
+    IF v_error THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;
+END;
+//
 DELIMITER ;
 
 
