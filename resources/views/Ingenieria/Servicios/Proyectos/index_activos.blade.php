@@ -86,7 +86,7 @@
 
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
 
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->descripcion_activo ?? '-'}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->getActivo->descripcion_activo ?? '-'}}</td>
 
                                                 <td>
                                                     <div class="row justify-content-center">
