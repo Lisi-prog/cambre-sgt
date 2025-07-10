@@ -44,4 +44,8 @@ class Activo extends Model
     public function getTipoActivo(){
         return $this->belongsTo(Tipo_activo::class, 'id_tipo_activo');
     }
+
+    public function getServicioActivo(){
+        return Servicio::where('id_activo', $this->id_activo)->where('id_subtipo_servicio', 7)->first();
+    }
 }
