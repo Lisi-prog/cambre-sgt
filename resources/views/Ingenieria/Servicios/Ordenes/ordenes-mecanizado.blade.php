@@ -56,10 +56,10 @@
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
+                    <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
-                    Carga Multiple
+                    Carga<br>Multiple
                 </button>
             </div>
         </div>

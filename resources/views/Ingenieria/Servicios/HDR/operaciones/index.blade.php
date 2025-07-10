@@ -73,19 +73,19 @@
                                 data-bs-target="#verEditarMulti"
                                 onclick="cargarEditMultiple()"
                                 id="btn-edit-mul" hidden>
-                            Carga Multiple
+                            Carga<br>Multiple
                         </button>
                         <div class="form-check m-0" hidden id="chk-sel-all">
                             <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
                             <label class="form-check-label" for="checkSelAll">
-                            Seleccionar todo
+                            Seleccionar<br>todo
                             </label>
                         </div>
                     </div>
 
                     <div class="form-check form-switch my-auto">
                         <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                        <label class="form-check-label" for="id_selec">Seleleccion multiple.</label>
+                        <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
                     </div>
                 </div>
 
