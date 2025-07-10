@@ -125,6 +125,11 @@ class Vw_servicio extends Model
         return $this->hasMany(Etapa::class, 'id_servicio');
     }
 
+    public function getActivo()
+    {
+        return $this->belongsTo(Activo::class, 'id_activo');
+    }
+
     public function getProgreso()
     {
         $etapas = $this->getEtapas;
