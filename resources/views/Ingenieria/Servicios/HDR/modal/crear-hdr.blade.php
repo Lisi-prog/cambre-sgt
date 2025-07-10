@@ -6,30 +6,12 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Hoja de Ruta</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits']) !!}
+            {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
             <div class="modal-body">
                 <div class="row">
                     <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">HDR anteriores <i class="fas fa-caret-down"></i></button> 
                 </div>
                 <div class="row" id="demo" hidden>
-                    {{-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group">
-                            {!! Form::label('proy_ant', 'Proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::select('proy', $proyectos, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'm-proy-ant'
-                                        ]) !!}
-                        </div>
-                    </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group">
-                            {!! Form::label('ord_ant', 'Orden Mecanizado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <select class="form-select form-group" id="m-ord-ant" name="ord">
-                                
-                            </select>
-                        </div>
-                    </div> --}}
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group">
                             {!! Form::label('hdr_ant', 'HDR:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
@@ -38,7 +20,8 @@
                             {!! Form::select('hdr-ant', $hdrAnt, null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
-                                            'id' => 'm-hdr-ant'
+                                            'id' => 'm-hdr-ant',
+                                            'onchange' => 'autocompletahdr(this.value)'
                                         ]) !!}
                         </div>
                     </div>
@@ -140,7 +123,11 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             {!! Form::label('archivo', 'Adjuntar Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            {!! Form::file('archivo', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload')) !!}
+                            <div class="input-group ">
+                                <input name="archivos[]" type="file" class="form-control" id="inputGroupFile02" multiple>
+                                <label class="input-group-text" for="inputGroupFile02">Subir</label>
+                            </div>
+                            {{-- {!! Form::file('archivos[]', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload', 'multiple')) !!} --}}
                             {{-- <input type="file" class="form-control" name="archivo" required> --}}
                         </div>
                     </div>

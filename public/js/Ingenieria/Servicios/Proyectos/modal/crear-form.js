@@ -45,6 +45,7 @@ function modificarFormulario(){
         cargarSupervisores();
         cargarEmpleados();
         cargarEstadosManufacturas();
+        cargarOrdMan();
         break;
     case 3:
         document.getElementById('selected-tipo-orden').style.border = "3px solid #d37c00";
@@ -943,7 +944,6 @@ function  cargarOrdMecyOrdTra(){
     let htmlOrdTra = '';
     let htmlOrdMec = '';
     let id = document.getElementById('id-servicio-dat').value;
-    console.log(id)
     $.ajax({
         type: "post",
         url: '/servicio/'+id+'/obtener-ord-tra-mec', 
@@ -964,6 +964,28 @@ function  cargarOrdMecyOrdTra(){
 
             cbxOrdMec.innerHTML += htmlOrdMec; 
             cbxOrdTra.innerHTML += htmlOrdTra;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function cargarOrdMan(){
+    let cbxOrdMan = document.getElementById('cbx_ord_man_asoc');
+    let htmlOrdMan = '';
+    let id = document.getElementById('id-servicio-dat').value;
+    $.ajax({
+        type: "post",
+        url: '/servicio/'+id+'/obtener-ord-man', 
+        success: function (response) {
+            response.ord_man.forEach(element => {             
+                htmlOrdMan  += `
+                                <option value="`+element.id_orden_manufactura+`">`+element.nombre_orden+`</option> 
+                                `    
+            });
+            
+            cbxOrdMan.innerHTML += htmlOrdMan;
         },
         error: function (error) {
             console.log(error);

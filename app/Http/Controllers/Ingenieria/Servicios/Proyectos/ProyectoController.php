@@ -952,4 +952,19 @@ class ProyectoController extends Controller
             'ord_tra' => $ordenesTrabajo
         ];
     }
+
+    public function obtenerOrdManUnServicio($id){
+        $ordenesManufactura = DB::select('select 
+                                                    o.id_orden,
+                                                    o.nombre_orden,
+                                                    ome.id_orden_manufactura
+                                                    from servicio s
+                                                    inner join etapa et on et.id_servicio = s.id_servicio
+                                                    inner join orden o on o.id_etapa = et.id_etapa
+                                                    inner join orden_manufactura ome on ome.id_orden = o.id_orden
+                                                    where s.id_servicio = ?;',[$id]);
+        return [
+            'ord_man' => $ordenesManufactura
+        ];
+    }
 }

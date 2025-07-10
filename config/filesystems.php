@@ -34,6 +34,10 @@ return [
             'driver' => 'local',
             'root' => public_path().'/storage/documentacion',
         ],
+        'public_plano_hdr' => [
+            'driver' => 'local',
+            'root' => public_path().'/storage/hojaderuta',
+        ],
         'public_arc_sol' => [
             'driver' => 'local',
             'root' => public_path().'/storage/solicitud',

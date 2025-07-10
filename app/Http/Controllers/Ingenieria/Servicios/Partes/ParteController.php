@@ -816,6 +816,10 @@ class ParteController extends Controller
                         'id_parte' => $parte->id_parte
                     ]);
                     
+                    if ($estado == 5) {
+                        $this->ajusteAOrdenMan($orden->id_orden);
+                    }
+
                     // if ($maquina) {
                     //     Parte_mecanizado_x_maquinaria::create([
                     //         'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
@@ -838,6 +842,43 @@ class ParteController extends Controller
 
         }
         return 1;    
+    }
+
+    public function ajusteAOrdenMan($idOrdenMan){
+        $ordenesMec = Vw_gest_orden_mecanizado::where('id_orden_manufactura', $idOrdenMan)->get();
+
+        $totalOrd = count($ordenesMec);
+        $contador = 0;
+
+        foreach ($ordenesMec as $ordMec) {
+            if ($ordMec->id_estado == 5 || $ordMec->id_estado == 6) {
+                $contador = $contador + 1;
+            }
+        }
+
+        if ($totalOrd == $contador) {
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 1,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => $observaciones,
+                        'fecha' => $fecha,
+                        'fecha_limite' => $fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => $horas,
+                        'costo' => $costo,
+                        'id_orden' => $orden->id_orden,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+            Parte_manufactura::create([
+                'id_estado_manufactura' => $estado,
+                'id_parte' => $parte->id_parte
+            ]);
+        }
     }
 
     public function guardarActualizarParteOpe(Request $request)

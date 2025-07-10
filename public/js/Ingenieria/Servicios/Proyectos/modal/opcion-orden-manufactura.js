@@ -78,6 +78,16 @@ export default
             <textarea id='observaciones' class="form-control reset-input" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh"></textarea>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group"> 
+            <label for="ord_manufactura_asoc" class="control-label fs-7" style="white-space: nowrap;">Orden Manufactura Asoc:</label>
+            <select class="form-select form-group reset-input" id="cbx_ord_man_asoc" name="ord_manufactura_asoc">
+                <option selected="selected" value="">Seleccionar</option>
+            </select>
+        </div>
+    </div>
 </div>`;
     
     

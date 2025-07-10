@@ -438,6 +438,7 @@ CREATE TABLE `hoja_de_ruta` (
   `id_responsabilidad` int,
   `id_orden_mecanizado` int,
   `ruta` varchar(500),
+  `activo` boolean,                                                                                                                                                                                                                                                                                                                                                                                 
   PRIMARY KEY (`id_hoja_de_ruta`),
   CONSTRAINT `pk_hoja_de_ruta_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_hoja_de_ruta_x_orden_mec` FOREIGN KEY (`id_orden_mecanizado`) REFERENCES `orden_mecanizado`(`id_orden_mecanizado`)

@@ -42,7 +42,10 @@ use App\Models\Cambre\Parte_trabajo;
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Tipo_orden_trabajo;
 use App\Models\Cambre\Orden_manufactura;
+use App\Models\Cambre\Orden_manufactura_asoc;
 use App\Models\Cambre\Orden_mecanizado;
+use App\Models\Cambre\Orden_mecanizado_asoc;
+use App\Models\Cambre\Archivo_hdr;
 use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Parte_mecanizado;
 use App\Models\Cambre\Tipo_relacion_gantt;
@@ -448,6 +451,7 @@ class OrdenController extends Controller
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
         $id_supervisor = $request->input('supervisor');
+        $ordManAsoc = $request->input('ord_manufactura_asoc');
 
         $responsabilidad = Responsabilidad::create([
              'id_empleado' => $id_supervisor,
@@ -489,6 +493,13 @@ class OrdenController extends Controller
             'id_orden' => $orden->id_orden
         ]);
 
+        if ($ordManAsoc) {
+            Orden_manufactura_asoc::create([
+                'id_orden_manufactura' => $ord_man->id_orden_manufactura,
+                'id_orden_man_asoc' => $ordManAsoc
+            ]);
+        }
+
         $parte = Parte::create([
             'observaciones' => 'Generacion de orden de manufactura',
             'fecha' => $fecha_ini,
@@ -524,7 +535,7 @@ class OrdenController extends Controller
         $id_supervisor = $request->input('supervisor');
         $id_orden_manufactura = $request->input('id_orden_manuf');
 
-        $idOrdenTrabajoCompar = $request->input('ord-tra-asoc');
+        $ordenTrabajoCompar = $request->input('ord-tra-asoc');
         $idOrdenMecanizadoAsoc = $request->input('ord-mec-asoc');
 
         $responsabilidad = Responsabilidad::create([
@@ -567,9 +578,15 @@ class OrdenController extends Controller
             'ruta_pieza' => $ruta_plano,
             'id_orden' => $orden->id_orden,
             'id_orden_manufactura' => $id_orden_manufactura,
-            'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
-            'ord_trab_compar' => $idOrdenTrabajoCompar
         ]);
+
+        if ($ordenTrabajoCompar || $idOrdenMecanizadoAsoc) {
+          Orden_mecanizado_asoc::create([
+            'id_orden_mecanizado' => $ord_mec->id_orden_mecanizado,
+            'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
+            'ord_tra_compar' => $ordenTrabajoCompar
+          ]); 
+        }
 
         
         $parte = Parte::create([
@@ -590,6 +607,7 @@ class OrdenController extends Controller
     }
 
     public function validarOrdenMecanizado(Request $request){
+        // return $request;
         $id_orden_manufactura = $request->input('id_orden_manuf');
         $id_orden = $request->input('id_orden');
         $this->validate($request, [
@@ -1290,11 +1308,12 @@ class OrdenController extends Controller
     public function guardar_hdr(Request $request, $id){
         // return $request;
 
-        /*$this->validate($request, [
-            
+        $this->validate($request, [
+            'archivos.*' => 'file|max:2048' //Max size in kilobytes (2 MB)
         ], [
-            
-        ]);*/
+            'archivos.*.max' => 'El archivo es muy grande.'
+        ]);
+
         $ubi = $request->input('m_ubi');
         $cant = $request->input('m_cant');
         $fec_carga = Carbon::now()->format('Y-m-d H:i:s');
@@ -1383,6 +1402,23 @@ class OrdenController extends Controller
             }
         }
         
+
+        if ($request->hasFile('archivos')) {
+            $nombre = Auth::user()->getEmpleado->nombre_empleado;
+            $cont = 1;
+            foreach ($request->file('archivos') as $file) {
+
+                $filename = $hdr->id_hoja_de_ruta . '-hdr_archivo_' . $cont . '_' . str_replace(" " ,"-", $nombre) . '.' . $file->extension();
+                $path = $file->storeAs('', $filename, 'public_plano_hdr');
+                
+                Archivo_hdr::create([
+                    'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
+                    'nombre_archivo' => $filename,
+                    'ruta' => 'storage/hojaderuta/'.$path
+                ]);
+                $cont++;
+            }
+        }
 
         // foreach ($operaciones as $ope) {
         //     Operaciones_de_hdr::create([
