@@ -129,7 +129,7 @@ function addRow() {
                     <input type="time" name="hora-fin[]" class="form-control" value="">
                 </td>
                 <td>
-                    <input class="form-control" name="horas[]" type="time" value="00:00" >
+                    <input class="form-control" name="horas[]" type="time" value="00:00" required>
                 </td>
                 <td class="text-center">
                     <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i></button>
