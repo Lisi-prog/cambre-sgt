@@ -16,7 +16,7 @@
                                 <thead>
                                   <tr>
                                     <th class='text-center' style="color:#fff; width: 10px !important;">N°</th>
-                                    <th class='text-center' style="color:#fff;">Orden/Etapa/Proyecto</th>
+                                    <th class='text-center' style="color:#fff;">Proyecto/Etapa/Orden</th>
                                     <th class='text-center' style="color:#fff; width: 25px !important;">Observaciones</th>
                                     <th class='text-center' style="color:#fff;">Hs. Ini.</th>
                                     <th class='text-center' style="color:#fff;">Hs. Fin</th>

@@ -1385,7 +1385,7 @@ class OrdenController extends Controller
                 if (Auth::user()->hasRole('SUPERVISOR')) {
                     $ordenes = Vw_gest_orden_trabajo::where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
                 }else{
-                    $ordenes = Vw_gest_orden_trabajo::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
+                    $ordenes = Vw_gest_orden_trabajo::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 9)->where('id_estado', '<>', 5)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
                 }
                 
                 break;
@@ -1394,7 +1394,7 @@ class OrdenController extends Controller
                 if (Auth::user()->hasRole('SUPERVISOR')) {
                     $ordenes = Vw_gest_orden_manufactura::where('id_estado', '<', 7)->orderBy('nombre_orden')->get();
                 }else{
-                    $ordenes = Vw_gest_orden_manufactura::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 7)->orderBy('nombre_orden')->get();
+                    $ordenes = Vw_gest_orden_manufactura::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 7)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
                 }
                 break;
             case 3:
@@ -1402,7 +1402,7 @@ class OrdenController extends Controller
                 if (Auth::user()->hasRole('SUPERVISOR')) {
                     $ordenes = Vw_gest_orden_mecanizado::where('id_estado', '<', 5)->orderBy('nombre_orden')->get();
                 }else{
-                    $ordenes = Vw_gest_orden_mecanizado::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 5)->orderBy('nombre_orden')->get();
+                    $ordenes = Vw_gest_orden_mecanizado::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_zestado', '<', 5)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
                 }
                 break;
             default:
@@ -1413,7 +1413,7 @@ class OrdenController extends Controller
         foreach ($ordenes as $orden) {
             array_push($ordenes_arr, (object)[
                 'id_orden' => $orden->id_orden,
-                'orden' => $orden->nombre_orden.'/'.$orden->descripcion_etapa.'/'.$orden->codigo_servicio
+                'orden' => $orden->codigo_servicio.'/'.$orden->descripcion_etapa.'/'.$orden->nombre_orden
             ]);
         }
 
