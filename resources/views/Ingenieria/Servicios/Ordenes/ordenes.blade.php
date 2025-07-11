@@ -78,7 +78,7 @@
                     </div>
                 </div> --}}
 
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMultiTime" onclick="" id="btn-sel-mul-ti" hidden>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMultiTime" onclick="" id="btn-sel-mul-ti">
                     Carga Multiple
                 </button>
             </div>
