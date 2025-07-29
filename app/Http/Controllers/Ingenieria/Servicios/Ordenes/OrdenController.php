@@ -1326,6 +1326,9 @@ class OrdenController extends Controller
 
         $operaciones = $request->input('operacion');
         
+        if ($request->input('id_hdr')) {
+           $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
+        }
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
@@ -1578,7 +1581,18 @@ class OrdenController extends Controller
 
     public function obtenerInfoOrdenMultipleAct(Request $request){
         $ids = $request->input('id');
-        return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+        $opcion = $request->input('opcion');
+        switch ($opcion) {
+            case 2:
+                return Vw_orden_manufactura::whereIn('id_orden', $ids)->get();
+                break;
+            case 3:
+                return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+                break;
+            default:
+                # code...
+                break;
+        }
     }
 
     public function editMultipleOpe(Request $request){

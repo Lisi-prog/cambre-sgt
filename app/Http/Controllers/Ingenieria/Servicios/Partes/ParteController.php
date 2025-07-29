@@ -1104,6 +1104,32 @@ class ParteController extends Controller
             $opcion = $orden->getOrdenDe->getTipoOrden();
 
             switch ($opcion) {
+                case 2:
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                    $responsabilidad = Responsabilidad::create([
+                                            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                        ]);
+
+                    $ultParte = Parte::where('id_orden', $orden->id_orden)->orderBy('id_parte', 'desc')->first();
+                                        
+                    $parte = Parte::create([
+                                'observaciones' => $observaciones,
+                                'fecha' => $fecha,
+                                'fecha_limite' => $ultParte->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => $horas,
+                                'costo' => 0,
+                                'id_orden' => $orden->id_orden,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+                    $parte_mecanizado = Parte_manufactura::create([
+                                            'id_estado_manufactura' => $estado,
+                                            'id_parte' => $parte->id_parte
+                                        ]);
+                break;
                 case 3:
                     $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 

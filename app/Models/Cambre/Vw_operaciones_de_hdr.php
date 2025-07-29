@@ -57,6 +57,10 @@ class Vw_operaciones_de_hdr extends Model
         }
 
     }
+
+    public function getHdr(){
+        return $this->belongsTo(Hoja_de_ruta::class, 'id_hoja_de_ruta');
+    }
    /* protected $casts = [
         'total_horas' => HoraMinutoCast::class
     ];

@@ -99,7 +99,11 @@
                                         $idCount = 0;
                                     @endphp
                                         @foreach ($hojas_de_ruta as $hdr)
-                                        <tr>
+                                        @if ($hdr->activo )
+                                            <tr style="background-color: #d3fccf">
+                                        @else
+                                            <tr>
+                                        @endif
                                             <td class= 'text-center' style="vertical-align: middle;">{{$contador ?? '-'}}</td>
 
                                             <td class= 'text-center' style="vertical-align: middle;">{{$hdr->id_hoja_de_ruta ?? '-'}}</td>
@@ -136,6 +140,15 @@
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                        @if ($hdr->activo)
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#reiniciarHdr" onclick="cargarHdrReiniciar({{$hdr->id_hoja_de_ruta}})">
+                                                                    Reiniciar
+                                                                </button>
+                                                            </div>
+                                                        </div> 
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>
@@ -174,7 +187,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div>
-                            <table id="example" class="table table-hover mt-2" class="display">
+                            <table id="exampleOpe" class="table table-hover mt-2" class="display">
                                 <thead style="">
                                     <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
@@ -200,6 +213,7 @@
 </section>
 
 @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
+@include('Ingenieria.Servicios.HDR.modal.reiniciar-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 <script>
@@ -223,10 +237,30 @@
                         next: 'Sig.',
                     },
                 },
-                order: [[0, 'asc']],
+                order: [[0, 'desc']],
+                "pageLength": 25
+        });
+
+        $('#exampleOpe').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ a _PAGES_ de _TOTAL_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                order: [[0, 'desc']],
                 "pageLength": 25
         });
     });
 </script>
 <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
+<script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

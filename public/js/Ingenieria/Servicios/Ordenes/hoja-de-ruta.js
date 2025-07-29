@@ -130,6 +130,7 @@ function cargarOperaciones(id) {
                                 `; 
             });
             body_tb.innerHTML += fila_ope;
+            changeTdColor();
         },
         error: function (error) {
             console.log(error);
@@ -330,4 +331,36 @@ function obtenerEstados(opcion){
         console.log(error);
     }
     }));
+}
+
+function cargarHdrReiniciar(id){
+    document.getElementById('m_re_idhdr').value = id;
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtener-hdr/'+id, // Ruta para obtener las máquinas
+        data: { id: id },
+        success: function (response) {
+            // console.log(response);
+            document.getElementById('m_re_ubi').value = response.ubicacion;
+            document.getElementById('m_re_cant').value = response.cantidad;
+            document.getElementById('m_re_ruta').value = response.ruta;
+            document.getElementById('m_re-obser').value = response.observaciones;
+            document.getElementById('re_table-body').innerHTML = '';
+            response.operaciones.forEach(function (op){
+                // console.log(op);
+                const nuevaFila = addRowRe();
+
+                // Esperar un breve momento para que la fila se agregue
+                setTimeout(() => {
+                    // console.log(nuevaFila)
+                    nuevaFila.querySelector(".input-ope").value = op.operacion;
+                    nuevaFila.querySelector(".input-asig").value = op.asignado;
+                    nuevaFila.querySelector(".input-maquina").value = op.maquina;
+                }, 100);
+            });
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }

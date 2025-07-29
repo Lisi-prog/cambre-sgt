@@ -1,40 +1,21 @@
 <!-- Modal -->
-<div class="modal fade" id="crearHdr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="reiniciarHdr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Hoja de Ruta</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Reiniciar Hoja de Ruta</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
             <div class="modal-body">
-                <div class="row">
-                    <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">HDR anteriores <i class="fas fa-caret-down"></i></button> 
-                </div>
-                <div class="row" id="demo" hidden>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <div class="form-group">
-                            {!! Form::label('hdr_ant', 'HDR:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {{-- <select class="form-select form-group" id="m-hdr-ant" name="hdr-ant" onchange="autocompletahdr(this.value)">
-                            </select> --}}
-                            {!! Form::select('hdr-ant', $hdrAnt, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'm-hdr-ant',
-                                            'onchange' => 'autocompletahdr(this.value)'
-                                        ]) !!}
-                        </div>
-                    </div>
-                </div> 
-
+                {!! Form::number('id_hdr', null, ['class' => 'form-control', 'hidden', 'id' => 'm_re_idhdr']) !!}
                 <div class="row">
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <div class="form-group">
                             {!! Form::label('m_id_pieza', 'ID PIEZA:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('m_id_pieza', $orden->nombre_orden, [
+                            {!! Form::text('m_re_id_pieza', $orden->nombre_orden, [
                                 'class' => 'form-control',
-                                'readonly',
-                                'id' => 'm_id_pieza'
+                                'readonly'
                             ]) !!}
                         </div>
                     </div>
@@ -42,11 +23,18 @@
                         <div class="form-group">
                             {!! Form::label('m_confec', 'Confeccionó:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {{-- <span class="obligatorio">*</span> --}}
-                            {!! Form::text('m_confec',  $orden->getSupervisor(), [
+                            {!! Form::text('m_re_confec',  $orden->getSupervisor(), [
                                 'class' => 'form-control',
-                                'readonly',
-                                'id' => 'm_confec'
+                                'readonly'
                             ]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="row border border-danger mb-2">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            {!! Form::label('observaciones', 'Observaciones para el reinicio de la Hoja de Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <textarea name='observaciones' id="m_re-obser-razon" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
                 </div>
@@ -57,7 +45,7 @@
                             {!! Form::text('m_ubi', null, [
                                 'class' => 'form-control reset-input',
                                 'required',
-                                'id' => 'm_ubi'
+                                'id' => 'm_re_ubi'
                             ]) !!}
                         </div>
                     </div>
@@ -67,7 +55,7 @@
                             {!! Form::text('m_cant', null, [
                                 'class' => 'form-control reset-input',
                                 'required',
-                                'id' => 'm_cant'
+                                'id' => 'm_re_cant'
                             ]) !!}
                         </div>
                     </div>
@@ -77,7 +65,7 @@
                             {!! Form::date('m_fec_carga', \Carbon\Carbon::now(), [
                                 'min' => '2023-01-01',
                                 'max' => \Carbon\Carbon::now()->year . '-12',
-                                'id' => 'm_fec_carga',
+                                'id' => 'm_re_fec_carga',
                                 'class' => 'form-control'
                             ]) !!}
                         </div>
@@ -87,7 +75,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('ope', 'Operaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <table class="table table-striped mt-2" id="editableTable">
+                            <table class="table table-striped mt-2" id="re_editableTable">
                                 <thead>
                                   <tr>
                                     <th class='text-center' style="color:#fff;">N°</th>
@@ -97,12 +85,12 @@
                                     <th class='text-center' style="color:#fff;">Acciones</th>
                                   </tr>
                                 </thead>
-                                <tbody id="table-body">
+                                <tbody id="re_table-body">
                                 </tbody>
                             </table>
                               
                               <!-- Botón para agregar filas -->
-                              <button id="addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
+                              <button id="re_addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
                         </div>
                     </div>
                 </div>
@@ -110,7 +98,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <textarea name='observaciones' id="m-obser" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                            <textarea name='observaciones' id="m_re-obser" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" hidden>
@@ -124,7 +112,7 @@
                         <div class="form-group">
                             {!! Form::label('archivo', 'Adjuntar Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <div class="input-group ">
-                                <input name="archivos[]" type="file" class="form-control" id="inputGroupFile02" multiple>
+                                <input name="archivos[]" type="file" class="form-control" id="re_inputGroupFile02" multiple>
                                 <label class="input-group-text" for="inputGroupFile02">Subir</label>
                             </div>
                             {{-- {!! Form::file('archivos[]', array('class' => 'form-control', 'type' => 'file', 'id' => "inputGroupFile03", 'aria-describedby' => 'inputGroupFileAddon03', 'aria-label' => 'Upload', 'multiple')) !!} --}}
@@ -136,7 +124,7 @@
                             {!! Form::label('m_ruta', 'Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::text('m_ruta', null, [
                                 'class' => 'form-control reset-input',
-                                'id' => 'm_ruta'
+                                'id' => 'm_re_ruta'
                             ]) !!}
                         </div>
                     </div>
@@ -151,5 +139,3 @@
         </div>
     </div>
 </div>
-
-<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/crear-hdr.js') }}"></script>

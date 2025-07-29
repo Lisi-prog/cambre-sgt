@@ -47,6 +47,32 @@
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12 align-items-center justify-content-between">
+            <!-- Título -->
+            <div class="col-auto">
+                <h4 class="mb-0">Ordenes de Manufactura</h4>
+            </div>
+
+            <!-- Botón y menú desplegable -->
+            <div class="d-flex align-items-center">
+                <div class="form-check form-switch me-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                    <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
+                </div>
+                <div class="form-check me-3" hidden id="chk-sel-all">
+                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                    <label class="form-check-label" for="checkSelAll">
+                    Seleccionar<br>todo
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul">
+                    Carga<br>Multiple
+                </button>
+            </div>
+        </div>
+    </div>
+    {!! Form::text('opcion_tipo', 2, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
+    {{-- <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
                 <h4 class="">Ordenes de Manufactura</h5>
@@ -63,7 +89,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -166,7 +192,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ordenes as $orden)
-                                        <tr>
+                                        <tr data-id="{{$orden->id_orden}}">
                                             <td class='text-center chk-input' style="vertical-align: middle;" hidden><input class="form-check-input m-auto" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]"></td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
@@ -294,6 +320,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
 @include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
+@include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
@@ -559,7 +586,60 @@
             });
             actRow();
     });
-        $('#id_selec').on('change', mostrarSelec);
+
+    $("#npm-form-multi").on('submit', function(evt){
+            evt.preventDefault();     
+            // console.log('hola');
+
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    // console.log(data);
+                    switch (data) {
+                        case '1':
+                            document.getElementById('alert-mp').innerHTML = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                                                Parte creado con exito
+                                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>`;
+                            document.getElementById('alert-mp').hidden = false;
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                    setTimeout(function(){document.getElementById('alert-mp').hidden = true;},3000);
+                    // html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                    //                         `+data+`
+                    //                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    //                             <span aria-hidden="true">&times;</span>
+                    //                         </button>
+                    //                     </div>`;
+                    // $('#alertOrd').html(html)
+                    // setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                }
+            });
+    });
+    
+    $('#id_selec').on('change', mostrarSelec);
+
+    document.getElementById('checkSelAll').addEventListener('change', event => {
+
+        if (document.getElementById('checkSelAll').checked) {
+            table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ordenes[]"]').prop('checked', true);
+        } else {
+            table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ordenes[]"]').prop('checked', false);
+        }
+
+    })
+
     } );
     
 </script>
@@ -585,16 +665,19 @@
         let colum_sel = document.getElementsByClassName('chk-input');
         let enca = document.getElementById('enc_sel');
         let btn = document.getElementById('btn-sel-mul'); 
+        let selAll = document.getElementById('chk-sel-all');
 
         if ($("#id_selec").is(":checked")) {
             enca.hidden = false;
-            btn.hidden = false;
+            // btn.hidden = false;
+            selAll.hidden = false;
             for (let index = 0; index < colum_sel.length; index++) {
                 colum_sel[index].hidden = false;
             }
         } else {
             enca.hidden = true;
-            btn.hidden = true;
+            // btn.hidden = true;
+            selAll.hidden = true;
             for (let index = 0; index < colum_sel.length; index++) {
                 colum_sel[index].hidden = true;
             }
@@ -606,6 +689,82 @@
         let ids = document.getElementById('m-parte-multiple-ids');
         let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
         ids.value = valores;
+        cargarEstadosMecanizados();
+        let html = '';
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-info-orden-mul',
+            data: {
+                id: valores,
+            },
+            success: function (response) {
+                console.log(response)
+                response.forEach(e => {
+                    html += `<tr>
+                                <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                            </tr>`;
+                });
+
+                document.getElementById('npm_body_ord').innerHTML = html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function cargarEstadosMecanizados(){
+        // let c_bx_estados_mec =  document.getElementById("cbx_estado_mec") ? document.getElementById("cbx_estado_mec") : '';
+        // let c_bx_estados_mec_edit =  document.getElementById("cbx_estado_mec_edit") ? document.getElementById("cbx_estado_mec_edit") : '';
+        let html_estados_mec = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/orden/obtener-estados-manufacturas', 
+            data: {
+                
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_estados_mec += `
+                                    <option value="`+element.id_estado_manufactura+`">`+element.nombre_estado_manufactura
+                                    +`</option> 
+                                    `
+            });
+            // c_bx_estados_mec != '' ? c_bx_estados_mec.innerHTML += html_estados_mec : '';
+            // c_bx_estados_mec_edit != '' ? c_bx_estados_mec_edit.innerHTML += html_estados_mec : '';
+            document.getElementById('npm-m-ver-parte-estado').innerHTML += html_estados_mec;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+    }
+
+    function cargarEstados(){
+        let c_bx_estados = document.getElementById("cbx_estado") ? document.getElementById("cbx_estado") : '';
+        let c_bx_estados_edit = document.getElementById("cbx_estado_edit") ? document.getElementById("cbx_estado_edit") : '';
+        let html_estados = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/orden/obtener-estados', 
+            data: {
+                
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_estados += `
+                                    <option value="`+element.id_estado+`">`+element.nombre_estado
+                                    +`</option> 
+                                    `
+            });
+            c_bx_estados != '' ? c_bx_estados.innerHTML += html_estados : '';
+            c_bx_estados_edit != '' ? c_bx_estados_edit.innerHTML += html_estados : '';
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
     }
 
     function cargarModalProgreso(id) {

@@ -121,12 +121,14 @@
             document.getElementById('npm_body_ord').innerHTML = '';
 
             let valores = [...document.querySelectorAll('input[name="id_ordenes[]"]:checked')].map(input => input.value);
+            let opcion = document.getElementById('opcion-tipo').value;
 
             $.ajax({
                 type: "post",
                 url: '/orden/obtener-mul-orden-act',
                 data: {
                     id: valores,
+                    opcion: opcion
                 },
                 success: function (response) {
                     console.log(response)

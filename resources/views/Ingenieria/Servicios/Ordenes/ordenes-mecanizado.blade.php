@@ -47,6 +47,32 @@
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
+        <div class="d-flex flex-row col-12 align-items-center justify-content-between">
+            <!-- Título -->
+            <div class="col-auto">
+                <h4 class="mb-0">Ordenes de Mecanizado</h4>
+            </div>
+
+            <!-- Botón y menú desplegable -->
+            <div class="d-flex align-items-center">
+                <div class="form-check form-switch me-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                    <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
+                </div>
+                <div class="form-check me-3" hidden id="chk-sel-all">
+                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                    <label class="form-check-label" for="checkSelAll">
+                    Seleccionar<br>todo
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul">
+                    Carga<br>Multiple
+                </button>
+            </div>
+        </div>
+    </div>
+    {!! Form::text('opcion_tipo', 3, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
+    {{-- <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
                 <h4 class="">Ordenes de Mecanizado</h5>
@@ -63,7 +89,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -342,6 +368,7 @@
     let es_super = {{$es_sup}};
     var table;
     $("#loading").show();
+
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -660,8 +687,19 @@
                 });
         });
 
-            $('#id_selec').on('change', mostrarSelec);
-            $("#loading").hide();
+        $('#id_selec').on('change', mostrarSelec);
+
+        document.getElementById('checkSelAll').addEventListener('change', event => {
+
+            if (document.getElementById('checkSelAll').checked) {
+                table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ordenes[]"]').prop('checked', true);
+            } else {
+                table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ordenes[]"]').prop('checked', false);
+            }
+
+        })
+
+        $("#loading").hide();
     } );
     
 </script>
@@ -687,16 +725,19 @@
         let colum_sel = document.getElementsByClassName('chk-input');
         let enca = document.getElementById('enc_sel');
         let btn = document.getElementById('btn-sel-mul'); 
+        let selAll = document.getElementById('chk-sel-all');
 
         if ($("#id_selec").is(":checked")) {
             enca.hidden = false;
-            btn.hidden = false;
+            // btn.hidden = false;
+            selAll.hidden = false;
             for (let index = 0; index < colum_sel.length; index++) {
                 colum_sel[index].hidden = false;
             }
         } else {
             enca.hidden = true;
-            btn.hidden = true;
+            // btn.hidden = true;
+            selAll.hidden = true;
             for (let index = 0; index < colum_sel.length; index++) {
                 colum_sel[index].hidden = true;
             }
