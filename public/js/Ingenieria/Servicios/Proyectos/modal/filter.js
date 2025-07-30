@@ -22,7 +22,7 @@ document.querySelectorAll('input[name=filter]').forEach(item => {
             //console.log("Checkbox is not checked..");
             deSelect($(item).val());
         }
-        validarFiltro();
+        // validarFiltro();
     })
 });
 
@@ -43,11 +43,11 @@ function deSelect(name){
     }  
 }  
 
-document.querySelectorAll('.input-filter').forEach(item => {
-    item.addEventListener('change', event => {
-        validarFiltro();
-    })
-});
+// document.querySelectorAll('.input-filter').forEach(item => {
+//     item.addEventListener('change', event => {
+//         validarFiltro();
+//     })
+// });
 
 function validarFiltro() {
     const cbx_servicios = document.getElementsByName('cod_serv[]');
