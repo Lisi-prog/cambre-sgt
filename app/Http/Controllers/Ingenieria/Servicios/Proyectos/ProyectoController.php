@@ -131,7 +131,7 @@ class ProyectoController extends Controller
 
             case 3:
                 $tipo = 'Servicio de ingenieria';
-                $prefijos_busq = array('SSI');
+                $prefijos_busq = array('SSI-', 'SI-');
                 // $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere(function ($query) use($prefijos_busq) {
                 //                                                                                                 foreach ($prefijos_busq as $prefijo){
                 //                                                                                                     $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
