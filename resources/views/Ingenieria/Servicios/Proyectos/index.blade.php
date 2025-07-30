@@ -69,7 +69,6 @@
                         <div class="row">
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">Filtros <i class="fas fa-caret-down"></i></button>
                         </div>
-                        {!! Form::open(['method' => 'GET', 'route' => ['proyecto.indexprefijo', $opcion], 'style' => 'display:inline']) !!}
                         <div class="row" id="demo" hidden>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
                                 <div class="row">
@@ -78,24 +77,25 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv[]', this)">
+                                                        <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('pry', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
-                                                            <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv[]" checked> (Seleccionar todo)</label>
-                                                        @foreach ($proyectosFilter as $proyecto)
-                                                            @if (is_null($flt_serv))
+                                                            <label style="font-style: italic"><input name="filter" type="checkbox" value="pry" checked> (Seleccionar todo)</label>
+                                                        @foreach ($proyectos->sortBy('codigo_servicio') as $proyecto)
+                                                            <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                            {{-- @if (is_null($flt_serv))
                                                                 @if ($proyecto->id_estado < 9)
-                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
                                                                 @else
-                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}"> {{$proyecto->codigo_servicio}}</label>
                                                                 @endif
                                                             @else
                                                                 @if (in_array($proyecto->id_servicio, $flt_serv))
-                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
                                                                 @else
-                                                                    <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
+                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}"> {{$proyecto->codigo_servicio}}</label>
                                                                 @endif
-                                                            @endif
+                                                            @endif --}}
 
                                                             {{-- @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
                                                                 <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
@@ -113,15 +113,15 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Tipo:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('tipos[]', this)">
+                                                        <label>Tipo:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('tip', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
-                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="tipos[]" checked> (Seleccionar todo)</label>
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="tip" checked> (Seleccionar todo)</label>
                                                         @foreach ($subtipos_servicio as $subtipo_servicio)
                                                             @if (is_null($flt_tip) || in_array($subtipo_servicio->id_subtipo_servicio, $flt_tip))
-                                                                <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                                <label><input class="input-filter" name="tip" type="checkbox" value="{{$subtipo_servicio->nombre_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
                                                             @else
-                                                                <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
+                                                                <label><input class="input-filter" name="tip" type="checkbox" value="{{$subtipo_servicio->nombre_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
                                                             @endif
                                                             {{-- <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label> --}}
                                                         @endforeach
@@ -139,15 +139,15 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Lider:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('lid[]', this)">
+                                                        <label>Lider:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('lid', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
-                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="lid[]" checked> (Seleccionar todo)</label>
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="lid" checked> (Seleccionar todo)</label>
                                                         @foreach ($supervisores as $supervisor)
                                                             @if (is_null($flt_lid) || in_array($supervisor->id_empleado, $flt_lid))
-                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
+                                                                <label><input class="input-filter" name="lid" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
                                                             @else
-                                                                <label><input class="input-filter" name="lid[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
+                                                                <label><input class="input-filter" name="lid" type="checkbox" value="{{$supervisor->nombre_empleado}}"> {{$supervisor->nombre_empleado}}</label>
                                                             @endif
                                                         @endforeach
                                                         {{-- @foreach ($responsables as $responsable)
@@ -164,23 +164,23 @@
                                             <div class="d-flex flex-row align-items-start justify-content-around">
                                                 <div class="card-body d-flex flex-column" style="height: 200px;">
                                                     <div class="">
-                                                        <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('estados[]', this)">
+                                                        <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
-                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="estados[]" checked> (Seleccionar todo)</label>
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                         @foreach ($estados as $estado)
 
                                                             @if (is_null($flt_est))
                                                                 @if ($estado->id_estado < 9)
-                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}} checked> {{$estado->nombre_estado}}</label>
+                                                                    <label><input class="input-filter" name="est" type="checkbox" value="{{$estado->nombre_estado}}" checked> {{$estado->nombre_estado}}</label>
                                                                 @else
-                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
+                                                                    <label><input class="input-filter" name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
                                                                 @endif
                                                             @else
                                                                 @if (in_array($estado->id_estado, $flt_est))
-                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}} checked> {{$estado->nombre_estado}}</label>
+                                                                    <label><input class="input-filter" name="est" type="checkbox" value="{{$estado->nombre_estado}}" checked> {{$estado->nombre_estado}}</label>
                                                                 @else
-                                                                    <label><input class="input-filter" name="estados[]" type="checkbox" value={{$estado->id_estado}}> {{$estado->nombre_estado}}</label>
+                                                                    <label><input class="input-filter" name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
                                                                 @endif
                                                             @endif
 
@@ -194,9 +194,6 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 my-auto">
-
-                                {!! Form::submit('Filtrar', ['class' => 'btn btn-success w-100', 'id' => 'btn-filtrar']) !!}
-                                {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
@@ -221,7 +218,7 @@
                                     <thead style="height:50px;background-color:#28587d;">
                                         <th class='text-center' style="color:#fff;width: 1vw">Prioridad</th>
                                         @if ($opcion == 3)
-                                            <th class='text-center' style="color:#fff;width: 2vw">SSI</th>
+                                            <th class='text-center' style="color:#fff;width: 2vw" >SSI</th>
                                         @endif
                                         {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                         <th class='ml-3 text-center' style="color:#fff;width: 10vw">ID</th>
@@ -397,6 +394,107 @@
             }
         }));
 
+
+        const tabla2 = document.querySelector('#example');
+        const encabezados = tabla2.querySelectorAll('thead th');
+
+        let indexPry = -1;
+        let indexTip = -1;
+        let indexLid = -1;
+        let indexEstado = -1;
+
+        encabezados.forEach((th, index) => {
+            if (th.textContent.trim() === 'ID') {
+                indexPry = index;
+            }
+            if (th.textContent.trim() === 'Tipo') {
+                indexTip = index;
+            }
+            if (th.textContent.trim() === 'Lider') {
+                indexLid = index;
+            }
+            if (th.textContent.trim() === 'Estado') {
+                indexEstado = index;
+            }
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+                var positions = $('input:checkbox[name="pry"]:checked').map(function() {
+                    return this.value;
+                }).get();
+            
+                if (positions.length === 0) {
+                    return true;
+                }
+                
+                if (positions.indexOf(searchData[indexPry]) !== -1) {
+                    return true;
+                }
+                
+                return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+           function( settings, searchData, index, rowData, counter ) {
+                var offices = $('input:checkbox[name="tip"]:checked').map(function() {
+                        return this.value;
+                }).get();
+                
+
+                if (offices.length === 0) {
+                    return true;
+                }
+                    
+                if (offices.indexOf(searchData[indexTip]) !== -1) {
+                    return true;
+                }
+                    
+                return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="lid"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+            
+            if (offices.indexOf(searchData[indexLid]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+                var offices = $('input:checkbox[name="est"]:checked').map(function() {
+                    return this.value;
+                }).get();
+        
+
+                if (offices.length === 0) {
+                    return true;
+                }
+            
+                if (offices.indexOf(searchData[indexEstado]) !== -1) {
+                    return true;
+                }
+            
+                return false;
+            }
+        );
+
         var tabla = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -419,9 +517,14 @@
                 ],
                 "pageLength": 100
         });
+
+        $('input:checkbox').on('change', function () {
+            tabla.draw();
+        });
+
         tabla.on('draw',function () {
             changeTdColor();
-        } )
+        })
     });
 </script>
 
