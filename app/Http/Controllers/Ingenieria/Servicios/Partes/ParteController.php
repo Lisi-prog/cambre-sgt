@@ -39,6 +39,8 @@ use App\Models\Cambre\Vw_parte_manufactura;
 use App\Models\Cambre\Vw_parte_mecanizado;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_manufactura;
+use App\Models\Cambre\Orden_manufactura;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Mail\Solicitud\ParteMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
@@ -733,10 +735,12 @@ class ParteController extends Controller
                                 'id_orden' => $orden->id_orden,
                                 'id_responsabilidad' => $responsabilidad->id_responsabilidad
                             ]);
+
                     Parte_manufactura::create([
                         'id_estado_manufactura' => $estado,
                         'id_parte' => $parte->id_parte
                     ]);
+
                     $result = 1;
                 }
 
@@ -760,16 +764,6 @@ class ParteController extends Controller
                         'responsable_cambio' => Auth::user()->getEmpleado->id_empleado
                     ]);
 
-                    // if ($parte->getParteDe->getParteMecxMaq->first()) {
-                    //     $log_parte->update([
-                    //         'id_maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->id_maquinaria,
-                    //         'horas_maquina' => $parte->getParteDe->getParteMecxMaq->first()->horas_maquina
-                    //     ]);
-                    // }
-
-                    // $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
-                    // $maquina = $request->input('maquina');
-
                     $parte->update([
                         'observaciones' => $observaciones,
                         'fecha_limite' => $fecha_limite,
@@ -780,13 +774,6 @@ class ParteController extends Controller
                     $parte->getParteDe->update([
                         'id_estado_mecanizado' => $estado
                     ]);
-
-                    // if ($maquina) {
-                    //     $parte->getParteDe->getParteMecxMaq->first()->update([
-                    //         'id_maquinaria' => $maquina,
-                    //         'horas_maquina' => $horas_maquina
-                    //     ]);
-                    // }
 
                     $result = 2;
 
@@ -816,17 +803,11 @@ class ParteController extends Controller
                         'id_parte' => $parte->id_parte
                     ]);
                     
-                    if ($estado == 5) {
+                    if ($estado == 5 && !is_null($orden->getOrdenMecanizado->id_orden_manufactura)) {
                         $this->ajusteAOrdenMan($orden->id_orden);
+                        // $estaComp = $this->comprobarSiTodasLasOrdDeMecEstanCompletas($orden->id_orden);
                     }
 
-                    // if ($maquina) {
-                    //     Parte_mecanizado_x_maquinaria::create([
-                    //         'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
-                    //         'id_maquinaria' => $maquina,
-                    //         'horas_maquina' => $horas_maquina
-                    //     ]);
-                    // }
                     $result = 1;
                 }
                 return[
@@ -844,19 +825,35 @@ class ParteController extends Controller
         return 1;    
     }
 
-    public function ajusteAOrdenMan($idOrdenMan){
-        $ordenesMec = Vw_gest_orden_mecanizado::where('id_orden_manufactura', $idOrdenMan)->get();
+    public function comprobarSiTodasLasOrdDeMecEstanCompletas($idOrd){
+        $estaCompleto = 1;
 
-        $totalOrd = count($ordenesMec);
-        $contador = 0;
+        $idOrdMan = Orden::find($idOrd)->getOrdenMecanizado->id_orden_manufactura;
 
-        foreach ($ordenesMec as $ordMec) {
-            if ($ordMec->id_estado == 5 || $ordMec->id_estado == 6) {
-                $contador = $contador + 1;
+        $ordenesMec = vw_gest_orden_mecanizado::where('id_orden_manufactura', $idOrdMan)->where('id_estado', '<=',  5)->get(['id_estado']);
+
+        foreach ($ordenesMec  as $ordenMec ) {
+            if ($ordenMec->id_estado != 5) {
+                $estaCompleto = 0;
             }
         }
 
-        if ($totalOrd == $contador) {
+        return $estaCompleto;
+    }
+
+    public function ajusteAOrdenMan($idOrd){
+
+        $estaCompleto = $this->comprobarSiTodasLasOrdDeMecEstanCompletas($idOrd);
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $fecha = Carbon::now()->format('Y-m-d');
+
+        if ($estaCompleto) {
+            $idOrdMan = Orden::find($idOrd)->getOrdenMecanizado->id_orden_manufactura;
+            $idOrdMan = Orden_manufactura::find($idOrdMan)->id_orden;
+
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
             $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
             $responsabilidad = Responsabilidad::create([
@@ -865,19 +862,21 @@ class ParteController extends Controller
             ]);
 
             $parte = Parte::create([
-                        'observaciones' => $observaciones,
+                        'observaciones' => 'Se completaron las ordenes de mecanizado',
                         'fecha' => $fecha,
-                        'fecha_limite' => $fecha_limite,
+                        'fecha_limite' => $ultParte->fecha_limite,
                         'fecha_carga' => $fecha_carga,
-                        'horas' => $horas,
-                        'costo' => $costo,
-                        'id_orden' => $orden->id_orden,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrdMan,
                         'id_responsabilidad' => $responsabilidad->id_responsabilidad
                     ]);
+
             Parte_manufactura::create([
-                'id_estado_manufactura' => $estado,
+                'id_estado_manufactura' => 6,
                 'id_parte' => $parte->id_parte
             ]);
+            
         }
     }
 
