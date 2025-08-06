@@ -112,7 +112,7 @@ function cargarOperaciones(id) {
                                     <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
                                     <td class= 'text-center' style="vertical-align: middle;">${op.fecha ?? '-'}</td>
                                     <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria}</td>
+                                    <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria ?? '-'}</td>
                                     <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
                                     <td class= 'text-center' style="vertical-align: middle;">${op.nombre_estado_hdr}</td>
                                     <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
@@ -338,6 +338,37 @@ function cargarHdrReiniciar(id){
     $.ajax({
         type: "post",
         url: '/orden/mec/hdr/obtener-hdr/'+id, // Ruta para obtener las máquinas
+        data: { id: id },
+        success: function (response) {
+            // console.log(response);
+            document.getElementById('m_re_ubi').value = response.ubicacion;
+            document.getElementById('m_re_cant').value = response.cantidad;
+            document.getElementById('m_re_ruta').value = response.ruta;
+            document.getElementById('m_re-obser').value = response.observaciones;
+            document.getElementById('re_table-body').innerHTML = '';
+            response.operaciones.forEach(function (op){
+                // console.log(op);
+                const nuevaFila = addRowRe();
+
+                // Esperar un breve momento para que la fila se agregue
+                setTimeout(() => {
+                    // console.log(nuevaFila)
+                    nuevaFila.querySelector(".input-ope").value = op.operacion;
+                    nuevaFila.querySelector(".input-asig").value = op.asignado;
+                    nuevaFila.querySelector(".input-maquina").value = op.maquina;
+                }, 100);
+            });
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function cargarHdrVer(id){
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtener-hdr/'+id,
         data: { id: id },
         success: function (response) {
             // console.log(response);

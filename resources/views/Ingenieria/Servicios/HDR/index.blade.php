@@ -135,6 +135,13 @@
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseHdr{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdr" onclick="cargarHdrVer({{$hdr->id_hoja_de_ruta}})">
+                                                                    Ver
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})">
                                                                     Operaciones
                                                                 </button>
@@ -213,6 +220,7 @@
 </section>
 
 @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
+@include('Ingenieria.Servicios.HDR.modal.ver-hdr')
 @include('Ingenieria.Servicios.HDR.modal.reiniciar-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')

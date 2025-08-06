@@ -64,6 +64,7 @@ use App\Models\Cambre\Hoja_de_ruta;
 use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Parte_ope_hdr;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
+use App\Models\Cambre\Hdr_reg_fallo;
 
 
 class OrdenController extends Controller
@@ -1278,7 +1279,7 @@ class OrdenController extends Controller
     }
 
     public function index_hdr(){
-        $operaciones = Vw_operaciones_de_hdr::get();
+        $operaciones = Vw_operaciones_de_hdr::where('activo', 1)->get();
 
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
@@ -1326,9 +1327,7 @@ class OrdenController extends Controller
 
         $operaciones = $request->input('operacion');
         
-        if ($request->input('id_hdr')) {
-           $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
-        }
+        
 
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
@@ -1345,6 +1344,15 @@ class OrdenController extends Controller
             'ruta' => $ruta
         ]);
 
+        if ($request->input('id_hdr')) {
+           $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
+           Hdr_reg_fallo::create([
+                'id_hdr_ant' => $request->input('id_hdr'),
+                'id_hdr_sig' => $hdr->id_hoja_de_ruta,
+                'observaciones_fallo' => $request->input('observaciones_fallo'),
+           ]);
+        }
+
         if (count($operaciones) != 0) {
             $tecnicos = $request->input('tecnico');
             $maquinarias = $request->input('maq');
@@ -1352,9 +1360,14 @@ class OrdenController extends Controller
 
             for ($i=0; $i < $total_op; $i++) { 
                 $res = null;
+                $id_maq = null;
 
                 $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
-                $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+
+                if (!is_null($maquinarias[$i])) {
+                    $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+                }
+                
 
                 if ($i == 0) {
                     $activo = 1;
@@ -1457,7 +1470,6 @@ class OrdenController extends Controller
     }
 
     public function obtenerOperacionesyTecnicos(){
-        // return 'holi';
         return [
                 'operaciones' => Operacion::orderBy('nombre_operacion')->get(),
                 'tecnicos' => $this->obtenerEmpleadosActivos()
@@ -1465,7 +1477,6 @@ class OrdenController extends Controller
     }
 
     public function obtenerMaquinas(Request $request){
-        // return 'holi';
         $nom_ope = $request->input('nom_operacion');
         $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
         // $idOperacion = $request->input('id_operacion');
