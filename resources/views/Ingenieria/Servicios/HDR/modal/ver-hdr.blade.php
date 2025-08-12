@@ -64,6 +64,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row border border-danger mb-2" id="obser-fallo" hidden>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            {!! Form::label('observaciones', 'Observaciones para la Hoja de Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <textarea name='observaciones_fallo' id="m_ver-obser-razon" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">

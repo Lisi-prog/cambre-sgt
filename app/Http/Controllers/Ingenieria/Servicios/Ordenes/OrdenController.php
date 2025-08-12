@@ -1510,13 +1510,14 @@ class OrdenController extends Controller
         $operaciones_arr = [];
         $hdr = Hoja_de_ruta::find($id);
         $opes = Operaciones_de_hdr::where('id_hoja_de_ruta', $id)->get();
+        $obseFallo = Hdr_reg_fallo::where('id_hdr_sig', $id)->first();
 
         foreach ($opes as $op) {
             array_push($operaciones_arr, (object)[
                 'numero' => $op->numero,
                 'operacion' => $op->getOperacion->nombre_operacion,
                 'asignado' => $op->getAsignado(),
-                'maquina' => $op->getMaquinaria->codigo_maquinaria
+                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-'
             ]);
         }
 
@@ -1525,7 +1526,8 @@ class OrdenController extends Controller
             'cantidad' => $hdr->cantidad,
             'ruta' => $hdr->ruta,
             'observaciones' => $hdr->observaciones,
-            'operaciones' => $operaciones_arr
+            'operaciones' => $operaciones_arr,
+            'obser_fallo' => $obseFallo->observaciones_fallo ?? null
         ];
     }
 

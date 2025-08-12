@@ -3,6 +3,10 @@ $(document).ready(function() {
         document.getElementById('table-body').innerHTML = '';
     });
 
+    $('#verHdr').on('hidden.bs.modal', function (e) {
+        document.getElementById('obser-fallo').hidden = true;
+    });
+
     $('#m-proy-ant').on('change', cargarOrdenesMec);
 
     $('#m-ord-ant').on('change', cargarHdr);

@@ -366,29 +366,33 @@ function cargarHdrReiniciar(id){
 }
 
 function cargarHdrVer(id){
+    let html = '';
     $.ajax({
         type: "post",
         url: '/orden/mec/hdr/obtener-hdr/'+id,
         data: { id: id },
         success: function (response) {
-            // console.log(response);
-            document.getElementById('m_re_ubi').value = response.ubicacion;
-            document.getElementById('m_re_cant').value = response.cantidad;
-            document.getElementById('m_re_ruta').value = response.ruta;
-            document.getElementById('m_re-obser').value = response.observaciones;
-            document.getElementById('re_table-body').innerHTML = '';
-            response.operaciones.forEach(function (op){
-                // console.log(op);
-                const nuevaFila = addRowRe();
+            console.log(response)
+            document.getElementById('m_ver_ubi').value = response.ubicacion;
+            document.getElementById('m_ver_cant').value = response.cantidad;
+            document.getElementById('m_ver_ruta').value = response.ruta;
+            document.getElementById('m_ver-obser').value = response.observaciones;
+            document.getElementById('m_ver-obser-razon').value = response.obser_fallo;
 
-                // Esperar un breve momento para que la fila se agregue
-                setTimeout(() => {
-                    // console.log(nuevaFila)
-                    nuevaFila.querySelector(".input-ope").value = op.operacion;
-                    nuevaFila.querySelector(".input-asig").value = op.asignado;
-                    nuevaFila.querySelector(".input-maquina").value = op.maquina;
-                }, 100);
+            if (response.obser_fallo) {
+                document.getElementById('obser-fallo').hidden = false;
+            }
+
+            document.getElementById('ver-table-body').innerHTML = '';
+            response.operaciones.forEach(function (op){
+                html += `<tr>
+                        <td class="text-center">`+1+`</td>
+                        <td class="text-center">`+op.operacion+`</td>
+                        <td class="text-center">`+op.asignado+`</td>
+                        <td class="text-center">`+op.maquina+`</td>
+                    </tr>`
             });
+            document.getElementById('ver-table-body').innerHTML = html;
         },
         error: function (error) {
             console.log(error);
