@@ -102,9 +102,27 @@ class Hoja_de_ruta extends Model
         if ($ope_act) {
             return $ope_act->getEstado();
         } else {
-            return '-';
+            $ult_op = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->orderBy('id_ope_de_hdr', 'desc')->first();
+            if ($ult_op) {
+                return $ult_op->getEstado();
+            } else {
+                return '-';
+            }
         }
-        // return Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first()->getEstado();
+    }
+
+    public function getIdEstadoActual(){
+        $ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first();
+        if ($ope_act) {
+            return $ope_act->getIdEstado();
+        } else {
+            $ult_op = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->orderBy('id_ope_de_hdr', 'desc')->first();
+            if ($ult_op) {
+                return $ult_op->getIdEstado();
+            } else {
+                return '-';
+            }
+        }
     }
 
     public function getEstaActivo(){

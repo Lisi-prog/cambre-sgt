@@ -256,6 +256,22 @@
         </div>
 
         <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        {!! Form::label('Opciones:') !!}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexOpc1" checked>
+                            <label class="form-check-label" for="flexOpc1">
+                              Solo activos.
+                            </label>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -266,7 +282,7 @@
                             </div>
                         @endif --}}
                         <div class="table-responsive">
-                            <table class="table table-striped mt-2" id="example">
+                            <table class="table table-hover mt-2" id="example">
                                 <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
                                     <th class='text-center' style="color:#fff;min-width:2vw">Prio. Global</th>
@@ -289,7 +305,8 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($operaciones as $ope)
-                                        <tr data-id="{{$ope->id_ope_de_hdr}}">
+                                     <tr data-id="{{$ope->id_ope_de_hdr}}" class="my-auto {{$ope->activo ? '' : 'no-activo'}}" {{$ope->activo ? '' : 'hidden'}}>
+                                        {{-- <tr data-id="{{$ope->id_ope_de_hdr}}"> --}}
                                             <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
                                                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                                                 <input class="form-check-input" type="checkbox" value="{{$ope->id_ope_de_hdr}}" id="flexCheck{{$ope->id_ope_de_hdr}}" name="id_ope[]">
@@ -908,6 +925,19 @@
 
     $('#id_selec').on('change', mostrarSelec);
     // $('#checkSelAll').on('change', selecDesTodo);
+
+    $('#flexOpc1').on('change', mostrarOculto);
+
+        function mostrarOculto() {
+            document.querySelectorAll('.no-activo').forEach(element => {
+                if (element.hidden) {
+                    element.hidden = false;
+                } else {
+                    element.hidden = true;
+                }
+            });
+
+        }
 
     document.getElementById('checkSelAll').addEventListener('change', event => {
         if (document.getElementById('checkSelAll').checked) {

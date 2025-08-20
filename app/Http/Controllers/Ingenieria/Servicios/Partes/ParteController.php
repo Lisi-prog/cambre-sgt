@@ -42,6 +42,7 @@ use App\Models\Cambre\Vw_orden_manufactura;
 use App\Models\Cambre\Orden_manufactura;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_mecanizado;
+use App\Models\Cambre\Hoja_de_ruta;
 use App\Mail\Solicitud\ParteMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
@@ -471,7 +472,7 @@ class ParteController extends Controller
                 'id_parte_ope_hdr' => $parte->id_parte_ope_hdr,
                 'observaciones' => $parte->observaciones,
                 'estado' => $parte->getNombreEstado(),
-                'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+                'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado ?? '-',
                 // 'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
                 'fecha' => $parte->fecha,
                 'horas' => $parte->horas,
@@ -857,7 +858,7 @@ class ParteController extends Controller
             $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
             $responsabilidad = Responsabilidad::create([
-                'id_empleado' => 1,
+                'id_empleado' => 999,
                 'id_rol_empleado' => $rol_empleado->id_rol_empleado
             ]);
 
@@ -964,17 +965,14 @@ class ParteController extends Controller
                     ]);
            
             if ($estado == 4) { //orden completado
+                $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
                 $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
                 if ($opeSgt) {
-                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
                     $opeSgt->activo = 1;
                     $opeSgt->save();
                 }
             }
-            // if ($estado_actual != $estado) {
-            //     $this->enviarEmail($parte->id_parte, $estado, $opcion);
-            // }
-
             $result = 1;
         }
 
@@ -982,6 +980,53 @@ class ParteController extends Controller
             'resultado' => $result,
             // 'tipo_orden' => $opcion
         ];
+    }
+
+    public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
+        $todasLasHdrOrdMec = Hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
+        $bandera = 1;
+
+        foreach ($todasLasHdrOrdMec as $hdr) {
+            if ($hdr->getIdEstadoActual() != 4) {
+                $bandera = 0;
+            }   
+        }
+
+        if ($bandera) {
+            $idOrd = Orden_mecanizado::find($id_mec)->id_orden;
+
+            $orden = Orden::find($idOrd);
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $fecha = Carbon::now()->format('Y-m-d');
+
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Se completaron todas las hojas de ruta.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrd,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => 7,
+                'id_parte' => $parte->id_parte
+            ]);
+            
+        }
     }
 
     public function pruebaEmail(){

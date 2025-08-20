@@ -217,6 +217,7 @@
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
+                                    <th class='text-center' style="color:#fff;min-width:8vw">Manufactura</th>
                                     <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
@@ -224,6 +225,8 @@
                                     <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Operacion Actual</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Estado Ope. Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Ult. Operacion</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
@@ -248,12 +251,14 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_orden ?? '-'}}</td>
 
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->manufactura ?? '-'}}</td>
+
                                             <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
                                             
                                             <td class= 'text-center' style="vertical-align: middle;">
                                                 <div class="progress position-relative" style="background-color: #b2baf8">
-                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{100}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{'10'.'/'.'10'}}</span>
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$orden->total_ope_completo.'/'.$orden->total_ope}}</span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -270,7 +275,11 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{'-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->ope_act ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->nom_est_ope_act ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->ope_ult ?? '-'}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -488,7 +497,7 @@
                             next: 'Sig.',
                         },
                     },
-                    "aaSorting": [],
+                    order: [[1, 'asc']],
                     "pageLength": 100
             });
             

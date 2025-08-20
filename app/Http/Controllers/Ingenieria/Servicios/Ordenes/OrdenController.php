@@ -1279,7 +1279,7 @@ class OrdenController extends Controller
     }
 
     public function index_hdr(){
-        $operaciones = Vw_operaciones_de_hdr::where('activo', 1)->get();
+        $operaciones = Vw_operaciones_de_hdr::get();
 
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
