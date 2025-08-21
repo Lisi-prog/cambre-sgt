@@ -1517,7 +1517,7 @@ class OrdenController extends Controller
                 'numero' => $op->numero,
                 'operacion' => $op->getOperacion->nombre_operacion,
                 'asignado' => $op->getAsignado(),
-                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-'
+                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? null
             ]);
         }
 

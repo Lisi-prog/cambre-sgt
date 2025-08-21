@@ -171,7 +171,7 @@ function addRowRe() {
                 </td>
                 <td>
                     <div class="dropdown-container my-auto">
-                        <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]" required>
+                        <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]">
                         <div class="dropdown-list-auto">
                         </div>
                     </div>

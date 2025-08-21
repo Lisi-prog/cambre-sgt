@@ -95,7 +95,7 @@
 
     <div class="section-body">
 
-        {{-- <div class="row">
+        <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -103,7 +103,7 @@
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('demo')">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
                         <div class="row" id="demo" hidden>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
@@ -120,49 +120,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Supervisor:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
+                                                <label>Manufactura:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
-                                                @foreach ($supervisores as $supervisor)
+                                                {{-- @foreach ($supervisores as $supervisor)
                                                     <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
-                                                @endforeach
+                                                @endforeach --}}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @role('SUPERVISOR')
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="row">
-                                        <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 200px;">
-                                                <div class="">
-                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
-                                                </div>
-                                                <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                    @foreach ($responsables as $responsable)
-                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endrole
                             
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
                                             <div class="">
-                                                <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
+                                                <label>Estado:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
@@ -198,11 +179,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                {{-- @foreach ($responsables as $responsable)
+                                                    <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
+                                                @endforeach --}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>   
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -218,16 +216,16 @@
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
                                     <th class='text-center' style="color:#fff;min-width:8vw">Manufactura</th>
-                                    <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
                                     {{-- <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th> --}}
-                                    <th class='text-center' style="color:#fff;">Horas</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
+                                    {{-- <th class='text-center' style="color:#fff;">Horas</th> --}}
+                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Operacion Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Estado Ope. Actual</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Ult. Operacion</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Ult. Operacion</th> --}}
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -253,7 +251,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->manufactura ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td> --}}
                                             
                                             <td class= 'text-center' style="vertical-align: middle;">
                                                 <div class="progress position-relative" style="background-color: #b2baf8">
@@ -269,17 +267,17 @@
                                             
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td> --}}
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td> --}}
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->ope_act ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nom_est_ope_act ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->ope_ult ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->ope_ult ?? '-'}}</td> --}}
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -441,7 +439,7 @@
             return false;
             }
         );
-
+*/
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
         
@@ -454,7 +452,7 @@
                 return true;
             }
             
-            if (offices.indexOf(searchData[6]) !== -1) {
+            if (offices.indexOf(searchData[7]) !== -1) {
                 return true;
             }
             
@@ -481,7 +479,7 @@
             
             return false;
             }
-        ); */
+        );
         table = $('#example').DataTable({
                 language: {
                         lengthMenu: 'Mostrar _MENU_ registros por pagina',
