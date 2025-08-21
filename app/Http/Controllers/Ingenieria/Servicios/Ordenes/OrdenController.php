@@ -988,10 +988,12 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
                 }
                 $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
+                $manufacturas = Vw_orden_mecanizado::orderBy('manufactura')->get('manufactura')->unique('manufactura');
+                $operaciones = Vw_orden_mecanizado::orderBy('ope_act')->get('ope_act')->unique('ope_act');
                 $tipo = 'Mecanizado';
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones'));
                 break;
 
             case 4:

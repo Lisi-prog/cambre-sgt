@@ -129,9 +129,9 @@
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
-                                                {{-- @foreach ($supervisores as $supervisor)
-                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
-                                                @endforeach --}}
+                                                @foreach ($manufacturas as $man)
+                                                    <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" checked> {{$man->manufactura ?? '-'}}</label>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -188,9 +188,9 @@
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                {{-- @foreach ($responsables as $responsable)
-                                                    <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
-                                                @endforeach --}}
+                                                @foreach ($operaciones as $ope)
+                                                    <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}" checked> {{$ope->ope_act ?? '-'}}</label>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -402,7 +402,7 @@
         let tipo_orden = window.location.pathname.substring(9, 10);
         modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
-        /*$.fn.dataTable.ext.search.push(
+        $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
             var positions = $('input:checkbox[name="sup"]:checked').map(function() {
                 return this.value;
@@ -412,7 +412,7 @@
                 return true;
             }
             
-            if (positions.indexOf(searchData[7]) !== -1) {
+            if (positions.indexOf(searchData[5]) !== -1) {
                 return true;
             }
             
@@ -439,7 +439,7 @@
             return false;
             }
         );
-*/
+
         $.fn.dataTable.ext.search.push(
             function( settings, searchData, index, rowData, counter ) {
         
