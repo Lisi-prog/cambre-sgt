@@ -145,7 +145,7 @@
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('demo')">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
                         <div class="row" id="demo" hidden>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
@@ -162,7 +162,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
@@ -183,7 +183,7 @@
                                 </div>
                             </div>
                             @role('SUPERVISOR')
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 200px;">
@@ -205,7 +205,7 @@
                                 </div>
                             @endrole
                             
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column" style="height: 200px;">
@@ -249,13 +249,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column">
+                                            {!! Form::label('Opciones:') !!}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="flexOpc1" checked>
+                                                <label class="form-check-label" for="flexOpc1">
+                                                    Solo activos.
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>   
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-body">
@@ -269,7 +284,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
