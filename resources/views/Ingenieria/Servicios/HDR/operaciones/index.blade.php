@@ -291,8 +291,8 @@
                             <table class="table table-sm table-hover mt-2" id="example">
                                 <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
-                                    <th class='text-center' style="color:#fff;min-width:2vw">Prio. Global</th>
                                     <th class='text-center' style="color:#fff;min-width:2vw">Prio. Operacion</th>
+                                    <th class='text-center' style="color:#fff;min-width:2vw">Prio. Global</th>
                                     <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
@@ -320,9 +320,9 @@
                                                 </div>
                                             </td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad_servicio ?? 'S/P'}}</td>
-
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad ?? 'S/P'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$ope->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$ope->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
@@ -693,7 +693,7 @@
                         next: 'Sig.',
                     },
                 },
-                order: [[ 2, 'asc' ]],
+                order: [[ 1, 'asc' ], [2, 'asc']],
                 "pageLength": 100
         });
         
