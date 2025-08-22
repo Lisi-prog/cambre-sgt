@@ -1348,6 +1348,26 @@ class OrdenController extends Controller
 
         if ($request->input('id_hdr')) {
            $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
+            $hdr_a_ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('activo', 1)->first();
+
+            $responsabilidad_parte_hdr_op = Responsabilidad::create([
+                                            'id_empleado' => 999,
+                                            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                                        ]);
+                    
+            $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
+
+           Parte_ope_hdr::create([
+                    'id_ope_de_hdr' => $hdr_a_ope_act->id_ope_de_hdr,
+                    'fecha_carga' => $fec_carga,
+                    'fecha' => $fec,
+                    'observaciones' => 'Generacion de operacion de hoja de ruta.',
+                    'id_responsabilidad' => $res_op,
+                    'horas' => '00:00',
+                    'medidas' => 0,
+                    'id_estado_hdr' => 5
+            ]);
+
            Hdr_reg_fallo::create([
                 'id_hdr_ant' => $request->input('id_hdr'),
                 'id_hdr_sig' => $hdr->id_hoja_de_ruta,

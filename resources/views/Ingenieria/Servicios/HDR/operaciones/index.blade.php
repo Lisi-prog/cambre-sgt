@@ -66,31 +66,22 @@
 
             <!-- Botón y menú desplegable -->
             <div class="d-flex align-items-center">
-                <div id="sideMenu" class="me-2 d-flex flex-row align-items-center gap-2">
-                    <div id="herr" class="d-flex flex-row align-items-center gap-2">
-                        <button type="button" class="btn btn-primary"
+                <div class="form-check form-switch me-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                    <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
+                </div>
+                <div class="form-check me-3" hidden id="chk-sel-all">
+                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                    <label class="form-check-label" for="checkSelAll">
+                    Seleccionar<br>todo
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary"
                                 data-bs-toggle="modal"
                                 data-bs-target="#verEditarMulti"
                                 onclick="cargarEditMultiple()"
-                                id="btn-edit-mul" hidden>
+                                id="btn-edit-mul">
                             Carga<br>Multiple
-                        </button>
-                        <div class="form-check m-0" hidden id="chk-sel-all">
-                            <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
-                            <label class="form-check-label" for="checkSelAll">
-                            Seleccionar<br>todo
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-check form-switch my-auto">
-                        <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                        <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
-                    </div>
-                </div>
-
-                <button id="toggleMenu" class="btn btn-warning">
-                    <i class="fas fa-tools"></i>
                 </button>
             </div>
         </div>
@@ -297,7 +288,7 @@
                             </div>
                         @endif --}}
                         <div class="table-responsive">
-                            <table class="table table-hover mt-2" id="example">
+                            <table class="table table-sm table-hover mt-2" id="example">
                                 <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
                                     <th class='text-center' style="color:#fff;min-width:2vw">Prio. Global</th>
@@ -311,7 +302,7 @@
                                     <th class='text-center' style="color:#fff;min-width:6vw">Ultimo res.</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
                                     {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th> --}}
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Activo</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
@@ -353,7 +344,7 @@
 
                                             {{-- <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_limite ?? '-'}}</td> --}}
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_finalizacion ?? '-'}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$ope->fecha_finalizacion ?? '-'}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->activo ? 'SI' : 'NO'}}</td>
         
@@ -465,22 +456,16 @@
     function mostrarSelec() {
         let colum_sel = document.getElementsByClassName('chk-input');
         let enca = document.getElementById('enc_sel');
-        // let btn = document.getElementById('btn-sel-mul');
-        let btn_ed = document.getElementById('btn-edit-mul'); 
         let chk_sel_all = document.getElementById('chk-sel-all');
 
         if ($("#id_selec").is(":checked")) {
             enca.hidden = false;
-            // btn.hidden = false;
-            btn_ed.hidden = false;
             chk_sel_all.hidden = false;
             table.rows().nodes().to$().find('td.chk-input').removeAttr('hidden');
             // Mostrar la columna de checkboxes
             table.column('.chk-input', { search: 'applied' }).visible(true);
         } else {
             enca.hidden = true;
-            // btn.hidden = true;
-            btn_ed.hidden = true;
             chk_sel_all.hidden = true;
             table.rows().nodes().to$().find('td.chk-input').attr('hidden', true);
             // Ocultar la columna de checkboxes
@@ -1132,14 +1117,14 @@
         }));
     }
 </script>
-<script>
+{{-- <script>
     const toggleButton = document.getElementById('toggleMenu');
     const sideMenu = document.getElementById('sideMenu');
 
     toggleButton.addEventListener('click', () => {
       sideMenu.classList.toggle('show');
     });
-</script>
+</script> --}}
 
 
 @endsection
