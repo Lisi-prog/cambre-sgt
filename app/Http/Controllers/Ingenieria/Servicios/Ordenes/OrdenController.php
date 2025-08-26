@@ -1347,8 +1347,14 @@ class OrdenController extends Controller
         ]);
 
         if ($request->input('id_hdr')) {
-           $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
+            $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
+
             $hdr_a_ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('activo', 1)->first();
+
+            if ($hdr_a_ope_act) {
+                $hdr_a_ope_act->update(['activo' => 0]);
+            }
+            
 
             $responsabilidad_parte_hdr_op = Responsabilidad::create([
                                             'id_empleado' => 999,
@@ -1357,11 +1363,27 @@ class OrdenController extends Controller
                     
             $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
 
+            //descartar operaciones siguientes
+            $hdr_a_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('numero', '>', $hdr_a_ope_act->numero)->get();
+
+            foreach ($hdr_a_ope as $ope) {
+                Parte_ope_hdr::create([
+                    'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                    'fecha_carga' => $fec_carga,
+                    'fecha' => $fec,
+                    'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
+                    'id_responsabilidad' => $res_op,
+                    'horas' => '00:00',
+                    'medidas' => 0,
+                    'id_estado_hdr' => 5
+                ]);
+            }
+            
            Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $hdr_a_ope_act->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
                     'fecha' => $fec,
-                    'observaciones' => 'Generacion de operacion de hoja de ruta.',
+                    'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
                     'id_responsabilidad' => $res_op,
                     'horas' => '00:00',
                     'medidas' => 0,

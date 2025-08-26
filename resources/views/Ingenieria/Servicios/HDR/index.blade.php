@@ -43,6 +43,46 @@
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
+        <div class="">
+            <h4 class="">Hoja de Ruta</h5>
+        </div>
+        <div class="ps-3">
+            <label for="" style="font-weight: bold">Orden de Mecanizado:</label> {{$orden->nombre_orden}}
+        </div>
+        <div class="ms-auto">
+            <div class="d-flex align-items-center">
+                <div class="form-check form-switch me-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
+                    <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
+                </div>
+                <div class="form-check me-3" hidden id="chk-sel-all">
+                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
+                    <label class="form-check-label" for="checkSelAll">
+                    Seleccionar<br>todo
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#verEditarMulti"
+                                onclick="cargarEditMultiple()"
+                                id="btn-edit-mul">
+                            Carga<br>Multiple
+                </button>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="d-flex section-header justify-content-center">
+        <div class="p-2 flex-grow-1">
+            <h4 class="">Hoja de Ruta</h5>
+        </div>
+        <div class="p-2">
+            
+        </div>
+        <div class="p-2">
+            <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
+        </div>
+    </div> --}}
+    {{-- <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
                 <h4 class="">Hoja de Ruta</h5>
@@ -53,7 +93,7 @@
                 <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 

@@ -964,6 +964,32 @@ class ParteController extends Controller
                         'ruta_cam' =>  $rutaCam
                     ]);
            
+           /* switch ($estado) {
+                case 1: //operacion en espera
+                    $this->cambiarEstadoOmecA($ope, 1);
+                break;
+                    $this->cambiarEstadoOmecA($ope, 2);
+                case 2: //operacion en proceso
+                break;
+
+                case 4: //operacion completada
+                    $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
+                    $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
+                    if ($opeSgt) {
+                        $opeSgt->activo = 1;
+                        $opeSgt->save();
+                    }
+                    break;
+                default:
+                    # code...
+                    break;
+            } */
+
+            if ($estado == 1 || $estado == 2) {
+                $this->cambiarEstadoOmecA($ope, $estado);
+            }
+
             if ($estado == 4) { //orden completado
                 $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
                 Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
@@ -980,6 +1006,53 @@ class ParteController extends Controller
             'resultado' => $result,
             // 'tipo_orden' => $opcion
         ];
+    }
+
+    public function cambiarEstadoOmecA($ope, $opcion){
+        switch ($opcion) {
+            case 1: // Espera
+                $estado = 8;
+                break;
+
+            case 2: //En proceso
+                $estado = 4;
+                break;
+
+            default:
+                break;
+        }
+
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $fecha = Carbon::now()->format('Y-m-d');
+
+        $ultParte = Parte::where('id_orden', $ope->getHdr->getOrdMec->id_orden)->orderBy('id_parte', 'desc')->first();
+
+        if ($ultParte->getParteMecanizado->id_estado_mecanizado != 4 && $ultParte->getParteMecanizado->id_estado_mecanizado != 8) {
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $ope->getHdr->getOrdMec->id_orden,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => $estado,
+                'id_parte' => $parte->id_parte
+            ]);
+        } 
+    
     }
 
     public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
