@@ -121,7 +121,7 @@
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
-                <li hidden>
+                <li>
                     <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
                     </a>
@@ -152,6 +152,11 @@
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 3)}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">
+                        <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
                     </a>
                 </li>
             </ul>

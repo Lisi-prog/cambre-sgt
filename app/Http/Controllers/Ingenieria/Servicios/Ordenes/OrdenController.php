@@ -932,6 +932,7 @@ class OrdenController extends Controller
 
             case 2:
                 //ORDEN DE MANUFACTURA
+                return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
                     $ordenes = Vw_orden_manufactura::get();
@@ -946,6 +947,7 @@ class OrdenController extends Controller
                 break;
 
             case 3:
+                return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
                     $ordenes = Vw_orden_mecanizado::get();
@@ -1243,6 +1245,7 @@ class OrdenController extends Controller
     }
 
     public function index_hdr(){
+        return redirect()->route('en.desarrollo');
         $operaciones = Vw_operaciones_de_hdr::get();
         return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones'));
     }
