@@ -92,7 +92,7 @@
                 @php
                     $env = env('APP_ENV');
                 @endphp
-{{-- ada --}}
+
                 @if ($env == 'development')
                     <h6 class="my-auto text-white fs-1 bg-danger rounded">VERSION DE PRUEBA DEL SGI</h6>
                 @endif
