@@ -458,12 +458,14 @@ CREATE TABLE `parte_ope_hdr` (
   `observaciones` varchar(500),
   `id_responsabilidad` int,
   `horas` time,
+  `id_maquinaria` int NULL,
   `horas_maquina` time,
   `medidas` boolean,
   `id_estado_hdr` int,
   PRIMARY KEY (`id_parte_ope_hdr`),
   CONSTRAINT `pk_parte_ope_hdr_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_parte_ope_hdr_x_ope_hdr` FOREIGN KEY (`id_ope_de_hdr`) REFERENCES `operaciones_de_hdr`(`id_ope_de_hdr`),
+  CONSTRAINT `pk_parte_ope_hdr_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
   CONSTRAINT `pk_parte_ope_hdr_x_est_hdr` FOREIGN KEY (`id_estado_hdr`) REFERENCES `estado_hdr`(`id_estado_hdr`)
 );
 

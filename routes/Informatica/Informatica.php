@@ -23,6 +23,12 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER
     Route::resource('puesto_tecnico', PuestoEmpleadoController::class);
 });
 
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('en-desarrollo', function(){
+        return view('enDesarrollo');
+    })->name('en.desarrollo');
+});
+
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNICO|VER-DOCUMENTACION']], function () {
     Route::post('usuario/editar', [UsuarioController::class, 'editarUsuario'])->name('usuario.editar');
     Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
