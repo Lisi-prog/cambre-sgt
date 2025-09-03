@@ -27,9 +27,17 @@ class Parte_ope_hdr extends Model
         'horas',
         'id_estado_hdr',
         'medidas',
-        'ruta_cam',
-        'id_maquinaria'
+        'ruta_cam'
     ];
+
+    // public function getMedidasAttribute()
+    // {
+    //     if ($this->attributes['medidas']) {
+    //         return 'SI';
+    //     } else {
+    //         return 'NO';
+    //     }
+    // }
 
     public function getEstado(){
         return $this->hasOne(Estado_hdr::class, 'id_estado_hdr');
@@ -50,9 +58,5 @@ class Parte_ope_hdr extends Model
             return 1;
         }
         return 0;
-    }
-
-    public function getMaquinaria(){
-        return $this->belongsTo(Maquinaria::class, 'id_maquinaria');
     }
 }

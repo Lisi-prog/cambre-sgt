@@ -14,7 +14,7 @@ class Vw_gest_orden_mecanizado extends Model
     
     protected $table = 'vw_gest_orden_mecanizado';
 
-    protected $primaryKey = 'vw_gest_orden_mecanizado';
+    protected $primaryKey = 'id_orden';
 
     public $incrementing = false;
 

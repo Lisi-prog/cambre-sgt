@@ -22,7 +22,7 @@ class Orden_manufactura extends Model
         'revision',
         'cantidad',
         'ruta_plano',
-        'id_orden'
+        'id_orden',
     ];
 
     public function getOrden()
