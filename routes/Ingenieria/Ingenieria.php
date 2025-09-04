@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('proyectos/obtener-proyecto-prefijo/{opcion}', [ProyectoController::class, 'indexPorPrefijo'])->name('proyecto.indexprefijo');
     Route::get('proyectos/obtener-proyecto-tipo-activo', [ProyectoController::class, 'indexPorActivo'])->name('proyecto.indexactivo');
     Route::post('/proyectos/obtener-mayor-prefijo/{id}', [ProyectoController::class, 'obtenerMayorCodigoServicioPrefijo']);
+    Route::post('/servicio/{id}/obtener-ord-tra-mec', [ProyectoController::class, 'obtenerOrdMecOrdTraUnServicio']);
+    Route::post('/servicio/{id}/obtener-ord-man', [ProyectoController::class, 'obtenerOrdManUnServicio']);
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('prefijo_proyecto', PrefijoProyectoController::class);
     // RUTAS ETAPAS
@@ -53,6 +55,11 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/mec/hdr/obtenerope',[OrdenController::class, 'obtenerOperacionesyTecnicos']);
     Route::post('/orden/mec/hdr/obtenermaq',[OrdenController::class, 'obtenerMaquinas']);
     Route::post('/orden/mec/hdr/obtener-ope-hdr',[OrdenController::class, 'obtenerOperacionHdr']);
+    Route::post('/orden/mec/hdr/obtener-hdr-ant/{id}',[OrdenController::class, 'obtenerHdrAnt']);
+    Route::post('/orden/mec/hdr/obtener-orden-mec/{id}',[OrdenController::class, 'obtenerOrdMec']);
+    Route::post('/orden/mec/hdr/obtener-hdr/{id}',[OrdenController::class, 'obtenerHdr']);
+    Route::post('/orden/mec/hdr/obtener-hdr-parte/{id}',[OrdenController::class, 'obtenerParteHdr']);
+    Route::post('/orden/man/obtener-progreso/{id}',[OrdenController::class, 'obtenerProgresoOrdMan']);
     Route::get('ordenes/mec/operaciones', [OrdenController::class, 'index_hdr'])->name('ordenes.indexhdr');
     Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
     Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
@@ -70,7 +77,13 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
     Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
     Route::post('/orden/obtener-estados-de/{opcion}',[OrdenController::class, 'listarTodosLosEstadosDe']);
+    Route::post('/orden/obtener-info-orden-mul',[OrdenController::class, 'obtenerInfoOrdenMultiple']);
+    Route::post('/orden/obtener-info-ope-mul',[OrdenController::class, 'obtenerInfoOpeMultiple']);
+    Route::post('/orden/obtener-info-ope-mul-act',[OrdenController::class, 'obtenerInfoOpeMultipleAct']);
+    Route::post('/orden/obtener-mul-orden-act',[OrdenController::class, 'obtenerInfoOrdenMultipleAct']);
     Route::post('/orden/obtener-ordenes-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeTrabajoUnaEtapa']);
+    Route::post('/ope-multiple/edit-multiple', [OrdenController::class, 'editMultipleOpe'])->name('ope.edit.multiple');
+    Route::post('/ope-multiple/parte-multiple', [OrdenController::class, 'parteMultipleOpe'])->name('ope.parte.multiple');
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
     Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
@@ -80,11 +93,16 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::resource('partes', ParteController::class);
         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
+        Route::post('parte-ope/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOpe']);
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
+        Route::post('parte-ope-hdr/obtener-una/{id}', [ParteController::class, 'obtenerParteOpeHdr']);
+        Route::post('ope-hdr/obtener-estado/{id}', [ParteController::class, 'obtenerEstadoOpeHdr']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
         Route::get('/parte/prueba/email', [ParteController::class, 'pruebaEmail']);
         // Route::get('/parte/prueba/email-semanal', [ParteController::class, 'emailSemanal']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
+        Route::post('/parte/guardar-o-act-parte-ope', [ParteController::class, 'guardarActualizarParteOpe'])->name('partesope.guardar.act');
+        Route::post('/parte/obtener-est-parte-ope', [ParteController::class, 'obtenerEstadoParteOpe']);
         Route::post('/parte-multiple/guardar-multiple', [ParteController::class, 'guardarMultipleParte'])->name('partes.guardar.multiple');
         Route::post('/parte-multiple/carga-multiple', [ParteController::class, 'cargaMultipleParte'])->name('partes.carga.multiple');
         Route::post('/orden/obtener-partes-orden/{id}',[OrdenController::class, 'obtenerPartesDeTrabajo']);
