@@ -31,7 +31,7 @@ function nuevoParte(){
     
 }
 
-function guardarParte(){
+/* function guardarParte(){
     $.when($.ajax({
         type: "post",
         url: '/parte/guardar-o-act-parte', 
@@ -45,7 +45,7 @@ function guardarParte(){
             console.log(error);
         }
     }));
-}
+} */
 
 
 function editarParte(id){
@@ -72,7 +72,7 @@ function editarParte(id){
             document.getElementById('m-editar').value = 1;
             document.getElementById('m-id-parte').value = response.id_parte;
 
-            if (response.maquinaria) {
+            /*if (response.maquinaria) {
                 if (response.maquinaria != '-') {
                     document.getElementById('m-ver-parte-maquina').value = response.maquinaria;
                     [hora_maquina, minutos_maquina] = response.horas_maquinaria.split(':');
@@ -83,7 +83,7 @@ function editarParte(id){
                     document.getElementById('horas_maquina').value = '00';
                     document.getElementById('minutos_maquina').value = '00';
                 }
-            }
+            }*/
 
             if (es_super === 0) {
                 document.getElementById('m-ver-parte-fecha-limite').readonly = true;
@@ -108,7 +108,7 @@ function recargarPartes(id, tipo_orden){
             // console.log(response)
             let maq_y_hora = '';
             let idCount = 0;
-            let urlLogParte = "/partes/";
+            let urlLogParte = "/parte/";
             response.forEach(element => {
                 if (element.fecha_limite) {
                     fecha_lim = element.fecha_limite;
@@ -116,11 +116,11 @@ function recargarPartes(id, tipo_orden){
                     fecha_lim = '-';
                 }
                 
-                if(tipo_orden == 3){
-                    maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                    <td class="text-center">`+element.horas_maquinaria+`</td>
-                                    `
-                }
+                // if(tipo_orden == 3){
+                //     maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
+                //                     <td class="text-center">`+element.horas_maquinaria+`</td>
+                //                     `
+                // }
                 
                 if (id_emp === element.id_res || es_super === 1) {
                     btn_editar = `<button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
@@ -138,7 +138,6 @@ function recargarPartes(id, tipo_orden){
                             <td class="text-center">`+element.horas+`</td>
                             <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                             <td class="text-center">`+element.responsable+`</td>
-                            `+maq_y_hora+`
                             <td class="text-center">`+element.supervisor+`</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
@@ -157,7 +156,7 @@ function recargarPartes(id, tipo_orden){
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <a href='`+urlLogParte+element.id_parte+`log' target="_blank">
+                                            <a href='`+urlLogParte+element.id_parte+`/logs' target="_blank">
                                                 <button type="button" class="btn btn-warning w-100" >
                                                     Logs
                                                 </button>
@@ -199,8 +198,8 @@ function cargarModalVerPartes(id, tipo_orden){
       });
 
     if(tipo_orden == 3){
-        document.getElementById('column-maq').hidden = false;
-        document.getElementById('column-hora-maq').hidden = false;
+        document.getElementById('column-maq').hidden = true;
+        document.getElementById('column-hora-maq').hidden = true;
     }else{
         document.getElementById('column-maq').hidden = true;
         document.getElementById('column-hora-maq').hidden = true;
@@ -224,11 +223,11 @@ function cargarModalVerPartes(id, tipo_orden){
                 fecha_lim = '-';
             }
             
-            if(tipo_orden == 3){
-                maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                  <td class="text-center">`+element.horas_maquinaria+`</td>
-                                 `
-            }
+            // if(tipo_orden == 3){
+            //     maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
+            //                       <td class="text-center">`+element.horas_maquinaria+`</td>
+            //                      `
+            // }
 
             if (id_emp === element.id_res || es_super === 1) {
                 btn_editar = `<div class="row justify-content-center" >
@@ -266,7 +265,6 @@ function cargarModalVerPartes(id, tipo_orden){
                         <td class="text-center">`+element.horas+`</td>
                         <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                         <td class="text-center">`+element.responsable+`</td>
-                        `+maq_y_hora+`
                         <td class="text-center">`+element.supervisor+`</td>
                         <td class="text-center">
                                 `+btn_editar+`
@@ -284,33 +282,33 @@ function cargarModalVerPartes(id, tipo_orden){
     }
     }));
     
-    if(tipo_orden == 3){
-        let maquinaria_div = document.getElementById("m-ver-parte-maquinaria");
-        let maq_html = `<div class="row"> 
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                            <div class="form-group">
-                                <label for="maquina" class="control-label" style="white-space: nowrap; ">Maquina:</label>
-                                <select class="form-select form-group" id="m-ver-parte-maquina" name="maquina">
-                                    <option selected="selected" value=0>Seleccionar</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                            <div class="form-group"> 
-                                <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
-                                <div class="input-group">
-                                    <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina">
-                                    <span class="input-group-text">:</span>
-                                    <input class="form-control" name="minutos_maquina" type="number" min="0" max="59" value="00" id="minutos_maquina">
-                                </div>
-                            </div>
-                        </div>
-                    </div>`
-                maquinaria_div.innerHTML = maq_html;
-                obtenerMaquinaria();
-    }else{
-        document.getElementById("m-ver-parte-maquinaria").innerHTML = '';
-    }
+    // if(tipo_orden == 3){
+    //     let maquinaria_div = document.getElementById("m-ver-parte-maquinaria");
+    //     let maq_html = `<div class="row"> 
+    //                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+    //                         <div class="form-group">
+    //                             <label for="maquina" class="control-label" style="white-space: nowrap; ">Maquina:</label>
+    //                             <select class="form-select form-group" id="m-ver-parte-maquina" name="maquina">
+    //                                 <option selected="selected" value=0>Seleccionar</option>
+    //                             </select>
+    //                         </div>
+    //                     </div>
+    //                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+    //                         <div class="form-group"> 
+    //                             <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
+    //                             <div class="input-group">
+    //                                 <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina">
+    //                                 <span class="input-group-text">:</span>
+    //                                 <input class="form-control" name="minutos_maquina" type="number" min="0" max="59" value="00" id="minutos_maquina">
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 </div>`
+    //             maquinaria_div.innerHTML = maq_html;
+    //             obtenerMaquinaria();
+    // }else{
+    //     document.getElementById("m-ver-parte-maquinaria").innerHTML = '';
+    // }
 }
 
 
