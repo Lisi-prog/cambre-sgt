@@ -297,6 +297,10 @@ class OrdenController extends Controller
 
                 return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de mecanizado y el parte de mecanizado se ha creado con exito.'); 
                 break;
+            
+            default:
+                # code...
+                break;
         }
     }
 
@@ -426,8 +430,8 @@ class OrdenController extends Controller
         $ordManAsoc = $request->input('ord_manufactura_asoc');
 
         $responsabilidad = Responsabilidad::create([
-            'id_empleado' => $id_supervisor,
-            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+             'id_empleado' => $id_supervisor,
+             'id_rol_empleado' => $rol_empleado->id_rol_empleado
         ]);
 
         $responsabilidad_supervisor = Responsabilidad::create([
@@ -438,10 +442,16 @@ class OrdenController extends Controller
         $orden = Orden::create([
                     'nombre_orden' => $nombre_orden,
                     // 'duracion_estimada' => $duracion_estimada,
+                    'duracion_estimada' => '00:00',
                     'fecha_inicio' => $fecha_ini,
                     'id_etapa' => $id_etapa,
                     'observaciones' => $observaciones
                 ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
 
         $responsabilidad = Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
@@ -516,11 +526,18 @@ class OrdenController extends Controller
 
         $orden = Orden::create([
                     'nombre_orden' => $nombre_orden,
-                    'duracion_estimada' => $duracion_estimada,
+                    // 'duracion_estimada' => $duracion_estimada,
+                    'duracion_estimada' => '00:00',
                     'fecha_inicio' => $fecha_ini,
                     'id_etapa' => $id_etapa,
                     'observaciones' => $observaciones
                 ]);
+        
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
 
         $responsabilidad = Responsabilidad_orden::create([
             'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
@@ -536,7 +553,7 @@ class OrdenController extends Controller
             'cantidad' => $cantidad,
             'ruta_pieza' => $ruta_plano,
             'id_orden' => $orden->id_orden,
-            'id_orden_manufactura' => $id_orden_manufactura
+            'id_orden_manufactura' => $id_orden_manufactura,
         ]);
 
         if ($ordenTrabajoCompar || $idOrdenMecanizadoAsoc) {
@@ -546,6 +563,7 @@ class OrdenController extends Controller
             'ord_tra_compar' => $ordenTrabajoCompar
           ]); 
         }
+
         
         $parte = Parte::create([
             'observaciones' => 'Generacion de orden de mecanizado',
@@ -565,6 +583,7 @@ class OrdenController extends Controller
     }
 
     public function validarOrdenMecanizado(Request $request){
+        // return $request;
         $id_orden_manufactura = $request->input('id_orden_manuf');
         $id_orden = $request->input('id_orden');
         $this->validate($request, [
