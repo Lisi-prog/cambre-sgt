@@ -759,19 +759,30 @@ VALUES
   (1, 'Planos entregados'),
   (2, 'Material encargado'),
   (3, 'Material preparado'),
-  (4, 'Mecanizado completo'),
-  (5, 'Temple'),
-  (6, 'Pieza finalizada'),
-  (7, 'Cancelado');
+  (4, 'Espera'),
+  (5, 'En proceso'),
+  (6, 'Revisar'),
+  (7, 'Completo'),
+  (8, 'Cancelado');
 
 INSERT INTO estado_manufactura(id_estado_manufactura, nombre_estado_manufactura)
 VALUES
-  (1, 'Orden creada'),
-  (2, 'Piezas en fabricacion'),
-  (3, 'Piezas listas'),
-  (4, 'Ajuste listo'),
-  (5, 'Ensamble listo'),
-  (6, 'Cancelado');
+  (1, 'Planos entregados'),
+  (2, 'En proceso'),
+  (3, 'Espera'),
+  (4, 'Pausa'),
+  (5, 'Programado'),
+  (6, 'Revisar'),
+  (7, 'Completo'),
+  (8, 'Cancelado');
+
+INSERT INTO estado_hdr(id_estado_hdr, nombre_estado_hdr)
+VALUES
+  (1, 'Espera'),
+  (2, 'En proceso'),
+  (3, 'Problema'),
+  (4, 'Completo'),
+  (5, 'Descartar');
 
 INSERT INTO tipo_relacion_gantt(nombre_relacion_gantt)
 VALUES
