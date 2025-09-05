@@ -184,7 +184,7 @@
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
                                                     @foreach ($flt_maquinas as $maquina)
-                                                        <label><input name="res" type="checkbox" value="{{$maquina}}" checked> {{$maquina}}</label>
+                                                        <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
                                                     @endforeach
                                                     {{-- @foreach ($responsables as $responsable)
                                                         <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
@@ -206,7 +206,7 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($flt_estados as $estado)
-                                                    <label><input name="est" type="checkbox" value="{{$estado}}" checked> {{$estado}}</label>
+                                                     <label><input name="est" type="checkbox" value="{{$estado}}" {{$estado != 'Completo' && $estado != 'Descartar'  ? 'checked' : ''}}> {{$estado}}</label>
                                                 @endforeach
                                                 {{-- @foreach ($estados as $estado)
                                                     @switch($tipo_orden)

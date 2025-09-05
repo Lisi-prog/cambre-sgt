@@ -148,7 +148,6 @@ function actualizarPartesOpe(id){
             id: id,
         },
         success: function (response) {
-            console.log(response)
             let idCount = 0;
             response.forEach(element => {
                 html += `<tr>
