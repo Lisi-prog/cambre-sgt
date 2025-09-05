@@ -2,6 +2,28 @@ $(document).ready(function () {
 
     $('#verPartesOpeHdrModal').on('hidden.bs.modal', function (e) {
         nuevoParte();
+        let id_ope = [document.getElementById('m-id-ope-hdr').value];
+
+            $.ajax({
+                type: "post",
+                url: '/orden/obtener-info-ope-mul-act',
+                data: {
+                    id: id_ope,
+                },
+                success: function (response) {
+                    response.forEach(e => {
+                        let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
+                        let rowIndex = table.row(fila).index();
+
+                        table.cell(rowIndex, 2).data(e.prioridad ?? 'S/P').draw();
+                        table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
+
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
     })
 
     $(".nuevo-editar-parte").on('submit', function(evt){

@@ -177,7 +177,6 @@
                     id: valores,
                 },
                 success: function (response) {
-                    console.log(response)
                     response.forEach(e => {
                         let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
                         let rowIndex = table.row(fila).index();
