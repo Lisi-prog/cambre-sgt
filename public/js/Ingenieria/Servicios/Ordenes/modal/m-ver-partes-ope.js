@@ -16,7 +16,7 @@ $(document).ready(function () {
             url: url_php,
             data: form_data,
             success: function(data) {
-                // console.log(data);
+                console.log(data);
                 let id_ope = document.getElementById('m-id-ope-hdr').value;
                 opcion = parseInt(data.resultado);
                 switch (opcion) {

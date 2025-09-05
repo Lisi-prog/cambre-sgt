@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
+
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
@@ -39,6 +40,14 @@ use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Mail\Solicitud\ParteMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
+use App\Models\Cambre\Orden_manufactura;
+use App\Models\Cambre\Orden_mecanizado;
+use App\Models\Cambre\Hoja_de_ruta;
+use App\Models\Cambre\Operaciones_de_hdr;
+use App\Models\Cambre\Parte_ope_hdr;
+use App\Models\Cambre\Estado_hdr;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
+
 
 class ParteController extends Controller
 {

@@ -737,7 +737,6 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    //console.log(data);
                     opcion = parseInt(data.resultado);
                     switch (opcion) {
                         case 1:
