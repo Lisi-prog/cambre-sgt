@@ -993,6 +993,7 @@ class ParteController extends Controller
             if ($estado == 4) { //orden completado
                 $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
                 Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
+                Hoja_de_ruta::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->update(['activo' => 0]);
                 $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
                 if ($opeSgt) {
                     $opeSgt->activo = 1;
