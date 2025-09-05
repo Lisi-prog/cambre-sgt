@@ -281,7 +281,7 @@ table.dataTable tbody td {
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                     <div class="row">
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
@@ -297,7 +297,7 @@ table.dataTable tbody td {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>   
         </div>
         <div class="card-body">
@@ -361,6 +361,13 @@ table.dataTable tbody td {
                                             </button>
                                         </div>
                                         <div class="collapse" data-bs-parent="#cuadro-ordenes-manufactura"id="collapseOrdenManufactura{{$idCount}}">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#verProgOrdenManModal" onclick="cargarModalProgreso({{$orden->id_orden}})">
+                                                        Progreso
+                                                    </button>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-12">
                                                     <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
@@ -487,7 +494,7 @@ table.dataTable tbody td {
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                     <div class="row">
                         <div class="d-flex flex-row align-items-start justify-content-around">
                             <div class="card-body d-flex flex-column" style="height: 170px;">
@@ -503,7 +510,7 @@ table.dataTable tbody td {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>   
         </div>
         <div class="card-body">
@@ -527,7 +534,7 @@ table.dataTable tbody td {
                             $idCount = 0;
                         @endphp
                         @foreach ($ordenes_mecanizado as $orden)
-                            @if ($orden->id_estado < 6)
+                            @if ($orden->id_estado < 5)
                                 <tr>
                             @else
                                 <tr style="display: none;">
@@ -607,7 +614,7 @@ table.dataTable tbody td {
 
 {{-- Ordenes de mantenimiento del proyecto --}}
 
-<div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_mantenimiento'>
+{{-- <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_mantenimiento'>
     <div class="card">
         <div class="card-head">
             <br>
@@ -618,9 +625,6 @@ table.dataTable tbody td {
                     <h5 class="text-center  my-auto">Orden de mantenimiento</h5>
                 </div>
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
-                    {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                        Nueva orden trabajo
-                    </button> --}}
                 </div>
             </div>
         </div>
@@ -639,52 +643,13 @@ table.dataTable tbody td {
                         <th class="text-center" scope="col" style="color:#fff;width:17vw;">Acciones</th>                                                           
                     </thead>
                     <tbody id="cuadro-ordenes-mantenimiento">
-                        {{-- @foreach ($proyecto->getEtapas as $etapa)
-                            @foreach ($etapa->getOrden as $orden)
-                                @if ($orden->getOrdenDe->getTipoOrden() == 4)
-                                    <tr>    
-                                        <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-
-                                        <td class= 'text-center' >{{$orden->nombre_orden}}</td>
-
-                                        <td class= 'text-center' >{{$orden->getEstado()}}</td>
-
-                                        <td class= 'text-center' >{{$orden->getNombreResponsable()}}</td>
-
-                                        <td class='text-center'>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <button type="button" class="btn btn-primary w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                        Editar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$orden->getOrdenDe->getTipoOrden()}})">
-                                                        Partes
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
-                                                            {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                    {!! Form::close() !!}
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                        @endforeach --}}
                     </tbody>
                 </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- ------------- --}}
 <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
 <script src="{{ asset('js/filter-to-filter.js') }}"></script>
