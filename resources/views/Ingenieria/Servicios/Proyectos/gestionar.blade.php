@@ -103,6 +103,7 @@
                                 </div>
                             </div>
                         </div>
+                        {!! Form::text('id_proyecto_dat', $proyecto->id_servicio, ['class' => 'form-control', 'hidden', 'id' => 'id-servicio-dat']) !!}
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
@@ -518,7 +519,7 @@
                     language: {
                             lengthMenu: 'Mostrar _MENU_ registros por pagina',
                             zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                            info: 'Mostrando pagina _PAGE_ de _PAGES_ de _TOTAL_ registros.',
                             infoEmpty: 'No se ha encontrado registros',
                             infoFiltered: '(Filtrado de _MAX_ registros totales)',
                             search: 'Buscar',
@@ -728,6 +729,7 @@
     @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-servicio')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-etapa')
+    @include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
     {{-- @include('layouts.modal.confirmation') --}}
 @endsection
 

@@ -53,7 +53,6 @@ use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_manufactura;
-use App\Models\Cambre\Vw_gest_orden_trabajo;
 use App\Models\Cambre\Vw_gest_orden_manufactura;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Mail\Solicitud\OrdenMailable;
@@ -73,6 +72,10 @@ class OrdenController extends Controller
     function __construct()
     {
         $this->middleware('auth');
+        //  $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
+        //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
+        //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
+        //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
         $this->middleware('role_or_permission:BORRAR-ORDEN|SUPERVISOR', ['only' => ['destroy', 'eliminarOrden']]);
 
     }
@@ -160,6 +163,9 @@ class OrdenController extends Controller
                     ]);
                 }
                 break;
+            default:
+                # code...
+                break;
         }
         return $estados_arr;
     }
@@ -189,14 +195,33 @@ class OrdenController extends Controller
     
     public function edit($id)
     {
+        $permiso = Permission::findOrFail($id);
+    
+        return view('Informatica.GestionUsuarios.permisos.editar',compact('permiso'));
     }
     
     public function update(Request $request, $id)
-    {                       
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+    
+        $permiso = Permission::find($id);
+
+        $permiso->update([
+            'name' => strtoupper($request->input('name'))
+        ]);
+    
+        return redirect()->route('permisos.index')->with('mensaje',$permiso->name.' editado exitosamente.');                        
     }
     
     public function destroy($id)
-    {              
+    {
+        $permiso = Permission::findOrFail($id);
+
+        Permission::destroy($id);
+
+        return redirect()->route('permisos.index')->with('mensaje', 'El permiso se elimino exitosamente.');               
     }
 
     public function gestionar($id)
@@ -928,8 +953,7 @@ class OrdenController extends Controller
                                                         ->get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
-                                                                                ->orderByRaw("CASE WHEN prioridad_servicio IS NULL THEN 1 ELSE 0 END")
+                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' OR prioridad_servicio IS NULL THEN 1 ELSE 0 END")
                                                                                 ->orderBy('prioridad_servicio', 'asc')
                                                                                 ->get();
                         }
@@ -941,7 +965,6 @@ class OrdenController extends Controller
 
             case 2:
                 //ORDEN DE MANUFACTURA
-                // return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
                     $ordenes = Vw_orden_manufactura::get();
@@ -957,7 +980,6 @@ class OrdenController extends Controller
                 break;
 
             case 3:
-                // return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
                     $ordenes = Vw_orden_mecanizado::get();
@@ -1264,7 +1286,7 @@ class OrdenController extends Controller
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
-
+        // $flt_proyectos = Servicio::orderBy('codigo_servicio')->pluck('codigo_servicio');
         $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
                                         from operaciones_de_hdr op_hdr
                                         inner join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = op_hdr.id_hoja_de_ruta
@@ -1273,6 +1295,10 @@ class OrdenController extends Controller
                                         inner join etapa et on et.id_etapa = o.id_etapa
                                         inner join servicio s on s.id_servicio = et.id_servicio
                                         group by s.id_servicio, s.codigo_servicio;'))->pluck('codigo_servicio');
+        // $flt_supervisores = $this->obtenerSupervisoresNoPluck();
+        // $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
+        // $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
+        // $flt_estados_mec = Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
 
         return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones', 'flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos'));
     }
@@ -1283,8 +1309,10 @@ class OrdenController extends Controller
     }
 
     public function guardar_hdr(Request $request, $id){
+        // return $request;
+
         $this->validate($request, [
-            'archivos.*' => 'file|max:2048' 
+            'archivos.*' => 'file|max:2048' //Max size in kilobytes (2 MB)
         ], [
             'archivos.*.max' => 'El archivo es muy grande.'
         ]);
@@ -1433,6 +1461,7 @@ class OrdenController extends Controller
 
             }
         }
+        
 
         if ($request->hasFile('archivos')) {
             $nombre = Auth::user()->getEmpleado->nombre_empleado;
@@ -1451,7 +1480,37 @@ class OrdenController extends Controller
             }
         }
 
+        // foreach ($operaciones as $ope) {
+        //     Operaciones_de_hdr::create([
+        //         'id_hoja_de_ruta',
+        //         'numero',
+        //         'fecha_carga',
+        //         'id_maquinaria',
+        //         'id_operacion',
+        //         'id_responsabilidad',
+        //         // 'medidas',
+        //         // 'ruta_cam'
+        //     ]);
+        // }
         return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido creado con exito.');
+    }
+
+    public function saveOperations(Request $request)
+    {
+        $validated = $request->validate([
+            'operations' => 'required|array',
+            'operations.*.numero' => 'required|integer',
+            'operations.*.operacion' => 'required|string|max:255',
+            'operations.*.asignado' => 'nullable|string|max:255',
+            'operations.*.maquina' => 'nullable|string|max:255',
+            'operations.*.medidas' => 'nullable|string|max:255',
+        ]);
+
+        foreach ($validated['operations'] as $operation) {
+            Operation::create($operation);
+        }
+
+        return response()->json(['message' => 'Datos guardados exitosamente']);
     }
 
     public function obtenerOperacionesyTecnicos(){
@@ -1459,76 +1518,6 @@ class OrdenController extends Controller
                 'operaciones' => Operacion::orderBy('nombre_operacion')->get(),
                 'tecnicos' => $this->obtenerEmpleadosActivos()
                 ];
-    }
-
-    // public function obtenerMaquinas(Request $request){
-    //     // return 'holi';
-    //     $idOperacion = $request->input('id_operacion');
-    //     return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
-    //             ->where('oxm.id_operacion', $idOperacion)
-    //             ->get();
-    // }
-
-    public function obtenerOrdenesParaCargaMultiple($tipo){
-        $ordenes_arr = array();
-        switch ($tipo) {
-            case 1:
-                # Trabajo
-                if (Auth::user()->hasRole('SUPERVISOR')) {
-                    $ordenes = Vw_gest_orden_trabajo::where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
-                }else{
-                    $ordenes = Vw_gest_orden_trabajo::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 9)->where('id_estado', '<>', 5)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
-                }
-                
-                break;
-            case 2:
-                # Manufactura
-                if (Auth::user()->hasRole('SUPERVISOR')) {
-                    $ordenes = Vw_gest_orden_manufactura::where('id_estado', '<', 7)->orderBy('nombre_orden')->get();
-                }else{
-                    $ordenes = Vw_gest_orden_manufactura::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 7)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
-                }
-                break;
-            case 3:
-                # Mecanizao
-                if (Auth::user()->hasRole('SUPERVISOR')) {
-                    $ordenes = Vw_gest_orden_mecanizado::where('id_estado', '<', 5)->orderBy('nombre_orden')->get();
-                }else{
-                    $ordenes = Vw_gest_orden_mecanizado::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_zestado', '<', 5)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
-                }
-                break;
-            default:
-                # code...
-                break;
-        }
-
-        foreach ($ordenes as $orden) {
-            array_push($ordenes_arr, (object)[
-                'id_orden' => $orden->id_orden,
-                'orden' => $orden->codigo_servicio.'/'.$orden->descripcion_etapa.'/'.$orden->nombre_orden
-            ]);
-        }
-
-        return $ordenes_arr;
-    }
-
-    public function obtenerInfoOrdenMultipleAct(Request $request){
-        $ids = $request->input('id');
-        $orden = Orden::find($ids[0]);
-        $tipo = $orden->getOrdenDe->getTipoOrden();
-
-        switch ($tipo) {
-            case 1:
-                return Vw_orden_trabajo::whereIn('id_orden', $ids)->get();
-                break;
-            case 2:
-                return Vw_orden_manufactura::whereIn('id_orden', $ids)->get();
-                break;
-            case 3:
-                return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
-                break;
-        }
-        
     }
 
     public function obtenerMaquinas(Request $request){
@@ -1647,21 +1636,21 @@ class OrdenController extends Controller
         return $op_arr;
     }
 
-    // public function obtenerInfoOrdenMultipleAct(Request $request){
-    //     $ids = $request->input('id');
-    //     $opcion = $request->input('opcion');
-    //     switch ($opcion) {
-    //         case 2:
-    //             return Vw_orden_manufactura::whereIn('id_orden', $ids)->get();
-    //             break;
-    //         case 3:
-    //             return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
-    //             break;
-    //         default:
-    //             # code...
-    //             break;
-    //     }
-    // }
+    public function obtenerInfoOrdenMultipleAct(Request $request){
+        $ids = $request->input('id');
+        $opcion = $request->input('opcion');
+        switch ($opcion) {
+            case 2:
+                return Vw_orden_manufactura::whereIn('id_orden', $ids)->get();
+                break;
+            case 3:
+                return Vw_orden_mecanizado::whereIn('id_orden', $ids)->get();
+                break;
+            default:
+                # code...
+                break;
+        }
+    }
 
     public function editMultipleOpe(Request $request){
 
@@ -1742,6 +1731,20 @@ class OrdenController extends Controller
     public function obtenerInfoOpeMultipleAct(Request $request){
         $ids = $request->input('id');
         return Vw_operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+        /*
+        $opeArray = array();
+        $operaciones = Operaciones_de_hdr::whereIn('id_ope_de_hdr', $ids)->get();
+
+        foreach ($operaciones as $ope) {
+            array_push($opeArray, (object)[
+                'id_ope_de_hd' => $ope->id_ope_de_hd,
+                'prioridad' => $ope->prioridad,
+                'estado' => $ope->getEstado(),
+                'horas' => $ope->getHoras()
+            ]);
+        }
+
+        return $opeArray; */
     }
 
     public function obtenerProgresoOrdMan($id){

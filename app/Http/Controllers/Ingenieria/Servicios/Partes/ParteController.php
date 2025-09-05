@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
+
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
@@ -39,6 +40,14 @@ use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Mail\Solicitud\ParteMailable;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
+use App\Models\Cambre\Orden_manufactura;
+use App\Models\Cambre\Orden_mecanizado;
+use App\Models\Cambre\Hoja_de_ruta;
+use App\Models\Cambre\Operaciones_de_hdr;
+use App\Models\Cambre\Parte_ope_hdr;
+use App\Models\Cambre\Estado_hdr;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
+
 
 class ParteController extends Controller
 {
@@ -375,13 +384,13 @@ class ParteController extends Controller
                     'id_parte' => $parte->id_parte
                 ]);
                 
-                if ($maquina) {
-                    Parte_mecanizado_x_maquinaria::create([
-                        'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
-                        'id_maquinaria' => $maquina,
-                        'horas_maquina' => $horas_maquina
-                    ]);
-                }
+                // if ($maquina) {
+                //     Parte_mecanizado_x_maquinaria::create([
+                //         'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
+                //         'id_maquinaria' => $maquina,
+                //         'horas_maquina' => $horas_maquina
+                //     ]);
+                // }
                 
 
                 return redirect()->back()->with('mensaje','Parte de mecanizado creado con éxito!.');
@@ -514,6 +523,21 @@ class ParteController extends Controller
         $partes_arr = array();
 
         foreach ($orden->getPartes as $parte) {
+            array_push($partes_arr, (object)[
+                    'id_parte' => $parte->id_parte,
+                    'observaciones' => $parte->observaciones,
+                    'estado' => $parte->getParteDe->getNombreEstado(),
+                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
+                    'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
+                    'fecha' => $parte->fecha,
+                    'fecha_limite' => $parte->fecha_limite ?? '-',
+                    'horas' => $parte->horas,
+                    'supervisor' => $parte->getOrden->getSupervisor(),
+                    'orden' => $orden->nombre_orden,
+                    'etapa' => $orden->getEtapa->descripcion_etapa,
+                    'estado_orden' => $orden->getEstado(),
+                    ]);
+            /*
             if ($orden->getOrdenDe->getTipoOrden() == 3) {
                 array_push($partes_arr, (object)[
                     'id_parte' => $parte->id_parte,
@@ -546,7 +570,28 @@ class ParteController extends Controller
                     'etapa' => $orden->getEtapa->descripcion_etapa,
                     'estado_orden' => $orden->getEstado(),
                     ]);
-            } 
+            } */
+        }
+
+        return $partes_arr;
+    }
+
+    public function obtenerPartesDeUnaOpe($id){
+        $ope_hdr = Operaciones_de_hdr::find($id);
+        $partes_arr = array();
+
+        foreach ($ope_hdr->getPartes as $parte) {
+            array_push($partes_arr, (object)[
+                'id_parte_ope_hdr' => $parte->id_parte_ope_hdr,
+                'observaciones' => $parte->observaciones,
+                'estado' => $parte->getNombreEstado(),
+                'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado ?? '-',
+                // 'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
+                'fecha' => $parte->fecha,
+                'horas' => $parte->horas,
+                'estado_ope' => $ope_hdr->getEstado(),
+                'medidas' => $parte->medidas
+            ]);
         }
 
         return $partes_arr;
@@ -561,7 +606,19 @@ class ParteController extends Controller
             $es_tecnico = 0;
         }
 
-        if ($parte->getParteDe->getTipoParte() != 3) {
+        return [
+                'id_orden' => $parte->id_orden,
+                'id_parte' => $parte->id_parte,
+                'observaciones' => $parte->observaciones,
+                'horas' => $parte->horas,
+                'estado' => $parte->getParteDe->getIdEstado(),
+                'nombre_estado' => $parte->getParteDe->getNombreEstado(),
+                'fecha' => $parte->fecha,
+                'fecha_limite' => $parte->fecha_limite,
+                'tec' => $es_tecnico
+            ];
+
+       /* if ($parte->getParteDe->getTipoParte() != 3) {
             return [
                 'id_orden' => $parte->id_orden,
                 'id_parte' => $parte->id_parte,
@@ -586,7 +643,33 @@ class ParteController extends Controller
                 'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-',
                 'tec' => $es_tecnico
             ];
+        } */
+    }
+
+    public function obtenerParteOpeHdr($id){
+        $parte = Parte_ope_hdr::find($id);
+
+        if (Auth::user()->hasRole('TECNICO')) {
+            $es_tecnico = 1;
+        } else {
+            $es_tecnico = 0;
         }
+
+        return [
+            'id_ope_de_hdr' => $parte->id_ope_de_hdr,
+            'id_parte_ope_hdr' => $parte->id_parte_ope_hdr,
+            'observaciones' => $parte->observaciones,
+            'horas' => $parte->horas,
+            'estado' => $parte->id_estado_hdr,
+            'nombre_estado' => $parte->getNombreEstado(),
+            'medidas' => $parte->medidas,
+            'fecha' => $parte->fecha,
+            'tec' => $es_tecnico
+        ];
+    }
+
+    public function obtenerEstadoOpeHdr($id){
+        return Operaciones_de_hdr::find($id)->getIdEstado();
     }
 
     public function ultimoParteOrden($id){
@@ -885,6 +968,283 @@ class ParteController extends Controller
         return 1;    
     }
 
+    public function comprobarSiTodasLasOrdDeMecEstanCompletas($idOrd){
+        $estaCompleto = 1;
+
+        $idOrdMan = Orden::find($idOrd)->getOrdenMecanizado->id_orden_manufactura;
+
+        $ordenesMec = vw_gest_orden_mecanizado::where('id_orden_manufactura', $idOrdMan)->where('id_estado', '<=',  5)->get(['id_estado']);
+
+        foreach ($ordenesMec  as $ordenMec ) {
+            if ($ordenMec->id_estado != 5) {
+                $estaCompleto = 0;
+            }
+        }
+
+        return $estaCompleto;
+    }
+
+    public function ajusteAOrdenMan($idOrd){
+
+        $estaCompleto = $this->comprobarSiTodasLasOrdDeMecEstanCompletas($idOrd);
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $fecha = Carbon::now()->format('Y-m-d');
+
+        if ($estaCompleto) {
+            $idOrdMan = Orden::find($idOrd)->getOrdenMecanizado->id_orden_manufactura;
+            $idOrdMan = Orden_manufactura::find($idOrdMan)->id_orden;
+
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Se completaron las ordenes de mecanizado',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrdMan,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            Parte_manufactura::create([
+                'id_estado_manufactura' => 6,
+                'id_parte' => $parte->id_parte
+            ]);
+            
+        }
+    }
+
+    public function guardarActualizarParteOpe(Request $request)
+    {
+        // return $request;
+        $this->validate($request, [
+            'id_op' => 'required',
+            'observaciones' => 'required',
+            // 'fecha_limite' => 'required',
+            'fecha' => 'required',
+            'horas' => 'required',
+            'minutos' => 'required',
+            'estado' => 'required'
+        ]);
+
+        $ope = Operaciones_de_hdr::find($request->input('id_op'));
+
+        $estado_actual = $ope->getIdEstado();
+       
+        $editar = $request->input('editar');
+
+        if ($request->input('id_parte_ope_hdr')) {
+            $parte = Parte_ope_hdr::find($request->input('id_parte_ope_hdr'));
+            $res = $parte->getResponsable->id_empleado;
+
+            if ($editar == 1 && $res != Auth::user()->getEmpleado->id_empleado && !Auth::user()->hasRole('SUPERVISOR')) {
+               return 6;
+            }
+        }     
+
+        $estado = $request->input('estado');
+
+        $fecha = $request->input('fecha');
+
+        $rutaCam = $request->input('ruta_cam');
+
+        $observaciones = $request->input('observaciones');
+
+        if ($request->input('medidas')) {
+            $medidas = 1;
+        } else {
+            $medidas = 0;
+        }
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $horas = $request->input('horas') . ':' . $request->input('minutos');
+
+       
+        
+
+        if ($editar){
+            /* Seccion carga de logs de cambios */
+            
+            $parte->update([
+                'observaciones' => $observaciones,
+                'fecha' => $fecha,
+                'horas' => $horas,
+                'medidas' => $medidas,
+                'id_estado_hdr' => $estado
+            ]);
+
+            $result = 2;
+        }else{
+            // $estado = $request->input('estado');
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte_ope_hdr::create([
+                        'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                        'observaciones' => $observaciones,
+                        'fecha' => $fecha,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => $horas,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                        'medidas' => $medidas,
+                        'id_estado_hdr' => $estado,
+                        'ruta_cam' =>  $rutaCam
+                    ]);
+           
+           /* switch ($estado) {
+                case 1: //operacion en espera
+                    $this->cambiarEstadoOmecA($ope, 1);
+                break;
+                    $this->cambiarEstadoOmecA($ope, 2);
+                case 2: //operacion en proceso
+                break;
+
+                case 4: //operacion completada
+                    $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
+                    $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
+                    if ($opeSgt) {
+                        $opeSgt->activo = 1;
+                        $opeSgt->save();
+                    }
+                    break;
+                default:
+                    # code...
+                    break;
+            } */
+
+            if ($estado == 1 || $estado == 2) {
+                $this->cambiarEstadoOmecA($ope, $estado);
+            }
+
+            if ($estado == 4) { //orden completado
+                $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
+                Hoja_de_ruta::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->update(['activo' => 0]);
+                $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
+                if ($opeSgt) {
+                    $opeSgt->activo = 1;
+                    $opeSgt->save();
+                }
+            }
+            $result = 1;
+        }
+
+        return [
+            'resultado' => $result,
+            // 'tipo_orden' => $opcion
+        ];
+    }
+
+    public function cambiarEstadoOmecA($ope, $opcion){
+        switch ($opcion) {
+            case 1: // Espera
+                $estado = 8;
+                break;
+
+            case 2: //En proceso
+                $estado = 4;
+                break;
+
+            default:
+                break;
+        }
+
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $fecha = Carbon::now()->format('Y-m-d');
+
+        $ultParte = Parte::where('id_orden', $ope->getHdr->getOrdMec->id_orden)->orderBy('id_parte', 'desc')->first();
+
+        if ($ultParte->getParteMecanizado->id_estado_mecanizado != 4 && $ultParte->getParteMecanizado->id_estado_mecanizado != 8) {
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $ope->getHdr->getOrdMec->id_orden,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => $estado,
+                'id_parte' => $parte->id_parte
+            ]);
+        } 
+    
+    }
+
+    public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
+        $todasLasHdrOrdMec = Hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
+        $bandera = 1;
+
+        foreach ($todasLasHdrOrdMec as $hdr) {
+            if ($hdr->getIdEstadoActual() != 4) {
+                $bandera = 0;
+            }   
+        }
+
+        if ($bandera) {
+            $idOrd = Orden_mecanizado::find($id_mec)->id_orden;
+
+            $orden = Orden::find($idOrd);
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $fecha = Carbon::now()->format('Y-m-d');
+
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Se completaron todas las hojas de ruta.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrd,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => 7,
+                'id_parte' => $parte->id_parte
+            ]);
+            
+        }
+    }
+    
     public function pruebaEmail(){
         $email = "lisandrosilvero@gmail.com";
         $tipo = 'Trabajo';
@@ -988,7 +1348,96 @@ class ParteController extends Controller
     }
 
     public function guardarMultipleParte(Request $request){
-        // return 'holi';
-       return $ids_orden = $request->input('ids');
+        // return $request;
+        $this->validate($request, [
+            'ids' => 'required',
+            'observaciones' => 'required'
+        ]);
+
+        $estado = $request->input('estado');
+        
+        //$fecha_limite = $request->input('fecha_limite');
+
+        $fecha = $request->input('fecha');
+
+        $observaciones = $request->input('observaciones');
+
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        $horas = $request->input('horas') . ':' . $request->input('minutos');
+
+        $ids_orden = explode(',', $request->input('ids')[0]);
+
+        $ordenes = Orden::whereIn('id_orden', $ids_orden)->get();
+
+        foreach ($ordenes as $orden) {
+            $opcion = $orden->getOrdenDe->getTipoOrden();
+
+            switch ($opcion) {
+                case 2:
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                    $responsabilidad = Responsabilidad::create([
+                                            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                        ]);
+
+                    $ultParte = Parte::where('id_orden', $orden->id_orden)->orderBy('id_parte', 'desc')->first();
+                                        
+                    $parte = Parte::create([
+                                'observaciones' => $observaciones,
+                                'fecha' => $fecha,
+                                'fecha_limite' => $ultParte->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => $horas,
+                                'costo' => 0,
+                                'id_orden' => $orden->id_orden,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+                    $parte_mecanizado = Parte_manufactura::create([
+                                            'id_estado_manufactura' => $estado,
+                                            'id_parte' => $parte->id_parte
+                                        ]);
+                break;
+                case 3:
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                    $responsabilidad = Responsabilidad::create([
+                                            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                        ]);
+
+                    $ultParte = Parte::where('id_orden', $orden->id_orden)->orderBy('id_parte', 'desc')->first();
+                                        
+                    $parte = Parte::create([
+                                'observaciones' => $observaciones,
+                                'fecha' => $fecha,
+                                'fecha_limite' => $ultParte->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => $horas,
+                                'costo' => 0,
+                                'id_orden' => $orden->id_orden,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+                    $parte_mecanizado = Parte_mecanizado::create([
+                                            'id_estado_mecanizado' => $estado,
+                                            'id_parte' => $parte->id_parte
+                                        ]);
+                    // return 1;
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
+        }
+        return 1;
+    }
+
+    public function obtenerEstadoParteOpe(){
+        return Estado_hdr::orderBy('id_estado_hdr')->get();
     }
 }

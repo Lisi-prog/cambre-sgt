@@ -32,7 +32,14 @@ class Vw_orden_mecanizado extends Model
         'supervisor',
         'id_empleado_supervisor',
         'nombre_estado',
-        'total_horas'
+        'total_horas',
+        'ope_act',
+        'nom_est_ope_act',
+        'ope_ult',
+        'manufactura',
+        'id_orden_manufactura',
+        'total_ope',
+        'total_ope_completo'
     ];
 
     protected $casts = [
@@ -45,6 +52,32 @@ class Vw_orden_mecanizado extends Model
             return $query;
         } else{
             return $query->where('id_empleado_responsable', $responsable);
+        }
+        
+    }
+
+    public function getHdrActivo(){
+        return $hojasDeRuta = Hoja_de_ruta::where('id_orden_mecanizado', $this->id_orden_mecanizado)->whereHas('getOperacionesHdr', function ($query) {
+            $query->where('activo', 1);
+        })->first();
+    }
+
+    public function getProgreso(){
+        $ope_tot = 0;
+        $ope_tot_com = 0;
+
+        if ($this->total_ope) {
+            $ope_tot = $this->total_ope;
+        }
+
+        if ($this->total_ope_completo) {
+            $ope_tot_com = $this->total_ope_completo;
+        }
+
+        if ($ope_tot == 0) {
+            return 0;
+        } else {
+            return ($ope_tot_com * 100) / $ope_tot;
         }
         
     }
