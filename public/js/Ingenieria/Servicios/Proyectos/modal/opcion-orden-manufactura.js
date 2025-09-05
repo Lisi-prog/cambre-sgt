@@ -37,28 +37,14 @@ export default
         </div> 
     </div> 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"> 
-        <div class="form-group" hidden> 
-            <label for="duracion_estimada" class="control-label" style="white-space: nowrap; ">Duracion estimada:</label> 
-            <span class="obligatorio">*</span> 
-            <div class= "input-group">
-                <input class="form-control reset-horas" name="horas_estimadas" type="number" min="0" value="00" id="horas_estimadas" required>
-                <span class="input-group-text">:</span>
-                <input class="form-control reset-horas" name="minutos_estimados" type="number" min="0" max="59" value="00" id="minutos_estimados" required>
-            </div>
-        </div>
-    </div> 
-</div>
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-        
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
         <div class="form-group">
             <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
             <span class="obligatorio">*</span>
             <input min="2023-01-01" max="2023-12" id="fec_ini" class="form-control reset-fecha" name="fecha_ini" type="date" required>
         </div>
-    </div>
+    </div> 
+</div>
+<div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
         <div class="form-group"> 
             <label for="estado" class="control-label fs-7" style="white-space: nowrap;">Estado manufactura:</label> 
@@ -92,7 +78,14 @@ export default
             <textarea id='observaciones' class="form-control reset-input" rows="54" cols="54" name="observaciones" style="resize:none; height: 20vh"></textarea>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group"> 
+            <label for="ord_manufactura_asoc" class="control-label fs-7" style="white-space: nowrap;">Orden Manufactura Asoc:</label>
+            <select class="form-select form-group reset-input" id="cbx_ord_man_asoc" name="ord_manufactura_asoc">
+                <option selected="selected" value="">Seleccionar</option>
+            </select>
+        </div>
+    </div>
 </div>`;
-    
-    
-    
