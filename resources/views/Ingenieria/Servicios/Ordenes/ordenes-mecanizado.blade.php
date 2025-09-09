@@ -765,11 +765,10 @@
                 id: valores,
             },
             success: function (response) {
-                console.log(response)
                 response.forEach(e => {
                     html += `<tr>
-                                <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
-                                <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.codigo_servicio+`</td>
+                                <td class="text-center" style="vertical-align: middle;">`+e.nombre_orden+`</td>
                             </tr>`;
                 });
 
