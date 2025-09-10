@@ -305,6 +305,7 @@ table.dataTable tbody td {
                 <table id="tablaOrdenMan" class="table table-hover mt-2" class="display">
                     <thead style="background-color: #982b37" id="comac">
                         <th class="text-center" scope="col" style="color:#fff;min-width:8vw">Orden</th>
+                        <th class="text-center" scope="col" style="color:#fff;">Conjunto Superior</th>
                         <th class="text-center" scope="col" style="color:#fff;">Etapa</th>
                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                         <th class="text-center" scope="col" style="color:#fff;width:10vw">Progreso Mecanizado</th>
@@ -328,6 +329,8 @@ table.dataTable tbody td {
                             @endif     
 
                                 <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+
+                                <td class= 'text-center' >{{$orden->getConjuntoSuperior ? $orden->getConjuntoSuperior->getOrdenManufactura->getOrden->nombre_orden : '-'}}</td>
 
                                 <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 16).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
 

@@ -23,4 +23,8 @@ class Orden_manufactura_asoc extends Model
         'id_orden_man_asoc'
     ];
 
+    public function getOrdenManufactura()
+    {
+        return $this->hasOne(Orden_manufactura::class, 'id_orden_manufactura', 'id_orden_man_asoc');
+    }
 }
