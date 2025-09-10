@@ -355,7 +355,7 @@ function cargarHdrReiniciar(id){
                     // console.log(nuevaFila)
                     nuevaFila.querySelector(".input-ope").value = op.operacion;
                     nuevaFila.querySelector(".input-asig").value = op.asignado;
-                    nuevaFila.querySelector(".input-maquina").value = op.maquina;
+                    nuevaFila.querySelector(".input-maquina").value = op.maquina == '-' ? null : op.maquina;
                 }, 100);
             });
         },
@@ -372,7 +372,6 @@ function cargarHdrVer(id){
         url: '/orden/mec/hdr/obtener-hdr/'+id,
         data: { id: id },
         success: function (response) {
-            console.log(response)
             document.getElementById('m_ver_ubi').value = response.ubicacion;
             document.getElementById('m_ver_cant').value = response.cantidad;
             document.getElementById('m_ver_ruta').value = response.ruta;
@@ -389,7 +388,7 @@ function cargarHdrVer(id){
                         <td class="text-center">`+1+`</td>
                         <td class="text-center">`+op.operacion+`</td>
                         <td class="text-center">`+op.asignado+`</td>
-                        <td class="text-center">`+op.maquina+`</td>
+                        <td class="text-center">`+op.maquina ?? '-'+`</td>
                     </tr>`
             });
             document.getElementById('ver-table-body').innerHTML = html;

@@ -1572,7 +1572,7 @@ class OrdenController extends Controller
                 'numero' => $op->numero,
                 'operacion' => $op->getOperacion->nombre_operacion,
                 'asignado' => $op->getAsignado(),
-                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? null
+                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-'
             ]);
         }
 
@@ -1582,7 +1582,7 @@ class OrdenController extends Controller
             'ruta' => $hdr->ruta,
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr,
-            'obser_fallo' => $obseFallo->observaciones_fallo ?? null
+            'obser_fallo' => $obseFallo->observaciones_fallo ?? '-'
         ];
     }
 

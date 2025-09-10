@@ -160,6 +160,7 @@
         document.querySelectorAll('input[type="checkbox"][name="id_ope[]"]').forEach(function(checkbox) {
             checkbox.checked = false;
         });
+        document.getElementById('checkSelAll').checked = false;
     }
 </script>
 
@@ -181,7 +182,7 @@
                         let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
                         let rowIndex = table.row(fila).index();
 
-                        table.cell(rowIndex, 2).data(e.prioridad ?? 'S/P').draw();
+                        table.cell(rowIndex, 1).data(e.prioridad ?? 'S/P').draw();
                         table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
 
                     });

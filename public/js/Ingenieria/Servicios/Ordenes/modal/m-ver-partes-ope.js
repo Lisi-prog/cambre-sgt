@@ -135,6 +135,7 @@ function nuevoParte(){
     document.getElementById('m-id-parte-ope').value = null;
     document.getElementById('checkDefaultMed').checked = false;
     let ope_hdr = document.getElementById('m-id-ope-hdr').value;
+    document.getElementById('mv-arch-cam').value = '';
     seleccionarEstadoOperacion(ope_hdr);
     // modificarModalVerPartesEstadoFechaLimite(id_orden);
     
