@@ -15,11 +15,7 @@
        border-collapse: collapse; /* make the table borders collapse to each other */
        width: 100%;
      }
-     /* #viv th,
-     #viv td {
-       padding: 8px 16px;
-       border: 1px solid #ccc;
-     }*/
+     
      #viv th {
        background: #ee9b27;
      } 
@@ -72,24 +68,6 @@
         </div>
     </div>
     {!! Form::text('opcion_tipo', 3, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Ordenes de Mecanizado</h5>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                    <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
-                </div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
-                    Carga<br>Multiple
-                </button>
-            </div>
-        </div>
-    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -216,16 +194,11 @@
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
                                     <th class='text-center' style="color:#fff;min-width:8vw">Manufactura</th>
-                                    {{-- <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
-                                    {{-- <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th> --}}
-                                    {{-- <th class='text-center' style="color:#fff;">Horas</th> --}}
-                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Operacion Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Estado Ope. Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
-                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Ult. Operacion</th> --}}
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -251,8 +224,6 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->manufactura ?? '-'}}</td>
 
-                                            {{-- <td class='text-center' style="vertical-align: middle;"><abbr title='{{$orden->descripcion_etapa}}' style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 20)}} <i class="fas fa-eye"></abbr></td> --}}
-                                            
                                             <td class= 'text-center' style="vertical-align: middle;">
                                                 <div class="progress position-relative" style="background-color: #b2baf8">
                                                     <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$orden->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
@@ -262,22 +233,12 @@
                                             </td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nombre_estado ?? ''}}</td>
-                                            
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->supervisor ?? '-'}}</td> --}}
-                                            
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->responsable ?? '-'}}</td> --}}
-                                            
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas ?? '-'}}</td> --}}
-
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->ope_act ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nom_est_ope_act ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
-
-                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->ope_ult ?? '-'}}</td> --}}
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -519,7 +480,8 @@
 
         $('#verPartesModal').on('hidden.bs.modal', function (e) {
             nuevoParte();
-            actRow();
+            // actRow();
+            actualizarRowOrden();
         })
 
         $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
@@ -539,7 +501,6 @@
                     url: url_php,
                     data: form_data,
                     success: function(data) {
-                        //console.log(data);
                         opcion = parseInt(data.resultado);
                         switch (opcion) {
                             case 1:
@@ -857,6 +818,27 @@
             console.log(error);
         }
         }));
+    }
+
+    function actualizarRowOrden(){
+        let valor = document.getElementById('m-ver-parte-orden').value;
+
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-orden-act',
+            data: {
+                id: valor,
+                opcion: 3,
+            },
+            success: function (res) {
+                let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
+                let rowIndex = table.row(fila).index();
+                table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     }
 </script>
 @endsection

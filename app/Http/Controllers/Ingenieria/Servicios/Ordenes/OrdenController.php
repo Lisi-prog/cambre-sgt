@@ -1254,7 +1254,11 @@ class OrdenController extends Controller
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
-        $hdrAnt= Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->pluck('fecha_carga', 'id_hoja_de_ruta');
+        // $hdrAnt= Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->pluck('fecha_carga', 'id_hoja_de_ruta');
+        $hdrAnt = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)
+                                    ->selectRaw("id_hoja_de_ruta, CONCAT('Fecha: ', DATE(fecha_carga), ' - Código: ', id_hoja_de_ruta) as descripcion")
+                                    ->orderBy('id_hoja_de_ruta', 'desc')
+                                    ->pluck('descripcion', 'id_hoja_de_ruta');
         return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt'));
     }
 
@@ -1582,7 +1586,7 @@ class OrdenController extends Controller
             'ruta' => $hdr->ruta,
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr,
-            'obser_fallo' => $obseFallo->observaciones_fallo ?? '-'
+            'obser_fallo' => $obseFallo->observaciones_fallo ?? null
         ];
     }
 
@@ -1757,5 +1761,24 @@ class OrdenController extends Controller
             'tot_mec_porcentaje' => $ord_man->tot_mec_porcentaje,
             'ordenes_mecanizado' => $ordenes_mec
         ];
+    }
+
+    public function obtenerOrdenAct(Request $request){
+        $id_orden = $request->input('id');
+        $opcion = $request->input('opcion');
+
+        switch ($opcion) {
+            case 1:
+                # code...
+                break;
+
+            case 2:
+                return Vw_orden_manufactura::where('id_orden', $id_orden)->first();
+                break;
+
+            case 3:
+                return Vw_orden_mecanizado::where('id_orden', $id_orden)->first();
+                break;
+        }
     }
 }

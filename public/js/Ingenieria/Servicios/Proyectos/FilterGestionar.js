@@ -182,17 +182,15 @@ function buscarYfiltrarOrdMan(tabla){
     sup = arrayForMe(supervisores);
 
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[1]; //etapa
-        td2 = tr[i].getElementsByTagName("td")[2]; //estado
-        td3 = tr[i].getElementsByTagName("td")[4]; //supervisor
-        td4 = tr[i].getElementsByTagName("td")[5]; //responsable
+        td = tr[i].getElementsByTagName("td")[2]; //etapa
+        td2 = tr[i].getElementsByTagName("td")[3]; //estado
+        td3 = tr[i].getElementsByTagName("td")[5]; //supervisor
         if (td) {
             // console.log(td.children[0].title);
             txtValue = td.children[0].title;
             txtValu2 = td2.innerText;
             txtValu3 = td3.innerText;
-            txtValu4 = td4.innerText;
-            if (busq.indexOf(txtValue) > -1 && est.indexOf(txtValu2) > -1 && sup.indexOf(txtValu3) > -1 && res.indexOf(txtValu4) > -1) {
+            if (busq.indexOf(txtValue) > -1 && est.indexOf(txtValu2) > -1 && sup.indexOf(txtValu3) > -1) {
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
@@ -227,13 +225,12 @@ function buscarYfiltrarOrdMec(tabla){
         td = tr[i].getElementsByTagName("td")[2]; //etapa
         td2 = tr[i].getElementsByTagName("td")[3]; //estado
         td3 = tr[i].getElementsByTagName("td")[4]; //supervisor
-        td4 = tr[i].getElementsByTagName("td")[5]; //responsable
         if (td) {
             txtValue = td.children[0].title;
             txtValu2 = td2.innerText;
             txtValu3 = td3.innerText;
-            txtValu4 = td4.innerText;
-            if (busq.indexOf(txtValue) > -1 && est.indexOf(txtValu2) > -1 && sup.indexOf(txtValu3) > -1 && res.indexOf(txtValu4) > -1) {
+
+            if (busq.indexOf(txtValue) > -1 && est.indexOf(txtValu2) > -1 && sup.indexOf(txtValu3) > -1) {
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";

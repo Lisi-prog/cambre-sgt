@@ -47,7 +47,7 @@ use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Parte_ope_hdr;
 use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
-
+use App\Models\Cambre\Vw_operaciones_de_hdr;
 
 class ParteController extends Controller
 {
@@ -1133,14 +1133,19 @@ class ParteController extends Controller
             }
 
             if ($estado == 4) { //orden completado
-                $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
-                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
-                Hoja_de_ruta::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->update(['activo' => 0]);
+                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
                 $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
                 if ($opeSgt) {
                     $opeSgt->activo = 1;
                     $opeSgt->save();
                 }
+
+                $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
+
+                //$this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                
+                //Hoja_de_ruta::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->update(['activo' => 0]);
+                
             }
             $result = 1;
         }
@@ -1439,5 +1444,21 @@ class ParteController extends Controller
 
     public function obtenerEstadoParteOpe(){
         return Estado_hdr::orderBy('id_estado_hdr')->get();
+    }
+
+    public function comprobarSiTodasLasOperacionesEstanCompletas($id_hdr){
+        $bandera_esta_completo = 1;
+
+        $operaciones = Vw_operaciones_de_hdr::where('id_hoja_de_ruta', $id_hdr)->where('id_estado_hdr', '<>', 5)->get();
+
+        foreach ($operaciones as $ope) {
+            if ($ope->id_estado_hdr != 4) {
+                $bandera_esta_completo = 0;
+            }
+        }
+
+        if ($bandera_esta_completo) {
+            Hoja_de_ruta::where('id_hoja_de_ruta', $id_hdr)->update(['activo' => 0]);
+        }
     }
 }
