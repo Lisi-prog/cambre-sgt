@@ -199,6 +199,7 @@ function actualizarPartesOpe(id){
                 idCount++;
             });
             document.getElementById('body_ver_parte_ope').innerHTML = html;
+            changeTdColor();
             // document.getElementById('mv-estado').value = response[0].estado_orden;
         },
         error: function (error) {
