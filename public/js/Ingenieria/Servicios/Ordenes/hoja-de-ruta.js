@@ -346,7 +346,15 @@ function cargarHdrReiniciar(id){
             document.getElementById('m_re_ruta').value = response.ruta;
             document.getElementById('m_re-obser').value = response.observaciones;
             document.getElementById('re_table-body').innerHTML = '';
-            response.operaciones.forEach(function (op){
+
+            response.operaciones.forEach(function (op) {
+                addRowRe().then((nuevaFila) => {
+                    nuevaFila.querySelector(".input-ope").value = op.operacion;
+                    nuevaFila.querySelector(".input-asig").value = op.asignado;
+                    nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
+                });
+            });
+            /*response.operaciones.forEach(function (op){
                 console.log(op);
                 const nuevaFila = addRowRe();
 
@@ -357,7 +365,7 @@ function cargarHdrReiniciar(id){
                     nuevaFila.querySelector(".input-asig").value = op.asignado;
                     nuevaFila.querySelector(".input-maquina").value = op.maquina == '-' ? null : op.maquina;
                 }, 100);
-            });
+            });*/
         },
         error: function (error) {
             console.log(error);
