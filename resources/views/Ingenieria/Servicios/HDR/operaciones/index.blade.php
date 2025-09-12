@@ -4,15 +4,15 @@
 
 <style>
     .tableFixHead {
-       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-       height: 300px; /* gives an initial height of 200px to the table */
+       overflow-y: auto;
+       height: 300px;
      }
      .tableFixHead thead th {
-       position: sticky; /* make the table heads sticky */
-       top: 0px; /* table head will be placed from the top of the table and sticks to it */
+       position: sticky; 
+       top: 0px;
      }
      #viv table {
-       border-collapse: collapse; /* make the table borders collapse to each other */
+       border-collapse: collapse;
        width: 100%;
      }
      
@@ -90,44 +90,6 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
     <div class="section-body">
-
-        {{-- <div class="row">
-            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('herr')">Herramientas <i class="fas fa-caret-down"></i></button> 
-                        </div>
-                        <div class="row" id="herr" hidden>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <div class="form-check" hidden id="chk-sel-all">
-                                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
-                                    <label class="form-check-label" for="checkDefault">
-                                      Selecc. todo
-                                    </label>
-                                  </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
-                                    Parte Multiple
-                                </button>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verEditarMulti" onclick="cargarEditMultiple()" id="btn-edit-mul" hidden >
-                                    Editar Multiple
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -165,9 +127,6 @@
                                                 @foreach ($flt_operaciones as $operacion)
                                                     <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
                                                 @endforeach
-                                                {{-- @foreach ($supervisores as $supervisor)
-                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
-                                                @endforeach --}}
                                             </div>
                                         </div>
                                     </div>
@@ -182,13 +141,10 @@
                                                     <label>Maquina:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
                                                     @foreach ($flt_maquinas as $maquina)
                                                         <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
                                                     @endforeach
-                                                    {{-- @foreach ($responsables as $responsable)
-                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
-                                                    @endforeach --}}
                                                 </div>
                                             </div>
                                         </div>

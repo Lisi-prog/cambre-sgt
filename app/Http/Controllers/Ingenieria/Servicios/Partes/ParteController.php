@@ -48,6 +48,7 @@ use App\Models\Cambre\Parte_ope_hdr;
 use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
+use App\Models\Cambre\Vw_hoja_de_ruta;
 
 class ParteController extends Controller
 {
@@ -919,9 +920,6 @@ class ParteController extends Controller
                     $result = 2;
 
                 } else {
-                    $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
-                    $maquina = $request->input('maquina');
-
                     $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
                     $responsabilidad = Responsabilidad::create([
@@ -939,18 +937,16 @@ class ParteController extends Controller
                                 'id_orden' => $orden->id_orden,
                                 'id_responsabilidad' => $responsabilidad->id_responsabilidad
                             ]);
+
                     $parte_mecanizado = Parte_mecanizado::create([
                         'id_estado_mecanizado' => $estado,
                         'id_parte' => $parte->id_parte
                     ]);
                     
-                    if ($maquina) {
-                        Parte_mecanizado_x_maquinaria::create([
-                            'id_parte_mecanizado' => $parte_mecanizado->id_parte_mecanizado,
-                            'id_maquinaria' => $maquina,
-                            'horas_maquina' => $horas_maquina
-                        ]);
+                    if ($estado == 7 && !is_null($orden->getOrdenMecanizado->id_orden_manufactura)) {
+                        $this->ajusteAOrdenMan($orden->id_orden);
                     }
+
                     $result = 1;
                 }
                 return[
@@ -973,10 +969,10 @@ class ParteController extends Controller
 
         $idOrdMan = Orden::find($idOrd)->getOrdenMecanizado->id_orden_manufactura;
 
-        $ordenesMec = vw_gest_orden_mecanizado::where('id_orden_manufactura', $idOrdMan)->where('id_estado', '<=',  5)->get(['id_estado']);
+        $ordenesMec = vw_gest_orden_mecanizado::where('id_orden_manufactura', $idOrdMan)->where('id_estado', '<=',  7)->get(['id_estado']);
 
         foreach ($ordenesMec  as $ordenMec ) {
-            if ($ordenMec->id_estado != 5) {
+            if ($ordenMec->id_estado != 7) {
                 $estaCompleto = 0;
             }
         }
@@ -1142,9 +1138,7 @@ class ParteController extends Controller
 
                 $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
 
-                //$this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
-                
-                //Hoja_de_ruta::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->update(['activo' => 0]);
+                $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
                 
             }
             $result = 1;
@@ -1159,11 +1153,11 @@ class ParteController extends Controller
     public function cambiarEstadoOmecA($ope, $opcion){
         switch ($opcion) {
             case 1: // Espera
-                $estado = 8;
+                $estado = 4;
                 break;
 
             case 2: //En proceso
-                $estado = 4;
+                $estado = 5;
                 break;
 
             default:
@@ -1178,76 +1172,106 @@ class ParteController extends Controller
 
         $ultParte = Parte::where('id_orden', $ope->getHdr->getOrdMec->id_orden)->orderBy('id_parte', 'desc')->first();
 
-        if ($ultParte->getParteMecanizado->id_estado_mecanizado != 4 && $ultParte->getParteMecanizado->id_estado_mecanizado != 8) {
-            $responsabilidad = Responsabilidad::create([
-                'id_empleado' => 999,
-                'id_rol_empleado' => $rol_empleado->id_rol_empleado
-            ]);
+        if ($estado == 4) {
+            if ($ultParte->getParteMecanizado->id_estado_mecanizado != 4) {
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => 999,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
 
-            $parte = Parte::create([
-                        'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
-                        'fecha' => $fecha,
-                        'fecha_limite' => $ultParte->fecha_limite,
-                        'fecha_carga' => $fecha_carga,
-                        'horas' => '00:00',
-                        'costo' => 0,
-                        'id_orden' => $ope->getHdr->getOrdMec->id_orden,
-                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
-                    ]);
+                $parte = Parte::create([
+                            'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
+                            'fecha' => $fecha,
+                            'fecha_limite' => $ultParte->fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => '00:00',
+                            'costo' => 0,
+                            'id_orden' => $ope->getHdr->getOrdMec->id_orden,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
 
-            $parte_mecanizado = Parte_mecanizado::create([
-                'id_estado_mecanizado' => $estado,
-                'id_parte' => $parte->id_parte
-            ]);
-        } 
+                $parte_mecanizado = Parte_mecanizado::create([
+                    'id_estado_mecanizado' => $estado,
+                    'id_parte' => $parte->id_parte
+                ]);
+            }
+        }
+
+        if ($estado == 5) {
+            if ($ultParte->getParteMecanizado->id_estado_mecanizado != 5) {
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => 999,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $parte = Parte::create([
+                            'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
+                            'fecha' => $fecha,
+                            'fecha_limite' => $ultParte->fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => '00:00',
+                            'costo' => 0,
+                            'id_orden' => $ope->getHdr->getOrdMec->id_orden,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+
+                $parte_mecanizado = Parte_mecanizado::create([
+                    'id_estado_mecanizado' => $estado,
+                    'id_parte' => $parte->id_parte
+                ]);
+            }
+        }
     
     }
 
     public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
-        $todasLasHdrOrdMec = Hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
+        $todasLasHdrOrdMec = Vw_hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
         $bandera = 1;
 
-        foreach ($todasLasHdrOrdMec as $hdr) {
-            if ($hdr->getIdEstadoActual() != 4) {
-                $bandera = 0;
-            }   
+        if ($todasLasHdrOrdMec) {
+            foreach ($todasLasHdrOrdMec as $hdr) {
+                if ($hdr->id_estado_hdr != 4) {
+                    $bandera = 0;
+                }   
+            }
+
+            if ($bandera) {
+                $idOrd = Orden_mecanizado::find($id_mec)->id_orden;
+
+                $orden = Orden::find($idOrd);
+
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+                $fecha = Carbon::now()->format('Y-m-d');
+
+                $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => 999,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $parte = Parte::create([
+                            'observaciones' => 'Se completaron todas las hojas de ruta.',
+                            'fecha' => $fecha,
+                            'fecha_limite' => $ultParte->fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => '00:00',
+                            'costo' => 0,
+                            'id_orden' => $idOrd,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+
+                $parte_mecanizado = Parte_mecanizado::create([
+                    'id_estado_mecanizado' => 6,
+                    'id_parte' => $parte->id_parte
+                ]);
+                
+            }
         }
-
-        if ($bandera) {
-            $idOrd = Orden_mecanizado::find($id_mec)->id_orden;
-
-            $orden = Orden::find($idOrd);
-
-            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-
-            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-
-            $fecha = Carbon::now()->format('Y-m-d');
-
-            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
-
-            $responsabilidad = Responsabilidad::create([
-                'id_empleado' => 999,
-                'id_rol_empleado' => $rol_empleado->id_rol_empleado
-            ]);
-
-            $parte = Parte::create([
-                        'observaciones' => 'Se completaron todas las hojas de ruta.',
-                        'fecha' => $fecha,
-                        'fecha_limite' => $ultParte->fecha_limite,
-                        'fecha_carga' => $fecha_carga,
-                        'horas' => '00:00',
-                        'costo' => 0,
-                        'id_orden' => $idOrd,
-                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
-                    ]);
-
-            $parte_mecanizado = Parte_mecanizado::create([
-                'id_estado_mecanizado' => 7,
-                'id_parte' => $parte->id_parte
-            ]);
-            
-        }
+        
     }
     
     public function pruebaEmail(){

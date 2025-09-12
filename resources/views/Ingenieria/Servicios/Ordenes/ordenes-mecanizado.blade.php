@@ -4,15 +4,15 @@
 
 <style>
     .tableFixHead {
-       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-       height: 300px; /* gives an initial height of 200px to the table */
+       overflow-y: auto;
+       height: 300px;
      }
      .tableFixHead thead th {
-       position: sticky; /* make the table heads sticky */
-       top: 0px; /* table head will be placed from the top of the table and sticks to it */
+       position: sticky; 
+       top: 0px; 
      }
      #viv table {
-       border-collapse: collapse; /* make the table borders collapse to each other */
+       border-collapse: collapse;
        width: 100%;
      }
      
@@ -106,9 +106,9 @@
                                                 <label>Manufactura:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="sup"> (Seleccionar todo)</label>
                                                 @foreach ($manufacturas as $man)
-                                                    <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" checked> {{$man->manufactura ?? '-'}}</label>
+                                                    <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -126,31 +126,7 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                 @foreach ($estados as $estado)
-                                                    @switch($tipo_orden)
-                                                        @case(1)
-                                                            @if ($estado->id_estado < 9 && $estado->id_estado != 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(2)
-                                                            @if ($estado->id_estado < 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(3)
-                                                            @if ($estado->id_estado < 6)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                            
-                                                    @endswitch
-                                                        
+                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre}}" {{$estado->nombre == 'Completo' || $estado->nombre == 'Cancelado' ? '' : 'checked'}}> {{$estado->nombre}}</label>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -165,9 +141,9 @@
                                                 <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                             </div>
                                             <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
                                                 @foreach ($operaciones as $ope)
-                                                    <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}" checked> {{$ope->ope_act ?? '-'}}</label>
+                                                    <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}"> {{$ope->ope_act ?? '-'}}</label>
                                                 @endforeach
                                             </div>
                                         </div>
