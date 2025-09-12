@@ -1321,7 +1321,8 @@ class OrdenController extends Controller
             'cantidad' => $cant,
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'id_orden_mecanizado' => $id,
-            'ruta' => $ruta
+            'ruta' => $ruta,
+            'activo' => 1
         ]);
 
         if ($request->input('id_hdr')) {
