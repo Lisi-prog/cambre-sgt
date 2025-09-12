@@ -172,26 +172,6 @@ function cargarModalVerPartesOpe(id){
     let html = '';
     obtenerEstados(5);
     document.getElementById('m-id-ope-hdr').value = id;
-    // modificarModalVerPartesEstadoFechaLimite(id);
-    // let orden = document.getElementById('m-ver-parte-orden');
-    // orden.value = id;
-    // let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
-    
-    // document.getElementById('body_ver_parte').innerHTML = '';
-    // document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
-
-    // let tablaa = document.getElementById('verPartes')
-    // tablaa.querySelectorAll('th').forEach(encabezado => {
-    //     encabezado.style.backgroundColor = color_encabezado;
-    // });
-
-    // if(tipo_orden == 3){
-    //     document.getElementById('column-maq').hidden = true;
-    //     document.getElementById('column-hora-maq').hidden = true;
-    // }else{
-    //     document.getElementById('column-maq').hidden = true;
-    //     document.getElementById('column-hora-maq').hidden = true;
-    // }
     
     $.ajax({
         type: "post",
@@ -245,59 +225,9 @@ function cargarModalVerPartesOpe(id){
         document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
         document.getElementById('mv-estado').value = response.partes_ope[0].estado;
         document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
-        /*let maq_y_hora = '';
-        let idCount = 0;
-        let urlLogParte = "/parte/";
-        
-        response.forEach(element => {
-            if (element.fecha_limite) {
-                fecha_lim = element.fecha_limite;
-            }else{
-                fecha_lim = '-';
-            }
-
-            html += `<tr>
-                        <td class="text-center">`+element.id_parte+`</td>
-                        <td class="text-center">`+element.fecha+`</td>
-                        <td class="text-center">`+fecha_lim+`</td>
-                        <td class="text-center">`+element.estado+`</td>
-                        <td class="text-center">`+element.horas+`</td>
-                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>s
-                        <td class="text-center">`+element.supervisor+`</td>
-                        <td class="text-center">
-                            <div class="row justify-content-center" >
-                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
-                                    Opciones
-                                </button>
-                            </div>
-                            <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
-
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
-                                            Editar
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <a href='`+urlLogParte+element.id_parte+`/logs' target="_blank">
-                                            <button type="button" class="btn btn-warning w-100" >
-                                                Logs
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>`
-            idCount ++;
-        });
-        document.getElementById('body_ver_parte').innerHTML = html;
-        document.getElementById('mv-orden').value = response[0].orden;
-        document.getElementById('mv-etapa').value = response[0].etapa;
-        document.getElementById('mv-estado').value = response[0].estado_orden; */
+    },
+    complete: function(){
+        changeTdColor();
     },
     error: function (error) {
         console.log(error);
