@@ -127,6 +127,69 @@ function addRow() {
 }
 
 function addRowRe() {
+    return new Promise((resolve, reject) => {
+        const table = document.getElementById('re_editableTable').getElementsByTagName('tbody')[0];
+        const rowCount = table.rows.length + 1;
+        const row = table.insertRow();
+
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtenerope', 
+            data: { id: 'hola' },
+            success: function (response) {
+                let options = '';
+                let opt_tec = '';
+                response.operaciones.forEach((ope) => {
+                    options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
+                });
+
+                response.tecnicos.forEach((tec) => {
+                    opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
+                });
+
+                row.innerHTML = `
+                    <td class="text-center">${rowCount}</td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select custom-input-1 input-ope" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
+                            <div class="dropdown-list-auto">
+                                ${options}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
+                            <div class="dropdown-list-auto">
+                                ${opt_tec}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]">
+                            <div class="dropdown-list-auto"></div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                    </td>
+                `;
+
+                // ... inicializar dropdowns y botones como ya tenías ...
+
+                resolve(row); // ✅ devolvemos la fila lista
+            },
+            error: function (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
+    });
+}
+
+/*
+function addRowRe() {
     const tableBody = document.getElementById("re_editableTable");
     const table = document.getElementById('re_editableTable').getElementsByTagName('tbody')[0];
     // const rowCount = tableBody.rows.length;
@@ -228,7 +291,7 @@ function addRowRe() {
         }
     });
     return row;
-}
+} */
 
 function cargarMaquinas(operacion, targetInput) {
     const selectedOperation = operacion;
