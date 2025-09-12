@@ -347,7 +347,7 @@ function cargarHdrReiniciar(id){
             document.getElementById('m_re-obser').value = response.observaciones;
             document.getElementById('re_table-body').innerHTML = '';
             response.operaciones.forEach(function (op){
-                // console.log(op);
+                console.log(op);
                 const nuevaFila = addRowRe();
 
                 // Esperar un breve momento para que la fila se agregue
