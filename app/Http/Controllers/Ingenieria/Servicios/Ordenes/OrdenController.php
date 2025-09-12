@@ -66,6 +66,7 @@ use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Parte_ope_hdr;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
 use App\Models\Cambre\Hdr_reg_fallo;
+use App\Models\Cambre\Vw_hoja_de_ruta;
 
 
 class OrdenController extends Controller
@@ -966,8 +967,8 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
                 }
                 $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
-                $manufacturas = Vw_orden_mecanizado::orderBy('manufactura')->get('manufactura')->unique('manufactura');
-                $operaciones = Vw_orden_mecanizado::orderBy('ope_act')->get('ope_act')->unique('ope_act');
+                $manufacturas = Vw_orden_mecanizado::whereNotNull('manufactura')->orderBy('manufactura')->get('manufactura')->unique('manufactura');
+                $operaciones = Vw_orden_mecanizado::whereNotNull('ope_act')->orderBy('ope_act')->get('ope_act')->unique('ope_act');
                 $tipo = 'Mecanizado';
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
@@ -1254,7 +1255,11 @@ class OrdenController extends Controller
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
-        $hdrAnt= Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->pluck('fecha_carga', 'id_hoja_de_ruta');
+        // $hdrAnt= Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->pluck('fecha_carga', 'id_hoja_de_ruta');
+        $hdrAnt = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)
+                                    ->selectRaw("id_hoja_de_ruta, CONCAT('Fecha: ', DATE(fecha_carga), ' - Código: ', id_hoja_de_ruta) as descripcion")
+                                    ->orderBy('id_hoja_de_ruta', 'desc')
+                                    ->pluck('descripcion', 'id_hoja_de_ruta');
         return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt'));
     }
 
@@ -1301,6 +1306,7 @@ class OrdenController extends Controller
 
         $operaciones = $request->input('operacion');
         
+        $this->comprobarSiTodasLasHdrEstanCompletas($id);
         
 
         $responsabilidad = Responsabilidad::create([
@@ -1454,6 +1460,56 @@ class OrdenController extends Controller
         return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido creado con exito.');
     }
 
+    public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
+        $todasLasHdrOrdMec = Vw_hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
+        $bandera = 1;
+
+        if ($todasLasHdrOrdMec) {
+            foreach ($todasLasHdrOrdMec as $hdr) {
+                if ($hdr->id_estado_hdr != 4) {
+                    $bandera = 0;
+                }   
+            }
+
+            if ($bandera) {
+                $idOrd = Orden_mecanizado::find($id_mec)->id_orden;
+
+                $orden = Orden::find($idOrd);
+
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+                $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+                $fecha = Carbon::now()->format('Y-m-d');
+
+                $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => 999,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $parte = Parte::create([
+                            'observaciones' => 'Se genero una nueva hoja de ruta a una orden de mecanizado previamente completa.',
+                            'fecha' => $fecha,
+                            'fecha_limite' => $ultParte->fecha_limite,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => '00:00',
+                            'costo' => 0,
+                            'id_orden' => $idOrd,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                        ]);
+
+                $parte_mecanizado = Parte_mecanizado::create([
+                    'id_estado_mecanizado' => 4,
+                    'id_parte' => $parte->id_parte
+                ]);
+                
+            }
+        }
+        
+    }
+
     public function obtenerOperacionesyTecnicos(){
         return [
                 'operaciones' => Operacion::orderBy('nombre_operacion')->get(),
@@ -1572,7 +1628,7 @@ class OrdenController extends Controller
                 'numero' => $op->numero,
                 'operacion' => $op->getOperacion->nombre_operacion,
                 'asignado' => $op->getAsignado(),
-                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? null
+                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-'
             ]);
         }
 
@@ -1757,5 +1813,24 @@ class OrdenController extends Controller
             'tot_mec_porcentaje' => $ord_man->tot_mec_porcentaje,
             'ordenes_mecanizado' => $ordenes_mec
         ];
+    }
+
+    public function obtenerOrdenAct(Request $request){
+        $id_orden = $request->input('id');
+        $opcion = $request->input('opcion');
+
+        switch ($opcion) {
+            case 1:
+                # code...
+                break;
+
+            case 2:
+                return Vw_orden_manufactura::where('id_orden', $id_orden)->first();
+                break;
+
+            case 3:
+                return Vw_orden_mecanizado::where('id_orden', $id_orden)->first();
+                break;
+        }
     }
 }

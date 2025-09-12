@@ -4,15 +4,15 @@
 
 <style>
     .tableFixHead {
-       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-       height: 300px; /* gives an initial height of 200px to the table */
+       overflow-y: auto;
+       height: 300px;
      }
      .tableFixHead thead th {
-       position: sticky; /* make the table heads sticky */
-       top: 0px; /* table head will be placed from the top of the table and sticks to it */
+       position: sticky; 
+       top: 0px;
      }
      #viv table {
-       border-collapse: collapse; /* make the table borders collapse to each other */
+       border-collapse: collapse;
        width: 100%;
      }
      
@@ -90,44 +90,6 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
     <div class="section-body">
-
-        {{-- <div class="row">
-            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('herr')">Herramientas <i class="fas fa-caret-down"></i></button> 
-                        </div>
-                        <div class="row" id="herr" hidden>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <div class="form-check" hidden id="chk-sel-all">
-                                    <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
-                                    <label class="form-check-label" for="checkDefault">
-                                      Selecc. todo
-                                    </label>
-                                  </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
-                                    Parte Multiple
-                                </button>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verEditarMulti" onclick="cargarEditMultiple()" id="btn-edit-mul" hidden >
-                                    Editar Multiple
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -165,9 +127,6 @@
                                                 @foreach ($flt_operaciones as $operacion)
                                                     <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
                                                 @endforeach
-                                                {{-- @foreach ($supervisores as $supervisor)
-                                                    <label><input name="sup" type="checkbox" value="{{$supervisor->nombre_empleado}}" checked> {{$supervisor->nombre_empleado}}</label>
-                                                @endforeach --}}
                                             </div>
                                         </div>
                                     </div>
@@ -182,13 +141,10 @@
                                                     <label>Maquina:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
                                                     @foreach ($flt_maquinas as $maquina)
                                                         <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
                                                     @endforeach
-                                                    {{-- @foreach ($responsables as $responsable)
-                                                        <label><input name="res" type="checkbox" value="{{$responsable->nombre_empleado}}" checked> {{$responsable->nombre_empleado}}</label>
-                                                    @endforeach --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -208,33 +164,6 @@
                                                 @foreach ($flt_estados as $estado)
                                                      <label><input name="est" type="checkbox" value="{{$estado}}" {{$estado != 'Completo' && $estado != 'Descartar'  ? 'checked' : ''}}> {{$estado}}</label>
                                                 @endforeach
-                                                {{-- @foreach ($estados as $estado)
-                                                    @switch($tipo_orden)
-                                                        @case(1)
-                                                            @if ($estado->id_estado < 9 && $estado->id_estado != 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(2)
-                                                            @if ($estado->id_estado < 5)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                        @case(3)
-                                                            @if ($estado->id_estado < 6)
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}" checked> {{$estado->nombre}}</label>
-                                                            @else
-                                                                <label><input name="est" type="checkbox" value="{{$estado->nombre}}"> {{$estado->nombre}}</label>
-                                                            @endif
-                                                            @break
-                                                            
-                                                    @endswitch
-                                                        
-                                                @endforeach --}}
                                             </div>
                                         </div>
                                     </div>
@@ -246,7 +175,7 @@
                                         <div class="card-body d-flex flex-column">
                                             {!! Form::label('Opciones:') !!}
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexOpc1" checked>
+                                                <input name="soloAct" class="form-check-input" type="checkbox" value="SI" id="flexOpc1" checked>
                                                 <label class="form-check-label" for="flexOpc1">
                                                     Solo activos.
                                                 </label>
@@ -312,7 +241,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($operaciones as $ope)
-                                     <tr data-id="{{$ope->id_ope_de_hdr}}" class="my-auto {{$ope->activo ? '' : 'no-activo'}}" {{$ope->activo ? '' : 'hidden'}}>
+                                     <tr data-id="{{$ope->id_ope_de_hdr}}" class="my-auto">
                                         {{-- <tr data-id="{{$ope->id_ope_de_hdr}}"> --}}
                                             <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
                                                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
@@ -486,7 +415,6 @@
                 id: valores,
             },
             success: function (response) {
-                console.log(response)
                 response.forEach(e => {
                     html += `<tr>
                                 <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
@@ -517,7 +445,6 @@
                 id: valores,
             },
             success: function (response) {
-                console.log(response)
                 response.forEach(e => {
                     html += `<tr>
                                 <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
@@ -544,7 +471,6 @@
                 id: 'a',
             },
             success: function (res) {
-                console.log(res)
                 res.forEach(e => {
                     html += `<option value="${e.id_estado_hdr}">${e.nombre_estado_hdr}</option>`;
                 });
@@ -572,6 +498,7 @@
     let x = '';
     let ind_rw = '';
     let id_emp = {{Auth::user()->getEmpleado->id_empleado}};
+    let b;
     
     var table;
     $(document).ready( function () {
@@ -678,6 +605,23 @@
             return false;
             }
         );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+                  var offices = $('input:checkbox[name="soloAct"]:checked').map(function() {
+                return this.value;
+            }).get();
+                  if (offices.length === 0) {
+                return true;
+            }
+          if (offices.indexOf(searchData[11]) !== -1) {
+                return true;
+            }
+         
+            return false;
+            }
+        );
+
     table = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -783,8 +727,7 @@
 
     $(".nuevo-editar-orden").on('submit', function(evt){
             evt.preventDefault();     
-            // console.log('hola');
-
+            
             var url_php = $(this).attr("action"); 
             var type_method = $(this).attr("method"); 
             var form_data = $(this).serialize();
@@ -794,7 +737,6 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    // console.log(data);
                     html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
                                             `+data+`
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -863,8 +805,6 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    console.log(data);
-
                     if (data) {
                         html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
                                             Operacion/es editados con exito.
@@ -900,8 +840,6 @@
                 url: url_php,
                 data: form_data,
                 success: function(data) {
-                    console.log(data);
-
                     if (data) {
                         html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
                                             Operacion/es editados con exito.
@@ -909,6 +847,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>`;
+                        b=1;                
                     } else {
                         html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
                                         Ocurrio un error
@@ -928,7 +867,7 @@
     $('#id_selec').on('change', mostrarSelec);
     // $('#checkSelAll').on('change', selecDesTodo);
 
-    $('#flexOpc1').on('change', mostrarOculto);
+    /* $('#flexOpc1').on('change', mostrarOculto);
 
         function mostrarOculto() {
             document.querySelectorAll('.no-activo').forEach(element => {
@@ -939,14 +878,12 @@
                 }
             });
 
-        }
+        } */
 
     document.getElementById('checkSelAll').addEventListener('change', event => {
         if (document.getElementById('checkSelAll').checked) {
-            console.log("Checkbox is checked..");
             table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ope[]"]').prop('checked', true);
         } else {
-            console.log("Checkbox is not checked..");
             table.rows({ search: 'applied' }).nodes().to$().find('input[type="checkbox"][name="id_ope[]"]').prop('checked', false);
         }
     })
@@ -1099,7 +1036,6 @@
                 
             },
         success: function (response) {
-            // console.log(response);
             response.forEach(element => {
                 html_estados += `
                                     <option value="`+element.id_estado+`">`+element.nombre

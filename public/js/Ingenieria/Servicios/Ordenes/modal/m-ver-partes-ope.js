@@ -15,7 +15,7 @@ $(document).ready(function () {
                         let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
                         let rowIndex = table.row(fila).index();
 
-                        table.cell(rowIndex, 2).data(e.prioridad ?? 'S/P').draw();
+                        table.cell(rowIndex, 1).data(e.prioridad ?? 'S/P').draw();
                         table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
 
                     });
@@ -135,6 +135,7 @@ function nuevoParte(){
     document.getElementById('m-id-parte-ope').value = null;
     document.getElementById('checkDefaultMed').checked = false;
     let ope_hdr = document.getElementById('m-id-ope-hdr').value;
+    document.getElementById('mv-arch-cam').value = '';
     seleccionarEstadoOperacion(ope_hdr);
     // modificarModalVerPartesEstadoFechaLimite(id_orden);
     

@@ -25,40 +25,46 @@ function modificarFormulario(){
    let html;
    let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0]
 //    console.log(fecha_de_hoy);
-   switch (tipo_orden) {
-    case 1:
-        formulario.innerHTML = '';
-        html = opcion1
-        formulario.innerHTML += html;
-        cargarTipoOrdenTrabajo();
-        cargarSupervisores();
-        cargarEmpleados();
-        cargarEstados();
-        $('#cbx_estado').on('change', mostrarOcultarFechaRequerida);
+    switch (tipo_orden) {
+        case 1:
+            document.getElementById('selected-tipo-orden').style.border = "3px solid #558540";
+            formulario.innerHTML = '';
+            html = opcion1
+            formulario.innerHTML += html;
+            cargarTipoOrdenTrabajo();
+            cargarSupervisores();
+            cargarEmpleados();
+            cargarEstados();
+            $('#cbx_estado').on('change', mostrarOcultarFechaRequerida);
+            break;
+        case 2:
+            document.getElementById('selected-tipo-orden').style.border = "3px solid #982b37";
+            formulario.innerHTML = '';
+            html = opcion2
+            formulario.innerHTML += html;
+            cargarSupervisores();
+            cargarEmpleados();
+            cargarEstadosManufacturas();
+            cargarOrdMan();
+            break;
+        case 3:
+            document.getElementById('selected-tipo-orden').style.border = "3px solid #d37c00";
+            formulario.innerHTML = '';
+            html = opcion3
+            formulario.innerHTML += html;
+            cargarSupervisores();
+            cargarEmpleados();
+            cargarEstadosMecanizados();
+            cargarOrdMecyOrdTra();
+            break;
+        case 4:
+            formulario.innerHTML = '';
+            break;    
+        default:
+            document.getElementById('selected-tipo-orden').style.border = "1px solid #ced4da";
+            formulario.innerHTML = '';
         break;
-    case 2:
-        formulario.innerHTML = '';
-        html = opcion2
-        formulario.innerHTML += html;
-        cargarSupervisores();
-        cargarEmpleados();
-        cargarEstadosManufacturas();
-        break;
-    case 3:
-        formulario.innerHTML = '';
-        html = opcion3
-        formulario.innerHTML += html;
-        cargarSupervisores();
-        cargarEmpleados();
-        cargarEstadosMecanizados();
-        break;
-    case 4:
-        formulario.innerHTML = '';
-        break;    
-    default:
-        formulario.innerHTML = '';
-        break;
-   }
+    }
     formulario.getElementsByClassName('form-control').namedItem('fec_ini') ? formulario.getElementsByClassName('form-control').namedItem('fec_ini').value = fecha_de_hoy : '';
     formulario.getElementsByClassName('form-control').namedItem('fec_req') ? formulario.getElementsByClassName('form-control').namedItem('fec_req').value = fecha_de_hoy : '';
 

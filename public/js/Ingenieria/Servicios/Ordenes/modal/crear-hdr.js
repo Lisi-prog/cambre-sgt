@@ -265,30 +265,25 @@ function cargarMaquinas(operacion, targetInput) {
 }
 
 function autocompletahdr(id_hdr) {
-        // console.log(id_hdr)
-
         if (id_hdr) {
             $.ajax({
                 type: "post",
                 url: '/orden/mec/hdr/obtener-hdr/'+id_hdr, // Ruta para obtener las máquinas
                 data: { id: id_hdr },
                 success: function (response) {
-                    // console.log(response);
                     document.getElementById('m_ubi').value = response.ubicacion;
                     document.getElementById('m_cant').value = response.cantidad;
                     document.getElementById('m_ruta').value = response.ruta;
                     document.getElementById('m-obser').value = response.observaciones;
                     document.getElementById('table-body').innerHTML = '';
                     response.operaciones.forEach(function (op){
-                        // console.log(op);
                         const nuevaFila = addRow();
 
                         // Esperar un breve momento para que la fila se agregue
                         setTimeout(() => {
-                            // console.log(nuevaFila)
                             nuevaFila.querySelector(".input-ope").value = op.operacion;
                             nuevaFila.querySelector(".input-asig").value = op.asignado;
-                            nuevaFila.querySelector(".input-maquina").value = op.maquina;
+                            nuevaFila.querySelector(".input-maquina").value = op.maquina == '-' ? null : op.maquina;
                         }, 100);
                     });
                 },

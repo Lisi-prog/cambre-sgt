@@ -126,7 +126,8 @@
                     </div>
                 </div>
                 <div class="row" id="eta_act_td_dv">
-                    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                    @include('Ingenieria.Servicios.Proyectos.layout.opciones-crear-servicio')
+                    {{-- <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                         <div class="form-group">
                             {!! Form::label('opt', 'Opciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <div class="form-check">
@@ -144,7 +145,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="modal-footer">

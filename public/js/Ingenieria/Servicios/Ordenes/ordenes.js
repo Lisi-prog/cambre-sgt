@@ -420,7 +420,6 @@ function actRow(){
         data: {
         },
         success: function (response) { 
-            // console.log(response) 
             table.cell(ind_rw, 4).data(response.nombre_orden).draw(false);
             table.cell(ind_rw, 6).data(response.estado).draw(false);
             table.cell(ind_rw, 8).data(response.responsable).draw(false);
