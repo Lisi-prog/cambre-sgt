@@ -58,7 +58,7 @@ function validarFiltro() {
 
     for (let i = 0; i < filtroColumnas.length; i++) {
         const cbx_col = document.getElementsByName(filtroColumnas[i]);
-        console.log(cbx_col);
+        // console.log(cbx_col);
         for (let i = 0; i < cbx_col.length; i++) {
             if (!cbx_col[i].checked) {
                 cantidadNoSeleccionadas++;

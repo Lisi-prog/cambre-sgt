@@ -391,10 +391,10 @@
                 let input_fec_ini = document.getElementById('input-fec_ini');
                 //let id_puesto = document.getElementById('input_id_puesto');
 
-                console.log(id);
-                console.log(nombre);
-                console.log(fecha);
-                console.log(lider);
+                // console.log(id);
+                // console.log(nombre);
+                // console.log(fecha);
+                // console.log(lider);
 
                 const $select = document.querySelector('#mySelect');
                 $select.value = lider;
