@@ -1464,7 +1464,7 @@ class OrdenController extends Controller
         $todasLasHdrOrdMec = Vw_hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
         $bandera = 1;
 
-        if ($todasLasHdrOrdMec) {
+        if ($todasLasHdrOrdMec->isNotEmpty()) {
             foreach ($todasLasHdrOrdMec as $hdr) {
                 if ($hdr->id_estado_hdr != 4) {
                     $bandera = 0;
