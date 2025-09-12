@@ -1788,6 +1788,15 @@ class OrdenController extends Controller
                                 'id_estado_hdr' => $estado,
                                 'medidas' => $ultParte->medidas
                             ]);
+
+                if ($estado == 4) { //orden completado
+                    Operaciones_de_hdr::where('id_hoja_de_ruta', $op->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
+                    $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $op->id_hoja_de_ruta)->where('numero', $op->numero + 1)->first();
+                    if ($opeSgt) {
+                        $opeSgt->activo = 1;
+                        $opeSgt->save();
+                    }
+                }
             }
 
             return 1;
