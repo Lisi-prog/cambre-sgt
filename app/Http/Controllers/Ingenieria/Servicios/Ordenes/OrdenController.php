@@ -1346,6 +1346,8 @@ class OrdenController extends Controller
             $hdr_a_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('numero', '>', $hdr_a_ope_act->numero)->get();
 
             foreach ($hdr_a_ope as $ope) {
+                $ope->prioridad = null;
+                $ope->save();
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
