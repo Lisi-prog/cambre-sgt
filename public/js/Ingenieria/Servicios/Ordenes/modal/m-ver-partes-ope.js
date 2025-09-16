@@ -79,7 +79,6 @@ $(document).ready(function () {
                 actualizarPartesOpe(id_ope);
                 nuevoParte();
                 setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-
             }
         });
     });
@@ -131,6 +130,8 @@ function nuevoParte(){
     document.getElementById('fecha').value = fecha_de_hoy;
     document.getElementById('horas').value = '00';
     document.getElementById('minutos').value = '00';
+    document.getElementById('horas_maquina').value = '00';
+    document.getElementById('minutos_maquina').value = '00';
     document.getElementById('m-editar').value = 0;
     document.getElementById('m-id-parte-ope').value = null;
     document.getElementById('checkDefaultMed').checked = false;
