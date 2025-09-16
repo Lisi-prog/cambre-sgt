@@ -1029,7 +1029,8 @@ class ParteController extends Controller
             'fecha' => 'required',
             'horas' => 'required',
             'minutos' => 'required',
-            'estado' => 'required'
+            'estado' => 'required',
+            'maquina' => 'required'
         ]);
 
         $ope = Operaciones_de_hdr::find($request->input('id_op'));
@@ -1065,6 +1066,9 @@ class ParteController extends Controller
 
         $horas = $request->input('horas') . ':' . $request->input('minutos');
 
+        $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
+
+        $id_maquinaria = $request->input('maquina');
        
         
 
@@ -1096,6 +1100,8 @@ class ParteController extends Controller
                         'fecha' => $fecha,
                         'fecha_carga' => $fecha_carga,
                         'horas' => $horas,
+                        'id_maquinaria' => $id_maquinaria,
+                        'horas_maquina' => $horas_maquina,
                         'id_responsabilidad' => $responsabilidad->id_responsabilidad,
                         'medidas' => $medidas,
                         'id_estado_hdr' => $estado,

@@ -940,12 +940,12 @@
                 } else {
                     document.getElementById('section-medida').hidden = false;
                 }
-            document.getElementById('body_ver_parte_ope').innerHTML = html;
-            document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
-            document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
-            document.getElementById('mv-estado').value = response.partes_ope[0].estado;
-            document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
-        
+                document.getElementById('body_ver_parte_ope').innerHTML = html;
+                document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
+                document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
+                document.getElementById('mv-estado').value = response.partes_ope[0].estado;
+                document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
+                obtenerMaquinasPorOpe(response.partes_ope[0].id_operacion);
         },
         complete: function(){
             changeTdColor();
@@ -964,23 +964,49 @@
             type: "post",
             url: '/orden/obtener-estados-de/'+opcion, 
             data: {
-                
             },
-        success: function (response) {
-            response.forEach(element => {
-                html_estados += `
-                                    <option value="`+element.id_estado+`">`+element.nombre
-                                    +`</option> 
-                                    `
-            });
-            select_estados.innerHTML += html_estados;
-        /* c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
-            c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : ''; */
-        },
-        error: function (error) {
-            console.log(error);
-        }
+            success: function (response) {
+                response.forEach(element => {
+                    html_estados += `
+                                        <option value="`+element.id_estado+`">`+element.nombre
+                                        +`</option> 
+                                        `
+                });
+                select_estados.innerHTML += html_estados;
+            },
+            error: function (error) {
+                console.log(error);
+            }
         }));
+    }
+
+    function obtenerMaquinasPorOpe(id){
+        let select_maquinas = document.getElementById('m-ver-parte-maquina');
+        select_maquinas.innerHTML = '<option value="">Seleccionar</option>';
+        html_maquinas = '';
+        let select_maq = null;
+        $.ajax({
+            type: "post",
+            url: '/operacion/obtener-maquinas-ope-de/'+id, 
+            data: {
+            },
+            success: function (res) {
+                if (res.length == 1) {
+                    select_maq = 'selected';
+                }
+
+                res.forEach(element => {
+                    html_maquinas += `
+                                       <option value="`+element.id_maquinaria+`" ${select_maq}>`+element.codigo_maquinaria
+                                        +`</option> 
+                                        `
+                });
+                select_maquinas.innerHTML += html_maquinas;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     }
 </script>
 {{-- <script>
