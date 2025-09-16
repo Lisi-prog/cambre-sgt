@@ -25,6 +25,8 @@ class Parte_ope_hdr extends Model
         'observaciones',
         'id_responsabilidad',
         'horas',
+        'id_maquinaria',
+        'horas_maquina',
         'id_estado_hdr',
         'medidas',
         'ruta_cam'

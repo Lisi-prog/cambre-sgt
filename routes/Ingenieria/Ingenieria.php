@@ -78,6 +78,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
     Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
     Route::post('/orden/obtener-estados-de/{opcion}',[OrdenController::class, 'listarTodosLosEstadosDe']);
+    Route::post('/operacion/obtener-maquinas-ope-de/{opcion}',[OrdenController::class, 'listarTodasLasMaquinariasDe']);
+
     // Route::post('/orden/obtener-info-orden-mul',[OrdenController::class, 'obtenerInfoOrdenMultiple']);
     Route::post('/orden/obtener-info-ope-mul',[OrdenController::class, 'obtenerInfoOpeMultiple']);
     Route::post('/orden/obtener-info-ope-mul-act',[OrdenController::class, 'obtenerInfoOpeMultipleAct']);

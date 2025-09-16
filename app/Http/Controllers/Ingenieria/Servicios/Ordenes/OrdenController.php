@@ -165,6 +165,12 @@ class OrdenController extends Controller
         return $estados_arr;
     }
 
+    public function listarTodasLasMaquinariasDe($idOpe){
+        return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
+                ->where('oxm.id_operacion', $idOpe)
+                ->get();
+    }
+
     public function listaOrdenEmp(){
         $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first()->id_rol_empleado;
         $responsabilidades = Responsabilidad::where('id_rol_empleado', $rol_empleado)->where('id_empleado', Auth::user()->getEmpleado->id_empleado)->get();
