@@ -945,7 +945,7 @@
                 document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
                 document.getElementById('mv-estado').value = response.partes_ope[0].estado;
                 document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
-                obtenerMaquinasPorOpe(id);
+                obtenerMaquinasPorOpe(response.partes_ope[0].id_operacion);
         },
         complete: function(){
             changeTdColor();
@@ -984,16 +984,20 @@
         let select_maquinas = document.getElementById('m-ver-parte-maquina');
         select_maquinas.innerHTML = '<option value="">Seleccionar</option>';
         html_maquinas = '';
+        let select_maq = null;
         $.ajax({
             type: "post",
             url: '/operacion/obtener-maquinas-ope-de/'+id, 
             data: {
             },
             success: function (res) {
-                console.log(res);
+                if (res.length == 1) {
+                    select_maq = 'selected';
+                }
+
                 res.forEach(element => {
                     html_maquinas += `
-                                       <option value="`+element.id_maquinaria+`">`+element.codigo_maquinaria
+                                       <option value="`+element.id_maquinaria+`" ${select_maq}>`+element.codigo_maquinaria
                                         +`</option> 
                                         `
                 });

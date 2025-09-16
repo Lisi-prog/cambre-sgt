@@ -1350,10 +1350,11 @@ class OrdenController extends Controller
 
             //descartar operaciones siguientes
             $hdr_a_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('numero', '>', $hdr_a_ope_act->numero)->get();
+            Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->update(['prioridad' => null]);
 
             foreach ($hdr_a_ope as $ope) {
-                $ope->prioridad = null;
-                $ope->save();
+                // $ope->prioridad = null;
+                // $ope->save();
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
@@ -1668,6 +1669,7 @@ class OrdenController extends Controller
                     'horas' => $parte->horas,
                     // 'supervisor' => $parte->getOrden->getSupervisor(),
                     'operacion' => $op->getOperacion->nombre_operacion,
+                    'id_operacion' => $op->id_operacion,
                     'orden_mec' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
                     'estado_op' => $op->getEstado(),
                     'medidas' => $parte->medidas
