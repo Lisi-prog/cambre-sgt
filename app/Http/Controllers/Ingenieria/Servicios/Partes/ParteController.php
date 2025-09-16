@@ -1141,6 +1141,10 @@ class ParteController extends Controller
                 $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
                 
             }
+
+            if ($estado == 5) { //orden completado
+                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
+            }
             $result = 1;
         }
 
@@ -1225,7 +1229,7 @@ class ParteController extends Controller
     }
 
     public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
-        $todasLasHdrOrdMec = Vw_hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
+        $todasLasHdrOrdMec = Vw_hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->where('id_estado_hdr', '<>', 5)->get();
         $bandera = 1;
 
         if ($todasLasHdrOrdMec) {
