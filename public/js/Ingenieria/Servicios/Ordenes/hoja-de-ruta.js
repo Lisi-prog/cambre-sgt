@@ -1,91 +1,5 @@
 $(document).ready(function () { 
     
-
-    // $(".nuevo-editar-parte").on('submit', function(evt){
-    //         evt.preventDefault();     
-    //         var url_php = $(this).attr("action"); 
-    //         var type_method = $(this).attr("method"); 
-    //         var form_data = $(this).serialize();
-    //         let html = '';
-    //         // let id_orden = document.getElementById('m-ver-parte-orden').value;
-    //         $.ajax({
-    //             type: type_method,
-    //             url: url_php,
-    //             data: form_data,
-    //             success: function(data) {
-    //                 //console.log(data);
-    //                 opcion = parseInt(data.resultado);
-    //                 switch (opcion) {
-    //                     case 1:
-    //                         html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-    //                                         Parte creado con exito
-    //                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                                             <span aria-hidden="true">&times;</span>
-    //                                         </button>
-    //                                     </div>`;
-    //                         break;
-    //                     case 2:
-    //                         id = document.getElementById('m-id-parte').value;
-    //                         html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-    //                                         Parte cod. `+id+` actualizado con exito
-    //                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                                             <span aria-hidden="true">&times;</span>
-    //                                         </button>
-    //                                     </div>`;
-    //                         break;
-    //                     case 6:
-    //                         html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-    //                                     No se puede actualizar un parte de la cual no eres responsable.
-    //                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                                         <span aria-hidden="true">&times;</span>
-    //                                     </button>
-    //                                 </div>`;
-    //                         break;
-    //                     default:
-    //                         html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-    //                                     Ocurrio un error
-    //                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                                         <span aria-hidden="true">&times;</span>
-    //                                     </button>
-    //                                 </div>`;
-    //                         break;
-    //                 }
-    //                 $('#alert').html(html)
-    //                 // cargarModalVerPartesOpe(id)
-    //                 // recargarPartes(id_orden, data.tipo_orden);
-    //                 // nuevoParte();
-    //                 setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-
-    //             }
-    //         });
-    // });
-
-    // $('#m-ver-act-id_estado').on('change', mostrarOpcionComEtp);
-
-    // $(".nuevo-editar-orden").on('submit', function(evt){
-    //     evt.preventDefault();     
-
-    //     var url_php = $(this).attr("action"); 
-    //     var type_method = $(this).attr("method"); 
-    //     var form_data = $(this).serialize();
-
-    //     $.ajax({
-    //         type: type_method,
-    //         url: url_php,
-    //         data: form_data,
-    //         success: function(data) {
-    //             html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
-    //                                     `+data+`
-    //                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                                         <span aria-hidden="true">&times;</span>
-    //                                     </button>
-    //                                 </div>`;
-    //             $('#alertOrd').html(html)
-    //             setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
-    //         }
-    //     });
-    //     // actRow();
-    // });
 });
 
 function cargarOperaciones(id) {
@@ -220,11 +134,12 @@ function cargarModalVerPartesOpe(id){
             } else {
                 document.getElementById('section-medida').hidden = false;
             }
-        document.getElementById('body_ver_parte_ope').innerHTML = html;
-        document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
-        document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
-        document.getElementById('mv-estado').value = response.partes_ope[0].estado;
-        document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
+            document.getElementById('body_ver_parte_ope').innerHTML = html;
+            document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
+            document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
+            document.getElementById('mv-estado').value = response.partes_ope[0].estado;
+            document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
+            obtenerMaquinasPorOpe(response.partes_ope[0].id_operacion);
     },
     complete: function(){
         changeTdColor();
@@ -232,6 +147,35 @@ function cargarModalVerPartesOpe(id){
     error: function (error) {
         console.log(error);
     }
+    });
+}
+
+function obtenerMaquinasPorOpe(id){
+    let select_maquinas = document.getElementById('m-ver-parte-maquina');
+    select_maquinas.innerHTML = '<option value="">Seleccionar</option>';
+    html_maquinas = '';
+    let select_maq = null;
+    $.ajax({
+        type: "post",
+        url: '/operacion/obtener-maquinas-ope-de/'+id, 
+        data: {
+        },
+        success: function (res) {
+            if (res.length == 1) {
+                select_maq = 'selected';
+            }
+
+            res.forEach(element => {
+                html_maquinas += `
+                                    <option value="`+element.id_maquinaria+`" ${select_maq}>`+element.codigo_maquinaria
+                                    +`</option> 
+                                    `
+            });
+            select_maquinas.innerHTML += html_maquinas;
+        },
+        error: function (error) {
+            console.log(error);
+        }
     });
 }
 
