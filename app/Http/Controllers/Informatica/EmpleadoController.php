@@ -97,6 +97,7 @@ class EmpleadoController extends Controller
         $puesto = $request->input('puesto');
         $sector = $request->input('sector');
         $costo_hora = $request->input('costo_hora');
+        $habilitado_operaciones = $request->input('habilitado_operaciones');
 
         if ($request->input('telefono')) {
             $telefono = $request->input('telefono');
@@ -113,7 +114,8 @@ class EmpleadoController extends Controller
                     'telefono_empleado' => $telefono,
                     'id_puesto_empleado' => $puesto,
                     'costo_hora' => $costo_hora,
-                    'id_sector' => $sector 
+                    'id_sector' => $sector,
+                    'habilitado_operaciones' => $habilitado_operaciones
                 ]);
                 break;
             
@@ -140,7 +142,8 @@ class EmpleadoController extends Controller
                     'id_puesto_empleado' => $puesto,
                     'id_sector' => $sector,
                     'costo_hora' => $costo_hora,
-                    'user_id' => $usuario->id
+                    'user_id' => $usuario->id,
+                    'habilitado_operaciones' => $habilitado_operaciones
                 ]);
 
                 break;
@@ -193,6 +196,7 @@ class EmpleadoController extends Controller
         $sector = $request->input('sector');
         $costo_hora = $request->input('costo_hora');
         $esta_activo = $request->input('esta_activo');
+        $habilitado_operaciones = $request->input('habilitado_operaciones');
         // $not_email_new = collect($request->input('notificaciones_email'));
 
         $not_emails_new  = collect($request->input('notificaciones_email'))->map(function ($value) {
@@ -250,7 +254,8 @@ class EmpleadoController extends Controller
             'id_puesto_empleado' => $puesto,
             'id_sector' => $sector,
             'costo_hora' => $costo_hora,
-            'esta_activo' => $esta_activo
+            'esta_activo' => $esta_activo,
+            'habilitado_operaciones' => $habilitado_operaciones,
         ]);
 
         foreach ($empleado->getEmpmaq as $empmaq) {

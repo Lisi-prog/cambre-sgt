@@ -846,6 +846,10 @@ class OrdenController extends Controller
         return Empleado::orderBy('nombre_empleado')->activo()->get();
     }
 
+    public function obtenerEmpleadosActivosOperarios(){
+        return Empleado::orderBy('nombre_empleado')->activo()->operario()->get();
+    }
+
     public function obtenerCodigoServicio(){
         return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
@@ -1523,7 +1527,7 @@ class OrdenController extends Controller
     public function obtenerOperacionesyTecnicos(){
         return [
                 'operaciones' => Operacion::orderBy('nombre_operacion')->get(),
-                'tecnicos' => $this->obtenerEmpleadosActivos()
+                'tecnicos' => $this->obtenerEmpleadosActivosOperarios()
                 ];
     }
 
