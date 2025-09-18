@@ -27,7 +27,8 @@ class Empleado extends Model
         'id_sector',
         'costo_hora',
         'user_id',
-        'esta_activo'
+        'esta_activo',
+        'habilitado_operaciones'
     ];
 
     public function getRequerimientoIngenieria()
@@ -63,6 +64,11 @@ class Empleado extends Model
     public function scopeActivo($query)
     {
         return $query->where('esta_activo', 1);
+    }
+
+    public function scopeOperario($query)
+    {
+        return $query->where('habilitado_operaciones', 1);
     }
     
     public function getOrganigrama(){
