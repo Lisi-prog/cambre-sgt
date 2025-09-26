@@ -1555,11 +1555,15 @@ class OrdenController extends Controller
                             $ope->id_operacion = $id_ope;
                             $ope->save();
 
-                            if ($res) {
-                               $parteMod = Parte_ope_hdr::where('id_ope_de_hdr', $ope->id_ope_de_hdr)->first();
+                            $parteMod = Parte_ope_hdr::where('id_ope_de_hdr', $ope->id_ope_de_hdr)->first();
+
+                            if (!is_null($res)) {
                                $parteMod->id_responsabilidad = $res;
-                               $parteMod->save();
+                            }else{
+                                $parteMod->id_responsabilidad = null;
                             }
+
+                            $parteMod->save();
                         }
 
                     }else{
