@@ -59,7 +59,7 @@ class CustomDropdown {
 
     showDropdown() {
         this.dropdown.style.display = "block";
-        this.filterOptions(); // Filtrar para mostrar solo las opciones válidas
+        // this.filterOptions(); // Filtrar para mostrar solo las opciones válidas
     }
 
     hideDropdown() {

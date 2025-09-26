@@ -280,3 +280,40 @@ function cargarHdrVer(id){
         }
     });
 }
+
+function cargarHdrEdit(id){
+    document.getElementById('m_edi_idhdr').value = id;
+    limpiarModalHdrEdit();
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtener-hdr/'+id, // Ruta para obtener las máquinas
+        data: { id: id },
+        success: function (response) {
+            // console.log(response);
+            document.getElementById('m_edi_ubi').value = response.ubicacion;
+            document.getElementById('m_edi_cant').value = response.cantidad;
+            document.getElementById('m_edi_ruta').value = response.ruta;
+            document.getElementById('m_edi-obser').value = response.observaciones;
+            document.getElementById('edi_table-body').innerHTML = '';
+
+            response.operaciones.forEach(function (op) {
+                addRowEdi().then((nuevaFila) => {
+                    nuevaFila.querySelector(".input-ope").value = op.operacion;
+                    nuevaFila.querySelector(".input-asig").value = op.asignado;
+                    nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
+                });
+            });
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function limpiarModalHdrEdit(){
+    document.getElementById('m_edi_ubi').value = null;
+    document.getElementById('m_edi_cant').value = null;
+    document.getElementById('m_edi_ruta').value = null;
+    document.getElementById('m_edi-obser').value = null;
+    document.getElementById('edi_table-body').innerHTML = '';
+}

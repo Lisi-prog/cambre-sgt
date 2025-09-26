@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('orden/multiple-parte', [OrdenController::class, 'cargaMultipleParte'])->name('ordenes.multipleparte');
     Route::get('ordenes/mec/{id}/hdr', [OrdenController::class, 'ordenHDR'])->name('ordenes.hdr');
     Route::put('ordenes/mec/{id}/hdr/guardar', [OrdenController::class, 'guardar_hdr'])->name('hdr.crear');
+    Route::put('ordenes/mec/{id}/hdr/editar', [OrdenController::class, 'editar_hdr'])->name('hdr.edit');
     Route::post('/orden/mec/hdr/obtenerope',[OrdenController::class, 'obtenerOperacionesyTecnicos']);
     Route::post('/orden/mec/hdr/obtenermaq',[OrdenController::class, 'obtenerMaquinas']);
     Route::post('/orden/mec/hdr/obtener-ope-hdr',[OrdenController::class, 'obtenerOperacionHdr']);
