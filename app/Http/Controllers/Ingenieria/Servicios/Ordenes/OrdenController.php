@@ -1474,6 +1474,255 @@ class OrdenController extends Controller
         return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido creado con exito.');
     }
 
+    public function editar_hdr(Request $request, $id){
+        // return $request;
+
+        // variables
+        $idHdr = $request->input('id_hdr');
+        $ubicacion = $request->input('m_ubi');
+        $observaciones = $request->input('observaciones');
+        $cantidad = $request->input('m_cant');
+        $ruta = $request->input('m_ruta');
+        $ubicacion = $request->input('m_ubi');
+
+        $contador = 1;
+
+        try {    
+            DB::beginTransaction();
+
+            $hdr = Hoja_de_ruta::find($idHdr);
+
+            $hdr->observaciones = $observaciones;
+
+            $hdr->ubicacion = $ubicacion;
+
+            $hdr->cantidad = $cantidad;
+
+            $hdr->ruta = $ruta;
+
+            if(!$hdr->save()) {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'Ocurrio un problema al editar la hoja de ruta');
+            }
+
+            if ($request->input('operacion')) {
+                $operaciones = $request->input('operacion');
+            } else {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'La hoja de ruta debe tener minimo una operacion.');
+            }
+            
+            $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            if (count($operaciones) != 0) {
+                $tecnicos = $request->input('tecnico');
+                $maquinarias = $request->input('maq');
+                $total_op = count($operaciones);
+
+                $totalOpeActual = Operaciones_de_hdr::where('id_hoja_de_ruta', $idHdr)->count();
+
+                for ($i=0; $i < $total_op; $i++) { 
+                    $res = null;
+                    $id_maq = null;
+
+                    $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
+
+                    if (!is_null($maquinarias[$i])) {
+                        $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+                    }
+
+                    if (!is_null($tecnicos[$i])) {
+                        $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+
+                        $responsabilidad_parte_hdr = Responsabilidad::create([
+                            'id_empleado' => $id_emp,
+                            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                        ]);
+                        
+                        $res = $responsabilidad_parte_hdr->id_responsabilidad;
+                    }
+
+                    $ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $idHdr)->where('numero', $contador)->first();
+
+                    if ($ope) {
+
+                        //Editar la operacion existente
+                        // $ope->numero = 
+                        if ($ope->getTotaPartesActual() == 1) {
+                            $ope->id_maquinaria = $id_maq;
+                            $ope->id_operacion = $id_ope;
+                            $ope->save();
+
+                            if ($res) {
+                               $parteMod = Parte_ope_hdr::where('id_ope_de_hdr', $ope->id_ope_de_hdr)->first();
+                               $parteMod->id_responsabilidad = $res;
+                               $parteMod->save();
+                            }
+                        }
+
+                    }else{
+
+                        //Crear si se agrega una nueva operacion
+                        $fec_carga = Carbon::now()->format('Y-m-d H:i:s');
+                        $fec = Carbon::now()->format('Y-m-d');
+
+                        if ($i == 0) {
+                            $activo = 1;
+                        } else {
+                            $activo = 0;
+                        }
+
+                        $newOpe = Operaciones_de_hdr::create([
+                                'id_hoja_de_ruta' => $idHdr,
+                                'numero' => $contador,
+                                'fecha_carga' => $fec_carga,
+                                'fecha' => $fec,
+                                'id_maquinaria' => $id_maq,
+                                'id_operacion' => $id_ope,
+                                'activo' => $activo
+                        ]);
+
+                        Parte_ope_hdr::create([
+                            'id_ope_de_hdr' => $newOpe->id_ope_de_hdr,
+                            'fecha_carga' => $fec_carga,
+                            'fecha' => $fec,
+                            'observaciones' => 'Generacion de operacion de hoja de ruta.',
+                            'id_responsabilidad' => $res,
+                            'horas' => '00:00',
+                            'medidas' => 0,
+                            'id_estado_hdr' => 1
+                        ]);
+                    }
+
+                    $contador += 1;
+                }
+
+                if ($totalOpeActual != $total_op) {
+                    $operacionesABorrar = Operaciones_de_hdr::where('id_hoja_de_ruta', $idHdr)->where('numero', '>', $total_op)->get();
+
+                    foreach ($operacionesABorrar as $opeABorrar) {
+                        if ($opeABorrar->getTotaPartesActual() == 1) {
+                            $opeABorrar->getPartes()->delete();
+                            $opeABorrar->delete();
+                        }
+                    }
+                }
+            }else{
+                //Borrar todas las operaciones?
+            }
+
+            // if (count($operaciones) != 0) {
+            //     $tecnicos = $request->input('tecnico');
+            //     $maquinarias = $request->input('maq');
+            //     $total_op = count($operaciones);
+
+            //     for ($i=0; $i < $total_op; $i++) { 
+            //         $res = null;
+            //         $id_maq = null;
+
+            //         $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
+
+            //         if (!is_null($maquinarias[$i])) {
+            //             $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+            //         }
+                    
+
+            //         if ($i == 0) {
+            //             $activo = 1;
+            //         } else {
+            //             $activo = 0;
+            //         }
+                    
+
+            //         if (!is_null($tecnicos[$i])) {
+            //             $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+
+            //             $responsabilidad_parte_hdr = Responsabilidad::create([
+            //                 'id_empleado' => $id_emp,
+            //                 'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+            //             ]);
+                        
+            //             $res = $responsabilidad_parte_hdr->id_responsabilidad;
+            //         }
+                    
+                    
+
+            //         $ope = Operaciones_de_hdr::create([
+            //                     'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
+            //                     'numero' => $contador,
+            //                     'fecha_carga' => $fec_carga,
+            //                     'fecha' => $fec,
+            //                     'id_maquinaria' => $id_maq,
+            //                     'id_operacion' => $id_ope,
+            //                     'activo' => $activo
+            //                     // 'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
+            //                     // 'medidas',
+            //                     // 'ruta_cam'
+            //             ]);
+
+            //         Parte_ope_hdr::create([
+            //             'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+            //             'fecha_carga' => $fec_carga,
+            //             'fecha' => $fec,
+            //             'observaciones' => 'Generacion de operacion de hoja de ruta.',
+            //             'id_responsabilidad' => $res,
+            //             'horas' => '00:00',
+            //             'medidas' => 0,
+            //             'id_estado_hdr' => 1
+            //         ]);
+
+            //         $contador += 1;
+
+            //     }
+            // }
+            // for ($i = 0; $i < count($destino); $i++) {
+            //     $dest = new Via_destino();
+
+            //     $dest->id_memo = $idMemo;
+
+            //     $dest->id_orden_s = $id;
+
+            //     $dest->motivo = $motivo[$i];
+
+            //     $dest->localidad = $destino[$i];
+
+            //     $dest->renglon = $i+1;
+
+            //     if(!$dest->save()) {
+            //         DB::rollBack();
+            //         return redirect()->back()
+            //                 ->with('error', 'Ocurrió un problema al vincular los destinos al Memorandum.');
+            //     }
+            // }
+
+            // foreach ($agentes as $agente) {
+            //     $agenteMemo = new Via_memo_age();
+
+            //     $agenteMemo->id_memo = $idMemo;
+
+            //     $agenteMemo->personal = $agente;
+
+            //     if(!$agenteMemo->save()) {
+            //         DB::rollBack();
+            //         return redirect()->back()
+            //                 ->with('error', 'Ocurrió un problema al vincular los agentes al Memorandum.');
+            //     }
+
+            // }
+    
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido editado con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al crear el Memorandum: '.$e->getMessage());
+        }
+    }
+
     public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
         $todasLasHdrOrdMec = Vw_hoja_de_ruta::where('id_orden_mecanizado', $id_mec)->get();
         $bandera = 1;
@@ -1603,12 +1852,19 @@ class OrdenController extends Controller
 
     public function obtenerMaquinas(Request $request){
         $nom_ope = $request->input('nom_operacion');
-        $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
-        // $idOperacion = $request->input('id_operacion');
 
-        return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
-                ->where('oxm.id_operacion', $idOperacion)
-                ->get();
+        if (Operacion::where('nombre_operacion', $nom_ope)->first()) {
+            $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
+            // $idOperacion = $request->input('id_operacion');
+
+            return Maquinaria::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'maquinaria.id_maquinaria')
+                    ->where('oxm.id_operacion', $idOperacion)
+                    ->get();
+        } else {
+            return [];
+        }
+        
+        
     }
 
     public function obtenerHdrAnt($id){

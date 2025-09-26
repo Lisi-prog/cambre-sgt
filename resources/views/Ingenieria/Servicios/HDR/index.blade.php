@@ -182,6 +182,13 @@
                                                         </div>
                                                         <div class="row my-2">
                                                             <div class="col-12">
+                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
+                                                                    Editar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})">
                                                                     Operaciones
                                                                 </button>
@@ -262,6 +269,7 @@
 @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
 @include('Ingenieria.Servicios.HDR.modal.ver-hdr')
 @include('Ingenieria.Servicios.HDR.modal.reiniciar-hdr')
+@include('Ingenieria.Servicios.HDR.modal.edit-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 <script>

@@ -35,6 +35,10 @@ class Operaciones_de_hdr extends Model
         return $this->hasMany(Parte_ope_hdr::class, 'id_ope_de_hdr');
     }
 
+    public function getTotaPartesActual(){
+        return $this->getPartes()->count();
+    }
+
     public function getMedidaEstado(){
         $esta_validado = Parte_ope_hdr::where('medidas', 1)->where('id_ope_de_hdr', $this->id_ope_de_hdr)->first();
 
