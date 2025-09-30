@@ -20,7 +20,8 @@ class Orden_manufactura_asoc extends Model
 
     protected $fillable = [ 
         'id_orden_manufactura',
-        'id_orden_man_asoc'
+        'id_orden_man_asoc',
+        'es_retrabajo'
     ];
 
     public function getOrdenManufactura()

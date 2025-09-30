@@ -1,55 +1,60 @@
-$(document).ready(function () { 
-    
-});
+let bOpe = 1;
 
 function cargarOperaciones(id) {
-    let body_tb = document.getElementById('body_ope');
-    body_tb.innerHTML = '';
-    let fila_ope = '';
-    $.ajax({
-        type: "post",
-        url: '/orden/mec/hdr/obtener-ope-hdr', 
-        data: {
-            id: id,
-        },
-        success: function (response) {
-            // console.log(response);
-            response.forEach((op) => {
+    // if (bOpe) {
+        let body_tb = document.getElementById('body_ope');
+        body_tb.innerHTML = '';
+        let fila_ope = '';
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtener-ope-hdr', 
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                // console.log(response);
+                response.forEach((op) => {
 
-                if (op.activo != 1) {
-                    tr = '<tr>'
-                } else {
-                    tr = '<tr style="background-color: #d3fccf">'
-                }
-                fila_ope += tr+`
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.fecha ?? '-'}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria ?? '-'}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.nombre_estado_hdr}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
-                                    <td class= 'text-center' style="vertical-align: middle;">${op.medidas}</td>
-                                    <td class='text-center' style="vertical-align: middle;">
-                                        
-                                                    <div class="col-12">
-                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe(${op.id_ope_de_hdr})">
-                                                            Partes
-                                                        </button>
-                                                    </div>
-                                                
-                                    </td>
-                                </tr>
-                                `; 
-            });
-            body_tb.innerHTML += fila_ope;
-            changeTdColor();
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
+                    if (op.activo != 1) {
+                        tr = '<tr>'
+                    } else {
+                        tr = '<tr style="background-color: #d3fccf">'
+                    }
+                    fila_ope += tr+`
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.id_hoja_de_ruta}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.fecha ?? '-'}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria ?? '-'}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.nombre_estado_hdr}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.medidas}</td>
+                                        <td class='text-center' style="vertical-align: middle;">
+                                            
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe(${op.id_ope_de_hdr})">
+                                                                Partes
+                                                            </button>
+                                                        </div>
+                                                    
+                                        </td>
+                                    </tr>
+                                    `; 
+                });
+                body_tb.innerHTML += fila_ope;
+                changeTdColor();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        // bOpe = 0;
+    // } else {
+    //     let body_tb = document.getElementById('body_ope');
+    //     body_tb.innerHTML = '';
+    //     bOpe = 1;
+    // }
 }
 
 function cargarModalCrearHDR(id, orden, sup){
