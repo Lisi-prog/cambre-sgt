@@ -14,7 +14,7 @@ class Vw_gest_orden_manufactura extends Model
     
     protected $table = 'vw_gest_orden_manufactura';
 
-    protected $primaryKey = 'vw_gest_orden_manufactura';
+    protected $primaryKey = 'id_orden';
 
     public $incrementing = false;
 
@@ -24,6 +24,7 @@ class Vw_gest_orden_manufactura extends Model
         'codigo_servicio',
         'nombre_servicio',
         'id_orden',
+        'id_orden_manufactura',
         'nombre_orden',
         'descripcion_etapa',
         'fecha_limite',
@@ -48,4 +49,7 @@ class Vw_gest_orden_manufactura extends Model
     //     'horas_estimada' => HoraMinutoCast::class
     // ];
 
+    public function getConjuntoSuperior(){
+        return $this->belongsTo(Orden_manufactura_asoc::class, 'id_orden_manufactura', 'id_orden_manufactura');
+    }
 }

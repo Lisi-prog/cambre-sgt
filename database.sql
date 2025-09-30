@@ -386,6 +386,12 @@ CREATE TABLE `orden_manufactura` (
   CONSTRAINT `pk_id_orden_manufactura_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
 );
 
+CREATE TABLE `orden_manufactura_asoc`(
+  `id_orden_manufactura` int,
+  `id_orden_man_asoc` int,
+  `es_retrabajo` boolean
+);
+
 CREATE TABLE `parte_manufactura` (
   `id_parte_manufactura` int NOT NULL AUTO_INCREMENT,
   `id_estado_manufactura` int,
@@ -404,6 +410,13 @@ CREATE TABLE `orden_mecanizado` (
   `id_orden_manufactura` int,
   PRIMARY KEY (`id_orden_mecanizado`),
   CONSTRAINT `pk_id_orden_mecanizado_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`)
+);
+
+CREATE TABLE `orden_mecanizado_asoc`(
+  `id_orden_mecanizado` int,
+  `id_orden_mec_asoc` int,
+  `ord_tra_compar` varchar(500) DEFAULT NULL,
+  `es_retrabajo` boolean
 );
 
 -- OLD
@@ -428,22 +441,44 @@ CREATE TABLE `hoja_de_ruta` (
   `id_hoja_de_ruta` int NOT NULL AUTO_INCREMENT,
   `fecha_carga` datetime,
   `observaciones` varchar(500),
+  `ubicacion` varchar(100),
+  `cantidad` int,
   `id_responsabilidad` int,
   `id_orden_mecanizado` int,
+  `ruta` varchar(500),
+  `activo` boolean,
   PRIMARY KEY (`id_hoja_de_ruta`),
   CONSTRAINT `pk_hoja_de_ruta_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_hoja_de_ruta_x_orden_mec` FOREIGN KEY (`id_orden_mecanizado`) REFERENCES `orden_mecanizado`(`id_orden_mecanizado`)
 );
 
+CREATE TABLE `hdr_reg_fallo` (
+  `id_hdr_ant` int,
+  `id_hdr_sig` int,
+  `observaciones_fallo` varchar(500),
+  `responsable` varchar(250),
+  PRIMARY KEY (`id_hdr_ant`, `id_hdr_sig`)
+); 
+
+CREATE TABLE `archivo_hdr` (
+  `id_archivo_hdr` int NOT NULL AUTO_INCREMENT,
+  `id_hoja_de_ruta` int NOT NULL,
+  `nombre_archivo` varchar(250),
+  `ruta` varchar(500),
+  PRIMARY KEY (`id_archivo_hdr`),
+  CONSTRAINT `pk_id_archivo_x_hdr` FOREIGN KEY (`id_hoja_de_ruta`) REFERENCES `hoja_de_ruta`(`id_hoja_de_ruta`)
+);
+
 CREATE TABLE `operaciones_de_hdr` (
   `id_ope_de_hdr` int NOT NULL AUTO_INCREMENT,
   `id_hoja_de_ruta` int,
+  `prioridad` int,
   `numero` int,
   `fecha_carga` datetime,
   `fecha` date,
   `id_maquinaria` int NULL,
   `id_operacion` int,
-  `ruta_cam` varchar(100),
+  `activo` boolean,
   PRIMARY KEY (`id_ope_de_hdr`),
   CONSTRAINT `pk_ope_de_hdr_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
   CONSTRAINT `pk_ope_de_hdr_x_operacion` FOREIGN KEY (`id_operacion`) REFERENCES `operacion`(`id_operacion`),
@@ -458,15 +493,16 @@ CREATE TABLE `parte_ope_hdr` (
   `observaciones` varchar(500),
   `id_responsabilidad` int,
   `horas` time,
-  `id_maquinaria` int NULL,
+  `id_maquinaria` int,
   `horas_maquina` time,
   `medidas` boolean,
   `id_estado_hdr` int,
+  `ruta_cam` varchar(200),
   PRIMARY KEY (`id_parte_ope_hdr`),
   CONSTRAINT `pk_parte_ope_hdr_x_responsabilidad` FOREIGN KEY (`id_responsabilidad`) REFERENCES `responsabilidad`(`id_responsabilidad`),
   CONSTRAINT `pk_parte_ope_hdr_x_ope_hdr` FOREIGN KEY (`id_ope_de_hdr`) REFERENCES `operaciones_de_hdr`(`id_ope_de_hdr`),
-  CONSTRAINT `pk_parte_ope_hdr_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`),
-  CONSTRAINT `pk_parte_ope_hdr_x_est_hdr` FOREIGN KEY (`id_estado_hdr`) REFERENCES `estado_hdr`(`id_estado_hdr`)
+  CONSTRAINT `pk_parte_ope_hdr_x_est_hdr` FOREIGN KEY (`id_estado_hdr`) REFERENCES `estado_hdr`(`id_estado_hdr`),
+  CONSTRAINT `pk_parte_ope_hdr_x_maq` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria`(`id_maquinaria`)
 );
 
 
@@ -759,19 +795,30 @@ VALUES
   (1, 'Planos entregados'),
   (2, 'Material encargado'),
   (3, 'Material preparado'),
-  (4, 'Mecanizado completo'),
-  (5, 'Temple'),
-  (6, 'Pieza finalizada'),
-  (7, 'Cancelado');
+  (4, 'Espera'),
+  (5, 'En proceso'),
+  (6, 'Revisar'),
+  (7, 'Completo'),
+  (8, 'Cancelado');
 
 INSERT INTO estado_manufactura(id_estado_manufactura, nombre_estado_manufactura)
 VALUES
-  (1, 'Orden creada'),
-  (2, 'Piezas en fabricacion'),
-  (3, 'Piezas listas'),
-  (4, 'Ajuste listo'),
-  (5, 'Ensamble listo'),
-  (6, 'Cancelado');
+  (1, 'Planos entregados'),
+  (2, 'En proceso'),
+  (3, 'Espera'),
+  (4, 'Pausa'),
+  (5, 'Programado'),
+  (6, 'Revisar'),
+  (7, 'Completo'),
+  (8, 'Cancelado');
+
+INSERT INTO estado_hdr(id_estado_hdr, nombre_estado_hdr)
+VALUES
+  (1, 'Espera'),
+  (2, 'En proceso'),
+  (3, 'Problema'),
+  (4, 'Completo'),
+  (5, 'Descartar');
 
 INSERT INTO tipo_relacion_gantt(nombre_relacion_gantt)
 VALUES

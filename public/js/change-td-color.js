@@ -5,7 +5,7 @@
 window.addEventListener("load", changeTdColor);
 window.addEventListener("pintarTabla", changeTdColor);
 
-function changeTdColor() {
+function changeTdColor22() {
     const values = document.querySelectorAll("tr");
     var text_var = "Estado"
     //var elem = $('th').filter(function() {
@@ -61,7 +61,7 @@ function changeTdColor() {
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#f8696b"; // if matches, change color
                      }
             
-                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Cancelado") { // check if td has desired value
+                     if (values[x].children[indexColumnaEstados[y]].innerHTML == "Cancelado" || values[x].children[indexColumnaEstados[y]].innerHTML == "Descartar") { // check if td has desired value
                          values[x].children[indexColumnaEstados[y]].style.backgroundColor = "#d2cab5"; // if matches, change color
                      }
                      if (values[x].children[indexColumnaEstados[y]].innerHTML == "Completo") { // check if td has desired value
@@ -261,4 +261,142 @@ function changeInteresColor() {
             }
         }
     }
+}
+
+function changeTdColorOpt() {
+    const tablas = document.querySelectorAll("table");
+
+    // Diccionario de estados y colores
+    const colores = {
+        "Continua": "#746cd6",
+        "En proceso": "#00b0f0",
+        "Espera": "#ff8001",
+        "Pausa": "#ffc000",
+        "Externo": "#ebd577",
+        "Programado": "#997339",
+        "Revisar": "#d4ea00",
+        "Problema": "#f8696b",
+        "Cancelado": "#d2cab5",
+        "Descartar": "#d2cab5",
+        "Completo": "#92d050",
+        "Planos entregados": "#997339",
+        "Orden creada": "#997339",
+        "Piezas en fabricacion": "#ff8001",
+        "Piezas listas": "#00b0f0",
+        "Ajuste listo": "#d4ea00",
+        "Ensamble listo": "#92d050",
+        "Material encargado": "#ff8001",
+        "Material preparado": "#00b0f0",
+        "Mecanizado completo": "#d4ea00",
+        "Pieza finalizada": "#92d050",
+        "Temple": "#ebd577",
+        "A Evaluar": "#d1d424",
+        "Rechazado": "#d2cab5",
+        "Aceptado": "#92d050"
+    };
+
+    // Recorrer todas las tablasy
+    tablas.forEach((tabla) => {
+        const filas = tabla.querySelectorAll("tr");
+        let indexColEstado = -1;
+
+        // Buscar la columna "Estado"
+        for (let i = 0; i < filas.length; i++) {
+            const celdas = filas[i].children;
+            for (let j = 0; j < celdas.length; j++) {
+                if (celdas[j].innerText.trim() === "Estado") {
+                    indexColEstado = j;
+
+                    // Recorremos las filas siguientes (datos)
+                    for (let k = i + 1; k < filas.length; k++) {
+                        const celda = filas[k].children[indexColEstado];
+                        if (!celda) continue;
+
+                        const valor = celda.innerText.trim();
+                        celda.style.color = "#fff";
+
+                        if (colores[valor]) {
+                            celda.style.backgroundColor = colores[valor];
+                        }
+                    }
+
+                    break; // una vez que encontramos "Estado", no seguimos buscando más encabezados
+                }
+            }
+
+            if (indexColEstado !== -1) break;
+        }
+    });
+
+    calcularDiferenciaFechas(); // Tu función externa
+}
+
+function changeTdColor() {
+    const tablas = document.querySelectorAll("table");
+
+    // Diccionario de estados y colores
+    const colores = {
+        "Continua": "#746cd6",
+        "En proceso": "#00b0f0",
+        "Espera": "#ff8001",
+        "Pausa": "#ffc000",
+        "Externo": "#ebd577",
+        "Programado": "#997339",
+        "Revisar": "#d4ea00",
+        "Problema": "#f8696b",
+        "Cancelado": "#d2cab5",
+        "Descartar": "#d2cab5",
+        "Completo": "#92d050",
+        "Planos entregados": "#997339",
+        "Orden creada": "#997339",
+        "Piezas en fabricacion": "#ff8001",
+        "Piezas listas": "#00b0f0",
+        "Ajuste listo": "#d4ea00",
+        "Ensamble listo": "#92d050",
+        "Material encargado": "#ff8001",
+        "Material preparado": "#00b0f0",
+        "Mecanizado completo": "#d4ea00",
+        "Pieza finalizada": "#92d050",
+        "Temple": "#ebd577",
+        "A Evaluar": "#d1d424",
+        "Rechazado": "#d2cab5",
+        "Aceptado": "#92d050"
+    };
+
+    // Recorrer todas las tablas
+    tablas.forEach((tabla) => {
+        const filas = tabla.querySelectorAll("tr");
+
+        // Buscar todas las columnas que contengan "Estado" en el encabezado
+        const columnasEstado = [];
+
+        for (let i = 0; i < filas.length; i++) {
+            const celdas = filas[i].children;
+            for (let j = 0; j < celdas.length; j++) {
+                const texto = celdas[j].innerText.trim().toLowerCase();
+                if (texto.includes("estado")) {
+                    columnasEstado.push({colIndex: j, headerRow: i});
+                }
+            }
+            if (columnasEstado.length > 0) break; // Solo necesitamos la primera fila de encabezados
+        }
+
+        // Pintar cada columna de estado
+        columnasEstado.forEach(({colIndex, headerRow}) => {
+            for (let k = headerRow + 1; k < filas.length; k++) {
+                const celda = filas[k].children[colIndex];
+                if (!celda) continue;
+
+                const valor = celda.innerText.trim();
+                celda.style.color = "#fff";
+
+                if (colores[valor]) {
+                    celda.style.backgroundColor = colores[valor];
+                }
+            }
+        });
+    });
+
+    // Llamada a tu función externa
+    calcularDiferenciaFechas();
 }

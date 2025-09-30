@@ -1,10 +1,14 @@
 <!-- Modal -->
-
+<style>
+    #encabezado_tabla_parte th {
+        background: #558540;
+    }
+</style>
 <div class="modal fade" id="verPartesOpeHdrModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Ver Partes</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Ver Partes Operaciones</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -46,17 +50,15 @@
                             <thead id="encabezado_tabla_parte" style="background: #558540">
                                 <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th>
+                                {{-- <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th> --}}
                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Horas</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                                <th id="column-maq" class="text-center" scope="col" style="color:#fff;" hidden>Maquina</th>
-                                <th id="column-hora-maq" class="text-center" scope="col" style="color:#fff;" hidden>Hora maquina</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Supervisor</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Medidas</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
                             </thead>
-                            <tbody id="body_ver_parte">
+                            <tbody id="body_ver_parte_ope">
                                 
                             </tbody>
                         </table>
@@ -68,9 +70,9 @@
                 </div>             
                 <div class="row rounded border border-3 border-warning" id="m-ver-parte-div">
                     <h5 class="text-center control-label pt-2" id="titulo-parte">Nuevo parte</h5>
-                    {!! Form::open(['route' => 'partes.guardar.act', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec nuevo-editar-parte', 'id' => 'form-nuevo-parte']) !!}
-                    {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
-                    {!! Form::text('id_parte', null, ['class' => 'form-control', 'hidden', 'id' => 'm-id-parte']) !!}
+                    {!! Form::open(['route' => 'partesope.guardar.act', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec nuevo-editar-parte', 'id' => 'form-nuevo-parte']) !!}
+                    {!! Form::text('id_op', null, ['class' => 'form-control', 'hidden', 'id' => 'm-id-ope-hdr']) !!}
+                    {!! Form::text('id_parte_ope_hdr', null, ['class' => 'form-control', 'hidden', 'id' => 'm-id-parte-ope']) !!}
                     {!! Form::text('editar', 0, ['class' => 'form-control', 'hidden', 'id' => 'm-editar']) !!}
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -92,28 +94,6 @@
                             </div>
                         </div>
                         
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                            <div class="form-group">
-                                {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                @role('SUPERVISOR')
-                                    {!! Form::date('fecha_limite', null, [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'm-ver-parte-fecha-limite',
-                                        'class' => 'form-control'
-                                    ]) !!}
-                                @else
-                                    {!! Form::date('fecha_limite', null, [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'm-ver-parte-fecha-limite',
-                                        'class' => 'form-control',
-                                        'readonly'
-                                    ]) !!}
-                                @endrole
-                            </div>
-                        </div>
-                       
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                                 {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
@@ -138,9 +118,64 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="section-medida">
+                            {!! Form::label('medida', 'Medidas:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=1 id="checkDefaultMed" name="medidas">
+                                <label class="form-check-label" for="checkDefaultMed">
+                                  Comprobado
+                                </label>
+                            </div>
+                        </div> --}}
+                        {{-- <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 mb-2" id="section-medida">
+                            <div class="form-group">
+                                {!! Form::label('arch_cam', 'Ruta Archivo CAM:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                {!! Form::text('ruta_cam', null, [
+                                    'class' => 'form-control',
+                                    'id' => 'mv-arch-cam'
+                                ]) !!}
+                            </div>
+                        </div> --}}
                     </div>
-                    <div class="row" id="m-ver-parte-maquinaria">
-
+                    <div class ='row'> 
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                {!! Form::label('maquina', "Maquina:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!} <span class="obligatorio">*</span>
+                                <select class="form-select form-group" id="m-ver-parte-maquina" name="maquina" required>
+                                    <option selected="selected" value="">Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <div class="form-group"> 
+                                <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
+                                <div class= "input-group">
+                                    <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina" required>
+                                    <span class="input-group-text">:</span>
+                                    <input class="form-control" name="minutos_maquina" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                            <div class="form-group">
+                                {!! Form::label('arch_cam', 'Ruta Archivo CAM:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                {!! Form::text('ruta_cam', null, [
+                                    'class' => 'form-control',
+                                    'id' => 'mv-arch-cam'
+                                ]) !!}
+                            </div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="section-medida">
+                            <div class="form-group">
+                                {!! Form::label('medida', 'Medidas:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value=1 id="checkDefaultMed" name="medidas">
+                                    <label class="form-check-label" for="checkDefaultMed">
+                                    Comprobado
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,3 +193,5 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script>

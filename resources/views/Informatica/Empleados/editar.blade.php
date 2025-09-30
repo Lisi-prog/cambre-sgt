@@ -157,7 +157,16 @@
                                                     </div>
                                                 @endforeach
                                             @endif
-                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            {!! Form::label('habilitado_operaciones', '¿Puede cargar operaciones?:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                            <span class="obligatorio">*</span>
+                                            {!! Form::select('habilitado_operaciones', [1 => 'SI', 0 => 'NO'], $empleado->habilitado_operaciones, [
+                                                'class' => 'form-select form-control',
+                                                'required'
+                                            ]) !!}
                                         </div>
                                     </div>
                                 </div>

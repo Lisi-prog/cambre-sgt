@@ -676,7 +676,6 @@
     $("#form-agregar-parte").on('submit', function(evt){
     evt.preventDefault();    
     agregarRenglon();
-    console.log('holaaaaa')
     const miBoton = document.getElementById('btn-cerrar-md');
     miBoton.click();
     

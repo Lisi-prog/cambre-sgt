@@ -82,7 +82,13 @@
                                                     <div class="d-flex flex-column overflow-auto">
                                                             <label style="font-style: italic"><input name="filter" type="checkbox" value="pry" checked> (Seleccionar todo)</label>
                                                         @foreach ($proyectos->sortBy('codigo_servicio') as $proyecto)
-                                                            <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+
+                                                            @if (!empty($flt_serv))
+                                                                <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" {{in_array($proyecto->id_servicio, $flt_serv) ? 'checked' : ''}}> {{$proyecto->codigo_servicio}}</label>
+                                                            @else
+                                                                <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
+                                                            @endif
+                                                            
                                                             {{-- @if (is_null($flt_serv))
                                                                 @if ($proyecto->id_estado < 9)
                                                                     <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
