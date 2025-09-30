@@ -168,7 +168,8 @@
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
                                                     <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHdr{{$idCount}}" aria-expanded="false" aria-controls="collapseHdr{{$idCount}}" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})">
+                                                        {{-- <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHdr{{$idCount}}" aria-expanded="false" aria-controls="collapseHdr{{$idCount}}" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})"> --}}
+                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHdr{{$idCount}}" aria-expanded="false" aria-controls="collapseHdr{{$idCount}}">
                                                             Opciones
                                                         </button>
                                                     </div>

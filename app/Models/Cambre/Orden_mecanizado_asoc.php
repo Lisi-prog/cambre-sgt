@@ -21,7 +21,8 @@ class Orden_mecanizado_asoc extends Model
     protected $fillable = [ 
         'id_orden_mecanizado',
         'id_orden_mec_asoc',
-        'ord_tra_compar'
+        'ord_tra_compar',
+        'es_retrabajo'
     ];
 
 }

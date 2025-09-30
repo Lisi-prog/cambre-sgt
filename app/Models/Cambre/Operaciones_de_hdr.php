@@ -26,7 +26,6 @@ class Operaciones_de_hdr extends Model
         'fecha',
         'id_maquinaria',
         'id_operacion',
-        'ruta_cam',
         'activo'
     ];
 
