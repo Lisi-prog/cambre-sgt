@@ -576,7 +576,7 @@ select
     order by se.prioridad_servicio;
 
 
-    CREATE VIEW vw_operaciones_de_hdr AS
+    CREATE VIEW vw_operaciones_de_hdrOLD AS
     with
     ParteRanked AS (
         SELECT
@@ -622,3 +622,94 @@ select
     inner join maquinaria maq on maq.id_maquinaria = op_hdr.id_maquinaria
     inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr
     inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1;
+
+CREATE VIEW vw_operaciones_de_hdr AS
+with
+    ParteRanked AS (
+        SELECT
+            p.id_parte_ope_hdr,
+            est.id_estado_hdr,
+            p.id_ope_de_hdr,
+            est.nombre_estado_hdr,
+            res.id_empleado,
+            emp.nombre_empleado,
+            p.medidas,
+            CASE
+                WHEN est.id_estado_hdr = 4 THEN p.fecha
+                ELSE "____-__-__"
+            END as fecha_finalizacion,
+            ROW_NUMBER() OVER (PARTITION BY p.id_ope_de_hdr ORDER BY p.id_parte_ope_hdr DESC) AS rn
+        FROM parte_ope_hdr p
+        inner join estado_hdr est on est.id_estado_hdr = p.id_estado_hdr
+        left join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+        left join empleado emp on emp.id_empleado = res.id_empleado
+    )
+select
+	se.prioridad_servicio,
+	op_hdr.prioridad,
+	se.codigo_servicio,
+	se.nombre_servicio,
+	et.descripcion_etapa,
+	o.nombre_orden,
+	hdr.id_hoja_de_ruta,
+	op.nombre_operacion,
+	maq.codigo_maquinaria,
+	op_hdr.id_ope_de_hdr,
+	op_hdr.activo,
+	op_hdr.fecha,
+	op_hdr.numero,
+	p_rank.id_estado_hdr,
+	p_rank.nombre_estado_hdr,
+	p_rank.nombre_empleado as ultimo_res,
+	th.total_horas,
+	p_rank.medidas 
+	from operaciones_de_hdr op_hdr
+    inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1
+    left join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = op_hdr.id_hoja_de_ruta
+    inner join operacion op on op.id_operacion = op_hdr.id_operacion
+    left join orden_mecanizado om on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+    left join orden_manufactura oma on oma.id_orden_manufactura = op_hdr.id_orden_manufactura
+    left join orden o on (o.id_orden = om.id_orden OR o.id_orden = oma.id_orden)
+    left join etapa et on et.id_etapa = o.id_etapa
+    left join servicio se on se.id_servicio = et.id_servicio
+    left join empleado emp on emp.id_empleado = p_rank.id_empleado
+    left join maquinaria maq on maq.id_maquinaria = op_hdr.id_maquinaria
+    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr;
+    
+CREATE VIEW vw_hoja_de_ruta AS
+WITH 
+ParteRanked AS (
+    SELECT
+            p.id_parte_ope_hdr,
+            est.id_estado_hdr,
+            p.id_ope_de_hdr,
+            est.nombre_estado_hdr,
+            res.id_empleado,
+            emp.nombre_empleado,
+            p.medidas,
+            CASE
+                WHEN est.id_estado_hdr = 4 THEN p.fecha
+                ELSE "____-__-__"
+            END as fecha_finalizacion,
+            ROW_NUMBER() OVER (PARTITION BY p.id_ope_de_hdr ORDER BY p.id_parte_ope_hdr DESC) AS rn
+        FROM parte_ope_hdr p
+        inner join estado_hdr est on est.id_estado_hdr = p.id_estado_hdr
+        left join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+        left join empleado emp on emp.id_empleado = res.id_empleado
+),
+OpeRanked AS (
+	select
+		ope_hdr.id_ope_de_hdr,
+		ope_hdr.id_hoja_de_ruta,
+		ROW_NUMBER() OVER (PARTITION BY ope_hdr.id_hoja_de_ruta ORDER BY ope_hdr.numero DESC) AS rn
+    from operaciones_de_hdr ope_hdr
+)
+select 
+	hdr.id_hoja_de_ruta,
+    hdr.id_orden_mecanizado,
+    o_rank.id_ope_de_hdr,
+    p_rank.id_estado_hdr,
+    p_rank.nombre_estado_hdr
+    from hoja_de_ruta as hdr
+    INNER JOIN OpeRanked AS o_rank ON o_rank.id_hoja_de_ruta = hdr.id_hoja_de_ruta AND o_rank.rn = 1
+    INNER JOIN ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = o_rank.id_ope_de_hdr AND p_rank.rn = 1;

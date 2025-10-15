@@ -26,7 +26,8 @@ class Operaciones_de_hdr extends Model
         'fecha',
         'id_maquinaria',
         'id_operacion',
-        'activo'
+        'activo',
+        'id_orden_manufactura'
     ];
 
     public function getPartes()
@@ -67,9 +68,7 @@ class Operaciones_de_hdr extends Model
             return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable->getEmpleado->nombre_empleado;
         } else {
             return "";
-        }
-        
-        
+        }  
     }
 
     public function getHdr(){
@@ -84,5 +83,37 @@ class Operaciones_de_hdr extends Model
     public function getIdEstado()
     {
         return $this->getPartes->sortByDesc('id_parte_ope_hdr')->first()->id_estado_hdr;
+    }
+
+    public function getOrdenManufactura()
+    {
+        return $this->belongsTo(Orden_manufactura::class, 'id_orden_manufactura', 'id_orden_manufactura');
+    }
+
+    public function getAsignadoOpeEnsa(){
+
+        if (Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->where('observaciones', 'Se activo la operacion para el ensamblado de la orden de manufactura.')->first()) {
+            if (Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->where('observaciones', 'Se activo la operacion para el ensamblado de la orden de manufactura.')->first()->getResponsable) {
+                return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->where('observaciones', 'Se activo la operacion para el ensamblado de la orden de manufactura.')->first()->getResponsable->getEmpleado->id_empleado;
+            } else {
+                return '';
+            } 
+        } else {
+            return '';
+        }
+        
+    }
+
+    public function getNombreAsignadoOpeEnsa(){
+
+        if (Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->where('observaciones', 'Se activo la operacion para el ensamblado de la orden de manufactura.')->first()) {
+            if (Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->where('observaciones', 'Se activo la operacion para el ensamblado de la orden de manufactura.')->first()->getResponsable) {
+                return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->where('observaciones', 'Se activo la operacion para el ensamblado de la orden de manufactura.')->first()->getResponsable->getEmpleado->nombre_empleado;
+            } else {
+                return '';
+            } 
+        } else {
+            return '';
+        }
     }
 }

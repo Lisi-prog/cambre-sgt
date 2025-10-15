@@ -77,6 +77,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/obtener-empleados',[OrdenController::class, 'obtenerEmpleadosActivos']);
     Route::post('/orden/obtener-estados',[OrdenController::class, 'obtenerEstados']);
     Route::post('/orden/obtener-supervisores',[OrdenController::class, 'obtenerSupervisores']);
+    Route::post('/orden/ope/obtener-ope-man/{id}',[OrdenController::class, 'obtenerOpeMan']);
+    Route::post('/orden/obtener-ope-man/activar',[OrdenController::class, 'activarOpeMan'])->name('ordenes.ordenman.validar');
     Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
     Route::post('/orden/obtener-estados-de/{opcion}',[OrdenController::class, 'listarTodosLosEstadosDe']);
     Route::post('/operacion/obtener-maquinas-ope-de/{opcion}',[OrdenController::class, 'listarTodasLasMaquinariasDe']);

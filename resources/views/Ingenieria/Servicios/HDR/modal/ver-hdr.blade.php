@@ -65,6 +65,16 @@
                     </div>
                 </div>
                 <div class="row border border-danger mb-2" id="obser-fallo" hidden>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::text('res_reinicio',  null, [
+                                'class' => 'form-control',
+                                'id' => 'm_ver-culpable-razon',
+                                'readonly'
+                            ]) !!}
+                        </div>
+                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones para la Hoja de Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
