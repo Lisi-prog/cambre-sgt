@@ -173,17 +173,17 @@
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Prioridad</th>
-                                    <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
+                                    <th class='text-center' style="color:#fff;min-width:3vw">Prio.</th>
+                                    <th class='text-center' style="color:#fff;min-width:8vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
-                                    <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Etapa</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:3vw">Activo</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Asignado</th>
                                     <th class='text-center' style="color: #fff; min-width:6vw;">Acciones</th>
@@ -225,7 +225,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td> --}}
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->estaActivo() ? 'SI' : 'NO'}}</td>
 
