@@ -52,4 +52,34 @@ class Vw_orden_manufactura extends Model
         
     }
 
+    public function poseeOpeEnsam(){
+        $idordman = Orden_manufactura::where('id_orden', $this->id_orden)->first()->id_orden_manufactura;
+        if (Operaciones_de_hdr::where('id_orden_manufactura', $idordman)->first()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function estaActivo(){
+        $idordman = Orden_manufactura::where('id_orden', $this->id_orden)->first()->id_orden_manufactura;
+
+        if (Operaciones_de_hdr::where('id_orden_manufactura', $idordman)->first()) {
+            $ope = Operaciones_de_hdr::where('id_orden_manufactura', $idordman)->first();
+            return $ope->activo;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getAsignado(){
+        $idordman = Orden_manufactura::where('id_orden', $this->id_orden)->first()->id_orden_manufactura;
+
+        if (Operaciones_de_hdr::where('id_orden_manufactura', $idordman)->first()) {
+            $ope = Operaciones_de_hdr::where('id_orden_manufactura', $idordman)->first();
+            return $ope->getNombreAsignadoOpeEnsa();
+        } else {
+            return '';
+        }
+    }
 }
