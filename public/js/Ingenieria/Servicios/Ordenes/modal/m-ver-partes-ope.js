@@ -66,9 +66,9 @@ $(document).ready(function () {
                                     </button>
                                 </div>`;
                         break;
-                    default:
+                    case 0:
                         html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                    Ocurrio un error
+                                    Ocurrio un error: ${data.error}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -173,13 +173,13 @@ function actualizarPartesOpe(id){
             let idCount = 0;
             response.forEach(element => {
                 html += `<tr>
-                        <td class="text-center">`+element.id_parte_ope_hdr+`</td>
-                        <td class="text-center">`+element.fecha+`</td>
-                        <td class="text-center">`+element.estado+`</td>
-                        <td class="text-center">`+element.horas+`</td>
-                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>
-                        <td class="text-center">`+element.medidas+`</td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.id_parte_ope_hdr+`</td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
+                        <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
                         <td class="text-center">
                             <div class="row justify-content-center" >
                                 <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenesOpe`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">

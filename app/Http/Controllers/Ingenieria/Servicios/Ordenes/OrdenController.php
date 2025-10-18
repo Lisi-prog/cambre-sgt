@@ -1985,7 +1985,7 @@ class OrdenController extends Controller
                     'id_operacion' => $op->id_operacion,
                     'orden_mec' => $op->getHdr ? $op->getHdr->getOrdMec->getOrden->nombre_orden : $op->getOrdenManufactura->getOrden->nombre_orden,
                     'estado_op' => $op->getEstado(),
-                    'medidas' => $parte->medidas
+                    'medidas' => $parte->medidas ? 'SI' : 'NO'
                     ]);
         }
 
@@ -2200,12 +2200,18 @@ class OrdenController extends Controller
             $fec_ope = Carbon::now()->format('Y-m-d');
 
             $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-            $responsabilidad_parte_hdr_op = Responsabilidad::create([
+
+            if ($request->input('asignado')) {
+                $responsabilidad_parte_hdr_op = Responsabilidad::create([
                                             'id_empleado' => $request->input('asignado'),
                                             'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
                                         ]);
                     
-            $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
+                $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
+            }else {
+                $res_op = null;
+            }
+            
 
             Parte_ope_hdr::create([
                 'id_ope_de_hdr' => $ope->id_ope_de_hdr,

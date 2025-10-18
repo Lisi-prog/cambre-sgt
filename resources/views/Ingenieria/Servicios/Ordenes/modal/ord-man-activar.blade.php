@@ -49,8 +49,7 @@
                             {!! Form::select('asignado', $tecnicosConManual, null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
-                                            'id' => 'm_act_ord_man_asig',
-                                            'required'
+                                            'id' => 'm_act_ord_man_asig'
                                         ]) !!}
                         </div>
                     </div>

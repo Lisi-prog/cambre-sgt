@@ -46,7 +46,7 @@
                     </div>
                 </div>
                     <div class="table-responsive tableFixHead">
-                        <table class="table table-striped" id="verPartes" >
+                        <table class="table table-sm table-striped" id="verPartes" >
                             <thead id="encabezado_tabla_parte" style="background: #558540">
                                 <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
