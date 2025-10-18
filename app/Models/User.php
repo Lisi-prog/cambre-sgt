@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Not_notificacion;
+use App\Models\Cambre\Emp_x_maq;
+use App\Models\Cambre\Ope_x_maq;
 
 class User extends Authenticatable
 {
@@ -53,5 +55,14 @@ class User extends Authenticatable
     public function getNotificaciones()
     {
         return $this->hasMany(Not_notificacion::class, 'user_id' ,'id');
+    }
+
+    public function getOperacionesValidas(){
+        try {
+            $idsMaq = Emp_x_maq::where('id_empleado', $this->getEmpleado->id_empleado)->pluck('id_maquinaria');
+            return Ope_x_maq::whereIn('id_maquinaria', $idsMaq)->pluck('id_operacion');
+        } catch (\Throwable $th) {
+            return [];
+        }
     }
 }

@@ -26,6 +26,7 @@ class Vw_operaciones_de_hdr extends Model
         'descripcion_etapa',
         'nombre_orden',
         'id_hoja_de_ruta',
+        'id_operacion',
         'nombre_operacion',
         'codigo_maquinaria',
         'activo',

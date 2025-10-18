@@ -1321,11 +1321,21 @@ class OrdenController extends Controller
     }
 
     public function index_hdr(){
-        $operaciones = Vw_operaciones_de_hdr::get();
+
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            $operaciones = Vw_operaciones_de_hdr::get();
+            $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        } else {
+            $opeDeUsuario = Auth::user()->getOperacionesValidas();
+            $operaciones = Vw_operaciones_de_hdr::whereIn('id_operacion', $opeDeUsuario)->get();
+            $flt_operaciones = Operacion::whereIn('id_operacion', $opeDeUsuario)->orderBy('nombre_operacion')->pluck('nombre_operacion');
+        }
+        
+        // return $operaciones;
 
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
-        $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        
 
         $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
                                         from operaciones_de_hdr op_hdr

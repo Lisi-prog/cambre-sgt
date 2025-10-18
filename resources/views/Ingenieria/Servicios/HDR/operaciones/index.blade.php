@@ -65,6 +65,7 @@
             </div>
 
             <!-- Botón y menú desplegable -->
+            @role(['ADMIN', 'SUPERVISOR'])
             <div class="d-flex align-items-center">
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
@@ -84,6 +85,7 @@
                             Carga<br>Multiple
                 </button>
             </div>
+            @endrole
         </div>
     </div>
 
@@ -170,7 +172,12 @@
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <div class="row">
+                                @role('TECNICO') 
+                                    <div class="row" hidden>
+                                @else
+                                    <div class="row">
+                                @endrole
+                                
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column">
                                             {!! Form::label('Opciones:') !!}

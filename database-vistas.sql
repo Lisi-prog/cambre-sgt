@@ -652,6 +652,7 @@ select
 	et.descripcion_etapa,
 	o.nombre_orden,
 	hdr.id_hoja_de_ruta,
+    op.id_operacion,
 	op.nombre_operacion,
 	maq.codigo_maquinaria,
 	op_hdr.id_ope_de_hdr,

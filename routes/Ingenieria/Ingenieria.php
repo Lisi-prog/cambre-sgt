@@ -181,6 +181,13 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::post('/orden/obtener-estados-manufacturas',[OrdenController::class, 'obtenerEstadosManufacturas']);
      Route::post('/orden/obtener-estados-de/{opcion}',[OrdenController::class, 'listarTodosLosEstadosDe']);
      Route::post('/orden/obtener-ordenes-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeTrabajoUnaEtapa']);
+     Route::post('/orden/mec/hdr/obtener-hdr-parte/{id}',[OrdenController::class, 'obtenerParteHdr']);
+     Route::get('ordenes/mec/operaciones', [OrdenController::class, 'index_hdr'])->name('ordenes.indexhdr');
+     Route::post('/operacion/obtener-maquinas-ope-de/{opcion}',[OrdenController::class, 'listarTodasLasMaquinariasDe']);
+     Route::post('/orden/obtener-info-ope-mul-act',[OrdenController::class, 'obtenerInfoOpeMultipleAct']);
+     Route::post('ope-hdr/obtener-estado/{id}', [ParteController::class, 'obtenerEstadoOpeHdr']);
+     Route::post('/parte/guardar-o-act-parte-ope', [ParteController::class, 'guardarActualizarParteOpe'])->name('partesope.guardar.act');
+     Route::post('parte-ope/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOpe']);
     //  Route::post('/orden/obtener-info-orden-mul',[OrdenController::class, 'obtenerInfoOrdenMultipleAct']);
      Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
      Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
