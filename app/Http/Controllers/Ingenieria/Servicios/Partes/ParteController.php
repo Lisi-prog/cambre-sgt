@@ -591,7 +591,7 @@ class ParteController extends Controller
                 'fecha' => $parte->fecha,
                 'horas' => $parte->horas,
                 'estado_ope' => $ope_hdr->getEstado(),
-                'medidas' => $parte->medidas
+                'medidas' => $parte->medidas ? 'SI' : 'NO'
             ]);
         }
 
