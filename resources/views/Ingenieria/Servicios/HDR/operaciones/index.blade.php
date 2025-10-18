@@ -65,8 +65,15 @@
             </div>
 
             <!-- Botón y menú desplegable -->
-            @role(['ADMIN', 'SUPERVISOR'])
-            <div class="d-flex align-items-center">
+            @php
+                $ocultoMulti = '';       
+            @endphp
+            @role(['TECNICO'])
+                @php
+                    $ocultoMulti = 'd-none';   
+                @endphp
+            @endrole
+            <div class="d-flex align-items-center {{$ocultoMulti}}">
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -85,7 +92,6 @@
                             Carga<br>Multiple
                 </button>
             </div>
-            @endrole
         </div>
     </div>
 
@@ -292,6 +298,15 @@
                                                         </button>
                                                     </div>
                                                      <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                        @if ($ope->id_hoja_de_ruta)
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$ope->getHdr->getOrdMec->id_orden}}, {{3}})">
+                                                                        Ver Ord Mec
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe({{$ope->id_ope_de_hdr}})">
@@ -373,8 +388,14 @@
 
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-carga-multiple')
+@include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
+
+<script type="module" > 
+        import {cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        window.cargarModalVerOrden = cargarModalVerOrden;
+</script>
 
 <script>
     function mostrarFiltro(id){
