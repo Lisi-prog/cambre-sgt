@@ -1142,10 +1142,11 @@ class ParteController extends Controller
                     $opeSgt->save();
                 }
 
-                $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
+                if ($ope->id_hoja_de_ruta) {
+                    $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
 
-                $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
-                
+                    $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                }
             }
 
             if ($estado == 5) { //orden completado
