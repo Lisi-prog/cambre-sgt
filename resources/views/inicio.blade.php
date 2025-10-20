@@ -77,7 +77,7 @@
                                     </a>
                                 </div>
                             </li>
-
+                            @role(['ADMIN', 'SUPERVISOR'])
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
@@ -103,6 +103,7 @@
                                     </a>
                                 </div>
                             </li>
+                            @endrole
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
@@ -134,7 +135,7 @@
                                     </a>
                                 </div>
                             </li>
-
+                            @role(['ADMIN', 'SUPERVISOR'])
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
@@ -160,6 +161,7 @@
                                     </a>
                                 </div>
                             </li>
+                            @endrole
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">

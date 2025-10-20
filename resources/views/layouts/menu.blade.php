@@ -111,6 +111,7 @@
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
+                @role(['ADMIN', 'SUPERVISOR'])
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
@@ -121,6 +122,7 @@
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
+                @endrole
                 <li>
                     <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
@@ -144,6 +146,7 @@
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
+                @role(['ADMIN', 'SUPERVISOR'])
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
@@ -154,6 +157,7 @@
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
+                @endrole
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
