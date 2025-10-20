@@ -1938,6 +1938,7 @@ class OrdenController extends Controller
                             ->where('oxm.id_operacion', $idOperacion)
                             ->select('emp.id_empleado', 'emp.nombre_empleado', 'oxm.id_operacion')
                             ->orderBy('emp.nombre_empleado', 'asc')
+                            ->distinct()
                             ->get();
 
 
