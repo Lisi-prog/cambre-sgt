@@ -47,10 +47,6 @@ function addRow() {
                 options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
             });
 
-            response.tecnicos.forEach((tec) => {
-                opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
-            });
-
             // const row = document.createElement("tr");
             row.innerHTML = `
                 <td class="text-center">${rowCount}</td>
@@ -66,7 +62,6 @@ function addRow() {
                     <div class="dropdown-container my-auto">
                         <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
                         <div class="dropdown-list-auto">
-                            ${opt_tec}
                         </div>
                     </div>
                 </td>
@@ -94,8 +89,16 @@ function addRow() {
                         const rowElement = customDropdown.container.closest("tr"); // Obtener la fila actual
                         const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
                         thirdInput.value = '';
+
+                        const secondInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[1]; // Segundo input
+                        secondInput.value = '';
+
                         if (thirdInput) {
                             cargarMaquinas(customDropdown.input.value, thirdInput);
+                        }
+
+                        if (secondInput) {
+                            cargarTecnicos(customDropdown.input.value, secondInput);
                         }
                     }
                 });
@@ -105,9 +108,14 @@ function addRow() {
                     if (customDropdown.input.classList.contains("custom-input-1")) {
                         const rowElement = dropdown.closest("tr"); // Obtener la fila actual
                         const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
+                        const secondInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[1]; // Segundo input
 
                         if (thirdInput) {
                             cargarMaquinas(customDropdown.input.value, thirdInput);
+                        }
+
+                        if (secondInput) {
+                            cargarTecnicos(customDropdown.input.value, secondInput);
                         }
                     }
                 });
@@ -224,46 +232,6 @@ function addRowRe() {
                     });
                 });
 
-                // let options = '';
-                // let opt_tec = '';
-                // response.operaciones.forEach((ope) => {
-                //     options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
-                // });
-
-                // response.tecnicos.forEach((tec) => {
-                //     opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
-                // });
-
-                // row.innerHTML = `
-                //     <td class="text-center">${rowCount}</td>
-                //     <td>
-                //         <div class="dropdown-container my-auto">
-                //             <input type="text" class="styled-input form-select custom-input-1 input-ope" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
-                //             <div class="dropdown-list-auto">
-                //                 ${options}
-                //             </div>
-                //         </div>
-                //     </td>
-                //     <td>
-                //         <div class="dropdown-container my-auto">
-                //             <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
-                //             <div class="dropdown-list-auto">
-                //                 ${opt_tec}
-                //             </div>
-                //         </div>
-                //     </td>
-                //     <td>
-                //         <div class="dropdown-container my-auto">
-                //             <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]">
-                //             <div class="dropdown-list-auto"></div>
-                //         </div>
-                //     </td>
-                //     <td class="text-center">
-                //         <button class="btn btn-danger delete-btn">Eliminar</button>
-                //     </td>
-                // `;
-
-
                 resolve(row); // ✅ devolvemos la fila lista
             },
             error: function (error) {
@@ -376,110 +344,6 @@ function addRowEdi() {
         });
     });
 }
-/*
-function addRowRe() {
-    const tableBody = document.getElementById("re_editableTable");
-    const table = document.getElementById('re_editableTable').getElementsByTagName('tbody')[0];
-    // const rowCount = tableBody.rows.length;
-    const rowCount = table.rows.length + 1;
-    const row = table.insertRow();
-
-    $.ajax({
-        type: "post",
-        url: '/orden/mec/hdr/obtenerope', 
-        data: {
-            id: 'hola',
-        },
-        success: function (response) {
-            let options = '';
-            let opt_tec = '';
-            response.operaciones.forEach((ope) => {
-                options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
-            });
-
-            response.tecnicos.forEach((tec) => {
-                opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
-            });
-
-            // const row = document.createElement("tr");
-            row.innerHTML = `
-                <td class="text-center">${rowCount}</td>
-                <td>
-                    <div class="dropdown-container my-auto">
-                        <input type="text" class="styled-input form-select custom-input-1 input-ope" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
-                        <div class="dropdown-list-auto">
-                            ${options}
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="dropdown-container my-auto">
-                        <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
-                        <div class="dropdown-list-auto">
-                            ${opt_tec}
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="dropdown-container my-auto">
-                        <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]">
-                        <div class="dropdown-list-auto">
-                        </div>
-                    </div>
-                </td>
-                <td class="text-center">
-                    <button class="btn btn-danger delete-btn">Eliminar</button>
-                </td>
-            `;
-
-            // Aplicar el dropdown a la nueva fila
-            row.querySelectorAll(".dropdown-container").forEach(dropdown => {
-                const customDropdown = new CustomDropdown(dropdown); // Guardamos la instancia
-
-                // Detectar cuando se selecciona una opción
-                customDropdown.container.addEventListener("optionSelected", (e) => {
-                    const option = e.detail.selectedOption;
-
-                    if (option.classList.contains("custom-option-1")) {
-                        const rowElement = customDropdown.container.closest("tr"); // Obtener la fila actual
-                        const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
-                        thirdInput.value = '';
-                        if (thirdInput) {
-                            cargarMaquinas(customDropdown.input.value, thirdInput);
-                        }
-                    }
-                });
-
-                // Detectar cuando el valor cambia manualmente (al escribir y presionar Enter o perder foco)
-                customDropdown.input.addEventListener("change", () => {
-                    if (customDropdown.input.classList.contains("custom-input-1")) {
-                        const rowElement = dropdown.closest("tr"); // Obtener la fila actual
-                        const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
-
-                        if (thirdInput) {
-                            cargarMaquinas(customDropdown.input.value, thirdInput);
-                        }
-                    }
-                });
-            });
-
-            // Agregar evento para eliminar fila
-            row.querySelector(".delete-btn").addEventListener("click", () => {
-                row.remove();
-
-                // Reordenar los números de la primera celda de cada fila
-                Array.from(table.rows).forEach((row, index) => {
-                     row.cells[0].innerText = index + 1;
-                });
-            });
-            
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
-    return row;
-} */
 
 function cargarMaquinas(operacion, targetInput) {
     const selectedOperation = operacion;
@@ -502,6 +366,40 @@ function cargarMaquinas(operacion, targetInput) {
                     div.classList.add("dropdown-item");
                     div.textContent = maq.codigo_maquinaria;
                     div.dataset.value = maq.codigo_maquinaria;
+                    dropdownList.appendChild(div);
+                });
+
+                // Volver a aplicar CustomDropdown para actualizar las opciones
+                new CustomDropdown(targetInput.closest(".dropdown-container"));
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function cargarTecnicos(operacion, targetInput) {
+    const selectedOperation = operacion;
+
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtenertec', // Ruta para obtener los tecnicos
+        data: { nom_operacion: selectedOperation },
+        success: function (response) {
+            // console.log(response);
+            
+            // Obtener la lista del dropdown correspondiente al tercer input
+            const dropdownList = targetInput.nextElementSibling;
+            if (dropdownList && dropdownList.classList.contains("dropdown-list-auto")) {
+                dropdownList.innerHTML = ""; // Limpiar opciones
+
+                // Agregar nuevas opciones
+                response.forEach((maq) => {
+                    const div = document.createElement("div");
+                    div.classList.add("dropdown-item");
+                    div.textContent = maq.nombre_empleado;
+                    div.dataset.value = maq.nombre_empleado;
                     dropdownList.appendChild(div);
                 });
 

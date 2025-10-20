@@ -1925,8 +1925,25 @@ class OrdenController extends Controller
         } else {
             return [];
         }
-        
-        
+    }
+
+    public function obtenerTecnicos(Request $request){
+        $nom_ope = $request->input('nom_operacion');
+
+        if (Operacion::where('nombre_operacion', $nom_ope)->first()) {
+            $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
+
+            return Emp_x_maq::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'emp_x_maq.id_maquinaria')
+                            ->join('empleado as emp', 'emp.id_empleado', '=', 'emp_x_maq.id_empleado')
+                            ->where('oxm.id_operacion', $idOperacion)
+                            ->select('emp.id_empleado', 'emp.nombre_empleado', 'oxm.id_operacion')
+                            ->orderBy('emp.nombre_empleado', 'asc')
+                            ->get();
+
+
+        } else {
+            return [];
+        }
     }
 
     public function obtenerHdrAnt($id){
