@@ -28,6 +28,7 @@ $(document).ready(function() {
 });
 
 function addRow() {
+    return new Promise((resolve, reject) => {
     const tableBody = document.getElementById("editableTable");
     const table = document.getElementById('editableTable').getElementsByTagName('tbody')[0];
     // const rowCount = tableBody.rows.length;
@@ -130,13 +131,15 @@ function addRow() {
                      row.cells[0].innerText = index + 1;
                 });
             });
-            
+            resolve(row);
         },
         error: function (error) {
             console.log(error);
+            reject(error);
         }
     });
-    return row;
+    // return row;
+    });
 }
 
 function addRowRe() {
