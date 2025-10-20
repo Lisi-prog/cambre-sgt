@@ -61,6 +61,7 @@ use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
 use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Maquinaria;
+use App\Models\Cambre\Emp_x_maq;
 use App\Models\Cambre\Hoja_de_ruta;
 use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Parte_ope_hdr;
@@ -270,9 +271,27 @@ class OrdenController extends Controller
                     'ruta_plano.required' => 'Falta la ruta del plano.'
                 ]);
 
-                $this->crearOrdenManufactura($request);
+                try {    
+                    DB::beginTransaction();
 
-                return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de manufactura y el parte de manufactura se ha creado con exito.');
+                    // if(!$hdr->save()) {
+                    //     DB::rollBack();
+                    //     return redirect()->back()
+                    //             ->with('error', 'Ocurrio un problema al editar la hoja de ruta');
+                    // }
+
+                    $this->crearOrdenManufactura($request);
+            
+                    DB::commit();
+
+                    return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de manufactura y el parte de manufactura se ha creado con exito.');                      
+            
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return redirect()->back()
+                                    ->with('error', 'Ocurrio un problema al crear la orden de manufactura: '.$e->getMessage());
+                }
+                
                 break;
             case 3:
                 # Crear orden de mecanizado
@@ -496,6 +515,31 @@ class OrdenController extends Controller
         Parte_manufactura::create([
             'id_estado_manufactura' => $id_estado_man,
             'id_parte' => $parte->id_parte
+        ]);
+
+        $fec_carga_ope = Carbon::now()->format('Y-m-d H:i:s');
+        $fec_ope = Carbon::now()->format('Y-m-d');
+
+        $ope = Operaciones_de_hdr::create([
+                            'id_hoja_de_ruta' => null,
+                            'numero' => 1,
+                            'fecha_carga' => $fec_carga_ope,
+                            'fecha' => $fec_ope,
+                            'id_maquinaria' => 10,
+                            'id_operacion' => 17,
+                            'activo' => 0,
+                            'id_orden_manufactura' => $ord_man->id_orden_manufactura
+                    ]);
+
+        Parte_ope_hdr::create([
+            'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+            'fecha_carga' => $fec_carga_ope,
+            'fecha' => $fec_ope,
+            'observaciones' => 'Generacion de operacion para el ensamblado de la orden de manufactura.',
+            'id_responsabilidad' => null,
+            'horas' => '00:00',
+            'medidas' => 0,
+            'id_estado_hdr' => 1
         ]);
 
     }
@@ -964,7 +1008,10 @@ class OrdenController extends Controller
                 $tipo = 'Manufactura';
                 $tipo_orden = 2;
                 $estados = $this->listarTodosLosEstadosDe(2);
-                return view('Ingenieria.Servicios.Ordenes.ordenes-manufactura', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));
+                $maquinaManual = Maquinaria::where('codigo_maquinaria', 'MANUAL')->first()->id_maquinaria;
+                $tecConMan = Emp_x_maq::where('id_maquinaria', $maquinaManual)->pluck('id_empleado');
+                $tecnicosConManual = Empleado::whereIn('id_empleado', $tecConMan)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+                return view('Ingenieria.Servicios.Ordenes.ordenes-manufactura', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'tecnicosConManual'));
                 break;
 
             case 3:
@@ -1274,11 +1321,21 @@ class OrdenController extends Controller
     }
 
     public function index_hdr(){
-        $operaciones = Vw_operaciones_de_hdr::get();
+
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            $operaciones = Vw_operaciones_de_hdr::get();
+            $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        } else {
+            $opeDeUsuario = Auth::user()->getOperacionesValidas();
+            $operaciones = Vw_operaciones_de_hdr::whereIn('id_operacion', $opeDeUsuario)->get();
+            $flt_operaciones = Operacion::whereIn('id_operacion', $opeDeUsuario)->orderBy('nombre_operacion')->pluck('nombre_operacion');
+        }
+        
+        // return $operaciones;
 
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
-        $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        
 
         $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
                                         from operaciones_de_hdr op_hdr
@@ -1386,6 +1443,7 @@ class OrdenController extends Controller
                 'id_hdr_ant' => $request->input('id_hdr'),
                 'id_hdr_sig' => $hdr->id_hoja_de_ruta,
                 'observaciones_fallo' => $request->input('observaciones_fallo'),
+                'responsable_fallo' => $request->input('res_reinicio')
            ]);
         }
 
@@ -1723,7 +1781,7 @@ class OrdenController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
-                             ->with('error', 'Ocurrio un problema al crear el Memorandum: '.$e->getMessage());
+                             ->with('error', 'Ocurrio un problema al editar la hoja de ruta: '.$e->getMessage());
         }
     }
 
@@ -1867,8 +1925,25 @@ class OrdenController extends Controller
         } else {
             return [];
         }
-        
-        
+    }
+
+    public function obtenerTecnicos(Request $request){
+        $nom_ope = $request->input('nom_operacion');
+
+        if (Operacion::where('nombre_operacion', $nom_ope)->first()) {
+            $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
+
+            return Emp_x_maq::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'emp_x_maq.id_maquinaria')
+                            ->join('empleado as emp', 'emp.id_empleado', '=', 'emp_x_maq.id_empleado')
+                            ->where('oxm.id_operacion', $idOperacion)
+                            ->select('emp.id_empleado', 'emp.nombre_empleado', 'oxm.id_operacion')
+                            ->orderBy('emp.nombre_empleado', 'asc')
+                            ->get();
+
+
+        } else {
+            return [];
+        }
     }
 
     public function obtenerHdrAnt($id){
@@ -1912,7 +1987,8 @@ class OrdenController extends Controller
             'ruta' => $hdr->ruta,
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr,
-            'obser_fallo' => $obseFallo->observaciones_fallo ?? null
+            'obser_fallo' => $obseFallo->observaciones_fallo ?? null,
+            'responsable_fallo' => $obseFallo->responsable_fallo ?? null
         ];
     }
 
@@ -1934,9 +2010,9 @@ class OrdenController extends Controller
                     // 'supervisor' => $parte->getOrden->getSupervisor(),
                     'operacion' => $op->getOperacion->nombre_operacion,
                     'id_operacion' => $op->id_operacion,
-                    'orden_mec' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
+                    'orden_mec' => $op->getHdr ? $op->getHdr->getOrdMec->getOrden->nombre_orden : $op->getOrdenManufactura->getOrden->nombre_orden,
                     'estado_op' => $op->getEstado(),
-                    'medidas' => $parte->medidas
+                    'medidas' => $parte->medidas ? 'SI' : 'NO'
                     ]);
         }
 
@@ -2117,4 +2193,92 @@ class OrdenController extends Controller
                 break;
         }
     }
+
+    public function obtenerOpeMan(Request $request, $id){
+       $idOrdMan = Orden_manufactura::where('id_orden', $id)->first()->id_orden_manufactura;
+       $orden = Orden::find($id);
+       $ope = Operaciones_de_hdr::where('id_orden_manufactura', $idOrdMan)->first();
+       
+       return [
+        'proyecto' => $orden->getEtapa->getServicio->codigo_servicio ?? '',
+        'orden' => $orden->nombre_orden ?? '',
+        'prioridad' => $ope->prioridad ?? null,
+        'operacion' => $ope->getOperacion ? $ope->getOperacion->nombre_operacion : '',
+        'maquina' => $ope->getMaquinaria ? $ope->getMaquinaria->codigo_maquinaria : '',
+        'asignado' => $ope->getAsignadoOpeEnsa() ?? null,
+        'activo' => $ope->activo ?? null 
+       ];
+    }
+
+    public function activarOpeMan(Request $request){
+        // return $request;
+        $idOrd = $request->input('idord');
+        $idOrdMan = Orden_manufactura::where('id_orden', $idOrd)->first()->id_orden_manufactura;
+        $ope = Operaciones_de_hdr::where('id_orden_manufactura', $idOrdMan)->first();
+
+        try {
+            DB::beginTransaction();
+
+            $ope->prioridad = $request->input('prioridad');
+
+            $ope->activo = 1;
+
+            $fec_carga_ope = Carbon::now()->format('Y-m-d H:i:s');
+            $fec_ope = Carbon::now()->format('Y-m-d');
+
+            $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            if ($request->input('asignado')) {
+                $responsabilidad_parte_hdr_op = Responsabilidad::create([
+                                            'id_empleado' => $request->input('asignado'),
+                                            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                                        ]);
+                    
+                $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
+            }else {
+                $res_op = null;
+            }
+            
+
+            Parte_ope_hdr::create([
+                'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                'fecha_carga' => $fec_carga_ope,
+                'fecha' => $fec_ope,
+                'observaciones' => 'Se activo la operacion para el ensamblado de la orden de manufactura.',
+                'id_responsabilidad' => $res_op,
+                'horas' => '00:00',
+                'medidas' => 0,
+                'id_estado_hdr' => 1
+            ]);
+
+            $ope->save();
+
+            DB::commit();
+            return 1;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return 0;
+        }
+    }
+    //Transaccion
+        /*try {    
+            DB::beginTransaction();
+
+            if(!$hdr->save()) {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'Ocurrio un problema al editar la hoja de ruta');
+            }
+
+        
+    
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido editado con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al editar la hoja de ruta: '.$e->getMessage());
+        }*/
 }

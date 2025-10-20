@@ -65,7 +65,15 @@
             </div>
 
             <!-- Botón y menú desplegable -->
-            <div class="d-flex align-items-center">
+            @php
+                $ocultoMulti = '';       
+            @endphp
+            @role(['TECNICO'])
+                @php
+                    $ocultoMulti = 'd-none';   
+                @endphp
+            @endrole
+            <div class="d-flex align-items-center {{$ocultoMulti}}">
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -170,7 +178,12 @@
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <div class="row">
+                                @role('TECNICO') 
+                                    <div class="row" hidden>
+                                @else
+                                    <div class="row">
+                                @endrole
+                                
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column">
                                             {!! Form::label('Opciones:') !!}
@@ -285,6 +298,15 @@
                                                         </button>
                                                     </div>
                                                      <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                        @if ($ope->id_hoja_de_ruta)
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$ope->getHdr->getOrdMec->id_orden}}, {{3}})">
+                                                                        Ver Ord Mec
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe({{$ope->id_ope_de_hdr}})">
@@ -292,13 +314,16 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $ope->getHdr->getOrdMec->id_orden], 'style' => 'display:inline', 'target' => '_blank']) !!}
-                                                                    {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                {!! Form::close() !!}
+                                                        @if ($ope->getHdr)
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $ope->getHdr->getOrdMec->id_orden], 'style' => 'display:inline', 'target' => '_blank']) !!}
+                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
+                                                        
 {{--
                                                         @if ($tipo_orden === 3)
                                                             <div class="row my-2">
@@ -363,8 +388,14 @@
 
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-carga-multiple')
+@include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
+
+<script type="module" > 
+        import {cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
+        window.cargarModalVerOrden = cargarModalVerOrden;
+</script>
 
 <script>
     function mostrarFiltro(id){
@@ -905,20 +936,20 @@
                 let idCount = 0;
                 response.partes_ope.forEach(element => {
                     html += `<tr>
-                            <td class="text-center">`+element.id_parte+`</td>
-                            <td class="text-center">`+element.fecha+`</td>
-                            <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.horas+`</td>
-                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                            <td class="text-center">`+element.responsable+`</td>
-                            <td class="text-center">`+element.medidas+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.id_parte+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
+                            <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
-                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOpe`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
                                         Opciones
                                     </button>
                                 </div>
-                                <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOrdenes`+idCount+`">
+                                <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOpe`+idCount+`">
                                     <div class="row">
                                         <div class="col-12 my-1">
                                             <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">

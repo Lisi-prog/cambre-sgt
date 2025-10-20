@@ -173,18 +173,20 @@
                             <table class="table table-striped mt-2" id="example">
                                 <thead id="encabezado_ordenes">
                                     <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Prioridad</th>
-                                    <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
+                                    <th class='text-center' style="color:#fff;min-width:3vw">Prio.</th>
+                                    <th class='text-center' style="color:#fff;min-width:8vw">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
                                     <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
-                                    <th class='text-center' style="color:#fff;min-width:12vw">Etapa</th>
+                                    <th class='text-center' style="color:#fff;min-width:5vw">Etapa</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Progreso</th>
                                     <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
                                     <th class='text-center' style="color:#fff;min-width:6vw">Supervisor</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th>
-                                    <th class='text-center' style="color: #fff; width:10%">Acciones</th>
+                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
+                                    <th class='text-center' style="color:#fff;min-width:3vw">Activo</th>
+                                    <th class='text-center' style="color:#fff;min-width:6vw">Asignado</th>
+                                    <th class='text-center' style="color: #fff; min-width:6vw;">Acciones</th>
                                 </thead>
                                 
                                 <tbody id="accordion">
@@ -223,7 +225,11 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
+                                            {{-- <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td> --}}
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->estaActivo() ? 'SI' : 'NO'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->getAsignado()}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -233,6 +239,16 @@
                                                         </button>
                                                     </div>
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                        @if ($orden->poseeOpeEnsam())
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#activarOrdenManufacturaModal" onclick="cargarModalActivar({{$orden->id_orden}})">
+                                                                        Activar
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
@@ -321,6 +337,7 @@
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
 @include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
 @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
+@include('Ingenieria.Servicios.Ordenes.modal.ord-man-activar')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
@@ -629,6 +646,43 @@
                     }
                 });
         });
+
+        $(".activar-orden-manufactura").on('submit', function(evt){
+                evt.preventDefault();     
+                // console.log('hola');
+
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(res) {
+                        console.log(res);
+                        
+                        if (res) {
+                            document.getElementById('alert-act-ord').innerHTML = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                                                    Operacion ENSAMBLADO de la orden manufactura activado con exito.
+                                                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                    </button>
+                                                                                </div>`;
+                            document.getElementById('alert-act-ord').hidden = false;
+                        } else {
+                            document.getElementById('alert-act-ord').innerHTML = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                                Ocurrio un problema al activar la operacion de ENSAMBLADO de la orden manufactura.
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`
+                        }
+
+                        setTimeout(function(){document.getElementById('alert-act-ord').hidden = true;},3000);
+                    }
+                });
+        });
         
         $('#id_selec').on('change', mostrarSelec);
 
@@ -821,5 +875,32 @@
         });
     }
 
+    function cargarModalActivar(id){
+        let input_priori = document.getElementById('m_act_ord_man_pri');
+        let input_ope = document.getElementById('m_act_ord_man_ope');
+        let input_maq = document.getElementById('m_act_ord_man_maq');
+        let input_asig = document.getElementById('m_act_ord_man_asig');
+
+        let input_pry = document.getElementById('m_act_ord_man_pry');
+        let input_ord = document.getElementById('m_act_ord_man');
+        let input_id = document.getElementById('m_act_id_ord_man');
+        input_id.value = id;
+        $.ajax({
+            type: "post",
+            url: '/orden/ope/obtener-ope-man/'+id,
+            success: function (res) {
+                // console.log(res)
+                input_priori.value = res.prioridad;
+                input_ope.value = res.operacion;
+                input_maq.value = res.maquina;
+                input_asig.value = res.asignado;
+                input_pry.value = res.proyecto;
+                input_ord.value = res.orden;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 </script>
 @endsection

@@ -264,6 +264,8 @@ function cargarHdrVer(id){
             document.getElementById('m_ver_ruta').value = response.ruta;
             document.getElementById('m_ver-obser').value = response.observaciones;
             document.getElementById('m_ver-obser-razon').value = response.obser_fallo;
+            document.getElementById('m_ver-culpable-razon').value = response.responsable_fallo;
+            
 
             if (response.obser_fallo) {
                 document.getElementById('obser-fallo').hidden = false;

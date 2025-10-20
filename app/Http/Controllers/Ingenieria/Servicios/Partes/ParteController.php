@@ -591,7 +591,7 @@ class ParteController extends Controller
                 'fecha' => $parte->fecha,
                 'horas' => $parte->horas,
                 'estado_ope' => $ope_hdr->getEstado(),
-                'medidas' => $parte->medidas
+                'medidas' => $parte->medidas ? 'SI' : 'NO'
             ]);
         }
 
@@ -1180,58 +1180,59 @@ class ParteController extends Controller
 
         $fecha = Carbon::now()->format('Y-m-d');
 
-        $ultParte = Parte::where('id_orden', $ope->getHdr->getOrdMec->id_orden)->orderBy('id_parte', 'desc')->first();
+        if ($ope->getHdr) {
+            $ultParte = Parte::where('id_orden', $ope->getHdr->getOrdMec->id_orden)->orderBy('id_parte', 'desc')->first();
 
-        if ($estado == 4) {
-            if ($ultParte->getParteMecanizado->id_estado_mecanizado != 4) {
-                $responsabilidad = Responsabilidad::create([
-                    'id_empleado' => 999,
-                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                ]);
+            if ($estado == 4) {
+                if ($ultParte->getParteMecanizado->id_estado_mecanizado != 4) {
+                    $responsabilidad = Responsabilidad::create([
+                        'id_empleado' => 999,
+                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                    ]);
 
-                $parte = Parte::create([
-                            'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
-                            'fecha' => $fecha,
-                            'fecha_limite' => $ultParte->fecha_limite,
-                            'fecha_carga' => $fecha_carga,
-                            'horas' => '00:00',
-                            'costo' => 0,
-                            'id_orden' => $ope->getHdr->getOrdMec->id_orden,
-                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-                        ]);
+                    $parte = Parte::create([
+                                'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
+                                'fecha' => $fecha,
+                                'fecha_limite' => $ultParte->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => '00:00',
+                                'costo' => 0,
+                                'id_orden' => $ope->getHdr->getOrdMec->id_orden,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
 
-                $parte_mecanizado = Parte_mecanizado::create([
-                    'id_estado_mecanizado' => $estado,
-                    'id_parte' => $parte->id_parte
-                ]);
+                    $parte_mecanizado = Parte_mecanizado::create([
+                        'id_estado_mecanizado' => $estado,
+                        'id_parte' => $parte->id_parte
+                    ]);
+                }
+            }
+
+            if ($estado == 5) {
+                if ($ultParte->getParteMecanizado->id_estado_mecanizado != 5) {
+                    $responsabilidad = Responsabilidad::create([
+                        'id_empleado' => 999,
+                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                    ]);
+
+                    $parte = Parte::create([
+                                'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
+                                'fecha' => $fecha,
+                                'fecha_limite' => $ultParte->fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'horas' => '00:00',
+                                'costo' => 0,
+                                'id_orden' => $ope->getHdr->getOrdMec->id_orden,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+                    $parte_mecanizado = Parte_mecanizado::create([
+                        'id_estado_mecanizado' => $estado,
+                        'id_parte' => $parte->id_parte
+                    ]);
+                }
             }
         }
-
-        if ($estado == 5) {
-            if ($ultParte->getParteMecanizado->id_estado_mecanizado != 5) {
-                $responsabilidad = Responsabilidad::create([
-                    'id_empleado' => 999,
-                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                ]);
-
-                $parte = Parte::create([
-                            'observaciones' => 'Cambio de estado en la operacion activa de la hoja de ruta.',
-                            'fecha' => $fecha,
-                            'fecha_limite' => $ultParte->fecha_limite,
-                            'fecha_carga' => $fecha_carga,
-                            'horas' => '00:00',
-                            'costo' => 0,
-                            'id_orden' => $ope->getHdr->getOrdMec->id_orden,
-                            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-                        ]);
-
-                $parte_mecanizado = Parte_mecanizado::create([
-                    'id_estado_mecanizado' => $estado,
-                    'id_parte' => $parte->id_parte
-                ]);
-            }
-        }
-    
     }
 
     public function comprobarSiTodasLasHdrEstanCompletas($id_mec){
