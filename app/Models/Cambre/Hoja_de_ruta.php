@@ -35,6 +35,10 @@ class Hoja_de_ruta extends Model
         return $this->hasMany(Operaciones_de_hdr::class, 'id_hoja_de_ruta');
     }
 
+    public function getVistaOperacionesHdr(){
+        return $this->hasMany(Vw_operaciones_de_hdr::class, 'id_hoja_de_ruta');
+    }
+
     public function getUltOpeActiva(){
         $ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('activo', 1)->first();
         if ($ope_act) {
@@ -132,5 +136,10 @@ class Hoja_de_ruta extends Model
         } else {
             return 0;
         }
+    }
+
+    public function getResponsable()
+    {
+        return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
     }
 }

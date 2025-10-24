@@ -48,6 +48,7 @@
         </div>
         <div class="ps-3">
             <label for="" style="font-weight: bold">Orden de Mecanizado:</label> {{$orden->nombre_orden}}
+            <label for="" style="font-weight: bold">Cantidad:</label> {{$orden->getOrdenDe ? $orden->getOrdenDe->cantidad : '-'}}
         </div>
         <div class="ms-auto">
             <div class="d-flex align-items-center">
@@ -179,6 +180,16 @@
                                                                 <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdr" onclick="cargarHdrVer({{$hdr->id_hoja_de_ruta}})">
                                                                     Ver
                                                                 </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.pdf', $hdr->id_hoja_de_ruta], 'target' => '_blank']) !!}
+                                                                    {!! Form::submit('Imprimir', ['class' => 'btn btn-success w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea imprimir la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                                {{-- <button type="button" class="btn btn-success w-100">
+                                                                    Imprimir
+                                                                </button> --}}
                                                             </div>
                                                         </div>
                                                         <div class="row my-2">
