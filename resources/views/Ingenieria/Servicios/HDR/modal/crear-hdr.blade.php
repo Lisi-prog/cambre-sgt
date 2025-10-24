@@ -64,7 +64,7 @@
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                         <div class="form-group">
                             {!! Form::label('m_cant', 'Cantidad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('m_cant', null, [
+                            {!! Form::text('m_cant', $orden->getOrdenDe->cantidad, [
                                 'class' => 'form-control reset-input',
                                 'required',
                                 'id' => 'm_cant'

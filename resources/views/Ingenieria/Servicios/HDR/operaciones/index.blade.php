@@ -246,6 +246,7 @@
                                     {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th> --}}
                                     {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
                                     <th class='text-center' style="color:#fff;min-width:5vw">Activo</th>
+                                    <th class='text-center' style="color:#fff;min-width:3vw">Cantidad</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -290,6 +291,8 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->activo ? 'SI' : 'NO'}}</td>
         
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->cantidad ?? ''}}</td>
+
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
                                                     <div class="row justify-content-center" >

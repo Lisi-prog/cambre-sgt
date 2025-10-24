@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 //agregamos
+use \PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -1840,6 +1841,25 @@ class OrdenController extends Controller
                 'operaciones' => Operacion::orderBy('nombre_operacion')->get(),
                 'tecnicos' => $this->obtenerEmpleadosActivosOperarios()
                 ];
+    }
+
+    public function imprimir_hdr($id){
+        $pdf = app('dompdf.wrapper');
+
+        $fechaHoy =  Carbon::now();
+
+        $hdr = Hoja_de_ruta::find($id);
+
+        return $pdf->loadView('Ingenieria.Servicios.HDR.Documentos.hoja-de-ruta-pdf',[
+                    'fechaHoy' => Carbon::parse($fechaHoy)->format('d/m/Y'),
+                    'fecha_carga' => Carbon::parse($hdr->fecha_carga)->format('d/m/Y'),
+                    'hdr' => $hdr,
+                    'revision' => $hdr->getOrdMec->revision ?? '',
+                    'idPieza' => $hdr->getOrdMec->getOrden->nombre_orden ?? '',
+                    'cant' => $hdr->cantidad ?? ''
+                ])  
+                ->setPaper('a4', 'portrait')
+                ->stream('Hoja_de_ruta.pdf');
     }
 
     // public function obtenerMaquinas(Request $request){
