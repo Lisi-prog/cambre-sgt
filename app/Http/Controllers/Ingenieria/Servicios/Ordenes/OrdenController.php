@@ -1953,6 +1953,10 @@ class OrdenController extends Controller
         if (Operacion::where('nombre_operacion', $nom_ope)->first()) {
             $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
 
+            if ($idOperacion == 18) {
+                return Empleado::where('id_empleado', 57)->get();
+            }
+
             return Emp_x_maq::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'emp_x_maq.id_maquinaria')
                             ->join('empleado as emp', 'emp.id_empleado', '=', 'emp_x_maq.id_empleado')
                             ->where('oxm.id_operacion', $idOperacion)
