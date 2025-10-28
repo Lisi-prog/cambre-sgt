@@ -261,6 +261,7 @@ function cargarHdrVer(id){
         success: function (response) {
             document.getElementById('m_ver_ubi').value = response.ubicacion;
             document.getElementById('m_ver_cant').value = response.cantidad;
+            document.getElementById('m_ver_fec_carga').value = response.fecha_requerida;
             document.getElementById('m_ver_ruta').value = response.ruta;
             document.getElementById('m_ver-obser').value = response.observaciones;
             document.getElementById('m_ver-obser-razon').value = response.obser_fallo;

@@ -1384,6 +1384,7 @@ class OrdenController extends Controller
 
         $hdr = Hoja_de_ruta::create([
             'fecha_carga' => $fec_carga,
+            'fecha_requerida' => $fec,
             'observaciones' => $obse,
             'ubicacion' => $ubi,
             'cantidad' => $cant,
@@ -1420,7 +1421,7 @@ class OrdenController extends Controller
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec,
+                    'fecha' => $fec_carga,
                     'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
                     'id_responsabilidad' => $res_op,
                     'horas' => '00:00',
@@ -1432,7 +1433,7 @@ class OrdenController extends Controller
            Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $hdr_a_ope_act->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec,
+                    'fecha' => $fec_carga,
                     'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
                     'id_responsabilidad' => $res_op,
                     'horas' => '00:00',
@@ -1488,7 +1489,7 @@ class OrdenController extends Controller
                             'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
                             'numero' => $contador,
                             'fecha_carga' => $fec_carga,
-                            'fecha' => $fec,
+                            'fecha' => $fec_carga,
                             'id_maquinaria' => $id_maq,
                             'id_operacion' => $id_ope,
                             'activo' => $activo
@@ -1500,7 +1501,7 @@ class OrdenController extends Controller
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec,
+                    'fecha' => $fec_carga,
                     'observaciones' => 'Generacion de operacion de hoja de ruta.',
                     'id_responsabilidad' => $res,
                     'horas' => '00:00',
@@ -1846,12 +1847,10 @@ class OrdenController extends Controller
     public function imprimir_hdr($id){
         $pdf = app('dompdf.wrapper');
 
-        $fechaHoy =  Carbon::now();
-
-        $hdr = Hoja_de_ruta::find($id);
+        $hdr = hoja_de_ruta::find($id);
 
         return $pdf->loadView('Ingenieria.Servicios.HDR.Documentos.hoja-de-ruta-pdf',[
-                    'fechaHoy' => Carbon::parse($fechaHoy)->format('d/m/Y'),
+                    'fecha_requerida' => $hdr->fecha_requerida ? Carbon::parse($hdr->fecha_requerida)->format('d/m/Y') : null,
                     'fecha_carga' => Carbon::parse($hdr->fecha_carga)->format('d/m/Y'),
                     'hdr' => $hdr,
                     'revision' => $hdr->getOrdMec->revision ?? '',
@@ -2009,6 +2008,7 @@ class OrdenController extends Controller
         return [
             'ubicacion' => $hdr->ubicacion,
             'cantidad' => $hdr->cantidad,
+            'fecha_requerida' => $hdr->fecha_requerida,
             'ruta' => $hdr->ruta,
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr,
