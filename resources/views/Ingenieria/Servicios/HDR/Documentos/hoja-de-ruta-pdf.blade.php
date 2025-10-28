@@ -45,13 +45,22 @@
         </tr>
         <tr>
             <td colspan="2"></td>
-            <td class="atributosize"><strong>FECHA:</strong></td>
-            <td>{{ $fechaHoy ?? ''}}</td>
+            <td class="atributosize"><strong>FECHA REQ.:</strong></td>
+            <td>{{ $fecha_requerida ?? '-'}}</td>
         </tr>
     </table>
 
     <table style="margin-top:10px;">
-        <tr class="azul">
+        <thead class="azul">
+            <th style="width: 3%;">N°</th>
+            <th style="width: 15%;">OPERACIÓN</th>
+            <th style="width: 15%;">ASIGNADO</th>
+            <th style="width: 10%;">MÁQUINA</th>
+            <th style="width: 8%;">MEDIDAS</th>
+            <th style="width: 5%;">HORAS</th>
+            <th style="width: 10%;">FECHA</th>
+        </thead>
+        {{-- <tr class="azul">
             <th>N°</th>
             <th style="width: 190px;">OPERACIÓN</th>
             <th style="width: 150px;">ASIGNADO</th>
@@ -59,7 +68,7 @@
             <th>MEDIDAS</th>
             <th>HORAS</th>
             <th style="width: 60px;">FECHA</th>
-        </tr>
+        </tr> --}}
         @foreach ($hdr->getVistaOperacionesHdr->sortBy('numero') as $op)
             <tr>
                 <td>{{ $op->numero ?? '-'}}</td>
@@ -68,6 +77,19 @@
                 <td style="text-align:left;">{{$op->codigo_maquinaria ?? ''}}</td>
                 <td></td><td></td><td></td>
             </tr>
+
+            {{-- @for ($i = 0; $i < 2; $i++)
+                <tr>
+                    <td style="height: 20px;"></td>
+                    <td style="height: 20px;"></td>
+                    <td style="height: 20px;"></td>
+                    <td style="height: 20px;"></td>
+                    <td style="height: 20px;"></td>
+                    <td style="height: 20px;"></td>
+                    <td style="height: 20px;"></td>
+                </tr>
+            @endfor --}}
+
         @endforeach
         {{-- @for ($i = 0; $i < 7; $i++)
             <tr><td colspan="7" style="height:20px;"></td></tr>
