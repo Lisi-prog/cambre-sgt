@@ -82,4 +82,20 @@ class Vw_orden_manufactura extends Model
             return '';
         }
     }
+
+    public function tieneMecAsoc(){
+        $idordman = Orden_manufactura::where('id_orden', $this->id_orden)->first()->id_orden_manufactura;
+
+        $ordMec = Vw_orden_mecanizado::where('id_orden_manufactura', $idordman)->get();
+
+        if (count($ordMec) > 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    public function getOrdenManufactura()
+    {
+        return $this->hasOne(Orden_manufactura::class, 'id_orden');
+    }
 }
