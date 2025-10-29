@@ -108,7 +108,11 @@
                                             <div class="d-flex flex-column overflow-auto">
                                                 <label style="font-style: italic"><input name="filter" type="checkbox" value="sup"> (Seleccionar todo)</label>
                                                 @foreach ($manufacturas as $man)
-                                                    <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
+                                                    @if (!empty($flt_ord))
+                                                        <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" {{$man->id_orden_manufactura == $flt_ord ? 'checked' : ''}}> {{$man->manufactura ?? '-'}}</label>
+                                                    @else
+                                                        <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>

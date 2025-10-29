@@ -959,7 +959,7 @@ class OrdenController extends Controller
     }
 
     // VISTAS DE ORDENES
-    public function obtenerOrdenes($tipo_orden){
+    public function obtenerOrdenes(Request $request, $tipo_orden){
         $id_empleado = Auth::user()->getEmpleado->id_empleado;
         $supervisores = $this->obtenerSupervisores();
         $responsables = $this->obtenerEmpleados();
@@ -1025,12 +1025,13 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
                 }
                 $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
-                $manufacturas = Vw_orden_mecanizado::whereNotNull('manufactura')->orderBy('manufactura')->get('manufactura')->unique('manufactura');
+                $manufacturas = Vw_orden_mecanizado::whereNotNull('manufactura')->orderBy('manufactura')->get(['manufactura', 'id_orden_manufactura'])->unique('manufactura');
                 $operaciones = Vw_orden_mecanizado::whereNotNull('ope_act')->orderBy('ope_act')->get('ope_act')->unique('ope_act');
                 $tipo = 'Mecanizado';
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones'));
+                $flt_ord = $request->input('flt_ord');
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones', 'flt_ord'));
                 break;
 
             case 4:
@@ -1370,13 +1371,14 @@ class OrdenController extends Controller
         $ruta = $request->input('m_ruta');
         $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $contador = 1;
-        
 
         $operaciones = $request->input('operacion');
-        
-        $this->comprobarSiTodasLasHdrEstanCompletas($id);
-        
 
+        try {    
+            DB::beginTransaction();
+
+            $this->comprobarSiTodasLasHdrEstanCompletas($id);
+        
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => Auth::user()->getEmpleado->id_empleado,
             'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
@@ -1384,6 +1386,7 @@ class OrdenController extends Controller
 
         $hdr = Hoja_de_ruta::create([
             'fecha_carga' => $fec_carga,
+            'fecha_requerida' => $fec,
             'observaciones' => $obse,
             'ubicacion' => $ubi,
             'cantidad' => $cant,
@@ -1420,7 +1423,7 @@ class OrdenController extends Controller
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec,
+                    'fecha' => $fec_carga,
                     'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
                     'id_responsabilidad' => $res_op,
                     'horas' => '00:00',
@@ -1432,7 +1435,7 @@ class OrdenController extends Controller
            Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $hdr_a_ope_act->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec,
+                    'fecha' => $fec_carga,
                     'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
                     'id_responsabilidad' => $res_op,
                     'horas' => '00:00',
@@ -1488,7 +1491,7 @@ class OrdenController extends Controller
                             'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
                             'numero' => $contador,
                             'fecha_carga' => $fec_carga,
-                            'fecha' => $fec,
+                            'fecha' => $fec_carga,
                             'id_maquinaria' => $id_maq,
                             'id_operacion' => $id_ope,
                             'activo' => $activo
@@ -1500,7 +1503,7 @@ class OrdenController extends Controller
                 Parte_ope_hdr::create([
                     'id_ope_de_hdr' => $ope->id_ope_de_hdr,
                     'fecha_carga' => $fec_carga,
-                    'fecha' => $fec,
+                    'fecha' => $fec_carga,
                     'observaciones' => 'Generacion de operacion de hoja de ruta.',
                     'id_responsabilidad' => $res,
                     'horas' => '00:00',
@@ -1510,27 +1513,35 @@ class OrdenController extends Controller
 
                 $contador += 1;
 
+                }
             }
-        }
 
-        if ($request->hasFile('archivos')) {
-            $nombre = Auth::user()->getEmpleado->nombre_empleado;
-            $cont = 1;
-            foreach ($request->file('archivos') as $file) {
+            if ($request->hasFile('archivos')) {
+                $nombre = Auth::user()->getEmpleado->nombre_empleado;
+                $cont = 1;
+                foreach ($request->file('archivos') as $file) {
 
-                $filename = $hdr->id_hoja_de_ruta . '-hdr_archivo_' . $cont . '_' . str_replace(" " ,"-", $nombre) . '.' . $file->extension();
-                $path = $file->storeAs('', $filename, 'public_plano_hdr');
-                
-                Archivo_hdr::create([
-                    'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
-                    'nombre_archivo' => $filename,
-                    'ruta' => 'storage/hojaderuta/'.$path
-                ]);
-                $cont++;
+                    $filename = $hdr->id_hoja_de_ruta . '-hdr_archivo_' . $cont . '_' . str_replace(" " ,"-", $nombre) . '.' . $file->extension();
+                    $path = $file->storeAs('', $filename, 'public_plano_hdr');
+                    
+                    Archivo_hdr::create([
+                        'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
+                        'nombre_archivo' => $filename,
+                        'ruta' => 'storage/hojaderuta/'.$path
+                    ]);
+                    $cont++;
+                }
             }
-        }
+    
+            DB::commit();
 
-        return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido creado con exito.');
+            return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido creado con exito.');                   
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al crear la hoja de ruta: '.$e->getMessage());
+        }
     }
 
     public function editar_hdr(Request $request, $id){
@@ -1829,11 +1840,42 @@ class OrdenController extends Controller
                 $parte_mecanizado = Parte_mecanizado::create([
                     'id_estado_mecanizado' => 4,
                     'id_parte' => $parte->id_parte
-                ]);
-                
+                ]); 
             }
-        }
-        
+        }else{
+            $idOrd = Orden_mecanizado::find($id_mec)->id_orden;
+
+            $orden = Orden::find($idOrd);
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $fecha = Carbon::now()->format('Y-m-d');
+
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Se genero una nueva hoja de ruta a una orden de mecanizado previamente completa.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrd,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => 4,
+                'id_parte' => $parte->id_parte
+            ]); 
+        }  
     }
 
     public function obtenerOperacionesyTecnicos(){
@@ -1846,12 +1888,10 @@ class OrdenController extends Controller
     public function imprimir_hdr($id){
         $pdf = app('dompdf.wrapper');
 
-        $fechaHoy =  Carbon::now();
-
-        $hdr = Hoja_de_ruta::find($id);
+        $hdr = hoja_de_ruta::find($id);
 
         return $pdf->loadView('Ingenieria.Servicios.HDR.Documentos.hoja-de-ruta-pdf',[
-                    'fechaHoy' => Carbon::parse($fechaHoy)->format('d/m/Y'),
+                    'fecha_requerida' => $hdr->fecha_requerida ? Carbon::parse($hdr->fecha_requerida)->format('d/m/Y') : null,
                     'fecha_carga' => Carbon::parse($hdr->fecha_carga)->format('d/m/Y'),
                     'hdr' => $hdr,
                     'revision' => $hdr->getOrdMec->revision ?? '',
@@ -1953,6 +1993,10 @@ class OrdenController extends Controller
         if (Operacion::where('nombre_operacion', $nom_ope)->first()) {
             $idOperacion = Operacion::where('nombre_operacion', $nom_ope)->first()->id_operacion;
 
+            if ($idOperacion == 18) {
+                return Empleado::where('id_empleado', 57)->get();
+            }
+
             return Emp_x_maq::join('ope_x_maq as oxm', 'oxm.id_maquinaria', '=', 'emp_x_maq.id_maquinaria')
                             ->join('empleado as emp', 'emp.id_empleado', '=', 'emp_x_maq.id_empleado')
                             ->where('oxm.id_operacion', $idOperacion)
@@ -2005,6 +2049,7 @@ class OrdenController extends Controller
         return [
             'ubicacion' => $hdr->ubicacion,
             'cantidad' => $hdr->cantidad,
+            'fecha_requerida' => $hdr->fecha_requerida,
             'ruta' => $hdr->ruta,
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr,
@@ -2184,7 +2229,7 @@ class OrdenController extends Controller
     public function obtenerProgresoOrdMan($id){
         $ord_man =  Vw_gest_orden_manufactura::find($id);
         $ord_mec = Orden_manufactura::where('id_orden', $id)->first();
-        $ordenes_mec = Vw_gest_orden_mecanizado::where('id_orden_manufactura', $ord_mec->id_orden_manufactura)->where('id_estado', '<', 5)->get();
+        $ordenes_mec = Vw_gest_orden_mecanizado::where('id_orden_manufactura', $ord_mec->id_orden_manufactura)->get();
 
         return [
             'nombre_orden' => $ord_man->nombre_orden,

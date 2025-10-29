@@ -467,7 +467,7 @@ table.dataTable tbody td {
                                 <div class="d-flex flex-column overflow-auto">
                                     <label style="font-style: italic"><input class="ome-ckb" name="filter" type="checkbox" value="ome_est" checked> (Seleccionar todo)</label>
                                     @foreach ($flt_estados_mec as $estado)
-                                        @if ($estado->id_estado_mecanizado < 6)
+                                        @if ($estado->id_estado_mecanizado < 7)
                                             <label><input class="ome-ckb" name="ome_est" type="checkbox" value="{{$estado->nombre_estado_mecanizado}}" checked> {{$estado->nombre_estado_mecanizado}}</label>
                                         @else
                                             <label><input class="ome-ckb" name="ome_est" type="checkbox" value="{{$estado->nombre_estado_mecanizado}}"> {{$estado->nombre_estado_mecanizado}}</label>
@@ -537,7 +537,7 @@ table.dataTable tbody td {
                             $idCount = 0;
                         @endphp
                         @foreach ($ordenes_mecanizado as $orden)
-                            @if ($orden->id_estado < 5)
+                            @if ($orden->id_estado < 7)
                                 <tr>
                             @else
                                 <tr style="display: none;">

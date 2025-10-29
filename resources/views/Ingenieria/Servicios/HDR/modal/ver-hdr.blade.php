@@ -53,10 +53,8 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group">
-                            {!! Form::label('m_fec_carga', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::date('m_fec_carga', \Carbon\Carbon::now(), [
-                                'min' => '2023-01-01',
-                                'max' => \Carbon\Carbon::now()->year . '-12',
+                            {!! Form::label('m_fec_carga', 'Fecha Requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::date('m_fec_carga', null, [
                                 'id' => 'm_ver_fec_carga',
                                 'class' => 'form-control',
                                 'readonly'

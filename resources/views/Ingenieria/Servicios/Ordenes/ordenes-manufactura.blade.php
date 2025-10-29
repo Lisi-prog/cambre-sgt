@@ -290,6 +290,16 @@
                                                             </div>
                                                             @endcan
                                                         </div>
+                                                        @if ($orden->tieneMecAsoc())
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', 3], 'style' => 'display:inline', 'target' => '_blank' ]) !!}
+                                                                        <input class="input-filter" name="flt_ord" type="text" value="{{$orden->getOrdenManufactura->id_orden_manufactura}}" hidden>
+                                                                    {!! Form::submit('Filtro', ['class' => 'btn btn-info w-100']) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>

@@ -112,30 +112,26 @@
                                 <label for="horas" class="control-label" style="white-space: nowrap; ">Horas hombre:</label> 
                                 <span class="obligatorio">*</span> 
                                 <div class= "input-group">
-                                    <input class="form-control" name="horas" type="number" min="0" value="00" id="horas" required>
+                                    <input class="form-control" name="horas" type="number" min="0" value="00" id="horas" onclick="this.select()" required>
                                     <span class="input-group-text">:</span>
-                                    <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos" required>
+                                    <input 
+                                        class="form-control" 
+                                        name="minutos" 
+                                        type="number" 
+                                        @role('TECNICO') 
+                                            min="1" 
+                                        @else 
+                                            min="0" 
+                                        @endrole 
+                                        max="59" 
+                                        value="00" 
+                                        id="minutos"
+                                        onclick="this.select()"
+                                        required
+                                    >
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="section-medida">
-                            {!! Form::label('medida', 'Medidas:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value=1 id="checkDefaultMed" name="medidas">
-                                <label class="form-check-label" for="checkDefaultMed">
-                                  Comprobado
-                                </label>
-                            </div>
-                        </div> --}}
-                        {{-- <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 mb-2" id="section-medida">
-                            <div class="form-group">
-                                {!! Form::label('arch_cam', 'Ruta Archivo CAM:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                {!! Form::text('ruta_cam', null, [
-                                    'class' => 'form-control',
-                                    'id' => 'mv-arch-cam'
-                                ]) !!}
-                            </div>
-                        </div> --}}
                     </div>
                     <div class ='row'> 
                         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -150,9 +146,23 @@
                             <div class="form-group"> 
                                 <label for="horas_maquina" class="control-label" style="white-space: nowrap; ">Horas maquina:</label> 
                                 <div class= "input-group">
-                                    <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina" required>
+                                    <input class="form-control" name="horas_maquina" type="number" min="0" value="00" id="horas_maquina" onclick="this.select()" required>
                                     <span class="input-group-text">:</span>
-                                    <input class="form-control" name="minutos_maquina" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
+                                    <input 
+                                        class="form-control" 
+                                        name="minutos_maquina" 
+                                        type="number" 
+                                        @role('TECNICO') 
+                                            min="1" 
+                                        @else 
+                                            min="0" 
+                                        @endrole  
+                                        max="59" 
+                                        value="00" 
+                                        id="minutos_maquina"
+                                        onclick="this.select()"
+                                        required
+                                    >
                                 </div>
                             </div>
                         </div>

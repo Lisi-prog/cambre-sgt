@@ -21,6 +21,7 @@ class Hoja_de_ruta extends Model
 
     protected $fillable = [ 
         'fecha_carga',
+        'fecha_requerida',
         'observaciones',
         'ubicacion',
         'cantidad',
