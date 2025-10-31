@@ -784,7 +784,9 @@ class OrdenController extends Controller
                     'id_supervisor' => $id_supervisor,
                     'supervisa' => $supervisor,
                     'observaciones' => $orden_trabajo->observaciones,
-                    'tec' => $es_tecnico
+                    'tec' => $es_tecnico,
+                    'id_orden_manufactura' => $orden_trabajo->getOrdenDe->id_orden_manufactura,
+                    'id_orden_manufactura_asoc' => $orden_trabajo->getOrdenDe->getOrdenManuAsoc(),
                     ]);
                 break;
             case 3:
@@ -1100,96 +1102,125 @@ class OrdenController extends Controller
                 break;
         }
         
+        try {    
+            DB::beginTransaction();
 
+            $orden->update([
+                'nombre_orden' => $request->input('nom_orden_edit'),
+                'fecha_inicio' => $request->input('fecha_ini_edit'),
+                'duracion_estimada' => $request->input('horas_estimadas_edit') . ':' . $request->input('minutos_estimados_edit'),
+                'observaciones' => $request->input('observaciones_edit')
+            ]);
+
+            $responsabilidades_orden = $orden->getResponsabilidaOrden;
+            $responsabilidad_res = '';
+            $responsabilidad_sup = '';
+            foreach ($responsabilidades_orden as $resp_ord) {
+            $rol = $resp_ord->getResponsabilidad->getRol->nombre_rol_empleado;
+            switch ($rol) {
+                case 'Responsable':
+                    $responsabilidad_res = $resp_ord->getResponsabilidad;
+                    if($responsabilidad_res->getEmpleado->id_empleado != $request->input('responsable_edit')){
+                        $responsabilidad_res->id_empleado = $request->input('responsable_edit');
+                        $responsabilidad_res->save();
+                    }
+                    break;
+                case 'Supervisor':
+                    $responsabilidad_sup = $resp_ord->getResponsabilidad;
+                    if($responsabilidad_sup->getEmpleado->id_empleado != $request->input('supervisor_edit')){
+                        $responsabilidad_sup->id_empleado = $request->input('supervisor_edit');
+                        $responsabilidad_sup->save();
+                    }
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            }
+            $fecha = Carbon::now()->format('Y-m-d');
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => 1
+            ]);
+
+            $parte = Parte::create([
+                'observaciones' => 'Edicion de orden',
+                'fecha' => Carbon::now()->format('Y-m-d'),
+                'fecha_limite' => $request->input('fecha_req_edit'),
+                'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s'),
+                'horas' => '00:00',
+                'id_orden' => $orden->id_orden,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            ]);
+
+            switch ($tipo_orden) {
+                case 1:
+                    $orden_trabajo = $orden->getOrdenDe;
+                    $orden_trabajo->id_tipo_orden_trabajo = $request->input('tipo_orden_trabajo_edit');
+                    $orden_trabajo->save();
+                    Parte_trabajo::create([
+                        'id_estado' => $request->input('id_estado_edit'),
+                        'id_parte' => $parte->id_parte
+                    ]);
+                break;
+                case 2:
+                    $orden_manufactura = $orden->getOrdenDe;
+                    $orden_manufactura->revision = $request->input('revision_edit');
+                    $orden_manufactura->cantidad = $request->input('cantidad_edit');
+                    $orden_manufactura->ruta_plano = $request->input('ruta_plano_edit');
+                    $orden_manufactura->save();
+
+                    $ordManAso = Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->first();
+
+                    if ($ordManAso) {
+                        if ($request->input('ord_manufactura_asoc')) {
+                            $ordManAso->id_ord_man_asoc = $request->input('ord_manufactura_asoc');
+                            $ordManAso->save();
+                        } else {
+                            Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->delete();
+                        }
+                    }else{
+                        if ($request->input('ord_manufactura_asoc')) {
+                            Orden_manufactura_asoc::create([
+                                'id_orden_manufactura' => $orden_manufactura->id_orden_manufactura,
+                                'id_orden_man_asoc' => $request->input('ord_manufactura_asoc'),
+                                'es_retrabajo' => 0
+                            ]);
+                        }
+                    } 
+                    
+                    Parte_manufactura::create([
+                        'id_estado_manufactura' => $request->input('estado_man_edit'),
+                        'id_parte' => $parte->id_parte
+                    ]);
+                break;
+                case 3:
+                    $orden_mecanizado = $orden->getOrdenDe;
+                    $orden_mecanizado->revision = $request->input('revision_edit');
+                    $orden_mecanizado->cantidad = $request->input('cantidad_edit');
+                    $orden_mecanizado->ruta_pieza = $request->input('ruta_plano_edit');
+                    $orden_mecanizado->save();
+                    Parte_mecanizado::create([
+                        'id_estado_mecanizado' => $request->input('estado_mecanizado_edit'),
+                        'id_parte' => $parte->id_parte
+                    ]);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+    
+            DB::commit();
+
+            return 'La orden ha sido editada con exito.';                     
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return 'Ocurrio un error al intentar editar la orden.'.$e->getMessage();
+        }
         
-        $orden->update([
-            'nombre_orden' => $request->input('nom_orden_edit'),
-            'fecha_inicio' => $request->input('fecha_ini_edit'),
-            'duracion_estimada' => $request->input('horas_estimadas_edit') . ':' . $request->input('minutos_estimados_edit'),
-            'observaciones' => $request->input('observaciones_edit')
-        ]);
-
-        $responsabilidades_orden = $orden->getResponsabilidaOrden;
-        $responsabilidad_res = '';
-        $responsabilidad_sup = '';
-        foreach ($responsabilidades_orden as $resp_ord) {
-           $rol = $resp_ord->getResponsabilidad->getRol->nombre_rol_empleado;
-           switch ($rol) {
-            case 'Responsable':
-                $responsabilidad_res = $resp_ord->getResponsabilidad;
-                if($responsabilidad_res->getEmpleado->id_empleado != $request->input('responsable_edit')){
-                    $responsabilidad_res->id_empleado = $request->input('responsable_edit');
-                    $responsabilidad_res->save();
-                }
-                break;
-            case 'Supervisor':
-                $responsabilidad_sup = $resp_ord->getResponsabilidad;
-                if($responsabilidad_sup->getEmpleado->id_empleado != $request->input('supervisor_edit')){
-                    $responsabilidad_sup->id_empleado = $request->input('supervisor_edit');
-                    $responsabilidad_sup->save();
-                }
-                break;
-            default:
-                # code...
-                break;
-           }
-        }
-        $fecha = Carbon::now()->format('Y-m-d');
-        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-
-        $responsabilidad = Responsabilidad::create([
-            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-            'id_rol_empleado' => 1
-        ]);
-
-        $parte = Parte::create([
-            'observaciones' => 'Edicion de orden',
-            'fecha' => Carbon::now()->format('Y-m-d'),
-            'fecha_limite' => $request->input('fecha_req_edit'),
-            'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s'),
-            'horas' => '00:00',
-            'id_orden' => $orden->id_orden,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
-
-        switch ($tipo_orden) {
-            case 1:
-                $orden_trabajo = $orden->getOrdenDe;
-                $orden_trabajo->id_tipo_orden_trabajo = $request->input('tipo_orden_trabajo_edit');
-                $orden_trabajo->save();
-                Parte_trabajo::create([
-                    'id_estado' => $request->input('id_estado_edit'),
-                    'id_parte' => $parte->id_parte
-                ]);
-                break;
-            case 2:
-                $orden_manufactura = $orden->getOrdenDe;
-                $orden_manufactura->revision = $request->input('revision_edit');
-                $orden_manufactura->cantidad = $request->input('cantidad_edit');
-                $orden_manufactura->ruta_plano = $request->input('ruta_plano_edit');
-                $orden_manufactura->save();
-                Parte_manufactura::create([
-                    'id_estado_manufactura' => $request->input('estado_man_edit'),
-                    'id_parte' => $parte->id_parte
-                ]);
-                break;
-            case 3:
-                $orden_mecanizado = $orden->getOrdenDe;
-                $orden_mecanizado->revision = $request->input('revision_edit');
-                $orden_mecanizado->cantidad = $request->input('cantidad_edit');
-                $orden_mecanizado->ruta_pieza = $request->input('ruta_plano_edit');
-                $orden_mecanizado->save();
-                Parte_mecanizado::create([
-                    'id_estado_mecanizado' => $request->input('estado_mecanizado_edit'),
-                    'id_parte' => $parte->id_parte
-                ]);
-                break;
-            default:
-                # code...
-                break;
-        }
-        // return redirect()->back()->with('mensaje', 'La orden ha sido editada con exito.');
-        return 'La orden ha sido editada con exito.';
     }
 
     public function eliminarOrden($id_orden){
@@ -2324,6 +2355,31 @@ class OrdenController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return 0;
+        }
+    }
+
+    public function desvincularOrdenMec($id){
+        $orden = Orden_mecanizado::find($id);
+
+        try {    
+            DB::beginTransaction();
+
+            $orden->id_orden_manufactura = null;
+
+            if(!$orden->save()) {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'Ocurrio un problema al quitar la orden de mecanizado');
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'Se quito la orden de mecanizado con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al quitar la orden de mecanizado: '.$e->getMessage());
         }
     }
     //Transaccion

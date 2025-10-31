@@ -188,6 +188,13 @@
                                                             </div>
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.mec.quitar', $orden_mecanizado->id_orden_mecanizado], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Quitar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea QUITAR la orden de mecanizado de esta orden de manufactura?');"]) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
                                                                     {!! Form::close() !!}
