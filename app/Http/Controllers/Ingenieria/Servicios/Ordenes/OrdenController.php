@@ -1176,7 +1176,7 @@ class OrdenController extends Controller
 
                     if ($ordManAso) {
                         if ($request->input('ord_manufactura_asoc')) {
-                            $ordManAso->id_ord_man_asoc = $request->input('ord_manufactura_asoc');
+                            $ordManAso->id_orden_man_asoc = $request->input('ord_manufactura_asoc');
                             $ordManAso->save();
                         } else {
                             Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->delete();
