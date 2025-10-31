@@ -305,6 +305,7 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
     let input_ruta_plano = document.getElementById('ruta_plano_edit');
     let input_cantidad = document.getElementById('cantidad_edit');
     let observaciones = document.getElementById('observaciones_edit');
+    let idOrdManAsoc = null;
     $.when($.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id_orden, 
@@ -334,7 +335,7 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
             input_revision ? input_revision.value = element.revision : '';
             input_ruta_plano ? input_ruta_plano.value = element.ruta_plano: '';
             input_cantidad ? input_cantidad.value = element.cantidad : '';
-            
+            cargarOrdMan(element.id_orden_manufactura_asoc, element.id_orden_manufactura);
         });
         
     },
@@ -948,7 +949,6 @@ function  cargarOrdMecyOrdTra(){
         type: "post",
         url: '/servicio/'+id+'/obtener-ord-tra-mec', 
         success: function (response) {
-            console.log(response)
 
             response.ord_mec.forEach(element => {             
                 htmlOrdMec  += `
@@ -971,7 +971,7 @@ function  cargarOrdMecyOrdTra(){
     });
 }
 
-function cargarOrdMan(){
+function cargarOrdMan(idOrdManAsoc, idOrdMan){
     let cbxOrdMan = document.getElementById('cbx_ord_man_asoc');
     let htmlOrdMan = '';
     let id = document.getElementById('id-servicio-dat').value;
@@ -986,6 +986,14 @@ function cargarOrdMan(){
             });
             
             cbxOrdMan.innerHTML += htmlOrdMan;
+
+            if (idOrdManAsoc) {
+                cbxOrdMan.value = idOrdManAsoc;
+            }
+
+            if (idOrdMan) {
+                cbxOrdMan.querySelector(`option[value="${idOrdMan}"]`).remove();
+            }
         },
         error: function (error) {
             console.log(error);
