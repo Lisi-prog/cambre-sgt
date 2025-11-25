@@ -1352,7 +1352,7 @@ class OrdenController extends Controller
                                     ->selectRaw("id_hoja_de_ruta, CONCAT('Fecha: ', DATE(fecha_carga), ' - Código: ', id_hoja_de_ruta) as descripcion")
                                     ->orderBy('id_hoja_de_ruta', 'desc')
                                     ->pluck('descripcion', 'id_hoja_de_ruta');
-        $tecnicos = $this->obtenerTecnicosDeOperaciones()->pluck('nombre_empleado', 'id_empleado');
+        $tecnicos = $this->obtenerEmpleadosActivos()->pluck('nombre_empleado', 'id_empleado');
 
         return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt', 'tecnicos'));
     }

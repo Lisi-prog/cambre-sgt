@@ -987,6 +987,7 @@
                             <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
                             <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
                             <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.horas_maquina+`</td>
                             <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                             <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
                             <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
