@@ -137,8 +137,15 @@
                     <div class ='row'> 
                         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                             <div class="form-group">
-                                {!! Form::label('maquina', "Maquina:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!} <span class="obligatorio">*</span>
-                                <select class="form-select form-group" id="m-ver-parte-maquina" name="maquina" required>
+                                {!! Form::label('maquina', "Maquina:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!} @role('TECNICO')<span class="obligatorio">*</span>@endrole
+                                <select 
+                                    class="form-select form-group" 
+                                    id="m-ver-parte-maquina" 
+                                    name="maquina" 
+                                    @role('TECNICO') 
+                                        required
+                                    @endrole
+                                >
                                     <option selected="selected" value="">Seleccionar</option>
                                 </select>
                             </div>
