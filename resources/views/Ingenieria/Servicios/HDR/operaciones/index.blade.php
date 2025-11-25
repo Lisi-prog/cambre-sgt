@@ -1111,7 +1111,7 @@
                 document.getElementById('ver-table-body').innerHTML = '';
                 response.operaciones.forEach(function (op){
                     html += `<tr>
-                            <td class="text-center">`+1+`</td>
+                            <td class="text-center">`+op.numero+`</td>
                             <td class="text-center">`+op.operacion+`</td>
                             <td class="text-center">`+op.asignado+`</td>
                             <td class="text-center">`+op.maquina ?? '-'+`</td>
