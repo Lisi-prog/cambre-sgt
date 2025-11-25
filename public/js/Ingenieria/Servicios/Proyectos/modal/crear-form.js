@@ -394,6 +394,7 @@ function cargarModalVerOrdenTrabajo(id_orden){
 }
 
 function cargarModalVerOrdenManufactura(id_orden){
+    let input_id_orden = document.getElementById("input-id_nom_orden")
     let input_nombre = document.getElementById("input-nom_orden");
     let input_revision = document.getElementById("input-revision");
     let input_cantidad = document.getElementById("input-cantidad");
@@ -421,6 +422,7 @@ function cargarModalVerOrdenManufactura(id_orden){
     success: function (response) {
         response.forEach(element => {
             // console.log(element.cantidad);
+            input_id_orden.value = id_orden;
             input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;
@@ -447,6 +449,7 @@ function cargarModalVerOrdenManufactura(id_orden){
 }
 
 function cargarModalVerOrdenMecanizado(id_orden){
+    let input_id_orden = document.getElementById("input-id_nom_orden")
     let input_nombre = document.getElementById("input-nom_orden");
     let input_revision = document.getElementById("input-revision");
     let input_cantidad = document.getElementById("input-cantidad");
@@ -472,6 +475,7 @@ function cargarModalVerOrdenMecanizado(id_orden){
         },
     success: function (response) {
         response.forEach(element => {
+            input_id_orden.value = id_orden;
             input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;

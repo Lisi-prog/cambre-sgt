@@ -66,6 +66,11 @@ class Empleado extends Model
         return $query->where('esta_activo', 1);
     }
 
+    public function scopeHabilitadoOperacion($query)
+    {
+        return $query->where('habilitado_operaciones', 1);
+    }
+
     public function scopeOperario($query)
     {
         return $query->where('habilitado_operaciones', 1);

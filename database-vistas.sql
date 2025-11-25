@@ -163,58 +163,62 @@ select
 
 CREATE VIEW vw_orden_mecanizado AS
 WITH 
-ParteRanked AS (
-    SELECT
-        p.id_parte,
-        pt.id_estado_mecanizado,
-        p.fecha_limite,
-        p.id_orden,
-        est.nombre_estado_mecanizado,
-        CASE
-			WHEN est.id_estado_mecanizado = 6 THEN p.fecha
-            ELSE "____-__-__"
-		END as fecha_finalizacion,
-        ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
-    FROM parte p
-    inner join parte_mecanizado pt on pt.id_parte = p.id_parte
-    inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
-),
-Res_ord AS (
-	select 
-		res_ord.id_orden,
-		res.id_rol_empleado,
-		emp.nombre_empleado,
-        emp.id_empleado
-	from responsabilidad_orden res_ord
-	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
-	inner join empleado emp on res.id_empleado = emp.id_empleado
-)
-
-select 
-	se.prioridad_servicio,
-    se.id_servicio,
-	se.codigo_servicio,
-    se.nombre_servicio,
-    o.id_orden,
-	o.nombre_orden,
-    et.descripcion_etapa,
-    p_rank.fecha_limite,
-    p_rank.fecha_finalizacion,
-    roo.nombre_empleado as responsable,
-    roo.id_empleado as id_empleado_responsable,
-    ro.nombre_empleado as supervisor,
-    ro.id_empleado as id_empleado_supervisor,
-    p_rank.nombre_estado_mecanizado as nombre_estado,
-    th.total_horas
-    from orden as o
-	inner join orden_mecanizado as ot on o.id_orden = ot.id_orden
-	inner join etapa as et on et.id_etapa = o.id_etapa
-	inner join servicio as se on se.id_servicio = et.id_servicio
+	ParteRanked AS (
+		SELECT
+			p.id_parte,
+			pt.id_estado_mecanizado,
+			p.fecha_limite,
+			p.id_orden,
+			est.nombre_estado_mecanizado,
+			CASE
+				WHEN est.id_estado_mecanizado = 7 THEN p.fecha -- completo en estado_mecanizado
+				ELSE "____-__-__"
+			END as fecha_finalizacion,
+			ROW_NUMBER() OVER (PARTITION BY p.id_orden ORDER BY p.id_parte DESC) AS rn
+		FROM parte p
+		inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+		inner join estado_mecanizado est on est.id_estado_mecanizado = pt.id_estado_mecanizado
+	),
+    Res_ord AS (
+		select 
+			res_ord.id_orden,
+			res.id_rol_empleado,
+			emp.nombre_empleado,
+			emp.id_empleado
+		from responsabilidad_orden res_ord
+		inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+		inner join empleado emp on res.id_empleado = emp.id_empleado
+	)
+    select 
+		se.prioridad_servicio,
+		se.id_servicio,
+		se.codigo_servicio,
+		se.nombre_servicio,
+		o.id_orden,
+		o.nombre_orden,
+        et.descripcion_etapa,
+        p_rank.fecha_limite,
+		p_rank.fecha_finalizacion,
+        p_rank.id_estado_mecanizado,
+        p_rank.nombre_estado_mecanizado as nombre_estado,
+        th.total_horas,
+        ro.nombre_empleado as supervisor,
+		ro.id_empleado as id_empleado_supervisor,
+        ObtenerOpeActivaOrdMec(omec.id_orden_mecanizado) as ope_act,
+        omec.id_orden_manufactura,
+        man.nombre_orden as manufactura,
+        TotalOperacionOrdMec(omec.id_orden_mecanizado) as total_ope,
+        ObtenerEstadoOpeActivaOrdMec(omec.id_orden_mecanizado) as nom_est_ope_act,
+		TotalOperacionCompletaOrdMec(omec.id_orden_mecanizado) as total_ope_completo,
+        TotalHorasRealOrdMecHdr(omec.id_orden_mecanizado) as total_horas_hdr
+    from orden o 
+    inner join orden_mecanizado omec on o.id_orden = omec.id_orden
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
-    inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
-    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
     inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
-    order by se.prioridad_servicio;
+    left join (select om.id_orden_manufactura, o.nombre_orden from orden o inner join orden_manufactura om on o.id_orden = om.id_orden) man on man.id_orden_manufactura = omec.id_orden_manufactura
+    inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+    inner join etapa et on et.id_etapa = o.id_etapa
+    inner join servicio se on se.id_servicio = et.id_servicio;
 
 CREATE VIEW vw_parte_trabajo AS
 WITH
@@ -622,7 +626,7 @@ select
     inner join maquinaria maq on maq.id_maquinaria = op_hdr.id_maquinaria
     inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr
     inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1;
-
+    
 CREATE VIEW vw_operaciones_de_hdr AS
 with
     ParteRanked AS (
@@ -660,10 +664,17 @@ select
 	op_hdr.activo,
 	op_hdr.fecha,
 	op_hdr.numero,
+    em.nombre_empleado as tecnico_asignado,
+    op_hdr.horas_estimada,
+    op_hdr.es_retrabajo,
 	p_rank.id_estado_hdr,
 	p_rank.nombre_estado_hdr,
 	p_rank.nombre_empleado as ultimo_res,
 	th.total_horas,
+    CASE
+		WHEN thh.total_horas_maquina IS NULL THEN "00:00:00"
+		ELSE thh.total_horas_maquina
+	END as total_horas_maquina,
 	p_rank.medidas 
 	from operaciones_de_hdr op_hdr
     inner join ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = op_hdr.id_ope_de_hdr and p_rank.rn = 1
@@ -676,7 +687,9 @@ select
     left join servicio se on se.id_servicio = et.id_servicio
     left join empleado emp on emp.id_empleado = p_rank.id_empleado
     left join maquinaria maq on maq.id_maquinaria = op_hdr.id_maquinaria
-    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr;
+    left join empleado em on em.id_empleado = op_hdr.tecnico_asignado
+    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte_ope_hdr p group by p.id_ope_de_hdr) as th on th.id_ope_de_hdr = op_hdr.id_ope_de_hdr
+    inner join (SELECT  p.id_ope_de_hdr, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas_maquina` ) ) ) AS total_horas_maquina FROM parte_ope_hdr p group by p.id_ope_de_hdr) as thh on thh.id_ope_de_hdr = op_hdr.id_ope_de_hdr;
     
 CREATE VIEW vw_hoja_de_ruta AS
 WITH 

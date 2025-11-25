@@ -930,10 +930,11 @@ class OrdenController extends Controller
     }
 
     public function verMecanizados($id){
-        $orden_manufactura = Orden::find($id);
-        $orden_manufactura = $orden_manufactura->getOrdenDe;
+        $orden = Orden::find($id);
+        $orden_manufactura = $orden->getOrdenDe;
+        $ord_mec_sin_manufactura = Vw_orden_mecanizado::where('id_servicio', $orden->getEtapa->getServicio->id_servicio)->whereNull('id_orden_manufactura')->pluck('nombre_orden','id_orden');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        return view('Ingenieria.Servicios.Ordenes.crear-mecanizado-manufactura', compact('orden_manufactura', 'empleados'));
+        return view('Ingenieria.Servicios.Ordenes.crear-mecanizado-manufactura', compact('orden_manufactura', 'empleados', 'ord_mec_sin_manufactura'));
     }
 
     public function relacionarOrdenes(){
@@ -1172,24 +1173,26 @@ class OrdenController extends Controller
                     $orden_manufactura->ruta_plano = $request->input('ruta_plano_edit');
                     $orden_manufactura->save();
 
-                    $ordManAso = Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->first();
+                    if ($request->input('edit-ord-man-asoc')) {
+                        $ordManAso = Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->first();
 
-                    if ($ordManAso) {
-                        if ($request->input('ord_manufactura_asoc')) {
-                            $ordManAso->id_orden_man_asoc = $request->input('ord_manufactura_asoc');
-                            $ordManAso->save();
-                        } else {
-                            Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->delete();
-                        }
-                    }else{
-                        if ($request->input('ord_manufactura_asoc')) {
-                            Orden_manufactura_asoc::create([
-                                'id_orden_manufactura' => $orden_manufactura->id_orden_manufactura,
-                                'id_orden_man_asoc' => $request->input('ord_manufactura_asoc'),
-                                'es_retrabajo' => 0
-                            ]);
-                        }
-                    } 
+                        if ($ordManAso) {
+                            if ($request->input('ord_manufactura_asoc')) {
+                                $ordManAso->id_orden_man_asoc = $request->input('ord_manufactura_asoc');
+                                $ordManAso->save();
+                            } else {
+                                Orden_manufactura_asoc::where('id_orden_manufactura', $orden_manufactura->id_orden_manufactura)->delete();
+                            }
+                        }else{
+                            if ($request->input('ord_manufactura_asoc')) {
+                                Orden_manufactura_asoc::create([
+                                    'id_orden_manufactura' => $orden_manufactura->id_orden_manufactura,
+                                    'id_orden_man_asoc' => $request->input('ord_manufactura_asoc'),
+                                    'es_retrabajo' => 0
+                                ]);
+                            }
+                        } 
+                    }
                     
                     Parte_manufactura::create([
                         'id_estado_manufactura' => $request->input('estado_man_edit'),
@@ -1345,23 +1348,30 @@ class OrdenController extends Controller
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
-        // $hdrAnt= Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->pluck('fecha_carga', 'id_hoja_de_ruta');
         $hdrAnt = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)
                                     ->selectRaw("id_hoja_de_ruta, CONCAT('Fecha: ', DATE(fecha_carga), ' - Código: ', id_hoja_de_ruta) as descripcion")
                                     ->orderBy('id_hoja_de_ruta', 'desc')
                                     ->pluck('descripcion', 'id_hoja_de_ruta');
-        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt'));
+        $tecnicos = $this->obtenerTecnicosDeOperaciones()->pluck('nombre_empleado', 'id_empleado');
+
+        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt', 'tecnicos'));
     }
 
     public function index_hdr(){
 
+        $operaciones = Vw_operaciones_de_hdr::orderByRaw('ISNULL(prioridad), prioridad')
+                                                    ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+                                                    ->get();
+        $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        $flt_operaciones_tec = [];
+
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            $operaciones = Vw_operaciones_de_hdr::get();
-            $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+            // $operaciones = Vw_operaciones_de_hdr::get();
+            // $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
         } else {
             $opeDeUsuario = Auth::user()->getOperacionesValidas();
-            $operaciones = Vw_operaciones_de_hdr::whereIn('id_operacion', $opeDeUsuario)->get();
-            $flt_operaciones = Operacion::whereIn('id_operacion', $opeDeUsuario)->orderBy('nombre_operacion')->pluck('nombre_operacion');
+            // $operaciones = Vw_operaciones_de_hdr::whereIn('id_operacion', $opeDeUsuario)->get();
+            $flt_operaciones_tec = Operacion::whereIn('id_operacion', $opeDeUsuario)->orderBy('nombre_operacion')->pluck('nombre_operacion');
         }
         
         // return $operaciones;
@@ -1379,7 +1389,9 @@ class OrdenController extends Controller
                                         inner join servicio s on s.id_servicio = et.id_servicio
                                         group by s.id_servicio, s.codigo_servicio;'))->pluck('codigo_servicio');
 
-        return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones', 'flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos'));
+        $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
+
+        return view('Ingenieria.Servicios.HDR.operaciones.index', compact('operaciones', 'flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos'));
     }
 
     public function obtenerOperacionHdr(Request $request){
@@ -1402,150 +1414,174 @@ class OrdenController extends Controller
         $ruta = $request->input('m_ruta');
         $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
         $contador = 1;
-
-        $operaciones = $request->input('operacion');
+        // $horas = $request->input('horas_ope') . ':' . $request->input('minutos_ope');
+        // $operaciones = $request->input('operacion');
 
         try {    
             DB::beginTransaction();
 
+            if ($request->input('operacion')) {
+                $operaciones = $request->input('operacion');
+            } else {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'La hoja de ruta debe tener minimo una operacion.');
+            }
+
             $this->comprobarSiTodasLasHdrEstanCompletas($id);
         
-        $responsabilidad = Responsabilidad::create([
-            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
-        ]);
-
-        $hdr = Hoja_de_ruta::create([
-            'fecha_carga' => $fec_carga,
-            'fecha_requerida' => $fec,
-            'observaciones' => $obse,
-            'ubicacion' => $ubi,
-            'cantidad' => $cant,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-            'id_orden_mecanizado' => $id,
-            'ruta' => $ruta,
-            'activo' => 1
-        ]);
-
-        if ($request->input('id_hdr')) {
-            $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
-
-            $hdr_a_ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('activo', 1)->first();
-
-            if ($hdr_a_ope_act) {
-                $hdr_a_ope_act->update(['activo' => 0]);
-            }
-            
-
-            $responsabilidad_parte_hdr_op = Responsabilidad::create([
-                                            'id_empleado' => 999,
-                                            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
-                                        ]);
-                    
-            $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
-
-            //descartar operaciones siguientes
-            $hdr_a_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('numero', '>', $hdr_a_ope_act->numero)->get();
-            Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->update(['prioridad' => null]);
-
-            foreach ($hdr_a_ope as $ope) {
-                // $ope->prioridad = null;
-                // $ope->save();
-                Parte_ope_hdr::create([
-                    'id_ope_de_hdr' => $ope->id_ope_de_hdr,
-                    'fecha_carga' => $fec_carga,
-                    'fecha' => $fec_carga,
-                    'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
-                    'id_responsabilidad' => $res_op,
-                    'horas' => '00:00',
-                    'medidas' => 0,
-                    'id_estado_hdr' => 5
-                ]);
-            }
-            
-           Parte_ope_hdr::create([
-                    'id_ope_de_hdr' => $hdr_a_ope_act->id_ope_de_hdr,
-                    'fecha_carga' => $fec_carga,
-                    'fecha' => $fec_carga,
-                    'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
-                    'id_responsabilidad' => $res_op,
-                    'horas' => '00:00',
-                    'medidas' => 0,
-                    'id_estado_hdr' => 5
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
             ]);
 
-           Hdr_reg_fallo::create([
-                'id_hdr_ant' => $request->input('id_hdr'),
-                'id_hdr_sig' => $hdr->id_hoja_de_ruta,
-                'observaciones_fallo' => $request->input('observaciones_fallo'),
-                'responsable_fallo' => $request->input('res_reinicio')
-           ]);
-        }
+            $hdr = Hoja_de_ruta::create([
+                'fecha_carga' => $fec_carga,
+                'fecha_requerida' => $fec,
+                'observaciones' => $obse,
+                'ubicacion' => $ubi,
+                'cantidad' => $cant,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                'id_orden_mecanizado' => $id,
+                'ruta' => $ruta,
+                'activo' => 1
+            ]);
 
-        if (count($operaciones) != 0) {
-            $tecnicos = $request->input('tecnico');
-            $maquinarias = $request->input('maq');
-            $total_op = count($operaciones);
+            if ($request->input('id_hdr')) {
+                $hdr_a = Hoja_de_ruta::find($request->input('id_hdr'))->update(['activo' => 0]);
 
-            for ($i=0; $i < $total_op; $i++) { 
-                $res = null;
-                $id_maq = null;
+                $hdr_a_ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('activo', 1)->first();
 
-                $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
-
-                if (!is_null($maquinarias[$i])) {
-                    $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+                if ($hdr_a_ope_act) {
+                    $hdr_a_ope_act->update(['activo' => 0]);
                 }
                 
 
-                if ($i == 0) {
-                    $activo = 1;
-                } else {
-                    $activo = 0;
-                }
-                
+                $responsabilidad_parte_hdr_op = Responsabilidad::create([
+                                                'id_empleado' => 999,
+                                                'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                                            ]);
+                        
+                $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
 
-                if (!is_null($tecnicos[$i])) {
-                    $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+                //descartar operaciones siguientes
+                $hdr_a_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->where('numero', '>', $hdr_a_ope_act->numero)->get();
+                Operaciones_de_hdr::where('id_hoja_de_ruta', $request->input('id_hdr'))->update(['prioridad' => null]);
 
-                    $responsabilidad_parte_hdr = Responsabilidad::create([
-                        'id_empleado' => $id_emp,
-                        'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                foreach ($hdr_a_ope as $ope) {
+                    // $ope->prioridad = null;
+                    // $ope->save();
+                    Parte_ope_hdr::create([
+                        'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                        'fecha_carga' => $fec_carga,
+                        'fecha' => $fec_carga,
+                        'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
+                        'id_responsabilidad' => $res_op,
+                        'horas' => '00:00',
+                        'medidas' => 0,
+                        'id_estado_hdr' => 5
                     ]);
-                    
-                    $res = $responsabilidad_parte_hdr->id_responsabilidad;
                 }
                 
-                
-
-                $ope = Operaciones_de_hdr::create([
-                            'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
-                            'numero' => $contador,
-                            'fecha_carga' => $fec_carga,
-                            'fecha' => $fec_carga,
-                            'id_maquinaria' => $id_maq,
-                            'id_operacion' => $id_ope,
-                            'activo' => $activo
-                            // 'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
-                            // 'medidas',
-                            // 'ruta_cam'
-                    ]);
-
                 Parte_ope_hdr::create([
-                    'id_ope_de_hdr' => $ope->id_ope_de_hdr,
-                    'fecha_carga' => $fec_carga,
-                    'fecha' => $fec_carga,
-                    'observaciones' => 'Generacion de operacion de hoja de ruta.',
-                    'id_responsabilidad' => $res,
-                    'horas' => '00:00',
-                    'medidas' => 0,
-                    'id_estado_hdr' => 1
+                        'id_ope_de_hdr' => $hdr_a_ope_act->id_ope_de_hdr,
+                        'fecha_carga' => $fec_carga,
+                        'fecha' => $fec_carga,
+                        'observaciones' => 'Se descarto la operacion al reiniciar la hoja de ruta.',
+                        'id_responsabilidad' => $res_op,
+                        'horas' => '00:00',
+                        'medidas' => 0,
+                        'id_estado_hdr' => 5
                 ]);
 
-                $contador += 1;
+                Hdr_reg_fallo::create([
+                        'id_hdr_ant' => $request->input('id_hdr'),
+                        'id_hdr_sig' => $hdr->id_hoja_de_ruta,
+                        'observaciones_fallo' => $request->input('observaciones_fallo'),
+                        'responsable_fallo' => $request->input('res_reinicio'),
+                        'id_empleado' => $request->input('res_reinicio_id'),
+                ]);
+            }
 
+            if ($operaciones) {
+                if (count($operaciones) != 0) {
+                    $tecnicos = $request->input('tecnico');
+                    $maquinarias = $request->input('maq');
+                    $total_op = count($operaciones);
+                    $horas = $request->input('horas_ope');
+                    $minutos = $request->input('minutos_ope');
+
+                    for ($i=0; $i < $total_op; $i++) { 
+                        $res = null;
+                        $id_maq = null;
+                        $horas_minutos = $horas[$i] . ':' . $minutos[$i];
+
+                        $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
+
+                        if (!is_null($maquinarias[$i])) {
+                            $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
+                        }
+                        
+
+                        if ($i == 0) {
+                            $activo = 1;
+                        } else {
+                            $activo = 0;
+                        }
+                        
+
+                        // if (!is_null($tecnicos[$i])) {
+                        //     $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+
+                        //     $responsabilidad_parte_hdr = Responsabilidad::create([
+                        //         'id_empleado' => $id_emp,
+                        //         'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                        //     ]);
+                            
+                        //     $res = $responsabilidad_parte_hdr->id_responsabilidad;
+                        // }
+                        
+                        
+
+                        $ope = Operaciones_de_hdr::create([
+                                    'id_hoja_de_ruta' => $hdr->id_hoja_de_ruta,
+                                    'numero' => $contador,
+                                    'fecha_carga' => $fec_carga,
+                                    'fecha' => $fec_carga,
+                                    'id_maquinaria' => $id_maq,
+                                    'id_operacion' => $id_ope,
+                                    'activo' => $activo,
+                                    'horas_estimada' => $horas_minutos
+                                    // 'id_responsabilidad' => $responsabilidad_hdr->id_responsabilidad,
+                                    // 'medidas',
+                                    // 'ruta_cam'
+                            ]);
+
+
+                        if (!is_null($tecnicos[$i])) {
+                            $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+
+                            $ope->tecnico_asignado = $id_emp;
+                            $ope->save();
+                        }
+
+                        Parte_ope_hdr::create([
+                            'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                            'fecha_carga' => $fec_carga,
+                            'fecha' => $fec_carga,
+                            'observaciones' => 'Generacion de operacion de hoja de ruta.',
+                            'id_responsabilidad' => $res,
+                            'horas' => '00:00',
+                            'medidas' => 0,
+                            'id_estado_hdr' => 1
+                        ]);
+
+                        $contador += 1;
+
+                    }
                 }
             }
+            
 
             if ($request->hasFile('archivos')) {
                 $nombre = Auth::user()->getEmpleado->nombre_empleado;
@@ -1624,26 +1660,29 @@ class OrdenController extends Controller
 
                 $totalOpeActual = Operaciones_de_hdr::where('id_hoja_de_ruta', $idHdr)->count();
 
+                $horas = $request->input('horas_ope');
+                $minutos = $request->input('minutos_ope');
+
                 for ($i=0; $i < $total_op; $i++) { 
                     $res = null;
                     $id_maq = null;
-
+                    $horas_minutos = $horas[$i] . ':' . $minutos[$i];
                     $id_ope = Operacion::where('nombre_operacion', $operaciones[$i])->first()->id_operacion;
 
                     if (!is_null($maquinarias[$i])) {
                         $id_maq = Maquinaria::where('codigo_maquinaria', $maquinarias[$i])->first()->id_maquinaria;
                     }
 
-                    if (!is_null($tecnicos[$i])) {
-                        $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+                    // if (!is_null($tecnicos[$i])) {
+                    //     $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
 
-                        $responsabilidad_parte_hdr = Responsabilidad::create([
-                            'id_empleado' => $id_emp,
-                            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
-                        ]);
+                    //     $responsabilidad_parte_hdr = Responsabilidad::create([
+                    //         'id_empleado' => $id_emp,
+                    //         'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                    //     ]);
                         
-                        $res = $responsabilidad_parte_hdr->id_responsabilidad;
-                    }
+                    //     $res = $responsabilidad_parte_hdr->id_responsabilidad;
+                    // }
 
                     $ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $idHdr)->where('numero', $contador)->first();
 
@@ -1654,6 +1693,15 @@ class OrdenController extends Controller
                         if ($ope->getTotaPartesActual() == 1) {
                             $ope->id_maquinaria = $id_maq;
                             $ope->id_operacion = $id_ope;
+                            $ope->horas_estimada = $horas_minutos;
+
+                            if (!is_null($tecnicos[$i])) {
+                                $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
+
+                                $ope->tecnico_asignado = $id_emp;
+                                // $ope->save();
+                            }
+
                             $ope->save();
 
                             $parteMod = Parte_ope_hdr::where('id_ope_de_hdr', $ope->id_ope_de_hdr)->first();
@@ -2042,6 +2090,10 @@ class OrdenController extends Controller
         }
     }
 
+    public function obtenerTecnicosDeOperaciones(){
+        return Empleado::orderBy('nombre_empleado')->activo()->HabilitadoOperacion()->get();
+    }
+
     public function obtenerHdrAnt($id){
         return Hoja_de_ruta::where('id_orden_mecanizado', $id)->orderBy('fecha_carga')->get();
     }
@@ -2069,11 +2121,29 @@ class OrdenController extends Controller
         $obseFallo = Hdr_reg_fallo::where('id_hdr_sig', $id)->first();
 
         foreach ($opes as $op) {
+            // Separar HH:MM:SS
+            $horas = '-';
+            $minutos = '-';
+            $editable = 1;
+
+            if ($op->horas_estimada) {
+                [$h, $m, $s] = explode(':', $op->horas_estimada);
+                $horas = $h;
+                $minutos = $m;
+            }
+
+            if (count($op->getPartes) > 1) {
+                $editable = 0;
+            }
+
             array_push($operaciones_arr, (object)[
                 'numero' => $op->numero,
                 'operacion' => $op->getOperacion->nombre_operacion,
                 'asignado' => $op->getAsignado(),
-                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-'
+                'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-',
+                'horas' => $horas,
+                'minutos' => $minutos,
+                'editable' => $editable
             ]);
         }
 
@@ -2085,7 +2155,9 @@ class OrdenController extends Controller
             'observaciones' => $hdr->observaciones,
             'operaciones' => $operaciones_arr,
             'obser_fallo' => $obseFallo->observaciones_fallo ?? null,
-            'responsable_fallo' => $obseFallo->responsable_fallo ?? null
+            'responsable_fallo' => $obseFallo->responsable_fallo ?? null,
+            'nombre_orden' => $hdr->getOrdMec->getOrden->nombre_orden ?? null,
+            'supervisor' => $hdr->getOrdMec->getOrden->getSupervisor() ?? null
         ];
     }
 
@@ -2104,6 +2176,7 @@ class OrdenController extends Controller
                     'fecha' => $parte->fecha,
                     // 'fecha_limite' => $parte->fecha_limite ?? '-',
                     'horas' => $parte->horas,
+                    'horas_maquina' => $parte->horas_maquina ?? '00:00:00',
                     // 'supervisor' => $parte->getOrden->getSupervisor(),
                     'operacion' => $op->getOperacion->nombre_operacion,
                     'id_operacion' => $op->id_operacion,
@@ -2380,6 +2453,92 @@ class OrdenController extends Controller
             DB::rollBack();
             return redirect()->back()
                              ->with('error', 'Ocurrio un problema al quitar la orden de mecanizado: '.$e->getMessage());
+        }
+    }
+
+    public function relacionarOrdenMecanizado(Request $request, $id){
+        $id_mec = $request->input('id_orden_mec');
+
+        try {    
+            DB::beginTransaction();
+            $orden_mecanizado = Orden_mecanizado::where('id_orden', $id_mec)->first();
+            $orden_mecanizado->id_orden_manufactura = $id;
+
+            if(!$orden_mecanizado->save()) {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'Ocurrio un problema al agregar la orden de mecanizado');
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'Se agrego la orden de mecanizado con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al agregar la orden de mecanizado: '.$e->getMessage());
+        }
+    }
+
+    public function descartarHDR($id){
+        
+        try {    
+            DB::beginTransaction();
+            $fec_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            //Desactivar la hoja de ruta
+            $hdr_a = Hoja_de_ruta::find($id)->update(['activo' => 0]);
+
+            //Desactivar la operacion activa si existe
+            $hdr_a_ope_act = Operaciones_de_hdr::where('id_hoja_de_ruta', $id)->where('activo', 1)->first();
+
+            if ($hdr_a_ope_act) {
+                $hdr_a_ope_act->update(['activo' => 0]);
+            }
+
+            //El responsable es el sistema
+            $rol_empleado_res = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+            $responsabilidad_parte_hdr_op = Responsabilidad::create([
+                                            'id_empleado' => 999,
+                                            'id_rol_empleado' => $rol_empleado_res->id_rol_empleado
+                                        ]);
+                    
+            $res_op = $responsabilidad_parte_hdr_op->id_responsabilidad;
+
+            //Descartar operaciones siguientes
+            $hdr_a_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $id)->where('numero', '>=', $hdr_a_ope_act->numero)->get();
+
+            Operaciones_de_hdr::where('id_hoja_de_ruta', $id)->update(['prioridad' => null]);
+
+            foreach ($hdr_a_ope as $ope) {
+                Parte_ope_hdr::create([
+                    'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                    'fecha_carga' => $fec_carga,
+                    'fecha' => $fec_carga,
+                    'observaciones' => 'Se descarto la operacion al descartar la hoja de ruta.',
+                    'id_responsabilidad' => $res_op,
+                    'horas' => '00:00',
+                    'medidas' => 0,
+                    'id_estado_hdr' => 5
+                ]);
+            }
+            
+
+            // if(!$orden_mecanizado->save()) {
+            //     DB::rollBack();
+            //     return redirect()->back()
+            //             ->with('error', 'Ocurrio un problema al agregar la orden de mecanizado');
+            // }
+
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'Se descarto la Hoja de Ruta con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al descartar la Hoja de Ruta: '.$e->getMessage());
         }
     }
     //Transaccion

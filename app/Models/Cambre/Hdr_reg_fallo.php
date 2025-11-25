@@ -23,7 +23,8 @@ class Hdr_reg_fallo extends Model
         'id_hdr_ant',
         'id_hdr_sig',
         'observaciones_fallo',
-        'responsable_fallo'
+        'responsable_fallo',
+        'id_empleado'
     ];
 
 }

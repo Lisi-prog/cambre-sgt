@@ -5,7 +5,7 @@ namespace App\Models\Cambre;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\DB;
 
 class Hoja_de_ruta extends Model
 {
@@ -142,5 +142,17 @@ class Hoja_de_ruta extends Model
     public function getResponsable()
     {
         return $this->belongsTo(Responsabilidad::class, 'id_responsabilidad');
+    }
+
+    public function getTotalHorasEstimada(){
+        $id = $this->id_hoja_de_ruta;
+        $resultado = DB::select("SELECT TotalHorasEstimadasHojaDeRuta(?) AS total", [$id]);
+        return $resultado[0]->total;
+    }
+
+    public function getTotalHorasReal(){
+        $id = $this->id_hoja_de_ruta;
+        $resultado = DB::select("SELECT TotalHorasRealHojaDeRuta(?) AS total", [$id]);
+        return $resultado[0]->total;
     }
 }

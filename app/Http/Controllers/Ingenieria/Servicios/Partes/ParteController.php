@@ -1134,14 +1134,27 @@ class ParteController extends Controller
                 $this->cambiarEstadoOmecA($ope, $estado);
             }
 
-            if ($estado == 4) { //orden completado
+            if ($estado == 4 && $ope->activo == 1) { //orden completado
+                $bOpe = 0;
                 Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
-                $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
-                if ($opeSgt) {
-                    $opeSgt->activo = 1;
-                    $opeSgt->save();
-                }
+                $operacionesSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', '>=', $ope->numero + 1)->get();
 
+                if (count($operacionesSgt) != 0) {
+                    foreach ($operacionesSgt as $opeSgt) {
+
+                        if ($bOpe == 0) {
+                            $estadoOpeSgt = (int) $opeSgt->getIdEstado();
+
+                            if ($estadoOpeSgt != 4 && $estadoOpeSgt != 5) {
+                                $opeSgt->activo = 1;
+                                $opeSgt->save();
+                                $bOpe = 1;
+                            }
+                        }
+
+                    }
+                }
+                
                 if ($ope->id_hoja_de_ruta) {
                     $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
 
@@ -1149,7 +1162,7 @@ class ParteController extends Controller
                 }
             }
 
-            if ($estado == 5) { //orden completado
+            if ($estado == 5 && $ope->activo == 1) { //orden completado
                 Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
             }
             $result = 1;

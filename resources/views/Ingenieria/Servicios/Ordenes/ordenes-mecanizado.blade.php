@@ -179,6 +179,7 @@
                                     <th class='text-center' style="color:#fff;min-width:5vw">Operacion Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Estado Ope. Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
+                                    <th class='text-center' style="color:#fff;min-width:3vw">Total Horas HDR</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -219,6 +220,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nom_est_ope_act ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas_hdr ?? '00:00'}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >

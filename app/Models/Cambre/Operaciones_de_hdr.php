@@ -27,7 +27,10 @@ class Operaciones_de_hdr extends Model
         'id_maquinaria',
         'id_operacion',
         'activo',
-        'id_orden_manufactura'
+        'id_orden_manufactura',
+        'horas_estimada',
+        'es_retrabajo',
+        'tecnico_asignado'
     ];
 
     public function getPartes()
@@ -63,12 +66,24 @@ class Operaciones_de_hdr extends Model
         return $this->belongsTo(Maquinaria::class, 'id_maquinaria');
     }
 
+    // public function getAsignado(){
+    //     if (Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable) {
+    //         return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable->getEmpleado->nombre_empleado;
+    //     } else {
+    //         return "";
+    //     }  
+    // }
+
     public function getAsignado(){
-        if (Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable) {
-            return Parte_ope_hdr::where('id_ope_de_hdr', $this->id_ope_de_hdr)->orderBy('id_parte_ope_hdr')->first()->getResponsable->getEmpleado->nombre_empleado;
+        if ($this->tecnico_asignado) {
+            return Empleado::where('id_empleado', $this->tecnico_asignado)->first()->nombre_empleado;
         } else {
             return "";
         }  
+    }
+
+    public function getTecnicoAsignado(){
+        return $this->belongsTo(Empleado::class, 'tecnico_asignado', 'id_empleado'); 
     }
 
     public function getHdr(){
