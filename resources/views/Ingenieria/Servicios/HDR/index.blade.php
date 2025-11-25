@@ -39,6 +39,16 @@
     .col-4 {
         padding: 5px;
     }
+
+    tr.no-edit {
+        background-color: #f8d7da !important; /* rojo claro */
+    }
+
+    tr.no-edit input,
+    tr.no-edit .delete-btn {
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
 </style>
 
 <section class="section">
@@ -51,7 +61,7 @@
             <label for="" style="font-weight: bold">Cantidad:</label> {{$orden->getOrdenDe ? $orden->getOrdenDe->cantidad : '-'}}
         </div>
         <div class="ms-auto">
-            <div class="d-flex align-items-center">
+            {{-- <div class="d-flex align-items-center">
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -69,32 +79,9 @@
                                 id="btn-edit-mul">
                             Carga<br>Multiple
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="p-2 flex-grow-1">
-            <h4 class="">Hoja de Ruta</h5>
-        </div>
-        <div class="p-2">
-            
-        </div>
-        <div class="p-2">
-            <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
-        </div>
-    </div> --}}
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Hoja de Ruta</h5>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
-            </div>
-        </div>
-    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -128,9 +115,11 @@
                                     <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:15%;">Observaciones</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Progreso</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas Estimada Total</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas Total</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
                                 </thead>
                                 
@@ -165,6 +154,11 @@
                                                     </div>
                                                 </div>
                                             </td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getTotalHorasEstimada()?? '-'}}</td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getTotalHorasReal() ?? '-'}}</td>
+
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -214,6 +208,21 @@
                                                                 </button>
                                                             </div>
                                                         </div> 
+
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
+                                                                    {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div> 
+                                                        <div class="row my-2" hidden>
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#retrabajoHdr" onclick="cargarHdrReTrabajo({{$hdr->id_hoja_de_ruta}})">
+                                                                    Re Trabajo
+                                                                </button>
+                                                            </div>
+                                                        </div> 
                                                         @endif
                                                     </div>
                                                 </div>
@@ -255,16 +264,19 @@
                             <div>
                             <table id="exampleOpe" class="table table-hover mt-2" class="display">
                                 <thead style="">
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Ultimo res.</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Maquina</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Operacion</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Medidas</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Cod. HDR</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">N°</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:4vw;">Fecha</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:6vw;">Ultimo res.</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:6vw;">Asignado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:5vw;">Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:5vw;">Operacion</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:4vw;">Estado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Horas estimada</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Horas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Horas Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:2vw;">Medidas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Acciones</th>
                                 </thead>
                                 <tbody id="body_ope">
                                 </tbody>
@@ -281,6 +293,7 @@
 @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
 @include('Ingenieria.Servicios.HDR.modal.ver-hdr')
 @include('Ingenieria.Servicios.HDR.modal.reiniciar-hdr')
+@include('Ingenieria.Servicios.HDR.modal.retrabajo-hdr')
 @include('Ingenieria.Servicios.HDR.modal.edit-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
@@ -329,6 +342,7 @@
         });
     });
 </script>
-<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
+{{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script> --}}
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js')) }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

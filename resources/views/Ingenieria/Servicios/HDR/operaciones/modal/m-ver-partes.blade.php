@@ -53,6 +53,7 @@
                                 {{-- <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th> --}}
                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Horas</th>
+                                <th class="text-center" scope="col" style="color:#fff;">Horas Maquina</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                                 <th class="text-center" scope="col" style="color:#fff;">Medidas</th>

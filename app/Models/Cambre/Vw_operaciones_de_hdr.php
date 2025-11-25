@@ -33,11 +33,21 @@ class Vw_operaciones_de_hdr extends Model
         'activo',
         'fecha',
         'numero',
+        'tecnico_asignado',
+        'horas_estimada',
+        'es_retrabajo',
         'id_estado_hdr',
         'nombre_estado_hdr',
         'ultimo_res',
         'total_horas',
+        'total_horas_maquina',
         'medidas'
+    ];
+
+    protected $casts = [
+        'horas_estimada' => HoraMinutoCast::class,
+        'total_horas_maquina' => HoraMinutoCast::class,
+        'total_horas' => HoraMinutoCast::class
     ];
 
     public function getMedidasAttribute()

@@ -34,16 +34,18 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('res_reinicio',  null, [
-                                'class' => 'form-control',
-                                'id' => 'm_re-culpable-razon'
-                            ]) !!}
+                            {!! Form::select('res_reinicio_id', $tecnicos, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'm_re-culpable-razon',
+                                            'required'
+                                        ]) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones para el reinicio de la Hoja de Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <textarea name='observaciones_fallo' id="m_re-obser-razon" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                            <textarea name='observaciones_fallo' id="m_re-obser-razon" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                         </div>
                     </div>
                 </div>
@@ -91,6 +93,7 @@
                                     <th class='text-center' style="color:#fff;">Operación</th>
                                     <th class='text-center' style="color:#fff;">Asignado</th>
                                     <th class='text-center' style="color:#fff;">Máquina</th>
+                                    <th class='text-center' style="color:#fff;">Horas Estimada</th>
                                     <th class='text-center' style="color:#fff;">Acciones</th>
                                   </tr>
                                 </thead>

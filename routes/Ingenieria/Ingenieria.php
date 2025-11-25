@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
      Route::post('/orden/mec/hdr/obtenertec',[OrdenController::class, 'obtenerTecnicos']);
     Route::post('/orden/mec/hdr/obtener-ope-hdr',[OrdenController::class, 'obtenerOperacionHdr']);
     Route::get('/orden/mec/hdr/imprimir/{id}',[OrdenController::class, 'imprimir_hdr'])->name('hojaderuta.pdf');
+    Route::get('/orden/mec/hdr/descartar/{id}',[OrdenController::class, 'descartarHDR'])->name('hojaderuta.descartar');
     Route::post('/orden/mec/hdr/obtener-hdr-ant/{id}',[OrdenController::class, 'obtenerHdrAnt']);
     Route::post('/orden/mec/hdr/obtener-orden-mec/{id}',[OrdenController::class, 'obtenerOrdMec']);
     Route::post('/orden/mec/hdr/obtener-hdr/{id}',[OrdenController::class, 'obtenerHdr']);
@@ -96,6 +97,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
     Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
     Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
+    Route::post('orden/ord-man-mec/vincular-mec-existente/{id}',[OrdenController::class, 'relacionarOrdenMecanizado'])->name('ordenes.relacionarmecanizado');
     Route::post('/orden/{tipo}/carga-multiple', [OrdenController::class, 'obtenerOrdenesParaCargaMultiple']);
     Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
         //RUTAS PARTES
@@ -186,6 +188,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::post('/orden/obtener-ordenes-etapa/{id}',[OrdenController::class, 'obtenerOrdenesDeTrabajoUnaEtapa']);
      Route::post('/orden/mec/hdr/obtener-hdr-parte/{id}',[OrdenController::class, 'obtenerParteHdr']);
      Route::get('ordenes/mec/operaciones', [OrdenController::class, 'index_hdr'])->name('ordenes.indexhdr');
+     Route::post('/orden/mec/hdr/obtener-hdr/{id}',[OrdenController::class, 'obtenerHdr']);
      Route::post('/operacion/obtener-maquinas-ope-de/{opcion}',[OrdenController::class, 'listarTodasLasMaquinariasDe']);
      Route::post('/orden/obtener-info-ope-mul-act',[OrdenController::class, 'obtenerInfoOpeMultipleAct']);
      Route::post('ope-hdr/obtener-estado/{id}', [ParteController::class, 'obtenerEstadoOpeHdr']);
@@ -195,6 +198,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      Route::get('orden/cargar-relaciones',[OrdenController::class, 'relacionarOrdenes']);
      Route::post('orden/relacionar',[OrdenController::class, 'guardarRelacionesOrdenes'])->name('ordenes.relacionar');
      Route::post('orden/validar-mecanizado',[OrdenController::class, 'validarOrdenMecanizado'])->name('ordenes.validarmecanizado');
+     Route::post('orden/ord-man-mec/vincular-mec-existente/{id}',[OrdenController::class, 'relacionarOrdenMecanizado'])->name('ordenes.relacionarmecanizado');
      Route::get('orden/manufactura_mecanizado/{id}', [OrdenController::class, 'verMecanizados'])->name('ordenes.manufacturamecanizado');
      Route::post('etapa/etapas-de-servicio/{id}',[EtapaController::class, 'obtenerEtapasDeUnServicio'])->name('etapa.obtenerdeservicio');
      Route::post('/orden/{tipo}/carga-multiple', [OrdenController::class, 'obtenerOrdenesParaCargaMultiple']);

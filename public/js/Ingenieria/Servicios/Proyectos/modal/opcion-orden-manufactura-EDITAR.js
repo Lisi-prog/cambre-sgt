@@ -101,10 +101,22 @@ export default
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" hidden>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group"> 
-            <label for="ord_manufactura_asoc" class="control-label fs-7" style="white-space: nowrap;">Orden Manufactura Asoc:</label>
+            <div class="row">
+                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                    <label for="ord_manufactura_asoc" class="control-label fs-7" style="white-space: nowrap;">Orden Manufactura Asoc:</label>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="checkDefaultEditOrdManAsoc" name="edit-ord-man-asoc">
+                        <label class="form-check-label" for="checkDefaultEditOrdManAsoc">
+                            Editar orden manufactura asociado.
+                        </label>
+                    </div>
+                </div>
+            </div>
             <select class="form-select form-group reset-input" id="cbx_ord_man_asoc" name="ord_manufactura_asoc">
                 <option selected="selected" value="">Seleccionar</option>
             </select>

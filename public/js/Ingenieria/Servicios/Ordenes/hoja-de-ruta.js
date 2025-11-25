@@ -25,10 +25,13 @@ function cargarOperaciones(id) {
                                         <td class= 'text-center' style="vertical-align: middle;">${op.numero}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.fecha ?? '-'}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.ultimo_res ?? '-'}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.tecnico_asignado ?? '-'}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.codigo_maquinaria ?? '-'}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.nombre_operacion}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.nombre_estado_hdr}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.horas_estimada}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
+                                        <td class= 'text-center' style="vertical-align: middle;">${op.total_horas_maquina}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.medidas}</td>
                                         <td class='text-center' style="vertical-align: middle;">
                                             
@@ -108,6 +111,7 @@ function cargarModalVerPartesOpe(id){
                         <td class="text-center">`+element.fecha+`</td>
                         <td class="text-center">`+element.estado+`</td>
                         <td class="text-center">`+element.horas+`</td>
+                        <td class="text-center">`+element.horas_maquina+`</td>
                         <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                         <td class="text-center">`+element.responsable+`</td>
                         <td class="text-center">`+element.medidas+`</td>
@@ -231,6 +235,8 @@ function cargarHdrReiniciar(id){
                     nuevaFila.querySelector(".input-ope").value = op.operacion;
                     nuevaFila.querySelector(".input-asig").value = op.asignado;
                     nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
+                    nuevaFila.querySelector(".input-hora-ope").value = op.horas;
+                    nuevaFila.querySelector(".input-minutos-ope").value = op.minutos;
                 });
             });
             /*response.operaciones.forEach(function (op){
@@ -245,6 +251,36 @@ function cargarHdrReiniciar(id){
                     nuevaFila.querySelector(".input-maquina").value = op.maquina == '-' ? null : op.maquina;
                 }, 100);
             });*/
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function cargarHdrReTrabajo(id){
+    document.getElementById('m_retra_idhdr').value = id;
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtener-hdr/'+id, // Ruta para obtener las máquinas
+        data: { id: id },
+        success: function (response) {
+            // console.log(response);
+            document.getElementById('m_retra_ubi').value = response.ubicacion;
+            document.getElementById('m_retra_cant').value = response.cantidad;
+            document.getElementById('m_retra_ruta').value = response.ruta;
+            document.getElementById('m_retra-obser').value = response.observaciones;
+            document.getElementById('retra_table-body').innerHTML = '';
+
+            response.operaciones.forEach(function (op) {
+                addRowTra().then((nuevaFila) => {
+                    nuevaFila.querySelector(".input-ope").value = op.operacion;
+                    nuevaFila.querySelector(".input-asig").value = op.asignado;
+                    nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
+                    nuevaFila.querySelector(".input-hora-ope").value = op.horas;
+                    nuevaFila.querySelector(".input-minutos-ope").value = op.minutos;
+                });
+            });
         },
         error: function (error) {
             console.log(error);
@@ -305,10 +341,17 @@ function cargarHdrEdit(id){
             document.getElementById('edi_table-body').innerHTML = '';
 
             response.operaciones.forEach(function (op) {
+                // console.log(op);
                 addRowEdi().then((nuevaFila) => {
                     nuevaFila.querySelector(".input-ope").value = op.operacion;
                     nuevaFila.querySelector(".input-asig").value = op.asignado;
                     nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
+                    nuevaFila.querySelector(".input-hora-ope").value = op.horas;
+                    nuevaFila.querySelector(".input-minutos-ope").value = op.minutos;
+
+                    if (op.editable == 0) {
+                        nuevaFila.classList.add("no-edit");
+                    }
                 });
             });
         },
