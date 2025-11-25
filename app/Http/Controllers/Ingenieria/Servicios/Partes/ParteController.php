@@ -590,6 +590,7 @@ class ParteController extends Controller
                 // 'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
                 'fecha' => $parte->fecha,
                 'horas' => $parte->horas,
+                'horas_maquina' => $parte->horas_maquina ?? '00:00:00',
                 'estado_ope' => $ope_hdr->getEstado(),
                 'medidas' => $parte->medidas ? 'SI' : 'NO'
             ]);
