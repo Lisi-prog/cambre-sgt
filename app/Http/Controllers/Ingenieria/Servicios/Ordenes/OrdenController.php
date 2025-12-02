@@ -324,9 +324,21 @@ class OrdenController extends Controller
                     'ruta_plano.required' => 'Falta la ruta del plano.'
                 ]);
 
-                $this->crearOrdenMecanizado($request);
+                try {    
+                    DB::beginTransaction();
 
-                return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de mecanizado y el parte de mecanizado se ha creado con exito.'); 
+                    $this->crearOrdenMecanizado($request);
+            
+                    DB::commit();
+
+                    return redirect()->route('proyectos.gestionar', $servicio)->with('mensaje', 'La orden de mecanizado y el parte de mecanizado se ha creado con exito.');                      
+            
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return redirect()->back()
+                                    ->with('error', 'Ocurrio un problema al crear la orden de mecanizado: '.$e->getMessage());
+                }
+                
                 break;
             
             default:
@@ -570,6 +582,9 @@ class OrdenController extends Controller
         $ordenTrabajoCompar = $request->input('ord-tra-asoc');
         $idOrdenMecanizadoAsoc = $request->input('ord-mec-asoc');
 
+        $esRetrabajo = $request->input('esRetrabajo') ?? 0;
+        $esModificacion = $request->input('esModificacion') ?? 0;
+
         $responsabilidad = Responsabilidad::create([
             'id_empleado' => $id_supervisor,
             'id_rol_empleado' => $rol_empleado->id_rol_empleado
@@ -610,17 +625,18 @@ class OrdenController extends Controller
             'ruta_pieza' => $ruta_plano,
             'id_orden' => $orden->id_orden,
             'id_orden_manufactura' => $id_orden_manufactura,
+            'es_modificacion' => $esRetrabajo,
+            'es_retrabajo' => $esModificacion
         ]);
 
         if ($ordenTrabajoCompar || $idOrdenMecanizadoAsoc) {
-          Orden_mecanizado_asoc::create([
-            'id_orden_mecanizado' => $ord_mec->id_orden_mecanizado,
-            'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
-            'ord_tra_compar' => $ordenTrabajoCompar
-          ]); 
+            Orden_mecanizado_asoc::create([
+                'id_orden_mecanizado' => $ord_mec->id_orden_mecanizado,
+                'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
+                'ord_tra_compar' => $ordenTrabajoCompar
+            ]); 
         }
 
-        
         $parte = Parte::create([
             'observaciones' => 'Generacion de orden de mecanizado',
             'fecha' => $fecha_ini,

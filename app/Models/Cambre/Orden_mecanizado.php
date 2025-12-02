@@ -23,7 +23,9 @@ class Orden_mecanizado extends Model
         'cantidad',
         'ruta_pieza',
         'id_orden',
-        'id_orden_manufactura'
+        'id_orden_manufactura',
+        'es_modificacion',
+        'es_retrabajo'
     ];
 
     public function getOrden()
