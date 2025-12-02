@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar retrabajo Hoja de Ruta</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.edit', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['route' => 'hdr.retrabajo', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 {!! Form::number('id_hdr', null, ['class' => 'form-control', 'hidden', 'id' => 'm_retra_idhdr']) !!}
                 <div class="row">
@@ -29,14 +29,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="row border border-danger mb-2">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::select('res_retra_id', $tecnicos, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select form-control',
+                                            'id' => 'm_retra-culpable-razon',
+                                            'required'
+                                        ]) !!}
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            {!! Form::label('observaciones', 'Observaciones para el retrabajo de la Hoja de Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <textarea name='observaciones_fallo' id="m_retra-obser-razon" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <div class="form-group">
                             {!! Form::label('m_ubi', 'Ubicación/es:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::text('m_ubi', null, [
                                 'class' => 'form-control reset-input',
-                                'required',
-                                'id' => 'm_retra_ubi'
+                                'id' => 'm_retra_ubi',
+                                'readonly'
                             ]) !!}
                         </div>
                     </div>
@@ -45,8 +64,8 @@
                             {!! Form::label('m_cant', 'Cantidad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::text('m_cant', null, [
                                 'class' => 'form-control reset-input',
-                                'required',
-                                'id' => 'm_retra_cant'
+                                'id' => 'm_retra_cant',
+                                'readonly'
                             ]) !!}
                         </div>
                     </div>
@@ -74,6 +93,7 @@
                                     <th class='text-center' style="color:#fff;">Asignado</th>
                                     <th class='text-center' style="color:#fff;">Máquina</th>
                                     <th class='text-center' style="color:#fff;">Horas Estimada</th>
+                                    <th class='text-center' style="color:#fff;width: 7vw;">Es retrabajo</th>
                                     <th class='text-center' style="color:#fff;">Acciones</th>
                                   </tr>
                                 </thead>
@@ -82,7 +102,7 @@
                             </table>
                               
                               <!-- Botón para agregar filas -->
-                              <button id="retra_addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
+                              <button type="button" id="retra_addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
                         </div>
                     </div>
                 </div>
@@ -90,7 +110,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <textarea name='observaciones' id="m_retra-obser" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
+                            <textarea name='observaciones' id="m_retra-obser" class="form-control reset-input" maxlength="500" rows="54" cols="54" style="resize:none; height: 20vh" readonly></textarea>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" hidden>
@@ -116,7 +136,8 @@
                             {!! Form::label('m_ruta', 'Ruta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::text('m_ruta', null, [
                                 'class' => 'form-control reset-input',
-                                'id' => 'm_retra_ruta'
+                                'id' => 'm_retra_ruta',
+                                'readonly'
                             ]) !!}
                         </div>
                     </div>

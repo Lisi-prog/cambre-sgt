@@ -261,7 +261,6 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <div>
                             <table id="exampleOpe" class="table table-hover mt-2" class="display">
                                 <thead style="">
                                     <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Cod. HDR</th>
@@ -281,7 +280,6 @@
                                 <tbody id="body_ope">
                                 </tbody>
                             </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -296,6 +294,7 @@
 @include('Ingenieria.Servicios.HDR.modal.retrabajo-hdr')
 @include('Ingenieria.Servicios.HDR.modal.edit-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
+@include('Ingenieria.Servicios.HDR.modal.edit-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 <script>
     $(document).ready(function () {

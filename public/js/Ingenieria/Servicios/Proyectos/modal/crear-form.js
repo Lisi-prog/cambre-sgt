@@ -946,8 +946,8 @@ function mostrarOcultarFechaRequerida(){
 function  cargarOrdMecyOrdTra(){
     let cbxOrdMec = document.getElementById('ord-mec-asoc');
     let cbxOrdTra = document.getElementById('ord-tra-asoc');
-    let htmlOrdTra = '';
-    let htmlOrdMec = '';
+    let htmlOrdTra = '<option value="">Seleccionar..</option>';
+    let htmlOrdMec = '<option value="">Seleccionar..</option>';
     let id = document.getElementById('id-servicio-dat').value;
     $.ajax({
         type: "post",
