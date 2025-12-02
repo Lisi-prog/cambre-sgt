@@ -25,6 +25,11 @@ $(document).ready(function() {
         e.preventDefault();
         addRowEdi();
     })
+
+    document.getElementById('retra_addRow').addEventListener('click', (e) => {
+        e.preventDefault();
+        addRowTra();
+    })
 });
 
 function addRow() {
@@ -423,6 +428,12 @@ function addRowTra() {
                             <span class="input-group-text">:</span>
                             <input class="form-control input-minutos-ope" name="minutos_ope[]" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
                         </div>
+                    </td>
+                    <td class="text-center">
+                        <select class="form-select form-group input-retrabajo my-auto" required name="es_retrabajo[]">
+                            <option value="1">SI</option>
+                            <option value="0">NO</option>
+                        </select>
                     </td>
                     <td class="text-center">
                         <button class="btn btn-danger delete-btn">Eliminar</button>

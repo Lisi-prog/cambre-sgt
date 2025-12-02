@@ -81,16 +81,39 @@ export default
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
         <div class="form-group">
             <label for="ord-tra-asoc" class="control-label" style="white-space: nowrap; ">Orden de Trabajo COMPAR:</label> 
-            <input class="form-control reset-input" type="text" id="ord-tra-asoc" name="ord-tra-asoc"> 
+            <select class="form-control form-select" id="ord-tra-asoc" name="ord-tra-asoc" placeholder="Seleccionar.." autocomplete="off">
+                
+            </select>
         </div>
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
         <div class="form-group">
-            <label for="ord-mec-asoc" class="control-label" style="white-space: nowrap; ">Orden de Mecanizado Asociado:</label> 
-            <input class="form-control reset-input" type="number" id="ord-mec-asoc" name="ord-mec-asoc">
+            <label for="ord-mec-asoc" class="control-label" style="white-space: nowrap; ">Orden de Mecanizado Asociado:</label>
+            <select class="form-control form-select" id="ord-mec-asoc" name="ord-mec-asoc" placeholder="Seleccionar.." autocomplete="off">
+                
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <label class="control-label" style="white-space: nowrap; ">Adicional:</label> 
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="esRetrabajo" name="esRetrabajo">
+                <label class="form-check-label" for="esRetrabajo">
+                    Es un retrabajo.
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="esModificacion" name="esModificacion">
+                <label class="form-check-label" for="esModificacion">
+                    Es una modificacion.
+                </label>
+            </div>
         </div>
     </div>
 </div>`;

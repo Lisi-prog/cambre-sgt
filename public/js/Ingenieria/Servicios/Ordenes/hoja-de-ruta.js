@@ -14,6 +14,10 @@ function cargarOperaciones(id) {
             success: function (response) {
                 // console.log(response);
                 response.forEach((op) => {
+                    let oculto = '';
+                    if (op.id_estado_hdr == 4 || op.id_estado_hdr == 5 || op.id_estado_hdr == 6) {
+                        oculto = 'hidden';
+                    }
 
                     if (op.activo != 1) {
                         tr = '<tr>'
@@ -33,14 +37,31 @@ function cargarOperaciones(id) {
                                         <td class= 'text-center' style="vertical-align: middle;">${op.total_horas}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.total_horas_maquina}</td>
                                         <td class= 'text-center' style="vertical-align: middle;">${op.medidas}</td>
+
                                         <td class='text-center' style="vertical-align: middle;">
-                                            
+                                            <div class="row justify-content-center" >
+                                                <div class="row justify-content-center" >
+                                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOpeHdr${op.id_ope_de_hdr}" aria-expanded="false" aria-controls="collapseHdr${op.id_ope_de_hdr}">
+                                                        Opciones
+                                                    </button>
+                                                </div>
+                                                <div class="collapse" data-bs-parent="#body_ope" id="collapseOpeHdr${op.id_ope_de_hdr}">
+                                                    <div class="row">
                                                         <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe(${op.id_ope_de_hdr})">
+                                                            <button type="button" class="btn btn-primary w-100 my-1" data-bs-toggle="modal" data-bs-target="#editarOpe" onclick="cargarModalEditOpe(${op.id_ope_de_hdr})" ${oculto}>
+                                                                Editar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-warning w-100 my-1" data-bs-toggle="modal" data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe(${op.id_ope_de_hdr})">
                                                                 Partes
                                                             </button>
                                                         </div>
-                                                    
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                     `; 
@@ -156,6 +177,43 @@ function cargarModalVerPartesOpe(id){
     error: function (error) {
         console.log(error);
     }
+    });
+}
+
+function cargarModalEditOpe(id){
+    let html = '';
+    document.getElementById('m_edi_idope').value = id;
+    let ope = document.getElementById('m_edi_ope');
+    let maq = document.getElementById('m_edi_maq_ope');
+    let asig = document.getElementById('m_edi_asig_ope');
+    let act = document.getElementById('m_edi_act_ope');
+
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtener-una-ope-hdr', 
+        data: {
+            id: id,
+        },
+        success: function (res) {
+            console.log(res);
+            ope.value = res.nombre_operacion;
+            maq.value = res.codigo_maquinaria;
+            asig.value = res.tecnico_asignado;
+            act.value = res.activo;
+
+            res.numeros_disponibles.forEach(e => {
+                html += `<option value="`+e+`">`+e+`</option>`;
+            });
+
+            document.getElementById('m_edi_num_ope').innerHTML = html;
+            document.getElementById('m_edi_num_ope').value = res.numero;
+        },
+        complete: function(){
+            // changeTdColor();
+        },
+        error: function (error) {
+            console.log(error);
+        }
     });
 }
 
@@ -279,6 +337,15 @@ function cargarHdrReTrabajo(id){
                     nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
                     nuevaFila.querySelector(".input-hora-ope").value = op.horas;
                     nuevaFila.querySelector(".input-minutos-ope").value = op.minutos;
+                    nuevaFila.classList.add("no-edit");
+
+                    nuevaFila.querySelector(".input-ope").disabled = true;
+                    nuevaFila.querySelector(".input-asig").disabled = true;
+                    nuevaFila.querySelector(".input-maquina").disabled = true;
+                    nuevaFila.querySelector(".input-hora-ope").disabled = true;
+                    nuevaFila.querySelector(".input-minutos-ope").disabled = true;
+                    nuevaFila.querySelector(".input-retrabajo").value = 0;
+                    nuevaFila.querySelector(".input-retrabajo").disabled = true;
                 });
             });
         },

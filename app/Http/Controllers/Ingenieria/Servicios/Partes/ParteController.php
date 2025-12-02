@@ -538,40 +538,6 @@ class ParteController extends Controller
                     'etapa' => $orden->getEtapa->descripcion_etapa,
                     'estado_orden' => $orden->getEstado(),
                     ]);
-            /*
-            if ($orden->getOrdenDe->getTipoOrden() == 3) {
-                array_push($partes_arr, (object)[
-                    'id_parte' => $parte->id_parte,
-                    'observaciones' => $parte->observaciones,
-                    'estado' => $parte->getParteDe->getNombreEstado(),
-                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
-                    'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
-                    'fecha' => $parte->fecha,
-                    'fecha_limite' => $parte->fecha_limite ?? '-',
-                    'horas' => $parte->horas,
-                    'supervisor' => $parte->getOrden->getSupervisor(),
-                    'orden' => $orden->nombre_orden,
-                    'etapa' => $orden->getEtapa->descripcion_etapa,
-                    'estado_orden' => $orden->getEstado(),
-                    'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->codigo_maquinaria ?? '-',
-                    'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-'
-                    ]);
-            } else {
-                array_push($partes_arr, (object)[
-                    'id_parte' => $parte->id_parte,
-                    'observaciones' => $parte->observaciones,
-                    'estado' => $parte->getParteDe->getNombreEstado(),
-                    'responsable' => $parte->getResponsable->getEmpleado->nombre_empleado,
-                    'id_res' => $parte->getResponsable->getEmpleado->id_empleado,
-                    'fecha' => $parte->fecha,
-                    'fecha_limite' => $parte->fecha_limite ?? '-',
-                    'horas' => $parte->horas,
-                    'supervisor' => $parte->getOrden->getSupervisor(),
-                    'orden' => $orden->nombre_orden,
-                    'etapa' => $orden->getEtapa->descripcion_etapa,
-                    'estado_orden' => $orden->getEstado(),
-                    ]);
-            } */
         }
 
         return $partes_arr;
@@ -619,33 +585,6 @@ class ParteController extends Controller
                 'fecha_limite' => $parte->fecha_limite,
                 'tec' => $es_tecnico
             ];
-
-       /* if ($parte->getParteDe->getTipoParte() != 3) {
-            return [
-                'id_orden' => $parte->id_orden,
-                'id_parte' => $parte->id_parte,
-                'observaciones' => $parte->observaciones,
-                'horas' => $parte->horas,
-                'estado' => $parte->getParteDe->getIdEstado(),
-                'nombre_estado' => $parte->getParteDe->getNombreEstado(),
-                'fecha' => $parte->fecha,
-                'fecha_limite' => $parte->fecha_limite,
-                'tec' => $es_tecnico
-            ];
-        } else {
-            return [
-                'id_parte' => $parte->id_parte,
-                'observaciones' => $parte->observaciones,
-                'horas' => $parte->horas,
-                'estado' => $parte->getParteDe->getIdEstado(),
-                'nombre_estado' => $parte->getParteDe->getNombreEstado(),
-                'fecha' => $parte->fecha,
-                'fecha_limite' => $parte->fecha_limite,
-                'maquinaria' => $parte->getParteDe->getParteMecxMaq->first()->getMaquinaria->id_maquinaria ?? '-',
-                'horas_maquinaria' => $parte->getParteDe->getParteMecxMaq->first() ? $parte->getParteDe->getParteMecxMaq->first()->horas_maquina : '-',
-                'tec' => $es_tecnico
-            ];
-        } */
     }
 
     public function obtenerParteOpeHdr($id){
@@ -1023,156 +962,151 @@ class ParteController extends Controller
     public function guardarActualizarParteOpe(Request $request)
     {
         // return $request;
+
         $this->validate($request, [
             'id_op' => 'required',
             'observaciones' => 'required',
-            // 'fecha_limite' => 'required',
             'fecha' => 'required',
             'horas' => 'required',
             'minutos' => 'required',
-            'estado' => 'required',
-            'maquina' => 'required'
+            'estado' => 'required'
         ]);
 
-        $ope = Operaciones_de_hdr::find($request->input('id_op'));
+        try {    
+            DB::beginTransaction();
 
-        $estado_actual = $ope->getIdEstado();
-       
-        $editar = $request->input('editar');
+            $ope = Operaciones_de_hdr::find($request->input('id_op'));
 
-        if ($request->input('id_parte_ope_hdr')) {
-            $parte = Parte_ope_hdr::find($request->input('id_parte_ope_hdr'));
-            $res = $parte->getResponsable->id_empleado;
-
-            if ($editar == 1 && $res != Auth::user()->getEmpleado->id_empleado && !Auth::user()->hasRole('SUPERVISOR')) {
-               return 6;
-            }
-        }     
-
-        $estado = $request->input('estado');
-
-        $fecha = $request->input('fecha');
-
-        $rutaCam = $request->input('ruta_cam');
-
-        $observaciones = $request->input('observaciones');
-
-        if ($request->input('medidas')) {
-            $medidas = 1;
-        } else {
-            $medidas = 0;
-        }
-
-        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
-
-        $horas = $request->input('horas') . ':' . $request->input('minutos');
-
-        $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
-
-        $id_maquinaria = $request->input('maquina');
-       
+            $estado_actual = $ope->getIdEstado();
         
+            $editar = $request->input('editar');
 
-        if ($editar){
-            /* Seccion carga de logs de cambios */
-            
-            $parte->update([
-                'observaciones' => $observaciones,
-                'fecha' => $fecha,
-                'horas' => $horas,
-                'medidas' => $medidas,
-                'id_estado_hdr' => $estado
-            ]);
+            if ($request->input('id_parte_ope_hdr')) {
+                $parte = Parte_ope_hdr::find($request->input('id_parte_ope_hdr'));
+                $res = $parte->getResponsable->id_empleado;
 
-            $result = 2;
-        }else{
-            // $estado = $request->input('estado');
+                if ($editar == 1 && $res != Auth::user()->getEmpleado->id_empleado && !Auth::user()->hasRole('SUPERVISOR')) {
+                    return 6;
+                }
+            }     
 
-            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+            $estado = $request->input('estado');
 
-            $responsabilidad = Responsabilidad::create([
-                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-                'id_rol_empleado' => $rol_empleado->id_rol_empleado
-            ]);
+            $fecha = $request->input('fecha');
 
-            $parte = Parte_ope_hdr::create([
-                        'id_ope_de_hdr' => $ope->id_ope_de_hdr,
-                        'observaciones' => $observaciones,
-                        'fecha' => $fecha,
-                        'fecha_carga' => $fecha_carga,
-                        'horas' => $horas,
-                        'id_maquinaria' => $id_maquinaria,
-                        'horas_maquina' => $horas_maquina,
-                        'id_responsabilidad' => $responsabilidad->id_responsabilidad,
-                        'medidas' => $medidas,
-                        'id_estado_hdr' => $estado,
-                        'ruta_cam' =>  $rutaCam
-                    ]);
-           
-           /* switch ($estado) {
-                case 1: //operacion en espera
-                    $this->cambiarEstadoOmecA($ope, 1);
-                break;
-                    $this->cambiarEstadoOmecA($ope, 2);
-                case 2: //operacion en proceso
-                break;
+            $rutaCam = $request->input('ruta_cam');
 
-                case 4: //operacion completada
-                    $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
-                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0]);
-                    $opeSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', $ope->numero + 1)->first();
-                    if ($opeSgt) {
-                        $opeSgt->activo = 1;
-                        $opeSgt->save();
-                    }
-                    break;
-                default:
-                    # code...
-                    break;
-            } */
+            $observaciones = $request->input('observaciones');
 
-            if ($estado == 1 || $estado == 2) {
-                $this->cambiarEstadoOmecA($ope, $estado);
+            if ($request->input('medidas')) {
+                $medidas = 1;
+            } else {
+                $medidas = 0;
             }
 
-            if ($estado == 4 && $ope->activo == 1) { //orden completado
-                $bOpe = 0;
-                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
-                $operacionesSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', '>=', $ope->numero + 1)->get();
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
 
-                if (count($operacionesSgt) != 0) {
-                    foreach ($operacionesSgt as $opeSgt) {
+            $horas = $request->input('horas') . ':' . $request->input('minutos');
 
-                        if ($bOpe == 0) {
-                            $estadoOpeSgt = (int) $opeSgt->getIdEstado();
+            $horas_maquina = $request->input('horas_maquina') . ':' . $request->input('minutos_maquina');
 
-                            if ($estadoOpeSgt != 4 && $estadoOpeSgt != 5) {
-                                $opeSgt->activo = 1;
-                                $opeSgt->save();
-                                $bOpe = 1;
-                            }
-                        }
+            $id_maquinaria = $request->input('maquina');
+        
+            if ($editar){
+                /* Seccion carga de logs de cambios */
 
-                    }
-                }
+                //-----
+
+                $parte->update([
+                    'observaciones' => $observaciones,
+                    'fecha' => $fecha,
+                    'horas' => $horas,
+                    'medidas' => $medidas,
+                    'id_estado_hdr' => $estado
+                ]);
+
+                $result = 2;
+            }else{
                 
-                if ($ope->id_hoja_de_ruta) {
-                    $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
+                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
 
-                    $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                $responsabilidad = Responsabilidad::create([
+                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                ]);
+
+                $parte = Parte_ope_hdr::create([
+                            'id_ope_de_hdr' => $ope->id_ope_de_hdr,
+                            'observaciones' => $observaciones,
+                            'fecha' => $fecha,
+                            'fecha_carga' => $fecha_carga,
+                            'horas' => $horas,
+                            'id_maquinaria' => $id_maquinaria,
+                            'horas_maquina' => $horas_maquina,
+                            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                            'medidas' => $medidas,
+                            'id_estado_hdr' => $estado,
+                            'ruta_cam' =>  $rutaCam
+                        ]);
+
+                if ($estado == 1 || $estado == 2) {
+                    $this->cambiarEstadoOmecA($ope, $estado);
                 }
-            }
 
-            if ($estado == 5 && $ope->activo == 1) { //orden completado
-                Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
+                if (($estado == 4 || $estado == 6) && $ope->activo == 1) { //orden completado
+                    $bOpe = 0;
+                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
+                    $operacionesSgt = Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('numero', '>=', $ope->numero + 1)->get();
+
+                    if (count($operacionesSgt) != 0) {
+                        foreach ($operacionesSgt as $opeSgt) {
+
+                            if ($bOpe == 0) {
+                                $estadoOpeSgt = (int) $opeSgt->getIdEstado();
+
+                                if ($estadoOpeSgt != 4 && $estadoOpeSgt != 6) {
+                                    $opeSgt->activo = 1;
+                                    $opeSgt->save();
+                                    $bOpe = 1;
+                                }
+                            }
+
+                        }
+                    }
+                    
+                    if ($ope->id_hoja_de_ruta) {
+                        $this->comprobarSiTodasLasOperacionesEstanCompletas($ope->id_hoja_de_ruta);
+
+                        $this->comprobarSiTodasLasHdrEstanCompletas($ope->getHdr->id_orden_mecanizado);
+                    }
+                }
+
+                if ($estado == 5 && $ope->activo == 1) { //orden completado
+                    Operaciones_de_hdr::where('id_hoja_de_ruta', $ope->id_hoja_de_ruta)->where('activo', 1)->update(['activo' => 0, 'prioridad' => null]);
+                }
+                $result = 1;
             }
-            $result = 1;
+    
+            DB::commit();
+
+            return [
+                'resultado' => $result,
+            ];
+
+            // return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido editado con exito.');                      
+    
+        } catch (\Exception $e) {
+            
+            DB::rollBack();
+
+            return [
+                'resultado' => 0,
+                'error' => $e->getMessage()
+            ];
+
+            // return redirect()->back()
+            //                  ->with('error', 'Ocurrio un problema al editar la hoja de ruta: '.$e->getMessage());
         }
-
-        return [
-            'resultado' => $result,
-            // 'tipo_orden' => $opcion
-        ];
     }
 
     public function cambiarEstadoOmecA($ope, $opcion){
@@ -1499,7 +1433,7 @@ class ParteController extends Controller
     public function comprobarSiTodasLasOperacionesEstanCompletas($id_hdr){
         $bandera_esta_completo = 1;
 
-        $operaciones = Vw_operaciones_de_hdr::where('id_hoja_de_ruta', $id_hdr)->where('id_estado_hdr', '<>', 5)->get();
+        $operaciones = Vw_operaciones_de_hdr::where('id_hoja_de_ruta', $id_hdr)->where('id_estado_hdr', '<>', 5)->where('id_estado_hdr', '<>', 6)->get();
 
         foreach ($operaciones as $ope) {
             if ($ope->id_estado_hdr != 4) {

@@ -57,6 +57,9 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::post('/orden/mec/hdr/obtenermaq',[OrdenController::class, 'obtenerMaquinas']);
      Route::post('/orden/mec/hdr/obtenertec',[OrdenController::class, 'obtenerTecnicos']);
     Route::post('/orden/mec/hdr/obtener-ope-hdr',[OrdenController::class, 'obtenerOperacionHdr']);
+    Route::post('/orden/mec/hdr/obtener-una-ope-hdr',[OrdenController::class, 'obtenerOperacion']);
+    Route::post('ordenes/mec/hdr/ope/editar', [OrdenController::class, 'editar_ope'])->name('ope.edit');
+    Route::post('ordenes/mec/hdr/retrabajo', [OrdenController::class, 'retrabajo_hdr'])->name('hdr.retrabajo');
     Route::get('/orden/mec/hdr/imprimir/{id}',[OrdenController::class, 'imprimir_hdr'])->name('hojaderuta.pdf');
     Route::get('/orden/mec/hdr/descartar/{id}',[OrdenController::class, 'descartarHDR'])->name('hojaderuta.descartar');
     Route::post('/orden/mec/hdr/obtener-hdr-ant/{id}',[OrdenController::class, 'obtenerHdrAnt']);
