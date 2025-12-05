@@ -155,4 +155,8 @@ class Hoja_de_ruta extends Model
         $resultado = DB::select("SELECT TotalHorasRealHojaDeRuta(?) AS total", [$id]);
         return $resultado[0]->total;
     }
+
+    public function getRutaCam(){
+        return DB::select("SELECT ruta_cam FROM parte_ope_hdr WHERE ruta_cam IS NOT NULL AND id_ope_de_hdr IN (SELECT id_ope_de_hdr FROM operaciones_de_hdr WHERE id_hoja_de_ruta = ?)", [$this->id_hoja_de_ruta]);
+    }
 }

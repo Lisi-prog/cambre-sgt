@@ -170,29 +170,32 @@
                                                     </div>
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseHdr{{$idCount}}">
                                                         <div class="row my-2">
-                                                            <div class="col-12">
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdr" onclick="cargarHdrVer({{$hdr->id_hoja_de_ruta}})">
+                                                                    Ver
+                                                                </button>
+                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
+                                                                    Editar
+                                                                </button>
+                                                            </div>
+                                                            {{-- <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                                                 <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdr" onclick="cargarHdrVer({{$hdr->id_hoja_de_ruta}})">
                                                                     Ver
                                                                 </button>
                                                             </div>
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
+                                                                    Editar
+                                                                </button>
+                                                            </div> --}}
                                                         </div>
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.pdf', $hdr->id_hoja_de_ruta], 'target' => '_blank']) !!}
-                                                                    {!! Form::submit('Imprimir', ['class' => 'btn btn-success w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea imprimir la hoja de ruta?')"]) !!}
-                                                                {!! Form::close() !!}
-                                                                {{-- <button type="button" class="btn btn-success w-100">
-                                                                    Imprimir
-                                                                </button> --}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
+                                                        {{-- <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
                                                                     Editar
                                                                 </button>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})">
@@ -201,28 +204,53 @@
                                                             </div>
                                                         </div>
                                                         @if ($hdr->activo)
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
+                                                        {{-- <div class="row my-2">
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                                                 <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#reiniciarHdr" onclick="cargarHdrReiniciar({{$hdr->id_hoja_de_ruta}})">
                                                                     Reiniciar
                                                                 </button>
                                                             </div>
-                                                        </div> 
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
+                                                                    {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>  --}}
 
-                                                        <div class="row my-2">
+                                                        {{-- <div class="row my-2">
                                                             <div class="col-12">
                                                                 {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
                                                                     {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
                                                                 {!! Form::close() !!}
                                                             </div>
-                                                        </div> 
-                                                        <div class="row my-2" hidden>
-                                                            <div class="col-12">
+                                                        </div>  --}}
+                                                        <div class="row my-2">
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#reiniciarHdr" onclick="cargarHdrReiniciar({{$hdr->id_hoja_de_ruta}})">
+                                                                    Reiniciar
+                                                                </button>
                                                                 <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#retrabajoHdr" onclick="cargarHdrReTrabajo({{$hdr->id_hoja_de_ruta}})">
-                                                                    Re Trabajo
+                                                                    ReTrabajo
                                                                 </button>
                                                             </div>
+                                                            {{-- <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#retrabajoHdr" onclick="cargarHdrReTrabajo({{$hdr->id_hoja_de_ruta}})">
+                                                                    ReTrabajo
+                                                                </button>
+                                                            </div> --}}
                                                         </div> 
+                                                        <div class="row my-2">
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
+                                                                    {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.pdf', $hdr->id_hoja_de_ruta], 'target' => '_blank']) !!}
+                                                                    {!! Form::submit('Imprimir', ['class' => 'btn btn-success w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea imprimir la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
                                                         @endif
                                                     </div>
                                                 </div>

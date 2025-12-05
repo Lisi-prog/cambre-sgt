@@ -31,6 +31,7 @@ class Vw_orden_mecanizado extends Model
         'id_empleado_responsable',
         'supervisor',
         'id_empleado_supervisor',
+        'id_estado_mecanizado',
         'nombre_estado',
         'total_horas',
         'ope_act',

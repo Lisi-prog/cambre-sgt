@@ -68,6 +68,8 @@ use App\Models\Cambre\Operaciones_de_hdr;
 use App\Models\Cambre\Parte_ope_hdr;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
 use App\Models\Cambre\Hdr_reg_fallo;
+use App\Models\Cambre\Hdr_reg_retrabajo;
+use App\Models\Cambre\Hdr_reg_retrabajo_ope;
 use App\Models\Cambre\Vw_hoja_de_ruta;
 
 
@@ -1905,6 +1907,20 @@ class OrdenController extends Controller
         
             $num_ult_ope = Operaciones_de_hdr::where('id_hoja_de_ruta', $id_hdr)->orderBy('numero', 'desc')->first()->numero+1;
             $fec_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $num_retra = 1;
+
+            if (count(Hdr_reg_retrabajo::where('id_hoja_de_ruta', $id_hdr)->get()) > 0) {
+                $num_retra = Hdr_reg_retrabajo::where('id_hoja_de_ruta', $id_hdr)->orderBy('numero', 'desc')->first()->numero+1;
+            }
+
+            $reg_retra = Hdr_reg_retrabajo::create([
+                            'id_hoja_de_ruta' => $id_hdr,
+                            'fecha_carga' => $fec_carga,
+                            'numero' => $num_retra,
+                            'observaciones' => $request->input('observaciones_fallo'),
+                            'id_empleado' => $request->input('res_retra_id')
+                        ]);
             
             if ($operaciones) {
                 if (count($operaciones) != 0) {
@@ -1944,6 +1960,10 @@ class OrdenController extends Controller
                                     'es_retrabajo' => $es_retrabajo[$i]
                             ]);
 
+                        Hdr_reg_retrabajo_ope::create([
+                            'id_hdr_reg_retrabajo' => $reg_retra->id_hdr_reg_retrabajo,
+                            'id_ope_de_hdr' => $ope->id_ope_de_hdr
+                        ]);
 
                         if (!is_null($tecnicos[$i])) {
                             $id_emp = Empleado::where('nombre_empleado', $tecnicos[$i])->first()->id_empleado;
@@ -2216,6 +2236,7 @@ class OrdenController extends Controller
             $horas = '-';
             $minutos = '-';
             $editable = 1;
+            $retra = "ORIGINAL";
 
             if ($op->horas_estimada) {
                 [$h, $m, $s] = explode(':', $op->horas_estimada);
@@ -2227,6 +2248,12 @@ class OrdenController extends Controller
                 $editable = 0;
             }
 
+            $opeRetrabajo = Hdr_reg_retrabajo_ope::where('id_ope_de_hdr', $op->id_ope_de_hdr)->first();
+
+            if ($opeRetrabajo) {
+                $retra = $opeRetrabajo->getHdrRegRetrabajo->numero."° retrabajo";
+            }
+
             array_push($operaciones_arr, (object)[
                 'numero' => $op->numero,
                 'operacion' => $op->getOperacion->nombre_operacion,
@@ -2234,7 +2261,8 @@ class OrdenController extends Controller
                 'maquina' => $op->getMaquinaria->codigo_maquinaria ?? '-',
                 'horas' => $horas,
                 'minutos' => $minutos,
-                'editable' => $editable
+                'editable' => $editable,
+                'retrabajo' => $retra
             ]);
         }
 
@@ -2248,7 +2276,8 @@ class OrdenController extends Controller
             'obser_fallo' => $obseFallo->observaciones_fallo ?? null,
             'responsable_fallo' => $obseFallo->responsable_fallo ?? null,
             'nombre_orden' => $hdr->getOrdMec->getOrden->nombre_orden ?? null,
-            'supervisor' => $hdr->getOrdMec->getOrden->getSupervisor() ?? null
+            'supervisor' => $hdr->getOrdMec->getOrden->getSupervisor() ?? null,
+            'ruta_cam' => $hdr->getRutaCam()
         ];
     }
 

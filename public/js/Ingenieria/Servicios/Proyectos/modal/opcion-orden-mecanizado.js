@@ -103,7 +103,7 @@ export default
         <div class="form-group">
             <label class="control-label" style="white-space: nowrap; ">Adicional:</label> 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="esRetrabajo" name="esRetrabajo">
+                <input class="form-check-input" type="checkbox" value="1" id="esRetrabajo" name="esRetrabajo" onclick="activarReqOrdenMec()">
                 <label class="form-check-label" for="esRetrabajo">
                     Es un retrabajo.
                 </label>
