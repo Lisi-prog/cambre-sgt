@@ -265,6 +265,17 @@
                                                             </div>
                                                             @endcan
                                                         </div>
+                                                        <div class="row my-2" hidden>
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                @if ($orden->id_estado_mecanizado != 4 )
+                                                                    <button type="button" class="btn btn-warning">Espera</button>
+                                                                @endif
+
+                                                                @if ($orden->id_estado_mecanizado != 5 )
+                                                                <button type="button" class="btn btn-info">En proceso</button>
+                                                                @endif
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>

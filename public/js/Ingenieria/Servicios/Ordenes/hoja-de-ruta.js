@@ -357,11 +357,13 @@ function cargarHdrReTrabajo(id){
 
 function cargarHdrVer(id){
     let html = '';
+    let html_ruta = '';
     $.ajax({
         type: "post",
         url: '/orden/mec/hdr/obtener-hdr/'+id,
         data: { id: id },
         success: function (response) {
+            // console.log(response);
             document.getElementById('m_ver_ubi').value = response.ubicacion;
             document.getElementById('m_ver_cant').value = response.cantidad;
             document.getElementById('m_ver_fec_carga').value = response.fecha_requerida;
@@ -378,13 +380,22 @@ function cargarHdrVer(id){
             document.getElementById('ver-table-body').innerHTML = '';
             response.operaciones.forEach(function (op){
                 html += `<tr>
-                        <td class="text-center">`+op.numero+`</td>
-                        <td class="text-center">`+op.operacion+`</td>
-                        <td class="text-center">`+op.asignado+`</td>
-                        <td class="text-center">`+op.maquina ?? '-'+`</td>
-                    </tr>`
+                            <td class="text-center">${op.numero}</td>
+                            <td class="text-center">${op.operacion}</td>
+                            <td class="text-center">${op.asignado}</td>
+                            <td class="text-center">${op.maquina ?? '-'}</td>
+                            <td class="text-center">${op.retrabajo ?? '-'}</td>
+                        </tr>`
             });
             document.getElementById('ver-table-body').innerHTML = html;
+
+            document.getElementById('ver-table-body-ruta-cam').innerHTML = '';
+            response.ruta_cam.forEach(function (ruca){
+                html_ruta += `<tr>
+                            <td class="text-start">${ruca.ruta_cam}</td>
+                        </tr>`
+            });
+            document.getElementById('ver-table-body-ruta-cam').innerHTML = html_ruta;
         },
         error: function (error) {
             console.log(error);
