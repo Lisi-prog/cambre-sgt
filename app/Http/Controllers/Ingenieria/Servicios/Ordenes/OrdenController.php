@@ -2335,8 +2335,8 @@ class OrdenController extends Controller
 
         foreach ($operaciones as $op) {
             array_push($op_arr, (object)[
-                'orden' => $op->getHdr->getOrdMec->getOrden->nombre_orden,
-                'proyecto' => $op->getHdr->getOrdMec->getOrden->getEtapa->getServicio->codigo_servicio,
+                'orden' => $op->getHdr ? $op->getHdr->getOrdMec->getOrden->nombre_orden : $op->getOrdenManufactura->getOrden->nombre_orden,
+                'proyecto' => $op->getHdr ? $op->getHdr->getOrdMec->getOrden->getEtapa->getServicio->codigo_servicio : $op->getOrdenManufactura->getOrden->getEtapa->getServicio->codigo_servicio,
                 'operacion' => $op->getOperacion->nombre_operacion
             ]);
         }

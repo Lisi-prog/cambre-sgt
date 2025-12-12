@@ -203,7 +203,15 @@
                                                         <label><input name="asig" type="checkbox" value="-" checked> -</label>
                                                     @endrole
                                                     @foreach ($flt_tecnicos as $tec)
-                                                        <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
+                                                        @role('TECNICO') 
+                                                            @if (Auth::user()->getEmpleado->nombre_empleado === $tec->nombre_empleado)
+                                                                <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}" checked> {{$tec->nombre_empleado}}</label>
+                                                            @else
+                                                                <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
+                                                            @endif
+                                                        @else
+                                                            <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
+                                                        @endrole
                                                     @endforeach
                                                 </div>
                                             </div>

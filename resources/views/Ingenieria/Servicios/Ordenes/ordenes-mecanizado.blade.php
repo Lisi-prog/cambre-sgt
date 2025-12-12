@@ -195,7 +195,7 @@
                                                 </div>
                                             </td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" data-order="{{$orden->prioridad_servicio ?? 999}}">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
@@ -265,7 +265,7 @@
                                                             </div>
                                                             @endcan
                                                         </div>
-                                                        <div class="row my-2" hidden>
+                                                        <div class="row my-2">
                                                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                                 @if ($orden->id_estado_mecanizado != 4 )
                                                                     <button type="button" class="btn btn-warning">Espera</button>
