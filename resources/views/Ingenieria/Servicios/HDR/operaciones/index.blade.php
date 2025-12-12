@@ -357,6 +357,7 @@
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                        
                                                         @role('SUPERVISOR') 
                                                         @if ($ope->getHdr)
                                                             <div class="row my-2">
@@ -377,6 +378,19 @@
                                                             </div>
                                                         </div>
                                                         @endif
+                                                        @role('SUPERVISOR')
+                                                        <div class="row my-2">
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                @if ($ope->id_estado_hdr != 1 )
+                                                                    <button type="button" class="btn btn-warning" onclick="crearParteOpeEspera({{$ope->id_ope_de_hdr}})">Espera</button>
+                                                                @endif
+
+                                                                @if ($ope->id_estado_hdr != 2 )
+                                                                <button type="button" class="btn btn-info" onclick="crearParteOpeEnProceso({{$ope->id_ope_de_hdr}})">En proceso</button>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        @endrole
                                                     </div> 
                                                 </div>
                                             </td>
@@ -1132,15 +1146,76 @@
             }
         });
     }
+
+    function actualizarRowOpePorId(id){
+        let id_ope = [id];
+
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-info-ope-mul-act',
+            data: {
+                id: id_ope,
+            },
+            success: function (response) {
+                response.forEach(e => {
+                    let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
+                    let rowIndex = table.row(fila).index();
+
+                    table.cell(rowIndex, 1).data(e.prioridad ?? 'S/P').draw();
+                    table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
+
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOpeEspera(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN ESPERA?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/operacion/crear-parte-espera',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+            },
+            complete: function(){
+                actualizarRowOpePorId(id);
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOpeEnProceso(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN PROCESO?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/operacion/crear-parte-en-proceso',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+            },
+            complete: function(){
+                actualizarRowOpePorId(id);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 </script>
-{{-- <script>
-    const toggleButton = document.getElementById('toggleMenu');
-    const sideMenu = document.getElementById('sideMenu');
-
-    toggleButton.addEventListener('click', () => {
-      sideMenu.classList.toggle('show');
-    });
-</script> --}}
-
 
 @endsection
