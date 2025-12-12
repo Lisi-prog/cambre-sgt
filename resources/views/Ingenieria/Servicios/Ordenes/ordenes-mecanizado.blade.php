@@ -268,11 +268,11 @@
                                                         <div class="row my-2">
                                                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                                 @if ($orden->id_estado_mecanizado != 4 )
-                                                                    <button type="button" class="btn btn-warning">Espera</button>
+                                                                    <button type="button" class="btn btn-warning" onclick="crearParteOrdMecEspera({{$orden->id_orden}})">Espera</button>
                                                                 @endif
 
                                                                 @if ($orden->id_estado_mecanizado != 5 )
-                                                                <button type="button" class="btn btn-info">En proceso</button>
+                                                                <button type="button" class="btn btn-info" onclick="crearParteOrdMecEnProceso({{$orden->id_orden}})">En proceso</button>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -828,6 +828,74 @@
                 let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
                 let rowIndex = table.row(fila).index();
                 table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function actualizarRowOrdenPorId(id){
+        let valor = id;
+
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-orden-act',
+            data: {
+                id: valor,
+                opcion: 3,
+            },
+            success: function (res) {
+                let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
+                let rowIndex = table.row(fila).index();
+                table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOrdMecEspera(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN ESPERA?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/orden/crear-parte-ord-mec-espera',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+                
+            },
+            complete: function(){
+                actualizarRowOrdenPorId(id);
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOrdMecEnProceso(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN PROCESO?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/orden/crear-parte-ord-mec-en-proceso',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+            },
+            complete: function(){
+                actualizarRowOrdenPorId(id);
+
             },
             error: function (error) {
                 console.log(error);

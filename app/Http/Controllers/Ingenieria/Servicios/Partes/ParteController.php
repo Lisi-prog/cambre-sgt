@@ -1445,4 +1445,201 @@ class ParteController extends Controller
             Hoja_de_ruta::where('id_hoja_de_ruta', $id_hdr)->update(['activo' => 0]);
         }
     }
+
+    public function crearParteOrdMecEspera(Request $request){
+        $idOrd = $request->input('id');
+        try {    
+            DB::beginTransaction();
+            
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha = Carbon::now()->format('Y-m-d');
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Se cambio el estado de la orden de mecanizado a ESPERA.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrd,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => 4,
+                'id_parte' => $parte->id_parte
+            ]); 
+    
+            DB::commit();
+
+            return [
+                'codigo' => 1
+            ];                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'codigo' => 0,
+                'error' => $e->getMessage()
+            ];  
+        }
+    }
+
+    public function crearParteOrdMecEnProceso(Request $request){
+        $idOrd = $request->input('id');
+        try {    
+            DB::beginTransaction();
+            
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha = Carbon::now()->format('Y-m-d');
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+            $ultParte = Parte::where('id_orden', $idOrd)->orderBy('id_parte', 'desc')->first();
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $parte = Parte::create([
+                        'observaciones' => 'Se cambio el estado de la orden de mecanizado a EN PROCESO.',
+                        'fecha' => $fecha,
+                        'fecha_limite' => $ultParte->fecha_limite,
+                        'fecha_carga' => $fecha_carga,
+                        'horas' => '00:00',
+                        'costo' => 0,
+                        'id_orden' => $idOrd,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+            $parte_mecanizado = Parte_mecanizado::create([
+                'id_estado_mecanizado' => 5,
+                'id_parte' => $parte->id_parte
+            ]); 
+    
+            DB::commit();
+
+            return [
+                'codigo' => 1
+            ];                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'codigo' => 0,
+                'error' => $e->getMessage()
+            ];  
+        }
+    }
+
+    public function crearParteOpeEspera(Request $request){
+        $idOpe = $request->input('id');
+        try {    
+            DB::beginTransaction();
+            
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha = Carbon::now()->format('Y-m-d');
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+    
+            Parte_ope_hdr::create([
+                    'id_ope_de_hdr' => $idOpe,
+                    'fecha_carga' => $fecha_carga,
+                    'fecha' => $fecha_carga,
+                    'observaciones' => 'Se cambio el estado de la operacion a ESPERA.',
+                    'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                    'horas' => '00:00',
+                    'medidas' => 0,
+                    'id_estado_hdr' => 1
+            ]);
+
+            DB::commit();
+
+            return [
+                'codigo' => 1
+            ];                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'codigo' => 0,
+                'error' => $e->getMessage()
+            ];  
+        }      
+    }
+
+    public function crearParteOpeEnProceso(Request $request){
+        $idOpe = $request->input('id');
+        try {    
+            DB::beginTransaction();
+            
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha = Carbon::now()->format('Y-m-d');
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+    
+            Parte_ope_hdr::create([
+                    'id_ope_de_hdr' => $idOpe,
+                    'fecha_carga' => $fecha_carga,
+                    'fecha' => $fecha_carga,
+                    'observaciones' => 'Se cambio el estado de la operacion a ESPERA.',
+                    'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                    'horas' => '00:00',
+                    'medidas' => 0,
+                    'id_estado_hdr' => 2
+            ]);
+
+            DB::commit();
+
+            return [
+                'codigo' => 1
+            ];                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'codigo' => 0,
+                'error' => $e->getMessage()
+            ];  
+        } 
+    }
+    //Transaccion
+        /*try {    
+            DB::beginTransaction();
+
+            if(!$hdr->save()) {
+                DB::rollBack();
+                return redirect()->back()
+                        ->with('error', 'Ocurrio un problema al editar la hoja de ruta');
+            }
+
+        
+    
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'La hoja de ruta ha sido editado con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al editar la hoja de ruta: '.$e->getMessage());
+        }*/
 }
