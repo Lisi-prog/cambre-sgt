@@ -1,0 +1,23 @@
+.btn-violet {
+    background-color: rgba(156, 19, 156, 0.76) !important;
+    border-color: rgba(156, 19, 156, 0.76) !important;
+    color: white;
+}
+
+.btn-violet:active {
+    background-color: rgba(156, 19, 156, 0.76) !important;
+    border-color: rgba(156, 19, 156, 0.76) !important;
+    color: white !important;
+}
+
+.btn-violet:focus-visible {
+    background-color: rgba(156, 19, 156, 0.76) !important;
+    border-color: rgba(156, 19, 156, 0.76) !important;
+    color: white !important;
+}
+
+.btn-violet:hover {
+    background-color: rgb(156, 19, 156) !important;
+    border-color: rgb(156, 19, 156) !important;
+    color: white;
+}

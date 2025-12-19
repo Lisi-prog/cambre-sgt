@@ -337,15 +337,18 @@ function cargarHdrReTrabajo(id){
                     nuevaFila.querySelector(".input-maquina").value = op.maquina === '-' ? null : op.maquina;
                     nuevaFila.querySelector(".input-hora-ope").value = op.horas;
                     nuevaFila.querySelector(".input-minutos-ope").value = op.minutos;
-                    nuevaFila.classList.add("no-edit");
 
-                    nuevaFila.querySelector(".input-ope").disabled = true;
-                    nuevaFila.querySelector(".input-asig").disabled = true;
-                    nuevaFila.querySelector(".input-maquina").disabled = true;
-                    nuevaFila.querySelector(".input-hora-ope").disabled = true;
-                    nuevaFila.querySelector(".input-minutos-ope").disabled = true;
+                    if (op.editable == 0) {
+                        nuevaFila.classList.add("no-edit");
+                        nuevaFila.querySelector(".input-ope").disabled = true;
+                        nuevaFila.querySelector(".input-asig").disabled = true;
+                        nuevaFila.querySelector(".input-maquina").disabled = true;
+                        nuevaFila.querySelector(".input-hora-ope").disabled = true;
+                        nuevaFila.querySelector(".input-minutos-ope").disabled = true;
+                        nuevaFila.querySelector(".input-retrabajo").disabled = true;
+                    }
                     nuevaFila.querySelector(".input-retrabajo").value = 0;
-                    nuevaFila.querySelector(".input-retrabajo").disabled = true;
+                    actualizarBotones('#retra_table-body');
                 });
             });
         },
@@ -430,6 +433,7 @@ function cargarHdrEdit(id){
                     if (op.editable == 0) {
                         nuevaFila.classList.add("no-edit");
                     }
+                    actualizarBotones('#retra_retratableTable');
                 });
             });
         },
@@ -445,4 +449,52 @@ function limpiarModalHdrEdit(){
     document.getElementById('m_edi_ruta').value = null;
     document.getElementById('m_edi-obser').value = null;
     document.getElementById('edi_table-body').innerHTML = '';
+}
+
+function cargarOperacionesReOrd(id){
+    let html = '';
+    let bodyTable = document.getElementById('reor_table-body');
+    $.ajax({
+        type: "post",
+        url: '/orden/mec/hdr/obtener-hdr/'+id, // Ruta para obtener las máquinas
+        data: { id: id },
+        success: function (response) {
+            response.operaciones.forEach(function (op) {
+                let backgre = '';
+
+                if (op.activo == 1) {
+                    backgre = `style="background-color: #d3fccf"`;
+                }
+
+                html += `<tr class="${op.editableNumOrden == 0 ? 'no-edit' : ''}" ${backgre}>
+                            <input type="hidden" name="ids[]" value="${op.id_ope_de_hdr}">
+                            <td class="text-center">${op.numero}</td>
+                            <td class="text-center">${op.operacion}</td>
+                            <td class="text-center">${op.asignado}</td>
+                            <td class="text-center">${op.maquina ?? '-'}</td>
+                            <td class="text-center">${op.horas+':'+op.minutos ?? '-'}</td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="activosino" id="radioDefault${op.id_ope_de_hdr}" ${op.activo ? 'checked' : ''} value="${op.id_ope_de_hdr}">
+                                    <label class="form-check-label" for="radioDefault${op.id_ope_de_hdr}">
+                                        ${op.activo ? 'Actual' : 'Cambiar'}
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <button type="button" class="btn btn-primary btn-up">⬆</button>
+                                    <button type="button" class="btn btn-primary btn-down">⬇</button>
+                                </div>
+                            </td>
+                        </tr>`
+            });
+            bodyTable.innerHTML = html;
+
+            actualizarBotones('#reor_editableTable');
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }

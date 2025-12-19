@@ -45,7 +45,20 @@
     }
 
     tr.no-edit input,
-    tr.no-edit .delete-btn {
+    tr.no-edit .delete-btn{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
+    tr.no-edit .btn-up{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
+    tr.no-edit .btn-down{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
+
+    tr.no-edit .form-check{
         cursor: not-allowed;
         pointer-events: none !important;
     }
@@ -178,24 +191,7 @@
                                                                     Editar
                                                                 </button>
                                                             </div>
-                                                            {{-- <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdr" onclick="cargarHdrVer({{$hdr->id_hoja_de_ruta}})">
-                                                                    Ver
-                                                                </button>
-                                                            </div>
-                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
-                                                                    Editar
-                                                                </button>
-                                                            </div> --}}
                                                         </div>
-                                                        {{-- <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
-                                                                    Editar
-                                                                </button>
-                                                            </div>
-                                                        </div> --}}
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-warning w-100" onclick="cargarOperaciones({{$hdr->id_hoja_de_ruta}})">
@@ -203,27 +199,14 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        @if ($hdr->activo)
-                                                        {{-- <div class="row my-2">
-                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#reiniciarHdr" onclick="cargarHdrReiniciar({{$hdr->id_hoja_de_ruta}})">
-                                                                    Reiniciar
+                                                        <div class="row my-2">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-violet w-100" data-bs-toggle="modal" data-bs-target="#reOrdenarOpe" onclick="cargarOperacionesReOrd({{$hdr->id_hoja_de_ruta}})">
+                                                                    Reordenar Operaciones
                                                                 </button>
                                                             </div>
-                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
-                                                                    {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
-                                                                {!! Form::close() !!}
-                                                            </div>
-                                                        </div>  --}}
-
-                                                        {{-- <div class="row my-2">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
-                                                                    {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
-                                                                {!! Form::close() !!}
-                                                            </div>
-                                                        </div>  --}}
+                                                        </div>
+                                                        @if ($hdr->activo)
                                                         <div class="row my-2">
                                                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                                 <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#reiniciarHdr" onclick="cargarHdrReiniciar({{$hdr->id_hoja_de_ruta}})">
@@ -233,11 +216,6 @@
                                                                     ReTrabajo
                                                                 </button>
                                                             </div>
-                                                            {{-- <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                                <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#retrabajoHdr" onclick="cargarHdrReTrabajo({{$hdr->id_hoja_de_ruta}})">
-                                                                    ReTrabajo
-                                                                </button>
-                                                            </div> --}}
                                                         </div> 
                                                         <div class="row my-2">
                                                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -323,6 +301,7 @@
 @include('Ingenieria.Servicios.HDR.modal.edit-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
 @include('Ingenieria.Servicios.HDR.modal.edit-ope')
+@include('Ingenieria.Servicios.HDR.modal.reordenar-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 <script>
     $(document).ready(function () {
@@ -366,6 +345,33 @@
                 },
                 order: [[0, 'desc']],
                 "pageLength": 25
+        });
+
+        const tbodyReor = document.getElementById('reor_table-body');
+
+        tbodyReor.addEventListener('click', function (e) {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+
+            const fila = btn.closest('tr');
+            if (!fila) return;
+
+            if (btn.classList.contains('btn-up')) {
+                const anterior = fila.previousElementSibling;
+                if (anterior) {
+                    fila.parentNode.insertBefore(fila, anterior);
+                }
+            }
+
+            if (btn.classList.contains('btn-down')) {
+                const siguiente = fila.nextElementSibling;
+                if (siguiente) {
+                    fila.parentNode.insertBefore(siguiente, fila);
+                }
+            }
+
+            renumerarFilas(tbodyReor);
+            actualizarBotones('#reor_editableTable');
         });
     });
 </script>

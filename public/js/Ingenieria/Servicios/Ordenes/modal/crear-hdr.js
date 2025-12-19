@@ -87,7 +87,11 @@ function addRow() {
                 </td>
                 
                 <td class="text-center">
-                    <button class="btn btn-danger delete-btn">Eliminar</button>
+                    <div class="d-flex justify-content-center gap-1">
+                        <button type="button" class="btn btn-primary btn-up">⬆</button>
+                        <button type="button" class="btn btn-primary btn-down">⬇</button>
+                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                    </div>
                 </td>
             `;
 
@@ -135,15 +139,40 @@ function addRow() {
                 });
             });
 
+            const tbody = table;
+
             // Agregar evento para eliminar fila
             row.querySelector(".delete-btn").addEventListener("click", () => {
                 row.remove();
 
-                // Reordenar los números de la primera celda de cada fila
-                Array.from(table.rows).forEach((row, index) => {
-                     row.cells[0].innerText = index + 1;
-                });
+                renumerarFilas(tbody);
+                actualizarBotones('#editableTable');
             });
+
+            row.querySelector(".btn-up").addEventListener("click", (e) => {
+                let fila = e.target.closest('tr');
+                let anterior = fila.previousElementSibling;
+
+                if (anterior) {
+                    fila.parentNode.insertBefore(fila, anterior);
+                }
+
+                renumerarFilas(tbody);
+                actualizarBotones('#editableTable');
+            });
+
+            row.querySelector(".btn-down").addEventListener("click", (e) => {
+                let fila = e.target.closest('tr');
+                let siguiente = fila.nextElementSibling;
+
+                if (siguiente) {
+                    fila.parentNode.insertBefore(siguiente, fila);
+                }
+
+                renumerarFilas(tbody);
+                actualizarBotones('#editableTable');
+            });
+            actualizarBotones('#editableTable');
             resolve(row);
         },
         error: function (error) {
@@ -320,7 +349,11 @@ function addRowEdi() {
                         </div>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                        <div class="d-flex justify-content-center gap-1">
+                            <button type="button" class="btn btn-primary btn-up">⬆</button>
+                            <button type="button" class="btn btn-primary btn-down">⬇</button>
+                            <button class="btn btn-danger delete-btn">Eliminar</button>
+                        </div>
                     </td>
                 `;
 
@@ -355,16 +388,40 @@ function addRowEdi() {
                     });
                 });
 
+                const tbody = table;
+
                 // Agregar evento para eliminar fila
                 row.querySelector(".delete-btn").addEventListener("click", () => {
                     row.remove();
 
-                    // Reordenar los números de la primera celda de cada fila
-                    Array.from(table.rows).forEach((row, index) => {
-                        row.cells[0].innerText = index + 1;
-                    });
+                    renumerarFilas(tbody);
+                    actualizarBotones('#edi_editableTable');
                 });
 
+                row.querySelector(".btn-up").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let anterior = fila.previousElementSibling;
+
+                    if (anterior) {
+                        fila.parentNode.insertBefore(fila, anterior);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#edi_editableTable');
+                });
+
+                row.querySelector(".btn-down").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let siguiente = fila.nextElementSibling;
+
+                    if (siguiente) {
+                        fila.parentNode.insertBefore(siguiente, fila);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#edi_editableTable');
+                });
+                actualizarBotones('#edi_editableTable');
                 resolve(row);
             },
             error: function (error) {
@@ -436,7 +493,11 @@ function addRowTra() {
                         </select>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                        <div class="d-flex justify-content-center gap-1">
+                            <button type="button" class="btn btn-primary btn-up">⬆</button>
+                            <button type="button" class="btn btn-primary btn-down">⬇</button>
+                            <button class="btn btn-danger delete-btn">Eliminar</button>
+                        </div>
                     </td>
                 `;
 
@@ -471,15 +532,41 @@ function addRowTra() {
                     });
                 });
 
+                const tbody = table;
+
                 // Agregar evento para eliminar fila
                 row.querySelector(".delete-btn").addEventListener("click", () => {
                     row.remove();
 
-                    // Reordenar los números de la primera celda de cada fila
-                    Array.from(table.rows).forEach((row, index) => {
-                        row.cells[0].innerText = index + 1;
-                    });
+                    renumerarFilas(tbody);
+                    actualizarBotones('#retra_retratableTable');
                 });
+
+                row.querySelector(".btn-up").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let anterior = fila.previousElementSibling;
+
+                    if (anterior) {
+                        fila.parentNode.insertBefore(fila, anterior);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#retra_retratableTable');
+                });
+
+                row.querySelector(".btn-down").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let siguiente = fila.nextElementSibling;
+
+                    if (siguiente) {
+                        fila.parentNode.insertBefore(siguiente, fila);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#retra_retratableTable');
+                });
+
+                actualizarBotones('#retra_retratableTable');
 
                 resolve(row);
             },
@@ -604,8 +691,6 @@ function mostrarFiltro(){
     }
 }
 
-
-
 function cargarOrdenesMec() {
     document.getElementById('m-ord-ant').innerHTML = '';
     document.getElementById('m-hdr-ant').innerHTML = '';
@@ -664,4 +749,52 @@ function cargarHdr() {
         });
     }
 
+}
+
+function actualizarBotones(tablaSelector) {
+    let filas = document.querySelectorAll(`${tablaSelector} tbody tr`);
+
+    filas.forEach((tr, index) => {
+        let btnUp = tr.querySelector('.btn-up');
+        let btnDown = tr.querySelector('.btn-down');
+
+        if (btnUp) btnUp.disabled = false;
+        if (btnDown) btnDown.disabled = false;
+
+        // 🔒 No permitir subir si la fila de arriba tiene class "no-edit"
+        if (index > 0) {
+            let filaAnterior = filas[index - 1];
+            if (filaAnterior.classList.contains('no-edit')) {
+                if (btnUp) btnUp.disabled = true;
+            }
+        }
+    });
+
+    // 🚫 Primera fila no puede subir
+    if (filas.length > 0) {
+        let primeraUp = filas[0].querySelector('.btn-up');
+        if (primeraUp) primeraUp.disabled = true;
+    }
+
+    // 🚫 Última fila no puede bajar
+    if (filas.length > 0) {
+        let ultimaDown = filas[filas.length - 1].querySelector('.btn-down');
+        if (ultimaDown) ultimaDown.disabled = true;
+    }
+}
+
+function renumerarFilas(tbody) {
+    Array.from(tbody.rows).forEach((row, index) => {
+        row.cells[0].innerText = index + 1;
+    });
+}
+
+function moverFila(fila, direccion) {
+    if (direccion === 'up' && fila.previousElementSibling) {
+        fila.parentNode.insertBefore(fila, fila.previousElementSibling);
+    }
+
+    if (direccion === 'down' && fila.nextElementSibling) {
+        fila.parentNode.insertBefore(fila.nextElementSibling, fila);
+    }
 }

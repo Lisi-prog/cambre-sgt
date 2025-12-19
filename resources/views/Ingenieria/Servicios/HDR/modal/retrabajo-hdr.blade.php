@@ -85,7 +85,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('ope', 'Operaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <table class="table table-striped mt-2" id="retra_retratableTable">
+                            <table class="table table-striped mt-2 table-md" id="retra_retratableTable">
                                 <thead>
                                   <tr>
                                     <th class='text-center' style="color:#fff;">N°</th>
