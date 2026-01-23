@@ -243,6 +243,7 @@
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                         {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>

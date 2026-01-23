@@ -305,10 +305,30 @@
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 <script>
     $(document).ready(function () {
-        // let tipo_orden = document.getElementById('tipo_orden').value;
-        // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
-        // url = url.replace(':tipo_orden', tipo_orden);
-        // document.getElementById('volver').href = url;
+        
+        let vieneDesde = '{{$vieneDesde}}';
+        switch (parseInt(vieneDesde)) {
+            case 1://Desde gestionar
+                let opcion = '{{$opcion}}';
+                console.log(opcion)
+                let idServ = '{{$idServ}}';
+                var url = '{{route('proyectos.gestionar',':idServ')}}';
+                url = url.replace(':idServ', idServ);
+                url += `?opcion=${opcion}`;
+                break;
+        
+            case 2://Desde ordenes de mecanizado
+                var url = '{{route("ordenes.tipo", 3)}}';
+                break;
+            case 3://Desde operaciones
+                var url = '{{route("ordenes.indexhdr")}}';
+                break;
+            default:
+                break;
+        }
+        // console.log(url);
+        document.getElementById('volver').href = url;
+
         $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',

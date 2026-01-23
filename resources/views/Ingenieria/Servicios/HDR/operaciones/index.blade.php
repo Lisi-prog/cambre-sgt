@@ -234,6 +234,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row justify-content-center">
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-outline-secondary m-1 rounded"
+                                            onclick="resetFilters()">
+                                        Restablecer filtros
+                                    </button>
+                                </div>
+                            </div>
                         </div>   
                     </div>
                 </div>
@@ -363,6 +371,7 @@
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $ope->getHdr->getOrdMec->id_orden], 'style' => 'display:inline', 'target' => '_blank']) !!}
+                                                                        {!! Form::text('vieneDesde', 3, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                         {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>
@@ -439,6 +448,63 @@
 </script>
 
 <script>
+    function loadFilters() {
+        let saved = localStorage.getItem('dt_filters_example');
+        if (!saved) return;
+
+        let filters = JSON.parse(saved);
+
+        $('input[type=checkbox]').each(function () {
+            let key = this.name + '_' + this.value;
+            if (filters.hasOwnProperty(key)) {
+                this.checked = filters[key];
+            }
+        });
+    }
+    function saveFilters() {
+        let filters = {};
+
+        $('input[type=checkbox]').each(function () {
+            filters[this.name + '_' + this.value] = this.checked;
+        });
+
+        localStorage.setItem('dt_filters_example', JSON.stringify(filters));
+    }
+
+    function saveDefaultFilters() {
+        if (localStorage.getItem('dt_filters_example_default')) return;
+
+        let defaults = {};
+        $('input[type=checkbox]').each(function () {
+            defaults[this.name + '_' + this.value] = this.checked;
+        });
+
+        localStorage.setItem(
+            'dt_filters_example_default',
+            JSON.stringify(defaults)
+        );
+    }
+    function resetFilters() {
+        let defaults = localStorage.getItem('dt_filters_example_default');
+        if (!defaults) return;
+
+        defaults = JSON.parse(defaults);
+
+        $('input[type=checkbox]').each(function () {
+            let key = this.name + '_' + this.value;
+            if (defaults.hasOwnProperty(key)) {
+                this.checked = defaults[key];
+            }
+        });
+
+        // Borra filtros actuales
+        localStorage.removeItem('dt_filters_example');
+
+        // Redibuja la tabla
+        table.search('').columns().search('');
+        table.draw();
+    }
+
     function mostrarFiltro(id){
         let cuadro_filtro = document.getElementById(id);
         if ($('#'+id).is(":hidden")) {
@@ -595,7 +661,8 @@
                 console.log(error);
             }
         }));
-        
+        saveDefaultFilters();
+        loadFilters();
         // let tipo_orden = window.location.pathname.substring(9, 10);
         // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
@@ -742,6 +809,7 @@
         });
         
     $('input:checkbox').on('change', function () {
+        saveFilters();
         table.draw();
     });
     

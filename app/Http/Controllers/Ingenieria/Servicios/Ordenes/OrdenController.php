@@ -1365,7 +1365,7 @@ class OrdenController extends Controller
         return Vw_orden_trabajo::find($id);
     }
 
-    public function ordenHDR($id){
+    public function ordenHDR(Request $request, $id){
         $orden = Orden::find($id);
         $operaciones = Operacion::orderBy('nombre_operacion')->get();
         $hojas_de_ruta = Hoja_de_ruta::where('id_orden_mecanizado', $orden->getOrdenDe->id_orden_mecanizado)->get();
@@ -1375,7 +1375,22 @@ class OrdenController extends Controller
                                     ->pluck('descripcion', 'id_hoja_de_ruta');
         $tecnicos = $this->obtenerEmpleadosActivos()->pluck('nombre_empleado', 'id_empleado');
 
-        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt', 'tecnicos'));
+        $idServ = null;
+        $opcion = null;
+
+        if ($request->input('vieneDesde')) {
+            $vieneDesde = $request->input('vieneDesde');
+
+            if ($request->input('idServ')) {
+                $opcion = $request->input('opcion');
+                $idServ = $request->input('idServ');
+            } 
+            
+        }else{
+            $vieneDesde = 1;
+        }
+
+        return view('Ingenieria.Servicios.HDR.index', compact('orden', 'operaciones', 'hojas_de_ruta', 'hdrAnt', 'tecnicos', 'opcion', 'idServ', 'vieneDesde'));
     }
 
     public function index_hdr(){
