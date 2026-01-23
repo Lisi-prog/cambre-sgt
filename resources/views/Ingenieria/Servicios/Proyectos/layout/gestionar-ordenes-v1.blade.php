@@ -573,6 +573,9 @@ table.dataTable tbody td {
                                                 <div class="row">
                                                     <div class="col-12">
                                                         {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                            {!! Form::text('vieneDesde', 1, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                            {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                            {!! Form::text('idServ', $proyecto->id_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} 
                                                             {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
                                                         {!! Form::close() !!}
                                                     </div>
