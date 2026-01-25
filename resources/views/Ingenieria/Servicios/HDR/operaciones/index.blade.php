@@ -274,6 +274,7 @@
                                 {!! $ordenes->links() !!}
                             </div>
                         @endif --}}
+                        @include('layouts.loanding')
                         <div class="table-responsive">
                             <table class="table table-sm table-hover mt-2" id="example">
                                 <thead id="encabezado_ordenes">
@@ -639,6 +640,7 @@
     let b;
     
     var table;
+    $("#loading").show();
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -959,6 +961,7 @@
             });
             actRow();
     });
+    $("#loading").hide();
     } );
 
     $(".edit-multi-ope").on('submit', function(evt){
