@@ -150,6 +150,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|VER-MENU-SOLICITUDES']], function () {
     Route::resource('s_s_i', ServicioDeIngenieriaController::class);
+    Route::post('s_s_i_man/guardar', [ServicioDeIngenieriaController::class, 'guardar_ssi_man'])->name('s_s_i_man.guardar');
+    Route::post('s_s_i_man/{id}/cargar-causas', [ServicioDeIngenieriaController::class, 'ssi_man_obtener_causas']);
     Route::get('r_i/evaluar/{id}', [RequerimientoDeIngenieriaController::class, 'evaluar'])->name('ri.evaluar');
     Route::post('r_i/evaluar/aceptar/{id}/{opcion}', [ProyectoController::class, 'aceptar_solicitud'])->name('solicitud.aceptar');
     Route::post('/solicitud/obtener-datos-proyecto/{id}', [ProyectoController::class, 'obtener_progreso']);

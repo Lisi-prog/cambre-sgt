@@ -54,6 +54,38 @@ CREATE TABLE `sol_servicio_de_mantenimiento` (
   CONSTRAINT `pk_id_serv_de_man_x_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `sol_solicitud`(`id_solicitud`)
 );
 
+CREATE TABLE `tipo_sintoma` (
+  `id_tipo_sintoma` int NOT NULL AUTO_INCREMENT,
+  `nombre_tipo_sintoma` varchar(100),
+  PRIMARY KEY (`id_tipo_sintoma`)
+);
+
+CREATE TABLE `sintoma` (
+  `id_sintoma` int NOT NULL AUTO_INCREMENT,
+  `nombre_sintoma` varchar(100),
+  `id_tipo_sintoma` int,
+  PRIMARY KEY (`id_sintoma`),
+  CONSTRAINT `fk_sintoma_x_tipo` FOREIGN KEY (`id_tipo_sintoma`) REFERENCES `tipo_sintoma`(`id_tipo_sintoma`)
+);
+
+CREATE TABLE `tipo_activo_x_sintoma` (
+  `id_tipo_activo_x_sintoma` int NOT NULL AUTO_INCREMENT,
+  `id_sintoma` int,
+  `id_tipo_activo` int,
+  PRIMARY KEY (`id_tipo_activo_x_sintoma`),
+  CONSTRAINT `fk_taxs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma`(`id_sintoma`),
+  CONSTRAINT `fk_taxs_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo`(`id_tipo_activo`)
+);
+
+CREATE TABLE `sol_serv_man_x_sintoma` (
+  `id_serv_man_x_sintoma` int NOT NULL AUTO_INCREMENT,
+  `id_sintoma` int,
+  `id_servicio_de_mantenimiento` int,
+  PRIMARY KEY (`id_serv_man_x_sintoma`),
+  CONSTRAINT `fk_smxs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma`(`id_sintoma`),
+  CONSTRAINT `fk_smxs_x_serv_man` FOREIGN KEY (`id_servicio_de_mantenimiento`) REFERENCES `sol_servicio_de_mantenimiento`(`id_servicio_de_mantenimiento`)
+);
+
 CREATE TABLE `sector` (
   `id_sector` int NOT NULL AUTO_INCREMENT,
   `nombre_sector` varchar(50) DEFAULT NULL,
