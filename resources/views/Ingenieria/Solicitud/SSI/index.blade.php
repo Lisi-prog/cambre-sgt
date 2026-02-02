@@ -180,6 +180,7 @@
                                     <th class='text-center' style="color:#fff; max-width: 3vw;">Fecha requerida</th>
                                     <th class='text-center' style="color:#fff; max-width: 2vw;">Estado</th>
                                     <th class='text-center' style="color:#fff; max-width: 2vw;">Prioridad</th>
+                                    <th class='text-center' style="color:#fff; max-width: 2vw;">Tipo</th>
                                     <th class='text-center' style="color: #fff; max-width: 4vw;">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -189,27 +190,29 @@
                                     @endphp
                                     @foreach ($listaSSI as $Ssi)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->fecha_carga)->format('Y-m-d H:i')}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->id_solicitud ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->id_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getEmpleado->nombre_empleado ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->nombre_solicitante ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSector->nombre_sector ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->nombre_sector ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$Ssi->getSolicitud->descripcion_solicitud}}' style="text-decoration:none; font-variant: none;">{{substr($Ssi->getSolicitud->descripcion_solicitud, 0, 20)}} <i class="fas fa-eye"></abbr></td>
+                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$Ssi->descripcion_solicitud}}' style="text-decoration:none; font-variant: none;">{{substr($Ssi->descripcion_solicitud, 0, 20)}} <i class="fas fa-eye"></abbr></td>
 
-                                            @if (is_null($Ssi->getSolicitud->fecha_requerida))
+                                            @if (is_null($Ssi->fecha_requerida))
                                                 <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
                                             @else
-                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d')}}</td>
+                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->fecha_requerida)->format('Y-m-d')}}</td>
                                             @endif
                                             
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getServicio ? $Ssi->getSolicitud->getServicio->getEstado() : $Ssi->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getServicio ? $Ssi->getServicio->getEstado() : $Ssi->nombre_estado_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->nombre_prioridad_solicitud ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->tipo ?? '-'}}</td>
                                             
-                                            @if (optional($Ssi->getSolicitud->getEmpleado)->id_empleado == optional(Auth::user()->getEmpleado)->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
+                                            @if ($Ssi->id_empleado == Auth::user()->getEmpleado->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
@@ -218,46 +221,64 @@
                                                         </button>
                                                     </div>
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseSSI{{$idCount}}">
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                @else
-                                                                    @can('EVALUAR-SOLICITUD')
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
+                                                        @if ($Ssi->getServicioDeIngenieria)
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    @if ($Ssi->id_estado_solicitud >= $id_estado_aceptado)
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                                         {!! Form::close() !!}
-                                                                    @endcan
+                                                                    @else
+                                                                        @can('EVALUAR-SOLICITUD')
+                                                                            {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
+                                                                            {!! Form::close() !!}
+                                                                        @endcan
+                                                                    @endif
+                                                                </div>
+                                                            </div> 
+                                                            <div class="row my-2">
+                                                                @if ($Ssi->id_estado_solicitud >= $id_estado_aceptado)
+                                                                    <div class="col-12">
+                                                                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#avanceProyectoModal" onclick="cargarModalProgresoServicio({{$Ssi->id_solicitud}})">
+                                                                        Avance
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
+                                                            </div> 
+                                                            <div class="row my-2">
+                                                                @if (Auth::user()->hasRole('SUPERVISOR'))
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                @else
+                                                                    @if ($Ssi->id_empleado ==  Auth::user()->getEmpleado->id_empleado && $Ssi->id_estado_solicitud < $id_estado_aceptado)
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    @endif
                                                                 @endif
                                                             </div>
-                                                            
-                                                        </div> 
-                                                        <div class="row my-2">
-                                                            @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
+                                                        @endif
+                                                        @if ($Ssi->getServicioDeMantenimiento)
+                                                            <div class="row my-2">
                                                                 <div class="col-12">
-                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#avanceProyectoModal" onclick="cargarModalProgresoServicio({{$Ssi->getSolicitud->id_solicitud}})">
-                                                                    Avance
-                                                                    </button>
+                                                                    @if ($Ssi->id_estado_solicitud >= $id_estado_aceptado)
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ssi_man.ver', $Ssi->getServicioDeMantenimiento->id_servicio_de_mantenimiento], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    @else
+                                                                        {{-- @can('EVALUAR-SOLICITUD')
+                                                                            {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
+                                                                            {!! Form::close() !!}
+                                                                        @endcan --}}
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div> 
-                                                        <div class="row my-2">
-                                                            @if (Auth::user()->hasRole('SUPERVISOR'))
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            @else
-                                                                @if ($Ssi->getSolicitud->getEmpleado->id_empleado ==  Auth::user()->getEmpleado->id_empleado && $Ssi->getSolicitud->id_estado_solicitud < $id_estado_aceptado)
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                @endif
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>

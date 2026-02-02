@@ -728,3 +728,36 @@ select
     from hoja_de_ruta as hdr
     INNER JOIN OpeRanked AS o_rank ON o_rank.id_hoja_de_ruta = hdr.id_hoja_de_ruta AND o_rank.rn = 1
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = o_rank.id_ope_de_hdr AND p_rank.rn = 1;
+
+CREATE VIEW vw_sol_solicitud_ssi AS
+select 
+    s.id_solicitud,
+    s.fecha_carga,
+    s.id_empleado,
+    s.nombre_solicitante,
+    se.nombre_sector,
+    s.descripcion_solicitud,
+    s.fecha_requerida,
+    est.nombre_estado_solicitud,
+    ps.nombre_prioridad_solicitud,
+    s.id_servicio,
+    case
+        when exists (
+            select 1
+            from sol_servicio_de_mantenimiento sm
+            where sm.id_solicitud = s.id_solicitud
+        ) then 'Mantenimiento'
+        when exists (
+            select 1
+            from sol_servicio_de_ingenieria si
+            where si.id_solicitud = s.id_solicitud
+        ) then 'Asistencia'
+        else 'Sin tipo'
+    end as tipo
+    from sol_solicitud s
+    left join sol_servicio_de_ingenieria si on s.id_solicitud=si.id_solicitud
+    left join sol_servicio_de_mantenimiento sm on s.id_solicitud=sm.id_solicitud
+    left join sector se on se.id_sector = si.id_sector
+    left join sol_estado_solicitud est on est.id_estado_solicitud=s.id_estado_solicitud
+    left join sol_prioridad_solicitud ps on ps.id_prioridad_solicitud=s.id_prioridad_solicitud
+    order by s.id_solicitud desc;
