@@ -188,16 +188,21 @@
                                         $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado');
                                         $idCount = 0;
                                     @endphp
+                                    
                                     @foreach ($listaSSI as $Ssi)
                                         <tr>
                                             <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->fecha_carga)->format('Y-m-d H:i')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->id_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->nombre_solicitante ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getEmpleado->nombre_empleado ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->nombre_sector ?? '-'}}</td>
-
+                                            @if ($Ssi->getServicioDeIngenieria)
+                                                <td class='text-center' style="vertical-align: middle;">{{$Ssi->getServicioDeIngenieria->getSector->nombre_sector ?? '-'}}</td>
+                                            @else
+                                                <td class='text-center' style="vertical-align: middle;">{{$Ssi->getServicioDeMantenimiento->getSector->nombre_sector ?? '-'}}</td>
+                                            @endif
+                                            
                                             <td class='text-center' style="vertical-align: middle;"><abbr title='{{$Ssi->descripcion_solicitud}}' style="text-decoration:none; font-variant: none;">{{substr($Ssi->descripcion_solicitud, 0, 20)}} <i class="fas fa-eye"></abbr></td>
 
                                             @if (is_null($Ssi->fecha_requerida))
@@ -205,14 +210,19 @@
                                             @else
                                                 <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->fecha_requerida)->format('Y-m-d')}}</td>
                                             @endif
-                                            
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getServicio ? $Ssi->getServicio->getEstado() : $Ssi->nombre_estado_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->nombre_prioridad_solicitud ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getServicio ? $Ssi->getServicio->getEstado() : $Ssi->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->tipo ?? '-'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
+
+                                            @if ($Ssi->getServicioDeIngenieria)
+                                                <td class='text-center' style="vertical-align: middle;">{{'Asistencia'}}</td>
+                                            @else
+                                                <td class='text-center' style="vertical-align: middle;">{{'Mantenimiento'}}</td>
+                                            @endif
+
                                             
-                                            @if ($Ssi->id_empleado == Auth::user()->getEmpleado->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
+                                            @if (optional($Ssi->getEmpleado)->id_empleado == optional(Auth::user()->getEmpleado)->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
@@ -254,15 +264,14 @@
                                                                         {!! Form::close() !!}
                                                                     </div>
                                                                 @else
-                                                                    @if ($Ssi->id_empleado ==  Auth::user()->getEmpleado->id_empleado && $Ssi->id_estado_solicitud < $id_estado_aceptado)
+                                                                    @if ($Ssi->getEmpleado->id_empleado ==  Auth::user()->getEmpleado->id_empleado && $Ssi->id_estado_solicitud < $id_estado_aceptado)
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
                                                                         {!! Form::close() !!}
                                                                     @endif
                                                                 @endif
                                                             </div>
-                                                        @endif
-                                                        @if ($Ssi->getServicioDeMantenimiento)
+                                                        @else
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     @if ($Ssi->id_estado_solicitud >= $id_estado_aceptado)
@@ -270,11 +279,11 @@
                                                                         {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
                                                                         {!! Form::close() !!}
                                                                     @else
-                                                                        {{-- @can('EVALUAR-SOLICITUD')
-                                                                            {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->getServicioDeIngenieria->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                        @can('EVALUAR-SOLICITUD')
+                                                                            {!! Form::open(['method' => 'GET', 'route' => ['ssi_man.ver.evaluar', $Ssi->getServicioDeMantenimiento->id_servicio_de_mantenimiento], 'style' => 'display:inline']) !!}
                                                                             {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
                                                                             {!! Form::close() !!}
-                                                                        @endcan --}}
+                                                                        @endcan
                                                                     @endif
                                                                 </div>
                                                             </div>

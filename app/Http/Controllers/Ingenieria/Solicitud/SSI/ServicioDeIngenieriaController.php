@@ -51,8 +51,14 @@ class ServicioDeIngenieriaController extends Controller
     
     public function index(Request $request)
     {        
+        $idsSol = Sol_servicio_de_ingenieria::pluck('id_solicitud')->merge(
+                    Sol_servicio_de_mantenimiento::pluck('id_solicitud')
+                )
+                ->unique()
+                ->values();
         // $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
-        $listaSSI = Vw_sol_solicitud_ssi::get();
+        // $listaSSI = Vw_sol_solicitud_ssi::get();
+        $listaSSI = Sol_solicitud::whereIn('id_solicitud', $idsSol)->orderBy('id_solicitud', 'desc')->get();
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
 
@@ -340,7 +346,7 @@ class ServicioDeIngenieriaController extends Controller
             'id_solicitud' => $Solicitud->id_solicitud,
             'id_servicio_requerido' => 1,
             'id_activo' => $activo,
-            //'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
+            'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
         ]);
 
         foreach ($sintomas as $sintoma) {
@@ -412,5 +418,10 @@ class ServicioDeIngenieriaController extends Controller
                 ]
             ];
         });
+    }
+
+    public function ssi_man_ver_evaluar($id){
+        $sma = Sol_servicio_de_mantenimiento::find($id);
+        return view('Ingenieria.Solicitud.SSI.SMA.evaluar', compact('sma'));
     }
 }
