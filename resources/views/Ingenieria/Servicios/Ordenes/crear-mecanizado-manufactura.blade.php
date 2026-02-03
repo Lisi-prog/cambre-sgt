@@ -188,6 +188,13 @@
                                                             </div>
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
+                                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.mec.quitar', $orden_mecanizado->id_orden_mecanizado], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::submit('Quitar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea QUITAR la orden de mecanizado de esta orden de manufactura?');"]) !!}
+                                                                    {!! Form::close() !!}
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2 justify-content-center" hidden>
+                                                                <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
                                                                     {!! Form::close() !!}
@@ -259,6 +266,31 @@
                             },
                         },
                         "aaSorting": []
+                });
+
+                $(".nuevo-editar-orden").on('submit', function(evt){
+                    evt.preventDefault();     
+                    // console.log('hola');
+
+                    var url_php = $(this).attr("action"); 
+                    var type_method = $(this).attr("method"); 
+                    var form_data = $(this).serialize();
+
+                    $.ajax({
+                        type: type_method,
+                        url: url_php,
+                        data: form_data,
+                        success: function(data) {
+                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                                    `+data+`
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>`;
+                            $('#alertOrd').html(html)
+                            setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                        }
+                    });
                 });
             });
             

@@ -94,4 +94,13 @@ class Orden_manufactura extends Model
         }
         return $totalOrdenesFinalizadas;
     }
+
+    public function getOrdenManuAsoc(){
+        $ordManAsc = Orden_manufactura_asoc::where('id_orden_manufactura', $this->id_orden_manufactura)->first();
+        if ($ordManAsc) {
+            return $ordManAsc->id_orden_man_asoc;
+        } else {
+            return null;
+        }
+    }
 }

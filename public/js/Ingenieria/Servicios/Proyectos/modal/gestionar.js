@@ -797,3 +797,13 @@ function cargarModalProgreso(id) {
         }
     });
 }
+
+function activarReqOrdenMec(){
+    const cb = document.getElementById("esRetrabajo");
+
+    if (cb.checked) {
+        document.getElementById("ord-mec-asoc").required = true;
+    } else {
+        document.getElementById("ord-mec-asoc").required = false;
+    }
+}

@@ -179,6 +179,7 @@
                                     <th class='text-center' style="color:#fff;min-width:5vw">Operacion Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Estado Ope. Actual</th>
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
+                                    <th class='text-center' style="color:#fff;min-width:3vw">Total Horas HDR</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -194,7 +195,7 @@
                                                 </div>
                                             </td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" data-order="{{$orden->prioridad_servicio ?? 999}}">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
@@ -219,6 +220,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->nom_est_ope_act ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas_hdr ?? '00:00'}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
@@ -240,6 +243,7 @@
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                        {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                         {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>
@@ -261,6 +265,17 @@
                                                                 </button> 
                                                             </div>
                                                             @endcan
+                                                        </div>
+                                                        <div class="row my-2">
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                @if ($orden->id_estado_mecanizado != 4 )
+                                                                    <button type="button" class="btn btn-warning" onclick="crearParteOrdMecEspera({{$orden->id_orden}})">Espera</button>
+                                                                @endif
+
+                                                                @if ($orden->id_estado_mecanizado != 5 )
+                                                                <button type="button" class="btn btn-info" onclick="crearParteOrdMecEnProceso({{$orden->id_orden}})">En proceso</button>
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -814,6 +829,74 @@
                 let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
                 let rowIndex = table.row(fila).index();
                 table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function actualizarRowOrdenPorId(id){
+        let valor = id;
+
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-orden-act',
+            data: {
+                id: valor,
+                opcion: 3,
+            },
+            success: function (res) {
+                let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
+                let rowIndex = table.row(fila).index();
+                table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOrdMecEspera(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN ESPERA?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/orden/crear-parte-ord-mec-espera',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+                
+            },
+            complete: function(){
+                actualizarRowOrdenPorId(id);
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOrdMecEnProceso(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN PROCESO?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/orden/crear-parte-ord-mec-en-proceso',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+            },
+            complete: function(){
+                actualizarRowOrdenPorId(id);
+
             },
             error: function (error) {
                 console.log(error);

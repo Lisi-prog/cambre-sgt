@@ -18,6 +18,7 @@
     <link href="{{ asset('assets/css/input-autocomplete.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/css/sweetalert.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/css/otros-botones.css') }}" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 @yield('page_css')
 <!-- Template CSS -->

@@ -197,7 +197,7 @@
                                         <tr data-id="{{$orden->id_orden}}">
                                             <td class='text-center chk-input' style="vertical-align: middle;" hidden><input class="form-check-input m-auto" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]"></td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" data-order="{{$orden->prioridad_servicio ?? 999}}">{{$orden->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$orden->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
@@ -458,7 +458,7 @@
                             next: 'Sig.',
                         },
                     },
-                    "aaSorting": [],
+                    order: [[1, 'asc']],
                     "pageLength": 100
             });
         

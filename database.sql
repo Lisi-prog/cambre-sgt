@@ -457,7 +457,25 @@ CREATE TABLE `hdr_reg_fallo` (
   `id_hdr_sig` int,
   `observaciones_fallo` varchar(500),
   `responsable` varchar(250),
+  `id_empleado` int,
   PRIMARY KEY (`id_hdr_ant`, `id_hdr_sig`)
+); 
+
+CREATE TABLE `hdr_reg_retrabajo` (
+  `id_hdr_reg_retrabajo` int NOT NULL AUTO_INCREMENT,
+  `id_hoja_de_ruta` int,
+  `numero` int,
+  `fecha_carga` datetime,
+  `observaciones` varchar(500),
+  `id_empleado` int,
+  PRIMARY KEY (`id_hdr_reg_retrabajo`)
+); 
+
+CREATE TABLE `hdr_reg_retrabajo_ope` (
+  `id_hdr_reg_retrabajo` int,
+  `id_ope_de_hdr` int,
+  PRIMARY KEY (`id_hdr_reg_retrabajo`, `id_ope_de_hdr`),
+  CONSTRAINT `pk_hdr_reg_ope_x_hdr_reg` FOREIGN KEY (`id_hdr_reg_retrabajo`) REFERENCES `hdr_reg_retrabajo`(`id_hdr_reg_retrabajo`)
 ); 
 
 CREATE TABLE `archivo_hdr` (

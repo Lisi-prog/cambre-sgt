@@ -47,7 +47,7 @@ function crearCuadrOrdenes(id_etapa){
 }
 
 function cargarModalVerOrden(id_orden){
-    console.log('jajajamodal');
+    // console.log('jajajamodal');
 
     let input_orden = document.getElementById("input-orden");
     let input_tipo = document.getElementById("input-tipo");

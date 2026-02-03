@@ -39,6 +39,29 @@
     .col-4 {
         padding: 5px;
     }
+
+    tr.no-edit {
+        background-color: #f8d7da !important; /* rojo claro */
+    }
+
+    tr.no-edit input,
+    tr.no-edit .delete-btn{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
+    tr.no-edit .btn-up{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
+    tr.no-edit .btn-down{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
+
+    tr.no-edit .form-check{
+        cursor: not-allowed;
+        pointer-events: none !important;
+    }
 </style>
 
 <section class="section">
@@ -51,7 +74,7 @@
             <label for="" style="font-weight: bold">Cantidad:</label> {{$orden->getOrdenDe ? $orden->getOrdenDe->cantidad : '-'}}
         </div>
         <div class="ms-auto">
-            <div class="d-flex align-items-center">
+            {{-- <div class="d-flex align-items-center">
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -69,32 +92,9 @@
                                 id="btn-edit-mul">
                             Carga<br>Multiple
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="p-2 flex-grow-1">
-            <h4 class="">Hoja de Ruta</h5>
-        </div>
-        <div class="p-2">
-            
-        </div>
-        <div class="p-2">
-            <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
-        </div>
-    </div> --}}
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Hoja de Ruta</h5>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                <label for="" style="font-weight: bold">Orden:</label> {{$orden->nombre_orden}}
-            </div>
-        </div>
-    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -128,9 +128,11 @@
                                     <th class="text-center" scope="col" style="color:#fff;width:5%;">Codigo</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:25%;">Observaciones</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:15%;">Observaciones</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Operacion actual</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Progreso</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas Estimada Total</th>
+                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas Total</th>
                                     <th class="text-center" scope="col" style="color:#fff;width:10%;">Acciones</th>                                                           
                                 </thead>
                                 
@@ -166,6 +168,11 @@
                                                 </div>
                                             </td>
 
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getTotalHorasEstimada()?? '-'}}</td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">{{$hdr->getTotalHorasReal() ?? '-'}}</td>
+
+
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
                                                     <div class="row justify-content-center" >
@@ -176,24 +183,10 @@
                                                     </div>
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseHdr{{$idCount}}">
                                                         <div class="row my-2">
-                                                            <div class="col-12">
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                                 <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdr" onclick="cargarHdrVer({{$hdr->id_hoja_de_ruta}})">
                                                                     Ver
                                                                 </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.pdf', $hdr->id_hoja_de_ruta], 'target' => '_blank']) !!}
-                                                                    {!! Form::submit('Imprimir', ['class' => 'btn btn-success w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea imprimir la hoja de ruta?')"]) !!}
-                                                                {!! Form::close() !!}
-                                                                {{-- <button type="button" class="btn btn-success w-100">
-                                                                    Imprimir
-                                                                </button> --}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
                                                                 <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#editarHdr" onclick="cargarHdrEdit({{$hdr->id_hoja_de_ruta}})">
                                                                     Editar
                                                                 </button>
@@ -206,14 +199,36 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        @if ($hdr->activo)
                                                         <div class="row my-2">
                                                             <div class="col-12">
+                                                                <button type="button" class="btn btn-violet w-100" data-bs-toggle="modal" data-bs-target="#reOrdenarOpe" onclick="cargarOperacionesReOrd({{$hdr->id_hoja_de_ruta}})">
+                                                                    Reordenar Operaciones
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        @if ($hdr->activo)
+                                                        <div class="row my-2">
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                                 <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#reiniciarHdr" onclick="cargarHdrReiniciar({{$hdr->id_hoja_de_ruta}})">
                                                                     Reiniciar
                                                                 </button>
+                                                                <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#retrabajoHdr" onclick="cargarHdrReTrabajo({{$hdr->id_hoja_de_ruta}})">
+                                                                    ReTrabajo
+                                                                </button>
                                                             </div>
                                                         </div> 
+                                                        <div class="row my-2">
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.descartar', $hdr->id_hoja_de_ruta]]) !!}
+                                                                    {!! Form::submit('Descartar', ['class' => 'btn btn-info w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea descartar la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                                {!! Form::open(['method' => 'GET', 'class' => 'd-flex justify-content-evenly', 'route' => ['hojaderuta.pdf', $hdr->id_hoja_de_ruta], 'target' => '_blank']) !!}
+                                                                    {!! Form::submit('Imprimir', ['class' => 'btn btn-success w-100', 'onclick' =>"return confirm('¿Esta seguro de que desea imprimir la hoja de ruta?')"]) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -252,24 +267,25 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <div>
                             <table id="exampleOpe" class="table table-hover mt-2" class="display">
                                 <thead style="">
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Cod. HDR</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">N°</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%;">Ultimo res.</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Maquina</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Operacion</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:10%">Estado</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Horas</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Medidas</th>
-                                    <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Cod. HDR</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">N°</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:4vw;">Fecha</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:6vw;">Ultimo res.</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:6vw;">Asignado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:5vw;">Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:5vw;">Operacion</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:4vw;">Estado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Horas estimada</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Horas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Horas Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:2vw;">Medidas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;max-width:3vw;">Acciones</th>
                                 </thead>
                                 <tbody id="body_ope">
                                 </tbody>
                             </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -281,15 +297,38 @@
 @include('Ingenieria.Servicios.HDR.modal.crear-hdr')
 @include('Ingenieria.Servicios.HDR.modal.ver-hdr')
 @include('Ingenieria.Servicios.HDR.modal.reiniciar-hdr')
+@include('Ingenieria.Servicios.HDR.modal.retrabajo-hdr')
 @include('Ingenieria.Servicios.HDR.modal.edit-hdr')
 @include('Ingenieria.Servicios.HDR.modal.crear-ope')
+@include('Ingenieria.Servicios.HDR.modal.edit-ope')
+@include('Ingenieria.Servicios.HDR.modal.reordenar-ope')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 <script>
     $(document).ready(function () {
-        // let tipo_orden = document.getElementById('tipo_orden').value;
-        // var url = '{{route('ordenes.tipo',':tipo_orden')}}';
-        // url = url.replace(':tipo_orden', tipo_orden);
-        // document.getElementById('volver').href = url;
+        
+        let vieneDesde = '{{$vieneDesde}}';
+        switch (parseInt(vieneDesde)) {
+            case 1://Desde gestionar
+                let opcion = '{{$opcion}}';
+                console.log(opcion)
+                let idServ = '{{$idServ}}';
+                var url = '{{route('proyectos.gestionar',':idServ')}}';
+                url = url.replace(':idServ', idServ);
+                url += `?opcion=${opcion}`;
+                break;
+        
+            case 2://Desde ordenes de mecanizado
+                var url = '{{route("ordenes.tipo", 3)}}';
+                break;
+            case 3://Desde operaciones
+                var url = '{{route("ordenes.indexhdr")}}';
+                break;
+            default:
+                break;
+        }
+        // console.log(url);
+        document.getElementById('volver').href = url;
+
         $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -327,8 +366,36 @@
                 order: [[0, 'desc']],
                 "pageLength": 25
         });
+
+        const tbodyReor = document.getElementById('reor_table-body');
+
+        tbodyReor.addEventListener('click', function (e) {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+
+            const fila = btn.closest('tr');
+            if (!fila) return;
+
+            if (btn.classList.contains('btn-up')) {
+                const anterior = fila.previousElementSibling;
+                if (anterior) {
+                    fila.parentNode.insertBefore(fila, anterior);
+                }
+            }
+
+            if (btn.classList.contains('btn-down')) {
+                const siguiente = fila.nextElementSibling;
+                if (siguiente) {
+                    fila.parentNode.insertBefore(siguiente, fila);
+                }
+            }
+
+            renumerarFilas(tbodyReor);
+            actualizarBotones('#reor_editableTable');
+        });
     });
 </script>
-<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script>
+{{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}"></script> --}}
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/hoja-de-ruta.js')) }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

@@ -25,6 +25,11 @@ $(document).ready(function() {
         e.preventDefault();
         addRowEdi();
     })
+
+    document.getElementById('retra_addRow').addEventListener('click', (e) => {
+        e.preventDefault();
+        addRowTra();
+    })
 });
 
 function addRow() {
@@ -73,8 +78,20 @@ function addRow() {
                         </div>
                     </div>
                 </td>
+                <td>
+                    <div class= "input-group">
+                        <input class="form-control" name="horas_ope[]" type="number" min="0" value="00" id="horas_maquina" required>
+                        <span class="input-group-text">:</span>
+                        <input class="form-control" name="minutos_ope[]" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
+                    </div>
+                </td>
+                
                 <td class="text-center">
-                    <button class="btn btn-danger delete-btn">Eliminar</button>
+                    <div class="d-flex justify-content-center gap-1">
+                        <button type="button" class="btn btn-primary btn-up">⬆</button>
+                        <button type="button" class="btn btn-primary btn-down">⬇</button>
+                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                    </div>
                 </td>
             `;
 
@@ -122,15 +139,40 @@ function addRow() {
                 });
             });
 
+            const tbody = table;
+
             // Agregar evento para eliminar fila
             row.querySelector(".delete-btn").addEventListener("click", () => {
                 row.remove();
 
-                // Reordenar los números de la primera celda de cada fila
-                Array.from(table.rows).forEach((row, index) => {
-                     row.cells[0].innerText = index + 1;
-                });
+                renumerarFilas(tbody);
+                actualizarBotones('#editableTable');
             });
+
+            row.querySelector(".btn-up").addEventListener("click", (e) => {
+                let fila = e.target.closest('tr');
+                let anterior = fila.previousElementSibling;
+
+                if (anterior) {
+                    fila.parentNode.insertBefore(fila, anterior);
+                }
+
+                renumerarFilas(tbody);
+                actualizarBotones('#editableTable');
+            });
+
+            row.querySelector(".btn-down").addEventListener("click", (e) => {
+                let fila = e.target.closest('tr');
+                let siguiente = fila.nextElementSibling;
+
+                if (siguiente) {
+                    fila.parentNode.insertBefore(siguiente, fila);
+                }
+
+                renumerarFilas(tbody);
+                actualizarBotones('#editableTable');
+            });
+            actualizarBotones('#editableTable');
             resolve(row);
         },
         error: function (error) {
@@ -187,6 +229,13 @@ function addRowRe() {
                             <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]">
                             <div class="dropdown-list-auto">
                             </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class= "input-group">
+                            <input class="form-control input-hora-ope" name="horas_ope[]" type="number" min="0" value="00" id="horas_maquina" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control input-minutos-ope" name="minutos_ope[]" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
                         </div>
                     </td>
                     <td class="text-center">
@@ -292,8 +341,19 @@ function addRowEdi() {
                             </div>
                         </div>
                     </td>
+                    <td>
+                        <div class= "input-group">
+                            <input class="form-control input-hora-ope" name="horas_ope[]" type="number" min="0" value="00" id="horas_maquina" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control input-minutos-ope" name="minutos_ope[]" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
+                        </div>
+                    </td>
                     <td class="text-center">
-                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                        <div class="d-flex justify-content-center gap-1">
+                            <button type="button" class="btn btn-primary btn-up">⬆</button>
+                            <button type="button" class="btn btn-primary btn-down">⬇</button>
+                            <button class="btn btn-danger delete-btn">Eliminar</button>
+                        </div>
                     </td>
                 `;
 
@@ -328,15 +388,185 @@ function addRowEdi() {
                     });
                 });
 
+                const tbody = table;
+
                 // Agregar evento para eliminar fila
                 row.querySelector(".delete-btn").addEventListener("click", () => {
                     row.remove();
 
-                    // Reordenar los números de la primera celda de cada fila
-                    Array.from(table.rows).forEach((row, index) => {
-                        row.cells[0].innerText = index + 1;
+                    renumerarFilas(tbody);
+                    actualizarBotones('#edi_editableTable');
+                });
+
+                row.querySelector(".btn-up").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let anterior = fila.previousElementSibling;
+
+                    if (anterior) {
+                        fila.parentNode.insertBefore(fila, anterior);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#edi_editableTable');
+                });
+
+                row.querySelector(".btn-down").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let siguiente = fila.nextElementSibling;
+
+                    if (siguiente) {
+                        fila.parentNode.insertBefore(siguiente, fila);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#edi_editableTable');
+                });
+                actualizarBotones('#edi_editableTable');
+                resolve(row);
+            },
+            error: function (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
+    });
+}
+
+function addRowTra() {
+    return new Promise((resolve, reject) => {
+        const table = document.getElementById('retra_retratableTable').getElementsByTagName('tbody')[0];
+        const rowCount = table.rows.length + 1;
+        const row = table.insertRow();
+
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtenerope', 
+            data: { id: 'hola' },
+            success: function (response) {
+                let options = '';
+                let opt_tec = '';
+                response.operaciones.forEach((ope) => {
+                    options += `<div class="custom-option-1" data-value="${ope.nombre_operacion}">${ope.nombre_operacion}</div>`;
+                });
+
+                response.tecnicos.forEach((tec) => {
+                    opt_tec += `<div data-value="${tec.nombre_empleado}">${tec.nombre_empleado}</div>`;
+                });
+
+                // const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td class="text-center">${rowCount}</td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select custom-input-1 input-ope" placeholder="Seleccionar" autocomplete="off" name="operacion[]" required>
+                            <div class="dropdown-list-auto">
+                                ${options}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select input-asig" placeholder="Seleccionar" autocomplete="off" name="tecnico[]">
+                            <div class="dropdown-list-auto">
+                                ${opt_tec}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown-container my-auto">
+                            <input type="text" class="styled-input form-select input-maquina" placeholder="Seleccionar" autocomplete="off" name="maq[]">
+                            <div class="dropdown-list-auto">
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class= "input-group">
+                            <input class="form-control input-hora-ope" name="horas_ope[]" type="number" min="0" value="00" id="horas_maquina" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control input-minutos-ope" name="minutos_ope[]" type="number" min="0" max="59" value="00" id="minutos_maquina" required>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <select class="form-select form-group input-retrabajo my-auto" required name="es_retrabajo[]">
+                            <option value="1">SI</option>
+                            <option value="0">NO</option>
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-1">
+                            <button type="button" class="btn btn-primary btn-up">⬆</button>
+                            <button type="button" class="btn btn-primary btn-down">⬇</button>
+                            <button class="btn btn-danger delete-btn">Eliminar</button>
+                        </div>
+                    </td>
+                `;
+
+                // Aplicar el dropdown a la nueva fila
+                row.querySelectorAll(".dropdown-container").forEach(dropdown => {
+                    const customDropdown = new CustomDropdown(dropdown); // Guardamos la instancia
+
+                    // Detectar cuando se selecciona una opción
+                    customDropdown.container.addEventListener("optionSelected", (e) => {
+                        const option = e.detail.selectedOption;
+
+                        if (option.classList.contains("custom-option-1")) {
+                            const rowElement = customDropdown.container.closest("tr"); // Obtener la fila actual
+                            const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
+                            thirdInput.value = '';
+                            if (thirdInput) {
+                                cargarMaquinas(customDropdown.input.value, thirdInput);
+                            }
+                        }
+                    });
+
+                    // Detectar cuando el valor cambia manualmente (al escribir y presionar Enter o perder foco)
+                    customDropdown.input.addEventListener("change", () => {
+                        if (customDropdown.input.classList.contains("custom-input-1")) {
+                            const rowElement = dropdown.closest("tr"); // Obtener la fila actual
+                            const thirdInput = rowElement.querySelectorAll(".dropdown-container .styled-input")[2]; // Tercer input
+
+                            if (thirdInput) {
+                                cargarMaquinas(customDropdown.input.value, thirdInput);
+                            }
+                        }
                     });
                 });
+
+                const tbody = table;
+
+                // Agregar evento para eliminar fila
+                row.querySelector(".delete-btn").addEventListener("click", () => {
+                    row.remove();
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#retra_retratableTable');
+                });
+
+                row.querySelector(".btn-up").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let anterior = fila.previousElementSibling;
+
+                    if (anterior) {
+                        fila.parentNode.insertBefore(fila, anterior);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#retra_retratableTable');
+                });
+
+                row.querySelector(".btn-down").addEventListener("click", (e) => {
+                    let fila = e.target.closest('tr');
+                    let siguiente = fila.nextElementSibling;
+
+                    if (siguiente) {
+                        fila.parentNode.insertBefore(siguiente, fila);
+                    }
+
+                    renumerarFilas(tbody);
+                    actualizarBotones('#retra_retratableTable');
+                });
+
+                actualizarBotones('#retra_retratableTable');
 
                 resolve(row);
             },
@@ -461,8 +691,6 @@ function mostrarFiltro(){
     }
 }
 
-
-
 function cargarOrdenesMec() {
     document.getElementById('m-ord-ant').innerHTML = '';
     document.getElementById('m-hdr-ant').innerHTML = '';
@@ -521,4 +749,52 @@ function cargarHdr() {
         });
     }
 
+}
+
+function actualizarBotones(tablaSelector) {
+    let filas = document.querySelectorAll(`${tablaSelector} tbody tr`);
+
+    filas.forEach((tr, index) => {
+        let btnUp = tr.querySelector('.btn-up');
+        let btnDown = tr.querySelector('.btn-down');
+
+        if (btnUp) btnUp.disabled = false;
+        if (btnDown) btnDown.disabled = false;
+
+        // 🔒 No permitir subir si la fila de arriba tiene class "no-edit"
+        if (index > 0) {
+            let filaAnterior = filas[index - 1];
+            if (filaAnterior.classList.contains('no-edit')) {
+                if (btnUp) btnUp.disabled = true;
+            }
+        }
+    });
+
+    // 🚫 Primera fila no puede subir
+    if (filas.length > 0) {
+        let primeraUp = filas[0].querySelector('.btn-up');
+        if (primeraUp) primeraUp.disabled = true;
+    }
+
+    // 🚫 Última fila no puede bajar
+    if (filas.length > 0) {
+        let ultimaDown = filas[filas.length - 1].querySelector('.btn-down');
+        if (ultimaDown) ultimaDown.disabled = true;
+    }
+}
+
+function renumerarFilas(tbody) {
+    Array.from(tbody.rows).forEach((row, index) => {
+        row.cells[0].innerText = index + 1;
+    });
+}
+
+function moverFila(fila, direccion) {
+    if (direccion === 'up' && fila.previousElementSibling) {
+        fila.parentNode.insertBefore(fila, fila.previousElementSibling);
+    }
+
+    if (direccion === 'down' && fila.nextElementSibling) {
+        fila.parentNode.insertBefore(fila.nextElementSibling, fila);
+    }
 }

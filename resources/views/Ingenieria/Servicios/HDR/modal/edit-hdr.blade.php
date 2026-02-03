@@ -73,6 +73,7 @@
                                     <th class='text-center' style="color:#fff;">Operación</th>
                                     <th class='text-center' style="color:#fff;">Asignado</th>
                                     <th class='text-center' style="color:#fff;">Máquina</th>
+                                    <th class='text-center' style="color:#fff;">Horas Estimada</th>
                                     <th class='text-center' style="color:#fff;">Acciones</th>
                                   </tr>
                                 </thead>

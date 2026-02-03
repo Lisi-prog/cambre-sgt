@@ -106,84 +106,121 @@
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('demo')">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
                         <div class="row" id="demo" hidden>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                @foreach ($flt_proyectos as $proyecto)
-                                                    <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$proyecto}}" checked> {{$proyecto}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
-                                                @foreach ($flt_operaciones as $operacion)
-                                                    <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @role('SUPERVISOR')
+                            <div class="row">
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="row">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column" style="height: 200px;">
                                                 <div class="">
-                                                    <label>Maquina:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                                    <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
-                                                    @foreach ($flt_maquinas as $maquina)
-                                                        <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
+                                                    @foreach ($flt_proyectos as $proyecto)
+                                                        <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$proyecto}}" checked> {{$proyecto}}</label>
                                                     @endforeach
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endrole
-                            
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="row">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                <div class="">
+                                                    <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
+                                                </div>
+                                                <div class="d-flex flex-column overflow-auto">
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
+                                                    @if (empty($flt_operaciones_tec))
+                                                        @foreach ($flt_operaciones as $operacion)
+                                                            <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
+                                                        @endforeach
+                                                    @else
+                                                        @foreach ($flt_operaciones as $operacion)
+                                                            <label><input name="sup" type="checkbox" value="{{$operacion}}" {{in_array($operacion, $flt_operaciones_tec->toArray()) ? 'checked' : ''}}> {{$operacion}}</label>
+                                                        @endforeach
+                                                    @endif
+                                                    {{-- @foreach ($flt_operaciones as $operacion)
+                                                        <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
+                                                    @endforeach --}}
+                                                    {{-- @foreach ($operaciones as $operacion)
+                                                        <label><input name="sup" type="checkbox" value="{{$operacion->nombre_operacion}}" {{in_array($operacion->nombre_operacion, $flt_operaciones) ? 'checked' : ''}}> {{$operacion->nombre_operacion}}</label>
+                                                    @endforeach --}}
+                                                </div>
                                             </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
-                                                @foreach ($flt_estados as $estado)
-                                                     <label><input name="est" type="checkbox" value="{{$estado}}" {{$estado != 'Completo' && $estado != 'Descartar'  ? 'checked' : ''}}> {{$estado}}</label>
-                                                @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                @role('SUPERVISOR')
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Maquina:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
+                                                        @foreach ($flt_maquinas as $maquina)
+                                                            <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endrole
+                                
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="row">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                <div class="">
+                                                    <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
+                                                </div>
+                                                <div class="d-flex flex-column overflow-auto">
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
+                                                    @foreach ($flt_estados as $estado)
+                                                        <label><input name="est" type="checkbox" value="{{$estado}}" {{$estado != 'Completo' && $estado != 'Descartar'  ? 'checked' : ''}}> {{$estado}}</label>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="row">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                <div class="">
+                                                    <label>Asignados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('asig', this)">
+                                                </div>
+                                                <div class="d-flex flex-column overflow-auto">
+                                                    <label style="font-style: italic"><input name="filter" type="checkbox" value="asig"> (Seleccionar todo)</label>
+                                                    @role('TECNICO') 
+                                                        <label><input name="asig" type="checkbox" value="-" checked> -</label>
+                                                    @endrole
+                                                    @foreach ($flt_tecnicos as $tec)
+                                                        @role('TECNICO') 
+                                                            @if (Auth::user()->getEmpleado->nombre_empleado === $tec->nombre_empleado)
+                                                                <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}" checked> {{$tec->nombre_empleado}}</label>
+                                                            @else
+                                                                <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
+                                                            @endif
+                                                        @else
+                                                            <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
+                                                        @endrole
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                @role('TECNICO') 
-                                    <div class="row" hidden>
-                                @else
-                                    <div class="row">
-                                @endrole
-                                
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <div class="d-flex flex-row align-items-start justify-content-around">
                                         <div class="card-body d-flex flex-column">
                                             {!! Form::label('Opciones:') !!}
@@ -195,6 +232,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-outline-secondary m-1 rounded"
+                                            onclick="resetFilters()">
+                                        Restablecer filtros
+                                    </button>
                                 </div>
                             </div>
                         </div>   
@@ -229,25 +274,27 @@
                                 {!! $ordenes->links() !!}
                             </div>
                         @endif --}}
+                        @include('layouts.loanding')
                         <div class="table-responsive">
                             <table class="table table-sm table-hover mt-2" id="example">
                                 <thead id="encabezado_ordenes">
-                                    <th class='text-center' style="color:#fff;min-width:2vw" hidden id="enc_sel"></th>
-                                    <th class='text-center' style="color:#fff;min-width:2vw">Prio. Operacion</th>
-                                    <th class='text-center' style="color:#fff;min-width:2vw">Prio. Global</th>
-                                    <th class='text-center' style="color:#fff; width:13vw">Proyecto</th>
+                                    <th class='text-center' style="color:#fff;max-width:2vw;" hidden id="enc_sel"></th>
+                                    <th class='text-center' style="color:#fff;max-width:3vw;">Prio. Operacion</th>
+                                    <th class='text-center' style="color:#fff;max-width:2vw;">Prio. Global</th>
+                                    <th class='text-center' style="color:#fff;max-width:8vw;">Proyecto</th>
                                     <th class='text-center' style="color:#fff;" hidden>Proyecto</th>
-                                    <th class='text-center' style="color:#fff;min-width:14vw">Orden</th>
-                                    <th class='text-center' style="color:#fff;min-width:10vw">Operacion</th>
-                                    <th class='text-center' style="color:#fff;min-width:10vw">Maquina</th>
-                                    <th class='text-center' style="color:#fff;min-width:4vw">Estado</th>
-                                    <th class='text-center' style="color:#fff;min-width:6vw">Ultimo res.</th>
+                                    <th class='text-center' style="color:#fff;max-width:6vw;">Orden</th>
+                                    <th class='text-center' style="color:#fff;max-width:6vw;">Operacion</th>
+                                    <th class='text-center' style="color:#fff;max-width:10vw;">Maquina</th>
+                                    <th class='text-center' style="color:#fff;max-width:4vw;">Estado</th>
+                                    <th class='text-center' style="color:#fff;max-width:6vw;">Ultimo res.</th>
+                                    <th class='text-center' style="color:#fff;max-width:6vw;">Asignado</th>
                                     <th class='text-center' style="color:#fff;">Horas</th>
-                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th> --}}
-                                    {{-- <th class='text-center' style="color:#fff;min-width:5vw">Fecha finalizacion</th> --}}
-                                    <th class='text-center' style="color:#fff;min-width:5vw">Activo</th>
-                                    <th class='text-center' style="color:#fff;min-width:3vw">Cantidad</th>
-                                    <th class='text-center' style="color: #fff; width:10%">Acciones</th>
+                                    {{-- <th class='text-center' style="color:#fff;max-width:5vw">Fecha limite</th> --}}
+                                    {{-- <th class='text-center' style="color:#fff;max-width:5vw">Fecha finalizacion</th> --}}
+                                    <th class='text-center' style="color:#fff;max-width:5vw;">Activo</th>
+                                    <th class='text-center' style="color:#fff;max-width:3vw;">Cantidad</th>
+                                    <th class='text-center' style="color: #fff;max-width:7vw;">Acciones</th>
                                 </thead>
                                 
                                 <tbody id="accordion">
@@ -263,9 +310,9 @@
                                                 </div>
                                             </td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad ?? 'S/P'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" data-order="{{$ope->prioridad ?? 999}}">{{$ope->prioridad ?? 'S/P'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$ope->prioridad_servicio ?? 'S/P'}}</td>
+                                            <td class='text-center' style="vertical-align: middle;" data-order="{{$ope->prioridad_servicio ?? 999}}">{{$ope->prioridad_servicio ?? 'S/P'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;"><abbr title="{{$ope->nombre_servicio ?? '-'}}" style="text-decoration:none; font-variant: none;">{{$ope->codigo_servicio ?? '-'}} <i class="fas fa-eye"></i></abbr></td>
                                             
@@ -282,6 +329,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->nombre_estado_hdr ?? '-'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->ultimo_res ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$ope->tecnico_asignado ?? '-'}}</td>
                                             
                                             <td class='text-center' style="vertical-align: middle;">{{$ope->total_horas ?? '-'}}</td>
 
@@ -317,43 +366,41 @@
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                        
+                                                        @role('SUPERVISOR') 
                                                         @if ($ope->getHdr)
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $ope->getHdr->getOrdMec->id_orden], 'style' => 'display:inline', 'target' => '_blank']) !!}
+                                                                        {!! Form::text('vieneDesde', 3, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                         {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        
-{{--
-                                                        @if ($tipo_orden === 3)
-                                                            <div class="row my-2">
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        
+                                                        @endrole
+                                                        @if ($ope->getHdr)
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Partes
+                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verHdrOpe" onclick="cargarHdrVer({{$ope->getHdr->id_hoja_de_ruta}})">
+                                                                    Ver HDR
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                        @endif
+                                                        @role('SUPERVISOR')
                                                         <div class="row my-2">
-                                                            @can('EDITAR-ORDENES')
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
-                                                                    Editar
-                                                                </button> 
+                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                @if ($ope->id_estado_hdr != 1 )
+                                                                    <button type="button" class="btn btn-warning" onclick="crearParteOpeEspera({{$ope->id_ope_de_hdr}})">Espera</button>
+                                                                @endif
+
+                                                                @if ($ope->id_estado_hdr != 2 )
+                                                                <button type="button" class="btn btn-info" onclick="crearParteOpeEnProceso({{$ope->id_ope_de_hdr}})">En proceso</button>
+                                                                @endif
                                                             </div>
-                                                            @endcan
-                                                        </div> --}}
+                                                        </div>
+                                                        @endrole
                                                     </div> 
                                                 </div>
                                             </td>
@@ -391,6 +438,7 @@
 
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-carga-multiple')
+@include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-hdr')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 {{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
@@ -401,6 +449,63 @@
 </script>
 
 <script>
+    function loadFilters() {
+        let saved = localStorage.getItem('dt_filters_example');
+        if (!saved) return;
+
+        let filters = JSON.parse(saved);
+
+        $('input[type=checkbox]').each(function () {
+            let key = this.name + '_' + this.value;
+            if (filters.hasOwnProperty(key)) {
+                this.checked = filters[key];
+            }
+        });
+    }
+    function saveFilters() {
+        let filters = {};
+
+        $('input[type=checkbox]').each(function () {
+            filters[this.name + '_' + this.value] = this.checked;
+        });
+
+        localStorage.setItem('dt_filters_example', JSON.stringify(filters));
+    }
+
+    function saveDefaultFilters() {
+        if (localStorage.getItem('dt_filters_example_default')) return;
+
+        let defaults = {};
+        $('input[type=checkbox]').each(function () {
+            defaults[this.name + '_' + this.value] = this.checked;
+        });
+
+        localStorage.setItem(
+            'dt_filters_example_default',
+            JSON.stringify(defaults)
+        );
+    }
+    function resetFilters() {
+        let defaults = localStorage.getItem('dt_filters_example_default');
+        if (!defaults) return;
+
+        defaults = JSON.parse(defaults);
+
+        $('input[type=checkbox]').each(function () {
+            let key = this.name + '_' + this.value;
+            if (defaults.hasOwnProperty(key)) {
+                this.checked = defaults[key];
+            }
+        });
+
+        // Borra filtros actuales
+        localStorage.removeItem('dt_filters_example');
+
+        // Redibuja la tabla
+        table.search('').columns().search('');
+        table.draw();
+    }
+
     function mostrarFiltro(id){
         let cuadro_filtro = document.getElementById(id);
         if ($('#'+id).is(":hidden")) {
@@ -535,6 +640,7 @@
     let b;
     
     var table;
+    $("#loading").show();
     $(document).ready( function () {
         
         var url = '{{url('/')}}';
@@ -557,7 +663,8 @@
                 console.log(error);
             }
         }));
-        
+        saveDefaultFilters();
+        loadFilters();
         // let tipo_orden = window.location.pathname.substring(9, 10);
         // modificarFormularioConArgumentos(tipo_orden, 'formulario-editar-orden', true);
         // document.getElementById('encabezado_ordenes').style.backgroundColor = colorEncabezadoPorTipoDeOrden(tipo_orden);
@@ -648,13 +755,37 @@
                   if (offices.length === 0) {
                 return true;
             }
-          if (offices.indexOf(searchData[11]) !== -1) {
+          if (offices.indexOf(searchData[12]) !== -1) {
                 return true;
             }
          
             return false;
             }
         );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+                  var offices = $('input:checkbox[name="asig"]:checked').map(function() {
+                return this.value;
+            }).get();
+                  if (offices.length === 0) {
+                return true;
+            }
+          if (offices.indexOf(searchData[10]) !== -1) {
+                return true;
+            }
+         
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.order['custom-prioridad'] = function  ( settings, col ) {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                var val = $(td).text();
+                if (val === 'S/P') return 999;   // empuja S/P al final
+                return parseInt(val) || 0;       // números normales
+            });
+        };
 
     table = $('#example').DataTable({
             language: {
@@ -671,11 +802,16 @@
                         next: 'Sig.',
                     },
                 },
-                order: [[ 1, 'asc' ], [2, 'asc']],
+                columnDefs: [
+                    { targets: 1 }, // Prio. Operacion
+                    { targets: 2 }  // Prio. Global
+                ],
+                // order: [[ 1, 'asc' ], [2, 'asc']],
                 "pageLength": 100
         });
         
     $('input:checkbox').on('change', function () {
+        saveFilters();
         table.draw();
     });
     
@@ -825,6 +961,7 @@
             });
             actRow();
     });
+    $("#loading").hide();
     } );
 
     $(".edit-multi-ope").on('submit', function(evt){
@@ -943,6 +1080,7 @@
                             <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
                             <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
                             <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
+                            <td class="text-center" style="vertical-align: middle;">`+element.horas_maquina+`</td>
                             <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                             <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
                             <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
@@ -1042,15 +1180,113 @@
             }
         });
     }
+
+    function cargarHdrVer(id){
+        let html = '';
+        $.ajax({
+            type: "post",
+            url: '/orden/mec/hdr/obtener-hdr/'+id,
+            data: { id: id },
+            success: function (response) {
+                // console.log(response);
+                document.getElementById('m_ver_ubi').value = response.ubicacion;
+                document.getElementById('m_ver_cant').value = response.cantidad;
+                document.getElementById('m_ver_fec_carga').value = response.fecha_requerida;
+                document.getElementById('m_ver_ruta').value = response.ruta;
+                document.getElementById('m_ver-obser').value = response.observaciones;
+                document.getElementById('m_ver_id_pieza').value = response.nombre_orden;
+                document.getElementById('m_ver_confec').value = response.supervisor;
+
+                if (response.obser_fallo) {
+                    document.getElementById('obser-fallo').hidden = false;
+                }
+
+                document.getElementById('ver-table-body').innerHTML = '';
+                response.operaciones.forEach(function (op){
+                    html += `<tr>
+                            <td class="text-center">`+op.numero+`</td>
+                            <td class="text-center">`+op.operacion+`</td>
+                            <td class="text-center">`+op.asignado+`</td>
+                            <td class="text-center">`+op.maquina ?? '-'+`</td>
+                        </tr>`
+                });
+                document.getElementById('ver-table-body').innerHTML = html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function actualizarRowOpePorId(id){
+        let id_ope = [id];
+
+        $.ajax({
+            type: "post",
+            url: '/orden/obtener-info-ope-mul-act',
+            data: {
+                id: id_ope,
+            },
+            success: function (response) {
+                response.forEach(e => {
+                    let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
+                    let rowIndex = table.row(fila).index();
+
+                    table.cell(rowIndex, 1).data(e.prioridad ?? 'S/P').draw();
+                    table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
+
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOpeEspera(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN ESPERA?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/operacion/crear-parte-espera',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+            },
+            complete: function(){
+                actualizarRowOpePorId(id);
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function crearParteOpeEnProceso(id){
+        if (!confirm("¿Estás seguro que querés crear el parte con estado EN PROCESO?")) {
+            return; // no hace nada
+        }
+        $.ajax({
+            type: "post",
+            url: '/operacion/crear-parte-en-proceso',
+            data: {
+                id: id,
+            },
+            success: function (res) {
+                console.log(res);
+            },
+            complete: function(){
+                actualizarRowOpePorId(id);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 </script>
-{{-- <script>
-    const toggleButton = document.getElementById('toggleMenu');
-    const sideMenu = document.getElementById('sideMenu');
-
-    toggleButton.addEventListener('click', () => {
-      sideMenu.classList.toggle('show');
-    });
-</script> --}}
-
 
 @endsection

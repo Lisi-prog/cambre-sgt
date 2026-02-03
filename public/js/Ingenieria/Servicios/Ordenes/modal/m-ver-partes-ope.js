@@ -12,13 +12,16 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     response.forEach(e => {
+                        console.log(response)
                         let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
                         let rowIndex = table.row(fila).index();
 
-                        table.cell(rowIndex, 1).data(e.prioridad ?? 'S/P').draw();
-                        table.cell(rowIndex, 8).data(e.nombre_estado_hdr).draw();
+                        table.cell(rowIndex, 1).data(e.prioridad ?? 'S/P');
+                        table.cell(rowIndex, 8).data(e.nombre_estado_hdr);
 
                     });
+                    // table.draw(false);
+                    changeTdColor();
                 },
                 error: function (error) {
                     console.log(error);
@@ -26,6 +29,7 @@ $(document).ready(function () {
             });
     })
 
+    
     $(".nuevo-editar-parte").on('submit', function(evt){
         evt.preventDefault();     
         var url_php = $(this).attr("action"); 
@@ -177,6 +181,7 @@ function actualizarPartesOpe(id){
                         <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
                         <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
                         <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
+                        <td class="text-center" style="vertical-align: middle;">`+element.horas_maquina+`</td>
                         <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
                         <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
                         <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>

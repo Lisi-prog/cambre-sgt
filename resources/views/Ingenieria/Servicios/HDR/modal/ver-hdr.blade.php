@@ -84,13 +84,14 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('ope', 'Operaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <table class="table table-striped mt-2" id="verEditableTable">
+                            <table class="table table-striped mt-2 table-sm" id="verEditableTable">
                                 <thead>
                                   <tr>
                                     <th class='text-center' style="color:#fff;">N°</th>
                                     <th class='text-center' style="color:#fff;">Operación</th>
                                     <th class='text-center' style="color:#fff;">Asignado</th>
                                     <th class='text-center' style="color:#fff;">Máquina</th>
+                                    <th class='text-center' style="color:#fff;">Retrabajo</th>
                                   </tr>
                                 </thead>
                                 <tbody id="ver-table-body">
@@ -121,6 +122,22 @@
                                 'id' => 'm_ver_ruta',
                                 'readonly'
                             ]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                        <div class="form-group">
+                            {!! Form::label('ope', 'Ruta CAM:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <table class="table table-striped table-sm mt-2" id="verRutaCam">
+                                <thead>
+                                  <tr>
+                                    <th class='text-center' style="color:#fff;">Ruta CAM</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="ver-table-body-ruta-cam">
+                                </tbody>
+                            </table>                       
                         </div>
                     </div>
                 </div>

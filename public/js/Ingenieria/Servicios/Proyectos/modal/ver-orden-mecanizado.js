@@ -1,10 +1,16 @@
 export default 
 `<div class="row"> 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"> 
         <div class="form-group"> 
             <label for="nom_orden" class="control-label" style="white-space: nowrap; ">ID-PIEZA:</label> 
             <span class="obligatorio">*</span> 
             <input class="form-control" name="nom_orden" type="text" id="input-nom_orden" readonly> 
+        </div> 
+    </div>
+    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"> 
+        <div class="form-group"> 
+            <label for="nom_orden" class="control-label" style="white-space: nowrap; ">ID:</label> 
+            <input class="form-control" name="id_nom_orden" type="text" id="input-id_nom_orden" readonly> 
         </div> 
     </div> 
 </div> 

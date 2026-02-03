@@ -553,3 +553,81 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION TotalHorasRealHojaDeRuta(hdr INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(p.horas)), 0)
+    INTO total_segundos
+    FROM 
+        parte_ope_hdr p
+    WHERE 
+        p.id_ope_de_hdr in (select o.id_ope_de_hdr from operaciones_de_hdr o where o.id_hoja_de_ruta = hdr);
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END$$
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION TotalHorasEstimadasHojaDeRuta(hdr INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(o.horas_estimada)), 0)
+    INTO total_segundos
+    FROM 
+        operaciones_de_hdr o
+    WHERE 
+        o.id_hoja_de_ruta = hdr;
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END//
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION TotalHorasRealOrdMecHdr(ord_mec INT)
+RETURNS VARCHAR(10)
+DETERMINISTIC
+BEGIN
+    DECLARE total_segundos INT;
+    DECLARE resultado VARCHAR(10);
+    
+    -- Sumar los segundos totales
+    SELECT 
+        COALESCE(SUM(TIME_TO_SEC(p.horas)), 0)
+    INTO total_segundos
+    FROM 
+        parte_ope_hdr p
+    WHERE 
+        p.id_ope_de_hdr in (select o.id_ope_de_hdr from operaciones_de_hdr o where o.id_hoja_de_ruta in (select hdr.id_hoja_de_ruta from hoja_de_ruta hdr where id_orden_mecanizado = ord_mec));
+    
+    -- Calcular manualmente horas y minutos
+    SET resultado = CONCAT(FLOOR(total_segundos / 3600), ':', LPAD(FLOOR((total_segundos % 3600) / 60), 2, '0'));
+    
+    RETURN resultado;
+END$$
+
+DELIMITER ;

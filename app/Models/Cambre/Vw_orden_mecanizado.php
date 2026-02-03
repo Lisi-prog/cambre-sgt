@@ -31,6 +31,7 @@ class Vw_orden_mecanizado extends Model
         'id_empleado_responsable',
         'supervisor',
         'id_empleado_supervisor',
+        'id_estado_mecanizado',
         'nombre_estado',
         'total_horas',
         'ope_act',
@@ -39,7 +40,8 @@ class Vw_orden_mecanizado extends Model
         'manufactura',
         'id_orden_manufactura',
         'total_ope',
-        'total_ope_completo'
+        'total_ope_completo',
+        'total_horas_hdr'
     ];
 
     protected $casts = [

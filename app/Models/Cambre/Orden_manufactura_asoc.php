@@ -14,7 +14,7 @@ class Orden_manufactura_asoc extends Model
     
     protected $table = 'orden_manufactura_asoc';
 
-    // protected $primaryKey = 'id_orden_manufactura';
+    protected $primaryKey = 'id_orden_manufactura';
 
     public $incrementing = true;
 

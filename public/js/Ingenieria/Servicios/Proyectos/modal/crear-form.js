@@ -305,6 +305,7 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
     let input_ruta_plano = document.getElementById('ruta_plano_edit');
     let input_cantidad = document.getElementById('cantidad_edit');
     let observaciones = document.getElementById('observaciones_edit');
+    let idOrdManAsoc = null;
     $.when($.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id_orden, 
@@ -334,7 +335,7 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
             input_revision ? input_revision.value = element.revision : '';
             input_ruta_plano ? input_ruta_plano.value = element.ruta_plano: '';
             input_cantidad ? input_cantidad.value = element.cantidad : '';
-            
+            cargarOrdMan(element.id_orden_manufactura_asoc, element.id_orden_manufactura);
         });
         
     },
@@ -393,6 +394,7 @@ function cargarModalVerOrdenTrabajo(id_orden){
 }
 
 function cargarModalVerOrdenManufactura(id_orden){
+    let input_id_orden = document.getElementById("input-id_nom_orden")
     let input_nombre = document.getElementById("input-nom_orden");
     let input_revision = document.getElementById("input-revision");
     let input_cantidad = document.getElementById("input-cantidad");
@@ -420,6 +422,7 @@ function cargarModalVerOrdenManufactura(id_orden){
     success: function (response) {
         response.forEach(element => {
             // console.log(element.cantidad);
+            input_id_orden.value = id_orden;
             input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;
@@ -446,6 +449,7 @@ function cargarModalVerOrdenManufactura(id_orden){
 }
 
 function cargarModalVerOrdenMecanizado(id_orden){
+    let input_id_orden = document.getElementById("input-id_nom_orden")
     let input_nombre = document.getElementById("input-nom_orden");
     let input_revision = document.getElementById("input-revision");
     let input_cantidad = document.getElementById("input-cantidad");
@@ -471,6 +475,7 @@ function cargarModalVerOrdenMecanizado(id_orden){
         },
     success: function (response) {
         response.forEach(element => {
+            input_id_orden.value = id_orden;
             input_nombre.value = element.orden;
             input_revision.value = element.revision;
             input_cantidad.value = element.cantidad;
@@ -941,14 +946,13 @@ function mostrarOcultarFechaRequerida(){
 function  cargarOrdMecyOrdTra(){
     let cbxOrdMec = document.getElementById('ord-mec-asoc');
     let cbxOrdTra = document.getElementById('ord-tra-asoc');
-    let htmlOrdTra = '';
-    let htmlOrdMec = '';
+    let htmlOrdTra = '<option value="">Seleccionar..</option>';
+    let htmlOrdMec = '<option value="">Seleccionar..</option>';
     let id = document.getElementById('id-servicio-dat').value;
     $.ajax({
         type: "post",
         url: '/servicio/'+id+'/obtener-ord-tra-mec', 
         success: function (response) {
-            console.log(response)
 
             response.ord_mec.forEach(element => {             
                 htmlOrdMec  += `
@@ -971,7 +975,7 @@ function  cargarOrdMecyOrdTra(){
     });
 }
 
-function cargarOrdMan(){
+function cargarOrdMan(idOrdManAsoc, idOrdMan){
     let cbxOrdMan = document.getElementById('cbx_ord_man_asoc');
     let htmlOrdMan = '';
     let id = document.getElementById('id-servicio-dat').value;
@@ -986,6 +990,14 @@ function cargarOrdMan(){
             });
             
             cbxOrdMan.innerHTML += htmlOrdMan;
+
+            if (idOrdManAsoc) {
+                cbxOrdMan.value = idOrdManAsoc;
+            }
+
+            if (idOrdMan) {
+                cbxOrdMan.querySelector(`option[value="${idOrdMan}"]`).remove();
+            }
         },
         error: function (error) {
             console.log(error);
