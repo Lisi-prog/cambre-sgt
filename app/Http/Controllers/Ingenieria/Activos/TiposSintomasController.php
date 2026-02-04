@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Cambre\Sintoma;
 use App\Models\Cambre\Tipo_sintoma;
+use App\Models\Cambre\Tipo_activo;
+use App\Models\Cambre\Tipo_activo_x_sintoma;
+
 
 class TiposSintomasController extends Controller
 {

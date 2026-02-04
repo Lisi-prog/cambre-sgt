@@ -12,10 +12,10 @@
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
-        {!! Form::model($ta, ['method' => 'PUT', 'route' => ['tipo_activo.update', $ta->id_tipo_activo], 'class' => '']) !!}
         <div class="row">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
                 <div class="card">
+                    {!! Form::model($ta, ['method' => 'PUT', 'route' => ['tipo_activo.update', $ta->id_tipo_activo], 'class' => '']) !!}
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -37,9 +37,7 @@
                                     (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                                 </div>
                                 <div class="p-1">
-                                    {{-- @can('CREAR-OBRAVIVIENDA') --}}
-                                        {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
-                                    {{-- @endcan --}}
+                                    {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="p-1">
@@ -53,14 +51,88 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
+                <div class="card">
+                    {{-- {!! Form::model($ta, ['method' => 'PUT', 'route' => ['tipo_activo.set_sintomas', $ta->id_tipo_activo], 'class' => '']) !!} --}}
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5>Síntomas</h5>      
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarSintomasModal">
+                                Agregar
+                            </button>                     
+                        </div>
+                        <div>
+                            <table id="tabla_sintomas" class="table table-striped">
+                                <thead>
+                                    <th class='text-center' style="color:#fff;">Síntoma</th>
+                                    <th class='text-center' style="color:#fff;">Tipo de Sintoma</th>
+                                    <th class='text-center' style="color:#fff;">Eliminar</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($ta->getSintomas as $sintoma)
+                                        <tr>
+                                            <td>{{$sintoma->getSintoma->nombre_sintoma}}</td>
+                                            <td>{{$sintoma->getSintoma->getTipoSintoma->nombre_tipo_sintoma}}</td>
+                                            <td class="text-center">
+                                                {!! Form::open([
+                                                    'method' => 'DELETE',
+                                                    'route' => ['tipo_activo.destroy_sintoma', [$sintoma->id_sintoma, $ta->id_tipo_activo]],
+                                                    'style' => 'display:inline'
+                                                ]) !!}
+                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                {!! Form::close() !!}
+                                            </td>
+                                        </tr>
+                                    @endforeach 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>                        
+                </div>
+            </div>
         </div>
     </div>
 </section>
+@include('Ingenieria.Activos.Tipo_activo.modal.editar-sintomas-tipo-activo')
 <script>
     $(document).ready(function () {
         var url = '{{route('activos.index')}}';
-        //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
+
+        $('#tabla_sintomas').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar:',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": []
+        });
+        $('#tabla_set_sintomas').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar:',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": []
+        });
     });
 </script>
 @endsection

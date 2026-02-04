@@ -36,12 +36,7 @@ class SintomasController extends Controller
             return redirect()->back()->with('error', 'Error al crear el síntoma: ' . $e->getMessage())->withInput();
         }
     }
-
-    public function show($id)
-    {
-        //
-    }   
-
+    
     public function edit($id)
     {
         $sintoma = Sintoma::findOrFail($id);

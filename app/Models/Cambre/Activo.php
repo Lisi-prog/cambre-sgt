@@ -48,4 +48,27 @@ class Activo extends Model
     public function getServicioActivo(){
         return Servicio::where('id_activo', $this->id_activo)->where('id_subtipo_servicio', 7)->first();
     }
+
+    public function getSintomas()
+    {
+        return $this->hasMany(Activo_x_sintoma::class,'id_activo','id_activo');
+    }
+
+    public function getSintomasSinUsar()
+    {
+        $sintomasUsadosIds = $this->getSintomas()->pluck('id_sintoma')->toArray();
+        $sintomasUsadosIds = array_merge($sintomasUsadosIds, $this->getTipoActivo->getSintomas()->pluck('id_sintoma')->toArray());
+
+        return Sintoma::whereNotIn('id_sintoma', $sintomasUsadosIds)->orderBy('nombre_sintoma', 'ASC')->get();
+    }
+
+    public function setSintomas($sintomasIds)
+    {
+        foreach ($sintomasIds as $id_sintoma) {
+            $tipo_activo_x_sintoma = new Activo_x_sintoma();
+            $tipo_activo_x_sintoma->id_activo = $this->id_activo;
+            $tipo_activo_x_sintoma->id_sintoma = $id_sintoma;
+            $tipo_activo_x_sintoma->save();
+        }
+    }
 }

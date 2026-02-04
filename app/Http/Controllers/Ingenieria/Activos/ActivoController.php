@@ -20,6 +20,8 @@ use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion_etapa;
+use App\Models\Cambre\Tipo_activo_x_sintoma;
+use App\Models\Cambre\Activo_x_sintoma;
 
 class ActivoController extends Controller
 {
@@ -316,10 +318,43 @@ class ActivoController extends Controller
         return redirect()->route('tipo_activo.index')->with('mensaje', 'El tipo activo editado exitosamente.');
     }
 
-    public function tipo_activo_destroy(){
+    public function tipo_activo_destroy($id){
         Tipo_activo::destroy($id);
 
         return redirect()->route('tipo_activo.index')->with('mensaje', 'El tipo activo se elimino exitosamente.'); 
     }
+
+    
+    public function set_sintomas_activo(Request $request){
+        $activo = Activo::findOrFail($request->input('id_activo'));
+        $activo->setSintomas($request->input('sintomas', []));
+        return redirect()->back()->with('mensaje','Síntomas asignados al activo exitosamente.');
+    }
+
+    public function destroy_sintoma_activo($id_sintoma, $id_activo){
+        $activo_x_sintoma = Activo_x_sintoma::where('id_sintoma', $id_sintoma)->where('id_activo', $id_activo)->first();
+        if ($activo_x_sintoma) {
+            $activo_x_sintoma->delete();
+        }
+        return redirect()->back()->with('mensaje','Síntoma eliminado del activo exitosamente.');
+    }
+
+    
+
+    public function set_sintomas_tipo_activo(Request $request){
+        $tipo_activo = Tipo_activo::findOrFail($request->input('id_tipo_activo'));
+        $tipo_activo->setSintomas($request->input('sintomas', []));
+        return redirect()->back()->with('mensaje','Síntomas asignados al tipo de activo exitosamente.');
+    }
+
+    public function destroy_sintoma_tipo_activo($id_sintoma, $id_tipo_activo){
+        $tipo_activo_x_sintoma = Tipo_activo_x_sintoma::where('id_sintoma', $id_sintoma)->where('id_tipo_activo', $id_tipo_activo)->first();
+        if ($tipo_activo_x_sintoma) {
+            $tipo_activo_x_sintoma->delete();
+        }
+        return redirect()->back()->with('mensaje','Síntoma eliminado del tipo de activo exitosamente.');
+    }
+
+
 
 }
