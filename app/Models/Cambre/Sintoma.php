@@ -26,4 +26,9 @@ class Sintoma extends Model
     {
         return $this->hasOne(Tipo_sintoma::class, 'id_tipo_sintoma', 'id_tipo_sintoma');
     }
+
+    public function getTipo()
+    {
+        return $this->belongsTo(Tipo_sintoma::class, 'id_sintoma');
+    }
 }

@@ -20,6 +20,7 @@ use App\Models\Cambre\Sol_servicio_de_ingenieria;
 use App\Models\Cambre\Sol_estado_solicitud;
 use App\Models\Cambre\Sol_solicitud;
 use App\Models\Cambre\Sol_archivo_solicitud;
+use App\Models\Cambre\Sol_servicio_de_mantenimiento;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Activo;
 use App\Models\Cambre\Empleado;
@@ -31,6 +32,10 @@ use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
 use App\Mail\Solicitud\SsiMailable;
 use App\Models\Cambre\Em_not_x_empleado;
+use App\Models\Cambre\Sintoma;
+use App\Models\Cambre\Tipo_sintoma;
+use App\Models\Cambre\Tipo_activo_x_sintoma;
+use App\Models\Cambre\Sol_serv_man_x_sintoma;
 
 class ServicioDeIngenieriaController extends Controller
 {
@@ -43,9 +48,31 @@ class ServicioDeIngenieriaController extends Controller
         //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
     }
     
-    public function index(Request $request)
+    public function index1(Request $request)
     {        
         $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
+        $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
+
+        $flt_users = $this->obtenerEmpleadosActivos();
+        $flt_sectores = Sector::orderBy('nombre_sector')->get();
+        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
+        $flt_estados = $this->estadosParaSolicitud();
+        $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
+        
+        return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos', 'flt_users', 'flt_sectores', 'flt_estados', 'flt_prioridades'));
+    }
+
+    public function index(Request $request)
+    {        
+        $idsSol = Sol_servicio_de_ingenieria::pluck('id_solicitud')->merge(
+                    Sol_servicio_de_mantenimiento::pluck('id_solicitud')
+                )
+                ->unique()
+                ->values();
+        // $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
+        // $listaSSI = Vw_sol_solicitud_ssi::get();
+        $listaSSI = Sol_solicitud::whereIn('id_solicitud', $idsSol)->orderBy('id_solicitud', 'desc')->get();
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
 
@@ -279,5 +306,4 @@ class ServicioDeIngenieriaController extends Controller
     {
                        
     }
-
 }

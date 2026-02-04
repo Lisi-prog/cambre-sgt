@@ -31,4 +31,9 @@ class Sol_serv_man_x_sintoma extends Model
     {
         return $this->hasOne(Sol_servicio_de_mantenimiento::class, 'id_servicio_de_mantenimiento', 'id_servicio_de_mantenimiento');
     }
+
+    public function getSolicitudMant()
+    {
+        return $this->belongsTo(Sol_servicio_de_mantenimiento::class, 'id_servicio_de_mantenimiento');
+    }
 }
