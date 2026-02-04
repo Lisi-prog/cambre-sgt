@@ -21,4 +21,9 @@ class Tipo_sintoma extends Model
     protected $fillable = [ 
         'nombre_tipo_sintoma',
     ];
+
+    public function getSintomas()
+    {
+        return $this->hasMany(Sintoma::class, 'id_tipo_sintoma');
+    }
 }
