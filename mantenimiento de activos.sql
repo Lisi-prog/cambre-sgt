@@ -54,8 +54,58 @@ CREATE TABLE `activo_x_sintoma` (
 	PRIMARY KEY (`id_activo_x_sintoma`) USING BTREE,
 	UNIQUE INDEX `id_activo_id_sintoma` (`id_activo`, `id_sintoma`) USING BTREE,
 	INDEX `FK_sintoma` (`id_sintoma`) USING BTREE,
-	CONSTRAINT `FK_activo` FOREIGN KEY (`id_activo_x_sintoma`) REFERENCES `activo` (`id_activo`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_activo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`) ON UPDATE NO ACTION ON DELETE NO ACTION,
 	CONSTRAINT `FK_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1
+;
+CREATE TABLE `parte_diagnostico` (
+	`id_parte_diagnostico` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_parte` INT(11) NOT NULL,
+	`id_estado` INT(11) NOT NULL,
+	`en_maquina` TINYINT(1) NOT NULL DEFAULT '0',
+	`en_banco` TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id_parte_diagnostico`) USING BTREE,
+	INDEX `FK_parte` (`id_parte`) USING BTREE,
+	CONSTRAINT `FK_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `ishikawa_categoria` (
+	`id_ishikawa_categoria` INT(11) NOT NULL AUTO_INCREMENT,
+	`codigo_categoria` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	`nombre_categoria` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	PRIMARY KEY (`id_ishikawa_categoria`) USING BTREE,
+	UNIQUE INDEX `codigo_categoria` (`codigo_categoria`) USING BTREE
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `ishikawa_causa` (
+	`id_ishikawa_causa` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_ishikawa_categoria` INT(11) NOT NULL,
+	`nombre_causa` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	`explicacion` VARCHAR(200) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	PRIMARY KEY (`id_ishikawa_causa`) USING BTREE,
+	INDEX `FK_ishikawa_categoria` (`id_ishikawa_categoria`) USING BTREE,
+	CONSTRAINT `FK_ishikawa_categoria` FOREIGN KEY (`id_ishikawa_categoria`) REFERENCES `ishikawa_categoria` (`id_ishikawa_categoria`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `parte_diag_x_causa` (
+	`id_parte_diag_x_causa` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_parte_diagnostico` INT(11) NOT NULL,
+	`id_ishikawa_causa` INT(11) NOT NULL,
+	PRIMARY KEY (`id_parte_diag_x_causa`) USING BTREE,
+	UNIQUE INDEX `id_parte_diagnostico_id_ishikawa_causa` (`id_parte_diagnostico`, `id_ishikawa_causa`) USING BTREE,
+	INDEX `FK_ishikawa_causa` (`id_ishikawa_causa`) USING BTREE,
+	CONSTRAINT `FK_ishikawa_causa` FOREIGN KEY (`id_ishikawa_causa`) REFERENCES `ishikawa_causa` (`id_ishikawa_causa`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_parte_diagnostico` FOREIGN KEY (`id_parte_diagnostico`) REFERENCES `parte_diagnostico` (`id_parte_diagnostico`) ON UPDATE NO ACTION ON DELETE RESTRICT
 )
 COLLATE='utf8mb4_uca1400_ai_ci'
 ENGINE=InnoDB

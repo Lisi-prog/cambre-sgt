@@ -324,7 +324,8 @@ class ActivoController extends Controller
         return redirect()->route('tipo_activo.index')->with('mensaje', 'El tipo activo se elimino exitosamente.'); 
     }
 
-    
+    //-- Gestión de síntomas --//
+
     public function set_sintomas_activo(Request $request){
         $activo = Activo::findOrFail($request->input('id_activo'));
         $activo->setSintomas($request->input('sintomas', []));
@@ -339,8 +340,6 @@ class ActivoController extends Controller
         return redirect()->back()->with('mensaje','Síntoma eliminado del activo exitosamente.');
     }
 
-    
-
     public function set_sintomas_tipo_activo(Request $request){
         $tipo_activo = Tipo_activo::findOrFail($request->input('id_tipo_activo'));
         $tipo_activo->setSintomas($request->input('sintomas', []));
@@ -354,7 +353,4 @@ class ActivoController extends Controller
         }
         return redirect()->back()->with('mensaje','Síntoma eliminado del tipo de activo exitosamente.');
     }
-
-
-
 }
