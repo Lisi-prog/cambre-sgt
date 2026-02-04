@@ -6,6 +6,8 @@ use App\Http\Controllers\Ingenieria\Activos\TiposSintomasController;
 use App\Http\Controllers\Ingenieria\Activos\ActivoController;
 use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController;
 use App\Http\Controllers\Ingenieria\Solicitud\SMA\MantenimientoDeActivoController;
+use App\Http\Controllers\Ingenieria\Activos\Ishikawa\IshikawaCategoriaController;
+use App\Http\Controllers\Ingenieria\Activos\Ishikawa\IshikawaCausaController;
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::put('tipo_activo/set_sintomas', [ActivoController::class, 'set_sintomas_tipo_activo'])->name('tipo_activo.set_sintomas');
@@ -14,6 +16,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::delete('activo/destroy_sintoma/{id_sintoma}/{id_activo}', [ActivoController::class, 'destroy_sintoma_activo'])->name('activo.destroy_sintoma');
     Route::resource('sintoma', SintomasController::class);
     Route::resource('tipo_sintoma', TiposSintomasController::class);
+    Route::resource('ishikawa_causa', IshikawaCausaController::class);
+    Route::resource('ishikawa_categoria', IshikawaCategoriaController::class);
 });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
