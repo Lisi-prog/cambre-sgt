@@ -1067,3 +1067,43 @@ CREATE TABLE `ishikawa_causa` (
 	PRIMARY KEY (`id_ishikawa_causa`),
 	CONSTRAINT `FK_ishikawa_categoria` FOREIGN KEY (`id_ishikawa_categoria`) REFERENCES `ishikawa_categoria` (`id_ishikawa_categoria`)
 );
+
+CREATE TABLE `tarea_ejecucion` (
+	`id_ejecucion` INT NOT NULL AUTO_INCREMENT,
+	`nombre_ejecucion` VARCHAR(200) NOT NULL,
+	PRIMARY KEY (`id_ejecucion`)
+);
+
+CREATE TABLE `zona_tarea` (
+	`id_zona_tarea` INT NOT NULL AUTO_INCREMENT,
+	`nombre_zona` VARCHAR(100) NOT NULL,
+	PRIMARY KEY (`id_zona_tarea`)
+);
+
+CREATE TABLE `tarea_mantenimiento` (
+	`id_tarea_mantenimiento` INT NOT NULL AUTO_INCREMENT,
+	`nombre_tarea` VARCHAR(200) NOT NULL,
+	`id_ejecucion` INT NOT NULL,
+	`id_zona_tarea` INT NOT NULL,
+	PRIMARY KEY (`id_tarea_mantenimiento`),
+	CONSTRAINT `FK_tm_x_ejecucion` FOREIGN KEY (`id_ejecucion`) REFERENCES `tarea_ejecucion` (`id_ejecucion`),
+	CONSTRAINT `FK_tm_x_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)
+);
+
+CREATE TABLE `activo_x_tarea_mant` (
+	`id_activo_x_tarea_mant` INT NOT NULL AUTO_INCREMENT,
+	`id_activo` INT NOT NULL,
+	`id_tarea_mantenimiento` INT NOT NULL,
+	PRIMARY KEY (`id_activo_x_tarea_mant`),
+	CONSTRAINT `FK_axt_activo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`),
+	CONSTRAINT `FK_axt_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`)
+);
+
+CREATE TABLE `tipo_activo_x_tarea_mant` (
+	`id_tipo_activo_x_tarea_mant` INT NOT NULL AUTO_INCREMENT,
+	`id_tipo_activo` INT NOT NULL,
+	`id_tarea_mantenimiento` INT NOT NULL,
+	PRIMARY KEY (`id_tipo_activo_x_tarea_mant`),
+	CONSTRAINT `FK_ta_x_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`),
+	CONSTRAINT `FK_ta_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
+);
