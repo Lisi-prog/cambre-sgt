@@ -189,15 +189,18 @@
                                 <div class="col-2">
                                     <div class="row">
                                         <div class="col-6">
+                                            {!! Form::open(['method' => 'GET', 'route' => ['sma.aceptar', $sma->getSolicitud->id_solicitud], 'style' => '']) !!}
+                                            {!! Form::submit('Aceptar', ['class' => 'btn btn-success', 'onclick' => "return confirm('¿Está seguro que desea ACEPTAR el servicio de mantenimiento?');"]) !!}
+                                            {!! Form::close() !!}
                                             {{-- {!! Form::submit('Aceptar', ['class' => 'btn btn-success']) !!} --}}
-                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearServicioModal">
+                                            {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearServicioModal">
                                                 Aceptar   
-                                            </button>
+                                            </button> --}}
                                             {{-- {!! Form::close() !!} --}}
                                         </div>
                                         <div class="col-6">
-                                            {!! Form::open(['method' => 'GET', 'route' => ['ssi.rechazar', $sma->getSolicitud->id_solicitud], 'style' => '']) !!}
-                                            {!! Form::submit('Rechazar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea RECHAZAR el servicio de ingenieria?');"]) !!}
+                                            {!! Form::open(['method' => 'GET', 'route' => ['sma.rechazar', $sma->getSolicitud->id_solicitud], 'style' => '']) !!}
+                                            {!! Form::submit('Rechazar', ['class' => 'btn btn-danger', 'onclick' => "return confirm('¿Está seguro que desea RECHAZAR el servicio de mantenimiento?');"]) !!}
                                             {!! Form::close() !!}
                                         </div>
                                     </div>

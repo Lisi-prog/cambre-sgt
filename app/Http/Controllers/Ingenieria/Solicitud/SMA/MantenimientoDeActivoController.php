@@ -26,10 +26,19 @@ use App\Models\Cambre\Activo;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Subtipo_servicio;
 use App\Models\Cambre\Servicio;
+use App\Models\Cambre\Servicio_info;
+use App\Models\Cambre\Etapa;
+use App\Models\Cambre\Actualizacion;
+use App\Models\Cambre\Actualizacion_servicio;
+use App\Models\Cambre\Actualizacion_etapa;
+use App\Models\Cambre\Orden;
+use App\Models\Cambre\Orden_mantenimiento;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
+use App\Models\Cambre\Rol_empleado;
+use App\Models\Cambre\Responsabilidad;
 use App\Mail\Solicitud\SsiMailable;
 use App\Models\Cambre\Em_not_x_empleado;
 use App\Models\Cambre\Sintoma;
@@ -227,16 +236,150 @@ class MantenimientoDeActivoController extends Controller
         $solicitud->id_estado_solicitud = 3;
         $solicitud->save();
 
-        try {
-            $nombre = $solicitud->getEmpleado->nombre_empleado;
-            $codigo = $solicitud->id_solicitud;
-            $email = strval($solicitud->getEmpleado->email_empleado);
-            Mail::to($email)->send(new SsiMailable($nombre, $codigo, 3));
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+        // try {
+        //     $nombre = $solicitud->getEmpleado->nombre_empleado;
+        //     $codigo = $solicitud->id_solicitud;
+        //     $email = strval($solicitud->getEmpleado->email_empleado);
+        //     Mail::to($email)->send(new SsiMailable($nombre, $codigo, 3));
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        // }
 
-        return redirect()->route('s_s_i.index')->with('mensaje', 'Solicitud de servicio de ingenieria rechazada con exito.');  
+        return redirect()->route('s_s_i.index')->with('mensaje', 'Solicitud de servicio de mantenimiento de activo rechazada con exito.');  
+    }
+
+    public function aceptar($id){
+
+        try {    
+            DB::beginTransaction();
+
+            $id_estado_solicitud = Sol_estado_solicitud::where('nombre_estado_solicitud', 'aceptado')->first()->id_estado_solicitud;
+
+            $solicitud = Sol_solicitud::find($id);
+
+            $solicitud->update([
+                'id_estado_solicitud' => $id_estado_solicitud
+            ]);
+
+            $id_servicio = $this->guardarServicioMantenimiento($solicitud);
+
+
+            $solicitud->update([
+                'id_servicio' => $id_servicio
+            ]);
+        
+            DB::commit();
+
+            return redirect()->route('servicio_mantenimiento.gestionar', $id_servicio)->with('mensaje', 'El servicio de mantenimiento se ha creado con exito.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al aceptar la solicitud de mantenimiento de activo: '.$e->getMessage());
+        } 
+    }
+
+    public function guardarServicioMantenimiento($solicitud){
+        $activo = $solicitud->getServicioDeMantenimiento->id_activo;
+
+        $codActivo = Activo::find($activo)->codigo_activo;
+
+        $numServ = 0001;
+
+        $codigo_proyecto = $codActivo.'-MAN-'.$numServ;
+
+        $nombre_proyecto = $codActivo.'-MAN-'.$numServ;
+
+        $lider = Auth::user()->getEmpleado->id_empleado;
+
+        $fecha_ini = Carbon::now()->format('Y-m-d');
+        $fecha_req = Carbon::now()->format('Y-m-d');
+        // $prioridad = $request->input('prioridad');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        if (1) {
+            $prioridadMax = null;
+        }else{
+            $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        }
+        
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
+
+        if (1) {
+            $estado = Estado::where('nombre_estado', 'En proceso')->first();
+        } else {
+            $estado = Estado::where('nombre_estado', 'espera')->first();
+        }
+        
+        $tipo_servicio = Subtipo_servicio::where('nombre_subtipo_servicio', 'Servicio de mantenimiento')->first()->id_subtipo_servicio;
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $lider,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+        
+        $proyecto = Servicio::create([
+            'codigo_servicio' => $codigo_proyecto,
+            'nombre_servicio' => $nombre_proyecto,
+            'id_subtipo_servicio' => $tipo_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'fecha_inicio' => $fecha_ini,
+            'prioridad_servicio' => $prioridadMax,
+            'id_activo' => $activo
+        ]);
+
+        Servicio_info::create([
+            'id_servicio' => $proyecto->id_servicio, 
+            'tot_ord' => 0,
+            'tot_ord_completa' => 0,
+            'progreso' => 0
+        ]);
+
+        $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $responsabilidad_act = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado_act->id_rol_empleado
+        ]);
+
+        $actualizacionServicio = Actualizacion::create([
+            'descripcion' => 'Creacion de servicio de mantenimiento.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad_act->id_responsabilidad
+        ]);
+
+        $actualizacion_servicio = Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
+            'id_servicio' => $proyecto->id_servicio
+        ]);
+
+        $etapa = Etapa::create([
+            'descripcion_etapa' => $nombre_proyecto,
+            'fecha_inicio' => $fecha_ini,
+            'id_servicio' => $proyecto->id_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacionEtapa = Actualizacion::create([
+            'descripcion' => 'Creacion de etapa.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacion_etapa = Actualizacion_etapa::create([
+            'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+            'id_etapa' => $etapa->id_etapa
+        ]);
+
+        return $proyecto->id_servicio;
+    }
+
+    public function gestionar($id){
+        $proyecto = Servicio::find($id);
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto'));
     }
 
     public function destroy($id)

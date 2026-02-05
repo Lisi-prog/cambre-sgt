@@ -1008,3 +1008,62 @@ DROP TABLE tipo_orden_mantenimiento;
 DROP TABLE tipo_orden_trabajo;
 DROP TABLE orden_gantt;
 DROP TABLE tipo_relacion_gantt;
+
+
+-- Modulo mantenimiento de activos
+CREATE TABLE `tipo_sintoma` (
+	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`nombre_tipo_sintoma` VARCHAR(150) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id_tipo_sintoma`)
+);
+
+CREATE TABLE `sintoma` (
+	`id_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`nombre_sintoma` VARCHAR(100) NOT NULL,
+	`id_tipo_sintoma` INT NOT NULL,
+	PRIMARY KEY (`id_sintoma`),
+	CONSTRAINT `FK_tipo_sintoma` FOREIGN KEY (`id_tipo_sintoma`) REFERENCES `tipo_sintoma` (`id_tipo_sintoma`)
+);
+
+CREATE TABLE `tipo_activo_x_sintoma` (
+	`id_tipo_activo_x_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`id_tipo_activo` INT NOT NULL,
+	`id_sintoma` INT NOT NULL,
+	PRIMARY KEY (`id_tipo_activo_x_sintoma`),
+	CONSTRAINT `FK_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`),
+	CONSTRAINT `FK_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
+);
+
+CREATE TABLE `sol_serv_man_x_sintoma` (
+	`id_sol_serv_man_x_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`id_servicio_de_mantenimiento` INT NOT NULL,
+	`id_sintoma` INT NOT NULL,
+	PRIMARY KEY (`id_sol_serv_man_x_sintoma`),
+	CONSTRAINT `FK_ssmxs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`),
+	CONSTRAINT `FK_sol_serv_man_x_sintoma_sol_servicio_de_mantenimiento` FOREIGN KEY (`id_servicio_de_mantenimiento`) REFERENCES `sol_servicio_de_mantenimiento` (`id_servicio_de_mantenimiento`)
+);
+
+CREATE TABLE `activo_x_sintoma` (
+	`id_activo_x_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`id_activo` INT NOT NULL,
+	`id_sintoma` INT NOT NULL,
+	PRIMARY KEY (`id_activo_x_sintoma`),
+	CONSTRAINT `FK_axs_x_activo` FOREIGN KEY (`id_activo_x_sintoma`) REFERENCES `activo` (`id_activo`),
+	CONSTRAINT `FK_axs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`)
+);
+
+CREATE TABLE `ishikawa_categoria` (
+	`id_ishikawa_categoria` INT NOT NULL AUTO_INCREMENT,
+	`codigo_categoria` VARCHAR(50) NOT NULL,
+	`nombre_categoria` VARCHAR(100) NOT NULL,
+	PRIMARY KEY (`id_ishikawa_categoria`)
+);
+
+CREATE TABLE `ishikawa_causa` (
+	`id_ishikawa_causa` INT NOT NULL AUTO_INCREMENT,
+	`id_ishikawa_categoria` INT NOT NULL,
+	`nombre_causa` VARCHAR(100) NOT NULL,
+	`explicacion` VARCHAR(200) NOT NULL,
+	PRIMARY KEY (`id_ishikawa_causa`),
+	CONSTRAINT `FK_ishikawa_categoria` FOREIGN KEY (`id_ishikawa_categoria`) REFERENCES `ishikawa_categoria` (`id_ishikawa_categoria`)
+);
