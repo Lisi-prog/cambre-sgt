@@ -10,7 +10,7 @@
         <div class="d-flex section-header justify-content-center">
             <div class="d-flex flex-row col-12">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-auto">
-                    <h4 class="">Gestionar Servicio de Mantenimiento</h5>
+                    <h4 class="">Gestionar Servicio de Mantenimiento - {{$proyecto->codigo_servicio}}</h5>
                 </div>
                 {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                 </div>
@@ -73,6 +73,12 @@
                                 </div>
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                {!! Form::label('activo', "Activo para mantenimiento:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                                {!! Form::text('activo', $proyecto->getActivo->codigo_activo.' - '.$proyecto->getActivo->nombre_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                            </div>
+                                        </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group">
                                                 {!! Form::label('sintoma', "Sintomas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
