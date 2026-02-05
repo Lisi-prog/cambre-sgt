@@ -8,6 +8,11 @@ use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController
 use App\Http\Controllers\Ingenieria\Solicitud\SMA\MantenimientoDeActivoController;
 use App\Http\Controllers\Ingenieria\Activos\Ishikawa\IshikawaCategoriaController;
 use App\Http\Controllers\Ingenieria\Activos\Ishikawa\IshikawaCausaController;
+use App\Http\Controllers\Ingenieria\Activos\Tarea\TareaEjecucionController;
+use App\Http\Controllers\Ingenieria\Activos\Tarea\TareaMantenimientoController;
+use App\Http\Controllers\Ingenieria\Activos\Tarea\ZonaTareaController;
+
+
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::put('tipo_activo/set_sintomas', [ActivoController::class, 'set_sintomas_tipo_activo'])->name('tipo_activo.set_sintomas');
@@ -18,6 +23,9 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('tipo_sintoma', TiposSintomasController::class);
     Route::resource('ishikawa_causa', IshikawaCausaController::class);
     Route::resource('ishikawa_categoria', IshikawaCategoriaController::class);
+    Route::resource('tarea_ejecucion', TareaEjecucionController::class);
+    Route::resource('tarea_mantenimiento', TareaMantenimientoController::class);
+    Route::resource('zona_tarea', ZonaTareaController::class);
 });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
