@@ -379,7 +379,8 @@ class MantenimientoDeActivoController extends Controller
 
     public function gestionar($id){
         $proyecto = Servicio::find($id);
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto'));
+        $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud'));
     }
 
     public function destroy($id)
