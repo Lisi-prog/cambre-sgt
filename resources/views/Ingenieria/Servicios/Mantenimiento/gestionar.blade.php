@@ -76,7 +76,7 @@
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group">
                                                 {!! Form::label('activo', "Activo para mantenimiento:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                                {!! Form::text('activo', $proyecto->getActivo->codigo_activo.' - '.$proyecto->getActivo->nombre_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                                {!! Form::text('activo', $proyecto->getActivo->codigo_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
