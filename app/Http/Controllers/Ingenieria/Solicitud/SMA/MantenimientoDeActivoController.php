@@ -282,9 +282,25 @@ class MantenimientoDeActivoController extends Controller
     public function guardarServicioMantenimiento($solicitud){
         $activo = $solicitud->getServicioDeMantenimiento->id_activo;
 
+        $existeServicioMant = Servicio::where('id_subtipo_servicio', 6)->where('id_activo', $solicitud->getServicioDeMantenimiento->id_activo)->orderBy('id_servicio', 'desc')->first();
+
+        if ($existeServicioMant) {
+            $ultNombre = $existeServicioMant->codigo_servicio;
+            // obtener los últimos 4 caracteres
+            $numeroNom = substr($ultNombre, -4);
+
+            // pasarlo a entero y sumar 1
+            $nuevoNumero = (int)$numeroNom + 1;
+
+            // volver a formatear a 4 dígitos
+            $numServ = str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+        } else {
+            $numServ = '0001';
+        }
+
         $codActivo = Activo::find($activo)->codigo_activo;
 
-        $numServ = 0001;
+        // $numServ = 0001;
 
         $codigo_proyecto = $codActivo.'-MAN-'.$numServ;
 
