@@ -24,4 +24,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('s_m_a', MantenimientoDeActivoController::class);
     Route::get('s_m_a/{id}/ver-evaluar', [MantenimientoDeActivoController::class, 'ssi_man_ver_evaluar'])->name('ssi_man.ver.evaluar');
     Route::post('s_m_a/{id}/cargar-causas', [MantenimientoDeActivoController::class, 'sma_obtener_causas']);
+    Route::get('s_m_a/rechazar/{id}', [MantenimientoDeActivoController::class, 'rechazar'])->name('sma.rechazar');
+    Route::get('s_m_a/aceptar/{id}', [MantenimientoDeActivoController::class, 'aceptar'])->name('sma.aceptar');
+    Route::get('s_m_a/gestionar/{id}', [MantenimientoDeActivoController::class, 'gestionar'])->name('servicio_mantenimiento.gestionar');
 });
