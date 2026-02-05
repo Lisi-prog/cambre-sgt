@@ -159,6 +159,9 @@
                                                 <td class= 'text-center' style="vertical-align: middle;">?</td>
                                                 <td class= 'text-center' style="vertical-align: middle;">?</td>
                                                 <td class= 'text-center' style="vertical-align: middle;">
+                                                    <button type="button" class="btn btn-primary" onclick="">
+                                                        <i class="fas fa-pen"></i>
+                                                    </button>
                                                     <button type="button" class="btn btn-warning" onclick="">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
