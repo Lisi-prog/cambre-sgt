@@ -89,6 +89,28 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        {!! Form::label('descrip', "Sintomas sobre Activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        <ul class="list-group">
+                                            @foreach ($Ssi->getSintomasAlt() as $grupo)
+                                                <li class="d-flex justify-content-between align-items-start">
+                                                    <div class="ms-2 me-auto">
+                                                        <div class="fw-bold">{{ $grupo['tipo'] }}</div>
+
+                                                        <ul class="mb-0">
+                                                            @foreach ($grupo['sintomas'] as $sintoma)
+                                                                <li>{{ $sintoma['nombre'] }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                             @if (sizeof($Ssi->getSolicitud->getArchivos) != 0 )
                             <div class="row">
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

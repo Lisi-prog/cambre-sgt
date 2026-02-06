@@ -38,4 +38,28 @@ class Sol_servicio_de_ingenieria extends Model
     {
         return $this->belongsTo(Activo::class, 'id_activo');
     }
+
+    public function getSintomasAlt(){
+        $idsSintomas = Sol_serv_ing_x_sintoma::where('id_servicio_de_ingenieria', $this->id_servicio_de_ingenieria)->pluck('id_sintoma');
+
+        $tipos = Tipo_sintoma::whereHas('getSintomas', function ($q) use ($idsSintomas) {
+            $q->whereIn('id_sintoma', $idsSintomas);
+        })
+        ->with(['getSintomas' => function ($q) use ($idsSintomas) {
+            $q->whereIn('id_sintoma', $idsSintomas);
+        }])
+        ->get();
+
+        return $tipos->mapWithKeys(function ($tipo) {
+            return [
+                $tipo->id_tipo_sintoma => [
+                    'tipo' => $tipo->nombre_tipo_sintoma,
+                    'sintomas' => $tipo->getSintomas->map(fn($s) => [
+                        'id' => $s->id_sintoma,
+                        'nombre' => ucfirst($s->nombre_sintoma)
+                    ])->values()
+                ]
+            ];
+        });
+    }
 }
