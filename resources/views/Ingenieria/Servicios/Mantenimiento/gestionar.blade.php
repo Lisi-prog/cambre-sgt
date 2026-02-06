@@ -83,7 +83,7 @@
                                             <div class="form-group">
                                                 {!! Form::label('sintoma', "Sintomas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 <div class="row">
-                                                    @foreach ($solicitud->getServicioDeMantenimiento->getSintomasAlt() as $grupo)
+                                                    @foreach ($solicitud->getServicioDeIngenieria->getSintomasAlt() as $grupo)
                                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                                             <li class="d-flex justify-content-between align-items-start">
                                                                 <div class="ms-2 me-auto">
