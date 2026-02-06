@@ -22,6 +22,8 @@ use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Tipo_activo_x_sintoma;
 use App\Models\Cambre\Activo_x_sintoma;
+use App\Models\Cambre\Activo_x_tarea_mant;
+use App\Models\Cambre\Tipo_activo_x_tarea_mant;
 
 class ActivoController extends Controller
 {
@@ -352,5 +354,35 @@ class ActivoController extends Controller
             $tipo_activo_x_sintoma->delete();
         }
         return redirect()->back()->with('mensaje','Síntoma eliminado del tipo de activo exitosamente.');
+    }
+
+    //-- Gestión de tareas de Mantenimiento --//
+
+    public function set_tareas_mantenimiento_activo(Request $request){
+        $activo = Activo::findOrFail($request->input('id_activo'));
+        $activo->setTareasMantenimiento($request->input('tareas_mantenimiento', []));
+        return redirect()->back()->with('mensaje','Tareas de mantenimiento asignadas al activo exitosamente.');
+    }
+
+    public function destroy_tarea_mantenimiento_activo($id_tarea_mant, $id_activo){
+        $activo_x_tarea_mant = Activo_x_tarea_mant::where('id_tarea_mantenimiento', $id_tarea_mant)->where('id_activo', $id_activo)->first();
+        if ($activo_x_tarea_mant) {
+            $activo_x_tarea_mant->delete();
+        }
+        return redirect()->back()->with('mensaje','Tarea de mantenimiento eliminada del activo exitosamente.');
+    }
+
+    public function set_tareas_mantenimiento_tipo_activo(Request $request){
+        $tipo_activo = Tipo_activo::findOrFail($request->input('id_tipo_activo'));
+        $tipo_activo->setTareasMantenimiento($request->input('tareas_mantenimiento', []));
+        return redirect()->back()->with('mensaje','Tareas de mantenimiento asignadas al tipo de activo exitosamente.');
+    }
+
+    public function destroy_tarea_mantenimiento_tipo_activo($id_tarea_mant, $id_tipo_activo){
+        $tipo_activo_x_tarea_mant = Tipo_activo_x_tarea_mant::where('id_tarea_mantenimiento', $id_tarea_mant)->where('id_tipo_activo', $id_tipo_activo)->first();
+        if ($tipo_activo_x_tarea_mant) {
+            $tipo_activo_x_tarea_mant->delete();
+        }
+        return redirect()->back()->with('mensaje','Tarea de mantenimiento eliminada del tipo de activo exitosamente.');
     }
 }

@@ -44,5 +44,25 @@ class Tipo_activo extends Model
         }
     }
 
+    public function getTareasMantenimiento(){    
+         return $this->hasMany(Tipo_activo_x_tarea_mant::class,'id_tipo_activo','id_tipo_activo');
+    }
+
+    public function getTareasMantenimientoSinUsar()
+    {
+        $tareasUsadasIds = $this->getTareasMantenimiento()->pluck('id_tarea_mantenimiento')->toArray();
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+    }
+
+    public function setTareasMantenimiento($tareasIds)
+    {
+        foreach ($tareasIds as $id_tarea_mant) {
+            $tipo_activo_x_tarea_mant = new Tipo_activo_x_tarea_mant();
+            $tipo_activo_x_tarea_mant->id_tipo_activo = $this->id_tipo_activo;
+            $tipo_activo_x_tarea_mant->id_tarea_mantenimiento = $id_tarea_mant;
+            $tipo_activo_x_tarea_mant->save();
+        }
+    }
 
 }

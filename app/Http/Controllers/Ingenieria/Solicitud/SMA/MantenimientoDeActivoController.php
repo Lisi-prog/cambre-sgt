@@ -48,7 +48,8 @@ use App\Models\Cambre\Sintoma;
 use App\Models\Cambre\Tipo_sintoma;
 use App\Models\Cambre\Tipo_activo_x_sintoma;
 use App\Models\Cambre\Sol_serv_man_x_sintoma;
-
+use App\Models\Cambre\Ishikawa_categoria;
+use App\Models\Cambre\Ishikawa_causa;
 class MantenimientoDeActivoController extends Controller
 {
     function __construct()
@@ -459,7 +460,9 @@ class MantenimientoDeActivoController extends Controller
     public function gestionar($id){
         $proyecto = Servicio::find($id);
         $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud'));
+        $ishikawa_categorias = Ishikawa_categoria::all();
+        $ishikawa_causas = Ishikawa_causa::all();
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas'));
     }
 
     public function destroy($id)

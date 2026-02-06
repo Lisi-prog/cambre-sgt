@@ -110,3 +110,59 @@ CREATE TABLE `parte_diag_x_causa` (
 COLLATE='utf8mb4_uca1400_ai_ci'
 ENGINE=InnoDB
 ;
+CREATE TABLE `tarea_ejecucion` (
+	`id_ejecucion` INT(11) NOT NULL AUTO_INCREMENT,
+	`nombre_ejecucion` VARCHAR(200) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	PRIMARY KEY (`id_ejecucion`) USING BTREE
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `zona_tarea` (
+	`id_zona_tarea` INT(11) NOT NULL AUTO_INCREMENT,
+	`nombre_zona` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	PRIMARY KEY (`id_zona_tarea`) USING BTREE
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `tarea_mantenimiento` (
+	`id_tarea_mantenimiento` INT(11) NOT NULL AUTO_INCREMENT,
+	`nombre_tarea` VARCHAR(200) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	`id_ejecucion` INT(11) NOT NULL,
+	`id_zona_tarea` INT(11) NOT NULL,
+	PRIMARY KEY (`id_tarea_mantenimiento`) USING BTREE,
+	INDEX `FK_ejecucion` (`id_ejecucion`) USING BTREE,
+	INDEX `FK_zona_tarea` (`id_zona_tarea`) USING BTREE,
+	CONSTRAINT `FK_ejecucion` FOREIGN KEY (`id_ejecucion`) REFERENCES `tarea_ejecucion` (`id_ejecucion`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `activo_x_tarea_mant` (
+	`id_activo_x_tarea_mant` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_activo` INT(11) NOT NULL,
+	`id_tarea_mantenimiento` INT(11) NOT NULL,
+	PRIMARY KEY (`id_activo_x_tarea_mant`) USING BTREE,
+	UNIQUE INDEX `id_activo_id_tarea_mantenimiento` (`id_activo`, `id_tarea_mantenimiento`) USING BTREE,
+	INDEX `FK_tarea_mantenimiento` (`id_tarea_mantenimiento`) USING BTREE,
+	CONSTRAINT `FK_activo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT `FK_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `tipo_activo_x_tarea_mant` (
+	`id_tipo_activo_x_tarea_mant` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_tipo_activo` INT(11) NOT NULL,
+	`id_tarea_mantenimiento` INT(11) NOT NULL,
+	PRIMARY KEY (`id_tipo_activo_x_tarea_mant`) USING BTREE,
+	UNIQUE INDEX `id_tipo_activo_id_tarea_mantenimiento` (`id_tipo_activo`, `id_tarea_mantenimiento`) USING BTREE,
+	INDEX `FK_tarea_mantenimiento` (`id_tarea_mantenimiento`) USING BTREE,
+	CONSTRAINT `FK_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
