@@ -21,7 +21,8 @@ class Sol_servicio_de_ingenieria extends Model
     protected $fillable = [ 
         'id_solicitud',
         'id_sector',
-        'id_activo'
+        'id_activo',
+        'id_servicio_requerido'
     ];
 
     public function getSolicitud()

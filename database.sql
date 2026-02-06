@@ -1011,6 +1011,10 @@ DROP TABLE tipo_relacion_gantt;
 
 
 -- Modulo mantenimiento de activos
+
+ALTER TABLE sol_servicio_de_ingenieria ADD id_servicio_requerido INT NULL;
+
+
 CREATE TABLE `tipo_sintoma` (
 	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,
 	`nombre_tipo_sintoma` VARCHAR(150) NOT NULL DEFAULT '',
