@@ -71,4 +71,26 @@ class Activo extends Model
             $tipo_activo_x_sintoma->save();
         }
     }
+
+    public function getTareasMantenimiento(){
+        return $this->hasMany(Activo_x_tarea_mant::class,'id_activo','id_activo');
+    }
+
+    public function getTareasMantenimientoSinUsar()
+    {
+        $tareasUsadasIds = $this->getTareasMantenimiento()->pluck('id_tarea_mantenimiento')->toArray();
+        $tareasUsadasIds = array_merge($tareasUsadasIds, $this->getTipoActivo->getTareasMantenimiento()->pluck('id_tarea_mantenimiento')->toArray());
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+    }
+
+    public function setTareasMantenimiento($tareasIds)
+    {
+        foreach ($tareasIds as $id_tarea_mant) {
+            $tipo_activo_x_tarea_mant = new Activo_x_tarea_mant();
+            $tipo_activo_x_tarea_mant->id_activo = $this->id_activo;
+            $tipo_activo_x_tarea_mant->id_tarea_mantenimiento = $id_tarea_mant;
+            $tipo_activo_x_tarea_mant->save();
+        }
+    }
 }

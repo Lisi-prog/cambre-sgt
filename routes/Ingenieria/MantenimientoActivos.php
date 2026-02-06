@@ -19,6 +19,10 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::delete('tipo_activo/destroy_sintoma/{id_sintoma}/{id_tipo_activo}', [ActivoController::class, 'destroy_sintoma_tipo_activo'])->name('tipo_activo.destroy_sintoma');
     Route::put('activo/set_sintomas', [ActivoController::class, 'set_sintomas_activo'])->name('activo.set_sintomas');
     Route::delete('activo/destroy_sintoma/{id_sintoma}/{id_activo}', [ActivoController::class, 'destroy_sintoma_activo'])->name('activo.destroy_sintoma');
+    Route::put('tipo_activo/set_tareas_mantenimiento', [ActivoController::class, 'set_tareas_mantenimiento_tipo_activo'])->name('tipo_activo.set_tareas_mantenimiento');
+    Route::delete('tipo_activo/destroy_tarea_mantenimiento/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_tipo_activo'])->name('tipo_activo.destroy_tarea_mantenimiento');
+    Route::put('activo/set_tareas_mantenimiento', [ActivoController::class, 'set_tareas_mantenimiento_activo'])->name('activo.set_tareas_mantenimiento');
+    Route::delete('activo/destroy_tarea_mantenimiento/{id_tarea_mant}/{id_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_activo'])->name('activo.destroy_tarea_mantenimiento');
     Route::resource('sintoma', SintomasController::class);
     Route::resource('tipo_sintoma', TiposSintomasController::class);
     Route::resource('ishikawa_causa', IshikawaCausaController::class);

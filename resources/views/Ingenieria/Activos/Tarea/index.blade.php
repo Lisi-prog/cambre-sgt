@@ -51,7 +51,7 @@
                                         <tr>
                                             <td class="text-center">{{ $tarea->id_tarea }}</td>
                                             <td class="text-center">{{ $tarea->nombre_tarea }}</td>
-                                            <td class="text-center">{{ $tarea->getZonaTarea->nombre_zona }}</td>
+                                            <td class="text-center">{{ $tarea->getZonaTareaTarea->nombre_zona }}</td>
                                             <td class="text-center">{{ $tarea->getEjecucion->nombre_ejecucion }}</td>
                                             <td class="text-center">
                                                 <div class="row justify-content-center">
