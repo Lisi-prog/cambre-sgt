@@ -83,4 +83,8 @@ class Parte extends Model
             return $this->hasOne(Parte_mantenimiento::class, 'id_parte');
         }
     }
+
+    public function getParteDiagnostico(){
+        return $this->hasOne(Parte_diagnostico::class, 'id_parte');
+    }
 }

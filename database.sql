@@ -1111,3 +1111,9 @@ CREATE TABLE `tipo_activo_x_tarea_mant` (
 	CONSTRAINT `FK_ta_x_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`),
 	CONSTRAINT `FK_ta_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
 );
+
+CREATE TABLE `estado_mantenimiento` (
+  `id_estado_mantenimiento` int NOT NULL,
+  `nombre_estado_mantenimiento` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_estado_mantenimiento`)
+);

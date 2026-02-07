@@ -462,7 +462,8 @@ class MantenimientoDeActivoController extends Controller
         $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
         $ishikawa_categorias = Ishikawa_categoria::all();
         $ishikawa_causas = Ishikawa_causa::all();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas'));
+        $ordenes_mantenimiento = Orden::where('id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'ordenes_mantenimiento'));
     }
 
     public function destroy($id)

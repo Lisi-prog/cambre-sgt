@@ -52,6 +52,11 @@ class Orden extends Model
         return $this->hasOne(Orden_mecanizado::class, 'id_orden');
     }
 
+    public function getOrdenMantenimiento()
+    {
+        return $this->hasOne(Orden_mantenimiento::class, 'id_orden');
+    }
+
     public function getFechaLimite(){
         return $this->getPartes->sortByDesc('id_parte')->first()->fecha_limite;
     }
