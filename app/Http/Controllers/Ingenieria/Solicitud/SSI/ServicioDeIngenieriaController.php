@@ -36,6 +36,7 @@ use App\Models\Cambre\Sintoma;
 use App\Models\Cambre\Tipo_sintoma;
 use App\Models\Cambre\Tipo_activo_x_sintoma;
 use App\Models\Cambre\Sol_serv_man_x_sintoma;
+use App\Models\Cambre\Sol_serv_ing_x_sintoma;
 
 class ServicioDeIngenieriaController extends Controller
 {
@@ -65,14 +66,14 @@ class ServicioDeIngenieriaController extends Controller
 
     public function index(Request $request)
     {        
-        $idsSol = Sol_servicio_de_ingenieria::pluck('id_solicitud')->merge(
-                    Sol_servicio_de_mantenimiento::pluck('id_solicitud')
-                )
-                ->unique()
-                ->values();
-        // $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
+        // $idsSol = Sol_servicio_de_ingenieria::pluck('id_solicitud')->merge(
+        //             Sol_servicio_de_mantenimiento::pluck('id_solicitud')
+        //         )
+        //         ->unique()
+        //         ->values();
+        $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
         // $listaSSI = Vw_sol_solicitud_ssi::get();
-        $listaSSI = Sol_solicitud::whereIn('id_solicitud', $idsSol)->orderBy('id_solicitud', 'desc')->get();
+        // $listaSSI = Sol_solicitud::whereIn('id_solicitud', $idsSol)->orderBy('id_solicitud', 'desc')->get();
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
 
@@ -129,6 +130,8 @@ class ServicioDeIngenieriaController extends Controller
         $nombre = Auth::user()->getEmpleado->nombre_empleado;
         $descrip = $request->input('descripcion');
         $prioridad = $request->input('id_prioridad');
+        $sintomas = $request->input('sintomas');
+
 
         if($request->input('fecha_req')){
             $fecha_requerida = $request->input('fecha_req');
@@ -178,10 +181,12 @@ class ServicioDeIngenieriaController extends Controller
             'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
         ]);
 
-        // $data =  Em_not_x_empleado::where('id_em_notificacion', 1)->get();
-        // $id_empleados = collect($data)->pluck('id_empleado')->all();
-        // $emp = Empleado::whereIn('id_empleado', $id_empleados)->get();
-        // $emails_para_aviso = collect($emp)->pluck('email_empleado')->all();
+        foreach ($sintomas as $sintoma) {
+            Sol_serv_ing_x_sintoma::create([
+                'id_sintoma' => $sintoma,
+                'id_servicio_de_ingenieria' => $Req_ing->id_servicio_de_ingenieria
+            ]);
+        }
         
         try {
             $email_aviso = Em_not_x_empleado::where('id_em_notificacion', 1)

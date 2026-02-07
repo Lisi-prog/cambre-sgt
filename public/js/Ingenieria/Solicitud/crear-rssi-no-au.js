@@ -1,6 +1,7 @@
 $(function(){
     $('#selected-prioridad').on('change', agregarUrgencia);
-    $('#ssi-mant-activo').on('change', cargarSintomas);
+    // $('#ssi-mant-activo').on('change', cargarSintomas);
+    $('#activo').on('change', cargarSintomas);
 });
 
 function agregarUrgencia(){
@@ -94,6 +95,12 @@ function cargarSintomas(){
     let activo = Number($(this).val());
     document.getElementById('sintomas-activo').innerHTML = '';
     let html = '';
+
+    if (activo) {
+        document.getElementById('row-sintomas').hidden = false;
+    } else {
+        document.getElementById('row-sintomas').hidden = true;
+    }
     
     $.ajax({
             type: "post",

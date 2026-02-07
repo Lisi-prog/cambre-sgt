@@ -4,6 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 
 class Orden_mantenimiento extends Model
@@ -35,6 +36,20 @@ class Orden_mantenimiento extends Model
 
     public function getNombreTipoOrden()
     {
-        return 'Manufactura';
+        return 'Mantenimiento';
+    }
+
+    public function getPartes()
+    {
+        return $this->hasMany(Parte::class, 'id_orden', 'id_orden');
+    }
+
+    public function getEstadoActual(){
+        switch ($this->id_tipo_orden_mantenimiento) {
+            case 1:
+                // return ':D';
+                return $this->getPartes->sortByDesc('id_parte')->first()->getParteDiagnostico->getEstado->nombre_estado_mantenimiento;
+            
+        }
     }
 }

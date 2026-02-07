@@ -1011,6 +1011,10 @@ DROP TABLE tipo_relacion_gantt;
 
 
 -- Modulo mantenimiento de activos
+
+ALTER TABLE sol_servicio_de_ingenieria ADD id_servicio_requerido INT NULL;
+
+
 CREATE TABLE `tipo_sintoma` (
 	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,
 	`nombre_tipo_sintoma` VARCHAR(150) NOT NULL DEFAULT '',
@@ -1034,13 +1038,13 @@ CREATE TABLE `tipo_activo_x_sintoma` (
 	CONSTRAINT `FK_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
 );
 
-CREATE TABLE `sol_serv_man_x_sintoma` (
-	`id_sol_serv_man_x_sintoma` INT NOT NULL AUTO_INCREMENT,
-	`id_servicio_de_mantenimiento` INT NOT NULL,
+CREATE TABLE `sol_serv_ing_x_sintoma` (
+	`id_sol_serv_ing_x_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`id_servicio_de_ingenieria` INT NOT NULL,
 	`id_sintoma` INT NOT NULL,
-	PRIMARY KEY (`id_sol_serv_man_x_sintoma`),
-	CONSTRAINT `FK_ssmxs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`),
-	CONSTRAINT `FK_sol_serv_man_x_sintoma_sol_servicio_de_mantenimiento` FOREIGN KEY (`id_servicio_de_mantenimiento`) REFERENCES `sol_servicio_de_mantenimiento` (`id_servicio_de_mantenimiento`)
+	PRIMARY KEY (`id_sol_serv_ing_x_sintoma`),
+	CONSTRAINT `FK_ssixs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`),
+	CONSTRAINT `FK_ssixs_x_sol_servicio_de_ingenieria` FOREIGN KEY (`id_servicio_de_ingenieria`) REFERENCES `sol_servicio_de_ingenieria` (`id_servicio_de_ingenieria`)
 );
 
 CREATE TABLE `activo_x_sintoma` (
@@ -1106,4 +1110,10 @@ CREATE TABLE `tipo_activo_x_tarea_mant` (
 	PRIMARY KEY (`id_tipo_activo_x_tarea_mant`),
 	CONSTRAINT `FK_ta_x_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`),
 	CONSTRAINT `FK_ta_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
+);
+
+CREATE TABLE `estado_mantenimiento` (
+  `id_estado_mantenimiento` int NOT NULL,
+  `nombre_estado_mantenimiento` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_estado_mantenimiento`)
 );

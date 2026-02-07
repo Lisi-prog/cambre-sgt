@@ -33,12 +33,15 @@ use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Orden_mantenimiento;
+use App\Models\Cambre\Parte;
+use App\Models\Cambre\Parte_diagnostico;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Not_notificacion_cuerpo;
 use App\Models\Cambre\Not_notificacion;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Responsabilidad;
+use App\Models\Cambre\Responsabilidad_orden;
 use App\Mail\Solicitud\SsiMailable;
 use App\Models\Cambre\Em_not_x_empleado;
 use App\Models\Cambre\Sintoma;
@@ -249,8 +252,9 @@ class MantenimientoDeActivoController extends Controller
         return redirect()->route('s_s_i.index')->with('mensaje', 'Solicitud de servicio de mantenimiento de activo rechazada con exito.');  
     }
 
-    public function aceptar($id){
+    public function aceptar(Request $request, $id){
 
+        // return $request;
         try {    
             DB::beginTransaction();
 
@@ -262,7 +266,7 @@ class MantenimientoDeActivoController extends Controller
                 'id_estado_solicitud' => $id_estado_solicitud
             ]);
 
-            $id_servicio = $this->guardarServicioMantenimiento($solicitud);
+            $id_servicio = $this->guardarServicioMantenimiento($request, $solicitud);
 
 
             $solicitud->update([
@@ -280,10 +284,10 @@ class MantenimientoDeActivoController extends Controller
         } 
     }
 
-    public function guardarServicioMantenimiento($solicitud){
-        $activo = $solicitud->getServicioDeMantenimiento->id_activo;
+    public function guardarServicioMantenimiento($request, $solicitud){
+        $activo = $solicitud->getServicioDeIngenieria->id_activo;
 
-        $existeServicioMant = Servicio::where('id_subtipo_servicio', 6)->where('id_activo', $solicitud->getServicioDeMantenimiento->id_activo)->orderBy('id_servicio', 'desc')->first();
+        $existeServicioMant = Servicio::where('id_subtipo_servicio', 6)->where('id_activo', $solicitud->getServicioDeIngenieria->id_activo)->orderBy('id_servicio', 'desc')->first();
 
         if ($existeServicioMant) {
             $ultNombre = $existeServicioMant->codigo_servicio;
@@ -307,11 +311,10 @@ class MantenimientoDeActivoController extends Controller
 
         $nombre_proyecto = $codActivo.'-MAN-'.$numServ;
 
-        $lider = Auth::user()->getEmpleado->id_empleado;
+        $lider = $request->input('lider');
 
-        $fecha_ini = Carbon::now()->format('Y-m-d');
-        $fecha_req = Carbon::now()->format('Y-m-d');
-        // $prioridad = $request->input('prioridad');
+        $fecha_ini = $request->input('fecha_ini');
+        $fecha_req = $request->input('fecha_req');
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
 
         if (1) {
@@ -391,6 +394,66 @@ class MantenimientoDeActivoController extends Controller
             'id_etapa' => $etapa->id_etapa
         ]);
 
+        //Crear orden de mantenimiento de tipo diagnostico
+        $id_responsable = Auth::user()->getEmpleado->id_empleado;
+        $id_supervisor = $request->input('lider');
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first()->id_rol_empleado;
+        $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first()->id_rol_empleado;
+
+        $responsabilidad = Responsabilidad::create([
+            'id_empleado' => $id_responsable,
+            'id_rol_empleado' => $rol_empleado
+        ]);
+
+        $responsabilidad_supervisor = Responsabilidad::create([
+            'id_empleado' => $id_supervisor,
+            'id_rol_empleado' => $rol_empleado_supervisor
+        ]);
+
+        $orden = Orden::create([
+                    'nombre_orden' => $nombre_proyecto.'-diagnostico',
+                    'fecha_inicio' => $fecha_ini,
+                    'id_etapa' => $etapa->id_etapa
+                ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        Responsabilidad_orden::create([
+            'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
+            'id_orden' => $orden->id_orden
+        ]);
+        
+        Orden_mantenimiento::create([
+            'id_tipo_orden_mantenimiento' => 1,
+            'id_orden' => $orden->id_orden
+        ]);
+
+        $responsabilidad_parte = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado
+        ]);
+        
+        $parte = Parte::create([
+            'observaciones' => 'Generacion de orden de mantenimiento de diagnostico',
+            'fecha' => $fecha_ini,
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'horas' => '00:00',
+            'id_orden' => $orden->id_orden,
+            'id_responsabilidad' => $responsabilidad_parte->id_responsabilidad
+        ]);
+
+        Parte_diagnostico::create([
+            'id_parte' => $parte->id_parte, 
+            'id_estado' => 1,
+            'en_maquina' => 0,
+            'en_banco' => 0
+        ]);
+
+
         return $proyecto->id_servicio;
     }
 
@@ -399,7 +462,8 @@ class MantenimientoDeActivoController extends Controller
         $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
         $ishikawa_categorias = Ishikawa_categoria::all();
         $ishikawa_causas = Ishikawa_causa::all();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas'));
+        $ordenes_mantenimiento = Orden::where('id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'ordenes_mantenimiento'));
     }
 
     public function destroy($id)

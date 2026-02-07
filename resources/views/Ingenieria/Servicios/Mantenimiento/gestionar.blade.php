@@ -80,7 +80,7 @@
                                             <div class="form-group">
                                                 {!! Form::label('sintoma', "Sintomas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 <div class="row">
-                                                    @foreach ($solicitud->getServicioDeMantenimiento->getSintomasAlt() as $grupo)
+                                                    @foreach ($solicitud->getServicioDeIngenieria->getSintomasAlt() as $grupo)
                                                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                                             <li class="d-flex justify-content-between align-items-start">
                                                                 <div class="ms-2 me-auto">
@@ -141,31 +141,36 @@
                                                 <th class="text-center" scope="col" style="color:#fff;">N°</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Tipo</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>
-                                                <th class="text-center" scope="col" style="color:#fff;">Legajo</th>
+                                                <th class="text-center" scope="col" style="color:#fff;">Tecnico</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Horas</th>
-                                                <th class="text-center" scope="col" style="color:#fff;">T. Est.</th>
+                                                {{-- <th class="text-center" scope="col" style="color:#fff;">T. Est.</th> --}}
                                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>                                                           
                                             </thead>
-                                            <tbody id="accordion">
-                                                <td class= 'text-center' style="vertical-align: middle;">1</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">Diagnostico</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">En espera</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">00:00</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">?</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">?</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">
-                                                    <button type="button" class="btn btn-primary" onclick="">
-                                                        <i class="fas fa-pen"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-warning" onclick="">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger" onclick="">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </td>
+                                            <tbody>
+                                                @foreach ($ordenes_mantenimiento as $orden)
+
+                                                <tr>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->id_orden ?? '-'}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento ?? '-'}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getEstadoActual()}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">00:00</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">
+                                                        <button type="button" class="btn btn-primary" onclick="">
+                                                            <i class="fas fa-pen"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-warning" onclick="">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger" onclick="">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                    
+                                                @endforeach
                                             </tbody>
                                         </table>
                                         <button type="button" class="btn btn-success" onclick="">
@@ -193,8 +198,9 @@
     </section>
 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
-    <div hidden>
+    {{-- <div hidden>
         @include('Ingenieria\Servicios\Mantenimiento\Partes\ishikawa_select')
-    </div>
+    </div> --}}
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
+    <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection
