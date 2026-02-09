@@ -198,9 +198,9 @@
     </section>
 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
-    {{-- <div hidden>
+    <div hidden>
         @include('Ingenieria\Servicios\Mantenimiento\Partes\ishikawa_select')
-    </div> --}}
+    </div>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection
