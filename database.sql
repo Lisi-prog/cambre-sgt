@@ -1014,6 +1014,14 @@ DROP TABLE tipo_relacion_gantt;
 
 ALTER TABLE sol_servicio_de_ingenieria ADD id_servicio_requerido INT NULL;
 
+ALTER TABLE `cambrepru`.`sol_servicio_de_ingenieria` 
+ADD COLUMN `id_servicio_requerido` INT NULL AFTER `id_activo`;
+
+INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('1', 'Espera');
+INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('2', 'Revisar');
+INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('3', 'Completo');
+INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('4', 'Rechazado');
+
 
 CREATE TABLE `tipo_sintoma` (
 	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,
@@ -1116,4 +1124,14 @@ CREATE TABLE `estado_mantenimiento` (
   `id_estado_mantenimiento` int NOT NULL,
   `nombre_estado_mantenimiento` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_estado_mantenimiento`)
+);
+
+CREATE TABLE `parte_diagnostico` (
+	`id_parte_diagnostico` INT NOT NULL AUTO_INCREMENT,
+	`id_parte` INT NOT NULL,
+	`id_estado` INT NOT NULL,
+	`en_maquina` boolean NOT NULL DEFAULT '0',
+	`en_banco` boolean NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id_parte_diagnostico`),
+	CONSTRAINT `FK_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`)
 );
