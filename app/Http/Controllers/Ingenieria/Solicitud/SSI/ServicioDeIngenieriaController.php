@@ -181,11 +181,13 @@ class ServicioDeIngenieriaController extends Controller
             'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
         ]);
 
-        foreach ($sintomas as $sintoma) {
-            Sol_serv_ing_x_sintoma::create([
-                'id_sintoma' => $sintoma,
-                'id_servicio_de_ingenieria' => $Req_ing->id_servicio_de_ingenieria
-            ]);
+        if (!empty($sintomas)) {
+            foreach ($sintomas as $sintoma) {
+                Sol_serv_ing_x_sintoma::create([
+                    'id_sintoma' => $sintoma,
+                    'id_servicio_de_ingenieria' => $Req_ing->id_servicio_de_ingenieria
+                ]);
+            }
         }
         
         try {

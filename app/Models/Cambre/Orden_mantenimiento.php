@@ -52,4 +52,9 @@ class Orden_mantenimiento extends Model
             
         }
     }
+
+    public function getTipoOrden()
+    {
+        return 4;
+    }
 }

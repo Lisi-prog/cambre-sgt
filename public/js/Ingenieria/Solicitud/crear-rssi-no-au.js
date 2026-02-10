@@ -48,7 +48,7 @@ function agregarUrgencia(){
 
 let enviando = false;
 
-document.getElementById('btn-guardar').addEventListener('click', function () {
+/* document.getElementById('btn-guardar').addEventListener('click', function () {
 
     if (enviando) return;
 
@@ -80,7 +80,7 @@ document.getElementById('btn-guardar').addEventListener('click', function () {
     this.innerHTML = 'Guardando...';
 
     form.requestSubmit(); // ✅ clave
-});
+}); */
 
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('invalid', () => {
@@ -112,7 +112,7 @@ function cargarSintomas(){
                                 <div id="msj-sin-sintomas">
                                     <strong>
                                         <span style="border:1px solid red; background:white; color:red; padding:10px;">
-                                            &nbsp; El tipo de activo no posee síntomas asociados. &nbsp;
+                                            &nbsp; El activo no posee síntomas asociados. &nbsp;
                                         </span>
                                     </strong>
                                 </div>
@@ -127,7 +127,7 @@ function cargarSintomas(){
                         html += `<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                             <div class="row">
                                                 <div class="d-flex flex-row align-items-start justify-content-around">
-                                                    <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="card-body d-flex flex-column" style="max-height: 200px;">
                                                         <div class="">
                                                             <label>${infoTipo.tipo}:</label>
                                                         </div>
