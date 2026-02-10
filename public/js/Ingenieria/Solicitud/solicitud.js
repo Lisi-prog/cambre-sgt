@@ -19,6 +19,7 @@ function cargarModalProgresoServicio(id){
             id: id,
         },
         success: function (response) {
+            // console.log(response)
             codigo.value = response.cod_serv;
             nombre.value = response.nom_serv;
             lider.value = response.lider;
@@ -27,7 +28,11 @@ function cargarModalProgresoServicio(id){
             estado.value = response.estado;
 
             try {
-                btn_gest.href = window.location.protocol + "//" + window.location.host +"/proyectos/gestionar/"+ response.id_serv;
+                if (response.esMantenimiento) {
+                    btn_gest.href = window.location.protocol + "//" + window.location.host +"/s_m_a/gestionar/"+ response.id_serv;
+                } else {
+                    btn_gest.href = window.location.protocol + "//" + window.location.host +"/proyectos/gestionar/"+ response.id_serv;
+                }
             } catch (error) {
                 
             }

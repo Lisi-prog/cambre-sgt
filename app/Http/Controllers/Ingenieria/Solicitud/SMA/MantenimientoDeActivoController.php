@@ -47,6 +47,7 @@ use App\Models\Cambre\Em_not_x_empleado;
 use App\Models\Cambre\Sintoma;
 use App\Models\Cambre\Tipo_sintoma;
 use App\Models\Cambre\Tipo_activo_x_sintoma;
+use App\Models\Cambre\Activo_x_sintoma;
 use App\Models\Cambre\Sol_serv_man_x_sintoma;
 use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
@@ -129,12 +130,15 @@ class MantenimientoDeActivoController extends Controller
                 'id_sector' => Auth::user()->getEmpleado->getSector->id_sector
             ]);
 
+            
             foreach ($sintomas as $sintoma) {
                 Sol_serv_man_x_sintoma::create([
                     'id_sintoma' => $sintoma,
                     'id_servicio_de_mantenimiento' => $Req_mant->id_servicio_de_mantenimiento
                 ]);
             }
+            
+            
             
             /*
             try {
@@ -474,10 +478,17 @@ class MantenimientoDeActivoController extends Controller
     public function sma_obtener_causas($id){
         $activo = Activo::findOrFail($id);
 
-        $idsSintomas = Tipo_activo_x_sintoma::where(
+        $idsTipo = Tipo_activo_x_sintoma::where(
             'id_tipo_activo',
             $activo->getTipoActivo->id_tipo_activo
         )->pluck('id_sintoma');
+
+        $idsActivo = Activo_x_sintoma::where(
+            'id_activo',
+            $id
+        )->pluck('id_sintoma');
+
+        $idsSintomas = $idsTipo->merge($idsActivo)->unique()->values();
 
         $tipos = Tipo_sintoma::whereHas('getSintomas', function ($q) use ($idsSintomas) {
             $q->whereIn('id_sintoma', $idsSintomas);

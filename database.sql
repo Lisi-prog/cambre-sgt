@@ -1014,14 +1014,16 @@ DROP TABLE tipo_relacion_gantt;
 
 ALTER TABLE sol_servicio_de_ingenieria ADD id_servicio_requerido INT NULL;
 
-ALTER TABLE `cambrepru`.`sol_servicio_de_ingenieria` 
+ALTER TABLE `sol_servicio_de_ingenieria` 
 ADD COLUMN `id_servicio_requerido` INT NULL AFTER `id_activo`;
 
-INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('1', 'Espera');
-INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('2', 'Revisar');
-INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('3', 'Completo');
-INSERT INTO `cambrepru`.`estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('4', 'Rechazado');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('1', 'Espera');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('2', 'Revisar');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('3', 'Completo');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('4', 'Rechazado');
 
+INSERT INTO `servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('1', 'Correctivo');
+INSERT INTO `servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('2', 'Preventivo');
 
 CREATE TABLE `tipo_sintoma` (
 	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,
@@ -1060,7 +1062,7 @@ CREATE TABLE `activo_x_sintoma` (
 	`id_activo` INT NOT NULL,
 	`id_sintoma` INT NOT NULL,
 	PRIMARY KEY (`id_activo_x_sintoma`),
-	CONSTRAINT `FK_axs_x_activo` FOREIGN KEY (`id_activo_x_sintoma`) REFERENCES `activo` (`id_activo`),
+	CONSTRAINT `FK_axs_x_activo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`),
 	CONSTRAINT `FK_axs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`)
 );
 
