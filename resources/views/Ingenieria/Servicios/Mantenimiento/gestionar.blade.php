@@ -217,7 +217,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($ordenes_mantenimiento as $orden_mantenimiento)
-                                        @foreach ($orden_mantenimiento->getPartes as $parte)
+                                        @foreach ($orden_mantenimiento->getPartes->sortByDesc('id_parte') as $parte)
                                             <tr>
                                                 <td class= 'text-center' style="vertical-align: middle;">{{ $orden_mantenimiento->id_orden }} {{ $orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento}}</td>
                                                 <td class= 'text-center' style="vertical-align: middle;">{{ $parte->id_parte }}</td>
