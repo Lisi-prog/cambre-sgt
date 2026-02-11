@@ -166,3 +166,83 @@ CREATE TABLE `tipo_activo_x_tarea_mant` (
 COLLATE='utf8mb4_uca1400_ai_ci'
 ENGINE=InnoDB
 ;
+CREATE TABLE `parte_inspeccion` (
+	`id_parte_inspeccion` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_parte` INT(11) NOT NULL,
+	`id_estado_mantenimiento` INT(11) NOT NULL,
+	PRIMARY KEY (`id_parte_inspeccion`) USING BTREE,
+	INDEX `FK_parte` (`id_parte`) USING BTREE,
+	INDEX `FK_estado_mantenimiento` (`id_estado_mantenimiento`) USING BTREE,
+	CONSTRAINT `FK_estado_mantenimiento` FOREIGN KEY (`id_estado_mantenimiento`) REFERENCES `estado_mantenimiento` (`id_estado_mantenimiento`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `accion_para_tarea` (
+	`id_accion_tarea` INT(11) NOT NULL AUTO_INCREMENT,
+	`nombre_accion` VARCHAR(200) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
+	PRIMARY KEY (`id_accion_tarea`) USING BTREE
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `parte_inspe_x_tarea_mant` (
+	`id_parte_inspe_x_tarea_mant` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_parte_inspeccion` INT(11) NOT NULL,
+	`id_tarea_mantenimiento` INT(11) NOT NULL,
+	`ok` TINYINT(4) NOT NULL DEFAULT '0',
+	`id_accion` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`id_parte_inspe_x_tarea_mant`) USING BTREE,
+	INDEX `FK_parte_inspeccion` (`id_parte_inspeccion`) USING BTREE,
+	INDEX `FK_tarea_mantenimiento` (`id_tarea_mantenimiento`) USING BTREE,
+	INDEX `FK_accion` (`id_accion`) USING BTREE,
+	CONSTRAINT `FK_accion` FOREIGN KEY (`id_accion`) REFERENCES `accion_para_tarea` (`id_accion_tarea`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_parte_inspeccion` FOREIGN KEY (`id_parte_inspeccion`) REFERENCES `parte_inspeccion` (`id_parte_inspeccion`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `parte_ajuste` (
+	`id_parte_ajuste` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_estado_mantenimiento` INT(11) NOT NULL,
+	`id_parte` INT(11) NOT NULL,
+	PRIMARY KEY (`id_parte_ajuste`) USING BTREE,
+	INDEX `FK_estado_mantenimiento` (`id_estado_mantenimiento`) USING BTREE,
+	INDEX `FK_parte` (`id_parte`) USING BTREE,
+	CONSTRAINT `FK_estado_mantenimiento` FOREIGN KEY (`id_estado_mantenimiento`) REFERENCES `estado_mantenimiento` (`id_estado_mantenimiento`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `zona` (
+	`id_zona` INT(11) NOT NULL AUTO_INCREMENT,
+	`nombre_zona` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`id_zona`) USING BTREE
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;
+CREATE TABLE `tarea_ajuste` (
+	`id_tarea_ajuste` INT(11) NOT NULL AUTO_INCREMENT,
+	`id_parte_ajuste` INT(11) NOT NULL,
+	`id_accion_tarea` INT(11) NOT NULL,
+	`id_zona` INT(11) NOT NULL,
+	`id_maquinaria` INT(11) NOT NULL,
+	`hecho` TINYINT(4) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id_tarea_ajuste`) USING BTREE,
+	INDEX `FK_parte_ajuste` (`id_parte_ajuste`) USING BTREE,
+	INDEX `FK_accion_tarea` (`id_accion_tarea`) USING BTREE,
+	INDEX `FK_zona` (`id_zona`) USING BTREE,
+	INDEX `FK_maquinaria` (`id_maquinaria`) USING BTREE,
+	CONSTRAINT `FK_accion_tarea` FOREIGN KEY (`id_accion_tarea`) REFERENCES `accion_para_tarea` (`id_accion_tarea`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria` (`id_maquinaria`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_parte_ajuste` FOREIGN KEY (`id_parte_ajuste`) REFERENCES `parte_ajuste` (`id_parte_ajuste`) ON UPDATE NO ACTION ON DELETE RESTRICT,
+	CONSTRAINT `FK_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`) ON UPDATE NO ACTION ON DELETE RESTRICT
+)
+COLLATE='utf8mb4_uca1400_ai_ci'
+ENGINE=InnoDB
+;

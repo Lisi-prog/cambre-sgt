@@ -31,5 +31,10 @@ class Parte_diagnostico extends Model
     {
         return $this->belongsTo(Estado_mantenimiento::class, 'id_estado', 'id_estado_mantenimiento');
     }
+
+    public function getParteDiagXCausa()
+    {
+        return $this->hasMany(Parte_diag_x_causa::class, 'id_parte_diagnostico', 'id_parte_diagnostico');
+    }
 }
 

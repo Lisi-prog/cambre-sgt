@@ -45,12 +45,13 @@ class Orden_mantenimiento extends Model
     }
 
     public function getEstadoActual(){
-        switch ($this->id_tipo_orden_mantenimiento) {
+        /* switch ($this->id_tipo_orden_mantenimiento) {   ??????
             case 1:
                 // return ':D';
                 return $this->getPartes->sortByDesc('id_parte')->first()->getParteDiagnostico->getEstado->nombre_estado_mantenimiento;
             
-        }
+        } */
+        return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstado->nombre_estado_mantenimiento;
     }
 
     public function getTipoOrden()
