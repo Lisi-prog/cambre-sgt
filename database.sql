@@ -1025,6 +1025,11 @@ INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_ma
 INSERT INTO `servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('1', 'Correctivo');
 INSERT INTO `servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('2', 'Preventivo');
 
+UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Diagnostico' WHERE (`id_tipo_orden_mantenimiento` = '1');
+UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Inspeccion' WHERE (`id_tipo_orden_mantenimiento` = '2');
+UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Ajuste' WHERE (`id_tipo_orden_mantenimiento` = '3');
+DELETE FROM `tipo_orden_mantenimiento` WHERE (`id_tipo_orden_mantenimiento` = '4');
+
 CREATE TABLE `tipo_sintoma` (
 	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,
 	`nombre_tipo_sintoma` VARCHAR(150) NOT NULL DEFAULT '',
@@ -1136,4 +1141,69 @@ CREATE TABLE `parte_diagnostico` (
 	`en_banco` boolean NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id_parte_diagnostico`),
 	CONSTRAINT `FK_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`)
+);
+
+CREATE TABLE `parte_diag_x_causa` (
+	`id_parte_diag_x_causa` INT NOT NULL AUTO_INCREMENT,
+	`id_parte_diagnostico` INT NOT NULL,
+	`id_ishikawa_causa` INT NOT NULL,
+	PRIMARY KEY (`id_parte_diag_x_causa`),
+	CONSTRAINT `FK_pdxc_ishikawa_causa` FOREIGN KEY (`id_ishikawa_causa`) REFERENCES `ishikawa_causa` (`id_ishikawa_causa`),
+	CONSTRAINT `FK_pdxc_parte_diagnostico` FOREIGN KEY (`id_parte_diagnostico`) REFERENCES `parte_diagnostico` (`id_parte_diagnostico`)
+);
+
+CREATE TABLE `parte_inspeccion` (
+	`id_parte_inspeccion` INT NOT NULL AUTO_INCREMENT,
+	`id_parte` INT NOT NULL,
+	`id_estado_mantenimiento` INT NOT NULL,
+	PRIMARY KEY (`id_parte_inspeccion`),
+	CONSTRAINT `FK_pi_x_estado_mantenimiento` FOREIGN KEY (`id_estado_mantenimiento`) REFERENCES `estado_mantenimiento` (`id_estado_mantenimiento`),
+	CONSTRAINT `FK_pi_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`)
+);
+
+CREATE TABLE `accion_para_tarea` (
+	`id_accion_tarea` INT NOT NULL AUTO_INCREMENT,
+	`nombre_accion` VARCHAR(200) NOT NULL,
+	PRIMARY KEY (`id_accion_tarea`)
+);
+
+CREATE TABLE `parte_inspe_x_tarea_mant` (
+	`id_parte_inspe_x_tarea_mant` INT NOT NULL AUTO_INCREMENT,
+	`id_parte_inspeccion` INT NOT NULL,
+	`id_tarea_mantenimiento` INT NOT NULL,
+	`ok` boolean NOT NULL DEFAULT 0,
+	`id_accion` INT NULL DEFAULT NULL,
+	PRIMARY KEY (`id_parte_inspe_x_tarea_mant`),
+	CONSTRAINT `FK_pixtm_accion` FOREIGN KEY (`id_accion`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
+	CONSTRAINT `FK_pixtm_parte_inspeccion` FOREIGN KEY (`id_parte_inspeccion`) REFERENCES `parte_inspeccion` (`id_parte_inspeccion`),
+	CONSTRAINT `FK_pixtm_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`)
+);
+
+CREATE TABLE `parte_ajuste` (
+	`id_parte_ajuste` INT NOT NULL AUTO_INCREMENT,
+	`id_estado_mantenimiento` INT NOT NULL,
+	`id_parte` INT NOT NULL,
+	PRIMARY KEY (`id_parte_ajuste`),
+	CONSTRAINT `FK_pa_x_estado_mantenimiento` FOREIGN KEY (`id_estado_mantenimiento`) REFERENCES `estado_mantenimiento` (`id_estado_mantenimiento`),
+	CONSTRAINT `FK_pa_x_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`)
+);
+
+CREATE TABLE `zona` (
+	`id_zona` INT NOT NULL AUTO_INCREMENT,
+	`nombre_zona` INT NULL DEFAULT NULL,
+	PRIMARY KEY (`id_zona`)
+);
+
+CREATE TABLE `tarea_ajuste` (
+	`id_tarea_ajuste` INT NOT NULL AUTO_INCREMENT,
+	`id_parte_ajuste` INT NOT NULL,
+	`id_accion_tarea` INT NOT NULL,
+	`id_zona` INT NOT NULL,
+	`id_maquinaria` INT NOT NULL,
+	`hecho` boolean NOT NULL DEFAULT 0,
+	PRIMARY KEY (`id_tarea_ajuste`),
+	CONSTRAINT `FK_ta_x_accion_tarea` FOREIGN KEY (`id_accion_tarea`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
+	CONSTRAINT `FK_ta_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria` (`id_maquinaria`),
+	CONSTRAINT `FK_ta_x_parte_ajuste` FOREIGN KEY (`id_parte_ajuste`) REFERENCES `parte_ajuste` (`id_parte_ajuste`),
+	CONSTRAINT `FK_ta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
 );

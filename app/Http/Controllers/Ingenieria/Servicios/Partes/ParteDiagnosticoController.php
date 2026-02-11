@@ -22,7 +22,7 @@ class ParteDiagnosticoController extends Controller{
             DB::beginTransaction();
             //PARTE
                 $parte = new Parte;
-                $parte->observacion = "Alta de parte diagnóstico, pendiente de revisión";
+                $parte->observaciones = "Alta de parte diagnóstico, pendiente de revisión";
                 $parte->id_orden = $request->id_orden;
                 $parte->fecha = $request->fecha;
                 $parte->horas = $request->horas;
