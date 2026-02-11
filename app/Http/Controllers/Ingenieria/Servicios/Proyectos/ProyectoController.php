@@ -935,6 +935,13 @@ class ProyectoController extends Controller
                 'progreso' => round($etapa->getProgreso())
             ]);
         }
+
+        if ($servicio->id_subtipo_servicio == 6) {
+            $esMantenimiento = 1;
+        } else {
+            $esMantenimiento = 0;
+        }
+        
         
         return [
             'id_serv' => $servicio->id_servicio,
@@ -945,7 +952,8 @@ class ProyectoController extends Controller
             'fec_lim' => $servicio->fecha_limite ?? '-',
             'estado' => $servicio->nombre_estado,
             'progreso' => $servicio->progreso,
-            'etapas' => $etapas_arr
+            'etapas' => $etapas_arr,
+            'esMantenimiento' => $esMantenimiento
         ];
     }
 
