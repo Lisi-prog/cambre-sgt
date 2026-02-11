@@ -39,7 +39,8 @@ class InformeController extends Controller
         ];
 
         $supervisores = $this->obtenerSupervisores();
-        return view('Informatica.Informes.index',compact('tipos', 'supervisores'));
+        $tecnicos = $this->obtenerEmpleadosActivos()->pluck('nombre_empleado', 'id_empleado');
+        return view('Informatica.Informes.index',compact('tipos', 'supervisores', 'tecnicos'));
     }
 
     public function create()
@@ -181,5 +182,9 @@ class InformeController extends Controller
     public function obtenerSupervisores(){
         $usuariosSupervisor = User::role('SUPERVISOR')->pluck('id')->toArray();
         return Empleado::whereIn('user_id', $usuariosSupervisor)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+    }
+
+    public function obtenerEmpleadosActivos(){
+        return Empleado::orderBy('nombre_empleado')->activo()->get();
     }
 }

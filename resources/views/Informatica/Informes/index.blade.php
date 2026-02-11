@@ -62,15 +62,26 @@
                             </div>
                             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 <div class="form-group">
+                                    {!! Form::label('tecni', 'Tecnico:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                    {!! Form::select('tecni', $tecnicos, null, [
+                                            'placeholder' => 'Seleccionar',
+                                            'class' => 'form-select',
+                                            'id' => 'id_tecni',
+                                        ]) !!}
+                                </div>
+                            </div>
+                            @role('SUPERVISOR')
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                <div class="form-group">
                                     {!! Form::label('supervi', 'Supervisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                                     {!! Form::select('supervi', $supervisores, null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select',
-                                            'id' => 'id_supervi',
-                                            'required'
+                                            'id' => 'id_supervi'
                                         ]) !!}
                                 </div>
                             </div>
+                            @endrole
                             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 my-auto">
                                 <div class="form-group my-auto">
                                     {!! Form::submit('Generar', ['class' => 'btn btn-success w-100']) !!}
