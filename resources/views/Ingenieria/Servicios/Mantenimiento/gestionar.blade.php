@@ -10,7 +10,7 @@
         <div class="d-flex section-header justify-content-center">
             <div class="d-flex flex-row col-12">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-auto">
-                    <h4 class="">Gestionar Servicio de Mantenimiento - {{$proyecto->codigo_servicio}}</h5>
+                    <h4 class="">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
                 </div>
             </div>
         </div>
@@ -22,7 +22,6 @@
                     <div class="card">
                         <div class="card-head py-3 m-auto">
                             <h5>Solicitud</h5>
-                            <button  type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoParteDiagnosticoModal">Parte Diagnóstico</button>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -136,11 +135,10 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="table-responsive">
-                                        <table class="table table-hover mt-2 table-sm">
+                                        <table id="table-orden" class="table table-hover mt-2 table-sm">
                                             <thead style="">
                                                 <th class="text-center" scope="col" style="color:#fff;">N°</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Tipo</th>
-                                                <th class="text-center" scope="col" style="color:#fff;">Descripcion</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Tecnico</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                                 <th class="text-center" scope="col" style="color:#fff;">Horas</th>
@@ -149,27 +147,46 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($ordenes_mantenimiento as $orden)
-
-                                                <tr>
-                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->id_orden ?? '-'}}</td>
-                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento ?? '-'}}</td>
-                                                    <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                                    <td class= 'text-center' style="vertical-align: middle;">-</td>
-                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getEstadoActual()}}</td>
-                                                    <td class= 'text-center' style="vertical-align: middle;">00:00</td>
-                                                    <td class= 'text-center' style="vertical-align: middle;">
-                                                        <button type="button" class="btn btn-primary" onclick="">
-                                                            <i class="fas fa-pen"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-warning" onclick="">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-danger" onclick="">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                    
+                                                    <tr>
+                                                        <td class= 'text-center' style="vertical-align: middle;">{{$orden->id_orden ?? '-'}}</td>
+                                                        <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento ?? '-'}}</td>                                                    
+                                                        <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                                        <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getEstadoActual()}}</td>
+                                                        <td class= 'text-center' style="vertical-align: middle;">{{$orden->getHoras()}}</td>
+                                                        <td class= 'text-center' style="vertical-align: middle;">
+                                                            @if($orden->getOrdenMantenimiento->getEstadoActual() == 'Espera')
+                                                                @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
+                                                                    <button type="button" onclick="openModalNuevoParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-pen"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
+                                                                    <button type="button" onclick="openModalNuevoParteInspeccion({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-pen"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-pen"></i>
+                                                                    </button>
+                                                                @endif
+                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
+                                                                @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
+                                                                <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>    
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
+                                                                    <button type="button" onclick="openModalConfirmarParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @endif
+                                                            @endif
+                                                            <button type="button" class="btn btn-warning" onclick="">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger" onclick="">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>                                                    
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -189,7 +206,34 @@
                             <h5>Parte</h5>
                         </div>
                         <div class="card-body">
-                            
+                            <table id="table_partes">
+                                <thead>
+                                    <th class="text-center" scope="col" style="color:#fff;">ORDEN</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">ID</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">ESTADO</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">RESPONSABLE</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">HORAS</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($ordenes_mantenimiento as $orden_mantenimiento)
+                                        @foreach ($orden_mantenimiento->getPartes as $parte)
+                                            <tr>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{ $orden_mantenimiento->id_orden }} {{ $orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento}}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->id_parte }}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento  ?? '-' }}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getResponsable->getEmpleado->nombre_empleado }}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
+                                                <td class= 'text-center' style="vertical-align: middle;">
+                                                    <button type="button" class="btn btn-primary" onclick="openModalDiagnostico({{ $parte->id_parte }})">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>                                                    
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach                                          
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>               
@@ -198,9 +242,50 @@
     </section>
 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
     <div hidden>
         @include('Ingenieria\Servicios\Mantenimiento\Partes\ishikawa_select')
     </div>
+    <script>
+        $(document).ready(function () { 
+            $('#table_partes').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": []
+            });
+            $('#table-orden').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": []
+            });
+        });
+    </script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

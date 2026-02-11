@@ -8,3 +8,8 @@
         <option value="{{ $categoria->id_ishikawa_categoria }}">{{ $categoria->nombre_categoria }}</option>
     @endforeach
 </select>
+<div id="accion_select_div">
+    @foreach ($acciones as $accion)
+        <option value="{{ $accion->id_accion_tarea }}">{{ $accion->nombre_accion }}</option>
+    @endforeach
+</div>

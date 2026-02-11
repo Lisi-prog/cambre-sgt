@@ -11,6 +11,8 @@ use App\Http\Controllers\Ingenieria\Activos\Ishikawa\IshikawaCausaController;
 use App\Http\Controllers\Ingenieria\Activos\Tarea\TareaEjecucionController;
 use App\Http\Controllers\Ingenieria\Activos\Tarea\TareaMantenimientoController;
 use App\Http\Controllers\Ingenieria\Activos\Tarea\ZonaTareaController;
+use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteDiagnosticoController;
+use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteInspeccionController;
 
 
 
@@ -30,7 +32,14 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('tarea_ejecucion', TareaEjecucionController::class);
     Route::resource('tarea_mantenimiento', TareaMantenimientoController::class);
     Route::resource('zona_tarea', ZonaTareaController::class);
-});
+    Route::resource('parte_diagnostico', ParteDiagnosticoController::class);
+    Route::get('get-parte-diagnostico/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico'])->name('get_parte_diagnostico');
+    Route::post('procesar-parte-diagnostico', [ParteDiagnosticoController::class, 'procesar_parte_diagnostico'])->name('procesar_parte_diagnostico');
+    Route::resource('parte_inspeccion', ParteInspeccionController::class);
+    Route::get('get-tareas-por-activo/{id_activo}', [ParteInspeccionController::class, 'get_tareas_x_activo'])->name('get_tareas_x_activo');   
+    Route::get('get-parte-inspeccion/{id_orden}', [ParteInspeccionController::class, 'get_parte_inspeccion'])->name('get_parte_inspeccion');   
+    Route::post('procesar-parte-inspeccion', [ParteInspeccionController::class, 'procesar_parte_inspeccion'])->name('procesar_parte_inspeccion');
+    });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::resource('s_m_a', MantenimientoDeActivoController::class);

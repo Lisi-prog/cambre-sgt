@@ -53,6 +53,7 @@ function agregarDiagnostico() {
 
     tabla_diagnosticos.draw(false);
     i++;
+    checkSendNuevoParteDiagnostico();
 }
 
 
@@ -84,5 +85,91 @@ function eliminarDiagnostico(indice){
         row.querySelector('select').setAttribute('onchange', `cambiarIshikawaCategoria(${j})`);
     }
     i= tabla_diagnosticos.rows().count();
+    checkSendNuevoParteDiagnostico();
 }
 
+function checkSendNuevoParteDiagnostico(){
+    if(tabla_diagnosticos.rows().count() > 0){
+        $("#btnGuardarNuevoParteDiagnostico").removeAttr('disabled');
+    }
+    else{
+        $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    }
+}
+
+
+function openModalNuevoParteDiagnostico(id_orden){
+    $('#nuevoParteDiagnosticoModal').modal('show');
+    $("#btnAgregarFilaDiagnostico").show();
+    tabla_diagnosticos.clear().draw();
+    i = 0;
+    $("#btnGuardarNuevoParteDiagnostico").show();
+    $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("input:radio[name=a_resolver]").removeAttr('disabled');
+    $("#horas").val('');
+    $("#horas").removeAttr('disabled');
+    $("#fecha").val('');
+    $("#fecha").removeAttr('disabled');
+    $("#herramental").val($("#activo").val());
+    $("#id_orden").val(id_orden);
+    $("input:radio").attr("checked", false);
+    $("#previewAceptarReview").hide();
+}
+
+function openModalConfirmarParteDiagnostico(id_orden){
+    $('#nuevoParteDiagnosticoModal').modal('show');
+    $("#btnAgregarFilaDiagnostico").hide();
+    $("#id_orden").val(id_orden);    
+    $("#fecha").attr('disabled', 'disabled');
+    $("#horas").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnostico").hide();
+    $("#herramental").val($("#activo").val());
+    $("#previewAceptarReview").show();
+    tabla_diagnosticos.clear()
+    $.ajax({
+        type: 'GET',
+        url: '/get-parte-diagnostico/' + id_orden,
+        success: function(data) {
+            data = data.data
+            console.log(data)
+            $("#horas").val(data.get_parte.horas);
+            $("#fecha").val(data.get_parte.fecha);
+            if(data.en_maquina == 1){
+                $("input:radio[name=a_resolver][value='Máquina']").attr("checked", true);
+            }
+            else if(data.en_banco == 1){
+                $("input:radio[name=a_resolver][value='Banco']").attr("checked", true);
+            }
+            $("input:radio[name=a_resolver]").attr("disabled", true);
+            i = 1;
+            data.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+
+                tabla_diagnosticos.row.add([
+                    i,
+                    parte_diag_x_causa.id_parte_diagnostico,
+                    parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
+                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa
+                ]);
+
+                i++;
+            });
+            tabla_diagnosticos.draw();
+        }
+    });
+}
+
+function procesarDiagnostico(accion){
+     $.ajax({
+        type: 'post',
+        url: '/procesar-parte-diagnostico',
+        data: {
+            id_orden_mantenimiento: $("#id_orden").val(),
+            accion: accion,
+            nombre_proyecto: $("#nombre_proyecto").text(),
+        },
+        success: function(data) {
+            $('#nuevoParteDiagnosticoModal').modal('hide');
+            location.reload();
+        }
+    });
+}

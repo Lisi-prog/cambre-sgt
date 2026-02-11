@@ -82,6 +82,15 @@ class Parte extends Model
         if (count(Parte_mantenimiento::where('id_parte', $this->id_parte)->get()) == 1) {
             return $this->hasOne(Parte_mantenimiento::class, 'id_parte');
         }
+        if (count(Parte_diagnostico::where('id_parte', $this->id_parte)->get()) == 1) {
+            return $this->hasOne(Parte_diagnostico::class, 'id_parte');
+        }
+        if (count(Parte_inspeccion::where('id_parte', $this->id_parte)->get()) == 1) {
+            return $this->hasOne(Parte_inspeccion::class, 'id_parte');
+        }
+        if (count(Parte_ajuste::where('id_parte', $this->id_parte)->get()) == 1) {
+            return $this->hasOne(Parte_ajuste::class, 'id_parte');
+        }
     }
 
     public function getParteDiagnostico(){
