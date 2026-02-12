@@ -13,7 +13,7 @@
                         <input disabled class="form-control" value="INSPECCIÓN">
                     </div>
                     <div class="form-group ml-4">
-                        <label>HERRAMENTAL</label>
+                        <label>ACTIVO</label>
                         <input id="herramental_inspeccion" disabled class="form-control">
                     </div>
                     <div class="form-group ml-4">
