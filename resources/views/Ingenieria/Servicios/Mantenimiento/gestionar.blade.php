@@ -244,7 +244,7 @@
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
     <div hidden>
-        @include('Ingenieria\Servicios\Mantenimiento\Partes\ishikawa_select')
+        @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
     </div>
     <script>
         $(document).ready(function () { 
