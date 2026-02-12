@@ -281,5 +281,6 @@ class Orden extends Model
     //
     public function getHoras(){
         //
+        return $this->getPartes()->selectRaw("TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(horas))), '%H:%i') as total")->value('total');
     }
 }
