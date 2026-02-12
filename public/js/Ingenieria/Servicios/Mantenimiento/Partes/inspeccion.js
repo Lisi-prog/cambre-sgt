@@ -17,6 +17,7 @@ $(document).ready(function () {
                     next: 'Sig.',
                 },
             },
+            pageLength: 100,
             "aaSorting": []
     });    
     activo = document.getElementById('activo').value;
