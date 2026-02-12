@@ -13,6 +13,8 @@ use App\Http\Controllers\Ingenieria\Activos\Tarea\TareaMantenimientoController;
 use App\Http\Controllers\Ingenieria\Activos\Tarea\ZonaTareaController;
 use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteDiagnosticoController;
 use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteInspeccionController;
+use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteAjusteController;
+use App\Http\Controllers\Ingenieria\Activos\ZonaController;
 
 
 
@@ -39,6 +41,11 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('get-tareas-por-activo/{id_activo}', [ParteInspeccionController::class, 'get_tareas_x_activo'])->name('get_tareas_x_activo');   
     Route::get('get-parte-inspeccion/{id_orden}', [ParteInspeccionController::class, 'get_parte_inspeccion'])->name('get_parte_inspeccion');   
     Route::post('procesar-parte-inspeccion', [ParteInspeccionController::class, 'procesar_parte_inspeccion'])->name('procesar_parte_inspeccion');
+    Route::resource('parte_ajuste', ParteAjusteController::class);
+    Route::get('get-pre-acciones-ajuste/{id_etapa}', [ParteAjusteController::class, 'get_pre_acciones_ajuste'])->name('get_acciones_ajuste');   
+    Route::get('get-parte-ajuste/{id_orden}', [ParteAjusteController::class, 'get_parte_ajuste'])->name('get_parte_ajuste');   
+    Route::post('procesar-parte-ajuste', [ParteAjusteController::class, 'procesar_parte_ajuste'])->name('procesar_parte_ajuste');   
+    Route::resource('zona', ZonaController::class);
     });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {

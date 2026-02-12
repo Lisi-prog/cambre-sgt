@@ -217,10 +217,9 @@ CREATE TABLE `parte_ajuste` (
 COLLATE='utf8mb4_uca1400_ai_ci'
 ENGINE=InnoDB
 ;
-
 CREATE TABLE `zona` (
 	`id_zona` INT(11) NOT NULL AUTO_INCREMENT,
-	`nombre_zona` INT(11) NULL DEFAULT NULL,
+	`nombre_zona` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_uca1400_ai_ci',
 	PRIMARY KEY (`id_zona`) USING BTREE
 )
 COLLATE='utf8mb4_uca1400_ai_ci'

@@ -164,7 +164,7 @@
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @endif
@@ -175,6 +175,10 @@
                                                                 </button>    
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
                                                                     <button type="button" onclick="openModalConfirmarParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                    <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
@@ -243,6 +247,7 @@
 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste') 
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
     </div>

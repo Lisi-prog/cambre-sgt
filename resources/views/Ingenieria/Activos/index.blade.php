@@ -20,12 +20,15 @@
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
                 <h4 class="titulo page__heading my-auto">Activos</h5>
             </div>
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2 d-flex">
                 {!! Form::open(['method' => 'GET', 'route' => ['tipo_activo.index'], 'class' => 'd-flex justify-content-end']) !!}
                     {!! Form::submit('Tipo Activo', ['class' => 'btn btn-primary']) !!}
                 {!! Form::close() !!}
+                {!! Form::open(['method' => 'GET', 'route' => ['zona.index'], 'class' => 'd-flex justify-content-end']) !!}
+                    {!! Form::submit('Zona', ['class' => 'btn btn-primary ml-2']) !!}
+                {!! Form::close() !!}
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-7">
+            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
                 {{-- <a href="{{route('operacion.index')}}" class="btn btn-primary">Operacion</a> --}}
             </div>
             
