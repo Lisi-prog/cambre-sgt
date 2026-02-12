@@ -163,6 +163,7 @@
                         .forEach(e => {
                             let trInfoSub = '';
 
+                        if (Number(e.total_horas) != 0) {
                             trEmpAv += `<tr style="">
                                             <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.name}</td>
                                                                                 
@@ -203,8 +204,12 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center mt-2">
+                                                        <h5>Total Hs: <strong>${e.total_horas}</strong></h5>
+                                                    </div>
                                                 </div>
                                             </div>`;
+                        }
                         });
 
                         document.getElementById('vista-grafico').innerHTML = `
