@@ -108,7 +108,7 @@ class InformeController extends Controller
                 $nombreEmpleado = $empleados[$subId] ?? 'Desconocido';
 
                 // Preparar datos para el gráfico del subordinado
-                $datosGraficoSub = $this->prepararDatosGrafico($datosSub);
+                $datosGraficoSub = $this->prepararDatosGraficoSubordinados($datosSub);
                 $totalHorasSub = isset($datosSub[0]) ? substr($datosSub[0]->total_ac, 0, -3) : '0';
 
                 $datosSubordinados[] = [
@@ -175,6 +175,45 @@ class InformeController extends Controller
 
         $chartData = json_encode($chartData);
         $chartURL = "https://quickchart.io/chart?width=600&height=400&c=" . urlencode($chartData);
+        
+        return ['chart_url' => $chartURL];
+    }
+
+    private function prepararDatosGraficoSubordinados($datos)
+    {
+        $codigo = [];
+        $porcentaje = [];
+
+        foreach ($datos as $item) {
+            $codigo[] = $item->codigo_servicio;
+            $porcentaje[] = $item->porcentaje;
+        }
+
+        if (empty($codigo) || empty($porcentaje)) {
+            return ['chart_url' => ''];
+        }
+
+        $chartData = [
+            'type' => 'pie',
+            'data' => [
+                'labels' => $codigo,
+                'datasets' => [['data' => $porcentaje]]
+            ],
+            'options' => [
+                'plugins' => [
+                    'datalabels' => [
+                        'display' => true,
+                        'align' => 'bottom',
+                        'backgroundColor' => '#ccc',
+                        'borderRadius' => 3,
+                        'font' => ['size' => 18],
+                    ]
+                ]
+            ]
+        ];
+
+        $chartData = json_encode($chartData);
+        $chartURL = "https://quickchart.io/chart?width=600&height=600&c=" . urlencode($chartData);
         
         return ['chart_url' => $chartURL];
     }
