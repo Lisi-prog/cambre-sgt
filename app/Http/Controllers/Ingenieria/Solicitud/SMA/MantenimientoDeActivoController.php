@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ingenieria\Solicitud\SMA;
 use App\Http\Controllers\Controller;
 
 use App\Models\Cambre\Accion_para_tarea;
+use App\Models\Cambre\Maquinaria;
 use Illuminate\Http\Request;
 
 //agregamos
@@ -52,6 +53,7 @@ use App\Models\Cambre\Activo_x_sintoma;
 use App\Models\Cambre\Sol_serv_man_x_sintoma;
 use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
+use App\Models\Cambre\Zona;
 class MantenimientoDeActivoController extends Controller
 {
     function __construct()
@@ -465,11 +467,13 @@ class MantenimientoDeActivoController extends Controller
     public function gestionar($id){
         $proyecto = Servicio::find($id);
         $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
-        $ishikawa_categorias = Ishikawa_categoria::all();
-        $ishikawa_causas = Ishikawa_causa::all();
-        $acciones = Accion_para_tarea::all();
+        $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
+        $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
+        $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $ordenes_mantenimiento = Orden::where('id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento'));
+        $zonas = Zona::orderBy('nombre_zona')->get();
+        $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas'));
     }
 
     public function destroy($id)

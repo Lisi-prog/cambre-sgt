@@ -1396,8 +1396,8 @@ class OrdenController extends Controller
     public function index_hdr(){
 
         $operaciones = Vw_operaciones_de_hdr::orderByRaw('ISNULL(prioridad), prioridad')
-                                                    ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
-                                                    ->get();
+            ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+            ->get();
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
         $flt_operaciones_tec = [];
 

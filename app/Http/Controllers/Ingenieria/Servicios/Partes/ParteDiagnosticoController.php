@@ -149,15 +149,7 @@ class ParteDiagnosticoController extends Controller{
                     $parte_inspeccion->id_parte = $parte->id_parte;
                     $parte_inspeccion->id_estado_mantenimiento = 1;
                     $parte_inspeccion->save();
-                }
-                else{
-                    DB::rollBack();
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Acción no válida.'
-                    ], 400);
-                }
-                 $parte_nueva = new Parte;
+                    $parte_nueva = new Parte;
                     $parte_nueva->observaciones = "Aprobación de orden de mantenimiento de diagnóstico";
                     $parte_nueva->fecha = Carbon::now();
                     $parte_nueva->fecha_carga = Carbon::now();
@@ -175,6 +167,14 @@ class ParteDiagnosticoController extends Controller{
                     $parte_diagnostico_nuevo->id_estado = 3;
                     $parte_diagnostico_nuevo->id_parte = $parte_nueva->id_parte;
                     $parte_diagnostico_nuevo->save();
+                }
+                else{
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Acción no válida.'
+                    ], 400);
+                }                 
                 DB::commit();
                 return response()->json([
                     'success' => true,

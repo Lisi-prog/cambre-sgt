@@ -21,7 +21,7 @@ $(document).ready(function () {
             "aaSorting": []
     });    
     activo = document.getElementById('activo').value;
-    document.getElementById('herramental').value = activo;
+    document.getElementById('herramental_inspeccion').value = activo;
 });
 
 function openModalNuevoParteInspeccion(id_activo, id_orden){
@@ -144,7 +144,8 @@ function openModalConfirmarParteInspeccion(id_orden){
                     accion
                 ]);
             });
-
+            $("#fecha_inspeccion").val(data.get_parte.fecha)
+            $("#horas_inspeccion").val(data.get_parte.horas)
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
         }
