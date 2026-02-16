@@ -136,6 +136,7 @@
                     data: form_data,
                     timeout: 60000, // 60 segundos de espera
                     success: function(res) {
+                        console.log(res);
                         document.getElementById('ver-informes').hidden = false;
                         let trProyAv = '';
                         let trEmpAv = '';
@@ -163,13 +164,14 @@
                         .forEach(e => {
                             let trInfoSub = '';
 
+                        trEmpAv += `<tr style="">
+                                        <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.name}</td>
+                                                                            
+                                        <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.total_horas}</td>
+                                                                            
+                                    </tr>`;
                         if (Number(e.total_horas) != 0) {
-                            trEmpAv += `<tr style="">
-                                            <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.name}</td>
-                                                                                
-                                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.total_horas}</td>
-                                                                                
-                                        </tr>`;
+                            
 
                             e.info.forEach( i => {
                                     trInfoSub += `<tr style="">
