@@ -49,6 +49,10 @@
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">                       
             </div>
             <div class="modal-footer">
+                <div class="form-group m-auto">
+                    <input type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
+                    <label for="completado_ajuste">COMPLETADO</label>
+                </div>
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">

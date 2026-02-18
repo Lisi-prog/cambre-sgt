@@ -171,6 +171,16 @@
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @endif
+                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'En proceso')
+                                                                @if ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
+                                                                    <button type="button" onclick="openModalParteInspeccionPendiente({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                    <button type="button" onclick="openModalParteAjustePendiente({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
                                                                 @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
                                                                 <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
@@ -254,6 +264,10 @@
     </div>
     <script>
         $(document).ready(function () { 
+        var url = '{{url('/s_s_i')}}';
+        document.getElementById('volver').href = url;
+        document.getElementById('ayudin').hidden = false;
+
             $('#table_partes').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
