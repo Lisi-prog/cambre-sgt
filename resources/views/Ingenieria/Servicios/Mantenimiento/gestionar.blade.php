@@ -104,13 +104,16 @@
                     </div>
                 </div>
                 {{-- -------------------------------- --}}
-
-                {{-- Ordenes y partes --}}
+               
+            </div>
+            {{-- Ordenes y partes --}}
+            <div class="row d-flex align-items-stretch">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-head pt-3 m-auto">
                             <h5>Orden</h5>
                         </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -194,9 +197,6 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                        <button type="button" class="btn btn-success" onclick="">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -205,10 +205,11 @@
                 </div>
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-head pt-3 m-auto">
                             <h5>Parte</h5>
                         </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <table id="table_partes">
                                 <thead>
@@ -240,7 +241,7 @@
                             </table>
                         </div>
                     </div>
-                </div>               
+                </div>
             </div>
         </div>
     </section>
