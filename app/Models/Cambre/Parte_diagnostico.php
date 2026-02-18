@@ -19,7 +19,7 @@ class Parte_diagnostico extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'id_parte', 'id_estado', 'en_maquina', 'en_banco'
+        'id_parte', 'id_estado', 'en_maquina', 'en_banco', 'completado'
     ];
 
     public function getParte()

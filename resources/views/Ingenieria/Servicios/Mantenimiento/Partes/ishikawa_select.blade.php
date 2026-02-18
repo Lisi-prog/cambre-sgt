@@ -23,3 +23,6 @@
         <option value="{{ $maquina->id_maquinaria }}">{{ $maquina->alias_maquinaria }}</option>
     @endforeach
 </div>
+<div id="tarea_mantenimiento">
+    
+</div>

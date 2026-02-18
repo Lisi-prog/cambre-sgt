@@ -2,7 +2,9 @@ var tabla_inspecciones
 $(document).ready(function () {
     tabla_inspecciones = $('#tabla_inspecciones').DataTable({headerCallback: function(thead) {
         $(thead).hide();
-    },
+    },columnDefs: [
+            { className: "text-center", targets: [0,1,2,3, 4] }
+        ],
         language: {
                 lengthMenu: 'Mostrar _MENU_ registros por pagina',
                 zeroRecords: 'No se ha encontrado registros',
@@ -51,16 +53,18 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
                 }    
                 tabla_inspecciones.row.add([
                     tarea.nombre_tarea,
+
                     tarea.get_ejecucion.nombre_ejecucion,
-                    `<input class="form-check-input" type="checkbox"
-                        id="tarea_${tarea.id_tarea_mantenimiento}"
-                        checked
-                        
-                        onchange="checkboxTareaRealizada(${tarea.id_tarea_mantenimiento})"
-                        value="${tarea.id_tarea_mantenimiento}">
-                        <input type="hidden" name="tareas[${j}][id]" value="${tarea.id_tarea_mantenimiento}">`,
+
+                    `<input type="radio"
+                        name="tareas[${j}][ok]" value="ok"  
+                        onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})">
+                    <input type="hidden" name="tareas[${j}][id]" value="${tarea.id_tarea_mantenimiento}">`,
+
+                    `<input type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
+
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" onchange="setTareasPendientes(${tarea.id_tarea_mantenimiento})" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -80,11 +84,12 @@ function addZonaHeader(nombreZona) {
         nombreZona,
         "",
         "",
+        "",
         ""
     ]).node();
 
     $(zonaRow).find('td').eq(0)
-        .attr('colspan', 4)
+        .attr('colspan', 5)
         .addClass('text-center fw-bold');
 
     $(zonaRow).find('td:gt(0)').remove();
@@ -93,6 +98,7 @@ function addZonaHeader(nombreZona) {
         "Tarea",
         "Ejecución",
         "OK",
+        "NO OK",
         "Acción"
     ]).node();
 
@@ -101,16 +107,31 @@ function addZonaHeader(nombreZona) {
 }
 
 
-function checkboxTareaRealizada(id){
-    if(!$("#tarea_"+id).is(':checked')){
-        $("#label_accion_"+id).attr('hidden', 'hidden')
-        $("#accion_"+id).removeAttr('hidden')
+function checkboxTareaRealizada(j, idTarea){
+    const radio = $(`input[name="tareas[${j}][ok]"]:checked`).val();
+
+    if (radio === 'not_ok') {
+        $("#label_accion_" + idTarea).attr('hidden', true);
+        $("#accion_" + idTarea).removeAttr('hidden');
+        $("#accion_" + idTarea).attr('required', 'required');
+    } else {
+        $("#accion_" + idTarea).attr('hidden', true);
+        $("#accion_" + idTarea).removeAttr('required');
+        $("#label_accion_" + idTarea).html('No se requiere acción')
+        $("#label_accion_" + idTarea).removeAttr('hidden');
+    }
+    
+    let completo = validarRadios()
+    if(completo){
+        $("#completado_inspeccion_value").prop('checked', true)
+        $("#completado_inspeccion").attr('checked', 'checked')
     }
     else{
-        $("#accion_"+id).attr('hidden', 'hidden')
-        $("#label_accion_"+id).removeAttr('hidden')
+        $("#completado_inspeccion_value").prop('checked', false)
+        $("#completado_inspeccion").removeAttr('checked')
     }
 }
+
 
 function openModalConfirmarParteInspeccion(id_orden){   
     $('#modalNuevoParteInspeccion').modal('show');
@@ -119,6 +140,7 @@ function openModalConfirmarParteInspeccion(id_orden){
     $("#previewAceptarInspeccionReview").show()
     $("#horas_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
+    $("#completado_inspeccion").attr('checked', 'checked')
     $("#herramental_inspeccion").val($("#activo").val());
     tabla_inspecciones.clear();
      $.ajax({
@@ -126,21 +148,24 @@ function openModalConfirmarParteInspeccion(id_orden){
         url: '/get-parte-inspeccion/' + id_orden,
         success: function(data) {
             let zona_actual = null;
-            data.get_tareas_mantenimiento.forEach(tarea => {
+            data.get_parte.get_orden.parte_inspe_x_tareas_mantenimiento.forEach(tarea => {
                 if (tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona !== zona_actual) {
                     zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
                     addZonaHeader(zona_actual)
                 }
-                let ok = 'SI'
+                let ok = 'VERDADERO'
+                let not_ok = 'FALSO'
                 let accion = 'NO SE REQUIERE'
                 if(tarea.ok == 0){
-                    ok = 'NO'
+                    ok = 'FALSO'
+                    not_ok = 'VERDADERO'
                     accion = tarea.get_accion_para_tarea.nombre_accion
                 }      
                 tabla_inspecciones.row.add([
                     tarea.get_tarea_mantenimiento.nombre_tarea,
                     tarea.get_tarea_mantenimiento.get_ejecucion.nombre_ejecucion,
                     ok,
+                    not_ok,
                     accion
                 ]);
             });
@@ -164,6 +189,100 @@ function procesarInspeccion(accion){
         success: function(data) {
             $('#nuevoParteInspeccionModal').modal('hide');
             location.reload();
+        }
+    });
+}
+
+function validarRadios() {
+    let completos = true;
+    const grupos = {};
+    $('input[type="radio"][name^="tareas"]').each(function () {
+        grupos[$(this).attr('name')] = true;
+    });
+    for (let name in grupos) {
+        if ($(`input[name="${name}"]:checked`).length === 0) {
+            completos = false;
+            break;
+        }
+    }
+    return completos;
+}
+
+function openModalParteInspeccionPendiente(id_activo, id_orden){
+    $('#modalNuevoParteInspeccion').modal('show');
+    $("#id_orden_inspeccion").val(id_orden);
+    $("#btnGuardarNuevoParteInspeccion").show()
+    $("#previewAceptarInspeccionReview").hide()
+    $("#herramental_inspeccion").val($("#activo").val());
+    $("#horas_inspeccion").removeAttr('disabled')
+    $("#fecha_inspeccion").removeAttr('disabled')
+
+    tabla_inspecciones.clear();
+
+    $.ajax({
+        type: 'GET',
+        url: '/get-parte-inspeccion-pendiente/' + id_activo + '/' + id_orden,
+        success: function(data) {
+            console.log(data)
+            let zona_actual = null;
+            let j = 0
+            data.tareasMantenimiento.forEach(tarea => {
+                if (tarea.get_zona_tarea.nombre_zona !== zona_actual) {
+                    zona_actual = tarea.get_zona_tarea.nombre_zona;
+                    addZonaHeader(zona_actual)
+                } 
+                tabla_inspecciones.row.add([
+                    tarea.nombre_tarea,
+
+                    tarea.get_ejecucion.nombre_ejecucion,
+
+                    `<input type="radio"
+                        name="tareas[${j}][ok]" value="ok"  
+                        checked  id="ok_${tarea.id_tarea_mantenimiento}"
+                        onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})">
+                    <input type="hidden" name="tareas[${j}][id]" value="${tarea.id_tarea_mantenimiento}">`,
+
+                    `<input id="not_ok_${tarea.id_tarea_mantenimiento}" type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
+
+                    `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
+                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                        <option value="NO ACCION" hidden>Seleccionar...</option>
+                        ${$("#accion_select_div").html()}
+                    </select>`
+                ]);
+                tabla_inspecciones.draw();
+                
+                if(tarea.ok ===null){
+                    console.log('null')
+                    $("#accion_" + tarea.id_tarea_mantenimiento).attr('hidden', true);
+                    $("#accion_" + tarea.id_tarea_mantenimiento).removeAttr('required');
+                    $("#label_accion_" + tarea.id_tarea_mantenimiento).removeAttr('hidden');
+                    $(`#ok_${tarea.id_tarea_mantenimiento}`).prop('checked', false)
+                    $(`#not_ok_${tarea.id_tarea_mantenimiento}`).prop('checked', false)
+                }
+                else if(tarea.ok === 0){
+                    console.log('0')
+                    $(`#accion_${tarea.id_tarea_mantenimiento}`).val(tarea.id_accion_tarea)
+                    $("#label_accion_" + tarea.id_tarea_mantenimiento).attr('hidden', true);
+                    $("#accion_" + tarea.id_tarea_mantenimiento).removeAttr('hidden');
+                    $("#accion_" + tarea.id_tarea_mantenimiento).attr('required', 'required');
+                    $(`#not_ok_${tarea.id_tarea_mantenimiento}`).prop('checked', true)
+                }
+                else if(tarea.ok == 1){
+                    console.log('1')
+                    $("#accion_" + tarea.id_tarea_mantenimiento).attr('hidden', true);
+                    $("#accion_" + tarea.id_tarea_mantenimiento).removeAttr('required');
+                    $("#label_accion_" + tarea.id_tarea_mantenimiento).html('No se requiere acción')
+                    $("#label_accion_" + tarea.id_tarea_mantenimiento).removeAttr('hidden');
+                    $(`#ok_${tarea.id_tarea_mantenimiento}`).prop('checked', true)
+                }
+
+                j++;
+            });
+            tabla_inspecciones.draw();
+            tabla_inspecciones.columns.adjust(); 
+            $("#horas_inspeccion").val(data.parte.get_parte.horas)
+            $("#fecha_inspeccion").val(data.parte.get_parte.fecha)
         }
     });
 }

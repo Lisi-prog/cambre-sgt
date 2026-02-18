@@ -22,7 +22,7 @@ class ParteDiagnosticoController extends Controller{
             DB::beginTransaction();
             //PARTE
                 $parte = new Parte;
-                $parte->observaciones = "Alta de parte diagnóstico, pendiente de revisión";
+                $parte->observaciones = $request->observacion;
                 $parte->id_orden = $request->id_orden;
                 $parte->fecha = $request->fecha;
                 $parte->horas = $request->horas;
@@ -44,7 +44,8 @@ class ParteDiagnosticoController extends Controller{
                     $parte_diagnostico->en_maquina = 0;
                     $parte_diagnostico->en_banco = 1;    
                 }
-                $parte_diagnostico->id_estado = 2;
+                $parte_diagnostico->id_estado = 3;
+                $parte_diagnostico->completado = 1;
                 $parte_diagnostico->id_parte = $parte->id_parte;
                 $parte_diagnostico->save();
             //Parte_diag_x_causa
@@ -113,13 +114,30 @@ class ParteDiagnosticoController extends Controller{
                     $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte_nueva->save();
                     $parte_diagnostico_nuevo = new Parte_diagnostico;
-                    $parte_diagnostico_nuevo->id_estado = 4;
+                    $parte_diagnostico_nuevo->id_estado = 5;
                     $parte_diagnostico_nuevo->id_parte = $parte_nueva->id_parte;
                     $parte_diagnostico_nuevo->save();
                 }
-                else if($request->accion == "aceptar"){
-                    $parte_diagnostico->id_estado = 3;
-                    $orden_vieja = Orden::find($request->id_orden_mantenimiento);
+                else if($request->accion == "aceptar"){                                    
+                    $parte_nueva = new Parte;
+                    $parte_nueva->observaciones = "Aprobación de orden de mantenimiento de diagnóstico";
+                    $parte_nueva->fecha = Carbon::now();
+                    $parte_nueva->fecha_carga = Carbon::now();
+                    $parte_nueva->horas = 0;
+                    $parte_nueva->costo = 0;
+                    $parte_nueva->id_orden = $parte_diagnostico->getParte->id_orden;
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+                    $responsabilidad = Responsabilidad::create([
+                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                    ]);
+                    $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
+                    $parte_nueva->save();
+                    $parte_diagnostico_nuevo = new Parte_diagnostico;
+                    $parte_diagnostico_nuevo->id_estado = 4;
+                    $parte_diagnostico_nuevo->id_parte = $parte_nueva->id_parte;
+                    $parte_diagnostico_nuevo->save();
+                    $orden_vieja = Orden::find($request->id_orden_mantenimiento);    
                     $orden_nueva = new Orden;                
                     $orden_nueva->nombre_orden = $request->nombre_proyecto . '-inspeccion';
                     $orden_nueva->fecha_inicio = Carbon::now();
@@ -140,7 +158,7 @@ class ParteDiagnosticoController extends Controller{
                     $parte->id_orden = $orden_nueva->id_orden;
                     $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
                     $responsabilidad = Responsabilidad::create([
-                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                        'id_empleado' => 999,
                                         'id_rol_empleado' => $rol_empleado->id_rol_empleado
                                     ]);
                     $parte->id_responsabilidad = $responsabilidad->id_responsabilidad;
@@ -149,24 +167,6 @@ class ParteDiagnosticoController extends Controller{
                     $parte_inspeccion->id_parte = $parte->id_parte;
                     $parte_inspeccion->id_estado_mantenimiento = 1;
                     $parte_inspeccion->save();
-                    $parte_nueva = new Parte;
-                    $parte_nueva->observaciones = "Aprobación de orden de mantenimiento de diagnóstico";
-                    $parte_nueva->fecha = Carbon::now();
-                    $parte_nueva->fecha_carga = Carbon::now();
-                    $parte_nueva->horas = 0;
-                    $parte_nueva->costo = 0;
-                    $parte_nueva->id_orden = $parte_diagnostico->getParte->id_orden;
-                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                    $responsabilidad = Responsabilidad::create([
-                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                                    ]);
-                    $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
-                    $parte_nueva->save();
-                    $parte_diagnostico_nuevo = new Parte_diagnostico;
-                    $parte_diagnostico_nuevo->id_estado = 3;
-                    $parte_diagnostico_nuevo->id_parte = $parte_nueva->id_parte;
-                    $parte_diagnostico_nuevo->save();
                 }
                 else{
                     DB::rollBack();
@@ -195,5 +195,4 @@ class ParteDiagnosticoController extends Controller{
             ], 500);  
         }
     }
-
 }
