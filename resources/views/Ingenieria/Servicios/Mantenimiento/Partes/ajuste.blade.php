@@ -62,6 +62,7 @@
                 </div>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
+            <input type="text" hidden id="bandera_refabricar">
             {!! Form::close() !!}
         </div>
     </div>

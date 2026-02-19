@@ -34,6 +34,10 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
     $("#herramental_inspeccion").val($("#activo").val());
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
+    let hoy = new Date()
+    hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
+    '-' + hoy.getDate().toString().padStart(2, 0)
+    $("#fecha_inspeccion").val(hoy)
 
     tabla_inspecciones.clear();
 
@@ -170,7 +174,7 @@ function openModalConfirmarParteInspeccion(id_orden){
                 ]);
             });
             $("#fecha_inspeccion").val(data.get_parte.fecha)
-            $("#horas_inspeccion").val(data.get_parte.horas)
+            $("#horas_inspeccion").val(data.horas)
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
         }
@@ -281,8 +285,56 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
             });
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
-            $("#horas_inspeccion").val(data.parte.get_parte.horas)
-            $("#fecha_inspeccion").val(data.parte.get_parte.fecha)
+            $("#horas_inspeccion").val('')
+            let hoy = new Date()
+            hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
+            '-' + hoy.getDate().toString().padStart(2, 0)
+            $("#fecha_inspeccion").val(hoy)
+        }
+    });
+}
+
+
+function openModalVerParteInspeccion(id_orden){   
+    $('#modalNuevoParteInspeccion').modal('show');
+    $("#id_orden_inspeccion").val(id_orden);
+    $("#btnGuardarNuevoParteInspeccion").hide()
+    $("#previewAceptarInspeccionReview").hide()
+    $("#horas_inspeccion").attr('disabled', 'disabled')
+    $("#fecha_inspeccion").attr('disabled', 'disabled')
+    $("#completado_inspeccion").attr('checked', 'checked')
+    $("#herramental_inspeccion").val($("#activo").val());
+    tabla_inspecciones.clear();
+     $.ajax({
+        type: 'GET',
+        url: '/get-parte-inspeccion-completado/' + id_orden,
+        success: function(data) {
+            let zona_actual = null;
+            data.get_parte.get_orden.parte_inspe_x_tareas_mantenimiento.forEach(tarea => {
+                if (tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona !== zona_actual) {
+                    zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
+                    addZonaHeader(zona_actual)
+                }
+                let ok = 'VERDADERO'
+                let not_ok = 'FALSO'
+                let accion = 'NO SE REQUIERE'
+                if(tarea.ok == 0){
+                    ok = 'FALSO'
+                    not_ok = 'VERDADERO'
+                    accion = tarea.get_accion_para_tarea.nombre_accion
+                }      
+                tabla_inspecciones.row.add([
+                    tarea.get_tarea_mantenimiento.nombre_tarea,
+                    tarea.get_tarea_mantenimiento.get_ejecucion.nombre_ejecucion,
+                    ok,
+                    not_ok,
+                    accion
+                ]);
+            });
+            $("#fecha_inspeccion").val(data.get_parte.fecha)
+            $("#horas_inspeccion").val(data.horas)
+            tabla_inspecciones.draw();
+            tabla_inspecciones.columns.adjust();
         }
     });
 }

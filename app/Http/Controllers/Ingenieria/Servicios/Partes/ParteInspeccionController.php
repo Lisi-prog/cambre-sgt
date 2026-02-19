@@ -133,7 +133,7 @@ class ParteInspeccionController extends Controller{
         })
         ->with(
             'getParte.getResponsable.getEmpleado',
-            
+            'getParte.getOrden'
         )
         ->orderByDesc('id_parte_inspeccion')
         ->first();
@@ -147,7 +147,7 @@ class ParteInspeccionController extends Controller{
             'getAccionParaTarea')
             ->get();
         }
-
+        $parte_inspeccion->horas = $parte_inspeccion->getParte->getOrden->getHoras();
         return response()->json($parte_inspeccion);
     }
 
@@ -327,5 +327,29 @@ class ParteInspeccionController extends Controller{
             ->get();
 
         return ["parte" => $parte_inspeccion, "tareasMantenimiento" => $tareasMantenimiento];
+    }
+
+    public function get_parte_inspeccion_completado($id_orden){
+        $parte_inspeccion = Parte_inspeccion::whereHas('getParte', function($query) use ($id_orden){
+        $query->where('id_orden', $id_orden)->whereIn('id_estado_mantenimiento', [2,3]);
+        })
+        ->with(
+            'getParte.getResponsable.getEmpleado',
+            'getParte.getOrden'
+        )
+        ->orderByDesc('id_parte_inspeccion')
+        ->first();
+        if ($parte_inspeccion) {
+            $orden = $parte_inspeccion->getParte->getOrden;
+
+            $orden->parte_inspe_x_tareas_mantenimiento =
+                $orden->getParteInspeXTareasMantenimiento()
+                ->with('getTareaMantenimiento.getZonaTarea',
+            'getTareaMantenimiento.getEjecucion',
+            'getAccionParaTarea')
+            ->get();
+        }
+        $parte_inspeccion->horas = $parte_inspeccion->getParte->getOrden->getHoras();
+        return response()->json($parte_inspeccion);
     }
 }

@@ -104,7 +104,7 @@ class ParteAjusteController extends Controller{
         $query->where('id_orden', $id_orden);
         })
         ->with(
-            'getParte', 
+            'getParte.getOrden', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
@@ -112,6 +112,7 @@ class ParteAjusteController extends Controller{
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();
+        $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
         return response()->json($parte_ajuste);
     }
 
@@ -141,7 +142,7 @@ class ParteAjusteController extends Controller{
                     $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte_nueva->save();
                     $parte_ajuste_nueva = new Parte_ajuste;
-                    $parte_ajuste_nueva->id_estado_mantenimiento = 4;
+                    $parte_ajuste_nueva->id_estado_mantenimiento = 5;
                     $parte_ajuste_nueva->id_parte = $parte_nueva->id_parte;
                     $parte_ajuste_nueva->save();
                 }
@@ -161,7 +162,7 @@ class ParteAjusteController extends Controller{
                     $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte_nueva->save();
                     $parte_ajuste_nuevo = new Parte_ajuste();
-                    $parte_ajuste_nuevo->id_estado_mantenimiento = 3;
+                    $parte_ajuste_nuevo->id_estado_mantenimiento = 4;
                     $parte_ajuste_nuevo->id_parte = $parte_nueva->id_parte;
                     $parte_ajuste_nuevo->save();                   
                 }
@@ -192,4 +193,22 @@ class ParteAjusteController extends Controller{
             ], 500);  
         }    
     }
+
+    public function get_parte_ajuste_completado($id_orden){
+        $parte_ajuste = Parte_ajuste::whereHas('getParte', function($query) use ($id_orden){
+        $query->where('id_orden', $id_orden)->whereIn('id_estado_mantenimiento', [2,3]);
+        })
+        ->with(
+            'getParte.getOrden', 
+            'getTareasAjuste.getAccionTarea', 
+            'getTareasAjuste.getZona',
+            'getTareasAjuste.getMaquinaria',
+            'getTareasAjuste.getTareaMantenimiento',
+        )
+        ->orderByDesc('id_parte_ajuste')
+        ->first();
+        $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
+        return response()->json($parte_ajuste);
+    }
+
 }
