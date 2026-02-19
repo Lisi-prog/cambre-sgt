@@ -54,6 +54,8 @@ use App\Models\Cambre\Sol_serv_man_x_sintoma;
 use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
 use App\Models\Cambre\Zona;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
+use App\Models\Cambre\Estado_mecanizado;
 class MantenimientoDeActivoController extends Controller
 {
     function __construct()
@@ -473,7 +475,9 @@ class MantenimientoDeActivoController extends Controller
         $ordenes_mantenimiento = Orden::where('id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
         $zonas = Zona::orderBy('nombre_zona')->get();
         $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas'));
+        $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
+        $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado'));
     }
 
     public function destroy($id)

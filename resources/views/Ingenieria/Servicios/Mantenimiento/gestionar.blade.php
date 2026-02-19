@@ -104,14 +104,13 @@
                     </div>
                 </div>
                 {{-- -------------------------------- --}}
-               
             </div>
             {{-- Ordenes y partes --}}
             <div class="row d-flex align-items-stretch">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="card h-100">
                         <div class="card-head pt-3 m-auto">
-                            <h5>Orden</h5>
+                            <h5>Orden de Mantenimiento</h5>
                         </div>
                         <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
@@ -253,12 +252,147 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row d-flex align-items-stretch mt-4">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-head">
+                            <br>
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                                    <h5>Orden de Mecanizado</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
+                                        Nuevo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="card-head pt-3 m-auto">
+                            <h5>Orden de Mecanizado</h5>
+                        </div> --}}
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tablaOrdenMec" class="table table-hover mt-2 table-sm" class="display">
+                                    <thead style="background-color: #d37c00" id="comec">
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:6vw">Orden</th>
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;">Manufactura</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th> --}}
+                                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th> --}}
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th> --}}
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Horas reales</th>
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:8vw;">Acciones</th>                                                           
+                                    </thead>
+                                    <tbody id="cuadro-ordenes-mecanizado">
+                                        @php
+                                            $idCount = 0;
+                                        @endphp
+                                        @foreach ($ordenes_mecanizado as $orden)
+                                            @if ($orden->id_estado < 7)
+                                                <tr>
+                                            @else
+                                                <tr style="display: none;">
+                                            @endif     
+                                                    <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+
+                                                    {{-- <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
+
+                                                    <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 6).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
+
+                                                    <td class= 'text-center' >{{$orden->nombre_estado}}</td>
+
+                                                    {{-- <td class= 'text-center' >{{$orden->supervisor}}</td> --}}
+
+                                                    {{-- <td class= 'text-center' >{{$orden->responsable}}</td> --}}
+
+                                                    <td class= 'text-center' >{{$orden->fecha_limite ?? '-'}}</td>
+
+                                                    <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
+
+                                                    <td class= 'text-center' >{{$orden->horas_estimada}}</td>
+                                                            
+                                                    <td class= 'text-center' >{{$orden->horas_real}}</td>
+                                                    
+                                                    <td class='text-center'>
+                                                        <div class="row justify-content-center" >
+                                                            <div class="row justify-content-center" >
+                                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenMecanizado{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenMecanizado{{$idCount}}">
+                                                                    Opciones
+                                                                </button>
+                                                            </div>
+                                                            <div class="collapse" data-bs-parent="#cuadro-ordenes-mecanizado" id="collapseOrdenMecanizado{{$idCount}}">
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::text('vieneDesde', 1, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::text('idServ', $proyecto->id_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} 
+                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                                            Editar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, 3)">
+                                                                            Partes
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @php
+                                            $idCount += 1;
+                                            @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-head pt-3 m-auto">
+                            <h5>Suministros</h5>
+                        </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
-    @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste') 
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')
+    @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec') 
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
     </div>
