@@ -283,4 +283,16 @@ class Orden extends Model
         //
         return $this->getPartes()->selectRaw("TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(horas))), '%H:%i') as total")->value('total');
     }
+
+   public function getParteInspeXTareasMantenimiento()
+    {
+        return Parte_inspe_x_tarea_mant::whereHas(
+            'getParte.getParte',
+            function ($query) {
+                $query->where('id_orden', $this->id_orden);
+            }
+        );
+    }
+
+
 }

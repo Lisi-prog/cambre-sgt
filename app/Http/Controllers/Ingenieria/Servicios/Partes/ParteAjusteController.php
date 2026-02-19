@@ -21,7 +21,7 @@ class ParteAjusteController extends Controller{
     {
         $parte_inspeccion = Parte_inspeccion::whereHas('getParte.getOrden', function ($query) use ($id_etapa) {
                 $query->where('id_etapa', $id_etapa)
-                    ->where('id_estado_mantenimiento', 2);
+                    ->whereIn('id_estado_mantenimiento', [2,3]);
             })
             ->whereHas('getTareasMantenimiento.getTareaMantenimiento', function ($query) {
                 $query->where('ok', 0);
@@ -47,6 +47,7 @@ class ParteAjusteController extends Controller{
         //return $request;    
         try{
             DB::beginTransaction();
+            $completo =  isset($request->completado) ? 1 : 0;
             //PARTE
             $parte_revisar = new Parte;
             $parte_revisar->observaciones = "Alta de parte de ajuste, pendiente de revisión";;
@@ -61,11 +62,19 @@ class ParteAjusteController extends Controller{
                                     'id_rol_empleado' => $rol_empleado->id_rol_empleado
                                 ]);
             $parte_revisar->id_responsabilidad = $responsabilidad->id_responsabilidad;
+            $next = 2;
+            if($completo){
+                $parte_revisar->observaciones = "Proceso de ajuste completo, pendiente de revisión";
+                $next = 3;
+            }
+            else{
+                $parte_revisar->observaciones = "Realizando proceso de ajuste";                
+            }
             $parte_revisar->save();
             //PARTE AJUSTE
             $parte_ajuste = new Parte_ajuste;
             $parte_ajuste->id_parte = $parte_revisar->id_parte;
-            $parte_ajuste->id_estado_mantenimiento = 2;
+            $parte_ajuste->id_estado_mantenimiento = $next;
             $parte_ajuste->save();
             //TAREAS DE AJUSTE   
             foreach ($request['tareas'] as $tarea) {
@@ -76,6 +85,7 @@ class ParteAjusteController extends Controller{
                 $tarea_nueva->id_parte_ajuste = $parte_ajuste->id_parte_ajuste;
                 $tarea_nueva->id_accion_tarea = $accion;
                 $tarea_nueva->id_zona = $zona;
+                $tarea_nueva->id_tarea_mantenimiento = $tarea['tarea_mant'];
                 $tarea_nueva->id_maquinaria = $maquina;
                 $tarea_nueva->hecho = isset($tarea['hecho']) ? 1 : 0;
                 $tarea_nueva->save();
@@ -98,6 +108,7 @@ class ParteAjusteController extends Controller{
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
+            'getTareasAjuste.getTareaMantenimiento',
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();

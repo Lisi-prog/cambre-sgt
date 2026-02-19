@@ -38,14 +38,21 @@
                         <th class="text-center" scope="col" style="color:#fff;"></th>
                         <th class="text-center" scope="col" style="color:#fff;"></th>
                         <th class="text-center" scope="col" style="color:#fff;"></th>
+                        <th class="text-center" scope="col" style="color:#fff;"></th>
                     </thead>
                     <tbody id="tabla_inspecciones_body">
 
                     </tbody>
                 </table>       
-                <input type="text" hidden id="id_orden_inspeccion" name="id_orden">                       
+                <input type="text" hidden id="id_orden_inspeccion" name="id_orden">        
+                             
             </div>
             <div class="modal-footer">
+                <div class="form-group m-auto">
+                    <input type="checkbox" disabled id="completado_inspeccion" class="form-check-input">
+                    <input hidden type="checkbox"  name="completo"  id="completado_inspeccion_value" class="form-check-input">
+                    <label for="completado_inspeccion">COMPLETADO</label>
+                </div> 
                 <button id="btnGuardarNuevoParteInspeccion" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarInspeccionReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
