@@ -195,4 +195,16 @@ class ParteDiagnosticoController extends Controller{
             ], 500);  
         }
     }
+
+    public function get_parte_diagnostico_completado($id_orden_mantenimiento){
+        $parte_diagnostico = Parte_diagnostico::whereHas('getParte', function($query) use ($id_orden_mantenimiento){
+        $query->where('id_orden', $id_orden_mantenimiento)->where('id_estado', 3);
+        })
+        ->with('getParte.getResponsable.getEmpleado',
+            'getParte.getOrden',
+            'getParteDiagXCausa.getIshikawaCausa.getCategoria')
+        ->first();
+        return $parte_diagnostico;
+    }
+
 }

@@ -36,15 +36,18 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('zona_tarea', ZonaTareaController::class);
     Route::resource('parte_diagnostico', ParteDiagnosticoController::class);
     Route::get('get-parte-diagnostico/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico'])->name('get_parte_diagnostico');
+    Route::get('get-parte-diagnostico-completado/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico_completado'])->name('get_parte_diagnostico_completado');
     Route::post('procesar-parte-diagnostico', [ParteDiagnosticoController::class, 'procesar_parte_diagnostico'])->name('procesar_parte_diagnostico');
     Route::resource('parte_inspeccion', ParteInspeccionController::class);
     Route::get('get-tareas-por-activo/{id_activo}', [ParteInspeccionController::class, 'get_tareas_x_activo'])->name('get_tareas_x_activo');   
     Route::get('get-parte-inspeccion-pendiente/{id_activo}/{id_orden}', [ParteInspeccionController::class, 'get_parte_inspeccion_pendiente'])->name('get_parte_inspeccion_pendiente');   
     Route::get('get-parte-inspeccion/{id_orden}', [ParteInspeccionController::class, 'get_parte_inspeccion'])->name('get_parte_inspeccion');   
+    Route::get('get-parte-inspeccion-completado/{id_orden}', [ParteInspeccionController::class, 'get_parte_inspeccion_completado'])->name('get_parte_inspeccion_completado');   
     Route::post('procesar-parte-inspeccion', [ParteInspeccionController::class, 'procesar_parte_inspeccion'])->name('procesar_parte_inspeccion');
     Route::resource('parte_ajuste', ParteAjusteController::class);
     Route::get('get-pre-acciones-ajuste/{id_etapa}', [ParteAjusteController::class, 'get_pre_acciones_ajuste'])->name('get_acciones_ajuste');   
     Route::get('get-parte-ajuste/{id_orden}', [ParteAjusteController::class, 'get_parte_ajuste'])->name('get_parte_ajuste');   
+    Route::get('get-parte-ajuste-completado/{id_orden}', [ParteAjusteController::class, 'get_parte_ajuste_completado'])->name('get_parte_ajuste_completado');   
     Route::post('procesar-parte-ajuste', [ParteAjusteController::class, 'procesar_parte_ajuste'])->name('procesar_parte_ajuste');   
     Route::resource('zona', ZonaController::class);
     });

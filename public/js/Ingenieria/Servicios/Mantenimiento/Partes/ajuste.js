@@ -24,6 +24,7 @@ $(document).ready(function () {
     });    
 });
 
+
 function openModalNuevoParteAjuste(id_orden, id_etapa){
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
@@ -42,26 +43,36 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
         success: function(data) {
             let j=0;
             let opciones = ''
-            data[0].get_tareas_mantenimiento.forEach(tarea => {
-                tabla_ajustes.row.add([
-                    (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
-                    tarea.get_accion_para_tarea.nombre_accion,
-                    `<select class="form-select" required name="tareas[${j}][zona]">
-                        <option value="">Seleccionar...</option>
-                        ${$("#zona_select_div").html()}
-                    </select>
-                    <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_para_tarea.id_accion_tarea}">
-                    <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
-                    `<select class="form-select" required name="tareas[${j}][maquina]">
-                        <option value="">Seleccionar...</option>
-                        ${$("#maquina_select_div").html()}
-                    </select>`,
-                    `<input  onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
-                    name="tareas[${j}][hecho]">`
-                ]);
-                j++;
-                opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`
-            });
+            data.forEach(d => 
+                {
+                    console.log(d)
+                    d.get_tareas_mantenimiento.forEach(tarea => {
+                        tabla_ajustes.row.add([
+                            (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                            tarea.get_accion_para_tarea.nombre_accion,
+                            `<select class="form-select" required name="tareas[${j}][zona]">
+                                <option value="">Seleccionar...</option>
+                                ${$("#zona_select_div").html()}
+                            </select>
+                            <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_para_tarea.id_accion_tarea}">
+                            <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
+                            `<select class="form-select" required name="tareas[${j}][maquina]">
+                                <option value="">Seleccionar...</option>
+                                ${$("#maquina_select_div").html()}
+                            </select>`,
+                            `<input  onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
+                            name="tareas[${j}][hecho]">`
+                        ]);                
+                    j++;
+                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
+                    console.log(opciones)
+                });               
+            })
+            let hoy = new Date()
+            hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
+            '-' + hoy.getDate().toString().padStart(2, 0)
+            $("#fecha_ajuste").val(hoy)
+            $("#horas_ajuste").val('')            
             $("#tarea_mantenimiento").html(opciones)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
@@ -154,6 +165,7 @@ function openModalConfirmarParteAjuste(id_orden){
         url: '/get-parte-ajuste/' + id_orden,
         success: function(data) {
             let j=0;
+            let bandera = 0
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
                     j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
@@ -163,9 +175,13 @@ function openModalConfirmarParteAjuste(id_orden){
                     tarea.hecho? 'SI': 'NO'
                 ]);
                 j++;
+                if(tarea.get_accion_tarea.nombre_accion == 'REFABRICAR' || tarea.get_accion_tarea.nombre_accion== 'Refabricar'){
+                    bandera = 1
+                }
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.get_parte.horas)
+            $("#horas_ajuste").val(data.horas)
+            $("#bandera_refabricar").val(bandera)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -188,7 +204,7 @@ function procesarAjuste(accion){
     });
 }
 
-function openModalParteAjustePendiente(id_orden){
+function openModalParteAjustePendiente(id_orden, id_etapa){
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
@@ -226,8 +242,63 @@ function openModalParteAjustePendiente(id_orden){
                 tarea.hecho? $(`#tarea_hecho_${j}`).prop('checked', true): $(`#tarea_hecho_${j}`).prop('checked', false)
                 j++;
             }); 
+            let hoy = new Date()
+            hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
+            '-' + hoy.getDate().toString().padStart(2, 0)
+            $("#fecha_ajuste").val(hoy)
+            $("#horas_ajuste").val('')       
+            tabla_ajustes.draw();
+            tabla_ajustes.columns.adjust();
+            getTareasSelect(id_etapa)
+        }
+    });
+}
+
+function getTareasSelect(id_etapa){
+    $.ajax({
+        type: 'GET',
+        url: '/get-pre-acciones-ajuste/' + id_etapa,
+        success: function(data) {
+            let opciones = ''
+            data.forEach(d => {
+                d.get_tareas_mantenimiento.forEach(tarea => {
+                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
+                });               
+            })
+            $("#tarea_mantenimiento").html(opciones)
+        }
+    });
+}
+
+function openModalVerParteAjuste(id_orden){
+    $('#modalNuevoParteAjuste').modal('show');
+    $("#id_orden_ajuste").val(id_orden);
+    $("#btnGuardarNuevoParteAjuste").hide()
+    $("#previewAceptarAjusteReview").hide()
+    $("#btnRowNuevoAjuste").hide()
+    $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#fecha_ajuste").attr('disabled', 'disabled')
+    $("#completado_ajuste").attr('disabled', 'disabled')
+    $("#completado_ajuste").prop('checked', true)
+    $("#herramental_ajuste").val($("#activo").val());
+    tabla_ajustes.clear();
+     $.ajax({
+        type: 'GET',
+        url: '/get-parte-ajuste-completado/' + id_orden,
+        success: function(data) {
+            let j=0;
+            data.get_tareas_ajuste.forEach(tarea => {
+                tabla_ajustes.row.add([
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    tarea.get_accion_tarea.nombre_accion,
+                    tarea.get_zona.nombre_zona,
+                    tarea.get_maquinaria.alias_maquinaria,
+                    tarea.hecho? 'SI': 'NO'
+                ]);
+                j++;
+            }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.get_parte.horas)
+            $("#horas_ajuste").val(data.horas)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
