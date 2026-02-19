@@ -308,6 +308,7 @@
                                     <tbody id="cuadro-ordenes-mecanizado">
                                         @php
                                             $idCount = 0;
+                                            $opcion = 1;
                                         @endphp
                                         @foreach ($ordenes_mecanizado as $orden)
                                             @if ($orden->id_estado < 7)
@@ -315,25 +316,25 @@
                                             @else
                                                 <tr style="display: none;">
                                             @endif     
-                                                    <td class= 'text-center' >{{$orden->nombre_orden}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
 
                                                     {{-- <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
 
                                                     <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 6).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
 
-                                                    <td class= 'text-center' >{{$orden->nombre_estado}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_estado}}</td>
 
                                                     {{-- <td class= 'text-center' >{{$orden->supervisor}}</td> --}}
 
                                                     {{-- <td class= 'text-center' >{{$orden->responsable}}</td> --}}
 
-                                                    <td class= 'text-center' >{{$orden->fecha_limite ?? '-'}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
 
-                                                    <td class= 'text-center' >{{$orden->fecha_finalizacion}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
 
-                                                    <td class= 'text-center' >{{$orden->horas_estimada}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->horas_estimada}}</td>
                                                             
-                                                    <td class= 'text-center' >{{$orden->horas_real}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->horas_real}}</td>
                                                     
                                                     <td class='text-center'>
                                                         <div class="row justify-content-center" >
@@ -343,10 +344,10 @@
                                                                 </button>
                                                             </div>
                                                             <div class="collapse" data-bs-parent="#cuadro-ordenes-mecanizado" id="collapseOrdenMecanizado{{$idCount}}">
-                                                                <div class="row">
+                                                                <div class="row my-2">
                                                                     <div class="col-12">
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                            {!! Form::text('vieneDesde', 1, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::text('vieneDesde', 4, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                             {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
                                                                             {!! Form::text('idServ', $proyecto->id_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} 
                                                                             {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
@@ -354,13 +355,13 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-12">
+                                                                    {{-- <div class="col-12">
                                                                         <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
                                                                             Editar
                                                                         </button>
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="row mb-2">
                                                                     <div class="col-12">
                                                                         <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, 3)">
                                                                             Partes
@@ -368,11 +369,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
-                                                                    <div class="col-12">
+                                                                    {{-- <div class="col-12">
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
                                                                                 {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
                                                                         {!! Form::close() !!}
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -406,15 +407,16 @@
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')
-    @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec') 
+    @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec')
+    @include('Ingenieria.Servicios.Mantenimiento.Modal.ver-partes')
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
     </div>
     <script>
-        $(document).ready(function () { 
-        var url = '{{url('/s_s_i')}}';
-        document.getElementById('volver').href = url;
-        document.getElementById('ayudin').hidden = false;
+        $(document).ready(function () {
+            var url = '{{url('/s_s_i')}}';
+            document.getElementById('volver').href = url;
+            document.getElementById('ayudin').hidden = false;
 
             $('#table_partes').DataTable({
             language: {
@@ -433,6 +435,7 @@
                 },
                 "aaSorting": []
             });
+
             $('#table-orden').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -450,8 +453,70 @@
                 },
                 "aaSorting": []
             });
+
+            $('#verPartesModal').on('hidden.bs.modal', function (e) {
+                nuevoParte();
+            })
+
+            $(".nuevo-editar-parte").on('submit', function(evt){
+                evt.preventDefault();     
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+                let html = '';
+                let id_orden = document.getElementById('m-ver-parte-orden').value;
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        //console.log(data);
+                        opcion = parseInt(data.resultado);
+                        switch (opcion) {
+                            case 1:
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte creado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 2:
+                                id = document.getElementById('m-id-parte').value;
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte cod. `+id+` actualizado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 6:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            No se puede actualizar un parte de la cual no eres responsable.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                            default:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            Ocurrio un error
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                        }
+                        $('#alert').html(html)
+                        recargarPartes(id_orden, data.tipo_orden);
+                        nuevoParte();
+                        setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                    }
+                });
+        });
         });
     </script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}"></script>
