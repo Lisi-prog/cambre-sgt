@@ -310,7 +310,6 @@
         switch (parseInt(vieneDesde)) {
             case 1://Desde gestionar
                 let opcion = '{{$opcion}}';
-                console.log(opcion)
                 let idServ = '{{$idServ}}';
                 var url = '{{route('proyectos.gestionar',':idServ')}}';
                 url = url.replace(':idServ', idServ);
@@ -322,6 +321,11 @@
                 break;
             case 3://Desde operaciones
                 var url = '{{route("ordenes.indexhdr")}}';
+                break;
+            case 4://Desde gestionar mantenimiento
+                let idServv = '{{$idServ}}';
+                var url = '{{route('servicio_mantenimiento.gestionar',':idServv')}}';
+                url = url.replace(':idServv', idServv);
                 break;
             default:
                 break;

@@ -56,4 +56,5 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('s_m_a/rechazar/{id}', [MantenimientoDeActivoController::class, 'rechazar'])->name('sma.rechazar');
     Route::get('s_m_a/aceptar/{id}', [MantenimientoDeActivoController::class, 'aceptar'])->name('sma.aceptar');
     Route::get('s_m_a/gestionar/{id}', [MantenimientoDeActivoController::class, 'gestionar'])->name('servicio_mantenimiento.gestionar');
+    Route::post('s_m/crear-orden-mec/{id}', [MantenimientoDeActivoController::class, 'guardarOrdenMecanizado'])->name('sm.guardar.ordmec');   
 });

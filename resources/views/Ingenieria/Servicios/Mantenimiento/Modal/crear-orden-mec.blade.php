@@ -6,7 +6,8 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Orden Mecanizado</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'ordenes.crear', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+            {!! Form::open(['route' => ['sm.guardar.ordmec', $proyecto->getEtapas->first()->id_etapa], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+            {{-- <input class="form-control reset-input" name="id_etapa" type="text" id="id_etp" value="{{$proyecto->getEtapas->first()->id_etapa}}" hidden> --}}
             <div class="modal-body">
                 <div class="row"> 
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8"> 
@@ -21,9 +22,12 @@
                         <div class="form-group">
                             <label for="supervisor" class="control-label fs-7" style="white-space: nowrap;">Supervisor:</label> 
                             <span class="obligatorio">*</span> 
-                            <select class="form-select form-group reset-input" id="cbx_supervisor" name="supervisor" required>
-                                <option selected="selected" value="">Seleccionar</option>
-                            </select>
+                            {!! Form::select('supervisor', $supervisores, null, [
+                                'placeholder' => 'Seleccionar',
+                                'class' => 'form-select form-control reset-input',
+                                'id' => 'cbx_supervisor',
+                                'required'
+                            ]) !!}
                         </div>
                     </div>
                 </div> 
@@ -50,7 +54,13 @@
                         <div class="form-group">
                             <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
                             <span class="obligatorio">*</span>
-                            <input min="2023-01-01" max="2023-12" id="fec_ini" class="form-control reset-fecha" name="fecha_ini" type="date" value="2023-12-12" required>
+                            {!! Form::date('fecha_ini', \Carbon\Carbon::now(), [
+                                'min' => '2023-01-01',
+                                'max' => \Carbon\Carbon::now()->year . '-12',
+                                'id' => 'fec_ini',
+                                'class' => 'form-control',
+                                'required'
+                            ]) !!}
                         </div>
                     </div> 
                 </div>
@@ -71,7 +81,13 @@
                         <div class="form-group">
                             <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label>
                             <span class="obligatorio">*</span>
-                            <input min="2023-01-01" max="2023-12" id="fec_req" class="form-control reset-fecha" name="fecha_req" type="date" value="2023-12-12" required>
+                            {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
+                                'min' => '2023-01-01',
+                                'max' => \Carbon\Carbon::now()->year . '-12',
+                                'id' => 'fec_req',
+                                'class' => 'form-control',
+                                'required'
+                            ]) !!}
                         </div>
                     </div>
                 </div>
@@ -92,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                         <div class="form-group">
                             <label for="ord-tra-asoc" class="control-label" style="white-space: nowrap; ">Orden de Trabajo COMPAR:</label> 
@@ -109,7 +125,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group">
