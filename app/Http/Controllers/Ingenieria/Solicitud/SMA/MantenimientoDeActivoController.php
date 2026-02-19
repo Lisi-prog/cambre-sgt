@@ -441,7 +441,7 @@ class MantenimientoDeActivoController extends Controller
         ]);
 
         $responsabilidad_parte = Responsabilidad::create([
-            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_empleado' => 999,
             'id_rol_empleado' => $rol_empleado
         ]);
         
