@@ -7,6 +7,8 @@ use App\Http\Controllers\Informatica\GestionUsuarios\UsuarioController;
 use App\Http\Controllers\Informatica\EmpleadoController;
 use App\Http\Controllers\Informatica\PuestoEmpleadoController;
 use App\Http\Controllers\Informatica\DocumentoController;
+use App\Http\Controllers\Informatica\InformeController;
+
 //Gestion de usuario
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|VER-PERMISOS|VER-USUARIOS|VER-ROLES']], function () {
     Route::resource('roles', RolController::class);
@@ -34,6 +36,10 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::post('usuario/editar-pass', [UsuarioController::class, 'editarUsuarioPass'])->name('usuario.editarpass');
     Route::post('/documentacion/obtener/{nombreArchivo}', [DocumentoController::class, 'rutaDelArchivo']);
     Route::resource('documentacion', DocumentoController::class);
+});
+
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
+    Route::resource('informes', InformeController::class);
 });
 
 Route::get('phpmyinfo', function () {
