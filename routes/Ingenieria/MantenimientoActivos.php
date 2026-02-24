@@ -15,6 +15,7 @@ use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteDiagnosticoController;
 use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteInspeccionController;
 use App\Http\Controllers\Ingenieria\Servicios\Partes\ParteAjusteController;
 use App\Http\Controllers\Ingenieria\Activos\ZonaController;
+use App\Http\Controllers\Ingenieria\Servicios\Ordenes\OrdenMantenimientoController;
 
 
 
@@ -50,6 +51,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('get-parte-ajuste-completado/{id_orden}', [ParteAjusteController::class, 'get_parte_ajuste_completado'])->name('get_parte_ajuste_completado');   
     Route::post('procesar-parte-ajuste', [ParteAjusteController::class, 'procesar_parte_ajuste'])->name('procesar_parte_ajuste');   
     Route::resource('zona', ZonaController::class);
+    Route::get('ordenes/mant/operaciones', [OrdenMantenimientoController::class, 'index'])->name('orden_mantenimiento.index');
+    Route::get('get_operaciones', [OrdenMantenimientoController::class, 'get_operaciones'])->name('get_operaciones');
     });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
