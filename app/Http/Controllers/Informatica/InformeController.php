@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use \PDF;
 
 use App\Models\User;
 use App\Models\Cambre\Empleado;
@@ -225,5 +226,16 @@ class InformeController extends Controller
 
     public function obtenerEmpleadosActivos(){
         return Empleado::orderBy('nombre_empleado')->activo()->get();
+    }
+
+    public function resumenSemanalPdf(Request $request){
+        $pdf = app('dompdf.wrapper');
+        return $request;       
+        $data = [];
+
+        return $pdf->loadView('Informatica.Informes.documentos.resumen-semanal-pdf',[
+                                    'data' => $data])
+                                    ->setPaper('a4', 'portrait')
+                                    ->stream('resumenSemanal.pdf');  
     }
 }

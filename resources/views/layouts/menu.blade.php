@@ -278,13 +278,13 @@
                 Informes
             </li>
 
-            {{-- <li>
-                <a class="nav-link" href="{{route('usuarios.index')}}" title="Usuarios">
-                    <i class="fas fa-user"style="font-size:1.2em; "></i><span>Usuarios</span>
+            <li>
+                <a class="nav-link" href="{{route('informes.index')}}" title="Informes Varios">
+                    <i class="fas fa-chart-pie" style="font-size:1.2em; "></i><span>Informes Varios</span>
                 </a>
             </li>
 
-            <li>
+            {{-- <li>
                 <a class="nav-link" href="{{route('tecnicos.index')}}" title="Tecnicos">
                     <i class="fas fa-hard-hat"style="font-size:1.2em; "></i><span>Técnicos</span>
                 </a>
