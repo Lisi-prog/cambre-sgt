@@ -13,84 +13,87 @@ document.getElementById("formulario_informe").addEventListener("submit", functio
         timeout: 60000, // 60 segundos de espera
         success: function(res) {
             console.log(res);
-            document.getElementById('ver-informes').hidden = false;
-            let trProyAv = '';
-            let trEmpAv = '';
-            let avPorSubord = '';
-            console.log(res);
-            let grafico = `<div class="" style="width: 30vw; height: 20vw; position: relative;">
-                                <img src="${res.data.chart}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-                            </div>`;
+            document.getElementById('ver-informes').hidden = true;
+            document.getElementById('ver-informes-sin-datos').hidden = true;
 
-            res.data.info
-            .sort((a, b) => b.porcentaje - a.porcentaje)
-            .forEach(e => {
-                trProyAv += `<tr style="">
-                                <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.codigo_servicio}</td>
-                                                                    
-                                <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.h_total}</td>
-                                                                    
-                                <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.porcentaje}%</td>
-                                                                    
-                            </tr>`;
-            });
+            if (res.vacio == 0) {
+                document.getElementById('ver-informes').hidden = false;
 
-            res.data.datos_sub
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .forEach(e => {
-                let trInfoSub = '';
+                document.getElementById('fec_ini_pdf').value = res.data.fecha_desde;
+                document.getElementById('fec_fin_pdf').value = res.data.fecha_hasta;
 
-            trEmpAv += `<tr style="">
-                            <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.name}</td>
-                                                                
-                            <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.total_horas}</td>
-                                                                
-                        </tr>`;
-            if (Number(e.total_horas) != 0) {
-                
-
-                e.info.forEach( i => {
-                        trInfoSub += `<tr style="">
-                                <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${i.codigo_servicio}</td>
-                                                                    
-                                <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${i.h_total}</td>
-
-                                <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${i.porcentaje}%</td>
-                                                                    
-                            </tr>`
-                })
-                
-                avPorSubord += `<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    <div class="row border">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                            <label class="control-label fs-7" style="white-space: nowrap; ">${e.name}</label>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <div class="" style="width: 18vw; margin: auto;">
-                                                <img src="${e.chart}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <table style="width: 100%">
-                                                <thead style="">
-                                                    <th class='ml-3 text-center' style="color:#000; border: 1px solid #000; border-spacing: 0;">Proyecto</th>
-                                                    <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0;">Horas</th>
-                                                    <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0;">Porcentaje</th>
-                                                </thead>
-                                                <tbody>
-                                                    ${trInfoSub}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center mt-2">
-                                            <h5>Total Hs: <strong>${e.total_horas}</strong></h5>
-                                        </div>
-                                    </div>
+                let trProyAv = '';
+                let trEmpAv = '';
+                let avPorSubord = '';
+                let grafico = `<div class="" style="width: 30vw; height: 20vw; position: relative;">
+                                    <img src="${res.data.chart}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
                                 </div>`;
-            }
-            });
 
-            document.getElementById('vista-grafico').innerHTML = `
+                res.data.info.sort((a, b) => b.porcentaje - a.porcentaje).forEach(e => {
+                    trProyAv += `<tr style="">
+                                    <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.codigo_servicio}</td>
+                                                                        
+                                    <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.h_total}</td>
+                                                                        
+                                    <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.porcentaje}%</td>
+                                                                        
+                                </tr>`;
+                });
+
+                res.data.datos_sub.sort((a, b) => a.name.localeCompare(b.name)).forEach(e => {
+                    let trInfoSub = '';
+
+                    trEmpAv += `<tr style="">
+                                    <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.name}</td>
+                                                                        
+                                    <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${e.total_horas}</td>
+                                                                        
+                                </tr>`;
+                    if (Number(e.total_horas) != 0) {
+                        
+
+                        e.info.forEach( i => {
+                                trInfoSub += `<tr style="">
+                                        <td class='text-end' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${i.codigo_servicio}</td>
+                                                                            
+                                        <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${i.h_total}</td>
+
+                                        <td class='text-center' style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">${i.porcentaje}%</td>
+                                                                            
+                                    </tr>`
+                        })
+                        
+                        avPorSubord += `<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                            <div class="row border">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                                    <label class="control-label fs-7" style="white-space: nowrap; ">${e.name}</label>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="" style="width: 18vw; margin: auto;">
+                                                        <img src="${e.chart}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <table style="width: 100%">
+                                                        <thead style="">
+                                                            <th class='ml-3 text-center' style="color:#000; border: 1px solid #000; border-spacing: 0;">Proyecto</th>
+                                                            <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0;">Horas</th>
+                                                            <th class='text-center' style="color:#000; border: 1px solid #000; border-spacing: 0;">Porcentaje</th>
+                                                        </thead>
+                                                        <tbody>
+                                                            ${trInfoSub}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center mt-2">
+                                                    <h5>Total Hs: <strong>${e.total_horas}</strong></h5>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                    }
+                });
+
+                document.getElementById('vista-grafico').innerHTML = `
                                                                     <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center border border-secondary">
                                                                         <div class="row">
                                                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center mt-2">
@@ -145,7 +148,10 @@ document.getElementById("formulario_informe").addEventListener("submit", functio
                                                                     </div>
                                                                 `;
 
-            document.getElementById('avance-subor').innerHTML = avPorSubord;                                                        
+                document.getElementById('avance-subor').innerHTML = avPorSubord;   
+            } else {
+                document.getElementById('ver-informes-sin-datos').hidden = false;
+            }                                                     
         },
         complete: function() {
             $("#loading").hide(); 

@@ -96,6 +96,23 @@
         </div>
 
         <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="ver-informes-sin-datos" hidden>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
+                                <div id="msj-sin-datos">
+                                    <strong>
+                                        <span style="border:1px solid red; background:white; color:red; padding:10px;">
+                                            &nbsp; No existen datos entre las dos fechas seleccionadas. &nbsp;
+                                        </span>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="ver-informes" hidden>
                 <div class="card">
                     <div class="card-body">
