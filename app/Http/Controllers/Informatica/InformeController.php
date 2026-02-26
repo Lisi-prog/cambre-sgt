@@ -122,6 +122,7 @@ class InformeController extends Controller
 
             // Preparar datos para el correo
             $data = [
+                'empleadoId' => $empleadoId,
                 'info' => $datosUsuario,
                 'fecha_desde' => $fechaHace7Dias,
                 'fecha_hasta' => $fechaHoy,
@@ -230,8 +231,12 @@ class InformeController extends Controller
 
     public function resumenSemanalPdf(Request $request){
         $pdf = app('dompdf.wrapper');
-        return $request;       
-        $data = [];
+        // return $request;
+        $fechaIni = $request->input('fec_ini');
+        $fechaFin = $request->input('fec_fin');
+        $supervisor = $request->input('id_tecnico');
+
+        $data = $this->generarResumenSemanal($fechaIni, $fechaFin, $supervisor);
 
         return $pdf->loadView('Informatica.Informes.documentos.resumen-semanal-pdf',[
                                     'data' => $data])

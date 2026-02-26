@@ -9,7 +9,7 @@
     <title>RESUMEN SEMANAL</title>
 </head>
 <body>
-    <header style="margin-left: 45px; margin-top: 20px;">
+    <header style="margin-left: -380px; margin-top: -50px;">
         <img class= "logo column-2 header-logo" alt="image"  src="{{asset('img/logo-cambre.png') }}">
         {{-- <img class= "logo" alt="image"  src="{{asset('img/logo_iprodha.jpg') }}" style="width: 260px !important; height:40px; !important"> --}}
     </header>
@@ -23,9 +23,12 @@
         </div>
         <section class="section">
             <div class="section-header">
-                <h4 style="text-align: center;">CERTIFICADO DE CANCELACION DE DEUDA</h4>
+                <h4 style="text-align: center;">RESUMEN AVANCE DE PROYECTOS</h4>
             </div>
             <div class="section-body" style="margin-right: -30px;">
+                @foreach($data['data']['info'] as $item)
+                    {{ $item->codigo_servicio }}
+                @endforeach
                {{-- <div class="column-4r" style="text-align: right;">
                     <p style="
                     font-family: Verdana, Geneva, sans-serif;

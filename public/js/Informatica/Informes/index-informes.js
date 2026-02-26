@@ -21,6 +21,7 @@ document.getElementById("formulario_informe").addEventListener("submit", functio
 
                 document.getElementById('fec_ini_pdf').value = res.data.fecha_desde;
                 document.getElementById('fec_fin_pdf').value = res.data.fecha_hasta;
+                document.getElementById('id_tecnico_pdf').value = res.data.empleadoId;
 
                 let trProyAv = '';
                 let trEmpAv = '';
