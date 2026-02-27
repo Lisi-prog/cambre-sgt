@@ -234,34 +234,36 @@
                         </div>
                         <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
-                            <table id="table_partes">
-                                <thead>
-                                    <th class="text-center" scope="col" style="color:#fff;">ORDEN</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">ID</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">ESTADO</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">RESPONSABLE</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">HORAS</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
-                                </thead>
-                                <tbody>
-                                    @foreach ($ordenes_mantenimiento->sortByDesc('id_orden') as $orden_mantenimiento)
-                                        @foreach ($orden_mantenimiento->getPartes->sortByDesc('id_parte') as $parte)
-                                            <tr>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $orden_mantenimiento->id_orden }} {{ $orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento}}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->id_parte }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento  ?? '-' }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getResponsable->getEmpleado->nombre_empleado }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">
-                                                    <button type="button" class="btn btn-primary" onclick="openModalDiagnostico({{ $parte->id_parte }})">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>                                                    
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endforeach                                          
-                                </tbody>
-                            </table>
+                            <div class="" style="max-height: 350px; overflow-y: auto; overflow-x: auto;">
+                                <table id="table_partes">
+                                    <thead>
+                                        <th class="text-center" scope="col" style="color:#fff;">ORDEN</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">ID</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">ESTADO</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">RESPONSABLE</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">HORAS</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($ordenes_mantenimiento->sortByDesc('id_orden') as $orden_mantenimiento)
+                                            @foreach ($orden_mantenimiento->getPartes->sortByDesc('id_parte') as $parte)
+                                                <tr>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $orden_mantenimiento->id_orden }} {{ $orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->id_parte }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento  ?? '-' }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getResponsable->getEmpleado->nombre_empleado }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">
+                                                        <button type="button" class="btn btn-primary" onclick="openModalDiagnostico({{ $parte->id_parte }})">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>                                                    
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach                                          
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,9 +281,11 @@
                                     <h5>Orden de Mecanizado</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
-                                        Nuevo
-                                    </button>
+                                    @if ($proyecto->tieneOrdenMantAjusteCompleto())
+                                        <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
+                                            Nuevo
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
