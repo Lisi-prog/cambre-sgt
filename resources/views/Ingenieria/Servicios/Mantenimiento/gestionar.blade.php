@@ -104,13 +104,15 @@
                     </div>
                 </div>
                 {{-- -------------------------------- --}}
-
-                {{-- Ordenes y partes --}}
+            </div>
+            {{-- Ordenes y partes --}}
+            <div class="row d-flex align-items-stretch">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-head pt-3 m-auto">
-                            <h5>Orden</h5>
+                            <h5>Orden de Mantenimiento</h5>
                         </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -164,8 +166,18 @@
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
                                                                         <i class="fas fa-pen"></i>
+                                                                    </button>
+                                                                @endif
+                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'En proceso')
+                                                                @if ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
+                                                                    <button type="button" onclick="openModalParteInspeccionPendiente({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                    <button type="button" onclick="openModalParteAjustePendiente({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
@@ -175,6 +187,24 @@
                                                                 </button>    
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
                                                                     <button type="button" onclick="openModalConfirmarParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                    <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @endif
+                                                            @else
+                                                                @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
+                                                                    <button type="button" onclick="openModalVerParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>    
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
+                                                                    <button type="button" onclick="openModalVerParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </button>
+                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                    <button type="button" onclick="openModalVerParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
@@ -190,9 +220,6 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                        <button type="button" class="btn btn-success" onclick="">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -201,53 +228,200 @@
                 </div>
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-head pt-3 m-auto">
                             <h5>Parte</h5>
                         </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
-                            <table id="table_partes">
-                                <thead>
-                                    <th class="text-center" scope="col" style="color:#fff;">ORDEN</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">ID</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">ESTADO</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">RESPONSABLE</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">HORAS</th>
-                                    <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
-                                </thead>
-                                <tbody>
-                                    @foreach ($ordenes_mantenimiento->sortByDesc('id_orden') as $orden_mantenimiento)
-                                        @foreach ($orden_mantenimiento->getPartes->sortByDesc('id_parte') as $parte)
-                                            <tr>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $orden_mantenimiento->id_orden }} {{ $orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento}}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->id_parte }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento  ?? '-' }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getResponsable->getEmpleado->nombre_empleado }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
-                                                <td class= 'text-center' style="vertical-align: middle;">
-                                                    <button type="button" class="btn btn-primary" onclick="openModalDiagnostico({{ $parte->id_parte }})">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>                                                    
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endforeach                                          
-                                </tbody>
-                            </table>
+                            <div class="" style="max-height: 350px; overflow-y: auto; overflow-x: auto;">
+                                <table id="table_partes">
+                                    <thead>
+                                        <th class="text-center" scope="col" style="color:#fff;">ORDEN</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">ID</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">ESTADO</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">RESPONSABLE</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">HORAS</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($ordenes_mantenimiento->sortByDesc('id_orden') as $orden_mantenimiento)
+                                            @foreach ($orden_mantenimiento->getPartes->sortByDesc('id_parte') as $parte)
+                                                <tr>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $orden_mantenimiento->id_orden }} {{ $orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento}}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->id_parte }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento  ?? '-' }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getResponsable->getEmpleado->nombre_empleado }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
+                                                    <td class= 'text-center' style="vertical-align: middle;">
+                                                        <button type="button" class="btn btn-primary" onclick="openModalDiagnostico({{ $parte->id_parte }})">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>                                                    
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach                                          
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>               
+                </div>
+            </div>
+
+            <div class="row d-flex align-items-stretch mt-4">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-head">
+                            <br>
+                            <div class="d-flex justify-content-between">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
+                                    <h5>Orden de Mecanizado</h5>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
+                                    @if ($proyecto->tieneOrdenMantAjusteCompleto())
+                                        <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
+                                            Nuevo
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="card-head pt-3 m-auto">
+                            <h5>Orden de Mecanizado</h5>
+                        </div> --}}
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tablaOrdenMec" class="table table-hover mt-2 table-sm" class="display">
+                                    <thead style="background-color: #d37c00" id="comec">
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:6vw">Orden</th>
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;">Manufactura</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Etapa</th> --}}
+                                        <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Supervisor</th> --}}
+                                        {{-- <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Responsable</th> --}}
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha limite</th>
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:5vw">Fecha finalizacion</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Horas estimadas</th>
+                                        <th class="text-center" scope="col" style="color:#fff;">Horas reales</th>
+                                        <th class="text-center" scope="col" style="color:#fff;min-width:8vw;">Acciones</th>                                                           
+                                    </thead>
+                                    <tbody id="cuadro-ordenes-mecanizado">
+                                        @php
+                                            $idCount = 0;
+                                            $opcion = 1;
+                                        @endphp
+                                        @foreach ($ordenes_mecanizado as $orden)
+                                            @if ($orden->id_estado < 7)
+                                                <tr>
+                                            @else
+                                                <tr style="display: none;">
+                                            @endif     
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
+
+                                                    {{-- <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
+
+                                                    <td class='text-center' style="vertical-align: middle;"><abbr title="{{$orden->descripcion_etapa ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($orden->descripcion_etapa, 0, 6).'...' ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
+
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_estado}}</td>
+
+                                                    {{-- <td class= 'text-center' >{{$orden->supervisor}}</td> --}}
+
+                                                    {{-- <td class= 'text-center' >{{$orden->responsable}}</td> --}}
+
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->fecha_limite ?? '-'}}</td>
+
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->fecha_finalizacion}}</td>
+
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->horas_estimada}}</td>
+                                                            
+                                                    <td class= 'text-center' style="vertical-align: middle;">{{$orden->horas_real}}</td>
+                                                    
+                                                    <td class='text-center'>
+                                                        <div class="row justify-content-center" >
+                                                            <div class="row justify-content-center" >
+                                                                <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenMecanizado{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenMecanizado{{$idCount}}">
+                                                                    Opciones
+                                                                </button>
+                                                            </div>
+                                                            <div class="collapse" data-bs-parent="#cuadro-ordenes-mecanizado" id="collapseOrdenMecanizado{{$idCount}}">
+                                                                <div class="row my-2">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::text('vieneDesde', 4, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::text('idServ', $proyecto->id_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} 
+                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    {{-- <div class="col-12">
+                                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarMecanizado({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                                            Editar
+                                                                        </button>
+                                                                    </div> --}}
+                                                                </div>
+                                                                <div class="row mb-2">
+                                                                    <div class="col-12">
+                                                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, 3)">
+                                                                            Partes
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    {{-- <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden->id_orden], 'style' => 'display:inline', 'onclick' => "return confirm('¿Está seguro que desea BORRAR la orden y sus partes?');"]) !!}
+                                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div> --}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @php
+                                            $idCount += 1;
+                                            @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-head pt-3 m-auto">
+                            <h5>Suministros</h5>
+                        </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
     @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')
+    @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec')
+    @include('Ingenieria.Servicios.Mantenimiento.Modal.ver-partes')
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
     </div>
     <script>
-        $(document).ready(function () { 
+        $(document).ready(function () {
+            var url = '{{url('/s_s_i')}}';
+            document.getElementById('volver').href = url;
+            document.getElementById('ayudin').hidden = false;
+
             $('#table_partes').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -265,6 +439,7 @@
                 },
                 "aaSorting": []
             });
+
             $('#table-orden').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -282,8 +457,70 @@
                 },
                 "aaSorting": []
             });
+
+            $('#verPartesModal').on('hidden.bs.modal', function (e) {
+                nuevoParte();
+            })
+
+            $(".nuevo-editar-parte").on('submit', function(evt){
+                evt.preventDefault();     
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+                let html = '';
+                let id_orden = document.getElementById('m-ver-parte-orden').value;
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        //console.log(data);
+                        opcion = parseInt(data.resultado);
+                        switch (opcion) {
+                            case 1:
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte creado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 2:
+                                id = document.getElementById('m-id-parte').value;
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Parte cod. `+id+` actualizado con exito
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            case 6:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            No se puede actualizar un parte de la cual no eres responsable.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                            default:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            Ocurrio un error
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                        }
+                        $('#alert').html(html)
+                        recargarPartes(id_orden, data.tipo_orden);
+                        nuevoParte();
+                        setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                    }
+                });
+        });
         });
     </script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}"></script>

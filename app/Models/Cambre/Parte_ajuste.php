@@ -32,5 +32,9 @@ class Parte_ajuste extends Model
         return $this->belongsTo(Estado_mantenimiento::class, 'id_estado_mantenimiento', 'id_estado_mantenimiento');
     }
 
+    public function getTareasAjuste(){
+        return $this->hasMany(Tarea_ajuste::class, 'id_parte_ajuste', 'id_parte_ajuste');
+    }
+
 }
 

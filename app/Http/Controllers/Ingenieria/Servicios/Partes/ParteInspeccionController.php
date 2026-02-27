@@ -22,9 +22,9 @@ class ParteInspeccionController extends Controller{
     public function store(Request $request){
         try{
             DB::beginTransaction();
+            $completo =  isset($request->completo) ? 1 : 0;
             //PARTE
             $parte_revisar = new Parte;
-            $parte_revisar->observaciones = "Alta de parte de inspección, pendiente de revisión";;
             $parte_revisar->fecha = $request->fecha;
             $parte_revisar->fecha_carga = Carbon::now();
             $parte_revisar->horas = $request->horas;
@@ -36,27 +36,55 @@ class ParteInspeccionController extends Controller{
                                     'id_rol_empleado' => $rol_empleado->id_rol_empleado
                                 ]);
             $parte_revisar->id_responsabilidad = $responsabilidad->id_responsabilidad;
+            $next = 2;
+            if($completo){
+                $parte_revisar->observaciones = "Proceso de inspección completo, pendiente de revisión";
+                $next = 3;
+            }
+            else{
+                $parte_revisar->observaciones = "Realizando proceso de inspección";                
+            }
             $parte_revisar->save();
             //PARTE INSPECCIÓN
             $parte_inspeccion = new Parte_inspeccion;
             $parte_inspeccion->id_parte = $parte_revisar->id_parte;
-            $parte_inspeccion->id_estado_mantenimiento = 2;
-            $parte_inspeccion->save();
+            $parte_inspeccion->id_estado_mantenimiento = $next;
+            $parte_inspeccion->save();           
             //TAREAS    
             foreach ($request['tareas'] as $tarea) {
-                $id = $tarea['id'];
-                $accion = $tarea['accion'];
-                $tarea_nueva = new Parte_inspe_x_tarea_mant;
-                $tarea_nueva->id_parte_inspeccion = $parte_inspeccion->id_parte_inspeccion;
-                $tarea_nueva->id_tarea_mantenimiento = $id;
-                if($accion == 'NO ACCION'){
-                    $tarea_nueva->ok = 1;
+                if (isset($tarea['ok'])) {
+                    $id = $tarea['id'];                    
+                    $accion = $tarea['accion'];
+                    $tarea_existe = Parte_inspe_x_tarea_mant::where('id_tarea_mantenimiento', $id)
+                        ->whereHas('getParte.getParte.getOrden', function ($query) use ($parte_inspeccion) {
+                            $query->where('id_orden', $parte_inspeccion->getParte->getOrden->id_orden);
+                        })
+                        ->first();
+
+                    if($tarea_existe){
+                        if($accion == 'NO ACCION'){
+                            $tarea_existe->ok = 1;
+                        }
+                        else{
+                            $tarea_existe->id_accion = $accion;
+                            $tarea_existe->ok = 0;
+                        }
+                        $tarea_existe->save();
+                    }
+                    else{
+                        $tarea_nueva = new Parte_inspe_x_tarea_mant;
+                        $tarea_nueva->id_parte_inspeccion = $parte_inspeccion->id_parte_inspeccion;
+                        $tarea_nueva->id_tarea_mantenimiento = $id;
+                        if($accion == 'NO ACCION'){
+                            $tarea_nueva->ok = 1;
+                        }
+                        else{
+                            $tarea_nueva->id_accion = $accion;
+                            $tarea_nueva->ok = 0;
+                        }
+                        $tarea_nueva->save();
+                    }
                 }
-                else{
-                    $tarea_nueva->id_accion = $accion;
-                    $tarea_nueva->ok = 0;
-                }
-                $tarea_nueva->save();
             }
             DB::commit();
             return redirect()->back()->with('mensaje', 'Se ha creado con éxito el parte de inspección.');
@@ -69,34 +97,31 @@ class ParteInspeccionController extends Controller{
 
     public function get_tareas_x_activo($id_activo){
         $activo = Activo::find($id_activo);
-       $tareasMantenimiento = Tarea_mantenimiento::leftJoin(
-        'activo_x_tarea_mant',
-        'tarea_mantenimiento.id_tarea_mantenimiento',
-        '=',
-        'activo_x_tarea_mant.id_tarea_mantenimiento'
-    )
-    ->leftJoin(
-        'tipo_activo_x_tarea_mant',
-        'tarea_mantenimiento.id_tarea_mantenimiento',
-        '=',
-        'tipo_activo_x_tarea_mant.id_tarea_mantenimiento'
-    )
-    ->where(function($q) use ($id_activo, $activo) {
-        $q->where('activo_x_tarea_mant.id_activo', $id_activo)
-          ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $activo->id_tipo_activo);
-    })
-    ->with(['getZonaTarea', 'getEjecucion'])
-    ->select(
-        'tarea_mantenimiento.id_tarea_mantenimiento',
-        'tarea_mantenimiento.nombre_tarea',
-        'tarea_mantenimiento.id_zona_tarea',
-        'tarea_mantenimiento.id_ejecucion'
-    )
-    ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
-    ->get();
-
-
-
+        $tareasMantenimiento = Tarea_mantenimiento::leftJoin(
+            'activo_x_tarea_mant',
+            'tarea_mantenimiento.id_tarea_mantenimiento',
+            '=',
+            'activo_x_tarea_mant.id_tarea_mantenimiento'
+        )
+        ->leftJoin(
+            'tipo_activo_x_tarea_mant',
+            'tarea_mantenimiento.id_tarea_mantenimiento',
+            '=',
+            'tipo_activo_x_tarea_mant.id_tarea_mantenimiento'
+        )
+        ->where(function($q) use ($id_activo, $activo) {
+            $q->where('activo_x_tarea_mant.id_activo', $id_activo)
+            ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $activo->id_tipo_activo);
+        })
+        ->with(['getZonaTarea', 'getEjecucion'])
+        ->select(
+            'tarea_mantenimiento.id_tarea_mantenimiento',
+            'tarea_mantenimiento.nombre_tarea',
+            'tarea_mantenimiento.id_zona_tarea',
+            'tarea_mantenimiento.id_ejecucion'
+        )
+        ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
+        ->get();
         return response()->json([
             'tareas_x_activo' => $tareasMantenimiento,
         ]);
@@ -108,13 +133,21 @@ class ParteInspeccionController extends Controller{
         })
         ->with(
             'getParte.getResponsable.getEmpleado',
-            'getParte.getOrden',
-            'getTareasMantenimiento.getTareaMantenimiento.getZonaTarea',
-            'getTareasMantenimiento.getTareaMantenimiento.getEjecucion',
-            'getTareasMantenimiento.getAccionParaTarea',
+            'getParte.getOrden'
         )
         ->orderByDesc('id_parte_inspeccion')
         ->first();
+        if ($parte_inspeccion) {
+            $orden = $parte_inspeccion->getParte->getOrden;
+
+            $orden->parte_inspe_x_tareas_mantenimiento =
+                $orden->getParteInspeXTareasMantenimiento()
+                ->with('getTareaMantenimiento.getZonaTarea',
+            'getTareaMantenimiento.getEjecucion',
+            'getAccionParaTarea')
+            ->get();
+        }
+        $parte_inspeccion->horas = $parte_inspeccion->getParte->getOrden->getHoras();
         return response()->json($parte_inspeccion);
     }
 
@@ -144,15 +177,32 @@ class ParteInspeccionController extends Controller{
                     $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte_nueva->save();
                     $parte_inspeccion_nueva = new Parte_inspeccion;
-                    $parte_inspeccion_nueva->id_estado_mantenimiento = 4;
+                    $parte_inspeccion_nueva->id_estado_mantenimiento = 5;
                     $parte_inspeccion_nueva->id_parte = $parte_nueva->id_parte;
                     $parte_inspeccion_nueva->save();
                 }
                 else if($request->accion == "aceptar"){
-                    $parte_inspeccion->id_estado = 3;
+                    $parte_nueva = new Parte;
+                    $parte_nueva->observaciones = "Aprobación de orden de mantenimiento de inspección";
+                    $parte_nueva->fecha = Carbon::now();
+                    $parte_nueva->fecha_carga = Carbon::now();
+                    $parte_nueva->horas = 0;
+                    $parte_nueva->costo = 0;
+                    $parte_nueva->id_orden = $parte_inspeccion->getParte->id_orden;
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+                    $responsabilidad = Responsabilidad::create([
+                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                    ]);
+                    $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
+                    $parte_nueva->save();
+                    $parte_inspeccion_nuevo = new Parte_inspeccion;
+                    $parte_inspeccion_nuevo->id_estado_mantenimiento = 4;
+                    $parte_inspeccion_nuevo->id_parte = $parte_nueva->id_parte;
+                    $parte_inspeccion_nuevo->save();
                     $orden_vieja = Orden::find($request->id_orden_mantenimiento);
                     $orden_nueva = new Orden;                
-                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-diagnóstico';
+                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-ajuste';
                     $orden_nueva->fecha_inicio = Carbon::now();
                     $orden_nueva->duracion_estimada = 0;
                     $orden_nueva->id_etapa = $orden_vieja->id_etapa;
@@ -163,7 +213,7 @@ class ParteInspeccionController extends Controller{
                     $orden_mantenimiento->id_orden = $orden_nueva->id_orden;
                     $orden_mantenimiento->save();
                     $parte = new Parte;
-                    $parte->observaciones = "Generacion de orden de mantenimiento de diagnóstico";
+                    $parte->observaciones = "Generacion de orden de mantenimiento de ajuste";
                     $parte->fecha = Carbon::now();
                     $parte->fecha_carga = Carbon::now();
                     $parte->horas = 0;
@@ -176,10 +226,10 @@ class ParteInspeccionController extends Controller{
                                     ]);
                     $parte->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte->save();
-                    $parte_ajuste = new Parte_ajuste;
-                    $parte_ajuste->id_parte = $parte->id_parte;
-                    $parte_ajuste->id_estado_mantenimiento = 1;
-                    $parte_ajuste->save();                    
+                    $parte_ajuste_nueva = new Parte_ajuste;
+                    $parte_ajuste_nueva->id_parte = $parte->id_parte;
+                    $parte_ajuste_nueva->id_estado_mantenimiento = 1;
+                    $parte_ajuste_nueva->save();       
                 }
                 else{
                     DB::rollBack();
@@ -187,25 +237,7 @@ class ParteInspeccionController extends Controller{
                         'success' => false,
                         'message' => 'Acción no válida.'
                     ], 400);
-                }
-                $parte_nueva = new Parte;
-                $parte_nueva->observaciones = "Aprobación de orden de mantenimiento de inspección";
-                $parte_nueva->fecha = Carbon::now();
-                $parte_nueva->fecha_carga = Carbon::now();
-                $parte_nueva->horas = 0;
-                $parte_nueva->costo = 0;
-                $parte_nueva->id_orden = $parte_inspeccion->getParte->id_orden;
-                $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                $responsabilidad = Responsabilidad::create([
-                                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-                                    'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                                ]);
-                $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
-                $parte_nueva->save();
-                $parte_inspeccion_nuevo = new Parte_inspeccion;
-                $parte_inspeccion_nuevo->id_estado_mantenimiento = 3;
-                $parte_inspeccion_nuevo->id_parte = $parte_nueva->id_parte;
-                $parte_inspeccion_nuevo->save();
+                }                
                 DB::commit();
                 return response()->json([
                     'success' => true,
@@ -228,4 +260,96 @@ class ParteInspeccionController extends Controller{
 
     }
 
+    public function get_parte_inspeccion_pendiente($id_activo, $id_orden){
+        $activo = Activo::find($id_activo);
+
+        $parte_inspeccion = Parte_inspeccion::whereHas('getParte', function($query) use ($id_orden){
+        $query->where('id_orden', $id_orden);
+        })
+        ->with(
+            'getParte.getResponsable.getEmpleado',
+            'getParte.getOrden',
+            'getTareasMantenimiento.getTareaMantenimiento.getZonaTarea',
+            'getTareasMantenimiento.getTareaMantenimiento.getEjecucion',
+            'getTareasMantenimiento.getAccionParaTarea',
+        )
+        ->orderByDesc('id_parte_inspeccion')
+        ->first();
+
+        $tareasMantenimiento = Tarea_mantenimiento::leftJoin(
+                'activo_x_tarea_mant',
+                'tarea_mantenimiento.id_tarea_mantenimiento',
+                '=',
+                'activo_x_tarea_mant.id_tarea_mantenimiento'
+            )
+            ->leftJoin(
+                'tipo_activo_x_tarea_mant',
+                'tarea_mantenimiento.id_tarea_mantenimiento',
+                '=',
+                'tipo_activo_x_tarea_mant.id_tarea_mantenimiento'
+            )
+            ->leftJoin('Parte_inspe_x_tarea_mant', function ($join) use ($id_orden) {
+                $join->on(
+                    'tarea_mantenimiento.id_tarea_mantenimiento',
+                    '=',
+                    'Parte_inspe_x_tarea_mant.id_tarea_mantenimiento'
+                )
+                ->join(
+                    'parte_inspeccion',
+                    'Parte_inspe_x_tarea_mant.id_parte_inspeccion',
+                    '=',
+                    'parte_inspeccion.id_parte_inspeccion'
+                )
+                ->join(
+                    'parte',
+                    'parte_inspeccion.id_parte',
+                    '=',
+                    'parte.id_parte'
+                )
+                ->leftJoin('Accion_para_tarea', 'Accion_para_tarea.id_accion_tarea', 'Parte_inspe_x_tarea_mant.id_accion')
+                ->where('parte.id_orden', $id_orden);
+            })
+
+            ->where(function($q) use ($id_activo, $activo) {
+                $q->where('activo_x_tarea_mant.id_activo', $id_activo)
+                ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $activo->id_tipo_activo);
+            })
+            ->with(['getZonaTarea', 'getEjecucion'])
+            ->select(
+                'tarea_mantenimiento.id_tarea_mantenimiento',
+                'tarea_mantenimiento.nombre_tarea',
+                'tarea_mantenimiento.id_zona_tarea',
+                'tarea_mantenimiento.id_ejecucion', 
+                'Parte_inspe_x_tarea_mant.ok',
+                'Accion_para_tarea.*'
+            )
+            ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
+            ->get();
+
+        return ["parte" => $parte_inspeccion, "tareasMantenimiento" => $tareasMantenimiento];
+    }
+
+    public function get_parte_inspeccion_completado($id_orden){
+        $parte_inspeccion = Parte_inspeccion::whereHas('getParte', function($query) use ($id_orden){
+        $query->where('id_orden', $id_orden)->whereIn('id_estado_mantenimiento', [2,3]);
+        })
+        ->with(
+            'getParte.getResponsable.getEmpleado',
+            'getParte.getOrden'
+        )
+        ->orderByDesc('id_parte_inspeccion')
+        ->first();
+        if ($parte_inspeccion) {
+            $orden = $parte_inspeccion->getParte->getOrden;
+
+            $orden->parte_inspe_x_tareas_mantenimiento =
+                $orden->getParteInspeXTareasMantenimiento()
+                ->with('getTareaMantenimiento.getZonaTarea',
+            'getTareaMantenimiento.getEjecucion',
+            'getAccionParaTarea')
+            ->get();
+        }
+        $parte_inspeccion->horas = $parte_inspeccion->getParte->getOrden->getHoras();
+        return response()->json($parte_inspeccion);
+    }
 }

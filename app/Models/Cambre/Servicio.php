@@ -4,7 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
 
 class Servicio extends Model
 {
@@ -165,5 +165,20 @@ class Servicio extends Model
 
     public function getSolicitud(){
         return $this->hasOne(Sol_solicitud::class, 'id_servicio');
+    }
+
+    public function tieneOrdenMantAjusteCompleto(){
+
+        $resultado = DB::select("SELECT EXISTS (
+                        SELECT 1
+                        FROM etapa e
+                        INNER JOIN orden o ON o.id_etapa = e.id_etapa
+                        INNER JOIN parte p ON p.id_orden = o.id_orden
+                        INNER JOIN parte_ajuste pa ON pa.id_parte = p.id_parte
+                        WHERE e.id_servicio = :idserv
+                        AND pa.id_estado_mantenimiento = 4
+                    ) AS tiene_ajuste", ["idserv" => $this->id_servicio]);
+
+        return (int) $resultado[0]->tiene_ajuste;
     }
 }

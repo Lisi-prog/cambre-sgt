@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">Parte Inspección</h1>
+                <h1 class="modal-title fs-5">Parte Ajuste</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>            
             {!! Form::open(['route' => 'parte_ajuste.store', 'method' => 'POST', 'id' => 'form_ajuste_alta']) !!}
@@ -10,7 +10,7 @@
                 <div class="d-flex">
                     <div class="form-group">
                         <label>TIPO</label>
-                        <input disabled class="form-control" value="INSPECCIÓN">
+                        <input disabled class="form-control" value="AJUSTE">
                     </div>
                     <div class="form-group ml-4">
                         <label>HERRAMENTAL</label>
@@ -33,18 +33,26 @@
 
                 <table class="table table-striped w-100" id="tabla_ajustes">
                     <thead>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
+                        <th class="text-center" scope="col" style="color:#fff;">TAREA</th>
+                        <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
+                        <th class="text-center" scope="col" style="color:#fff;">ZONA</th>
+                        <th class="text-center" scope="col" style="color:#fff;">MÁQUINA</th>
+                        <th class="text-center" scope="col" style="color:#fff;">HECHO</th>
                     </thead>
                     <tbody id="tabla_ajustes_body">
 
                     </tbody>
                 </table>       
+                <div class="d-flex">
+                    <button id="btnRowNuevoAjuste" onclick="agregarNuevoAjusteRow()" type="button" class="btn btn-success ml-auto">Agregar Ajuste</button>
+                </div>
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">                       
             </div>
             <div class="modal-footer">
+                <div class="form-group m-auto">
+                    <input type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
+                    <label for="completado_ajuste">COMPLETADO</label>
+                </div>
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
@@ -54,6 +62,7 @@
                 </div>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
+            <input type="text" hidden id="bandera_refabricar">
             {!! Form::close() !!}
         </div>
     </div>

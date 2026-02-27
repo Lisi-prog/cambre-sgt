@@ -148,6 +148,15 @@ class ProyectoController extends Controller
                 //                                                                         }      
                 //                                                                     })->orderBy('prioridad_servicio')->get();
                 break;
+            case 5:
+                $tipo = 'Servicio de mantenimiento';
+                $prefijos_busq = array('MAN');
+                // $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
+                //                                                                         foreach ($prefijos_busq as $prefijo){
+                //                                                                             $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
+                //                                                                         }      
+                //                                                                     })->orderBy('prioridad_servicio')->get();
+                break;
         }
 
         // $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->where('id_subtipo_servicio', '<>', 7)->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
@@ -159,7 +168,7 @@ class ProyectoController extends Controller
                                 })->orderByRaw('id_estado = 8')                
                                 ->orderByRaw('prioridad_servicio IS NULL') 
                                 ->orderBy('prioridad_servicio')
-                                ->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
+                                ->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'id_subtipo_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
         
         
         //Para el filtro

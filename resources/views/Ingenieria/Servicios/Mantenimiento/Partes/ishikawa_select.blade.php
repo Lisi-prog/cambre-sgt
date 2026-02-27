@@ -13,3 +13,16 @@
         <option value="{{ $accion->id_accion_tarea }}">{{ $accion->nombre_accion }}</option>
     @endforeach
 </div>
+<div id="zona_select_div">
+    @foreach ($zonas as $zona)
+        <option value="{{ $zona->id_zona }}">{{ $zona->nombre_zona }}</option>
+    @endforeach
+</div>
+<div id="maquina_select_div">
+    @foreach ($maquinas as $maquina)
+        <option value="{{ $maquina->id_maquinaria }}">{{ $maquina->alias_maquinaria }}</option>
+    @endforeach
+</div>
+<div id="tarea_mantenimiento">
+    
+</div>

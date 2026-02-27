@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ingenieria\Solicitud\SMA;
 use App\Http\Controllers\Controller;
 
 use App\Models\Cambre\Accion_para_tarea;
+use App\Models\Cambre\Maquinaria;
 use Illuminate\Http\Request;
 
 //agregamos
@@ -34,8 +35,11 @@ use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Orden_mantenimiento;
+use App\Models\Cambre\Orden_mecanizado;
+use App\Models\Cambre\Orden_mecanizado_asoc;
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_diagnostico;
+use App\Models\Cambre\Parte_mecanizado;
 use App\Models\Cambre\Prefijo_proyecto;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Not_notificacion_cuerpo;
@@ -52,6 +56,10 @@ use App\Models\Cambre\Activo_x_sintoma;
 use App\Models\Cambre\Sol_serv_man_x_sintoma;
 use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
+use App\Models\Cambre\Zona;
+use App\Models\Cambre\Vw_gest_orden_mecanizado;
+use App\Models\Cambre\Estado_mecanizado;
+
 class MantenimientoDeActivoController extends Controller
 {
     function __construct()
@@ -437,7 +445,7 @@ class MantenimientoDeActivoController extends Controller
         ]);
 
         $responsabilidad_parte = Responsabilidad::create([
-            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_empleado' => 999,
             'id_rol_empleado' => $rol_empleado
         ]);
         
@@ -465,11 +473,17 @@ class MantenimientoDeActivoController extends Controller
     public function gestionar($id){
         $proyecto = Servicio::find($id);
         $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
-        $ishikawa_categorias = Ishikawa_categoria::all();
-        $ishikawa_causas = Ishikawa_causa::all();
-        $acciones = Accion_para_tarea::all();
-        $ordenes_mantenimiento = Orden::where('id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento'));
+        $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
+        $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
+        $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
+        $ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
+                                ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
+        $zonas = Zona::orderBy('nombre_zona')->get();
+        $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
+        $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
+        $supervisores = $this->obtenerSupervisores()->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores'));
     }
 
     public function destroy($id)
@@ -516,5 +530,141 @@ class MantenimientoDeActivoController extends Controller
     public function ssi_man_ver_evaluar($id){
         $sma = Sol_servicio_de_mantenimiento::find($id);
         return view('Ingenieria.Solicitud.SMA.evaluar', compact('sma'));
+    }
+
+    public function obtenerSupervisores(){
+        $usuariosSupervisor = User::role('SUPERVISOR')->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->activo()->get();
+    }
+
+    public function guardarOrdenMecanizado(Request $request, $id){
+        
+        $this->validate($request, [
+            'nom_orden' => 'required',
+            'supervisor' => 'required',
+            'revision' => 'required',
+            'cantidad' => 'required',
+            'fecha_ini' => 'required',
+            'fecha_req' => 'required',
+            'ruta_plano' => 'required',
+            'estado_mecanizado' => 'required',
+        ], [
+            'nom_orden.required' => 'No se agrego el nombre de la orden',
+            'supervisor.required' => 'Seleccione un supervisor'
+        ]);
+
+        $id_etapa = $id;
+        $nombre_orden = $request->input('nom_orden');
+        $revision = $request->input('revision');
+        $cantidad = $request->input('cantidad');
+        $duracion_estimada = $request->input('horas_estimadas') . ':' . $request->input('minutos_estimados');
+        $id_responsable = $request->input('responsable');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        $id_estado_mec = $request->input('estado_mecanizado');
+        $ruta_plano = $request->input('ruta_plano');
+        $observaciones = $request->input('observaciones');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first();
+        $id_supervisor = $request->input('supervisor');
+        $id_orden_manufactura = $request->input('id_orden_manuf');
+
+        $ordenTrabajoCompar = $request->input('ord-tra-asoc');
+        $idOrdenMecanizadoAsoc = $request->input('ord-mec-asoc');
+
+        $esRetrabajo = $request->input('esRetrabajo') ?? 0;
+        $esModificacion = $request->input('esModificacion') ?? 0;
+
+        try {    
+            DB::beginTransaction();
+        
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => $id_supervisor,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $responsabilidad_supervisor = Responsabilidad::create([
+                'id_empleado' => $id_supervisor,
+                'id_rol_empleado' => $rol_empleado_supervisor->id_rol_empleado
+            ]);
+
+            $orden = Orden::create([
+                        'nombre_orden' => $nombre_orden,
+                        // 'duracion_estimada' => $duracion_estimada,
+                        'duracion_estimada' => '00:00',
+                        'fecha_inicio' => $fecha_ini,
+                        'id_etapa' => $id_etapa,
+                        'observaciones' => $observaciones
+                    ]);
+            
+
+            Responsabilidad_orden::create([
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                'id_orden' => $orden->id_orden
+            ]);
+
+            $responsabilidad = Responsabilidad_orden::create([
+                'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
+                'id_orden' => $orden->id_orden
+            ]);
+
+            //Calculamos los costos despues de asignar responsabilidades
+            // $orden->costo_estimado = $orden->getCostoEstimado();
+            $orden->save();
+
+            $ord_mec = Orden_mecanizado::create([
+                'revision' => $revision,
+                'cantidad' => $cantidad,
+                'ruta_pieza' => $ruta_plano,
+                'id_orden' => $orden->id_orden,
+                'id_orden_manufactura' => $id_orden_manufactura,
+                'es_modificacion' => $esRetrabajo,
+                'es_retrabajo' => $esModificacion
+            ]);
+
+            if ($ordenTrabajoCompar || $idOrdenMecanizadoAsoc) {
+                Orden_mecanizado_asoc::create([
+                    'id_orden_mecanizado' => $ord_mec->id_orden_mecanizado,
+                    'id_orden_mec_asoc' => $idOrdenMecanizadoAsoc,
+                    'ord_tra_compar' => $ordenTrabajoCompar
+                ]); 
+            }
+
+            $parte = Parte::create([
+                'observaciones' => 'Generacion de orden de mecanizado',
+                'fecha' => $fecha_ini,
+                'fecha_limite' => $fecha_req,
+                'fecha_carga' => $fecha_carga,
+                'horas' => '00:00',
+                'id_orden' => $orden->id_orden,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            ]);
+
+            Parte_mecanizado::create([
+                'id_estado_mecanizado' => $id_estado_mec,
+                'id_parte' => $parte->id_parte
+            ]);
+    
+            DB::commit();
+
+            return redirect()->back()->with('mensaje', 'La orden de mecanizado fue creado con exito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al crear la orden de mecanizado: '.$e->getMessage());
+        }
     }
 }
