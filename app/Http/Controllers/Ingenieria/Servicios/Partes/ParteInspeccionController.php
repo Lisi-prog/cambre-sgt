@@ -306,7 +306,7 @@ class ParteInspeccionController extends Controller{
                     '=',
                     'parte.id_parte'
                 )
-                ->leftJoin('Accion_para_tarea', 'Accion_para_tarea.id_accion_tarea', 'parte_inspe_x_tarea_mant.id_accion')
+                ->leftJoin('accion_para_tarea', 'accion_para_tarea.id_accion_tarea', 'parte_inspe_x_tarea_mant.id_accion')
                 ->where('parte.id_orden', $id_orden);
             })
 
@@ -321,7 +321,7 @@ class ParteInspeccionController extends Controller{
                 'tarea_mantenimiento.id_zona_tarea',
                 'tarea_mantenimiento.id_ejecucion', 
                 'parte_inspe_x_tarea_mant.ok',
-                'Accion_para_tarea.*'
+                'accion_para_tarea.*'
             )
             ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
             ->get();
