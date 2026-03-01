@@ -288,15 +288,15 @@ class ParteInspeccionController extends Controller{
                 '=',
                 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento'
             )
-            ->leftJoin('Parte_inspe_x_tarea_mant', function ($join) use ($id_orden) {
+            ->leftJoin('parte_inspe_x_tarea_mant', function ($join) use ($id_orden) {
                 $join->on(
                     'tarea_mantenimiento.id_tarea_mantenimiento',
                     '=',
-                    'Parte_inspe_x_tarea_mant.id_tarea_mantenimiento'
+                    'parte_inspe_x_tarea_mant.id_tarea_mantenimiento'
                 )
                 ->join(
                     'parte_inspeccion',
-                    'Parte_inspe_x_tarea_mant.id_parte_inspeccion',
+                    'parte_inspe_x_tarea_mant.id_parte_inspeccion',
                     '=',
                     'parte_inspeccion.id_parte_inspeccion'
                 )
@@ -306,7 +306,7 @@ class ParteInspeccionController extends Controller{
                     '=',
                     'parte.id_parte'
                 )
-                ->leftJoin('Accion_para_tarea', 'Accion_para_tarea.id_accion_tarea', 'Parte_inspe_x_tarea_mant.id_accion')
+                ->leftJoin('Accion_para_tarea', 'Accion_para_tarea.id_accion_tarea', 'parte_inspe_x_tarea_mant.id_accion')
                 ->where('parte.id_orden', $id_orden);
             })
 
@@ -320,7 +320,7 @@ class ParteInspeccionController extends Controller{
                 'tarea_mantenimiento.nombre_tarea',
                 'tarea_mantenimiento.id_zona_tarea',
                 'tarea_mantenimiento.id_ejecucion', 
-                'Parte_inspe_x_tarea_mant.ok',
+                'parte_inspe_x_tarea_mant.ok',
                 'Accion_para_tarea.*'
             )
             ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
