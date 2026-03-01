@@ -1195,7 +1195,7 @@ CREATE TABLE `parte_ajuste` (
 
 CREATE TABLE `zona` (
 	`id_zona` INT NOT NULL AUTO_INCREMENT,
-	`nombre_zona` INT NULL DEFAULT NULL,
+	`nombre_zona` VARCHAR(100) NULL DEFAULT NULL,
 	PRIMARY KEY (`id_zona`)
 );
 
