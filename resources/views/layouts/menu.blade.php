@@ -130,6 +130,11 @@
                 </li>
                 @endrole
                 <li>
+                    <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
+                        <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>Mantenimiento</span>
+                    </a>
+                </li>
+                <li>
                     <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
                     </a>
