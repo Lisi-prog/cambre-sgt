@@ -48,12 +48,12 @@
                             <div class="form-group">
                                 <span class="obligatorio">*</span>
                                 <label>HORAS</label>
-                                <input id="horas" name="horas" required type="time" class="form-control">
+                                <input onchange="checkSendNuevoParteDiagnostico()" id="horas" name="horas" required type="time" class="form-control">
                             </div>
                             <div class="form-group">
                                 <span class="obligatorio">*</span>
                                 <label>FECHA</label>
-                                <input id="fecha" name="fecha" required type="date" class="form-control">
+                                <input onchange="checkSendNuevoParteDiagnostico()" id="fecha" name="fecha" required type="date" class="form-control">
                             </div>
                             <div class="form-group" hidden>
                                 <label>LEGAJO</label>

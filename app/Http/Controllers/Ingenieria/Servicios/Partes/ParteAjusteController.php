@@ -21,7 +21,7 @@ class ParteAjusteController extends Controller{
     {
         $parte_inspeccion = Parte_inspeccion::whereHas('getParte.getOrden', function ($query) use ($id_etapa) {
                 $query->where('id_etapa', $id_etapa)
-                    ->whereIn('id_estado_mantenimiento', [2,3]);
+                    ->whereIn('id_estado_mantenimiento', [2,4]);
             })
             ->whereHas('getTareasMantenimiento.getTareaMantenimiento', function ($query) {
                 $query->where('ok', 0);

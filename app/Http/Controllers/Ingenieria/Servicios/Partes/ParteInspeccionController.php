@@ -254,7 +254,7 @@ class ParteInspeccionController extends Controller{
 
     public function get_parte_inspeccion_completado($id_orden){
         $parte_inspeccion = Parte_inspeccion::whereHas('getParte', function($query) use ($id_orden){
-        $query->where('id_orden', $id_orden)->whereIn('id_estado_mantenimiento', [2,3]);
+        $query->where('id_orden', $id_orden)->whereIn('id_estado_mantenimiento', [2,4]);
         })
         ->with(
             'getParte.getResponsable.getEmpleado',
