@@ -181,19 +181,9 @@
                                                                     </button>
                                                                 @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
-                                                                @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
-                                                                <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
                                                                     <i class="fas fa-eye"></i>
-                                                                </button>    
-                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
-                                                                    <button type="button" onclick="openModalConfirmarParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </button>
-                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </button>
-                                                                @endif
+                                                                </button>
                                                             @else
                                                                 @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
                                                                     <button type="button" onclick="openModalVerParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
