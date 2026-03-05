@@ -202,9 +202,6 @@
                                                             <button type="button" class="btn btn-warning" onclick="">
                                                                 <i class="fas fa-edit"></i>
                                                             </button>
-                                                            <button type="button" class="btn btn-danger" onclick="">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
                                                         </td>
                                                     </tr>                                                    
                                                 @endforeach

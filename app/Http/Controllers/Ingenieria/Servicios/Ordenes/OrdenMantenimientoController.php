@@ -14,6 +14,8 @@ use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
+use App\Models\Cambre\Orden_mantenimiento;
+use App\Models\Cambre\Tipo_orden_mantenimiento;
 
 
 class OrdenMantenimientoController extends Controller
@@ -21,18 +23,15 @@ class OrdenMantenimientoController extends Controller
 
 public function index(){
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        $orden_mantimiento = Tipo_orden_mantenimiento::where('id_tipo_orden_mantenimiento', '<>', 3)->orderBy('id_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
+        $flt_operaciones = $flt_operaciones->merge($orden_mantimiento)->sort();
         $flt_operaciones_tec = [];
 
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            // $operaciones = Vw_operaciones_de_hdr::get();
-            // $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
         } else {
             $opeDeUsuario = Auth::user()->getOperacionesValidas();
-            // $operaciones = Vw_operaciones_de_hdr::whereIn('id_operacion', $opeDeUsuario)->get();
             $flt_operaciones_tec = Operacion::whereIn('id_operacion', $opeDeUsuario)->orderBy('nombre_operacion')->pluck('nombre_operacion');
         }
-        
-        // return $operaciones;
 
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
@@ -63,6 +62,24 @@ public function index(){
             ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
             ->with('getHdr.getOrdMec');
 
+        $operaciones_mantenimiento = [];
+        if((!$request->res || in_array('-', $request->res))){
+            $operaciones_mantenimiento = Orden_mantenimiento::with('getOrden.getEtapa.getServicio', 
+            'getTipoOrdenMantenimiento')
+            ->get()
+            ->filter(function ($om) use ($request) {
+                $estado = $om->getEstadoActual();
+
+                if (in_array($estado, $request->est)) {
+                    $om->estado_actual = $estado;
+                    return true;
+                }
+
+                return false;
+            })
+            ->values();
+        }
+
         if($request->cod_serv){
             $operaciones = $operaciones->whereIn('codigo_servicio', $request->cod_serv);
         }
@@ -70,7 +87,19 @@ public function index(){
             $operaciones = $operaciones->whereIn('nombre_operacion', $request->sup);
         }    
         if($request->res){
-            $operaciones = $operaciones->whereIn('codigo_maquinaria', $request->res);
+            if(in_array('-', $request->res)){
+                $res = array_diff($request->res, ['-']);
+                $operaciones = $operaciones->where(function ($q) use ($res) {
+                    if (!empty($res)) {
+                        $q->whereIn('codigo_maquinaria', $res)
+                        ->orWhereNull('codigo_maquinaria');
+                    } else {
+                        $q->whereNull('codigo_maquinaria');
+                    }
+                });
+            }else{
+                $operaciones = $operaciones->whereIn('codigo_maquinaria', $request->res);
+            }                
         }
         if($request->est){
             $operaciones = $operaciones->whereIn('nombre_estado_hdr', $request->est);
@@ -81,8 +110,12 @@ public function index(){
         if($request->soloAct == 1){
             $operaciones = $operaciones->where('activo', 1);
         }
+
+        $operaciones_todas['generales'] = $operaciones->get();
+        $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;
     
-        return $operaciones->get();
+    
+        return $operaciones_todas;
     }
 }
 

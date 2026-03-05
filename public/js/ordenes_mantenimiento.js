@@ -733,7 +733,9 @@ function buscarPorFiltros(){
         success: function(operaciones) {
             let idCount = 0;
             let opciones = ''
-            operaciones.forEach(ope => {
+
+            //OPERACIONES GENERALES
+            operaciones['generales'].forEach(ope => {
                 opciones = `<div class="row justify-content-center">
                             <div class="row justify-content-center">
                                 <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" 
@@ -742,7 +744,6 @@ function buscarPorFiltros(){
                                 </button>
                             </div>
                             <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes${idCount}">`;
-
                 if (ope.id_hoja_de_ruta) {
                     opciones += `
                     <div class="row my-2">
@@ -762,8 +763,7 @@ function buscarPorFiltros(){
                                 Partes
                             </button>
                         </div>
-                    </div>
-                `;        
+                    </div>`;        
                 if (ope.getHdr) {
                     if (ope.can_hdr) {
                         opciones += `
@@ -805,9 +805,7 @@ function buscarPorFiltros(){
                         </div>
                     </div>`;
                 }
-
                 opciones += `</div></div>`;
-
                
                 table.row.add({
                     0 : `<div style="display: flex; justify-content: center; align-items: center; height: 100%;">
@@ -833,7 +831,36 @@ function buscarPorFiltros(){
                     14: opciones,
                 }).node().id = ope.id_ope_de_hdr;     
                 idCount++;
-            });     
+            });
+
+            //OPERACIONES DE MANTENIMIENTO
+            operaciones['mantenimiento'].forEach(ope => {
+                table.row.add({
+                    0 : `<div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <input class="form-check-input" type="checkbox" value="${ope.id_ope_de_hdr}" id="flexCheck${ope.id_ope_de_hdr}" name="id_ope[]">
+                    </div>`,
+                    1 : 'S/P',
+                    _order_prioridad: 999,
+                    2: ope.get_orden.get_etapa.get_servicio.prioridad_servicio ?? 'S/P',
+                    _order_prioridad_servicio: ope.get_orden.get_etapa.get_servicio.prioridad_servicio ?? 999,
+                    3: `<abbr title="${ope.get_orden.get_etapa.get_servicio.nombre_servicio ?? '-'}" style="text-decoration:none; font-variant: none;">
+                            ${ope.get_orden.get_etapa.get_servicio.codigo_servicio ?? '-'}<i class="fas fa-eye"></i>
+                        </abbr>`,
+                    4: ope.get_orden.get_etapa.get_servicio.codigo_servicio ?? '-',
+                    5: ope.get_orden.nombre_orden ?? '-',
+                    6: ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento,
+                    7: '-',
+                    8: ope.estado_actual,
+                    9: '-',
+                    10: ope.tecnico_asignado ?? '-',
+                    11: ope.total_horas ?? '-',
+                    12: ope.activo ? 'SI' : 'NO',
+                    13: ope.cantidad ?? '-',
+                    14: '-',
+                }).node().id = ope.id_ope_de_hdr;     
+                idCount++;
+            });
+
             table.draw()      
         }
     });
