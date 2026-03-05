@@ -853,7 +853,7 @@ function buscarPorFiltros(){
                     8: ope.estado_actual,
                     9: '-',
                     10: ope.tecnico_asignado ?? '-',
-                    11: ope.total_horas ?? '-',
+                    11: ope.horas,
                     12: ope.activo ? 'SI' : 'NO',
                     13: ope.cantidad ?? '-',
                     14: '-',

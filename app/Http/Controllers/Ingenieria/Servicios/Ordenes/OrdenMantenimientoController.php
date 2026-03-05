@@ -69,15 +69,16 @@ public function index(){
             ->get()
             ->filter(function ($om) use ($request) {
                 $estado = $om->getEstadoActual();
-
                 if (in_array($estado, $request->est)) {
                     $om->estado_actual = $estado;
                     return true;
                 }
-
                 return false;
             })
             ->values();
+            foreach($operaciones_mantenimiento as $om){
+                $om->horas = $om->getOrden->getHoras();
+            }
         }
 
         if($request->cod_serv){
