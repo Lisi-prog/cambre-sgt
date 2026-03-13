@@ -54,4 +54,8 @@ class Orden_mantenimiento extends Model
     {
         return 4;
     }
+
+    public function getEmpleado(){
+        return $this->hasOne(Empleado::class, 'id_empleado', 'id_empleado');
+    }
 }
