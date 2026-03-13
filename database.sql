@@ -544,6 +544,8 @@ CREATE TABLE `orden_mantenimiento` (
   `id_orden_mantenimiento` int NOT NULL AUTO_INCREMENT,
   `id_orden` int,
   `id_tipo_orden_mantenimiento` int,
+  `id_empleado` int,
+  `esta_activo` boolean,
   PRIMARY KEY (`id_orden_mantenimiento`),
   CONSTRAINT `pk_id__orden_mantenimiento_x_orden` FOREIGN KEY (`id_orden`) REFERENCES `orden`(`id_orden`),
   CONSTRAINT `pk_id__orden_mantenimiento_x_tipo_orden_mantenimiento` FOREIGN KEY (`id_tipo_orden_mantenimiento`) REFERENCES `tipo_orden_mantenimiento`(`id_tipo_orden_mantenimiento`)
@@ -1035,6 +1037,13 @@ UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Diagn
 UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Inspeccion' WHERE (`id_tipo_orden_mantenimiento` = '2');
 UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Ajuste' WHERE (`id_tipo_orden_mantenimiento` = '3');
 DELETE FROM `tipo_orden_mantenimiento` WHERE (`id_tipo_orden_mantenimiento` = '4');
+
+ALTER TABLE `tarea_ajuste` 
+ADD COLUMN `id_tarea_mantenimiento` INT NULL AFTER `hecho`;
+
+ALTER TABLE `orden_mantenimiento` 
+ADD COLUMN `id_empleado` INT NULL DEFAULT NULL AFTER `id_tipo_orden_mantenimiento`,
+ADD COLUMN `esta_activo` TINYINT NULL DEFAULT NULL AFTER `id_empleado`;
 
 CREATE TABLE `tipo_sintoma` (
 	`id_tipo_sintoma` INT NOT NULL AUTO_INCREMENT,

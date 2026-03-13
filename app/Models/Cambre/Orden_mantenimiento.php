@@ -21,7 +21,9 @@ class Orden_mantenimiento extends Model
 
     protected $fillable = [ 
         'id_tipo_orden_mantenimiento',
-        'id_orden'
+        'id_orden',
+        'id_empleado',
+        'esta_activo'
     ];
 
     public function getOrden()

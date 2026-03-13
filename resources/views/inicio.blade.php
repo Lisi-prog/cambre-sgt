@@ -117,7 +117,7 @@
                                 </div>
                             </li>
                             @endrole
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
+                            {{-- <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
                                     <div class="row m-auto text-center" style="">
@@ -128,7 +128,7 @@
                                     </div>
                                     </a>
                                 </div>
-                            </li>
+                            </li> --}}
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
