@@ -329,7 +329,7 @@ function openModalVerParteInspeccion(id_orden){
     $("#previewAceptarInspeccionReview").hide()
     $("#horas_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
-    $("#completado_inspeccion").attr('checked', 'checked')
+    $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val($("#activo").val());
     tabla_inspecciones.clear();
      $.ajax({
@@ -342,9 +342,6 @@ function openModalVerParteInspeccion(id_orden){
                     zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
                     addZonaHeader(zona_actual)
                 }
-                // let ok = 'VERDADERO'
-                // let not_ok = 'FALSO'
-                // let accion = 'NO SE REQUIERE'
 
                 let ok = `<div class="form-check">
                             <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
@@ -361,8 +358,6 @@ function openModalVerParteInspeccion(id_orden){
                 let accion = '-';
 
                 if(tarea.ok == 0){
-                    // ok = 'FALSO'
-                    // not_ok = 'VERDADERO'
                     ok = `<div class="form-check">
                             <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
                             <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">

@@ -7,11 +7,11 @@
                         <h1 class="modal-title fs-5">Parte Diagnóstico</h1>
                     </div>
                     <div class="ml-auto d-flex">
-                        <div class="form-group">
+                        <div class="form-group mb-0 p-0">
                             <label>Tipo:</label>
                             <input disabled class="form-control" value="DIAGNÓSTICO">
                         </div>
-                        <div class="form-group ml-4">
+                        <div class="form-group mb-0 p-0 ml-4">
                             <label>Activo:</label>
                             <input id="herramental" disabled class="form-control">
                         </div>
