@@ -36,7 +36,7 @@
                     </div>
                     <div style="width: 85%;">
                         <hr>
-                        <table class="table table-striped" id="tabla_diagnosticos">
+                        <table class="table table-striped" id="tabla_diagnosticos" style="width: 100%;">
                             <thead>
                                 <th class='text-center' style="color:#fff;">Nº</th>
                                 <th class='text-center' style="color:#fff; width: 30%;"><span class="obligatorio mr-1">*</span>CATEGORÍA 5M</th>

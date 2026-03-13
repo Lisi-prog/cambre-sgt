@@ -196,11 +196,12 @@ function openModalVerParteDiagnostico(id_orden){
     $("#horas").attr('disabled', 'disabled');
     $('.obligatorio').hide();
     $("#label_ob_diagnostico").hide();
-    $("#completado_diagnostico").attr('disabled', 'disabled');
+    $("#completado_diagnostico").prop('disabled', 'disabled');
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnostico").hide();
     $("#herramental").val($("#activo").val());
     $("#previewAceptarReview").hide();
+    tabla_diagnosticos.column(3).visible(false);
     tabla_diagnosticos.clear()
     $.ajax({
         type: 'GET',
@@ -209,26 +210,28 @@ function openModalVerParteDiagnostico(id_orden){
             $("#horas").val(data.get_parte.horas);
             $("#fecha").val(data.get_parte.fecha);
             $("#observaciones_diagonstico").val(data.get_parte.observaciones);
-            $("#completado_diagnostico").attr('checked', 'checked')
+            $("#completado_diagnostico").prop('checked', true)
             if(data.en_maquina == 1){
-                $("input:radio[name=a_resolver][value='Máquina']").attr("checked", true);
+                $("input:radio[name=a_resolver][value='Máquina']").prop("checked", true);
+                $("input:radio[name=a_resolver][value='Banco']").prop("checked", false);
             }
             else if(data.en_banco == 1){
-                $("input:radio[name=a_resolver][value='Banco']").attr("checked", true);
+                $("input:radio[name=a_resolver][value='Máquina']").prop("checked", false);
+                $("input:radio[name=a_resolver][value='Banco']").prop("checked", true);
             }
             $("input:radio[name=a_resolver]").attr("disabled", true);
             i = 1;
             data.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
-
                 tabla_diagnosticos.row.add([
                     i,
-                    parte_diag_x_causa.id_parte_diagnostico,
                     parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa
+                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                    '-'
                 ]);
 
                 i++;
             });
+            tabla_diagnosticos.columns.adjust();
             tabla_diagnosticos.draw();
         }
     });
