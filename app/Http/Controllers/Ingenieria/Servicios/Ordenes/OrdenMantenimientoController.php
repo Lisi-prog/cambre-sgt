@@ -118,5 +118,25 @@ public function index(){
     
         return $operaciones_todas;
     }
+
+    public function editar(Request $request){
+        $orden_mantenimiento = Orden_mantenimiento::find($request->id_orden);
+        if($orden_mantenimiento){
+            $orden_mantenimiento->id_empleado = $request->id_empleado;
+            if($request->activo){
+                $orden_mantenimiento->esta_activo = 1;
+            }else{
+                $orden_mantenimiento->esta_activo = 0;
+            }
+            $orden_mantenimiento->save();
+            return back()->with(['success' => true, 'mensaje' => 'Orden de mantenimiento actualizada correctamente.']);
+        }else{
+            return back()->with(['success' => false, 'error' => 'Orden de mantenimiento no encontrada.']);
+        }
+    }
+
+    public function check_pre_editar(Request $request){
+        return Orden_mantenimiento::find($request->id_orden);
+    }
 }
 

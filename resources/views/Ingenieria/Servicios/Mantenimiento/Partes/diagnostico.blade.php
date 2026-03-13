@@ -7,12 +7,12 @@
                         <h1 class="modal-title fs-5">Parte Diagnóstico</h1>
                     </div>
                     <div class="ml-auto d-flex">
-                        <div class="form-group mb-0 p-0">
-                            <label>Tipo:</label>
-                            <input disabled class="form-control" value="DIAGNÓSTICO">
+                        <div class="form-group mb-0 p-0 d-flex align-items-center">
+                            <label for="diagnostico_label" class="mr-2">Tipo:</label>
+                            <input id="diagnostico_label" disabled class="form-control" value="DIAGNÓSTICO">
                         </div>
-                        <div class="form-group mb-0 p-0 ml-4">
-                            <label>Activo:</label>
+                        <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
+                            <label for="herramental" class="mr-2">Activo:</label>
                             <input id="herramental" disabled class="form-control">
                         </div>
                     </div>

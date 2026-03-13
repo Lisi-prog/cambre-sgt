@@ -22,6 +22,8 @@ $(document).ready(function () {
     });    
     activo = document.getElementById('activo').value;
     document.getElementById('herramental').value = activo;
+    $("#hs").val($("#horas_totales").val())
+    $("#es").val($("#estado_actual").val())
 });
 
 var i = 0;
@@ -180,7 +182,7 @@ function procesarDiagnostico(accion){
         data: {
             id_orden_mantenimiento: $("#id_orden").val(),
             accion: accion,
-            nombre_proyecto: $("#nombre_proyecto").text(),
+            nombre_proyecto: $("#nombre_proyecto_i").text(),
         },
         success: function(data) {
             $('#nuevoParteDiagnosticoModal').modal('hide');

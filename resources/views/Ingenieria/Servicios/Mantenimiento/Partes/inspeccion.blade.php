@@ -8,12 +8,12 @@
                     </div>
                     
                     <div class="d-flex ml-auto">
-                        <div class="form-group mb-0 pb-0">
-                            <label>Tipo:</label>
-                            <input disabled class="form-control" value="INSPECCIÓN">
+                        <div class="form-group mb-0 pb-0 d-flex align-items-center">
+                            <label for="inspeccion_label" class="mr-2">Tipo: </label>
+                            <input id="inspeccion_label" disabled class="form-control" value="INSPECCIÓN">
                         </div>
-                        <div class="form-group ml-4 mb-0 pb-0">
-                            <label>Activo:</label>
+                        <div class="form-group ml-4 mb-0 pb-0 d-flex align-items-center">
+                            <label for="herramental_inspeccion" class="mr-2">Activo: </label>
                             <input id="herramental_inspeccion" disabled class="form-control">
                         </div>
                     </div>

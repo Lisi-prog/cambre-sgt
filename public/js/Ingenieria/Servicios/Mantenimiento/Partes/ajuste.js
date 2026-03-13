@@ -195,7 +195,7 @@ function procesarAjuste(accion){
         data: {
             id_orden_mantenimiento: $("#id_orden_ajuste").val(),
             accion: accion,
-            nombre_proyecto: $("#nombre_proyecto").text(),
+            nombre_proyecto: $("#nombre_proyecto_i").text(),
         },
         success: function(data) {
             $('#nuevoParteAjusteModal').modal('hide');

@@ -53,6 +53,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('zona', ZonaController::class);
     Route::get('ordenes/mant/operaciones', [OrdenMantenimientoController::class, 'index'])->name('orden_mantenimiento.index');
     Route::get('get_operaciones', [OrdenMantenimientoController::class, 'get_operaciones'])->name('get_operaciones');
+    Route::get('orden_mantenimiento/check_pre_editar', [OrdenMantenimientoController::class, 'check_pre_editar'])->name('orden_mantenimiento.check_pre_editar');
+    Route::put('orden_mantenimiento/editar', [OrdenMantenimientoController::class, 'editar'])->name('orden_mantenimiento.editar');
     });
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {

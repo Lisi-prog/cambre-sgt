@@ -336,3 +336,111 @@ function nuevoParte(){
     }
     
 }
+
+function editarOrdenMantenimiento(){    
+    $.ajax({
+        type: "post",
+        url: '/orden_mantenimiento/editar', 
+        data: {
+            id_orden: $("#id_orden_editar").val(),
+            id_empleado: $("#id_editar_empleado").val()
+        },
+        success: function (response) {
+            // console.log(response)
+            let maq_y_hora = '';
+            let idCount = 0;
+            response.forEach(element => {
+                if (element.fecha_limite) {
+                    fecha_lim = element.fecha_limite;
+                }else{
+                    fecha_lim = '-';
+                }
+                
+                if(tipo_orden == 3){
+                    maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
+                                    <td class="text-center">`+element.horas_maquinaria+`</td>
+                                    `
+                }
+
+                html += `<tr>
+                            <td class="text-center">`+element.id_parte+`</td>
+                            <td class="text-center">`+element.fecha+`</td>
+                            <td class="text-center">`+fecha_lim+`</td>
+                            <td class="text-center">`+element.estado+`</td>
+                            <td class="text-center">`+element.horas+`</td>
+                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">`+element.responsable+`</td>
+                            `+maq_y_hora+`
+                            <td class="text-center">`+element.supervisor+`</td>
+                            <td class="text-center">
+                                <div class="row justify-content-center" >
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                        Opciones
+                                    </button>
+                                </div>
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                                Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="" onclick="">
+                                                Logs
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`
+                idCount++;
+            });
+            document.getElementById('body_ver_parte').innerHTML = html;
+            document.getElementById('mv-estado').value = response[0].estado_orden;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+}
+
+function modalEditarPartes(id_orden){
+    $("#id_orden_editar").val(id_orden)    
+    $.ajax({
+        type: "get",
+        url: '/orden_mantenimiento/check_pre_editar', 
+        data: {
+            id_orden
+        },
+        success: function (response) {
+           $("#editarPartes").modal('show')
+           if(response.esta_activo == 1){
+                $("#activo_editar").prop('checked', true);
+                $("#label_activo_editar").text("Activa");
+           }
+           else{
+                $("#activo_editar").prop('checked', false);
+                $("#label_activo_editar").text("Inactiva");
+           }
+           if(response.id_empleado){
+                $("#id_editar_empleado").val(response.id_empleado);
+           }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })    
+}
+
+
+$("#activo_editar").on("change", function () {
+    if ($(this).is(":checked")) {
+        $("#label_activo_editar").text("Activa");
+    } else {
+        $("#label_activo_editar").text("Inactiva");
+    }
+});
