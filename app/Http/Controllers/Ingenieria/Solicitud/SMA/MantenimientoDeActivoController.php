@@ -441,7 +441,8 @@ class MantenimientoDeActivoController extends Controller
         
         Orden_mantenimiento::create([
             'id_tipo_orden_mantenimiento' => 1,
-            'id_orden' => $orden->id_orden
+            'id_orden' => $orden->id_orden,
+            'esta_activo' => 1
         ]);
 
         $responsabilidad_parte = Responsabilidad::create([
@@ -483,7 +484,7 @@ class MantenimientoDeActivoController extends Controller
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
         $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
         $supervisores = $this->obtenerSupervisores()->pluck('nombre_empleado', 'id_empleado');
-        $empleados = Empleado::orderBy('nombre_empleado')->get();
+        $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
         return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores'));
     }
 

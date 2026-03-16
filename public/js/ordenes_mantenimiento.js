@@ -727,7 +727,7 @@ function buscarPorFiltros(){
     let filtros = getSelectedFilters();
     table.clear().draw()
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         data: filtros,
         url: '/get_operaciones',
         success: function(operaciones) {
@@ -852,9 +852,9 @@ function buscarPorFiltros(){
                     7: '-',
                     8: ope.estado_actual,
                     9: '-',
-                    10: ope.tecnico_asignado ?? '-',
+                    10: ope.get_empleado.nombre_empleado ?? '-',
                     11: ope.horas,
-                    12: ope.activo ? 'SI' : 'NO',
+                    12: ope.esta_activo ? 'SI' : 'NO',
                     13: ope.cantidad ?? '-',
                     14: '-',
                 }).node().id = ope.id_ope_de_hdr;     

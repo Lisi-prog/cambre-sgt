@@ -36,6 +36,10 @@ class Parte_inspeccion extends Model
     {
         return $this->hasMany(Parte_inspe_x_tarea_mant::class, 'id_parte_inspeccion', 'id_parte_inspeccion');
     }
+
+    public function getParteInspeXTareasMantenimiento(){
+        return $this->hasMany(Parte_inspe_x_tarea_mant::class, 'id_parte_inspeccion', 'id_parte_inspeccion');
+    }
     
 }
 

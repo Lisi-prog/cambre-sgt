@@ -37,14 +37,21 @@ public function index(){
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         
 
-        $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
-                                        from operaciones_de_hdr op_hdr
-                                        inner join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = op_hdr.id_hoja_de_ruta
-                                        inner join orden_mecanizado om on om.id_orden_mecanizado = hdr.id_orden_mecanizado
-                                        inner join orden o on o.id_orden = om.id_orden
-                                        inner join etapa et on et.id_etapa = o.id_etapa
-                                        inner join servicio s on s.id_servicio = et.id_servicio
-                                        group by s.id_servicio, s.codigo_servicio;'))->pluck('codigo_servicio');
+        $flt_proyectos = collect(DB::select('
+                    select s.codigo_servicio
+                    from servicio s
+                    left join etapa et 
+                        on et.id_servicio = s.id_servicio
+                    left join orden o 
+                        on o.id_etapa = et.id_etapa
+                    left join orden_mecanizado om 
+                        on om.id_orden = o.id_orden
+                    left join hoja_de_ruta hdr 
+                        on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+                    left join operaciones_de_hdr op_hdr 
+                        on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
+                    group by s.id_servicio, s.codigo_servicio
+                '))->pluck('codigo_servicio');
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
@@ -64,16 +71,32 @@ public function index(){
 
         $operaciones_mantenimiento = [];
         if((!$request->res || in_array('-', $request->res))){
-            $operaciones_mantenimiento = Orden_mantenimiento::with('getOrden.getEtapa.getServicio', 
-            'getTipoOrdenMantenimiento')
-            ->get()
+            $operaciones_mantenimiento = Orden_mantenimiento::with('getEmpleado','getOrden.getEtapa.getServicio', 
+            'getTipoOrdenMantenimiento');
+            if($request->soloAct == 'SI'){
+                $operaciones_mantenimiento = $operaciones_mantenimiento->where('esta_activo', 1);
+            }            
+            $operaciones_mantenimiento = $operaciones_mantenimiento->get()
             ->filter(function ($om) use ($request) {
                 $estado = $om->getEstadoActual();
-                if (in_array($estado, $request->est)) {
-                    $om->estado_actual = $estado;
-                    return true;
+                if($request->est && !in_array($estado, $request->est)){
+                    return false;
                 }
-                return false;
+                if($request->cod_serv && !in_array(
+                    $om->getOrden->getEtapa->getServicio->codigo_servicio,
+                    $request->cod_serv
+                )){
+                    return false;
+                }
+                if($request->sup && !in_array(
+                    $om->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento,
+                    $request->sup
+                )){
+                    return false;
+                }
+                $om->estado_actual = $estado;
+
+                return true;
             })
             ->values();
             foreach($operaciones_mantenimiento as $om){
@@ -108,7 +131,7 @@ public function index(){
         if($request->asig){
             $operaciones = $operaciones->whereIn('tecnico_asignado', $request->asig);
         }
-        if($request->soloAct == 1){
+        if($request->soloAct == 'SI'){
             $operaciones = $operaciones->where('activo', 1);
         }
 

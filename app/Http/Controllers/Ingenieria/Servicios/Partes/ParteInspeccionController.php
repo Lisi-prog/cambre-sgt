@@ -275,4 +275,17 @@ class ParteInspeccionController extends Controller{
         $parte_inspeccion->horas = $parte_inspeccion->getParte->getOrden->getHoras();
         return response()->json($parte_inspeccion);
     }
+
+    public function get_parte_inspeccion_porcion($id_parte){
+        $parte_inspeccion = Parte_inspeccion::where('id_parte', $id_parte)
+        ->with(
+            'getParteInspeXTareasMantenimiento.getTareaMantenimiento.getZonaTarea',
+            'getParteInspeXTareasMantenimiento.getTareaMantenimiento.getEjecucion',
+            'getParteInspeXTareasMantenimiento.getAccionParaTarea',
+            'getParte.getOrden'
+        )
+        ->orderByDesc('id_parte_inspeccion')
+        ->first();
+        return response()->json($parte_inspeccion);
+    }
 }

@@ -211,4 +211,18 @@ class ParteAjusteController extends Controller{
         return response()->json($parte_ajuste);
     }
 
+    public function get_parte_ajuste_porcion($id_parte){
+        $parte_ajuste = Parte_ajuste::where('id_parte', $id_parte)
+        ->with(
+            'getParte.getOrden', 
+            'getTareasAjuste.getAccionTarea', 
+            'getTareasAjuste.getZona',
+            'getTareasAjuste.getMaquinaria',
+            'getTareasAjuste.getTareaMantenimiento',
+        )
+        ->orderByDesc('id_parte_ajuste')
+        ->first();
+        return response()->json($parte_ajuste);
+    }
+
 }
