@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use \PDF;
 
 use App\Models\User;
 use App\Models\Cambre\Empleado;
@@ -121,6 +122,7 @@ class InformeController extends Controller
 
             // Preparar datos para el correo
             $data = [
+                'empleadoId' => $empleadoId,
                 'info' => $datosUsuario,
                 'fecha_desde' => $fechaHace7Dias,
                 'fecha_hasta' => $fechaHoy,
@@ -225,5 +227,20 @@ class InformeController extends Controller
 
     public function obtenerEmpleadosActivos(){
         return Empleado::orderBy('nombre_empleado')->activo()->get();
+    }
+
+    public function resumenSemanalPdf(Request $request){
+        $pdf = app('dompdf.wrapper');
+        // return $request;
+        $fechaIni = $request->input('fec_ini');
+        $fechaFin = $request->input('fec_fin');
+        $supervisor = $request->input('id_tecnico');
+
+        $data = $this->generarResumenSemanal($fechaIni, $fechaFin, $supervisor);
+
+        return $pdf->loadView('Informatica.Informes.documentos.resumen-semanal-pdf',[
+                                    'data' => $data])
+                                    ->setPaper('a4', 'portrait')
+                                    ->stream('resumenSemanal.pdf');  
     }
 }
