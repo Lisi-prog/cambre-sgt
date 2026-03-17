@@ -16,7 +16,10 @@ use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
 use App\Models\Cambre\Orden_mantenimiento;
 use App\Models\Cambre\Tipo_orden_mantenimiento;
-
+use App\Models\Cambre\Ishikawa_categoria;
+use App\Models\Cambre\Ishikawa_causa;
+use App\Models\Cambre\Accion_para_tarea;
+use App\Models\Cambre\Zona;
 
 class OrdenMantenimientoController extends Controller
 {
@@ -55,7 +58,20 @@ public function index(){
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
-        return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos'));
+        $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
+        $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
+        $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
+        $zonas = Zona::orderBy('nombre_zona')->get();
+        $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        /*$ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
+                                ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
+        $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
+        $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
+        $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
+ */
+        return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos',
+        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas'
+        ));
     }
 
      public function obtenerTecnicosDeOperaciones(){
@@ -71,7 +87,7 @@ public function index(){
 
         $operaciones_mantenimiento = [];
         if((!$request->res || in_array('-', $request->res))){
-            $operaciones_mantenimiento = Orden_mantenimiento::with('getEmpleado','getOrden.getEtapa.getServicio', 
+            $operaciones_mantenimiento = Orden_mantenimiento::with('getEmpleado','getOrden.getEtapa.getServicio.getActivo', 
             'getTipoOrdenMantenimiento');
             if($request->soloAct == 'SI'){
                 $operaciones_mantenimiento = $operaciones_mantenimiento->where('esta_activo', 1);

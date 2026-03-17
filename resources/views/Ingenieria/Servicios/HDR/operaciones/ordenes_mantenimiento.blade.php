@@ -278,6 +278,15 @@
     </div>
     <input type="text" hidden value="{{Auth::user()->getEmpleado->id_empleado}}" id="id_emp">
 </section>
+
+@include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
+@include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
+@include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')
+
+<div hidden>
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
+</div>
+
 <script>
     const ordenHdrRoute = "{{ url('/ordenes/hdr') }}";
 </script>
@@ -285,6 +294,7 @@
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
 <script src="{{ asset('js/ordenes_mantenimiento.js') }}"></script>
+<script src="{{ asset('js/ope_mant_partes.js') }}"></script>
 <script type="module" > 
         import {cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.cargarModalVerOrden = cargarModalVerOrden;

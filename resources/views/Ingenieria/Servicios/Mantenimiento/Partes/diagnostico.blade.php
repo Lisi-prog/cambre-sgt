@@ -82,13 +82,6 @@
                     <label class="my-auto" for="completado_diagnostico">COMPLETADO</label>
                 </div>
                 <button id="btnGuardarNuevoParteDiagnostico" type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
-                <div id="previewAceptarReview" style="width: 100%;">
-                    <hr>
-                    <div class="d-flex justify-content-center">
-                        <button onclick="procesarDiagnostico('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Diagnóstico</button>
-                        <button onclick="procesarDiagnostico('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Diagnóstico</button>
-                    </div>
-                </div>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}
