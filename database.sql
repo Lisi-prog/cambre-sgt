@@ -1026,12 +1026,13 @@ CREATE TABLE `estado_mantenimiento` (
 );
 
 INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('1', 'Espera');
-INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('2', 'Revisar');
-INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('3', 'Completo');
-INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('4', 'Rechazado');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('2', 'En proceso');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('3', 'Revisar');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('4', 'Completo');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('5', 'Rechazado');
 
-INSERT INTO `servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('1', 'Correctivo');
-INSERT INTO `servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('2', 'Preventivo');
+INSERT INTO `sol_servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('1', 'Correctivo');
+INSERT INTO `sol_servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('2', 'Preventivo');
 
 UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Diagnostico' WHERE (`id_tipo_orden_mantenimiento` = '1');
 UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Inspeccion' WHERE (`id_tipo_orden_mantenimiento` = '2');
@@ -1148,8 +1149,9 @@ CREATE TABLE `parte_diagnostico` (
 	`id_estado` INT NOT NULL,
 	`en_maquina` boolean NOT NULL DEFAULT '0',
 	`en_banco` boolean NOT NULL DEFAULT '0',
+  `completado` boolean,
 	PRIMARY KEY (`id_parte_diagnostico`),
-	CONSTRAINT `FK_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`)
+	CONSTRAINT `FK_pdxp_parte` FOREIGN KEY (`id_parte`) REFERENCES `parte` (`id_parte`)
 );
 
 CREATE TABLE `parte_diag_x_causa` (
@@ -1215,6 +1217,7 @@ CREATE TABLE `tarea_ajuste` (
 	`id_zona` INT NOT NULL,
 	`id_maquinaria` INT NOT NULL,
 	`hecho` boolean NOT NULL DEFAULT 0,
+  `id_tarea_mantenimiento` INT,
 	PRIMARY KEY (`id_tarea_ajuste`),
 	CONSTRAINT `FK_ta_x_accion_tarea` FOREIGN KEY (`id_accion_tarea`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
 	CONSTRAINT `FK_ta_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria` (`id_maquinaria`),

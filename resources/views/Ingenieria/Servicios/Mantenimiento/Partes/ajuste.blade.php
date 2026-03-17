@@ -6,14 +6,14 @@
                     <div>
                         <h1 class="modal-title fs-5">Parte Ajuste</h1>
                     </div>
-                    <div class="d-flex ml-auto">
+                    <div class="ml-auto d-flex me-4">
                         <div class="form-group mb-0 p-0 d-flex align-items-center">
-                            <label for="ajuste_label" class="mr-2">Tipo:</label>
-                            <input id="ajuste_label" disabled class="form-control" value="AJUSTE">
+                            <label for="diagnostico_label" class="my-auto">Tipo: <strong>Ajuste</strong></label>
+                            <input id="ajuste_label" disabled class="form-control" value="AJUSTE" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
-                            <label for="herramental_ajuste" class="mr-2">Activo:</label>
-                            <input id="herramental_ajuste" disabled class="form-control">
+                            <label for="herramental" class="my-auto">Activo: <strong>{{$proyecto->getActivo->nombre_activo}}</strong></label>
+                            <input id="herramental_ajuste" disabled class="form-control" hidden>
                         </div>
                     </div>
                 </div>

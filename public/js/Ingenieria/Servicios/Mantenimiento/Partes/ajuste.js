@@ -4,7 +4,7 @@ $(document).ready(function () {
     tabla_ajustes = $('#tabla_ajustes').DataTable({
         autoWidth: false,
          columnDefs: [
-            { className: "text-center", targets: [0,1,2,3,4] }, { width: '25%', targets:[0]}
+            { className: "text-center", targets: [1,2,3,4] }, { width: '25%', targets:[0]}, {className: "text-start", targets: [0]}  
         ],
         language: {
                 lengthMenu: 'Mostrar _MENU_ registros por pagina',

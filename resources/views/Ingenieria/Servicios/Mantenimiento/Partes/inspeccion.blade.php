@@ -2,19 +2,18 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="d-flex w-100">
+                <div class="d-flex w-100 align-items-center">
                     <div>
                         <h1 class="modal-title fs-5">Parte Inspección</h1>
                     </div>
-                    
-                    <div class="d-flex ml-auto">
-                        <div class="form-group mb-0 pb-0 d-flex align-items-center">
-                            <label for="inspeccion_label" class="mr-2">Tipo: </label>
-                            <input id="inspeccion_label" disabled class="form-control" value="INSPECCIÓN">
+                    <div class="ml-auto d-flex me-4">
+                        <div class="form-group mb-0 p-0 d-flex align-items-center">
+                            <label for="diagnostico_label" class="my-auto">Tipo: <strong>Inspección</strong></label>
+                            <input id="inspeccion_label" disabled class="form-control" value="INSPECCIÓN" hidden>
                         </div>
-                        <div class="form-group ml-4 mb-0 pb-0 d-flex align-items-center">
-                            <label for="herramental_inspeccion" class="mr-2">Activo: </label>
-                            <input id="herramental_inspeccion" disabled class="form-control">
+                        <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
+                            <label for="herramental" class="my-auto">Activo: <strong>{{$proyecto->getActivo->nombre_activo}}</strong></label>
+                            <input id="herramental_inspeccion" disabled class="form-control" hidden>
                         </div>
                     </div>
                 </div>

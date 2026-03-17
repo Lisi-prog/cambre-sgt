@@ -10,7 +10,7 @@
         <div class="d-flex section-header justify-content-center">
             <div class="d-flex flex-row col-12">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-auto">
-                    <h4 class="">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
+                    <h4 class="my-auto">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
                         <input type="text" hidden id="nombre_proyecto_i" value="{{ $proyecto->codigo_servicio }}">
                 </div>
             </div>
@@ -21,9 +21,10 @@
                 {{-- Informacion de la solicitud --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-head py-3 m-auto">
+                        <div class="card-head pt-3 m-auto">
                             <h5>Solicitud</h5>
                         </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">

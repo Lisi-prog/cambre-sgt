@@ -6,14 +6,14 @@
                     <div>
                         <h1 class="modal-title fs-5">Parte Diagnóstico</h1>
                     </div>
-                    <div class="ml-auto d-flex">
+                    <div class="ml-auto d-flex me-4">
                         <div class="form-group mb-0 p-0 d-flex align-items-center">
-                            <label for="diagnostico_label" class="mr-2">Tipo:</label>
-                            <input id="diagnostico_label" disabled class="form-control" value="DIAGNÓSTICO">
+                            <label for="diagnostico_label" class="my-auto">Tipo: <strong>Diagnostico</strong></label>
+                            <input id="diagnostico_label" disabled class="form-control" value="DIAGNÓSTICO" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
-                            <label for="herramental" class="mr-2">Activo:</label>
-                            <input id="herramental" disabled class="form-control">
+                            <label for="herramental" class="my-auto">Activo: <strong>{{$proyecto->getActivo->nombre_activo}}</strong></label>
+                            <input id="herramental" disabled class="form-control" hidden>
                         </div>
                     </div>
                 </div>
@@ -22,10 +22,12 @@
             {!! Form::open(['route' => 'parte_diagnostico.store', 'method' => 'POST']) !!}
             <div class="modal-body">
                 <div class="d-flex">
-                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">              
+                    <hr>
+                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">    
+                        <hr>          
                         <div class="form-group mb-0">
                             <span class="obligatorio">*</span>
-                            <label class="mr-2">A resolver: </label>
+                            <label class="mr-2 form-label">A resolver: </label>
                         </div>          
                         <div>
                             <input onchange="checkSendNuevoParteDiagnostico()" id="Máquina" required class="ml-4"type="radio" name="a_resolver" value="Máquina"> <label for="Máquina"> Máquina</label>
@@ -34,8 +36,9 @@
                             <input onchange="checkSendNuevoParteDiagnostico()" id="Banco" required class="ml-4" type="radio" name="a_resolver" value="Banco"> <label for="Banco"> Banco</label>                       
                         </div>
                     </div>
-                    <div style="width: 85%;">
+                    <div style="width: 85%;" class="form-group">
                         <hr>
+                        <label class="mr-2 form-label">Diagnosticos: </label>
                         <table class="table table-striped" id="tabla_diagnosticos" style="width: 100%;">
                             <thead>
                                 <th class='text-center' style="color:#fff;">Nº</th>
@@ -50,10 +53,10 @@
                         </div>
                     </div>
                 </div>     
-                <div class="d-flex  mt-5">
-                    <div style="width: 50%;">
+                <div class="d-flex">
+                    <div style="width: 50%;" class="form-group">
                         <label for="observaciones_diagonstico">Observaciones:</label>       
-                        <textarea style="height: 100%;" name="observacion" class="form-control" id="observaciones_diagonstico" placeholder="Observaciones"></textarea>   
+                        <textarea style="resize:none; height: 10vh;" name="observacion" class="form-control" id="observaciones_diagonstico" placeholder="Observaciones"></textarea>   
                     </div>
                     <div style="width: 50%;" class="d-flex">
                         <div class="form-group ml-auto">
@@ -76,7 +79,7 @@
                 </div>
                 <div class="form-group ml-auto align-items-bottom d-flex mb-0 mr-4">
                     <input type="checkbox" onchange="checkSendNuevoParteDiagnostico()" id="completado_diagnostico" class="form-check-input mt-auto">
-                    <label class="mt-auto" for="completado">COMPLETADO</label>
+                    <label class="my-auto" for="completado_diagnostico">COMPLETADO</label>
                 </div>
                 <button id="btnGuardarNuevoParteDiagnostico" type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <div id="previewAceptarReview" style="width: 100%;">
