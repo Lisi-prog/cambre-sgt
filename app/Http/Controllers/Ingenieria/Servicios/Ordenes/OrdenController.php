@@ -2216,11 +2216,11 @@ class OrdenController extends Controller
         switch ($tipo) {
             case 1:
                 # Trabajo
-                if (Auth::user()->hasRole('SUPERVISOR')) {
-                    $ordenes = Vw_gest_orden_trabajo::where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
-                }else{
-                    $ordenes = Vw_gest_orden_trabajo::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 9)->where('id_estado', '<>', 5)->orderBy('codigo_servicio')->orderBy('descripcion_etapa')->orderBy('nombre_orden')->get();
-                }
+                // if (Auth::user()->hasRole('SUPERVISOR')) {
+                //     $ordenes = Vw_gest_orden_trabajo::where('id_estado', '<', 9)->orderBy('nombre_orden')->get();
+                // }else{
+                    $ordenes = Vw_gest_orden_trabajo::where('id_empleado_responsable', Auth::user()->getEmpleado->id_empleado)->where('id_estado', '<', 9)->where('id_estado', '<>', 5)->orderBy('codigo_servicio', 'asc')->orderBy('nombre_orden')->get();
+                // }
                 
                 break;
             case 2:
