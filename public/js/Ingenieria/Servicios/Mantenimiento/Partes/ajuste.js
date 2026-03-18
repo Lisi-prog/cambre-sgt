@@ -30,7 +30,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
     $("#previewAceptarAjusteReview").hide()
-    $("#herramental_ajuste").val($("#activo").val())
+    // $("#herramental_ajuste").val($("#activo").val())
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#btnRowNuevoAjuste").show()
@@ -158,7 +159,8 @@ function openModalConfirmarParteAjuste(id_orden){
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
-    $("#herramental_ajuste").val($("#activo").val());
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -213,7 +215,8 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
-    $("#herramental_ajuste").val($("#activo").val());
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -281,7 +284,8 @@ function openModalVerParteAjuste(id_orden){
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
-    $("#herramental_ajuste").val($("#activo").val());
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -320,7 +324,8 @@ function verParteDeAjuste(id_parte, estado){
     }else{
         $("#completado_ajuste").prop('checked', false)
     }
-    $("#herramental_ajuste").val($("#activo").val());
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',

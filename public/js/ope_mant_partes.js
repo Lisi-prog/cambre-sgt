@@ -164,6 +164,7 @@ function openModalNuevoParteDiagnostico(id_orden){
     $("#completado_diagnostico").removeAttr('disabled');
     $("#fecha").removeAttr('disabled');
     $("#herramental").val($("#activo").val());
+    document.getElementById('nombreActivo').textContent = $("#activo").val();
     $("#id_orden").val(id_orden);
     $("input:radio").attr("checked", false);
 }
@@ -179,6 +180,7 @@ function openModalVerParteDiagnostico(id_orden, activo){
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnostico").hide();
     $("#herramental").val(activo);
+    document.getElementById('nombreActivo').textContent = activo;
     tabla_diagnosticos.column(3).visible(false);
     tabla_diagnosticos.clear()
     $.ajax({
@@ -235,6 +237,7 @@ function openModalParteDiagnosticoPendiente(id_orden, activo){
     $("#completado_diagnostico").removeAttr('disabled');
     $("#fecha").removeAttr('disabled');
     $("#herramental").val(activo);
+    document.getElementById('nombreActivo').textContent = activo;
     $("#id_orden").val(id_orden);
 
     let hoy = new Date()
@@ -282,6 +285,7 @@ function openModalCrearParteDiagnostico(id_orden, nombre_activo){
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").show();
     $("#herramental").val(nombre_activo);
+    document.getElementById('nombreActivo').textContent = nombre_activo;
     tabla_diagnosticos.clear().draw();
     i = 0;
     $("#btnGuardarNuevoParteDiagnostico").show();
@@ -311,6 +315,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo){
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
     let hoy = new Date()
@@ -437,6 +442,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo){
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     $("#horas_inspeccion").removeAttr('disabled')
     $("#completado_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
@@ -524,6 +530,7 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     tabla_inspecciones.clear();
      $.ajax({
         type: 'GET',
@@ -586,6 +593,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo) {
     $("#btnGuardarNuevoParteAjuste").show()
     $("#previewAceptarAjusteReview").hide()
     $("#herramental_ajuste").val(nombre_activo)
+    document.getElementById('nombreActivoAjuste').textContent = nombre_activo;
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#btnRowNuevoAjuste").show()
@@ -714,6 +722,7 @@ function openModalConfirmarParteAjuste(id_orden, nombre_act){
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
     $("#herramental_ajuste").val(nombre_act);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_act;
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -769,6 +778,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo){
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
     $("#herramental_ajuste").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -837,6 +847,7 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
     $("#herramental_ajuste").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',

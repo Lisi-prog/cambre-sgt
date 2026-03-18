@@ -60,7 +60,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12 align-items-center justify-content-between">
             <div class="col-auto">
-                <h4 class="mb-0">Operaciones de HDR</h4>
+                <h4 class="mb-0">Operaciones</h4>
             </div>
 
             @php

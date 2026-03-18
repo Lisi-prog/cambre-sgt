@@ -12,7 +12,7 @@
                             <input id="inspeccion_label" disabled class="form-control" value="INSPECCIÓN" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
-                            <label for="herramental" class="my-auto">Activo: <strong></strong></label>
+                            <label for="herramental" class="my-auto">Activo: <strong id="nombreActivoInspeccion"></strong></label>
                             <input id="herramental_inspeccion" disabled class="form-control" hidden>
                         </div>
                     </div>

@@ -24,6 +24,7 @@ $(document).ready(function () {
     });    
     activo = document.getElementById('activo').value;
     document.getElementById('herramental_inspeccion').value = activo;
+    document.getElementById('nombreActivoInspeccion').textContent = activo;
 });
 
 function openModalNuevoParteInspeccion(id_activo, id_orden){
@@ -32,6 +33,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
     let hoy = new Date()
@@ -147,6 +149,7 @@ function openModalConfirmarParteInspeccion(id_orden){
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").attr('checked', 'checked')
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     tabla_inspecciones.clear();
      $.ajax({
         type: 'GET',
@@ -241,6 +244,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
 
@@ -327,6 +331,7 @@ function openModalVerParteInspeccion(id_orden){
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     tabla_inspecciones.clear();
      $.ajax({
         type: 'GET',
@@ -390,6 +395,7 @@ function verParteDeInspeccion(id_parte, completado){
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     if(completado == 'Completo'){
         $("#completado_inspeccion").prop('checked', true)
     }
