@@ -180,6 +180,9 @@
                                                                     </button>
                                                                 @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'En proceso')
+                                                                    <button type="button" onclick="openModalParteDiagnosticoPendiente({{$orden->id_orden}})" class="btn btn-primary">
+                                                                        <i class="fas fa-pen"></i>
+                                                                    </button>
                                                                 @if ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
                                                                     <button type="button" onclick="openModalParteInspeccionPendiente({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-eye"></i>
@@ -258,8 +261,8 @@
                                                     <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
                                                     <td class= 'text-center' style="vertical-align: middle;">
                                                         @if($orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO')
-                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Completo')                                                                
-                                                                <button type="button" class="btn btn-primary" onclick="openModalVerParteDiagnostico({{ $orden_mantenimiento->id_orden }})">
+                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Completo' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso')                                                                
+                                                                <button type="button" class="btn btn-primary" onclick="verParteDeDiagnostico({{ $parte->id_parte }}, '{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento }}')">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>                    
                                                             @endif   

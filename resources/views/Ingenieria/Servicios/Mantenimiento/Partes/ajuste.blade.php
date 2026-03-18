@@ -12,7 +12,7 @@
                             <input id="ajuste_label" disabled class="form-control" value="AJUSTE" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
-                            <label for="herramental" class="my-auto">Activo: <strong>{{$proyecto->getActivo->nombre_activo}}</strong></label>
+                            <label for="herramental" class="my-auto">Activo: <strong></strong></label>
                             <input id="herramental_ajuste" disabled class="form-control" hidden>
                         </div>
                     </div>

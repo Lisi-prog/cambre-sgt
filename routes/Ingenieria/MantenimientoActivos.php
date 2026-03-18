@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::resource('parte_diagnostico', ParteDiagnosticoController::class);
     Route::get('get-parte-diagnostico/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico'])->name('get_parte_diagnostico');
     Route::get('get-parte-diagnostico-completado/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico_completado'])->name('get_parte_diagnostico_completado');
+    Route::get('get-parte-diagnostico-porcion/{id_parte}', [ParteDiagnosticoController::class, 'get_parte_diagnostico_porcion'])->name('get_parte_diagnostico_porcion');
     Route::post('procesar-parte-diagnostico', [ParteDiagnosticoController::class, 'procesar_parte_diagnostico'])->name('procesar_parte_diagnostico');
     Route::resource('parte_inspeccion', ParteInspeccionController::class);
     Route::get('get-tareas-por-activo/{id_activo}', [ParteInspeccionController::class, 'get_tareas_x_activo'])->name('get_tareas_x_activo');   

@@ -12,7 +12,7 @@
                             <input id="diagnostico_label" disabled class="form-control" value="DIAGNÓSTICO" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
-                            <label for="herramental" class="my-auto">Activo: <strong>{{$proyecto->getActivo->nombre_activo}}</strong></label>
+                            <label for="herramental" class="my-auto">Activo: <strong></strong></label>
                             <input id="herramental" disabled class="form-control" hidden>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                     (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                 </div>
                 <div class="form-group ml-auto align-items-bottom d-flex mb-0 mr-4">
-                    <input type="checkbox" onchange="checkSendNuevoParteDiagnostico()" id="completado_diagnostico" class="form-check-input mt-auto">
+                    <input type="checkbox" name="completado" onchange="checkSendNuevoParteDiagnostico()" id="completado_diagnostico" class="form-check-input mt-auto">
                     <label class="my-auto" for="completado_diagnostico">COMPLETADO</label>
                 </div>
                 <button id="btnGuardarNuevoParteDiagnostico" type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>

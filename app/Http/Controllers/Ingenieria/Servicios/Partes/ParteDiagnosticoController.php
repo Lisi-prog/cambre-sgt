@@ -44,18 +44,29 @@ class ParteDiagnosticoController extends Controller{
                     $parte_diagnostico->en_maquina = 0;
                     $parte_diagnostico->en_banco = 1;    
                 }
-                $parte_diagnostico->id_estado = 4;
-                $parte_diagnostico->completado = 1;
+                $next = 2;
+                if($request->completado){
+                    $parte_diagnostico->id_estado = 4;
+                    $parte_diagnostico->completado = 1;
+                }
+                else{
+                    $next = 1;
+                    $parte_diagnostico->id_estado = 2;
+                    $parte_diagnostico->completado = 0;    
+                }
                 $parte_diagnostico->id_parte = $parte->id_parte;
                 $parte_diagnostico->save();
-            //Parte_diag_x_causa
-                for($i=0; $i<count($request->ishikawa_categoria); $i++){
-                    $parte_diag_x_causa = new Parte_diag_x_causa;
-                    $parte_diag_x_causa->id_parte_diagnostico = $parte_diagnostico->id_parte_diagnostico;
-                    $parte_diag_x_causa->id_ishikawa_causa = $request->ishikawa_causa[$i];
-                    $parte_diag_x_causa->save();
+                //Parte_diag_x_causa
+                if($request->ishikawa_categoria){
+                    for($i=0; $i<count($request->ishikawa_categoria); $i++){
+                        $parte_diag_x_causa = new Parte_diag_x_causa;
+                        $parte_diag_x_causa->id_parte_diagnostico = $parte_diagnostico->id_parte_diagnostico;
+                        $parte_diag_x_causa->id_ishikawa_causa = $request->ishikawa_causa[$i];
+                        $parte_diag_x_causa->save();
+                    }
                 }
-                $orden_vieja = Orden::find($request->id_orden);    
+                if($next == 2){
+                    $orden_vieja = Orden::find($request->id_orden);    
                     $orden_nueva = new Orden;                
                     $orden_nueva->nombre_orden = $request->nombre_proyecto . '-inspeccion';
                     $orden_nueva->fecha_inicio = Carbon::now();
@@ -85,6 +96,7 @@ class ParteDiagnosticoController extends Controller{
                     $parte_inspeccion->id_parte = $parte->id_parte;
                     $parte_inspeccion->id_estado_mantenimiento = 1;
                     $parte_inspeccion->save();
+                }
             DB::commit();
             return redirect()->back()->with("mensaje","Parte diagnóstico creado exitosamente.");
         } catch (\Exception $e) {
@@ -120,13 +132,24 @@ class ParteDiagnosticoController extends Controller{
 
     public function get_parte_diagnostico_completado($id_orden_mantenimiento){
         $parte_diagnostico = Parte_diagnostico::whereHas('getParte', function($query) use ($id_orden_mantenimiento){
-        $query->where('id_orden', $id_orden_mantenimiento)->where('id_estado', 4);
+        $query->where('id_orden', $id_orden_mantenimiento)->whereIn('id_estado', [2,4]);
         })
         ->with('getParte.getResponsable.getEmpleado',
             'getParte.getOrden',
             'getParteDiagXCausa.getIshikawaCausa.getCategoria')
-        ->first();
+        ->get();
         return $parte_diagnostico;
+    }
+
+     public function get_parte_diagnostico_porcion($id_parte){
+        $parte_diagnostico = Parte_diagnostico::where('id_parte', $id_parte)
+        ->with(
+            'getParte',
+            'getParteDiagXCausa.getIshikawaCausa.getCategoria'
+        )
+        ->orderByDesc('id_parte_diagnostico')
+        ->first();
+        return response()->json($parte_diagnostico);
     }
 
 }

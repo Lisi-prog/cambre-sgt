@@ -882,6 +882,16 @@ function buscarPorFiltros(){
                             </div>
                         </div>`;
                     }
+                    else if(ope.estado_actual == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
                     else{
                         opciones += `
                         <div class="row my-2">
