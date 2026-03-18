@@ -21,7 +21,10 @@ $(document).ready(function () {
             "aaSorting": []
     });    
     activo = document.getElementById('activo').value;
-    document.getElementById('herramental').value = activo;
+    // document.getElementById('herramental').value = activo;
+    document.getElementById('nombreActivo').textContent = activo;
+    $("#hs").val($("#horas_totales").val())
+    $("#es").val($("#estado_actual").val())
 });
 
 var i = 0;
@@ -89,7 +92,7 @@ function eliminarDiagnostico(indice){
 }
 
 function checkSendNuevoParteDiagnostico(){
-    if(tabla_diagnosticos.rows().count() > 0 && $("#fecha").val() && $("#horas").val() && $("#completado_diagnostico").is(':checked')){
+    if(tabla_diagnosticos.rows().count() > 0 && $("#fecha").val() && $("#horas").val()){
         $("#btnGuardarNuevoParteDiagnostico").removeAttr('disabled');
     }
     else{
@@ -122,71 +125,6 @@ function openModalNuevoParteDiagnostico(id_orden){
     $("#herramental").val($("#activo").val());
     $("#id_orden").val(id_orden);
     $("input:radio").attr("checked", false);
-    $("#previewAceptarReview").hide();
-}
-
-function openModalConfirmarParteDiagnostico(id_orden){
-    $('#nuevoParteDiagnosticoModal').modal('show');
-    $("#btnAgregarFilaDiagnostico").hide();
-    $("#id_orden").val(id_orden);    
-    $("#fecha").attr('disabled', 'disabled');
-    $("#horas").attr('disabled', 'disabled');
-    $('.obligatorio').hide();
-    $("#label_ob_diagnostico").hide();
-    $("#completado_diagnostico").attr('disabled', 'disabled');
-    $("#observaciones_diagonstico").attr('disabled', 'disabled');
-    $("#btnGuardarNuevoParteDiagnostico").hide();
-    $("#herramental").val($("#activo").val());
-    $("#previewAceptarReview").show();
-    tabla_diagnosticos.clear()
-    $.ajax({
-        type: 'GET',
-        url: '/get-parte-diagnostico/' + id_orden,
-        success: function(data) {
-            data = data.data
-            console.log(data)
-            $("#horas").val(data.get_parte.horas);
-            $("#fecha").val(data.get_parte.fecha);
-            $("#observaciones_diagonstico").val(data.get_parte.observaciones);
-            $("#completado_diagnostico").attr('checked', 'checked')
-            if(data.en_maquina == 1){
-                $("input:radio[name=a_resolver][value='Máquina']").attr("checked", true);
-            }
-            else if(data.en_banco == 1){
-                $("input:radio[name=a_resolver][value='Banco']").attr("checked", true);
-            }
-            $("input:radio[name=a_resolver]").attr("disabled", true);
-            i = 1;
-            data.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
-
-                tabla_diagnosticos.row.add([
-                    i,
-                    parte_diag_x_causa.id_parte_diagnostico,
-                    parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa
-                ]);
-
-                i++;
-            });
-            tabla_diagnosticos.draw();
-        }
-    });
-}
-
-function procesarDiagnostico(accion){
-     $.ajax({
-        type: 'post',
-        url: '/procesar-parte-diagnostico',
-        data: {
-            id_orden_mantenimiento: $("#id_orden").val(),
-            accion: accion,
-            nombre_proyecto: $("#nombre_proyecto").text(),
-        },
-        success: function(data) {
-            $('#nuevoParteDiagnosticoModal').modal('hide');
-            location.reload();
-        }
-    });
 }
 
 function openModalVerParteDiagnostico(id_orden){
@@ -196,39 +134,152 @@ function openModalVerParteDiagnostico(id_orden){
     $("#horas").attr('disabled', 'disabled');
     $('.obligatorio').hide();
     $("#label_ob_diagnostico").hide();
-    $("#completado_diagnostico").attr('disabled', 'disabled');
+    $("#completado_diagnostico").prop('disabled', 'disabled');
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnostico").hide();
     $("#herramental").val($("#activo").val());
-    $("#previewAceptarReview").hide();
+    tabla_diagnosticos.column(3).visible(false);
     tabla_diagnosticos.clear()
     $.ajax({
         type: 'GET',
         url: '/get-parte-diagnostico-completado/' + id_orden,
         success: function(data) {
-            $("#horas").val(data.get_parte.horas);
-            $("#fecha").val(data.get_parte.fecha);
-            $("#observaciones_diagonstico").val(data.get_parte.observaciones);
-            $("#completado_diagnostico").attr('checked', 'checked')
-            if(data.en_maquina == 1){
-                $("input:radio[name=a_resolver][value='Máquina']").attr("checked", true);
+            if(!data.length){
+                return;
             }
-            else if(data.en_banco == 1){
-                $("input:radio[name=a_resolver][value='Banco']").attr("checked", true);
+            let diag = data[0];
+            $("#horas").val(diag.get_parte.horas);
+            $("#fecha").val(diag.get_parte.fecha);
+            $("#observaciones_diagonstico").val(diag.get_parte.observaciones);
+            $("#completado_diagnostico").prop('checked', true);
+            if(diag.en_maquina == 1){
+                $("input:radio[name=a_resolver][value='Máquina']").prop("checked", true);
+            }
+            else if(diag.en_banco == 1){
+                $("input:radio[name=a_resolver][value='Banco']").prop("checked", true);
             }
             $("input:radio[name=a_resolver]").attr("disabled", true);
-            i = 1;
-            data.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+            let i = 1;
+            data.forEach(diagnostico => {
+                diagnostico.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+                    tabla_diagnosticos.row.add([
+                        i,
+                        parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
+                        parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                        '-'
+                    ]);
+                    i++;
+                });
+            });
+            tabla_diagnosticos.columns.adjust();
+            tabla_diagnosticos.draw();
+        }
+    });
+}
 
+function openModalParteDiagnosticoPendiente(id_orden){
+    $('#nuevoParteDiagnosticoModal').modal('show');
+    $("#btnAgregarFilaDiagnostico").show();
+    tabla_diagnosticos.clear().draw();
+    i = 0;
+    $("#btnGuardarNuevoParteDiagnostico").show();
+    $('.obligatorio').show();
+    $("#label_ob_diagnostico").show()
+    $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("input:radio[name=a_resolver]").removeAttr('disabled');
+    $("#horas").val('');
+    $("#horas").removeAttr('disabled');
+    $("#observaciones_diagonstico").removeAttr('disabled');
+    $("#completado_diagnostico").removeAttr('checked');
+    $("#completado_diagnostico").removeAttr('disabled');
+    $("#fecha").removeAttr('disabled');
+    $("#herramental").val($("#activo").val());
+    $("#id_orden").val(id_orden);
+
+    let hoy = new Date()
+    hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
+    '-' + hoy.getDate().toString().padStart(2, 0)
+    $("#fecha").val(hoy);
+    $.ajax({
+        type: 'GET',
+        url: '/get-parte-diagnostico-completado/' + id_orden,
+        success: function(data) {
+            if(!data.length){
+                return;
+            }
+            let diag = data[0];
+            $("#observaciones_diagonstico").val(diag.get_parte.observaciones);
+            $("#completado_diagnostico").prop('checked', false);
+            if(diag.en_maquina == 1){
+                $("input:radio[name=a_resolver][value='Máquina']").prop("checked", true);
+            }
+            else if(diag.en_banco == 1){
+                $("input:radio[name=a_resolver][value='Banco']").prop("checked", true);
+            }
+            $("input:radio[name=a_resolver]").attr("disabled", false);
+            let i = 0;
+            let tabla_already = tabla_diagnosticos.rows().count();
+            data.forEach(diagnostico => {
+                diagnostico.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+                    tabla_diagnosticos.row.add([
+                        (i + tabla_already + 1),
+                        parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
+                        parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                        '-'
+                    ]);
+                    i++;
+                });
+            });
+
+            tabla_diagnosticos.columns.adjust();
+            tabla_diagnosticos.draw();
+        }
+    });
+}
+
+function verParteDeDiagnostico(id_parte, completado){
+    $('#nuevoParteDiagnosticoModal').modal('show');
+    $("#btnAgregarFilaDiagnostico").hide();
+    $("#fecha").attr('disabled', 'disabled');
+    $("#horas").attr('disabled', 'disabled');
+    $("#herramental_inspeccion").val($("#activo").val());
+    $("#observaciones_diagonstico").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnostico").hide();
+    if(completado == 'Completo'){
+        $("#completado_diagnostico").prop('checked', true)
+    }
+    else{
+        $("#completado_diagnostico").prop('checked', false)
+    }
+
+    tabla_diagnosticos.clear();
+     $.ajax({
+        type: 'GET',
+        url: '/get-parte-diagnostico-porcion/' + id_parte,
+        success: function(diag) {
+            $("#observaciones_diagonstico").val(diag.get_parte.observaciones);
+            $("#completado_diagnostico").prop('checked', false);
+            if(diag.en_maquina == 1){
+                $("input:radio[name=a_resolver][value='Máquina']").prop("checked", true);
+            }
+            else if(diag.en_banco == 1){
+                $("input:radio[name=a_resolver][value='Banco']").prop("checked", true);
+            }
+            $("input:radio[name=a_resolver]").attr("disabled", true);
+            let i = 0;
+            let tabla_already = tabla_diagnosticos.rows().count();
+            diag.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
                 tabla_diagnosticos.row.add([
-                    i,
-                    parte_diag_x_causa.id_parte_diagnostico,
+                    (i + tabla_already + 1),
                     parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa
+                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                    '-'
                 ]);
-
                 i++;
             });
+            $("#horas").val(diag.get_parte.horas);
+            $("#fecha").val(diag.get_parte.fecha);
+            tabla_diagnosticos.columns.adjust();
             tabla_diagnosticos.draw();
         }
     });

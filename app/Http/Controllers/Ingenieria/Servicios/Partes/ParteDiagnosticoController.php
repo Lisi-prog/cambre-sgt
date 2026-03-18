@@ -44,16 +44,58 @@ class ParteDiagnosticoController extends Controller{
                     $parte_diagnostico->en_maquina = 0;
                     $parte_diagnostico->en_banco = 1;    
                 }
-                $parte_diagnostico->id_estado = 3;
-                $parte_diagnostico->completado = 1;
+                $next = 2;
+                if($request->completado){
+                    $parte_diagnostico->id_estado = 4;
+                    $parte_diagnostico->completado = 1;
+                }
+                else{
+                    $next = 1;
+                    $parte_diagnostico->id_estado = 2;
+                    $parte_diagnostico->completado = 0;    
+                }
                 $parte_diagnostico->id_parte = $parte->id_parte;
                 $parte_diagnostico->save();
-            //Parte_diag_x_causa
-                for($i=0; $i<count($request->ishikawa_categoria); $i++){
-                    $parte_diag_x_causa = new Parte_diag_x_causa;
-                    $parte_diag_x_causa->id_parte_diagnostico = $parte_diagnostico->id_parte_diagnostico;
-                    $parte_diag_x_causa->id_ishikawa_causa = $request->ishikawa_causa[$i];
-                    $parte_diag_x_causa->save();
+                //Parte_diag_x_causa
+                if($request->ishikawa_categoria){
+                    for($i=0; $i<count($request->ishikawa_categoria); $i++){
+                        $parte_diag_x_causa = new Parte_diag_x_causa;
+                        $parte_diag_x_causa->id_parte_diagnostico = $parte_diagnostico->id_parte_diagnostico;
+                        $parte_diag_x_causa->id_ishikawa_causa = $request->ishikawa_causa[$i];
+                        $parte_diag_x_causa->save();
+                    }
+                }
+                if($next == 2){
+                    $orden_vieja = Orden::find($request->id_orden);    
+                    $orden_nueva = new Orden;                
+                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-inspeccion';
+                    $orden_nueva->fecha_inicio = Carbon::now();
+                    $orden_nueva->duracion_estimada = 0;
+                    $orden_nueva->id_etapa = $orden_vieja->id_etapa;
+                    $orden_nueva->costo_estimado = 0;   
+                    $orden_nueva->save();
+                    $orden_mantenimiento = new Orden_mantenimiento;
+                    $orden_mantenimiento->id_tipo_orden_mantenimiento = 2;
+                    $orden_mantenimiento->id_orden = $orden_nueva->id_orden;
+                    $orden_mantenimiento->save();
+                    $parte = new Parte;
+                    $parte->observaciones = "Generacion de orden de mantenimiento de inspección";
+                    $parte->fecha = Carbon::now();
+                    $parte->fecha_carga = Carbon::now();
+                    $parte->horas = 0;
+                    $parte->costo = 0;
+                    $parte->id_orden = $orden_nueva->id_orden;
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+                    $responsabilidad = Responsabilidad::create([
+                                        'id_empleado' => 999,
+                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                    ]);
+                    $parte->id_responsabilidad = $responsabilidad->id_responsabilidad;
+                    $parte->save();
+                    $parte_inspeccion = new Parte_inspeccion;
+                    $parte_inspeccion->id_parte = $parte->id_parte;
+                    $parte_inspeccion->id_estado_mantenimiento = 1;
+                    $parte_inspeccion->save();
                 }
             DB::commit();
             return redirect()->back()->with("mensaje","Parte diagnóstico creado exitosamente.");
@@ -86,125 +128,28 @@ class ParteDiagnosticoController extends Controller{
                 'message' => 'No se encontró un parte diagnóstico para esta orden de mantenimiento.'
             ], 404);
         }
-    }
-
-    public function procesar_parte_diagnostico(Request $request){
-        try {        
-            DB::beginTransaction();    
-            $parte_diagnostico = Parte_diagnostico::whereHas('getParte', function($query) use ($request){
-                $query->where('id_orden', $request->id_orden_mantenimiento);
-            })
-            ->orderByDesc('id_parte_diagnostico')
-            ->first();
-
-            if($parte_diagnostico){
-                if($request->accion == "rechazar"){
-                    $parte_nueva = new Parte;
-                    $parte_nueva->observaciones = "Rechazo de orden de mantenimiento de diagnóstico";
-                    $parte_nueva->fecha = Carbon::now();
-                    $parte_nueva->fecha_carga = Carbon::now();
-                    $parte_nueva->horas = 0;
-                    $parte_nueva->costo = 0;
-                    $parte_nueva->id_orden = $parte_diagnostico->getParte->id_orden;
-                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                    $responsabilidad = Responsabilidad::create([
-                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                                    ]);
-                    $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
-                    $parte_nueva->save();
-                    $parte_diagnostico_nuevo = new Parte_diagnostico;
-                    $parte_diagnostico_nuevo->id_estado = 5;
-                    $parte_diagnostico_nuevo->id_parte = $parte_nueva->id_parte;
-                    $parte_diagnostico_nuevo->save();
-                }
-                else if($request->accion == "aceptar"){                                    
-                    $parte_nueva = new Parte;
-                    $parte_nueva->observaciones = "Aprobación de orden de mantenimiento de diagnóstico";
-                    $parte_nueva->fecha = Carbon::now();
-                    $parte_nueva->fecha_carga = Carbon::now();
-                    $parte_nueva->horas = 0;
-                    $parte_nueva->costo = 0;
-                    $parte_nueva->id_orden = $parte_diagnostico->getParte->id_orden;
-                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                    $responsabilidad = Responsabilidad::create([
-                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
-                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                                    ]);
-                    $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
-                    $parte_nueva->save();
-                    $parte_diagnostico_nuevo = new Parte_diagnostico;
-                    $parte_diagnostico_nuevo->id_estado = 4;
-                    $parte_diagnostico_nuevo->id_parte = $parte_nueva->id_parte;
-                    $parte_diagnostico_nuevo->save();
-                    $orden_vieja = Orden::find($request->id_orden_mantenimiento);    
-                    $orden_nueva = new Orden;                
-                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-inspeccion';
-                    $orden_nueva->fecha_inicio = Carbon::now();
-                    $orden_nueva->duracion_estimada = 0;
-                    $orden_nueva->id_etapa = $orden_vieja->id_etapa;
-                    $orden_nueva->costo_estimado = 0;   
-                    $orden_nueva->save();
-                    $orden_mantenimiento = new Orden_mantenimiento;
-                    $orden_mantenimiento->id_tipo_orden_mantenimiento = 2;
-                    $orden_mantenimiento->id_orden = $orden_nueva->id_orden;
-                    $orden_mantenimiento->save();
-                    $parte = new Parte;
-                    $parte->observaciones = "Generacion de orden de mantenimiento de inspección";
-                    $parte->fecha = Carbon::now();
-                    $parte->fecha_carga = Carbon::now();
-                    $parte->horas = 0;
-                    $parte->costo = 0;
-                    $parte->id_orden = $orden_nueva->id_orden;
-                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
-                    $responsabilidad = Responsabilidad::create([
-                                        'id_empleado' => 999,
-                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
-                                    ]);
-                    $parte->id_responsabilidad = $responsabilidad->id_responsabilidad;
-                    $parte->save();
-                    $parte_inspeccion = new Parte_inspeccion;
-                    $parte_inspeccion->id_parte = $parte->id_parte;
-                    $parte_inspeccion->id_estado_mantenimiento = 1;
-                    $parte_inspeccion->save();
-                }
-                else{
-                    DB::rollBack();
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Acción no válida.'
-                    ], 400);
-                }                 
-                DB::commit();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Parte diagnóstico procesado exitosamente.'
-                ]);
-            }else{
-                DB::rollBack();
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No se encontró un parte diagnóstico para esta orden de mantenimiento.'
-                ], 404);
-            }   
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);  
-        }
-    }
+    }    
 
     public function get_parte_diagnostico_completado($id_orden_mantenimiento){
         $parte_diagnostico = Parte_diagnostico::whereHas('getParte', function($query) use ($id_orden_mantenimiento){
-        $query->where('id_orden', $id_orden_mantenimiento)->where('id_estado', 3);
+        $query->where('id_orden', $id_orden_mantenimiento)->whereIn('id_estado', [2,4]);
         })
         ->with('getParte.getResponsable.getEmpleado',
             'getParte.getOrden',
             'getParteDiagXCausa.getIshikawaCausa.getCategoria')
-        ->first();
+        ->get();
         return $parte_diagnostico;
+    }
+
+     public function get_parte_diagnostico_porcion($id_parte){
+        $parte_diagnostico = Parte_diagnostico::where('id_parte', $id_parte)
+        ->with(
+            'getParte',
+            'getParteDiagXCausa.getIshikawaCausa.getCategoria'
+        )
+        ->orderByDesc('id_parte_diagnostico')
+        ->first();
+        return response()->json($parte_diagnostico);
     }
 
 }

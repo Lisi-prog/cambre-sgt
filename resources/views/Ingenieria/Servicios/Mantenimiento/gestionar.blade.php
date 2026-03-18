@@ -10,7 +10,8 @@
         <div class="d-flex section-header justify-content-center">
             <div class="d-flex flex-row col-12">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 my-auto">
-                    <h4 class="">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
+                    <h4 class="my-auto">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
+                        <input type="text" hidden id="nombre_proyecto_i" value="{{ $proyecto->codigo_servicio }}">
                 </div>
             </div>
         </div>
@@ -20,9 +21,10 @@
                 {{-- Informacion de la solicitud --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-head py-3 m-auto">
+                        <div class="card-head pt-3 m-auto">
                             <h5>Solicitud</h5>
                         </div>
+                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -117,20 +119,14 @@
                             <div class="row">
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('num', "Numero:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('num', 123, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    <div class="form-group">
                                         {!! Form::label('est', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('est', '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('est', '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true', 'id' => 'es']) !!}
                                     </div>
                                 </div>
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         {!! Form::label('hs', "Horas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('hs', '00:00', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        {!! Form::text('hs', '00:00', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true', 'id' => 'hs']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -148,6 +144,10 @@
                                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>                                                           
                                             </thead>
                                             <tbody>
+                                                @php
+                                                    $horas_totales = 0;
+                                                    $estado = ''
+                                                @endphp
                                                 @foreach ($ordenes_mantenimiento as $orden)
                                                     <tr>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->id_orden ?? '-'}}</td>
@@ -155,71 +155,77 @@
                                                         <td class= 'text-center' style="vertical-align: middle;">-</td>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getEstadoActual()}}</td>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->getHoras()}}</td>
+                                                        @php
+                                                            if($orden->getHoras()){
+                                                                [$h, $m] = explode(':', $orden->getHoras());
+                                                                $horas_totales += ($h * 60) + $m;
+                                                            }
+                                                        @endphp
                                                         <td class= 'text-center' style="vertical-align: middle;">
+                                                            @php
+                                                                $estado = $orden->getOrdenMantenimiento->getEstadoActual()
+                                                            @endphp
                                                             @if($orden->getOrdenMantenimiento->getEstadoActual() == 'Espera')
                                                                 @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
-                                                                    <button type="button" onclick="openModalNuevoParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalNuevoParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
-                                                                    <button type="button" onclick="openModalNuevoParteInspeccion({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalNuevoParteInspeccion({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalNuevoParteAjuste({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary">
                                                                         <i class="fas fa-pen"></i>
                                                                     </button>
                                                                 @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'En proceso')
+                                                                    <button type="button" onclick="openModalParteDiagnosticoPendiente({{$orden->id_orden}})" class="btn btn-primary">
+                                                                        <i class="fas fa-pen"></i>
+                                                                    </button>
                                                                 @if ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
-                                                                    <button type="button" onclick="openModalParteInspeccionPendiente({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalParteInspeccionPendiente({{$proyecto->getActivo->id_activo}},{{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalParteAjustePendiente({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalParteAjustePendiente({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
-                                                                @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
-                                                                <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
                                                                     <i class="fas fa-eye"></i>
-                                                                </button>    
-                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
-                                                                    <button type="button" onclick="openModalConfirmarParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </button>
-                                                                @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </button>
-                                                                @endif
+                                                                </button>
                                                             @else
                                                                 @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
-                                                                    <button type="button" onclick="openModalVerParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalVerParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>    
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 2)
-                                                                    <button type="button" onclick="openModalVerParteInspeccion({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalVerParteInspeccion({{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
-                                                                    <button type="button" onclick="openModalVerParteAjuste({{$orden->id_orden}})" class="btn btn-primary" onclick="">
+                                                                    <button type="button" onclick="openModalVerParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
                                                             @endif
-                                                            <button type="button" class="btn btn-warning" onclick="">
+                                                            <button type="button" class="btn btn-warning" onclick="modalEditarPartes({{$orden->getOrdenMantenimiento->id_orden_mantenimiento}})">
                                                                 <i class="fas fa-edit"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-danger" onclick="">
-                                                                <i class="fas fa-trash"></i>
                                                             </button>
                                                         </td>
                                                     </tr>                                                    
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                        @php
+                                            $horas = floor($horas_totales / 60);
+                                            $minutos = $horas_totales % 60;
+                                            $horas_totales = sprintf('%02d:%02d', $horas, $minutos);
+                                        @endphp
+                                        <input type="text" hidden id="horas_totales" value="{{$horas_totales}}">
+                                        <input type="text" hidden id="estado_actual" value="{{$estado}}">
                                     </div>
                                 </div>
                             </div>
@@ -254,9 +260,25 @@
                                                     <td class= 'text-center' style="vertical-align: middle;">{{ $parte->getResponsable->getEmpleado->nombre_empleado }}</td>
                                                     <td class= 'text-center' style="vertical-align: middle;">{{ $parte->horas }}</td>
                                                     <td class= 'text-center' style="vertical-align: middle;">
-                                                        <button type="button" class="btn btn-primary" onclick="openModalDiagnostico({{ $parte->id_parte }})">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button>                                                    
+                                                        @if($orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO')
+                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Completo' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso')                                                                
+                                                                <button type="button" class="btn btn-primary" onclick="verParteDeDiagnostico({{ $parte->id_parte }}, '{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento }}')">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>                    
+                                                            @endif   
+                                                        @elseif($orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento == 'INSPECCIÓN')
+                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Completo')
+                                                                <button type="button" class="btn btn-primary" onclick="verParteDeInspeccion({{ $parte->id_parte }}, '{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento }}')">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>      
+                                                            @endif   
+                                                        @elseif($orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento == 'AJUSTE')
+                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Revisar')
+                                                                <button type="button" class="btn btn-primary" onclick="verParteDeAjuste({{ $parte->id_parte }}, '{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento }}')">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>      
+                                                            @endif   
+                                                        @endif                                                                                   
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -413,6 +435,8 @@
     @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')
     @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec')
     @include('Ingenieria.Servicios.Mantenimiento.Modal.ver-partes')
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.editar_partes')
+
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
     </div>

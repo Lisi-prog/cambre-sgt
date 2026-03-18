@@ -37,5 +37,7 @@ class Parte_inspe_x_tarea_mant extends Model
         return $this->belongsTo(Accion_para_tarea::class, 'id_accion', 'id_accion_tarea');
     }
 
+    
+
 }
 

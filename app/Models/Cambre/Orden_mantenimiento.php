@@ -21,7 +21,9 @@ class Orden_mantenimiento extends Model
 
     protected $fillable = [ 
         'id_tipo_orden_mantenimiento',
-        'id_orden'
+        'id_orden',
+        'id_empleado',
+        'esta_activo'
     ];
 
     public function getOrden()
@@ -45,17 +47,15 @@ class Orden_mantenimiento extends Model
     }
 
     public function getEstadoActual(){
-        /* switch ($this->id_tipo_orden_mantenimiento) {   ??????
-            case 1:
-                // return ':D';
-                return $this->getPartes->sortByDesc('id_parte')->first()->getParteDiagnostico->getEstado->nombre_estado_mantenimiento;
-            
-        } */
         return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstado->nombre_estado_mantenimiento;
     }
 
     public function getTipoOrden()
     {
         return 4;
+    }
+
+    public function getEmpleado(){
+        return $this->hasOne(Empleado::class, 'id_empleado', 'id_empleado');
     }
 }

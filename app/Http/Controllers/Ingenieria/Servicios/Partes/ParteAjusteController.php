@@ -21,7 +21,7 @@ class ParteAjusteController extends Controller{
     {
         $parte_inspeccion = Parte_inspeccion::whereHas('getParte.getOrden', function ($query) use ($id_etapa) {
                 $query->where('id_etapa', $id_etapa)
-                    ->whereIn('id_estado_mantenimiento', [2,3]);
+                    ->whereIn('id_estado_mantenimiento', [2,4]);
             })
             ->whereHas('getTareasMantenimiento.getTareaMantenimiento', function ($query) {
                 $query->where('ok', 0);
@@ -208,6 +208,20 @@ class ParteAjusteController extends Controller{
         ->orderByDesc('id_parte_ajuste')
         ->first();
         $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
+        return response()->json($parte_ajuste);
+    }
+
+    public function get_parte_ajuste_porcion($id_parte){
+        $parte_ajuste = Parte_ajuste::where('id_parte', $id_parte)
+        ->with(
+            'getParte.getOrden', 
+            'getTareasAjuste.getAccionTarea', 
+            'getTareasAjuste.getZona',
+            'getTareasAjuste.getMaquinaria',
+            'getTareasAjuste.getTareaMantenimiento',
+        )
+        ->orderByDesc('id_parte_ajuste')
+        ->first();
         return response()->json($parte_ajuste);
     }
 

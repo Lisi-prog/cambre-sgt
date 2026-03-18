@@ -4,7 +4,7 @@ $(document).ready(function () {
     tabla_ajustes = $('#tabla_ajustes').DataTable({
         autoWidth: false,
          columnDefs: [
-            { className: "text-center", targets: [0,1,2,3,4] }, { width: '25%', targets:[0]}
+            { className: "text-center", targets: [1,2,3,4] }, { width: '25%', targets:[0]}, {className: "text-start", targets: [0]}  
         ],
         language: {
                 lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -30,7 +30,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
     $("#previewAceptarAjusteReview").hide()
-    $("#herramental_ajuste").val($("#activo").val())
+    // $("#herramental_ajuste").val($("#activo").val())
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#btnRowNuevoAjuste").show()
@@ -158,7 +159,8 @@ function openModalConfirmarParteAjuste(id_orden){
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
-    $("#herramental_ajuste").val($("#activo").val());
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -195,7 +197,7 @@ function procesarAjuste(accion){
         data: {
             id_orden_mantenimiento: $("#id_orden_ajuste").val(),
             accion: accion,
-            nombre_proyecto: $("#nombre_proyecto").text(),
+            nombre_proyecto: $("#nombre_proyecto_i").text(),
         },
         success: function(data) {
             $('#nuevoParteAjusteModal').modal('hide');
@@ -212,7 +214,9 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
     $("#btnRowNuevoAjuste").show()
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
-    $("#herramental_ajuste").val($("#activo").val());
+    $("#completado_ajuste").removeAttr('disabled')
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -280,7 +284,8 @@ function openModalVerParteAjuste(id_orden){
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
-    $("#herramental_ajuste").val($("#activo").val());
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -299,6 +304,46 @@ function openModalVerParteAjuste(id_orden){
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
             $("#horas_ajuste").val(data.horas)
+            tabla_ajustes.draw();
+            tabla_ajustes.columns.adjust();
+        }
+    });
+}
+
+function verParteDeAjuste(id_parte, estado){
+    $('#modalNuevoParteAjuste').modal('show');
+    $("#id_orden_ajuste").val(id_orden);
+    $("#btnGuardarNuevoParteAjuste").hide()
+    $("#previewAceptarAjusteReview").hide()
+    $("#btnRowNuevoAjuste").hide()
+    $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#fecha_ajuste").attr('disabled', 'disabled')
+    $("#completado_ajuste").attr('disabled', 'disabled')
+    if(estado == 'Revisar'){
+        $("#completado_ajuste").prop('checked', true)
+    }else{
+        $("#completado_ajuste").prop('checked', false)
+    }
+    // $("#herramental_ajuste").val($("#activo").val());
+    document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
+    tabla_ajustes.clear();
+     $.ajax({
+        type: 'GET',
+        url: '/get-parte-ajuste-porcion/' + id_parte,
+        success: function(data) {
+            let j=0;
+            data.get_tareas_ajuste.forEach(tarea => {
+                tabla_ajustes.row.add([
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    tarea.get_accion_tarea.nombre_accion,
+                    tarea.get_zona.nombre_zona,
+                    tarea.get_maquinaria.alias_maquinaria,
+                    tarea.hecho? 'SI': 'NO'
+                ]);
+                j++;
+            }); 
+            $("#fecha_ajuste").val(data.get_parte.fecha)
+            $("#horas_ajuste").val(data.get_parte.horas)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }

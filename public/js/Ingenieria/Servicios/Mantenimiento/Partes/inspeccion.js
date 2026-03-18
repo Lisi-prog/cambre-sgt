@@ -24,6 +24,7 @@ $(document).ready(function () {
     });    
     activo = document.getElementById('activo').value;
     document.getElementById('herramental_inspeccion').value = activo;
+    document.getElementById('nombreActivoInspeccion').textContent = activo;
 });
 
 function openModalNuevoParteInspeccion(id_activo, id_orden){
@@ -32,6 +33,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
     let hoy = new Date()
@@ -94,10 +96,10 @@ function addZonaHeader(nombreZona) {
 
     $(zonaRow).find('td').eq(0)
         .attr('colspan', 5)
-        .addClass('text-center fw-bold');
+        .addClass('text-center fw-bold text-dark');
 
     $(zonaRow).find('td:gt(0)').remove();
-    $(zonaRow).attr('style', "color: rgb(255, 255, 255); background-color: #2b56843b; font-weight: bold;");
+    $(zonaRow).removeClass('odd even').attr('style', "color: rgb(255, 255, 255); background-color: #2b56843b; font-weight: bold;");
     let headerRow = tabla_inspecciones.row.add([
         "Tarea",
         "Ejecución",
@@ -106,8 +108,9 @@ function addZonaHeader(nombreZona) {
         "Acción"
     ]).node();
 
-    $(headerRow).addClass('zona-columns');
-    $(headerRow).attr('style', "color: rgb(255, 255, 255); background-color: #2b5684; font-weight: bold;");
+    $(headerRow).removeClass('odd even').addClass('zona-columns text-light');
+    $(headerRow).find('td').removeClass('odd even').attr('style', "color: rgb(255, 255, 255) !important; background-color: #2b5684; font-weight: bold;");
+    $(headerRow).attr('style', "color: rgb(255, 255, 255) !important; background-color: #2b5684; font-weight: bold;");
 }
 
 
@@ -146,6 +149,7 @@ function openModalConfirmarParteInspeccion(id_orden){
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").attr('checked', 'checked')
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     tabla_inspecciones.clear();
      $.ajax({
         type: 'GET',
@@ -157,14 +161,36 @@ function openModalConfirmarParteInspeccion(id_orden){
                     zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
                     addZonaHeader(zona_actual)
                 }
-                let ok = 'VERDADERO'
-                let not_ok = 'FALSO'
-                let accion = 'NO SE REQUIERE'
+
+                let ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+
+                let not_ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+
+                let accion = '-';
+
                 if(tarea.ok == 0){
-                    ok = 'FALSO'
-                    not_ok = 'VERDADERO'
+                    ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+                    not_ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
                     accion = tarea.get_accion_para_tarea.nombre_accion
-                }      
+                } 
+                
+                
                 tabla_inspecciones.row.add([
                     tarea.get_tarea_mantenimiento.nombre_tarea,
                     tarea.get_tarea_mantenimiento.get_ejecucion.nombre_ejecucion,
@@ -188,7 +214,7 @@ function procesarInspeccion(accion){
         data: {
             id_orden_mantenimiento: $("#id_orden_inspeccion").val(),
             accion: accion,
-            nombre_proyecto: $("#nombre_proyecto").text(),
+            nombre_proyecto: $("#nombre_proyecto_i").text(),
         },
         success: function(data) {
             $('#nuevoParteInspeccionModal').modal('hide');
@@ -218,6 +244,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
 
@@ -302,8 +329,9 @@ function openModalVerParteInspeccion(id_orden){
     $("#previewAceptarInspeccionReview").hide()
     $("#horas_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
-    $("#completado_inspeccion").attr('checked', 'checked')
+    $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     tabla_inspecciones.clear();
      $.ajax({
         type: 'GET',
@@ -315,12 +343,32 @@ function openModalVerParteInspeccion(id_orden){
                     zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
                     addZonaHeader(zona_actual)
                 }
-                let ok = 'VERDADERO'
-                let not_ok = 'FALSO'
-                let accion = 'NO SE REQUIERE'
+
+                let ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+
+                let not_ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+
+                let accion = '-';
+
                 if(tarea.ok == 0){
-                    ok = 'FALSO'
-                    not_ok = 'VERDADERO'
+                    ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+                    not_ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
                     accion = tarea.get_accion_para_tarea.nombre_accion
                 }      
                 tabla_inspecciones.row.add([
@@ -333,6 +381,79 @@ function openModalVerParteInspeccion(id_orden){
             });
             $("#fecha_inspeccion").val(data.get_parte.fecha)
             $("#horas_inspeccion").val(data.horas)
+            tabla_inspecciones.draw();
+            tabla_inspecciones.columns.adjust();
+        }
+    });
+}
+
+function verParteDeInspeccion(id_parte, completado){
+    $('#modalNuevoParteInspeccion').modal('show');
+    $("#btnGuardarNuevoParteInspeccion").hide()
+    $("#previewAceptarInspeccionReview").hide()
+    $("#horas_inspeccion").attr('disabled', 'disabled')
+    $("#fecha_inspeccion").attr('disabled', 'disabled')
+    $("#completado_inspeccion").prop('checked', true)
+    $("#herramental_inspeccion").val($("#activo").val());
+    document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
+    if(completado == 'Completo'){
+        $("#completado_inspeccion").prop('checked', true)
+    }
+    else{
+        $("#completado_inspeccion").prop('checked', false)
+    }
+
+    tabla_inspecciones.clear();
+     $.ajax({
+        type: 'GET',
+        url: '/get-parte-inspeccion-porcion/' + id_parte,
+        success: function(data) {
+            let zona_actual = null;
+            console.log(data)
+            data.get_parte_inspe_x_tareas_mantenimiento.forEach(tarea => {
+                if (tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona !== zona_actual) {
+                    zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
+                    addZonaHeader(zona_actual)
+                }
+
+                let ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+
+                let not_ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+
+                let accion = '-';
+
+                if(tarea.ok == 0){
+                    ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+                    not_ok = `<div class="form-check">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            </label>
+                          </div>`;
+                    accion = tarea.get_accion_para_tarea.nombre_accion
+                }      
+                tabla_inspecciones.row.add([
+                    tarea.get_tarea_mantenimiento.nombre_tarea,
+                    tarea.get_tarea_mantenimiento.get_ejecucion.nombre_ejecucion,
+                    ok,
+                    not_ok,
+                    accion
+                ]);
+            });
+            
+            $("#fecha_inspeccion").val(data.get_parte.fecha)            
+            $("#horas_inspeccion").val(data.get_parte.horas)
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
         }

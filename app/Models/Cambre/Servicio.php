@@ -176,7 +176,6 @@ class Servicio extends Model
                         INNER JOIN parte p ON p.id_orden = o.id_orden
                         INNER JOIN parte_ajuste pa ON pa.id_parte = p.id_parte
                         WHERE e.id_servicio = :idserv
-                        AND pa.id_estado_mantenimiento = 4
                     ) AS tiene_ajuste", ["idserv" => $this->id_servicio]);
 
         return (int) $resultado[0]->tiene_ajuste;

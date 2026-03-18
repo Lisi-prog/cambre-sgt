@@ -14,42 +14,64 @@ use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Maquinaria;
 use App\Models\Cambre\Vw_operaciones_de_hdr;
-
+use App\Models\Cambre\Orden_mantenimiento;
+use App\Models\Cambre\Tipo_orden_mantenimiento;
+use App\Models\Cambre\Ishikawa_categoria;
+use App\Models\Cambre\Ishikawa_causa;
+use App\Models\Cambre\Accion_para_tarea;
+use App\Models\Cambre\Zona;
 
 class OrdenMantenimientoController extends Controller
 {
 
 public function index(){
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
+        $orden_mantimiento = Tipo_orden_mantenimiento::where('id_tipo_orden_mantenimiento', '<>', 3)->orderBy('id_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
+        $flt_operaciones = $flt_operaciones->merge($orden_mantimiento)->sort();
         $flt_operaciones_tec = [];
 
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-            // $operaciones = Vw_operaciones_de_hdr::get();
-            // $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
         } else {
             $opeDeUsuario = Auth::user()->getOperacionesValidas();
-            // $operaciones = Vw_operaciones_de_hdr::whereIn('id_operacion', $opeDeUsuario)->get();
             $flt_operaciones_tec = Operacion::whereIn('id_operacion', $opeDeUsuario)->orderBy('nombre_operacion')->pluck('nombre_operacion');
         }
-        
-        // return $operaciones;
 
         $flt_estados = Estado_hdr::orderBy('id_estado_hdr')->pluck('nombre_estado_hdr');
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         
 
-        $flt_proyectos =  collect(DB::select('select s.codigo_servicio 
-                                        from operaciones_de_hdr op_hdr
-                                        inner join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = op_hdr.id_hoja_de_ruta
-                                        inner join orden_mecanizado om on om.id_orden_mecanizado = hdr.id_orden_mecanizado
-                                        inner join orden o on o.id_orden = om.id_orden
-                                        inner join etapa et on et.id_etapa = o.id_etapa
-                                        inner join servicio s on s.id_servicio = et.id_servicio
-                                        group by s.id_servicio, s.codigo_servicio;'))->pluck('codigo_servicio');
+        $flt_proyectos = collect(DB::select('
+                    select s.codigo_servicio
+                    from servicio s
+                    left join etapa et 
+                        on et.id_servicio = s.id_servicio
+                    left join orden o 
+                        on o.id_etapa = et.id_etapa
+                    left join orden_mecanizado om 
+                        on om.id_orden = o.id_orden
+                    left join hoja_de_ruta hdr 
+                        on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+                    left join operaciones_de_hdr op_hdr 
+                        on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
+                    group by s.id_servicio, s.codigo_servicio
+                '))->pluck('codigo_servicio');
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
-        return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos'));
+        $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
+        $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
+        $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
+        $zonas = Zona::orderBy('nombre_zona')->get();
+        $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        /*$ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
+                                ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
+        $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
+        $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
+        $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
+ */
+        return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos',
+        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas'
+        ));
     }
 
      public function obtenerTecnicosDeOperaciones(){
@@ -63,6 +85,41 @@ public function index(){
             ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
             ->with('getHdr.getOrdMec');
 
+        $operaciones_mantenimiento = [];
+        if((!$request->res || in_array('-', $request->res))){
+            $operaciones_mantenimiento = Orden_mantenimiento::with('getEmpleado','getOrden.getEtapa.getServicio.getActivo', 
+            'getTipoOrdenMantenimiento');
+            if($request->soloAct == 'SI'){
+                $operaciones_mantenimiento = $operaciones_mantenimiento->where('esta_activo', 1);
+            }            
+            $operaciones_mantenimiento = $operaciones_mantenimiento->get()
+            ->filter(function ($om) use ($request) {
+                $estado = $om->getEstadoActual();
+                if($request->est && !in_array($estado, $request->est)){
+                    return false;
+                }
+                if($request->cod_serv && !in_array(
+                    $om->getOrden->getEtapa->getServicio->codigo_servicio,
+                    $request->cod_serv
+                )){
+                    return false;
+                }
+                if($request->sup && !in_array(
+                    $om->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento,
+                    $request->sup
+                )){
+                    return false;
+                }
+                $om->estado_actual = $estado;
+
+                return true;
+            })
+            ->values();
+            foreach($operaciones_mantenimiento as $om){
+                $om->horas = $om->getOrden->getHoras();
+            }
+        }
+
         if($request->cod_serv){
             $operaciones = $operaciones->whereIn('codigo_servicio', $request->cod_serv);
         }
@@ -70,7 +127,19 @@ public function index(){
             $operaciones = $operaciones->whereIn('nombre_operacion', $request->sup);
         }    
         if($request->res){
-            $operaciones = $operaciones->whereIn('codigo_maquinaria', $request->res);
+            if(in_array('-', $request->res)){
+                $res = array_diff($request->res, ['-']);
+                $operaciones = $operaciones->where(function ($q) use ($res) {
+                    if (!empty($res)) {
+                        $q->whereIn('codigo_maquinaria', $res)
+                        ->orWhereNull('codigo_maquinaria');
+                    } else {
+                        $q->whereNull('codigo_maquinaria');
+                    }
+                });
+            }else{
+                $operaciones = $operaciones->whereIn('codigo_maquinaria', $request->res);
+            }                
         }
         if($request->est){
             $operaciones = $operaciones->whereIn('nombre_estado_hdr', $request->est);
@@ -78,11 +147,35 @@ public function index(){
         if($request->asig){
             $operaciones = $operaciones->whereIn('tecnico_asignado', $request->asig);
         }
-        if($request->soloAct == 1){
+        if($request->soloAct == 'SI'){
             $operaciones = $operaciones->where('activo', 1);
         }
+
+        $operaciones_todas['generales'] = $operaciones->get();
+        $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;
     
-        return $operaciones->get();
+    
+        return $operaciones_todas;
+    }
+
+    public function editar(Request $request){
+        $orden_mantenimiento = Orden_mantenimiento::find($request->id_orden);
+        if($orden_mantenimiento){
+            $orden_mantenimiento->id_empleado = $request->id_empleado;
+            if($request->activo){
+                $orden_mantenimiento->esta_activo = 1;
+            }else{
+                $orden_mantenimiento->esta_activo = 0;
+            }
+            $orden_mantenimiento->save();
+            return back()->with(['success' => true, 'mensaje' => 'Orden de mantenimiento actualizada correctamente.']);
+        }else{
+            return back()->with(['success' => false, 'error' => 'Orden de mantenimiento no encontrada.']);
+        }
+    }
+
+    public function check_pre_editar(Request $request){
+        return Orden_mantenimiento::find($request->id_orden);
     }
 }
 

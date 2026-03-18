@@ -60,7 +60,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12 align-items-center justify-content-between">
             <div class="col-auto">
-                <h4 class="mb-0">Operaciones de HDR</h4>
+                <h4 class="mb-0">Operaciones</h4>
             </div>
 
             @php
@@ -155,6 +155,7 @@
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
+                                                        <label><input name="res" type="checkbox" value="-" checked> NO APLICA</label>
                                                         @foreach ($flt_maquinas as $maquina)
                                                             <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
                                                         @endforeach
@@ -277,12 +278,23 @@
     </div>
     <input type="text" hidden value="{{Auth::user()->getEmpleado->id_empleado}}" id="id_emp">
 </section>
+
+@include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
+@include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
+@include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')
+
+<div hidden>
+    @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
+</div>
+
 <script>
     const ordenHdrRoute = "{{ url('/ordenes/hdr') }}";
 </script>
+<script src="{{ asset('js/filter-to-filter.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
 <script src="{{ asset('js/ordenes_mantenimiento.js') }}"></script>
+<script src="{{ asset('js/ope_mant_partes.js') }}"></script>
 <script type="module" > 
         import {cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.cargarModalVerOrden = cargarModalVerOrden;

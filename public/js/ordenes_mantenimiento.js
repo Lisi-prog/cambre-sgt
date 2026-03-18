@@ -28,6 +28,11 @@ $(document).ready( function () {
     loadFilters();
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
+
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
+
         var positions = $('input:checkbox[name="sup"]:checked').map(function() {
             return this.value;
         }).get();
@@ -47,6 +52,10 @@ $(document).ready( function () {
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
     
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
+
         var offices = $('input:checkbox[name="res"]:checked').map(function() {
             return this.value;
         }).get();
@@ -65,8 +74,12 @@ $(document).ready( function () {
     );
 
     $.fn.dataTable.ext.search.push(
-        function( settings, searchData, index, rowData, counter ) {
-    
+        function( settings, searchData, index, rowData, counter ) {    
+
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
+
         var offices = $('input:checkbox[name="est"]:checked').map(function() {
             return this.value;
         }).get();
@@ -87,6 +100,10 @@ $(document).ready( function () {
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
     
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
+
         var offices = $('input:checkbox[name="cod_serv"]:checked').map(function() {
             return this.value;
         }).get();
@@ -107,7 +124,11 @@ $(document).ready( function () {
 
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
-                var offices = $('input:checkbox[name="soloAct"]:checked').map(function() {
+
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
+        var offices = $('input:checkbox[name="soloAct"]:checked').map(function() {
             return this.value;
         }).get();
                 if (offices.length === 0) {
@@ -123,7 +144,11 @@ $(document).ready( function () {
 
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
-                var offices = $('input:checkbox[name="asig"]:checked').map(function() {
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
+
+        var offices = $('input:checkbox[name="asig"]:checked').map(function() {
             return this.value;
         }).get();
                 if (offices.length === 0) {
@@ -138,6 +163,9 @@ $(document).ready( function () {
     );
 
     $.fn.dataTable.ext.order['custom-prioridad'] = function  ( settings, col ) {
+        if (settings.nTable.id !== 'tabla_operaciones') {
+            return true; // ignore other tables
+        }
         return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
             var val = $(td).text();
             if (val === 'S/P') return 999;  
@@ -727,13 +755,15 @@ function buscarPorFiltros(){
     let filtros = getSelectedFilters();
     table.clear().draw()
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         data: filtros,
         url: '/get_operaciones',
         success: function(operaciones) {
             let idCount = 0;
             let opciones = ''
-            operaciones.forEach(ope => {
+
+            //OPERACIONES GENERALES
+            operaciones['generales'].forEach(ope => {
                 opciones = `<div class="row justify-content-center">
                             <div class="row justify-content-center">
                                 <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" 
@@ -742,7 +772,6 @@ function buscarPorFiltros(){
                                 </button>
                             </div>
                             <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes${idCount}">`;
-
                 if (ope.id_hoja_de_ruta) {
                     opciones += `
                     <div class="row my-2">
@@ -762,8 +791,7 @@ function buscarPorFiltros(){
                                 Partes
                             </button>
                         </div>
-                    </div>
-                `;        
+                    </div>`;        
                 if (ope.getHdr) {
                     if (ope.can_hdr) {
                         opciones += `
@@ -805,9 +833,7 @@ function buscarPorFiltros(){
                         </div>
                     </div>`;
                 }
-
                 opciones += `</div></div>`;
-
                
                 table.row.add({
                     0 : `<div style="display: flex; justify-content: center; align-items: center; height: 100%;">
@@ -833,7 +859,160 @@ function buscarPorFiltros(){
                     14: opciones,
                 }).node().id = ope.id_ope_de_hdr;     
                 idCount++;
-            });     
+            });
+
+            //OPERACIONES DE MANTENIMIENTO
+            operaciones['mantenimiento'].forEach(ope => {
+                opciones = `<div class="row justify-content-center">
+                            <div class="row justify-content-center">
+                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
+                                    Opciones
+                                </button>
+                            </div>
+                            <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes${idCount}">`;
+                if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO'){
+                    if(ope.estado_actual == 'Espera'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.estado_actual == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else{
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalVerParteDiagnostico(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Ver parte
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                }
+                else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'INSPECCIÓN'){
+                    if(ope.estado_actual == 'Espera'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo},${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.estado_actual == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" onclick="openModalParteInspeccionPendiente(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}, ${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')"  class="btn btn-info w-100">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else{
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalVerParteInspeccion(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Ver parte
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                }
+                else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
+                    if(ope.estado_actual == 'Espera'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.estado_actual == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.estado_actual == 'Revisar'){
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalConfirmarParteAjuste(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Revisar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else{
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalVerParteAjuste(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                    Ver parte
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                }
+                opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <a target="_blank" href="/s_m_a/gestionar/${ope.get_orden.get_etapa.get_servicio.id_servicio}" type="button" class="btn btn-warning w-100">
+                                    Ir a gestionar
+                                </a>
+                            </div>
+                        </div>`;
+                opciones += `</div></div>`;
+
+                table.row.add({
+                    0 : `<div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <input class="form-check-input" type="checkbox" value="${ope.id_ope_de_hdr}" id="flexCheck${ope.id_ope_de_hdr}" name="id_ope[]">
+                    </div>`,
+                    1 : 'S/P',
+                    _order_prioridad: 999,
+                    2: ope.get_orden.get_etapa.get_servicio.prioridad_servicio ?? 'S/P',
+                    _order_prioridad_servicio: ope.get_orden.get_etapa.get_servicio.prioridad_servicio ?? 999,
+                    3: `<abbr title="${ope.get_orden.get_etapa.get_servicio.nombre_servicio ?? '-'}" style="text-decoration:none; font-variant: none;">
+                            ${ope.get_orden.get_etapa.get_servicio.codigo_servicio ?? '-'}<i class="fas fa-eye"></i>
+                        </abbr>`,
+                    4: ope.get_orden.get_etapa.get_servicio.codigo_servicio ?? '-',
+                    5: ope.get_orden.nombre_orden ?? '-',
+                    6: ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento,
+                    7: '-',
+                    8: ope.estado_actual,
+                    9: '-',
+                    10: ope.get_empleado?.nombre_empleado ?? '-',
+                    11: ope.horas,
+                    12: ope.esta_activo ? 'SI' : 'NO',
+                    13: ope.cantidad ?? '-',
+                    14: opciones,
+                }).node().id = ope.id_ope_de_hdr;     
+                idCount++;
+            });
+
             table.draw()      
         }
     });
