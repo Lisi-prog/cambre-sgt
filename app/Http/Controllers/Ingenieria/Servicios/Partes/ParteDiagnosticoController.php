@@ -138,6 +138,7 @@ class ParteDiagnosticoController extends Controller{
             'getParte.getOrden',
             'getParteDiagXCausa.getIshikawaCausa.getCategoria')
         ->get();
+        $parte_diagnostico[0]->horas = $parte_diagnostico[0]->getParte->getOrden->getHoras();
         return $parte_diagnostico;
     }
 

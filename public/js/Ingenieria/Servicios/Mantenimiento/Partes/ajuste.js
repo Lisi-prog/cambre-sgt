@@ -22,6 +22,7 @@ $(document).ready(function () {
             },
             "aaSorting": []
     });    
+    $("#nombre_proyecto_ajuste").val($("#nombre_proyecto_i").val())
 });
 
 

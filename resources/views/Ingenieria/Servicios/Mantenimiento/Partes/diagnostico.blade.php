@@ -19,24 +19,12 @@
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                
             </div>            
-            {!! Form::open(['route' => 'parte_diagnostico.store', 'method' => 'POST']) !!}
+            {!! Form::open(['route' => 'parte_diagnostico.store', 'method' => 'POST', 'id' => 'formNuevoParteDiagnostico']) !!}
             <div class="modal-body">
                 <div class="d-flex">
                     <hr>
-                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">    
-                        <hr>          
-                        <div class="form-group mb-0">
-                            <span class="obligatorio">*</span>
-                            <label class="mr-2 form-label">A resolver: </label>
-                        </div>          
-                        <div>
-                            <input onchange="checkSendNuevoParteDiagnostico()" id="Máquina" required class="ml-4"type="radio" name="a_resolver" value="Máquina"> <label for="Máquina"> Máquina</label>
-                        </div>
-                        <div>
-                            <input onchange="checkSendNuevoParteDiagnostico()" id="Banco" required class="ml-4" type="radio" name="a_resolver" value="Banco"> <label for="Banco"> Banco</label>                       
-                        </div>
-                    </div>
-                    <div style="width: 85%;" class="form-group">
+                    
+                    <div style="width: 100%;" class="form-group">
                         <hr>
                         <label class="mr-2 form-label">Diagnosticos: </label>
                         <table class="table table-striped" id="tabla_diagnosticos" style="width: 100%;">
@@ -52,9 +40,23 @@
                             <button id="btnAgregarFilaDiagnostico" onclick="agregarDiagnostico()" class="ml-auto btn btn-success" type="button">Agregar Diagnóstico</button>
                         </div>
                     </div>
+                    <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_diagnostico">
                 </div>     
                 <div class="d-flex">
-                    <div style="width: 50%;" class="form-group">
+                    <hr>          
+                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">    
+                        <div class="form-group mb-0">
+                            <span class="obligatorio">*</span>
+                            <label class="mr-2 form-label">A resolver: </label>
+                        </div>          
+                        <div>
+                            <input onchange="checkSendNuevoParteDiagnostico()" id="Máquina" required class="ml-4"type="radio" name="a_resolver" value="Máquina"> <label for="Máquina"> Máquina</label>
+                        </div>
+                        <div>
+                            <input onchange="checkSendNuevoParteDiagnostico()" id="Banco" required class="ml-4" type="radio" name="a_resolver" value="Banco"> <label for="Banco"> Banco</label>                       
+                        </div>
+                    </div>
+                    <div style="width: 35%;" class="form-group">                        
                         <label for="observaciones_diagonstico">Observaciones:</label>       
                         <textarea style="resize:none; height: 10vh;" name="observacion" class="form-control" id="observaciones_diagonstico" placeholder="Observaciones"></textarea>   
                     </div>
@@ -70,6 +72,7 @@
                             <input onchange="checkSendNuevoParteDiagnostico()" style="width: 170px;" id="fecha" name="fecha" required type="date" class="form-control">
                         </div>                      
                     </div>
+                    <input hidden type="checkbox" name="completado" id="completado_diagnostico" class="form-check-input mt-auto">
                 </div>
                 <input type="text" hidden id="id_orden" name="id_orden">                       
             </div>
@@ -77,11 +80,8 @@
                 <div class="me-auto" id="label_ob_diagnostico">
                     (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                 </div>
-                <div class="form-group ml-auto align-items-bottom d-flex mb-0 mr-4">
-                    <input type="checkbox" name="completado" onchange="checkSendNuevoParteDiagnostico()" id="completado_diagnostico" class="form-check-input mt-auto">
-                    <label class="my-auto" for="completado_diagnostico">COMPLETADO</label>
-                </div>
-                <button id="btnGuardarNuevoParteDiagnostico" type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
+                <button onclick="diagnosticoPreSubmit('G')" id="btnGuardarNuevoParteDiagnostico" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
+                <button onclick="diagnosticoPreSubmit('C')" id="btnGuardarNuevoParteDiagnosticoCerrar" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar y Cerrar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

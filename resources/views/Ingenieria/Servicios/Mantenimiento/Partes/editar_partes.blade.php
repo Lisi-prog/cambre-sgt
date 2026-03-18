@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <hr>
-                <label for="id_editar_empleado">Empleado Asignado: </label>
+                <label for="id_editar_empleado">Técnico Asignado: </label>
                 <select name="id_empleado" class="form-select" id="id_editar_empleado">
                     <option value="">SIN ASIGNAR</option>
                     @foreach ($empleados as $empleado)

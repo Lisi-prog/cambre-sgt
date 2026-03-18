@@ -135,9 +135,11 @@ function eliminarDiagnostico(indice){
 function checkSendNuevoParteDiagnostico(){
     if(tabla_diagnosticos.rows().count() > 0 && $("#fecha").val() && $("#horas").val()){
         $("#btnGuardarNuevoParteDiagnostico").removeAttr('disabled');
+        $("#btnGuardarNuevoParteDiagnosticoCerrar").removeAttr('disabled');
     }
     else{
         $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+        $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     }
 }
 
@@ -148,9 +150,11 @@ function openModalNuevoParteDiagnostico(id_orden){
     tabla_diagnosticos.clear().draw();
     i = 0;
     $("#btnGuardarNuevoParteDiagnostico").show();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").show();
     $('.obligatorio').show();
     $("#label_ob_diagnostico").show()
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
     $("#horas").removeAttr('disabled');
@@ -178,6 +182,7 @@ function openModalVerParteDiagnostico(id_orden, activo){
     $("#completado_diagnostico").prop('disabled', 'disabled');
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnostico").hide();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").hide();
     $("#herramental").val(activo);
     tabla_diagnosticos.column(3).visible(false);
     tabla_diagnosticos.clear()
@@ -218,15 +223,17 @@ function openModalVerParteDiagnostico(id_orden, activo){
     });
 }
 
-function openModalParteDiagnosticoPendiente(id_orden, activo){
+function openModalParteDiagnosticoPendiente(id_orden, activo, proyecto){
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").show();
     tabla_diagnosticos.clear().draw();
     i = 0;
     $("#btnGuardarNuevoParteDiagnostico").show();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").show();
     $('.obligatorio').show();
     $("#label_ob_diagnostico").show()
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
     $("#horas").removeAttr('disabled');
@@ -236,6 +243,8 @@ function openModalParteDiagnosticoPendiente(id_orden, activo){
     $("#fecha").removeAttr('disabled');
     $("#herramental").val(activo);
     $("#id_orden").val(id_orden);
+    $("#nombre_proyecto_diagnostico").val(proyecto);
+
 
     let hoy = new Date()
     hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -278,16 +287,19 @@ function openModalParteDiagnosticoPendiente(id_orden, activo){
     });
 }
 
-function openModalCrearParteDiagnostico(id_orden, nombre_activo){
+function openModalCrearParteDiagnostico(id_orden, nombre_activo, proyecto){
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").show();
     $("#herramental").val(nombre_activo);
+    $("#nombre_proyecto_diagnostico").val(proyecto);
     tabla_diagnosticos.clear().draw();
     i = 0;
     $("#btnGuardarNuevoParteDiagnostico").show();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").show();
     $('.obligatorio').show();
     $("#label_ob_diagnostico").show()
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
     $("#horas").removeAttr('disabled');
@@ -304,13 +316,24 @@ function openModalCrearParteDiagnostico(id_orden, nombre_activo){
     $("input:radio").attr("checked", false);
 }
 
+function diagnosticoPreSubmit(tipo){
+    if(tipo == 'C'){
+        $("#completado_diagnostico").prop('checked', true);
+    }
+    else{
+        $("#completado_diagnostico").prop('checked', false);
+    }
+    $("#formNuevoParteDiagnostico").trigger( "submit" );
+}
 
-function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo){
+
+function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proyecto){
     $('#modalNuevoParteInspeccion').modal('show');
     $("#id_orden_inspeccion").val(id_orden);
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val(nombre_activo);
+    $("#nombre_proyecto_inspeccion").val(proyecto);
     $("#horas_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
     let hoy = new Date()
@@ -431,12 +454,13 @@ function validarRadios() {
     return completos;
 }
 
-function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo){
+function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, proyecto){
     $('#modalNuevoParteInspeccion').modal('show');
     $("#id_orden_inspeccion").val(id_orden);
     $("#btnGuardarNuevoParteInspeccion").show()
     $("#previewAceptarInspeccionReview").hide()
     $("#herramental_inspeccion").val(nombre_activo);
+    $("#nombre_proyecto_inspeccion").val(proyecto);
     $("#horas_inspeccion").removeAttr('disabled')
     $("#completado_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
@@ -580,12 +604,13 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
 }
 
 
-function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo) {
+function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) {
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
     $("#previewAceptarAjusteReview").hide()
     $("#herramental_ajuste").val(nombre_activo)
+    $("#nombre_proyecto_ajuste").val(proyecto)
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#btnRowNuevoAjuste").show()
@@ -703,7 +728,7 @@ function checkCompletoAjuste() {
 
 
 
-function openModalConfirmarParteAjuste(id_orden, nombre_act){
+function openModalConfirmarParteAjuste(id_orden, nombre_act, proyecto){
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").hide()
@@ -714,6 +739,7 @@ function openModalConfirmarParteAjuste(id_orden, nombre_act){
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
     $("#herramental_ajuste").val(nombre_act);
+    $("#nombre_proyecto_ajuste").val(proyecto);
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -759,7 +785,7 @@ function procesarAjuste(accion){
     });
 }
 
-function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo){
+function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyecto){
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
@@ -769,6 +795,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo){
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
     $("#herramental_ajuste").val(nombre_activo);
+    $("#nombre_proyecto_ajuste").val(proyecto);
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',

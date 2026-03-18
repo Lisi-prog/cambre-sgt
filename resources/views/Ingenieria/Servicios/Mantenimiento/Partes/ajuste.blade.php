@@ -37,6 +37,7 @@
                 <div class="d-flex">
                     <button id="btnRowNuevoAjuste" onclick="agregarNuevoAjusteRow()" type="button" class="btn btn-success ml-auto">Agregar Ajuste</button>
                 </div>
+                <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_ajuste">
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">         
                 <div class="d-flex mt-4">
                     <div class="form-group ml-auto mb-0 pb-0">

@@ -47,6 +47,7 @@
                         <input id="fecha_inspeccion" style="width: 170px;" name="fecha" required type="date" class="form-control">
                     </div>
                 </div>
+                <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_inspeccion">
             </div>
             <div class="modal-footer">
                 <div class="form-group ml-auto mb-0 mr-4">
