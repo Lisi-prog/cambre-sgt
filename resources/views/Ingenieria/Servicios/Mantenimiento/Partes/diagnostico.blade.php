@@ -12,7 +12,7 @@
                             <input id="diagnostico_label" disabled class="form-control" value="DIAGNÓSTICO" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
-                            <label for="herramental" class="my-auto">Activo: <strong></strong></label>
+                            <label for="herramental" class="my-auto">Activo: <strong id="nombreActivo"></strong></label>
                             <input id="herramental" disabled class="form-control" hidden>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                     <div style="width: 100%;" class="form-group">
                         <hr>
                         <label class="mr-2 form-label">Diagnosticos: </label>
-                        <table class="table table-striped" id="tabla_diagnosticos" style="width: 100%;">
+                        <table class="table table-striped table-sm" id="tabla_diagnosticos" style="width: 100%;">
                             <thead>
                                 <th class='text-center' style="color:#fff;">Nº</th>
                                 <th class='text-center' style="color:#fff; width: 30%;"><span class="obligatorio mr-1">*</span>CATEGORÍA 5M</th>
@@ -60,7 +60,19 @@
                         <label for="observaciones_diagonstico">Observaciones:</label>       
                         <textarea style="resize:none; height: 10vh;" name="observacion" class="form-control" id="observaciones_diagonstico" placeholder="Observaciones"></textarea>   
                     </div>
-                    <div style="width: 50%;" class="d-flex">
+                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">
+                        <div class="form-group mb-0">
+                            <span class="obligatorio">*</span>
+                            <label class="mr-2 form-label">A resolver: </label>
+                        </div>          
+                        <div>
+                            <input onchange="checkSendNuevoParteDiagnostico()" id="Máquina" required class="ml-4"type="radio" name="a_resolver" value="Máquina"> <label for="Máquina"> Máquina</label>
+                        </div>
+                        <div>
+                            <input onchange="checkSendNuevoParteDiagnostico()" id="Banco" required class="ml-4" type="radio" name="a_resolver" value="Banco"> <label for="Banco"> Banco</label>                       
+                        </div>
+                    </div>
+                    <div style="width: 40%;" class="d-flex">
                         <div class="form-group ml-auto">
                             <span class="obligatorio">*</span>
                             <label>Horas:</label>

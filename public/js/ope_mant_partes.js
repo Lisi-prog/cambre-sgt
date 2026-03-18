@@ -168,6 +168,7 @@ function openModalNuevoParteDiagnostico(id_orden){
     $("#completado_diagnostico").removeAttr('disabled');
     $("#fecha").removeAttr('disabled');
     $("#herramental").val($("#activo").val());
+    document.getElementById('nombreActivo').textContent = $("#activo").val();
     $("#id_orden").val(id_orden);
     $("input:radio").attr("checked", false);
 }
@@ -184,6 +185,7 @@ function openModalVerParteDiagnostico(id_orden, activo){
     $("#btnGuardarNuevoParteDiagnostico").hide();
     $("#btnGuardarNuevoParteDiagnosticoCerrar").hide();
     $("#herramental").val(activo);
+    document.getElementById('nombreActivo').textContent = activo;
     tabla_diagnosticos.column(3).visible(false);
     tabla_diagnosticos.clear()
     $.ajax({
@@ -242,6 +244,7 @@ function openModalParteDiagnosticoPendiente(id_orden, activo, proyecto){
     $("#completado_diagnostico").removeAttr('disabled');
     $("#fecha").removeAttr('disabled');
     $("#herramental").val(activo);
+    document.getElementById('nombreActivo').textContent = activo;
     $("#id_orden").val(id_orden);
     $("#nombre_proyecto_diagnostico").val(proyecto);
 
@@ -548,6 +551,7 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     tabla_inspecciones.clear();
      $.ajax({
         type: 'GET',
@@ -864,6 +868,7 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
     $("#herramental_ajuste").val(nombre_activo);
+    document.getElementById('nombreActivoInspeccion').textContent = nombre_activo;
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',

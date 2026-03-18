@@ -21,7 +21,8 @@ $(document).ready(function () {
             "aaSorting": []
     });    
     activo = document.getElementById('activo').value;
-    document.getElementById('herramental').value = activo;
+    // document.getElementById('herramental').value = activo;
+    document.getElementById('nombreActivo').textContent = activo;
     $("#hs").val($("#horas_totales").val())
     $("#es").val($("#estado_actual").val())
     $("#nombre_proyecto_diagnostico").val($("#nombre_proyecto_i").val())

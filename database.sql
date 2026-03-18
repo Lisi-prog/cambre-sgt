@@ -1034,9 +1034,9 @@ INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_ma
 INSERT INTO `sol_servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('1', 'Correctivo');
 INSERT INTO `sol_servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('2', 'Preventivo');
 
-UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Diagnostico' WHERE (`id_tipo_orden_mantenimiento` = '1');
-UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Inspeccion' WHERE (`id_tipo_orden_mantenimiento` = '2');
-UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'Ajuste' WHERE (`id_tipo_orden_mantenimiento` = '3');
+UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'DIAGNÓSTICO' WHERE (`id_tipo_orden_mantenimiento` = '1');
+UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'INSPECCIÓN' WHERE (`id_tipo_orden_mantenimiento` = '2');
+UPDATE `tipo_orden_mantenimiento` SET `nombre_tipo_orden_mantenimiento` = 'AJUSTE' WHERE (`id_tipo_orden_mantenimiento` = '3');
 DELETE FROM `tipo_orden_mantenimiento` WHERE (`id_tipo_orden_mantenimiento` = '4');
 
 ALTER TABLE `tarea_ajuste` 
