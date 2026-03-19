@@ -968,6 +968,105 @@ END //
 
 DELIMITER ;
 
+-- Actualizado con las operaciones de hdr
+DELIMITER //
+
+CREATE PROCEDURE ObtenerTotalHorasServicio(IN usuario INT, IN fecha_d DATE, IN fecha_h DATE)
+BEGIN
+    DECLARE vTotHo INT DEFAULT 0;
+
+    /* ==========================================
+       TOTAL GENERAL (parte + parte_ope_hdr)
+       ========================================== */
+
+    SELECT IFNULL(SUM(segundos),0) INTO vTotHo
+    FROM (
+        /* HORAS DESDE PARTE */
+        SELECT TIME_TO_SEC(p.horas) AS segundos
+        FROM parte p
+        INNER JOIN responsabilidad r ON r.id_responsabilidad = p.id_responsabilidad
+        INNER JOIN empleado e ON e.id_empleado = r.id_empleado
+        WHERE p.fecha BETWEEN fecha_d AND fecha_h
+          AND e.id_empleado = usuario
+
+        UNION ALL
+
+        /* HORAS DESDE PARTE_OPE_HDR */
+        SELECT TIME_TO_SEC(ph.horas) AS segundos
+        FROM parte_ope_hdr ph
+        INNER JOIN responsabilidad r ON r.id_responsabilidad = ph.id_responsabilidad
+        INNER JOIN empleado e ON e.id_empleado = r.id_empleado
+        WHERE ph.fecha BETWEEN fecha_d AND fecha_h
+          AND e.id_empleado = usuario
+
+    ) t;
+
+
+    /* ==========================================
+       DETALLE POR SERVICIO
+       ========================================== */
+
+    SELECT 
+        datos.id_servicio,
+        datos.codigo_servicio,
+        TIME_FORMAT(SEC_TO_TIME(SUM(datos.segundos)), '%H:%i') AS h_total,
+        usuario AS id_responsable,
+        CASE 
+            WHEN vTotHo = 0 THEN 0
+            ELSE ROUND((SUM(datos.segundos) * 100) / vTotHo)
+        END AS porcentaje,
+        -- TIME_FORMAT(SEC_TO_TIME(vTotHo), '%H:%i') AS total_ac
+        SEC_TO_TIME(vTotHo) AS total_ac
+    FROM (
+
+        /* ================= PARTE ================= */
+
+        SELECT 
+            s.id_servicio,
+            s.codigo_servicio,
+            TIME_TO_SEC(p.horas) AS segundos
+        FROM parte p
+        INNER JOIN responsabilidad r ON r.id_responsabilidad = p.id_responsabilidad
+        INNER JOIN empleado e ON e.id_empleado = r.id_empleado
+        INNER JOIN orden o ON o.id_orden = p.id_orden
+        INNER JOIN etapa et ON et.id_etapa = o.id_etapa
+        INNER JOIN servicio s ON s.id_servicio = et.id_servicio
+        WHERE p.fecha BETWEEN fecha_d AND fecha_h
+          AND e.id_empleado = usuario
+
+        UNION ALL
+
+        /* ================= PARTE_OPE_HDR ================= */
+
+        SELECT 
+            s.id_servicio,
+            s.codigo_servicio,
+            TIME_TO_SEC(ph.horas) AS segundos
+        FROM parte_ope_hdr ph
+        INNER JOIN responsabilidad r ON r.id_responsabilidad = ph.id_responsabilidad
+        INNER JOIN empleado e ON e.id_empleado = r.id_empleado
+        INNER JOIN operaciones_de_hdr odh 
+                ON odh.id_ope_de_hdr = ph.id_ope_de_hdr
+        INNER JOIN hoja_de_ruta hdr 
+                ON hdr.id_hoja_de_ruta = odh.id_hoja_de_ruta
+        INNER JOIN orden_mecanizado om 
+                ON om.id_orden_mecanizado = hdr.id_orden_mecanizado
+        INNER JOIN orden o 
+                ON o.id_orden = om.id_orden
+        INNER JOIN etapa et 
+                ON et.id_etapa = o.id_etapa
+        INNER JOIN servicio s 
+                ON s.id_servicio = et.id_servicio
+        WHERE ph.fecha BETWEEN fecha_d AND fecha_h
+          AND e.id_empleado = usuario
+
+    ) datos
+    GROUP BY datos.id_servicio, datos.codigo_servicio;
+
+END //
+
+DELIMITER ;
+
 
 
 DROP TABLE parte_mantenimiento;
