@@ -182,8 +182,8 @@ class ProyectoController extends Controller
             $flt_lid = $request->input('lid');
             $flt_est = $request->input('estados');
         //------------------
-        
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion'));
+        $supervisores_admin = $this->obtenerSupervisoresAdmin();
+        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion', 'supervisores_admin'));
     }
 
     public function indexPorActivo(Request $request)
@@ -846,6 +846,127 @@ class ProyectoController extends Controller
         return redirect()->back()->with('mensaje', 'Actualizacion del proyecto creado exitosamente.');  
     }
 
+    public function guardarActualizacionServicio(Request $request){
+
+        $this->validate($request, [
+            'm-ver-act-descripcion' => 'required',
+            'm-ver-act-id_estado' => 'required',
+            'm-ver-act-lider' => 'required',
+            'm-ver-act-fecha_limite' => 'required'
+        ]);
+
+        try {    
+            DB::beginTransaction();
+
+            $id = $request->input('id_serv');
+
+            $descripcion = $request->input('m-ver-act-descripcion');
+
+            $id_estado = $request->input('m-ver-act-id_estado');
+
+            $fecha_limite = $request->input('m-ver-act-fecha_limite');
+
+            $lider = $request->input('m-ver-act-lider');
+
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            $act_eta_com = $request->input('eta_p');
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+
+            $actualizacion = Actualizacion::create([
+                                'descripcion' => $descripcion,
+                                'fecha_limite' => $fecha_limite,
+                                'fecha_carga' => $fecha_carga,
+                                'id_estado' => $id_estado,
+                                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                            ]);
+
+            Actualizacion_servicio::create([
+                'id_actualizacion' => $actualizacion->id_actualizacion,
+                'id_servicio' => $id
+            ]);
+
+            //Actualizamos el lider del proyecto
+            $servicio = Servicio::where('id_servicio', $id)->first();
+
+            if ($act_eta_com) {
+                $etapas_a_actualizar = Vw_etapa::where('id_servicio', $id)->whereNotIn('id_estado', [9, 10])->get();
+
+                foreach ($etapas_a_actualizar as $etapa_act) {
+                    
+                    $responsabilidad_eta = Responsabilidad::create([
+                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                    ]);
+
+                    $actualizacion_eta = Actualizacion::create([
+                                        'descripcion' => $descripcion,
+                                        'fecha_limite' => $fecha_limite,
+                                        'fecha_carga' => $fecha_carga,
+                                        'id_estado' => $id_estado,
+                                        'id_responsabilidad' => $responsabilidad_eta->id_responsabilidad
+                                    ]);
+
+                    Actualizacion_etapa::create([
+                        'id_actualizacion' => $actualizacion_eta->id_actualizacion,
+                        'id_etapa' => $etapa_act->id_etapa
+                    ]);
+                }
+            }
+        
+
+            $responsable_proyecto = $servicio->getResponsabilidad;
+            if($responsable_proyecto->id_empleado != $lider){
+                $responsable_proyecto->id_empleado = $lider;
+                $responsable_proyecto->save();
+            }
+            
+            if ($id_estado == 9 || $id_estado == 10) {
+                $servicio->prioridad_servicio = null;
+                $servicio->save();
+                $this->reordenarPrioridades();
+            }
+
+            if($servicio->getSolicitud){
+                if ($id_estado == 9) {
+                    try {
+                        $nombre = $servicio->getSolicitud->getEmpleado->nombre_empleado;
+                        $codigo = $servicio->getSolicitud->id_solicitud;
+                        $email = strval($servicio->getSolicitud->getEmpleado->email_empleado);
+
+                        Mail::to($email)->send(new SsiMailable($nombre, $codigo, 5));    
+                            
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
+                }
+            }
+    
+            DB::commit();
+
+            $result = 1;
+
+            return [
+                'resultado' => $result,
+            ];                      
+    
+        } catch (\Exception $e) {
+            
+            DB::rollBack();
+
+            return [
+                'resultado' => 0,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
     public function obtenerSupervisores(){
         $usuariosSupervisor = User::role('SUPERVISOR')->get();
 
@@ -891,7 +1012,7 @@ class ProyectoController extends Controller
                   
             }
         }
-        return Empleado::whereIn('id_empleado', $id_supervisores)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return Empleado::whereIn('id_empleado', $id_supervisores)->where('esta_activo', 1)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function obtenerMayorCodigoServicioPrefijo($id){
@@ -923,7 +1044,8 @@ class ProyectoController extends Controller
         array_push($ultima_act, (object)[
             'fecha_limite' => $act_servicio->getActualizacion->fecha_limite,
             'estado' => $act_servicio->getActualizacion->getEstado->id_estado,
-            'lider' => $act_servicio->getActualizacion->getResponsable->getEmpleado->id_empleado
+            'responsable' => $act_servicio->getActualizacion->getResponsable->getEmpleado->id_empleado,
+            'lider' => $servicio->getResponsabilidad->getEmpleado->id_empleado,
         ]);
         return $ultima_act;
     }
