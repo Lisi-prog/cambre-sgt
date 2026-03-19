@@ -88,26 +88,6 @@
                                                             @else
                                                                 <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
                                                             @endif
-                                                            
-                                                            {{-- @if (is_null($flt_serv))
-                                                                @if ($proyecto->id_estado < 9)
-                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
-                                                                @else
-                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}"> {{$proyecto->codigo_servicio}}</label>
-                                                                @endif
-                                                            @else
-                                                                @if (in_array($proyecto->id_servicio, $flt_serv))
-                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
-                                                                @else
-                                                                    <label><input class="input-filter" name="pry" type="checkbox" value="{{$proyecto->codigo_servicio}}"> {{$proyecto->codigo_servicio}}</label>
-                                                                @endif
-                                                            @endif --}}
-
-                                                            {{-- @if (is_null($flt_serv) || in_array($proyecto->id_servicio, $flt_serv))
-                                                                <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}" checked> {{$proyecto->codigo_servicio}}</label>
-                                                            @else
-                                                                <label><input class="input-filter" name="cod_serv[]" type="checkbox" value="{{$proyecto->id_servicio}}"> {{$proyecto->codigo_servicio}}</label>
-                                                            @endif --}}
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -129,11 +109,7 @@
                                                             @else
                                                                 <label><input class="input-filter" name="tip" type="checkbox" value="{{$subtipo_servicio->nombre_subtipo_servicio}}"> {{$subtipo_servicio->nombre_subtipo_servicio}}</label>
                                                             @endif
-                                                            {{-- <label><input class="input-filter" name="tipos[]" type="checkbox" value="{{$subtipo_servicio->id_subtipo_servicio}}" checked> {{$subtipo_servicio->nombre_subtipo_servicio}}</label> --}}
                                                         @endforeach
-                                                        {{-- @foreach ($supervisores as $supervisor)
-                                                            <label><input name="supervisores[]" type="checkbox" value="{{$supervisor->id_empleado}}"> {{$supervisor->nombre_empleado}}</label>
-                                                        @endforeach --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,9 +132,6 @@
                                                                 <label><input class="input-filter" name="lid" type="checkbox" value="{{$supervisor->nombre_empleado}}"> {{$supervisor->nombre_empleado}}</label>
                                                             @endif
                                                         @endforeach
-                                                        {{-- @foreach ($responsables as $responsable)
-                                                            <label><input name="responsables[]" type="checkbox" value="{{$responsable->id_empleado}}"> {{$responsable->nombre_empleado}}</label>
-                                                        @endforeach --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -212,12 +185,6 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <!-- Centramos la paginacion a la derecha -->
-                            {{-- @if (count($proyectos) != 0)
-                                <div class="pagination justify-content-end">
-                                    {!! $proyectos->links() !!}
-                                </div>
-                            @endif --}}
                         <div class="table-responsive">
                             <div id="tableFixHead">
                                 <table class="table table-striped mt-2" id="example">
@@ -226,14 +193,11 @@
                                         @if ($opcion == 3)
                                             <th class='text-center' style="color:#fff;width: 2vw" >SSI</th>
                                         @endif
-                                        {{-- <th class='text-center' style="color:#fff;">Fecha</th> --}}
                                         <th class='ml-3 text-center' style="color:#fff;width: 10vw">ID</th>
                                         <th class='text-center' style="color:#fff;width: 8vw">Nombre</th>
                                         <th class='text-center' style="color:#fff;">Tipo</th>
-                                        {{-- <th class='text-center' style="color:#fff;">Tipo proyecto</th> --}}
                                         <th class='text-center' style="color:#fff;width: 5vw">Lider</th>
                                         <th class='text-center' style="color:#fff;">Progreso</th>
-                                        {{-- <th class='text-center' style="color:#fff;">Ordenes</th> --}}
                                         <th class='text-center' style="color:#fff;">Estado</th>
                                         <th class='text-center' style="color:#fff;width: 5vw">Fecha inicio</th>
                                         <th class='text-center' style="color:#fff;width: 5vw">Fecha limite</th>
@@ -257,7 +221,6 @@
 
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
 
-                                                {{-- <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td> --}}
                                                 <td class='text-center' style="vertical-align: middle;">{{$proyecto->lider ?? '-'}}</td>
 
                                                 <td class= 'text-center' style="vertical-align: middle;">
@@ -293,72 +256,22 @@
                                                             @endcan
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                                        {{-- {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!} --}}
-                                                                        {!! Form::text('opcion', $opcion, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
-                                                                    {!! Form::close() !!}
+                                                                    <a href="{{ route('proyectos.gestionar', [$proyecto->id_servicio, 'opcion' => $opcion]) }}" class="btn btn-success w-100">
+                                                                        Gestionar
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#verActualizacionModal" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">
+                                                                        Actualizaciones
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            {{-- <tr>
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->prioridad_servicio}}</td>
-
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->codigo_servicio}}</td>
-
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_servicio}}</td>
-
-                                                <td class='text-center' style="vertical-align: middle;">{{$proyecto->nombre_subtipo_servicio}}</td>
-
-                                                <td class='text-center' style="vertical-align: middle;"><abbr title="{{$proyecto->lider ?? '-'}}" style="text-decoration:none; font-variant: none;">{{substr($proyecto->lider, 0, 10) ?? "-"}} <i class="fas fa-eye"></i></abbr></td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">
-                                                    <div class="progress position-relative" style="background-color: #b2baf8">
-                                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{$proyecto->getOrdenesRealizadasPorcentaje()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$proyecto->getOrdenesRealizadas()}}</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->nombre_estado}}</td>
-
-                                                <td class= 'text-center'style="vertical-align: middle;">{{$proyecto->fecha_inicio}}</td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$proyecto->fecha_limite}}</td>
-                                                <td>
-                                                    <div class="row justify-content-center">
-                                                        <div class="row justify-content-center" >
-                                                            <button class="btn btn-primary w-100 my-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyectos{{$idCount}}" aria-expanded="false" aria-controls="collapseProyectos{{$idCount}}">
-                                                                Opciones <i class="fas fa-chevron-down m-auto"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseProyectos{{$idCount}}">
-                                                            @can('MODIFICAR-PRIORIDAD-PROYECTO')
-                                                            <div class="row my-2 justify-content-center">
-                                                                <div class="col-12">
-                                                                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modificarPrioridadModal" onclick="cargarModalModif({{$proyecto->id_servicio}}, this)">
-                                                                        Prioridad
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            @endcan
-                                                            <div class="row my-2 justify-content-center">
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::text('prefijo', $prefijo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                        {!! Form::text('tipo', $tipo, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                    {!! Form::submit('Gestionar', ['class' => 'btn btn-success w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr> --}}
                                             @php
                                                 $idCount += 1;
                                             @endphp
@@ -376,7 +289,7 @@
     <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/filter.js') }}"></script>
     <script src="{{ asset('js/filter-to-filter.js') }}"></script>
 </section>
-
+@include('Ingenieria.Servicios.Proyectos.modal.ver-act-serv')
 
 <script>
     let x = '';
@@ -552,7 +465,50 @@
                         .removeClass("fa-chevron-right")
                         .addClass("fa-chevron-down");
                 });
+
+        $(".nueva-act-serv").on('submit', function(evt){
+            evt.preventDefault();     
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+            let html = '';
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    let id = document.getElementById('m_act_id_serv').value;
+                    opcion = parseInt(data.resultado);
+                    switch (opcion) {
+                        case 1:
+                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                            Actualizacion creado con exito.
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                            break;
+                        
+                        case 0:
+                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                        Ocurrio un error: ${data.error}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                            break;
+                    }
+                    $('#alert-act-serv').html(html)
+                    actualizarRecuadroAct(id);
+                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                }
+            });
         });
+
+        $('#verActualizacionModal').on('hidden.bs.modal', function (e) {
+            document.getElementById('m_act_id_serv').value = null;
+        });
+    });
 </script>
 
 <script>
@@ -561,6 +517,7 @@
         let nombre = document.getElementById('m-nombre_proyecto');
         let id_proyecto = document.getElementById('id_proyecto');
         let num_prioridad = document.getElementById('num_prioridad');
+        document.getElementById('m_act_id_serv').value = id;
 
         $.when($.ajax({
             type: "post",
@@ -580,9 +537,105 @@
             error: function (error) {
                 console.log(error);
             }
-            }));
+        }));
 
         id_proyecto.value = id;
+    }
+
+    function cargarModalActualizaciones(id) {
+        let renglones_actualizacion = document.getElementById("cuadro-act");
+        let html_act = '';
+        document.getElementById("m-ver-act-div").hidden = true;
+        document.getElementById("m-ver-act-btn").hidden = true;
+        document.getElementById('m_act_id_serv').value = id;
+        
+        $.when($.ajax({
+            type: "post",
+            url: '/proyectos/obtener-actualizaciones-proyecto/'+id, 
+            data: {
+                id: id,
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_act += `<tr>
+                                <td class="text-center">`+element.codigo+`</td>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+element.estado+`</td>
+                                <td class="text-center">`+element.responsable+`</td>    
+                                </tr>`
+            });
+            renglones_actualizacion.innerHTML = html_act;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+        cargarFechaEstadoLiderModalVerAct(id);
+    }
+
+    function verCargarActModal(){
+        let cuadro_oculto_de_cargar_act = document.getElementById('m-ver-act-div');
+        let btn_oculto_de_cargar_act = document.getElementById('m-ver-act-btn');
+        if ($('#m-ver-act-div').is(":hidden")) {
+            cuadro_oculto_de_cargar_act.hidden = false;
+            btn_oculto_de_cargar_act.hidden = false;
+        }else{
+            cuadro_oculto_de_cargar_act.hidden = true;
+            btn_oculto_de_cargar_act.hidden = true;
+        }
+    }
+
+    function cargarFechaEstadoLiderModalVerAct(id){
+        let estado = document.getElementById("m-ver-act-id_estado");
+        let fecha_limite = document.getElementById("m-ver-act-fecha_limite");
+        let lider = document.getElementById("m-ver-act-cbx_lider");
+        document.getElementById('m-ver-act-desc').value = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/proyectos/obtener-ultima-actualizacion-servicio/'+id, 
+            data: {
+                id: id,
+            },
+        success: function (response) {
+            estado.value = response[0].estado;
+            fecha_limite.value = response[0].fecha_limite;
+            lider.value = response[0].lider;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+    }
+
+    function actualizarRecuadroAct(id){
+        let renglones_actualizacion = document.getElementById("cuadro-act");
+        let html_act = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/proyectos/obtener-actualizaciones-proyecto/'+id, 
+            data: {
+                id: id,
+            },
+            success: function (response) {
+                response.forEach(element => {
+                    html_act += `<tr>
+                                    <td class="text-center">`+element.codigo+`</td>
+                                    <td class="text-center">`+element.fecha_carga+`</td>
+                                    <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                                    <td class="text-center">`+element.fecha_limite+`</td>
+                                    <td class="text-center">`+element.estado+`</td>
+                                    <td class="text-center">`+element.responsable+`</td>    
+                                    </tr>`
+                });
+                renglones_actualizacion.innerHTML = html_act;
+                cargarFechaEstadoLiderModalVerAct(id);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        }));
     }
 
 </script>
