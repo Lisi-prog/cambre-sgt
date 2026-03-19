@@ -1,9 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="verActServOrdenModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="verActualizacionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Ver actualizaciones servicio</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Ver actualizaciones servicio: <strong id="mact-nombre-servicio"></strong></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -35,21 +35,22 @@
                     </div>
                 </div>
                 <div class="row" id="m-ver-act-div" hidden>
-                {!! Form::open(['route' => ['actualizacion.crear', $proyecto->id_servicio], 'method' => 'POST', 'class' => 'formulario']) !!}
+                {!! Form::open(['route' => ['actualizacion.servicio.crear'], 'method' => 'POST', 'class' => 'formulario nueva-act-serv']) !!}
+                {!! Form::number('id_serv', null, ['class' => 'form-control', 'hidden', 'id' => 'm_act_id_serv']) !!}
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                 <div class="form-group">
                                     {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <span class="obligatorio">*</span>
-                                    {!! Form::text('m-ver-act-descripcion', null, ['class' => 'form-control', 'required']) !!}
+                                    {!! Form::text('m-ver-act-descripcion', null, ['class' => 'form-control', 'required', 'id' => 'm-ver-act-desc']) !!}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 <div class="form-group">
                                     {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                     <span class="obligatorio">*</span>
-                                    {!! Form::select('m-ver-act-id_estado', $estados, null, [
+                                    {!! Form::select('m-ver-act-id_estado', $estados->pluck('nombre_estado', 'id_estado'), null, [
                                             'placeholder' => 'Seleccionar',
                                             'class' => 'form-select form-control',
                                             'required',
@@ -100,8 +101,10 @@
                     </div>
                 </div>
             </div>
+            <div id="alert-act-serv" class="mx-3">
+                
+            </div>
             <div class="modal-footer">
-                {{-- <button type="submit" class="btn btn-success">Guardar</button> --}}
                 <button type="submit" class="btn btn-success" id="m-ver-act-btn" hidden>Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
