@@ -19,7 +19,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="titulo page__heading my-auto">Propuesta de mejora</h5>
+                <h4 class="titulo page__heading my-auto">Propuesta de mejora22</h5>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             </div>
@@ -109,7 +109,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ListaPM as $Pm)
-                                        @if (is_null($Pm->calificacion))
+                                        @if (is_null($Pm->calificacion) && $Pm->getSolicitud->id_estado_solicitud != 3)
                                             <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Pm->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
 
@@ -249,7 +249,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ListaPM as $Pm)
-                                        @if (!is_null($Pm->calificacion))
+                                        @if ($Pm->getSolicitud->id_estado_solicitud === 3 || !is_null($Pm->calificacion))
                                             @if (in_array($Pm->getSolicitud->getServicio ? $Pm->getSolicitud->getServicio->getEstado() : $Pm->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-', $estados_a_buscar))
                                                 <tr style="display: none">
                                             @else
