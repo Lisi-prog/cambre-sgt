@@ -152,7 +152,7 @@
                                                     <tr>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->id_orden ?? '-'}}</td>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento ?? '-'}}</td>                                                    
-                                                        <td class= 'text-center' style="vertical-align: middle;">-</td>
+                                                        <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getEmpleado ? $orden->getOrdenMantenimiento->getEmpleado->nombre_empleado : '-'}}</td>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->getOrdenMantenimiento->getEstadoActual()}}</td>
                                                         <td class= 'text-center' style="vertical-align: middle;">{{$orden->getHoras()}}</td>
                                                         @php

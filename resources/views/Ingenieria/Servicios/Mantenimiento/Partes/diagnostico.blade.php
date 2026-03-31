@@ -43,24 +43,11 @@
                     <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_diagnostico">
                 </div>     
                 <div class="d-flex">
-                    <hr>          
-                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">    
-                        <div class="form-group mb-0">
-                            <span class="obligatorio">*</span>
-                            <label class="mr-2 form-label">A resolver: </label>
-                        </div>          
-                        <div>
-                            <input onchange="checkSendNuevoParteDiagnostico()" id="Máquina" required class="ml-4"type="radio" name="a_resolver" value="Máquina"> <label for="Máquina"> Máquina</label>
-                        </div>
-                        <div>
-                            <input onchange="checkSendNuevoParteDiagnostico()" id="Banco" required class="ml-4" type="radio" name="a_resolver" value="Banco"> <label for="Banco"> Banco</label>                       
-                        </div>
-                    </div>
-                    <div style="width: 35%;" class="form-group">                        
+                    <div style="width: 40%;" class="form-group">                        
                         <label for="observaciones_diagonstico">Observaciones:</label>       
                         <textarea style="resize:none; height: 10vh;" name="observacion" class="form-control" id="observaciones_diagonstico" placeholder="Observaciones"></textarea>   
                     </div>
-                    <div style="width: 15%;" class="form-group align-content-center d-flex flex-column">
+                    <div style="width: 20%;" class="form-group align-content-center d-flex flex-column">
                         <div class="form-group mb-0">
                             <span class="obligatorio">*</span>
                             <label class="mr-2 form-label">A resolver: </label>
@@ -93,7 +80,7 @@
                     (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                 </div>
                 <button onclick="diagnosticoPreSubmit('G')" id="btnGuardarNuevoParteDiagnostico" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
-                <button onclick="diagnosticoPreSubmit('C')" id="btnGuardarNuevoParteDiagnosticoCerrar" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar y Cerrar</button>
+                <button onclick="diagnosticoPreSubmit('C')" id="btnGuardarNuevoParteDiagnosticoCerrar" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar y Completar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
             {!! Form::close() !!}

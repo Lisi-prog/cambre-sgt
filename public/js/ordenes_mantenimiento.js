@@ -189,7 +189,12 @@ table = $('#example').DataTable({
                 },
             },                   
             columnDefs: [
-                { targets: [0, 4], visible: false },
+                {
+                    targets: 0,
+                    visible: false,   // 👈 arranca oculta
+                    orderable: false
+                },
+                { targets: [4], visible: false },
                 { targets: 1,  // Prio. Operacion
                   createdCell: function (td, cellData, rowData, row, col) {
                       $(td).attr('data-order', rowData._order_prioridad);
@@ -339,17 +344,19 @@ function limpiarFiltro(){
 
 function mostrarSelec() {
     let colum_sel = document.getElementsByClassName('chk-input');
-    let enca = document.getElementById('enc_sel');
+    // let enca = document.getElementById('enc_sel');
     let chk_sel_all = document.getElementById('chk-sel-all');
 
     if ($("#id_selec").is(":checked")) {
-        enca.hidden = false;
+        // enca.hidden = false;
+        table.column(0).visible(true);
         chk_sel_all.hidden = false;
         table.rows().nodes().to$().find('td.chk-input').removeAttr('hidden');
         // Mostrar la columna de checkboxes
         table.column('.chk-input', { search: 'applied' }).visible(true);
     } else {
-        enca.hidden = true;
+        // enca.hidden = true;
+        table.column(0).visible(false);
         chk_sel_all.hidden = true;
         table.rows().nodes().to$().find('td.chk-input').attr('hidden', true);
         // Ocultar la columna de checkboxes
