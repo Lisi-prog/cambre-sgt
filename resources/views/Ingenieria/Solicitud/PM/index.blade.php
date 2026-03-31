@@ -19,7 +19,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="titulo page__heading my-auto">Propuesta de mejora22</h5>
+                <h4 class="titulo page__heading my-auto">Propuesta de mejora</h5>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             </div>
