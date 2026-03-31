@@ -1065,7 +1065,11 @@ END //
 
 DELIMITER ;
 
-
+CREATE EVENT actualizar_servicio
+ON SCHEDULE EVERY 1 DAY
+STARTS TIMESTAMP(CURRENT_DATE, '02:00:00')
+DO
+CALL Act_info_servicio();
 
 DROP TABLE parte_mantenimiento;
 DROP TABLE orden_mantenimiento;
