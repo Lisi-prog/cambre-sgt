@@ -48,10 +48,10 @@
     <div class="d-flex section-header justify-content-center" >
         <div class="d-flex flex-row col-12">
 
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
                 <h4 class="titulo page__heading my-auto">{{$tipo ?? ''}}</h5>
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
             </div>
             <div class="d-flex col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
                 <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearProyectoModal">
@@ -256,9 +256,15 @@
                                                             @endcan
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
-                                                                    <a href="{{ route('proyectos.gestionar', [$proyecto->id_servicio, 'opcion' => $opcion]) }}" class="btn btn-success w-100">
-                                                                        Gestionar
-                                                                    </a>
+                                                                    @if ($proyecto->id_subtipo_servicio != 6)
+                                                                        <a href="{{ route('proyectos.gestionar', [$proyecto->id_servicio, 'opcion' => $opcion]) }}" class="btn btn-success w-100">
+                                                                            Gestionar
+                                                                        </a>
+                                                                    @else
+                                                                        <a href="{{ route('servicio_mantenimiento.gestionar', [$proyecto->id_servicio, 'opcion' => $opcion]) }}" class="btn btn-success w-100">
+                                                                            Gestionar
+                                                                        </a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                             <div class="row my-2 justify-content-center">

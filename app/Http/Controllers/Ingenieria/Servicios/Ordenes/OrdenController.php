@@ -54,6 +54,7 @@ use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
 use App\Models\Cambre\Vw_orden_manufactura;
+use App\Models\Cambre\Vw_orden_mantenimiento;
 use App\Models\Cambre\Vw_gest_orden_trabajo;
 use App\Models\Cambre\Vw_gest_orden_manufactura;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
@@ -1061,16 +1062,20 @@ class OrdenController extends Controller
 
             case 4:
                 //ORDEN DE MANTENIMIENTO
-                foreach ($array_ordenes as $orden) {
-                    try {
-                        if (count(Orden_mantenimiento::where('id_orden', $orden->id_orden)->get()) == 1) {
-                            array_push($ordenes, $orden);
-                        }
-                    } catch (\Throwable $th) {
-                    }
+
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
+                    $ordenes = Vw_orden_mantenimiento::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $ordenes = Vw_orden_mantenimiento::responsable($id_empleado)->get();
                 }
+
                 $tipo = 'Mantenimiento';
-                $estados = $this->listarTodosLosEstadosDe(1);
+                // $estados = $this->listarTodosLosEstadosDe(1);
+
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mantenimiento', compact('ordenes'));
+
                 break;
         }
         
@@ -1396,8 +1401,8 @@ class OrdenController extends Controller
     public function index_hdr(){
 
         $operaciones = Vw_operaciones_de_hdr::orderByRaw('ISNULL(prioridad), prioridad')
-                                                    ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
-                                                    ->get();
+            ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+            ->get();
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
         $flt_operaciones_tec = [];
 

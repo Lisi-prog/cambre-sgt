@@ -28,12 +28,22 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3" id="fecha_req">
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                            {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <div class="form-group">
+                                {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 {!! Form::select('id_activo', $activos, null, [
                                     'placeholder' => 'Seleccionar',
                                     'class' => 'form-select reset-input',
                                     'id' => 'activo',
                                 ]) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="row-sintomas" hidden>
+                        <div class="form-group">
+                            {!! Form::label('descrip', 'Sintomas sobre Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <div class="row" id="sintomas-activo">
+                                
+                            </div>
                         </div>
                     </div>
                     <div class="row">

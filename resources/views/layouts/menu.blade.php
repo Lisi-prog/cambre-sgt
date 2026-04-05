@@ -77,6 +77,12 @@
                 </li>
 
                 <li>
+                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 5)}}" title="Servicio de mantenimiento">
+                        <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>SM</span>
+                    </a>
+                </li>
+
+                <li>
                     <a class="nav-link" href="{{route('proyecto.indexprefijo', 4)}}" title="Mejora continua">
                         <i class="fas fa-star" style="font-size:1.2em;"></i><span>TMC</span>
                     </a>
@@ -123,6 +129,11 @@
                     </a>
                 </li>
                 @endrole
+                <li>
+                    <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
+                        <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>Mantenimiento</span>
+                    </a>
+                </li>
                 <li>
                     <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
@@ -251,6 +262,37 @@
                 <a class="nav-link" href="{{route('sectores.index')}}" title="Sectores">
                     <i class="fas fa-bezier-curve"></i><span>Sectores</span>
                 </a>
+            </li>
+
+            <li class="dropdown ">
+                <a href="" class="nav-link has-dropdown menu-hover">
+                    <i class="fas fa-cog"></i><span>Conf. Mant.</span>
+                </a>
+                <ul class="dropdown-menu border border-primary border-2 borde-menu m-0 border-primary" style="display: none;">
+                    <li class="dropdown-title pt-3">
+                        Conf. Mantenimiento
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('sintoma.index')}}" title="Sintomas">
+                            <i class="fas fa-stethoscope"></i><span>Sintomas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('ishikawa_causa.index')}}" title="Las 5 M">
+                            <i class="fas fa-comments"></i><span>Las 5 M's</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('tarea_mantenimiento.index')}}" title="Tareas Activo">
+                            <i class="fas fa-clipboard"></i><span>Tareas Activo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{route('zona.index')}}" title="Zona">
+                            <i class="fas fa-sign"></i><span>Zona</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li>
