@@ -61,7 +61,7 @@ class SendScheduledMailResSuper implements ShouldQueue
             $subordinados = Og_organigrama::where('id_supervisor_directo', $empleadoId)->pluck('id_empleado')->toArray();
 
             // Obtener datos de subordinados de forma masiva
-            $empleados = Empleado::whereIn('id_empleado', $subordinados)->pluck('nombre_empleado', 'id_empleado');
+            $empleados = Empleado::where('esta_activo', 1)->whereIn('id_empleado', $subordinados)->pluck('nombre_empleado', 'id_empleado');
             $datosSubordinados = [];
 
             foreach ($subordinados as $subId) {
