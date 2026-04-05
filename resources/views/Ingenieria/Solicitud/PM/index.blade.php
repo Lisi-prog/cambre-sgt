@@ -109,7 +109,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ListaPM as $Pm)
-                                        @if (is_null($Pm->calificacion))
+                                        @if (is_null($Pm->calificacion) && $Pm->getSolicitud->id_estado_solicitud != 3)
                                             <tr>
                                                 <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Pm->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
 
@@ -249,7 +249,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ListaPM as $Pm)
-                                        @if (!is_null($Pm->calificacion))
+                                        @if ($Pm->getSolicitud->id_estado_solicitud === 3 || !is_null($Pm->calificacion))
                                             @if (in_array($Pm->getSolicitud->getServicio ? $Pm->getSolicitud->getServicio->getEstado() : $Pm->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-', $estados_a_buscar))
                                                 <tr style="display: none">
                                             @else

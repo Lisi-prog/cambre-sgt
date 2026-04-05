@@ -210,7 +210,8 @@ WITH
         TotalOperacionOrdMec(omec.id_orden_mecanizado) as total_ope,
         ObtenerEstadoOpeActivaOrdMec(omec.id_orden_mecanizado) as nom_est_ope_act,
 		TotalOperacionCompletaOrdMec(omec.id_orden_mecanizado) as total_ope_completo,
-        TotalHorasRealOrdMecHdr(omec.id_orden_mecanizado) as total_horas_hdr
+        TotalHorasRealOrdMecHdr(omec.id_orden_mecanizado) as total_horas_hdr,
+        omec.cantidad
     from orden o 
     inner join orden_mecanizado omec on o.id_orden = omec.id_orden
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1

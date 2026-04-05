@@ -65,19 +65,25 @@ function buscarYfiltrarPM(tabla){
     est = arrayForMe(estados);
     usu = arrayForMe(usuarios);
 
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        td2 = tr[i].getElementsByTagName("td")[5];
-        td3 = tr[i].getElementsByTagName("td")[7];
-        if (td) {
-            txtValu2 = td2.innerText;
-            txtValu3 = td3.innerText;
-            if (usu.indexOf(txtValu2) > -1 && est.indexOf(txtValu3) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        } 
+    if (est.length==0 && usu.length==0) {
+        for (i = 0; i < tr.length; i++) {
+            tr[i].style.display = "";
+        }
+    } else {
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            td2 = tr[i].getElementsByTagName("td")[5];
+            td3 = tr[i].getElementsByTagName("td")[7];
+            if (td) {
+                txtValu2 = td2.innerText;
+                txtValu3 = td3.innerText;
+                if (usu.indexOf(txtValu2) > -1 && est.indexOf(txtValu3) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            } 
+        }
     }
 }
 
