@@ -97,6 +97,7 @@ class ParteInspeccionController extends Controller{
                 $orden_nueva->save();
                 $orden_mantenimiento = new Orden_mantenimiento;
                 $orden_mantenimiento->id_tipo_orden_mantenimiento = 3;
+                $orden_mantenimiento->esta_activo = 1;
                 $orden_mantenimiento->id_orden = $orden_nueva->id_orden;
                 $orden_mantenimiento->save();
                 $parte = new Parte;
