@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">Editar Parte</h1>
+                <h1 class="modal-title fs-5">Editar Orden Mantenimiento</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                
             </div>            
             {!! Form::open(['route' => 'orden_mantenimiento.editar', 'method' => 'PUT']) !!}
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <hr>
-                <label for="id_editar_empleado">Empleado Asignado: </label>
+                <label for="id_editar_empleado">Técnico Asignado: </label>
                 <select name="id_empleado" class="form-select" id="id_editar_empleado">
                     <option value="">SIN ASIGNAR</option>
                     @foreach ($empleados as $empleado)

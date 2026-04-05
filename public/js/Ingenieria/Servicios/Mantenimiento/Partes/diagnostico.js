@@ -25,6 +25,7 @@ $(document).ready(function () {
     document.getElementById('nombreActivo').textContent = activo;
     $("#hs").val($("#horas_totales").val())
     $("#es").val($("#estado_actual").val())
+    $("#nombre_proyecto_diagnostico").val($("#nombre_proyecto_i").val())
 });
 
 var i = 0;
@@ -94,9 +95,11 @@ function eliminarDiagnostico(indice){
 function checkSendNuevoParteDiagnostico(){
     if(tabla_diagnosticos.rows().count() > 0 && $("#fecha").val() && $("#horas").val()){
         $("#btnGuardarNuevoParteDiagnostico").removeAttr('disabled');
+        $("#btnGuardarNuevoParteDiagnosticoCerrar").removeAttr('disabled');
     }
     else{
         $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+        $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     }
 }
 
@@ -107,9 +110,11 @@ function openModalNuevoParteDiagnostico(id_orden){
     tabla_diagnosticos.clear().draw();
     i = 0;
     $("#btnGuardarNuevoParteDiagnostico").show();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").show();
     $('.obligatorio').show();
     $("#label_ob_diagnostico").show()
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
     $("#horas").removeAttr('disabled');
@@ -137,6 +142,7 @@ function openModalVerParteDiagnostico(id_orden){
     $("#completado_diagnostico").prop('disabled', 'disabled');
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnostico").hide();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").hide();
     $("#herramental").val($("#activo").val());
     tabla_diagnosticos.column(3).visible(false);
     tabla_diagnosticos.clear()
@@ -148,7 +154,6 @@ function openModalVerParteDiagnostico(id_orden){
                 return;
             }
             let diag = data[0];
-            $("#horas").val(diag.get_parte.horas);
             $("#fecha").val(diag.get_parte.fecha);
             $("#observaciones_diagonstico").val(diag.get_parte.observaciones);
             $("#completado_diagnostico").prop('checked', true);
@@ -171,6 +176,7 @@ function openModalVerParteDiagnostico(id_orden){
                     i++;
                 });
             });
+            $("#horas").val(data[0].horas);
             tabla_diagnosticos.columns.adjust();
             tabla_diagnosticos.draw();
         }
@@ -183,9 +189,11 @@ function openModalParteDiagnosticoPendiente(id_orden){
     tabla_diagnosticos.clear().draw();
     i = 0;
     $("#btnGuardarNuevoParteDiagnostico").show();
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").show();
     $('.obligatorio').show();
     $("#label_ob_diagnostico").show()
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
     $("#horas").removeAttr('disabled');
@@ -244,7 +252,8 @@ function verParteDeDiagnostico(id_parte, completado){
     $("#horas").attr('disabled', 'disabled');
     $("#herramental_inspeccion").val($("#activo").val());
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
-    $("#btnGuardarNuevoParteDiagnostico").hide();
+    $("#btnGuardarNuevoParteDiagnostico").hide();   
+    $("#btnGuardarNuevoParteDiagnosticoCerrar").hide();
     if(completado == 'Completo'){
         $("#completado_diagnostico").prop('checked', true)
     }
@@ -283,4 +292,15 @@ function verParteDeDiagnostico(id_parte, completado){
             tabla_diagnosticos.draw();
         }
     });
+}
+
+
+function diagnosticoPreSubmit(tipo){
+    if(tipo == 'C'){
+        $("#completado_diagnostico").prop('checked', true);
+    }
+    else{
+        $("#completado_diagnostico").prop('checked', false);
+    }
+    $("#formNuevoParteDiagnostico").trigger( "submit" );
 }

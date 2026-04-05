@@ -23,6 +23,7 @@ $(document).ready(function () {
             "aaSorting": []
     });    
     activo = document.getElementById('activo').value;
+    $("#nombre_proyecto_inspeccion").val($("#nombre_proyecto_i").val())
     document.getElementById('herramental_inspeccion').value = activo;
     document.getElementById('nombreActivoInspeccion').textContent = activo;
 });

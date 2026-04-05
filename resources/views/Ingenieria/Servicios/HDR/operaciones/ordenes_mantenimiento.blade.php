@@ -64,7 +64,7 @@
             </div>
 
             @php
-                $ocultoMulti = '';       
+                $ocultoMulti = 'd-none';       
             @endphp
             @role(['TECNICO'])
                 @php
@@ -249,7 +249,7 @@
                         <div class="table-responsive">
                             <table class="table table-sm table-hover mt-2" id="example">
                                 <thead id="encabezado_ordenes">
-                                    <th class='text-center' style="color:#fff;max-width:2vw;" hidden id="enc_sel"></th>
+                                    <th class='text-center' style="color:#fff;max-width:2vw;" id="enc_sel"></th>
                                     <th class='text-center' style="color:#fff;max-width:3vw;">Prio. Operacion</th>
                                     <th class='text-center' style="color:#fff;max-width:2vw;">Prio. Global</th>
                                     <th class='text-center' style="color:#fff;max-width:8vw;">Proyecto</th>

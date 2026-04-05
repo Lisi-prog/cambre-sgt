@@ -189,7 +189,12 @@ table = $('#example').DataTable({
                 },
             },                   
             columnDefs: [
-                { targets: [0, 4], visible: false },
+                {
+                    targets: 0,
+                    visible: false,   // 👈 arranca oculta
+                    orderable: false
+                },
+                { targets: [4], visible: false },
                 { targets: 1,  // Prio. Operacion
                   createdCell: function (td, cellData, rowData, row, col) {
                       $(td).attr('data-order', rowData._order_prioridad);
@@ -339,17 +344,19 @@ function limpiarFiltro(){
 
 function mostrarSelec() {
     let colum_sel = document.getElementsByClassName('chk-input');
-    let enca = document.getElementById('enc_sel');
+    // let enca = document.getElementById('enc_sel');
     let chk_sel_all = document.getElementById('chk-sel-all');
 
     if ($("#id_selec").is(":checked")) {
-        enca.hidden = false;
+        // enca.hidden = false;
+        table.column(0).visible(true);
         chk_sel_all.hidden = false;
         table.rows().nodes().to$().find('td.chk-input').removeAttr('hidden');
         // Mostrar la columna de checkboxes
         table.column('.chk-input', { search: 'applied' }).visible(true);
     } else {
-        enca.hidden = true;
+        // enca.hidden = true;
+        table.column(0).visible(false);
         chk_sel_all.hidden = true;
         table.rows().nodes().to$().find('td.chk-input').attr('hidden', true);
         // Ocultar la columna de checkboxes
@@ -876,7 +883,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
                                 </button>
                             </div>
@@ -886,7 +893,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
                                 </button>
                             </div>
@@ -908,7 +915,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo},${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo},${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
                                 </button>
                             </div>
@@ -918,7 +925,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" onclick="openModalParteInspeccionPendiente(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}, ${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')"  class="btn btn-info w-100">
+                                <button type="button" onclick="openModalParteInspeccionPendiente(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}, ${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')"  class="btn btn-info w-100">
                                     Procesar
                                 </button>
                             </div>
@@ -940,7 +947,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
                                 </button>
                             </div>
@@ -950,7 +957,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
                                 </button>
                             </div>
@@ -960,7 +967,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalConfirmarParteAjuste(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalConfirmarParteAjuste(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Revisar
                                 </button>
                             </div>
