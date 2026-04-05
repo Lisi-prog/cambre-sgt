@@ -68,7 +68,7 @@ class ParteDiagnosticoController extends Controller{
                 if($next == 2){
                     $orden_vieja = Orden::find($request->id_orden);    
                     $orden_nueva = new Orden;                
-                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-inspeccion';
+                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-INSPECCIÓN';
                     $orden_nueva->fecha_inicio = Carbon::now();
                     $orden_nueva->duracion_estimada = 0;
                     $orden_nueva->id_etapa = $orden_vieja->id_etapa;
