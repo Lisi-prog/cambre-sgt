@@ -129,7 +129,7 @@
                     </a>
                 </li>
                 @endrole
-                <li>
+                <li hidden>
                     <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
                         <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>Mantenimiento</span>
                     </a>

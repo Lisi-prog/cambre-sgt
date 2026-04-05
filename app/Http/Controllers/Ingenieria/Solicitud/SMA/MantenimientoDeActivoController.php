@@ -424,7 +424,7 @@ class MantenimientoDeActivoController extends Controller
         ]);
 
         $orden = Orden::create([
-                    'nombre_orden' => $nombre_proyecto.'-diagnostico',
+                    'nombre_orden' => $nombre_proyecto.'-DIAGNÓSTICO',
                     'fecha_inicio' => $fecha_ini,
                     'id_etapa' => $etapa->id_etapa
                 ]);
