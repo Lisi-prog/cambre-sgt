@@ -62,7 +62,15 @@ public function index(){
         $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $zonas = Zona::orderBy('nombre_zona')->get();
-        $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+            $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
+        }else{
+            $maquinas = DB::table('maquinaria as maq')
+                        ->join('emp_x_maq as exp', 'exp.id_maquinaria', '=', 'maq.id_maquinaria')
+                        ->where('exp.id_empleado', Auth::user()->getEmpleado->id_empleado)
+                        ->get();
+        }
         /*$ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
                                 ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
