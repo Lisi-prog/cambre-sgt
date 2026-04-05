@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo', 'Operaciones de hdr')
+@section('titulo', 'Operaciones')
 @section('content')
 
 <style>

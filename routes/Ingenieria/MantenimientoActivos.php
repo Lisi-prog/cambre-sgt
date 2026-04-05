@@ -19,7 +19,7 @@ use App\Http\Controllers\Ingenieria\Servicios\Ordenes\OrdenMantenimientoControll
 
 
 
-Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
+Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNICO']], function () {
     Route::put('tipo_activo/set_sintomas', [ActivoController::class, 'set_sintomas_tipo_activo'])->name('tipo_activo.set_sintomas');
     Route::delete('tipo_activo/destroy_sintoma/{id_sintoma}/{id_tipo_activo}', [ActivoController::class, 'destroy_sintoma_tipo_activo'])->name('tipo_activo.destroy_sintoma');
     Route::put('activo/set_sintomas', [ActivoController::class, 'set_sintomas_activo'])->name('activo.set_sintomas');
