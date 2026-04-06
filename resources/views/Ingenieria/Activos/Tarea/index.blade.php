@@ -49,7 +49,7 @@
                                     @endphp
                                     @foreach ($tareas as $tarea)
                                         <tr>
-                                            <td class="text-center">{{ $tarea->id_tarea }}</td>
+                                            <td class="text-center">{{ $tarea->id_tarea_mantenimiento ?? '-'}}</td>
                                             <td class="text-center">{{ $tarea->nombre_tarea }}</td>
                                             <td class="text-center">{{ $tarea->getZonaTarea->nombre_zona }}</td>
                                             <td class="text-center">{{ $tarea->getEjecucion->nombre_ejecucion }}</td>
