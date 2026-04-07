@@ -16,6 +16,8 @@
                             <input id="herramental_ajuste" disabled class="form-control" hidden>
                         </div>
                     </div>
+                    <input type="text" hidden id="id_activo_para_orden">
+                    <input type="text" hidden id="id_tipo_activo_para_orden">
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>            

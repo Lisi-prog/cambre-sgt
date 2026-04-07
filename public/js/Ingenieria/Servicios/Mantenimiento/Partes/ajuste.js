@@ -66,8 +66,6 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                             name="tareas[${j}][hecho]">`
                         ]);                
                     j++;
-                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
-                    console.log(opciones)
                 });               
             })
             let hoy = new Date()
@@ -75,7 +73,6 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
             $("#horas_ajuste").val('')            
-            $("#tarea_mantenimiento").html(opciones)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -86,7 +83,12 @@ function agregarNuevoAjusteRow(){
     let j = tabla_ajustes.rows().count();
 
     const rowNode = tabla_ajustes.row.add([
-        '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div><select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]"><option value="">Seleccionar...</option>${$("#tarea_mantenimiento").html()}</select></div>`,
+        '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div>
+        <select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]">
+            <option value="">Seleccionar...</option>
+            ${$("#tarea_mantenimiento").html()}
+        </select>
+        </div>`,
         `<select class="form-select" required name="tareas[${j}][accion]">
             <option value="">Seleccionar...</option>
             ${$("#accion_select_div").html()}
@@ -254,26 +256,10 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
             $("#horas_ajuste").val('')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
-            getTareasSelect(id_etapa)
         }
     });
 }
 
-function getTareasSelect(id_etapa){
-    $.ajax({
-        type: 'GET',
-        url: '/get-pre-acciones-ajuste/' + id_etapa,
-        success: function(data) {
-            let opciones = ''
-            data.forEach(d => {
-                d.get_tareas_mantenimiento.forEach(tarea => {
-                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
-                });               
-            })
-            $("#tarea_mantenimiento").html(opciones)
-        }
-    });
-}
 
 function openModalVerParteAjuste(id_orden){
     $('#modalNuevoParteAjuste').modal('show');

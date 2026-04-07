@@ -3,8 +3,9 @@ $(document).ready(function () {
     tabla_inspecciones = $('#tabla_inspecciones').DataTable({headerCallback: function(thead) {
         $(thead).hide();
     },columnDefs: [
-            { className: "text-center", targets: [0,1,2,3, 4] }
+            { className: "text-center", targets: [0,1,2,3,4 ] }
         ],
+        order: [],
         language: {
                 lengthMenu: 'Mostrar _MENU_ registros por pagina',
                 zeroRecords: 'No se ha encontrado registros',

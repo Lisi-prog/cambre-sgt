@@ -947,7 +947,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
+                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo}')">
                                     Procesar
                                 </button>
                             </div>
@@ -957,7 +957,7 @@ function buscarPorFiltros(){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo}')">
                                     Procesar
                                 </button>
                             </div>

@@ -608,7 +608,7 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
 }
 
 
-function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) {
+function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, id_act, id_tipo) {
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
@@ -617,6 +617,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) 
     $("#nombre_proyecto_ajuste").val(proyecto)
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
+    $("#id_activo_para_orden").val(id_act)
+    $("#id_tipo_activo_para_orden").val(id_tipo)
     $("#btnRowNuevoAjuste").show()
 
     tabla_ajustes.clear();
@@ -648,8 +650,6 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) 
                             name="tareas[${j}][hecho]">`
                         ]);                
                     j++;
-                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
-                    console.log(opciones)
                 });               
             })
             let hoy = new Date()
@@ -657,18 +657,34 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) 
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
             $("#horas_ajuste").val('')            
-            $("#tarea_mantenimiento").html(opciones)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
     });
 }
 
+function getTareasFiltradas(idActivo, idTipo) {
+    return $("#tarea_mantenimiento option").filter(function () {
+        const activo = $(this).data("activo");
+        const tipo = $(this).data("tipo");
+
+        return activo == idActivo || tipo == idTipo;
+    }).clone();
+}
+
 function agregarNuevoAjusteRow(){
     let j = tabla_ajustes.rows().count();
 
     const rowNode = tabla_ajustes.row.add([
-        '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div><select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]"><option value="">Seleccionar...</option>${$("#tarea_mantenimiento").html()}</select></div>`,
+        '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div>
+        <select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]">
+            <option value="">Seleccionar...</option>
+            ${getTareasFiltradas($("#id_activo_para_orden").val(), $("#id_tipo_activo_para_orden").val())
+                .map((_, el) => el.outerHTML)
+                .get()
+                .join('')}
+        </select>
+        </div>`,
         `<select class="form-select" required name="tareas[${j}][accion]">
             <option value="">Seleccionar...</option>
             ${$("#accion_select_div").html()}
@@ -789,7 +805,7 @@ function procesarAjuste(accion){
     });
 }
 
-function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyecto){
+function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyecto, id_act, id_tipo){
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
@@ -799,7 +815,9 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
     $("#herramental_ajuste").val(nombre_activo);
-    $("#nombre_proyecto_ajuste").val(proyecto);
+    $("#nombre_proyecto_ajuste").val(proyecto);    
+    $("#id_activo_para_orden").val(id_act)
+    $("#id_tipo_activo_para_orden").val(id_tipo)
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -836,26 +854,10 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
             $("#horas_ajuste").val('')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
-            getTareasSelect(id_etapa)
         }
     });
 }
 
-function getTareasSelect(id_etapa){
-    $.ajax({
-        type: 'GET',
-        url: '/get-pre-acciones-ajuste/' + id_etapa,
-        success: function(data) {
-            let opciones = ''
-            data.forEach(d => {
-                d.get_tareas_mantenimiento.forEach(tarea => {
-                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
-                });               
-            })
-            $("#tarea_mantenimiento").html(opciones)
-        }
-    });
-}
 
 function openModalVerParteAjuste(id_orden, nombre_activo){
     $('#modalNuevoParteAjuste').modal('show');

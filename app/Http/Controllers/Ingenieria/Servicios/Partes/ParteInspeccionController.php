@@ -154,6 +154,7 @@ class ParteInspeccionController extends Controller{
             'tarea_mantenimiento.id_ejecucion'
         )
         ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
+        ->orderBy('tarea_mantenimiento.nombre_tarea','asc')
         ->get();
         return response()->json([
             'tareas_x_activo' => $tareasMantenimiento,
@@ -248,6 +249,7 @@ class ParteInspeccionController extends Controller{
                 'accion_para_tarea.*'
             )
             ->orderBy('tarea_mantenimiento.id_zona_tarea','desc')
+            ->orderBy('tarea_mantenimiento.nombre_tarea','asc')
             ->get();
 
         return ["parte" => $parte_inspeccion, "tareasMantenimiento" => $tareasMantenimiento];
