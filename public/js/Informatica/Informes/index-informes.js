@@ -12,7 +12,7 @@ document.getElementById("formulario_informe").addEventListener("submit", functio
         data: form_data,
         timeout: 60000, // 60 segundos de espera
         success: function(res) {
-            console.log(res);
+            // console.log(res);
             document.getElementById('ver-informes').hidden = true;
             document.getElementById('ver-informes-sin-datos').hidden = true;
 

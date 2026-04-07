@@ -112,13 +112,23 @@ class InformeController extends Controller
                 $datosGraficoSub = $this->prepararDatosGraficoSubordinados($datosSub);
                 $totalHorasSub = isset($datosSub[0]) ? substr($datosSub[0]->total_ac, 0, -3) : '0';
 
+                $base64Sub = null;
+
+                if (!empty($datosGraficoSub['chart_url'])) {
+                    $imageSub = file_get_contents($datosGraficoSub['chart_url']);
+                    $base64Sub = 'data:image/png;base64,' . base64_encode($imageSub);
+                }
                 $datosSubordinados[] = [
                     'name' => $nombreEmpleado,
                     'info' => $datosSub,
                     'total_horas' => $totalHorasSub,
-                    'chart' => $datosGraficoSub['chart_url']
+                    'chart' => $datosGraficoSub['chart_url'],
+                    'chart_base64' => $base64Sub,
                 ];
             }
+
+            $image = file_get_contents($datosGraficoUsuario['chart_url']);
+            $base64 = 'data:image/png;base64,' . base64_encode($image);
 
             // Preparar datos para el correo
             $data = [
@@ -128,6 +138,7 @@ class InformeController extends Controller
                 'fecha_hasta' => $fechaHoy,
                 'total_horas' => substr($datosUsuario[0]->total_ac, 0, -3),
                 'chart' => $datosGraficoUsuario['chart_url'],
+                'chart_base64' => $base64,
                 'datos_sub' => $datosSubordinados
             ];
 
@@ -239,7 +250,9 @@ class InformeController extends Controller
         $data = $this->generarResumenSemanal($fechaIni, $fechaFin, $supervisor);
 
         return $pdf->loadView('Informatica.Informes.documentos.resumen-semanal-pdf',[
-                                    'data' => $data])
+                                    'data' => $data,
+                                    'fechaIni' => $fechaIni,
+                                    'fechaFin' => $fechaFin])
                                     ->setPaper('a4', 'portrait')
                                     ->stream('resumenSemanal.pdf');  
     }
