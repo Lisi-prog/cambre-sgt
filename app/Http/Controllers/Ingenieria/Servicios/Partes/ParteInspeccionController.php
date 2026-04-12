@@ -53,34 +53,33 @@ class ParteInspeccionController extends Controller{
             //TAREAS    
             foreach ($request['tareas'] as $tarea) {
                 if (isset($tarea['ok'])) {
-                    $id = $tarea['id'];                    
-                    $accion = $tarea['accion'];
+                    $id = $tarea['id'];
+                    $ok = $tarea['ok'];
+                    $accion = $tarea['accion'] ?? null;
                     $tarea_existe = Parte_inspe_x_tarea_mant::where('id_tarea_mantenimiento', $id)
                         ->whereHas('getParte.getParte.getOrden', function ($query) use ($parte_inspeccion) {
                             $query->where('id_orden', $parte_inspeccion->getParte->getOrden->id_orden);
                         })
                         ->first();
-
-                    if($tarea_existe){
-                        if($accion == 'NO ACCION'){
+                    if ($tarea_existe) {
+                        if ($ok === 'ok') {
                             $tarea_existe->ok = 1;
-                        }
-                        else{
-                            $tarea_existe->id_accion = $accion;
+                            $tarea_existe->id_accion = null;
+                        } else {
                             $tarea_existe->ok = 0;
+                            $tarea_existe->id_accion = $accion;
                         }
                         $tarea_existe->save();
-                    }
-                    else{
+                    } else {
                         $tarea_nueva = new Parte_inspe_x_tarea_mant;
                         $tarea_nueva->id_parte_inspeccion = $parte_inspeccion->id_parte_inspeccion;
                         $tarea_nueva->id_tarea_mantenimiento = $id;
-                        if($accion == 'NO ACCION'){
+                        if ($ok === 'ok') {
                             $tarea_nueva->ok = 1;
-                        }
-                        else{
-                            $tarea_nueva->id_accion = $accion;
+                            $tarea_nueva->id_accion = null;
+                        } else {
                             $tarea_nueva->ok = 0;
+                            $tarea_nueva->id_accion = $accion;
                         }
                         $tarea_nueva->save();
                     }

@@ -72,7 +72,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
                     `<input type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -121,11 +121,9 @@ function checkboxTareaRealizada(j, idTarea){
 
     if (radio === 'not_ok') {
         $("#label_accion_" + idTarea).attr('hidden', true);
-        $("#accion_" + idTarea).removeAttr('hidden');
-        $("#accion_" + idTarea).attr('required', 'required');
+        $("#accion_" + idTarea).removeAttr('hidden').prop('disabled', false).attr('required', 'required');
     } else {
-        $("#accion_" + idTarea).attr('hidden', true);
-        $("#accion_" + idTarea).removeAttr('required');
+        $("#accion_" + idTarea).attr('hidden', true).removeAttr('required').val('').prop('disabled', true);
         $("#label_accion_" + idTarea).html('No se requiere acción')
         $("#label_accion_" + idTarea).removeAttr('hidden');
     }
@@ -203,6 +201,7 @@ function openModalConfirmarParteInspeccion(id_orden){
             });
             $("#fecha_inspeccion").val(data.get_parte.fecha)
             $("#horas_inspeccion").val(data.horas)
+            showSpanAviso();
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
         }
@@ -278,7 +277,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
                     `<input id="not_ok_${tarea.id_tarea_mantenimiento}" type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -314,6 +313,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
             });
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
+            showSpanAviso();
             $("#horas_inspeccion").val('')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -385,6 +385,7 @@ function openModalVerParteInspeccion(id_orden){
             $("#horas_inspeccion").val(data.horas)
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
+            showSpanAviso();
         }
     });
 }
@@ -458,6 +459,36 @@ function verParteDeInspeccion(id_parte, completado){
             $("#horas_inspeccion").val(data.get_parte.horas)
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
+            showSpanAviso();
         }
     });
+}
+
+function showSpanAviso() {
+    let hayRefabricar = false;
+
+    $("select[id^='accion_']").each(function () {
+        let text = $(this).find("option:selected").text();
+        if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+            hayRefabricar = true;
+            return false;
+        }
+    });
+
+    if (!hayRefabricar) {
+        $("#tabla_inspecciones tbody tr").each(function () {
+            let text = $(this).find("td").eq(4).text();
+
+            if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+                hayRefabricar = true;
+                return false;
+            }
+        });
+    }
+
+    if (hayRefabricar) {
+        $("#span_aviso_mecanizado").show();
+    } else {
+        $("#span_aviso_mecanizado").hide();
+    }
 }

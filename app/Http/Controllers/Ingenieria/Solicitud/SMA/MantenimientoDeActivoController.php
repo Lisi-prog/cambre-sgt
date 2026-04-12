@@ -487,7 +487,7 @@ class MantenimientoDeActivoController extends Controller
         ->where('activo_x_tarea_mant.id_activo', $proyecto->id_activo)
         ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $proyecto->getActivo->id_tipo_activo)
         ->get();
-        
+        $estados = Estado::orderBy('id_estado')->get();
         
         //todas las maquinas
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
@@ -506,6 +506,7 @@ class MantenimientoDeActivoController extends Controller
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
         $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
         $supervisores = $this->obtenerSupervisores()->pluck('nombre_empleado', 'id_empleado');
+        $supervisores_admin = $this->obtenerSupervisoresAdmin();
         //todos los empleados
         // $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
 
@@ -520,7 +521,24 @@ class MantenimientoDeActivoController extends Controller
                         ->orderBy('emp.nombre_empleado')
                         ->get();
         return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 
-        'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento'));
+        'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento', 'estados',
+        'supervisores_admin'));
+    }
+
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->where('esta_activo', 1)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function destroy($id)

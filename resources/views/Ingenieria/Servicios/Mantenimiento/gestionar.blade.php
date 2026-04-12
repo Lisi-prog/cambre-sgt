@@ -21,8 +21,11 @@
                 {{-- Informacion de la solicitud --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-head pt-3 m-auto">
-                            <h5>Solicitud</h5>
+                        <div class="card-head pt-3 m-auto d-flex w-100">
+                            <h5 class="ml-auto">Solicitud</h5>
+                            <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">
+                                Actualizaciones
+                            </button>
                         </div>
                         <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
@@ -437,6 +440,8 @@
     @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec')
     @include('Ingenieria.Servicios.Mantenimiento.Modal.ver-partes')
     @include('Ingenieria.Servicios.Mantenimiento.Partes.editar_partes')
+    @include('Ingenieria.Servicios.Proyectos.modal.ver-act-serv')
+
 
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')

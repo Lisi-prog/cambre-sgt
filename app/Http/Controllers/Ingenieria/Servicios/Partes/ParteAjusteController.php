@@ -12,8 +12,11 @@ use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_ajuste;
 use App\Models\Cambre\Tarea_ajuste;
 use App\Models\Cambre\Responsabilidad;
+use App\Models\Cambre\Estado;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Orden;
+use App\Models\Cambre\Actualizacion;
+use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Orden_mantenimiento;
 
 class ParteAjusteController extends Controller{
@@ -164,7 +167,28 @@ class ParteAjusteController extends Controller{
                     $parte_ajuste_nuevo = new Parte_ajuste();
                     $parte_ajuste_nuevo->id_estado_mantenimiento = 4;
                     $parte_ajuste_nuevo->id_parte = $parte_nueva->id_parte;
-                    $parte_ajuste_nuevo->save();                   
+                    $parte_ajuste_nuevo->save();           
+
+                    $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+                    $responsabilidad = Responsabilidad::create([
+                                        'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                        'id_rol_empleado' => $rol_empleado->id_rol_empleado
+                                    ]);
+                    
+                    $estado = Estado::where('nombre_estado', 'Completo')->first();
+                    
+                    $actualizacionServicio = Actualizacion::create([
+                        'descripcion' => 'Finalización del proyecto.',
+                        'fecha_limite' => $parte_ajuste->getParte->fecha_limite,
+                        'fecha_carga' => Carbon::now(),
+                        'id_estado' => $estado->id_estado,
+                        'id_responsabilidad' => $responsabilidad->id_responsabilidad
+                    ]);
+
+                    $actualizacion_servicio = Actualizacion_servicio::create([
+                        'id_actualizacion' => $actualizacionServicio->id_actualizacion,
+                        'id_servicio' => $parte_ajuste->getParte->getOrden->getEtapa->id_servicio
+                    ]);
                 }
                 else{
                     DB::rollBack();
