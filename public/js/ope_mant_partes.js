@@ -373,7 +373,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proye
                     `<input type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -496,7 +496,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
                     `<input id="not_ok_${tarea.id_tarea_mantenimiento}" type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -532,6 +532,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
             });
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
+            showSpanAviso();
             $("#horas_inspeccion").val('')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -602,6 +603,7 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
             $("#fecha_inspeccion").val(data.get_parte.fecha)
             $("#horas_inspeccion").val(data.horas)
             tabla_inspecciones.draw();
+            showSpanAviso();
             tabla_inspecciones.columns.adjust();
         }
     });
@@ -893,4 +895,34 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
             tabla_ajustes.columns.adjust();
         }
     });
+}
+
+
+function showSpanAviso() {
+    let hayRefabricar = false;
+
+    $("select[id^='accion_']").each(function () {
+        let text = $(this).find("option:selected").text();
+        if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+            hayRefabricar = true;
+            return false;
+        }
+    });
+
+    if (!hayRefabricar) {
+        $("#tabla_inspecciones tbody tr").each(function () {
+            let text = $(this).find("td").eq(4).text();
+
+            if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+                hayRefabricar = true;
+                return false;
+            }
+        });
+    }
+
+    if (hayRefabricar) {
+        $("#span_aviso_mecanizado").show();
+    } else {
+        $("#span_aviso_mecanizado").hide();
+    }
 }
