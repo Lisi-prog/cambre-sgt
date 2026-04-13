@@ -471,19 +471,19 @@
             });
 
             $('#table-orden').DataTable({
-            language: {
-                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                    zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
-                    infoEmpty: 'No se ha encontrado registros',
-                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                    search: 'Buscar',
-                    paginate:{
-                        first:"Prim.",
-                        last: "Ult.",
-                        previous: 'Ant.',
-                        next: 'Sig.',
-                    },
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
                 },
                 "aaSorting": []
             });
@@ -547,7 +547,46 @@
                         setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
                     }
                 });
-        });
+            });
+
+            $(".nueva-act-serv").on('submit', function(evt){
+                evt.preventDefault();     
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+                let html = '';
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        let id = document.getElementById('m_act_id_serv').value;
+                        opcion = parseInt(data.resultado);
+                        switch (opcion) {
+                            case 1:
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Actualizacion creado con exito.
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            
+                            case 0:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            Ocurrio un error: ${data.error}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                        }
+                        $('#alert-act-serv').html(html)
+                        actualizarRecuadroAct(id);
+                        setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                    }
+                });
+            });
         });
     </script>
     <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}"></script>

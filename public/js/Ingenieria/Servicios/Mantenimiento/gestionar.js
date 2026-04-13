@@ -515,3 +515,32 @@ function cargarModalActualizaciones(id_servicio){
             btn_oculto_de_cargar_act.hidden = true;
         }
     }
+
+function actualizarRecuadroAct(id){
+    let renglones_actualizacion = document.getElementById("cuadro-act");
+    let html_act = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/proyectos/obtener-actualizaciones-proyecto/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (response) {
+            response.forEach(element => {
+                html_act += `<tr>
+                                <td class="text-center">`+element.codigo+`</td>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+element.estado+`</td>
+                                <td class="text-center">`+element.responsable+`</td>    
+                                </tr>`
+            });
+            renglones_actualizacion.innerHTML = html_act;
+            cargarFechaEstadoLiderModalVerAct(id);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+}
