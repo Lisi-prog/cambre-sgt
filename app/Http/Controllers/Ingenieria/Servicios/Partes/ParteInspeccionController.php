@@ -108,7 +108,7 @@ class ParteInspeccionController extends Controller{
                 $parte->id_orden = $orden_nueva->id_orden;
                 $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
                 $responsabilidad = Responsabilidad::create([
-                                    'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                                    'id_empleado' => 999,
                                     'id_rol_empleado' => $rol_empleado->id_rol_empleado
                                 ]);
                 $parte->id_responsabilidad = $responsabilidad->id_responsabilidad;

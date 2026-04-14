@@ -176,10 +176,12 @@ class ParteAjusteController extends Controller{
                                     ]);
                     
                     $estado = Estado::where('nombre_estado', 'Completo')->first();
+
+                    $ultActServ = Actualizacion_servicio::where('id_servicio', $parte_ajuste->getParte->getOrden->getEtapa->id_servicio)->orderBy('id_actualizacion', 'desc')->first();
                     
                     $actualizacionServicio = Actualizacion::create([
                         'descripcion' => 'Finalización del proyecto.',
-                        'fecha_limite' => $parte_ajuste->getParte->fecha_limite,
+                        'fecha_limite' => $ultActServ->getActualizacion->fecha_limite,
                         'fecha_carga' => Carbon::now(),
                         'id_estado' => $estado->id_estado,
                         'id_responsabilidad' => $responsabilidad->id_responsabilidad
@@ -187,7 +189,7 @@ class ParteAjusteController extends Controller{
 
                     $actualizacion_servicio = Actualizacion_servicio::create([
                         'id_actualizacion' => $actualizacionServicio->id_actualizacion,
-                        'id_servicio' => $parte_ajuste->getParte->getOrden->getEtapa->id_servicio
+                        'id_servicio' => $ultActServ->id_servicio
                     ]);
                 }
                 else{
