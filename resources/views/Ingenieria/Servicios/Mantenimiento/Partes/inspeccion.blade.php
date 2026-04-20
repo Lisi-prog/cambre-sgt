@@ -50,6 +50,7 @@
                 <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_inspeccion">
             </div>
             <div class="modal-footer">
+                <span id="span_aviso_mecanizado" style="display: none;" class="text-warning">Se recomienda crear una orden de mecanizado.</span>
                 <div class="form-group ml-auto mb-0 mr-4">
                     <input type="checkbox" disabled id="completado_inspeccion" class="form-check-input">
                     <input hidden type="checkbox"  name="completo"  id="completado_inspeccion_value" class="form-check-input">

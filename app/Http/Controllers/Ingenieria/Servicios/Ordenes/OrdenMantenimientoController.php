@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ingenieria\Servicios\Ordenes;
 use App\Http\Controllers\Controller;
 
+use App\Models\Cambre\Tarea_mantenimiento;
 use Illuminate\Http\Request;
 
 //agregamos
@@ -62,6 +63,11 @@ public function index(){
         $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $zonas = Zona::orderBy('nombre_zona')->get();
+        $tareas_mantenimiento = Tarea_mantenimiento::orderBy('nombre_tarea')
+        ->leftJoin('tipo_activo_x_tarea_mant', 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
+        ->leftJoin('activo_x_tarea_mant', 'activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')        
+        ->get();
+        
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
             $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
@@ -78,7 +84,7 @@ public function index(){
         $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
  */
         return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos',
-        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas'
+        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas', 'tareas_mantenimiento'
         ));
     }
 

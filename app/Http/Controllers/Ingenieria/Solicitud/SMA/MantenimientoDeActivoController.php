@@ -59,6 +59,7 @@ use App\Models\Cambre\Ishikawa_causa;
 use App\Models\Cambre\Zona;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Models\Cambre\Estado_mecanizado;
+use App\Models\Cambre\Tarea_mantenimiento;
 
 class MantenimientoDeActivoController extends Controller
 {
@@ -480,6 +481,14 @@ class MantenimientoDeActivoController extends Controller
         $ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
                                 ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
         $zonas = Zona::orderBy('nombre_zona')->get();
+        $tareas_mantenimiento = Tarea_mantenimiento::orderBy('nombre_tarea')
+        ->leftJoin('tipo_activo_x_tarea_mant', 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
+        ->leftJoin('activo_x_tarea_mant', 'activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
+        ->where('activo_x_tarea_mant.id_activo', $proyecto->id_activo)
+        ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $proyecto->getActivo->id_tipo_activo)
+        ->get();
+        $estados = Estado::orderBy('id_estado')->get();
+        
         //todas las maquinas
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
 
@@ -497,6 +506,7 @@ class MantenimientoDeActivoController extends Controller
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
         $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
         $supervisores = $this->obtenerSupervisores()->pluck('nombre_empleado', 'id_empleado');
+        $supervisores_admin = $this->obtenerSupervisoresAdmin();
         //todos los empleados
         // $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
 
@@ -510,7 +520,25 @@ class MantenimientoDeActivoController extends Controller
                         ->select('emp.id_empleado', 'emp.nombre_empleado') // opcional, podés ajustar
                         ->orderBy('emp.nombre_empleado')
                         ->get();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores'));
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 
+        'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento', 'estados',
+        'supervisores_admin'));
+    }
+
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->where('esta_activo', 1)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function destroy($id)

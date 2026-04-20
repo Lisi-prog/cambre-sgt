@@ -373,7 +373,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proye
                     `<input type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -496,7 +496,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
                     `<input id="not_ok_${tarea.id_tarea_mantenimiento}" type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -532,6 +532,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
             });
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
+            showSpanAviso();
             $("#horas_inspeccion").val('')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -602,13 +603,14 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
             $("#fecha_inspeccion").val(data.get_parte.fecha)
             $("#horas_inspeccion").val(data.horas)
             tabla_inspecciones.draw();
+            showSpanAviso();
             tabla_inspecciones.columns.adjust();
         }
     });
 }
 
 
-function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) {
+function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, id_act, id_tipo) {
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
@@ -617,6 +619,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) 
     $("#nombre_proyecto_ajuste").val(proyecto)
     $("#horas_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
+    $("#id_activo_para_orden").val(id_act)
+    $("#id_tipo_activo_para_orden").val(id_tipo)
     $("#btnRowNuevoAjuste").show()
 
     tabla_ajustes.clear();
@@ -648,8 +652,6 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) 
                             name="tareas[${j}][hecho]">`
                         ]);                
                     j++;
-                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
-                    console.log(opciones)
                 });               
             })
             let hoy = new Date()
@@ -657,18 +659,34 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto) 
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
             $("#horas_ajuste").val('')            
-            $("#tarea_mantenimiento").html(opciones)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
     });
 }
 
+function getTareasFiltradas(idActivo, idTipo) {
+    return $("#tarea_mantenimiento option").filter(function () {
+        const activo = $(this).data("activo");
+        const tipo = $(this).data("tipo");
+
+        return activo == idActivo || tipo == idTipo;
+    }).clone();
+}
+
 function agregarNuevoAjusteRow(){
     let j = tabla_ajustes.rows().count();
 
     const rowNode = tabla_ajustes.row.add([
-        '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div><select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]"><option value="">Seleccionar...</option>${$("#tarea_mantenimiento").html()}</select></div>`,
+        '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div>
+        <select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]">
+            <option value="">Seleccionar...</option>
+            ${getTareasFiltradas($("#id_activo_para_orden").val(), $("#id_tipo_activo_para_orden").val())
+                .map((_, el) => el.outerHTML)
+                .get()
+                .join('')}
+        </select>
+        </div>`,
         `<select class="form-select" required name="tareas[${j}][accion]">
             <option value="">Seleccionar...</option>
             ${$("#accion_select_div").html()}
@@ -789,7 +807,7 @@ function procesarAjuste(accion){
     });
 }
 
-function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyecto){
+function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyecto, id_act, id_tipo){
     $('#modalNuevoParteAjuste').modal('show');
     $("#id_orden_ajuste").val(id_orden);
     $("#btnGuardarNuevoParteAjuste").show()
@@ -799,7 +817,9 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
     $("#herramental_ajuste").val(nombre_activo);
-    $("#nombre_proyecto_ajuste").val(proyecto);
+    $("#nombre_proyecto_ajuste").val(proyecto);    
+    $("#id_activo_para_orden").val(id_act)
+    $("#id_tipo_activo_para_orden").val(id_tipo)
     tabla_ajustes.clear();
      $.ajax({
         type: 'GET',
@@ -836,26 +856,10 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
             $("#horas_ajuste").val('')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
-            getTareasSelect(id_etapa)
         }
     });
 }
 
-function getTareasSelect(id_etapa){
-    $.ajax({
-        type: 'GET',
-        url: '/get-pre-acciones-ajuste/' + id_etapa,
-        success: function(data) {
-            let opciones = ''
-            data.forEach(d => {
-                d.get_tareas_mantenimiento.forEach(tarea => {
-                    opciones = opciones += `<option value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">${tarea.get_tarea_mantenimiento.nombre_tarea}</option>`     
-                });               
-            })
-            $("#tarea_mantenimiento").html(opciones)
-        }
-    });
-}
 
 function openModalVerParteAjuste(id_orden, nombre_activo){
     $('#modalNuevoParteAjuste').modal('show');
@@ -891,4 +895,34 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
             tabla_ajustes.columns.adjust();
         }
     });
+}
+
+
+function showSpanAviso() {
+    let hayRefabricar = false;
+
+    $("select[id^='accion_']").each(function () {
+        let text = $(this).find("option:selected").text();
+        if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+            hayRefabricar = true;
+            return false;
+        }
+    });
+
+    if (!hayRefabricar) {
+        $("#tabla_inspecciones tbody tr").each(function () {
+            let text = $(this).find("td").eq(4).text();
+
+            if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+                hayRefabricar = true;
+                return false;
+            }
+        });
+    }
+
+    if (hayRefabricar) {
+        $("#span_aviso_mecanizado").show();
+    } else {
+        $("#span_aviso_mecanizado").hide();
+    }
 }

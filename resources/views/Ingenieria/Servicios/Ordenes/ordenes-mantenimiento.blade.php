@@ -90,7 +90,7 @@
                                                                     <i class="fas fa-pen"></i>
                                                                 </button>
                                                             @elseif ($orden->id_tipo_orden_mantenimiento == 3)
-                                                                <button type="button" onclick="openModalNuevoParteAjuste({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
+                                                                <button type="button" onclick="openModalNuevoParteAjuste({{$orden->id_orden}}, {{$orden->id_etapa}}, {{$orden->id_activo}}, {{$orden->getActivo->id_tipo_activo}})" class="btn btn-primary" onclick="">
                                                                     <i class="fas fa-pen"></i>
                                                                 </button>
                                                             @endif
@@ -100,7 +100,7 @@
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>
                                                             @elseif ($orden->id_tipo_orden_mantenimiento == 3)
-                                                                <button type="button" onclick="openModalParteAjustePendiente({{$orden->id_orden}}, {{$orden->id_etapa}})" class="btn btn-primary" onclick="">
+                                                                <button type="button" onclick="openModalParteAjustePendiente({{$orden->id_orden}}, {{$orden->id_etapa}}, {{$orden->id_activo}}, {{$orden->getActivo->id_tipo_activo}})" class="btn btn-primary" onclick="">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>
                                                             @endif
