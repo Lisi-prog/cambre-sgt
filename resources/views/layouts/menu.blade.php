@@ -135,7 +135,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
+                    <a class="nav-link" href="{{route('orden_mantenimiento.index')}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
                     </a>
                 </li>
