@@ -106,7 +106,7 @@ function cargarSintomas(){
             type: "post",
             url: 's_m_a/'+activo+'/cargar-causas', 
             success: function (res) {
-                console.log(res);
+                // console.log(res);
                 if (Object.keys(res).length === 0) {
                     html = `<div class="col-12 d-flex justify-content-center">
                                 <div id="msj-sin-sintomas">
