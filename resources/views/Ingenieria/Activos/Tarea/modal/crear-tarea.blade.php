@@ -19,6 +19,19 @@
                             ]) !!}
                         </div>
                     </div>
+
+                    {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                           {!! Form::label('tipo_tarea', 'Tipo tarea:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="obligatorio">*</span>
+                            {!! Form::select('id_ejecucion', [1 => 'CORRECTIVO', 2 => 'PREVENTIVO'], 1, [
+                                'class' => 'form-control reset-input form-select',
+                                'required',
+                                'id' => 'tipo_tarea'
+                            ]) !!}
+                        </div>
+                    </div> --}}
+
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('id_zona_tarea', 'Zona de tarea:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
@@ -36,7 +49,7 @@
                             {!! Form::label('id_ejecucion', 'Ejecución de tarea:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::select('id_ejecucion', $ejecuciones->pluck('nombre_ejecucion', 'id_ejecucion'), null, [
-                                'class' => 'form-control reset-input',
+                                'class' => 'form-control reset-input form-select',
                                 'placeholder' => 'Seleccione una ejecución',
                                 'required' => 'required',
                                 'id' => 'id_ejecucion'
@@ -48,8 +61,8 @@
                                 'style' => 'display:none;'])
                             !!}
                         </div>
-                        <div class="form-group" style="width: 10%;">
-                            <button type="button" class="btn btn-success mt-4" onclick="mostrarInputEjecucion()">
+                        <div class="form-group m-auto ms-3" style="width: 10%;">
+                            <button type="button" class="btn btn-success" onclick="mostrarInputEjecucion()">
                                 +
                             </button>
                         </div>
