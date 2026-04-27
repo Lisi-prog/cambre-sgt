@@ -444,3 +444,103 @@ $("#activo_editar").on("change", function () {
         $("#label_activo_editar").text("Inactiva");
     }
 });
+
+
+function cargarModalActualizaciones(id_servicio){
+    let renglones_actualizacion = document.getElementById("cuadro-act");
+        let html_act = '';
+        document.getElementById("m-ver-act-div").hidden = true;
+        document.getElementById("m-ver-act-btn").hidden = true;
+        document.getElementById('m_act_id_serv').value = id_servicio;
+        
+        $.when($.ajax({
+            type: "post",
+            url: '/proyectos/obtener-actualizaciones-proyecto/'+id_servicio, 
+            data: {
+                id: id_servicio,
+            },
+        success: function (response) {
+            response.forEach(element => {
+                html_act += `<tr>
+                                <td class="text-center">`+element.codigo+`</td>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+element.estado+`</td>
+                                <td class="text-center">`+element.responsable+`</td>    
+                                </tr>`
+            });
+            renglones_actualizacion.innerHTML = html_act;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+        cargarFechaEstadoLiderModalVerAct(id_servicio);
+}
+
+
+    function cargarFechaEstadoLiderModalVerAct(id){
+        let estado = document.getElementById("m-ver-act-id_estado");
+        let fecha_limite = document.getElementById("m-ver-act-fecha_limite");
+        let lider = document.getElementById("m-ver-act-cbx_lider");
+        document.getElementById('m-ver-act-desc').value = '';
+        $.when($.ajax({
+            type: "post",
+            url: '/proyectos/obtener-ultima-actualizacion-servicio/'+id, 
+            data: {
+                id: id,
+            },
+        success: function (response) {
+            estado.value = response[0].estado;
+            fecha_limite.value = response[0].fecha_limite;
+            lider.value = response[0].lider;
+            
+            $('#verActualizacionModal').modal('show');
+        },
+        error: function (error) {
+            console.log(error);
+        }
+        }));
+    }
+
+    function verCargarActModal(){
+        let cuadro_oculto_de_cargar_act = document.getElementById('m-ver-act-div');
+        let btn_oculto_de_cargar_act = document.getElementById('m-ver-act-btn');
+        if ($('#m-ver-act-div').is(":hidden")) {
+            cuadro_oculto_de_cargar_act.hidden = false;
+            btn_oculto_de_cargar_act.hidden = false;
+        }else{
+            cuadro_oculto_de_cargar_act.hidden = true;
+            btn_oculto_de_cargar_act.hidden = true;
+        }
+    }
+
+function actualizarRecuadroAct(id){
+    let renglones_actualizacion = document.getElementById("cuadro-act");
+    let html_act = '';
+    $.when($.ajax({
+        type: "post",
+        url: '/proyectos/obtener-actualizaciones-proyecto/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (response) {
+            response.forEach(element => {
+                html_act += `<tr>
+                                <td class="text-center">`+element.codigo+`</td>
+                                <td class="text-center">`+element.fecha_carga+`</td>
+                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                                <td class="text-center">`+element.fecha_limite+`</td>
+                                <td class="text-center">`+element.estado+`</td>
+                                <td class="text-center">`+element.responsable+`</td>    
+                                </tr>`
+            });
+            renglones_actualizacion.innerHTML = html_act;
+            cargarFechaEstadoLiderModalVerAct(id);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }));
+}
