@@ -729,3 +729,52 @@ select
     from hoja_de_ruta as hdr
     INNER JOIN OpeRanked AS o_rank ON o_rank.id_hoja_de_ruta = hdr.id_hoja_de_ruta AND o_rank.rn = 1
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = o_rank.id_ope_de_hdr AND p_rank.rn = 1;
+
+create view vw_parte_operaciones as
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+SELECT 
+    poh.id_parte_ope_hdr,
+    poh.fecha,
+    poh.fecha_carga,
+    poh.observaciones,
+    emp.id_empleado as id_responsable,
+    emp.nombre_empleado responsable,
+    poh.horas,
+    poh.horas_maquina,
+    maq.id_maquinaria,
+    maq.codigo_maquinaria,
+    ehdr.id_estado_hdr,
+    ehdr.nombre_estado_hdr,
+    odh.id_ope_de_hdr,
+    op.nombre_operacion,
+    hdr.id_hoja_de_ruta,
+    omec.id_orden_mecanizado,
+    o.id_orden,
+    o.nombre_orden,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_supervisor
+FROM parte_ope_hdr poh
+left join operaciones_de_hdr odh on odh.id_ope_de_hdr = poh.id_ope_de_hdr
+left join operacion op on op.id_operacion = odh.id_operacion
+left join responsabilidad res on res.id_responsabilidad = poh.id_responsabilidad
+left join empleado emp on emp.id_empleado = res.id_empleado
+left join maquinaria maq on maq.id_maquinaria = poh.id_maquinaria
+inner join estado_hdr ehdr on ehdr.id_estado_hdr = poh.id_estado_hdr
+left join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = odh.id_hoja_de_ruta
+left join orden_mecanizado omec on omec.id_orden_mecanizado = hdr.id_orden_mecanizado
+left join orden o on o.id_orden = omec.id_orden
+left join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+left join etapa et on et.id_etapa = o.id_etapa
+left join servicio se on se.id_servicio = et.id_servicio
+order by poh.id_parte_ope_hdr desc
+;
