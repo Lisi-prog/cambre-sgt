@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
 
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     Route::post('/pdf-informe/resumen-semanal', [InformeController::class, 'resumenSemanalPdf'])->name('resumen.semanal.pdf');
+    Route::get('/excel-informe/exportar-excel', [InformeController::class, 'exportar'])->name('exportar.excel');
     Route::resource('informes', InformeController::class);
 });
 

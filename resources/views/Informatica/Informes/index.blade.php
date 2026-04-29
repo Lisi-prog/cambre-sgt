@@ -121,6 +121,9 @@
                             <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                             </div>
                             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                <a href="{{ route('exportar.excel') }}" class="btn btn-info w-100" target='_blank'>
+                                    Excel
+                                </a>
                             </div>
                             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                 {!! Form::open(['method' => 'POST', 'class' => '', 'route' => ['resumen.semanal.pdf'], 'target' => '_blank']) !!}

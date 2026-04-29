@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use \PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\User;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Og_organigrama;
+use App\Exports\ReporteExport;
 // use App\Models\Cambre\Sector;
 // use App\Models\Cambre\Puesto_empleado;
 // use App\Models\Cambre\Em_not_x_empleado;
@@ -258,5 +260,12 @@ class InformeController extends Controller
                                     ])
                                     ->setPaper('a4', 'portrait')
                                     ->stream('resumenSemanal.pdf');  
+    }
+
+    public function exportar(Request $request)
+    {
+        $nombre = $request->nombre;
+
+        return Excel::download(new ReporteExport('2026-03-01', '2026-03-27'), "resumen_semanal_".date('Ymd').".xlsx");
     }
 }
