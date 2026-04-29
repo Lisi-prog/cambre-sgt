@@ -5,7 +5,15 @@ document.getElementById("formulario_informe").addEventListener("submit", functio
     var type_method = $(this).attr("method"); 
     var form_data = $(this).serialize();
 
-    $("#loading").show();
+    const btn = document.getElementById('btnInforme');
+
+     // Guardar contenido original
+     const original = btn.innerHTML;
+
+     // Deshabilitar botón y poner spinner
+     btn.disabled = true;
+     btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status"></span>`;
+
     $.ajax({
         type: type_method,
         url: url_php,
@@ -155,10 +163,12 @@ document.getElementById("formulario_informe").addEventListener("submit", functio
             }                                                     
         },
         complete: function() {
-            $("#loading").hide(); 
+            btn.disabled = false;
+            btn.innerHTML = original;
         },
         error: function(jqXHR, textStatus) {
-            $("#loading").hide();
+            btn.disabled = false;
+            btn.innerHTML = original;
             if (textStatus === "timeout") {
                 alert("La generacion del informe tardo demaciado.");
             } else {

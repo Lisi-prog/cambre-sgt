@@ -13,22 +13,13 @@
         <tr>
             <td rowspan="2" class="sin-borde">
                 <img class= "logo column-2 header-logo" alt="image"  src="{{asset('img/logo-cambre.png') }}">
-                {{-- <img src="{{asset('img/logo_cambre.png') }}" class="header-logo"> --}}
             </td>
             <td colspan="3" class="titulo">RESUMEN SEMANAL</td>
-            {{-- <td><strong>Rev.:</strong> {{ $revision ?? ''}}</td> --}}
         </tr>
         <tr>
             <td colspan="3"><strong>PERIODO: {{ $fechaIni ?? '-'}} al {{$fechaFin ?? '-'}}</strong></td>
-            {{-- <td><strong>Fecha:</strong> {{ $fecha_desde ?? ''}} al {{$fecha_hasta ?? ''}}</td> --}}
         </tr>
     </table>
-
-    {{-- <table style="margin-top:10px;">
-        <thead class="azul">
-            <th style="width: 100%;">{{'SUPERVISOR'}}</th>
-        </thead>
-    </table> --}}
 
     <table class="observaciones">
         <tr>
@@ -41,7 +32,7 @@
         <tr>
             <td>
                 <div class="" style="width: 300px; height: 200px; position: relative;">
-                    <img src="{{ $data['data']['chart_base64'] }}" style="width: 100%; height: auto%;">
+                    <img src="{{ $data['data']['chart_base64'] }}" style="width: 100%; height: auto;">
                 </div>
             </td>
             <td style="width: 400px !important;">
@@ -70,7 +61,7 @@
         </tr>
     </table>
 
-    <table class="observaciones">
+    <table class="observaciones" style="page-break-inside: avoid;">
         <tr>
             <th colspan="2">AVANCE SUBORDINADOS</th>
         </tr>
@@ -100,10 +91,56 @@
             </td>
             <td>
                 <div class="" style="width: 300px; height: 200px; position: relative;">
-                    <img src="{{ $data['data']['chart_base64'] }}" style="width: 100%; height: auto%;">
+                    <img src="{{ $data['data']['chart_base64'] }}" style="width: 100%; height: auto;">
                 </div>
             </td>
         </tr>
     </table>
+
+    @foreach (collect($data['data']['datos_sub'])->sortByDesc('total_horas') as $sub)
+        @if ($sub['total_horas'] != 0)
+            <table class="observaciones" style="page-break-inside: avoid;">
+                <tr>
+                    <th colspan="2">{{ $sub['name'] }}</th>
+                </tr>
+                <tr>
+                    <td>Avances Proyectos:</td>
+                    <td>Graficos:</td>
+                </tr>
+                <tr style="">
+                    <td style="">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="ml-3 text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Proyecto</th>
+                                    <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Horas</th>
+                                    <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(collect($sub['info'])->sortByDesc('porcentaje') as $item)
+                                    <tr style="">
+                                        <td class="text-end" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%; text-align: right;">{{$item->codigo_servicio}}</td>
+                                                                            
+                                        <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->h_total}}</td>
+                                                                            
+                                        <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->porcentaje}}%</td>                                         
+                                    </tr>
+                                @endforeach
+                                    <tr>
+                                        <td colspan=3 style="vertical-align: middle;">Total Hs: <strong>{{ $sub['total_horas'] }}</strong></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="width: 100px; text-align: center;">
+                        <div style="width: 200px; height: 200px; overflow: hidden; position: relative;">
+                            <img src="{{ $sub['chart_base64'] }}" style="width: 100%; height: auto;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        @endif
+    @endforeach
 </body>
 </html>
