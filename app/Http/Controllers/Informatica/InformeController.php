@@ -246,13 +246,16 @@ class InformeController extends Controller
         $fechaIni = $request->input('fec_ini');
         $fechaFin = $request->input('fec_fin');
         $supervisor = $request->input('id_tecnico');
+        $nombre = Empleado::find($supervisor)->nombre_empleado;
 
         $data = $this->generarResumenSemanal($fechaIni, $fechaFin, $supervisor);
 
         return $pdf->loadView('Informatica.Informes.documentos.resumen-semanal-pdf',[
                                     'data' => $data,
                                     'fechaIni' => $fechaIni,
-                                    'fechaFin' => $fechaFin])
+                                    'fechaFin' => $fechaFin,
+                                    'nombre' => $nombre
+                                    ])
                                     ->setPaper('a4', 'portrait')
                                     ->stream('resumenSemanal.pdf');  
     }

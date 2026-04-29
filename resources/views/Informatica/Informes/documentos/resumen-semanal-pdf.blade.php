@@ -17,7 +17,7 @@
             <td colspan="3" class="titulo">RESUMEN SEMANAL</td>
         </tr>
         <tr>
-            <td colspan="3"><strong>PERIODO: {{ $fechaIni ?? '-'}} al {{$fechaFin ?? '-'}}</strong></td>
+            <td colspan="3"><strong>SUPERVISOR:</strong> {{$nombre ?? '-'}} <strong>PERIODO:</strong> {{ $fechaIni ?? '-'}} al {{$fechaFin ?? '-'}}</td>
         </tr>
     </table>
 
