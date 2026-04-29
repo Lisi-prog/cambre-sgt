@@ -1,4 +1,60 @@
-@page {
+body {
+    font-family: DejaVu Sans, sans-serif;
+    font-size: 11px;
+    margin: -20px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    border: 1px solid #000;
+    padding: 4px;
+    text-align: center;
+}
+.header-logo {
+    width: 120px;
+}
+.titulo {
+    font-weight: bold;
+    text-align: center;
+}
+.azul {
+    background-color: #7db1e0;
+    font-weight: bold;
+}
+.sin-borde {
+    border: none;
+}
+.page-border {
+    border: 2px solid #000; /* grosor y color del borde */
+    padding: 10px;          /* espacio interno para que no quede pegado */
+    height: 100%;
+}
+.observaciones {
+    margin-top: 15px;
+    width: 100%;
+    border: 1px solid #000;
+}
+.observaciones th {
+    background-color: #7db1e0;
+    text-align: center;
+    padding: 4px;
+}
+
+.atributosize{
+    width: 60px;
+    text-align: right;
+}
+
+.datosEnc{
+    text-align: left;
+}
+
+.enc{
+    text-align: center;
+}
+/* @page {
     margin: 0cm;
 }
 
@@ -148,5 +204,5 @@ header {
     margin-bottom: 5cm;
 
 }
-footer { position: fixed; bottom: -60px; left: 0px; right: 0px; height: 50px; }
+footer { position: fixed; bottom: -60px; left: 0px; right: 0px; height: 50px; } */
 
