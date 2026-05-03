@@ -21,9 +21,11 @@ use App\Models\Cambre\Actualizacion_servicio;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion_etapa;
 use App\Models\Cambre\Tipo_activo_x_sintoma;
+use App\Models\Cambre\Tarea_prev_x_tipo_activo;
 use App\Models\Cambre\Activo_x_sintoma;
 use App\Models\Cambre\Activo_x_tarea_mant;
 use App\Models\Cambre\Tipo_activo_x_tarea_mant;
+use App\Models\Cambre\Tarea_prev_x_activo;
 
 class ActivoController extends Controller
 {
@@ -363,9 +365,38 @@ class ActivoController extends Controller
         $activo->setTareasMantenimiento($request->input('tareas_mantenimiento', []));
         return redirect()->back()->with('mensaje','Tareas de mantenimiento asignadas al activo exitosamente.');
     }
+   public function set_tareas_mantenimiento_preventiva_activo(Request $request)
+    {
+        $id_activo = $request->id_activo;
+        $tareas = $request->tareas_mantenimiento ?? [];
+
+        foreach ($tareas as $id_tarea) {
+            $intervalo = $request->input('duracion_' . $id_tarea);
+            $cant_golpes = $request->input('cant_golpes_' . $id_tarea);
+            $fecha = $request->input('fecha_ultima_ejecucion_' . $id_tarea);
+
+            Tarea_prev_x_activo::create([
+                'id_activo' => $id_activo,
+                'id_tarea_mantenimiento' => $id_tarea,
+                'intervalo_dias' => $intervalo,
+                'cant_golpes' => $cant_golpes,
+                'fecha_ultima_ejecucion' => $fecha,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Tareas preventivas asignadas correctamente.');
+    }
 
     public function destroy_tarea_mantenimiento_activo($id_tarea_mant, $id_activo){
         $activo_x_tarea_mant = Activo_x_tarea_mant::where('id_tarea_mantenimiento', $id_tarea_mant)->where('id_activo', $id_activo)->first();
+        if ($activo_x_tarea_mant) {
+            $activo_x_tarea_mant->delete();
+        }
+        return redirect()->back()->with('mensaje','Tarea de mantenimiento eliminada del activo exitosamente.');
+    }
+
+    public function destroy_tarea_mantenimiento_preventiva_activo($id_tarea_mant, $id_activo){
+        $activo_x_tarea_mant = Tarea_prev_x_activo::where('id_tarea_mantenimiento', $id_tarea_mant)->where('id_activo', $id_activo)->first();
         if ($activo_x_tarea_mant) {
             $activo_x_tarea_mant->delete();
         }
@@ -378,8 +409,42 @@ class ActivoController extends Controller
         return redirect()->back()->with('mensaje','Tareas de mantenimiento asignadas al tipo de activo exitosamente.');
     }
 
+    public function set_tareas_mantenimiento_preventivas_tipo_activo(Request $request){
+        $id_tipo_activo = $request->id_tipo_activo;
+        $tareas = $request->tareas_mantenimiento ?? [];
+
+        foreach ($tareas as $id_tarea) {
+
+            $intervalo = $request->input('duracion_' . $id_tarea);
+            $cant_golpes = $request->input('cant_golpes_' . $id_tarea);
+            $fecha = $request->input('fecha_ultima_ejecucion_' . $id_tarea);
+
+            Tarea_prev_x_tipo_activo::create(
+                [
+                    'id_tipo_activo' => $id_tipo_activo,
+                    'id_tarea_mantenimiento' => $id_tarea,
+                    'intervalo_dias' => $intervalo,
+                    'cant_golpes' => $cant_golpes,
+                    'fecha_ultima_ejecucion' => $fecha,
+                ]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Tareas preventivas asignadas correctamente.');
+    }
+
+    
+
     public function destroy_tarea_mantenimiento_tipo_activo($id_tarea_mant, $id_tipo_activo){
         $tipo_activo_x_tarea_mant = Tipo_activo_x_tarea_mant::where('id_tarea_mantenimiento', $id_tarea_mant)->where('id_tipo_activo', $id_tipo_activo)->first();
+        if ($tipo_activo_x_tarea_mant) {
+            $tipo_activo_x_tarea_mant->delete();
+        }
+        return redirect()->back()->with('mensaje','Tarea de mantenimiento eliminada del tipo de activo exitosamente.');
+    }
+
+    public function destroy_tarea_mantenimiento_preventiva_tipo_activo($id_tarea_mant, $id_tipo_activo){
+        $tipo_activo_x_tarea_mant = Tarea_prev_x_tipo_activo::where('id_tarea_mantenimiento', $id_tarea_mant)->where('id_tipo_activo', $id_tipo_activo)->first();
         if ($tipo_activo_x_tarea_mant) {
             $tipo_activo_x_tarea_mant->delete();
         }
