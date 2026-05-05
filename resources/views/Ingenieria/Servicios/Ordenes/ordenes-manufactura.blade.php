@@ -54,7 +54,11 @@
             </div>
 
             <!-- Botón y menú desplegable -->
+            @role('SUPERVISOR')
             <div class="d-flex align-items-center">
+            @else
+            <div class="d-flex align-items-center d-none">
+            @endrole
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -233,22 +237,76 @@
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
-                                                    <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
-                                                            Opciones
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
-                                                        @if ($orden->poseeOpeEnsam())
+                                                    @role('SUPERVISOR')
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
+                                                                Opciones
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                            @if ($orden->poseeOpeEnsam())
+                                                                <div class="row my-2">
+                                                                    <div class="col-12">
+                                                                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#activarOrdenManufacturaModal" onclick="cargarModalActivar({{$orden->id_orden}})">
+                                                                            Activar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                            
                                                             <div class="row my-2">
                                                                 <div class="col-12">
-                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#activarOrdenManufacturaModal" onclick="cargarModalActivar({{$orden->id_orden}})">
-                                                                        Activar
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
+                                                                        Ver
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                        @endif
-                                                        
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#verProgOrdenManModal" onclick="cargarModalProgreso({{$orden->id_orden}})">
+                                                                        Progreso
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            @if ($tipo_orden === 3)
+                                                                <div class="row my-2">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                            
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
+                                                                        Partes
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2">
+                                                                @can('EDITAR-ORDENES')
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                                        Editar
+                                                                    </button> 
+                                                                </div>
+                                                                @endcan
+                                                            </div>
+                                                            @if ($orden->tieneMecAsoc())
+                                                                <div class="row my-2 justify-content-center">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', 3], 'style' => 'display:inline', 'target' => '_blank' ]) !!}
+                                                                            <input class="input-filter" name="flt_ord" type="text" value="{{$orden->getOrdenManufactura->id_orden_manufactura}}" hidden>
+                                                                        {!! Form::submit('Filtro', ['class' => 'btn btn-info w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    @else
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
@@ -256,51 +314,7 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#verProgOrdenManModal" onclick="cargarModalProgreso({{$orden->id_orden}})">
-                                                                    Progreso
-                                                                </button>
-                                                            </div>
-                                                        </div>
-
-                                                        @if ($tipo_orden === 3)
-                                                            <div class="row my-2">
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Partes
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            @can('EDITAR-ORDENES')
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
-                                                                    Editar
-                                                                </button> 
-                                                            </div>
-                                                            @endcan
-                                                        </div>
-                                                        @if ($orden->tieneMecAsoc())
-                                                            <div class="row my-2 justify-content-center">
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', 3], 'style' => 'display:inline', 'target' => '_blank' ]) !!}
-                                                                        <input class="input-filter" name="flt_ord" type="text" value="{{$orden->getOrdenManufactura->id_orden_manufactura}}" hidden>
-                                                                    {!! Form::submit('Filtro', ['class' => 'btn btn-info w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </div>
+                                                    @endrole
                                                 </div>
                                             </td>
                                         </tr>

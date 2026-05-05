@@ -90,7 +90,7 @@
                                     </a>
                                 </div>
                             </li>
-                            @role(['ADMIN', 'SUPERVISOR'])
+                            @can(['VER-ORDEN-MANUFACTURA'])
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
@@ -103,6 +103,8 @@
                                     </a>
                                 </div>
                             </li>
+                            @endcan
+                            @can(['VER-ORDEN-MECANIZADO'])
                             {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
@@ -116,7 +118,7 @@
                                     </a>
                                 </div>
                             </li>
-                            @endrole
+                            @endcan
                             {{-- <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
@@ -160,7 +162,7 @@
                                     </a>
                                 </div>
                             </li>
-                            @role(['ADMIN', 'SUPERVISOR'])
+                            @can(['VER-PARTE-MANUFACTURA'])
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
@@ -173,6 +175,8 @@
                                     </a>
                                 </div>
                             </li>
+                            @endcan
+                            @can(['VER-PARTE-MECANIZADO'])
                             {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
@@ -186,7 +190,7 @@
                                     </a>
                                 </div>
                             </li>
-                            @endrole
+                            @endcan
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
                                     <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">

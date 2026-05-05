@@ -104,28 +104,27 @@ class ParteController extends Controller
                 
             case 2:
                 //PARTE DE MANUFACTURA
-                return redirect()->route('en.desarrollo');
+                //return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }
                 $tipo = 'Manufactura';
                 $estados = $this->listarTodosLosEstadosDe(2);
                 break;
             case 3:
                 //PARTE DE MECANIZADO
-                return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }
                 $tipo = 'Mecanizado';
                 $estados = $this->listarTodosLosEstadosDe(3);
@@ -145,6 +144,17 @@ class ParteController extends Controller
                 break;
             case 5:
                 return redirect()->route('en.desarrollo');
+                //PARTE DE OPERACIONES
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
+                    $partes = Vw_parte_mantenimiento::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $editable = 'readonly';
+                    $partes = Vw_parte_mantenimiento::responsable($id_empleado)->get();
+                }
+                $tipo = 'Operaciones';
+                $estados = $this->listarTodosLosEstadosDe(1);
                 break;
             default:
                 

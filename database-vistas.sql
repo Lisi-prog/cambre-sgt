@@ -204,6 +204,8 @@ WITH
         th.total_horas,
         ro.nombre_empleado as supervisor,
 		ro.id_empleado as id_empleado_supervisor,
+        roo.nombre_empleado as responsable,
+        roo.id_empleado as id_empleado_responsable,
         ObtenerOpeActivaOrdMec(omec.id_orden_mecanizado) as ope_act,
         omec.id_orden_manufactura,
         man.nombre_orden as manufactura,
@@ -218,6 +220,7 @@ WITH
     inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
     left join (select om.id_orden_manufactura, o.nombre_orden from orden o inner join orden_manufactura om on o.id_orden = om.id_orden) man on man.id_orden_manufactura = omec.id_orden_manufactura
     inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
     inner join etapa et on et.id_etapa = o.id_etapa
     inner join servicio se on se.id_servicio = et.id_servicio;
 

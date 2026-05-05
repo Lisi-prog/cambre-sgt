@@ -50,7 +50,11 @@
             </div>
 
             <!-- Botón y menú desplegable -->
+            @role('SUPERVISOR')
             <div class="d-flex align-items-center">
+            @else
+            <div class="d-flex align-items-center d-none">
+            @endrole
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -154,6 +158,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div class="row">
+                                    <div class="d-flex flex-row align-items-start justify-content-around">
+                                        <div class="card-body d-flex flex-column" style="height: 200px;">
+                                            <div class="">
+                                                <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('respo', this)">
+                                            </div>
+                                            <div class="d-flex flex-column overflow-auto">
+                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="respo"> (Seleccionar todo)</label>
+                                                @foreach ($responsables as $re)
+                                                    <label><input name="respo" type="checkbox" value="{{$re ?? '-'}}"> {{$re ?? '-'}}</label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>   
                     </div>
                 </div>
@@ -181,6 +202,7 @@
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;min-width:3vw">Total Hs. HDR</th>
                                     <th class='text-center' style="color:#fff;min-width:3vw">Cantidad</th>
+                                    <th class='text-center' style="color:#fff;" hidden>Res.</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -225,15 +247,66 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas_hdr ?? '00:00'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->cantidad ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->responsable ?? '-'}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
-                                                    <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
-                                                            Opciones
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                    @role('SUPERVISOR')
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
+                                                                Opciones
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
+                                                                        Ver
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            @if ($tipo_orden === 3)
+                                                                <div class="row my-2">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                            
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
+                                                                        Partes
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2">
+                                                                @can('EDITAR-ORDENES')
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                                        Editar
+                                                                    </button> 
+                                                                </div>
+                                                                @endcan
+                                                            </div>
+                                                            <div class="row my-2">
+                                                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                    @if ($orden->id_estado_mecanizado != 4 )
+                                                                        <button type="button" class="btn btn-warning" onclick="crearParteOrdMecEspera({{$orden->id_orden}})">Espera</button>
+                                                                    @endif
+
+                                                                    @if ($orden->id_estado_mecanizado != 5 )
+                                                                    <button type="button" class="btn btn-info" onclick="crearParteOrdMecEnProceso({{$orden->id_orden}})">En proceso</button>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @else
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
@@ -241,46 +314,8 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-
-                                                        @if ($tipo_orden === 3)
-                                                            <div class="row my-2">
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Partes
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            @can('EDITAR-ORDENES')
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
-                                                                    Editar
-                                                                </button> 
-                                                            </div>
-                                                            @endcan
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                @if ($orden->id_estado_mecanizado != 4 )
-                                                                    <button type="button" class="btn btn-warning" onclick="crearParteOrdMecEspera({{$orden->id_orden}})">Espera</button>
-                                                                @endif
-
-                                                                @if ($orden->id_estado_mecanizado != 5 )
-                                                                <button type="button" class="btn btn-info" onclick="crearParteOrdMecEnProceso({{$orden->id_orden}})">En proceso</button>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    @endrole
+                                                    
                                                 </div>
                                             </td>
                                         </tr>
@@ -433,6 +468,27 @@
 
 
             if (offices.indexOf(searchData[3]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="respo"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+
+
+            if (offices.indexOf(searchData[13]) !== -1) {
                 return true;
             }
             
