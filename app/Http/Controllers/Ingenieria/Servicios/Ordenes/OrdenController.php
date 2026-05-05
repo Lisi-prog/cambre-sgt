@@ -1029,7 +1029,8 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_manufactura::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
+                    // $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
+                    $ordenes = Vw_orden_manufactura::get();
                 }
                 $servicios = Vw_orden_manufactura::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $tipo = 'Manufactura';
@@ -1048,11 +1049,13 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mecanizado::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
+                    // $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
+                    $ordenes = Vw_orden_mecanizado::get();
                 }
                 $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $manufacturas = Vw_orden_mecanizado::whereNotNull('manufactura')->orderBy('manufactura')->get(['manufactura', 'id_orden_manufactura'])->unique('manufactura');
                 $operaciones = Vw_orden_mecanizado::whereNotNull('ope_act')->orderBy('ope_act')->get('ope_act')->unique('ope_act');
+                $responsables = Vw_orden_mecanizado::orderBy('responsable')->get('responsable')->unique('responsable')->pluck('responsable');
                 $tipo = 'Mecanizado';
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
