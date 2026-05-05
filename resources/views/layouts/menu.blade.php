@@ -117,18 +117,20 @@
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
-                @role(['ADMIN', 'SUPERVISOR'])
+                @can(['VER-ORDEN-MANUFACTURA'])
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
+                @endcan
+                @can(['VER-ORDEN-MECANIZADO'])
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
-                @endrole
+                @endcan
                 <li hidden>
                     <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
                         <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>Mantenimiento</span>
@@ -157,18 +159,20 @@
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
-                @role(['ADMIN', 'SUPERVISOR'])
+                @can(['VER-PARTE-MANUFACTURA'])
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
+                @endcan
+                @can(['VER-PARTE-MECANIZADO'])
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 3)}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
-                @endrole
+                @endcan
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
