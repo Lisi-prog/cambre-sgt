@@ -146,7 +146,7 @@ public function index(){
                 $operaciones = $operaciones->where(function ($q) use ($res) {
                     if (!empty($res)) {
                         $q->whereIn('codigo_maquinaria', $res)
-                        ->whereNull('codigo_maquinaria');
+                        ->orWhereNull('codigo_maquinaria');
                     } else {
                         $q->whereNull('codigo_maquinaria');
                     }
