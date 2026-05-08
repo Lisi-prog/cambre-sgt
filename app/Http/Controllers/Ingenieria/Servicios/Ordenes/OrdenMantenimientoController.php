@@ -161,7 +161,7 @@ public function index(){
         if($request->asig){
             $operaciones = $operaciones->whereIn('tecnico_asignado', $request->asig);
         }
-        if($request->soloAct == 'SI'){
+        if($request->soloAct === 'SI'){
             $operaciones = $operaciones->where('activo', 1);
         }
 
