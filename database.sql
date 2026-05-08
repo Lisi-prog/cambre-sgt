@@ -1231,7 +1231,7 @@ CREATE TABLE `tarea_prev_x_activo` (
   `intervalo_dias` INT NOT NULL,
   `cant_golpes` int not null,
   `fecha_ultima_ejecucion` date null,
-	PRIMARY KEY (`tarea_prev_x_activo`),
+	PRIMARY KEY (`id_tarea_prev_x_activo`),
 	CONSTRAINT `FK_tpxa_activo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`),
 	CONSTRAINT `FK_tpxa_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`)
 );
