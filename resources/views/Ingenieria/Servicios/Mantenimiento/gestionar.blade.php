@@ -196,7 +196,7 @@
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
-                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
+                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar' && Auth::user()->hasRole('SUPERVISOR'))
                                                                 <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>
@@ -277,7 +277,7 @@
                                                                 </button>      
                                                             @endif   
                                                         @elseif($orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento == 'AJUSTE')
-                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Revisar')
+                                                            @if(($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Revisar') && Auth::user()->hasRole('SUPERVISOR'))
                                                                 <button type="button" class="btn btn-primary" onclick="verParteDeAjuste({{ $parte->id_parte }}, '{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento }}')">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>      

@@ -104,7 +104,7 @@
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>
                                                             @endif
-                                                        @elseif ($orden->nombre_estado == 'Revisar')
+                                                        @elseif ($orden->nombre_estado == 'Revisar' && Auth::user()->hasRole('SUPERVISOR'))
                                                             @if($orden->id_tipo_orden_mantenimiento == 1)
                                                             <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary" onclick="">
                                                                 <i class="fas fa-eye"></i>

@@ -963,7 +963,7 @@ function buscarPorFiltros(){
                             </div>
                         </div>`;
                     }
-                    else if(ope.estado_actual == 'Revisar'){
+                    else if(ope.estado_actual == 'Revisar' && $("#es_supervisor").val() == 1){
                         opciones += `
                         <div class="row my-2">
                             <div class="col-12">                               
