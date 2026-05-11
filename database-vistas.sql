@@ -655,6 +655,7 @@ with
 select
 	se.prioridad_servicio,
 	op_hdr.prioridad,
+    se.id_servicio,
 	se.codigo_servicio,
 	se.nombre_servicio,
 	et.descripcion_etapa,

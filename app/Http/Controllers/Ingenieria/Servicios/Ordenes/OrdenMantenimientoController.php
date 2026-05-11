@@ -42,7 +42,7 @@ public function index(){
         
 
         $flt_proyectos = collect(DB::select('
-                    select s.codigo_servicio
+                    select s.codigo_servicio, s.id_servicio
                     from servicio s
                     left join etapa et 
                         on et.id_servicio = s.id_servicio
@@ -55,7 +55,7 @@ public function index(){
                     left join operaciones_de_hdr op_hdr 
                         on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
                     group by s.id_servicio, s.codigo_servicio
-                '))->pluck('codigo_servicio');
+                '))->pluck('codigo_servicio', 'id_servicio');
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
@@ -92,7 +92,7 @@ public function index(){
         return Empleado::orderBy('nombre_empleado')->activo()->HabilitadoOperacion()->get();
     }
 
-    public function get_operaciones(Request $request){
+    public function get_operacionesOLD(Request $request){
        //return $request;
        
         $operaciones = Vw_operaciones_de_hdr::orderByRaw('ISNULL(prioridad), prioridad')
@@ -161,7 +161,7 @@ public function index(){
         if($request->asig){
             $operaciones = $operaciones->whereIn('tecnico_asignado', $request->asig);
         }
-        if($request->soloAct === 'SI'){
+        if($request->soloAct == 'SI'){
             $operaciones = $operaciones->where('activo', 1);
         }
 
@@ -170,6 +170,68 @@ public function index(){
     
     
         return $operaciones_todas;
+    }
+
+    public function get_operaciones(Request $request){
+        //return $request;
+
+        //variables 
+        $servicios = $request->input('cod_serv');
+        $operaciones = $request->input('sup');
+        $maquinas = $request->input('res');
+        $estados = $request->input('est');
+        $asignados = $request->input('asig');
+        $activo = $request->input('soloAct') === 'SI' ? 1 : 0;
+       
+        $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
+            ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+            ->with('getHdr.getOrdMec');
+        
+        
+
+        $operaciones_mantenimiento = [];
+
+        if((!$maquinas  || in_array('-', $maquinas ))){
+            $operaciones_mantenimiento = Orden_mantenimiento::with('getEmpleado','getOrden.getEtapa.getServicio.getActivo', 
+            'getTipoOrdenMantenimiento');
+
+            if($activo){
+                $operaciones_mantenimiento = $operaciones_mantenimiento->where('esta_activo', 1);
+            }
+
+            $operaciones_mantenimiento = $operaciones_mantenimiento->get()
+            ->filter(function ($om) use ($request, $servicios, $operaciones, $maquinas,  $estados, $asignados, $activo) {
+                $estado = $om->getEstadoActual();
+                if($estados && !in_array($estado, $estados)){
+                    return false;
+                }
+                if($servicios && !in_array(
+                    $om->getOrden->getEtapa->getServicio->codigo_servicio,
+                    $servicios
+                )){
+                    return false;
+                }
+                if($operaciones && !in_array(
+                    $om->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento,
+                    $operaciones
+                )){
+                    return false;
+                }
+                $om->estado_actual = $estado;
+
+                return true;
+            })
+            ->values();
+            foreach($operaciones_mantenimiento as $om){
+                $om->horas = $om->getOrden->getHoras();
+            }
+        }
+
+        $operaciones_todas['generales'] = $operaciones->get();
+        $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;
+    
+    
+        return $operaciones_todas;  
     }
 
     public function editar(Request $request){

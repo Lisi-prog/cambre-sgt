@@ -766,6 +766,7 @@ function buscarPorFiltros(){
         data: filtros,
         url: '/get_operaciones',
         success: function(operaciones) {
+            console.log(operaciones);
             let idCount = 0;
             let opciones = ''
 
