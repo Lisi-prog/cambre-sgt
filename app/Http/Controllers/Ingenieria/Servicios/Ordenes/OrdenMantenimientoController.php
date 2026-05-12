@@ -59,6 +59,11 @@ public function index(){
                                             group by s.id_servicio, s.codigo_servicio
                                         '))->pluck('codigo_servicio', 'id_servicio'); */
 
+        $flt_proy_ope = Vw_operaciones_de_hdr::orderBy('codigo_servicio')->get(['id_servicio','codigo_servicio'])->unique('codigo_servicio')->pluck('codigo_servicio', 'id_servicio');
+        $flt_proy_ord_mant = Vw_orden_mantenimiento::orderBy('codigo_servicio')->get(['id_servicio','codigo_servicio'])->unique('codigo_servicio')->pluck('codigo_servicio', 'id_servicio');
+
+        $flt_proyectos = $flt_proy_ope->merge($flt_proy_ord_mant)->unique()->sort();
+
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
         $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
