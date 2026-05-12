@@ -65,4 +65,15 @@ class Tipo_activo extends Model
         }
     }
 
+    public function getTareasMantenimientoPreventiva(){    
+         return $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo');
+    }
+
+    public function getTareasMantenimientoSinUsarPreventiva()
+    {
+        $tareasUsadasIds = $this->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray();
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+    }
+
 }

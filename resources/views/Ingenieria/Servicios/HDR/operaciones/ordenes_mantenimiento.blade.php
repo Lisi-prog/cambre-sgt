@@ -278,7 +278,7 @@
     </div>
     <input type="text" hidden value="{{Auth::user()->getEmpleado->id_empleado}}" id="id_emp">
 </section>
-
+<input hidden id="es_supervisor" value="{{ Auth::user()->hasRole('SUPERVISOR') ? 1:0 }}">
 @include('Ingenieria.Servicios.Mantenimiento.Partes.diagnostico') 
 @include('Ingenieria.Servicios.Mantenimiento.Partes.inspeccion') 
 @include('Ingenieria.Servicios.Mantenimiento.Partes.ajuste')

@@ -93,4 +93,16 @@ class Activo extends Model
             $tipo_activo_x_tarea_mant->save();
         }
     }
+
+    public function getTareasMantenimientoPreventiva(){
+        return $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo');
+    }
+
+    public function getTareasMantenimientoSinUsarPreventiva()
+    {
+        $tareasUsadasIds = $this->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray();
+        $tareasUsadasIds = array_merge($tareasUsadasIds, $this->getTipoActivo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray());
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+    }
 }
