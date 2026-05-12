@@ -273,6 +273,7 @@ SELECT
     tom.id_tipo_orden_mantenimiento,
     tom.nombre_tipo_orden_mantenimiento,
     o.nombre_orden,
+    et.id_etapa,
     et.descripcion_etapa,
     p_rank.fecha_limite,
     p_rank.fecha_finalizacion,

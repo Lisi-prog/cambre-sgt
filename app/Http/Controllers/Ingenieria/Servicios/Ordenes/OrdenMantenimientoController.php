@@ -42,21 +42,22 @@ public function index(){
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         
 
-        $flt_proyectos = collect(DB::select('
-                    select s.codigo_servicio, s.id_servicio
-                    from servicio s
-                    left join etapa et 
-                        on et.id_servicio = s.id_servicio
-                    left join orden o 
-                        on o.id_etapa = et.id_etapa
-                    left join orden_mecanizado om 
-                        on om.id_orden = o.id_orden
-                    left join hoja_de_ruta hdr 
-                        on hdr.id_orden_mecanizado = om.id_orden_mecanizado
-                    left join operaciones_de_hdr op_hdr 
-                        on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
-                    group by s.id_servicio, s.codigo_servicio
-                '))->pluck('codigo_servicio', 'id_servicio');
+        /*$flt_proyectos = collect(DB::select('select 
+                                                s.codigo_servicio, 
+                                                s.id_servicio
+                                            from servicio s
+                                            left join etapa et 
+                                                on et.id_servicio = s.id_servicio
+                                            left join orden o 
+                                                on o.id_etapa = et.id_etapa
+                                            left join orden_mecanizado om 
+                                                on om.id_orden = o.id_orden
+                                            left join hoja_de_ruta hdr 
+                                                on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+                                            left join operaciones_de_hdr op_hdr 
+                                                on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
+                                            group by s.id_servicio, s.codigo_servicio
+                                        '))->pluck('codigo_servicio', 'id_servicio'); */
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
