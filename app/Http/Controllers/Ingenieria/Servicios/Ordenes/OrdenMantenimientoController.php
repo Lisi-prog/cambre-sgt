@@ -21,6 +21,7 @@ use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
 use App\Models\Cambre\Accion_para_tarea;
 use App\Models\Cambre\Zona;
+use App\Models\Cambre\Vw_orden_mantenimiento;
 
 class OrdenMantenimientoController extends Controller
 {
@@ -42,7 +43,7 @@ public function index(){
         
 
         $flt_proyectos = collect(DB::select('
-                    select s.codigo_servicio
+                    select s.codigo_servicio, s.id_servicio
                     from servicio s
                     left join etapa et 
                         on et.id_servicio = s.id_servicio
@@ -55,7 +56,7 @@ public function index(){
                     left join operaciones_de_hdr op_hdr 
                         on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
                     group by s.id_servicio, s.codigo_servicio
-                '))->pluck('codigo_servicio');
+                '))->pluck('codigo_servicio', 'id_servicio');
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
@@ -92,7 +93,7 @@ public function index(){
         return Empleado::orderBy('nombre_empleado')->activo()->HabilitadoOperacion()->get();
     }
 
-    public function get_operaciones(Request $request){
+    public function get_operacionesOLD(Request $request){
        //return $request;
        
         $operaciones = Vw_operaciones_de_hdr::orderByRaw('ISNULL(prioridad), prioridad')
@@ -161,7 +162,7 @@ public function index(){
         if($request->asig){
             $operaciones = $operaciones->whereIn('tecnico_asignado', $request->asig);
         }
-        if($request->soloAct === 'SI'){
+        if($request->soloAct == 'SI'){
             $operaciones = $operaciones->where('activo', 1);
         }
 
@@ -170,6 +171,38 @@ public function index(){
     
     
         return $operaciones_todas;
+    }
+
+    public function get_operaciones(Request $request){
+        //return $request;
+
+        //variables 
+        $servicios = $request->input('cod_serv');
+        $operaciones_flt = $request->input('sup');
+        $maquinas = $request->input('res');
+        $estados = $request->input('est');
+        $asignados = $request->input('asig');
+        $activo = $request->input('soloAct') === 'SI' ? 1 : 0;
+       
+        $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones_flt)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
+            ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+            ->with('getHdr.getOrdMec');
+        
+        
+
+        $operaciones_mantenimiento = [];
+
+        $operaciones_mantenimiento = Vw_orden_mantenimiento::servicio($servicios)->mantenimiento($operaciones_flt)->estado($estados)->asignado($asignados)->activo($activo)->get();
+
+        foreach($operaciones_mantenimiento as $om){
+            $om->horas = $om->getOrden->getHoras();
+        }
+
+        $operaciones_todas['generales'] = $operaciones->get();
+        $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;
+    
+    
+        return $operaciones_todas;  
     }
 
     public function editar(Request $request){
