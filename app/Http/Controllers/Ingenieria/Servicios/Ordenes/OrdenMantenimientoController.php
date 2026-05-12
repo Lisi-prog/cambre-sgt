@@ -21,6 +21,7 @@ use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
 use App\Models\Cambre\Accion_para_tarea;
 use App\Models\Cambre\Zona;
+use App\Models\Cambre\Vw_orden_mantenimiento;
 
 class OrdenMantenimientoController extends Controller
 {
@@ -177,13 +178,13 @@ public function index(){
 
         //variables 
         $servicios = $request->input('cod_serv');
-        $operaciones = $request->input('sup');
+        $operaciones_flt = $request->input('sup');
         $maquinas = $request->input('res');
         $estados = $request->input('est');
         $asignados = $request->input('asig');
         $activo = $request->input('soloAct') === 'SI' ? 1 : 0;
        
-        $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
+        $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones_flt)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
             ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
             ->with('getHdr.getOrdMec');
         
@@ -191,40 +192,10 @@ public function index(){
 
         $operaciones_mantenimiento = [];
 
-        if((!$maquinas  || in_array('-', $maquinas ))){
-            $operaciones_mantenimiento = Orden_mantenimiento::with('getEmpleado','getOrden.getEtapa.getServicio.getActivo', 
-            'getTipoOrdenMantenimiento');
+        $operaciones_mantenimiento = Vw_orden_mantenimiento::servicio($servicios)->mantenimiento($operaciones_flt)->estado($estados)->asignado($asignados)->activo($activo)->get();
 
-            if($activo){
-                $operaciones_mantenimiento = $operaciones_mantenimiento->where('esta_activo', 1);
-            }
-
-            $operaciones_mantenimiento = $operaciones_mantenimiento->get()
-            ->filter(function ($om) use ($request, $servicios, $operaciones, $maquinas,  $estados, $asignados, $activo) {
-                $estado = $om->getEstadoActual();
-                if($estados && !in_array($estado, $estados)){
-                    return false;
-                }
-                if($servicios && !in_array(
-                    $om->getOrden->getEtapa->getServicio->codigo_servicio,
-                    $servicios
-                )){
-                    return false;
-                }
-                if($operaciones && !in_array(
-                    $om->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento,
-                    $operaciones
-                )){
-                    return false;
-                }
-                $om->estado_actual = $estado;
-
-                return true;
-            })
-            ->values();
-            foreach($operaciones_mantenimiento as $om){
-                $om->horas = $om->getOrden->getHoras();
-            }
+        foreach($operaciones_mantenimiento as $om){
+            $om->horas = $om->getOrden->getHoras();
         }
 
         $operaciones_todas['generales'] = $operaciones->get();
