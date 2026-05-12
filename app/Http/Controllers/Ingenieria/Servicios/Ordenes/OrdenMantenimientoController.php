@@ -62,7 +62,7 @@ public function index(){
         $flt_proy_ope = Vw_operaciones_de_hdr::orderBy('codigo_servicio')->get(['id_servicio','codigo_servicio'])->unique('codigo_servicio')->pluck('codigo_servicio', 'id_servicio');
         $flt_proy_ord_mant = Vw_orden_mantenimiento::orderBy('codigo_servicio')->get(['id_servicio','codigo_servicio'])->unique('codigo_servicio')->pluck('codigo_servicio', 'id_servicio');
 
-        $flt_proyectos = $flt_proy_ope->merge($flt_proy_ord_mant)->unique()->sort();
+        $flt_proyectos = $flt_proy_ope->union($flt_proy_ord_mant)->sort();
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
@@ -192,7 +192,7 @@ public function index(){
        
         $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones_flt)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
             ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
-            ->with('getHdr.getOrdMec');
+            ->with('getHdr.getOrdMec')->get();
         
         
 
@@ -204,7 +204,7 @@ public function index(){
             $om->horas = $om->getOrden->getHoras();
         }
 
-        $operaciones_todas['generales'] = $operaciones->get();
+        $operaciones_todas['generales'] = $operaciones;
         $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;
     
     
