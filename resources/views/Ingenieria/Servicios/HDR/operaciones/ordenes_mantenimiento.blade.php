@@ -114,8 +114,8 @@
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                    @foreach ($flt_proyectos as $proyecto)
-                                                        <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$proyecto}}" checked> {{$proyecto}}</label>
+                                                    @foreach ($flt_proyectos as $key => $value)
+                                                        <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$key}}" checked> {{$value}}</label>
                                                     @endforeach
                                                 </div>
                                             </div>

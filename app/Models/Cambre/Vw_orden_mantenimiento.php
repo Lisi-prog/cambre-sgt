@@ -23,8 +23,10 @@ class Vw_orden_mantenimiento extends Model
         'id_servicio',
         'codigo_servicio',
         'nombre_servicio',
+        'esta_activo',
         'id_orden',
         'id_tipo_orden_mantenimiento',
+        'nombre_tipo_orden_mantenimiento',
         'nombre_orden',
         'id_etapa',
         'descripcion_etapa',
@@ -32,7 +34,9 @@ class Vw_orden_mantenimiento extends Model
         'fecha_finalizacion',
         'id_estado_mantenimiento',
         'nombre_estado',
-        'id_activo0',
+        'id_empleado_asignado',
+        'nombre_empleado_asignado',
+        'id_activo',
         'nombre_activo'
     ];
 
@@ -70,4 +74,66 @@ class Vw_orden_mantenimiento extends Model
         
     // }
 
+    public function getOrden()
+    {
+        return $this->belongsTo(Orden::class, 'id_orden');
+    }
+
+     public function getPartes()
+    {
+        return $this->hasMany(Parte::class, 'id_orden', 'id_orden');
+    }
+
+    public function getEstadoActual(){
+        return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstado->nombre_estado_mantenimiento;
+    }
+
+    public function getTipoOrden()
+    {
+        return 4;
+    }
+
+    public function scopeServicio($query, $servicios){
+        if ($servicios == '') {
+            return $query;
+        } else{
+            return $query->whereIn('id_servicio', $servicios);
+        }
+    }
+
+    public function scopeMantenimiento($query, $operaciones){
+        if ($operaciones == '') {
+            return $query;
+        } else{
+            return $query->whereIn('nombre_tipo_orden_mantenimiento', $operaciones);
+        }
+    }
+
+    public function scopeEstado($query, $estados){
+        if ($estados == '') {
+            return $query;
+        } else{
+            return $query->whereIn('nombre_estado', $estados);
+        }
+    }
+
+    public function scopeAsignado($query, $asignados){
+        if ($asignados == '') {
+            return $query;
+        } else{
+            return $query->whereIn('nombre_empleado_asignado', $asignados);
+        }
+    }
+
+    public function scopeActivo($query, $activo){
+        if ($activo == '') {
+            return $query;
+        } else{
+            if ($activo) {
+                return $query->where('esta_activo', 1);
+            } else {
+                return $query;
+            }
+        }
+    }
 }
