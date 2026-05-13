@@ -224,6 +224,75 @@ WITH
     inner join etapa et on et.id_etapa = o.id_etapa
     inner join servicio se on se.id_servicio = et.id_servicio;
 
+CREATE VIEW vw_orden_mantenimiento AS
+WITH PartesUnificadas AS (
+    SELECT p.id_parte, p.id_orden, p.fecha_limite, p.fecha,
+           pi.id_estado_mantenimiento
+    FROM parte p
+    INNER JOIN parte_inspeccion pi ON pi.id_parte = p.id_parte
+
+    UNION ALL
+
+    SELECT p.id_parte, p.id_orden, p.fecha_limite, p.fecha,
+           pd.id_estado as id_estado_mantenimiento
+    FROM parte p
+    INNER JOIN parte_diagnostico pd ON pd.id_parte = p.id_parte
+
+    UNION ALL
+
+    SELECT p.id_parte, p.id_orden, p.fecha_limite, p.fecha,
+           pa.id_estado_mantenimiento
+    FROM parte p
+    INNER JOIN parte_ajuste pa ON pa.id_parte = p.id_parte
+),
+
+ParteRanked AS (
+    SELECT
+        pu.*,
+        est.nombre_estado_mantenimiento,
+        CASE
+            WHEN pu.id_estado_mantenimiento = 4 THEN pu.fecha
+            ELSE NULL
+        END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY pu.id_orden ORDER BY pu.id_parte DESC) AS rn
+    FROM PartesUnificadas pu
+    INNER JOIN estado_mantenimiento est 
+        ON est.id_estado_mantenimiento = pu.id_estado_mantenimiento
+)
+
+SELECT 
+    se.prioridad_servicio,
+    se.id_servicio,
+    se.codigo_servicio,
+    se.nombre_servicio,
+    case 
+		when oman.esta_activo is null then 0
+        else oman.esta_activo
+    end as esta_activo,
+    o.id_orden,
+    tom.id_tipo_orden_mantenimiento,
+    tom.nombre_tipo_orden_mantenimiento,
+    o.nombre_orden,
+    et.id_etapa,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    p_rank.id_estado_mantenimiento,
+    p_rank.nombre_estado_mantenimiento as nombre_estado,
+    emp.id_empleado as id_empleado_asignado,
+    emp.nombre_empleado as nombre_empleado_asignado,
+    act.id_activo,
+    act.nombre_activo
+FROM orden o 
+INNER JOIN orden_mantenimiento oman ON o.id_orden = oman.id_orden
+inner join tipo_orden_mantenimiento tom on tom.id_tipo_orden_mantenimiento=oman.id_tipo_orden_mantenimiento
+LEFT JOIN empleado emp on emp.id_empleado=oman.id_empleado
+INNER JOIN ParteRanked p_rank 
+    ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+INNER JOIN etapa et ON et.id_etapa = o.id_etapa
+INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+INNER JOIN activo act on act.id_activo=se.id_activo;
+
 CREATE VIEW vw_parte_trabajo AS
 WITH
 Res_ord AS (
@@ -655,6 +724,7 @@ with
 select
 	se.prioridad_servicio,
 	op_hdr.prioridad,
+    se.id_servicio,
 	se.codigo_servicio,
 	se.nombre_servicio,
 	et.descripcion_etapa,
