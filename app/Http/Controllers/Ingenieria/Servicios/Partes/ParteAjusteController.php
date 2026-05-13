@@ -56,7 +56,7 @@ class ParteAjusteController extends Controller{
             $parte_revisar->observaciones = "Alta de parte de ajuste, pendiente de revisión";;
             $parte_revisar->fecha = $request->fecha;
             $parte_revisar->fecha_carga = Carbon::now();
-            $parte_revisar->horas = $request->horas;
+            $parte_revisar->horas = $request->horas . ':' . $request->minutos;
             $parte_revisar->costo = 0;
             $parte_revisar->id_orden = $request->id_orden;
             $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();

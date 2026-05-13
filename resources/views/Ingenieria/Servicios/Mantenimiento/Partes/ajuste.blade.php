@@ -44,7 +44,32 @@
                 <div class="d-flex mt-4">
                     <div class="form-group ml-auto mb-0 pb-0">
                         <label>Horas:</label>
-                        <input id="horas_ajuste" name="horas" style="width: 170px;" required type="time" class="form-control">
+                        <div class="d-flex">
+                            <input 
+                                class="form-control" 
+                                id="horas_ajuste"  
+                                type="number" 
+                                min="0" 
+                                value="00" 
+                                name="horas" 
+                                onclick="this.select()" 
+                                onkeyup="checkSendNuevoParteDiagnostico()"
+                                required
+                            >
+                            <span class="input-group-text">:</span>
+                            <input 
+                                class="form-control" 
+                                id="minutos_ajuste" 
+                                type="number" 
+                                min="0" 
+                                max="59" 
+                                value="00" 
+                                name="minutos"
+                                onclick="this.select()"
+                                onkeyup="checkSendNuevoParteDiagnostico()"
+                                required
+                            >
+                        </div>
                     </div>
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>

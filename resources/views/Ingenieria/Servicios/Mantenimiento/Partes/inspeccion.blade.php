@@ -40,7 +40,32 @@
                 <div class="d-flex">                    
                     <div class="form-group ml-auto mb-0 pb-0">
                         <label>Horas:</label>
-                        <input id="horas_inspeccion" style="width: 170px;" name="horas" required type="time" class="form-control">
+                        <div class="d-flex">
+                            <input 
+                                class="form-control" 
+                                name="horas"  
+                                type="number" 
+                                min="0" 
+                                value="00" 
+                                id="horas_inspeccion" 
+                                onclick="this.select()" 
+                                onkeyup="checkSendNuevoParteDiagnostico()"
+                                required
+                            >
+                            <span class="input-group-text">:</span>
+                            <input 
+                                class="form-control" 
+                                name="minutos" 
+                                type="number" 
+                                min="0" 
+                                max="59" 
+                                value="00" 
+                                id="minutos_inspeccion"
+                                onclick="this.select()"
+                                onkeyup="checkSendNuevoParteDiagnostico()"
+                                required
+                            >
+                        </div>
                     </div>
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>

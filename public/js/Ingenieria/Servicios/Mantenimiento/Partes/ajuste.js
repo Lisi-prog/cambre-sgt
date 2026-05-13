@@ -34,6 +34,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
     // $("#herramental_ajuste").val($("#activo").val())
     document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     $("#horas_ajuste").removeAttr('disabled')
+    $("#minutos_ajuste").removeAttr('disabled')
+    $("#minutos_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#btnRowNuevoAjuste").show()
 
@@ -73,6 +75,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
             $("#horas_ajuste").val('')            
+            $("#minutos_ajuste").val('')            
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -159,6 +162,7 @@ function openModalConfirmarParteAjuste(id_orden){
     $("#previewAceptarAjusteReview").show()
     $("#btnRowNuevoAjuste").hide()
     $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#minutos_ajuste").attr('disabled', 'disabled')
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
@@ -185,7 +189,9 @@ function openModalConfirmarParteAjuste(id_orden){
                 }
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.horas)
+            let [hr, mn] = data.horas.split(':');
+            $("#horas_ajuste").val(hr);
+            $("#minutos_ajuste").val(mn);
             $("#bandera_refabricar").val(bandera)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
@@ -216,6 +222,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
     $("#previewAceptarAjusteReview").hide()
     $("#btnRowNuevoAjuste").show()
     $("#horas_ajuste").removeAttr('disabled')
+    $("#minutos_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
     // $("#herramental_ajuste").val($("#activo").val());
@@ -254,6 +261,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
             $("#horas_ajuste").val('')       
+            $("#minutos_ajuste").val('')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -268,6 +276,7 @@ function openModalVerParteAjuste(id_orden){
     $("#previewAceptarAjusteReview").hide()
     $("#btnRowNuevoAjuste").hide()
     $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#minutos_ajuste").attr('disabled', 'disabled')
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
@@ -290,7 +299,9 @@ function openModalVerParteAjuste(id_orden){
                 j++;
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.horas)
+            let [hr, mn] = data.get_parte.horas.split(':');
+            $("#horas_ajuste").val(hr);
+            $("#minutos_ajuste").val(mn);            
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -304,6 +315,7 @@ function verParteDeAjuste(id_parte, estado){
     $("#previewAceptarAjusteReview").hide()
     $("#btnRowNuevoAjuste").hide()
     $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#minutos_ajuste").attr('disabled', 'disabled')
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     if(estado == 'Revisar'){
@@ -330,7 +342,9 @@ function verParteDeAjuste(id_parte, estado){
                 j++;
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.get_parte.horas)
+            let [hr, mn] = data.get_parte.horas.split(':');
+            $("#horas_ajuste").val(hr);
+            $("#minutos_ajuste").val(mn);
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }

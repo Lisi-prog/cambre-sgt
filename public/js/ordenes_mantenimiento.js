@@ -1050,4 +1050,3 @@ function getSelectedFilters() {
         soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO'
     };
 }
-

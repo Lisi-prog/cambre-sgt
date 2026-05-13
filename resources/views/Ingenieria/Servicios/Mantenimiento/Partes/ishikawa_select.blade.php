@@ -23,7 +23,7 @@
         <option value="{{ $maquina->id_maquinaria }}">{{ $maquina->alias_maquinaria }}</option>
     @endforeach
 </div>
-<div  id="tarea_mantenimiento">
+<div id="tarea_mantenimiento">
     @foreach ($tareas_mantenimiento as $tarea)
         <option data-activo="{{ $tarea->id_activo }}" data-tipo="{{ $tarea->id_tipo_activo }}" value="{{ $tarea->id_tarea_mantenimiento }}">{{ $tarea->nombre_tarea }}</option>
     @endforeach
