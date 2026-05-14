@@ -21,24 +21,37 @@
                 {{-- Informacion de la solicitud --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-head pt-3 m-auto d-flex w-100">
-                            <h5 class="ml-auto">Solicitud</h5>
-                            <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">
-                                Actualizaciones
-                            </button>
-                        </div>
+                        @role('SUPERVISOR')
+                            <div class="card-head pt-3 m-auto d-flex w-100">
+                                <h5 class="ml-auto">Solicitud</h5>
+                                <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">
+                                    Actualizaciones
+                                </button>
+                            </div>
+                        @else
+                            <div class="card-head pt-3 m-auto">
+                                <h5 class="ml-auto">Solicitud</h5>
+                            </div>
+                        @endrole
+                        
                         <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                     <div class="row">
-                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                             <div class="form-group">
                                                 {!! Form::label('numero', "Numero:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 {!! Form::text('numero', $solicitud->id_solicitud, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                             </div>
                                         </div>
                                         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                            <div class="form-group">
+                                                {!! Form::label('solicitante', "Solicitante:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                                {!! Form::text('solicitante', $solicitud->getEmpleado->nombre_empleado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <div class="form-group">
                                                 {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 {!! Form::text('estado', $solicitud->getEstadoSolicitud->nombre_estado_solicitud, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
@@ -85,7 +98,7 @@
                                                 {!! Form::label('sintoma', "Sintomas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 <div class="row">
                                                     @foreach ($solicitud->getServicioDeIngenieria->getSintomasAlt() as $grupo)
-                                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                             <li class="d-flex justify-content-between align-items-start">
                                                                 <div class="ms-2 me-auto">
                                                                     <div class="fw-bold">{{ $grupo['tipo'] }}</div>
@@ -215,9 +228,11 @@
                                                                     </button>
                                                                 @endif
                                                             @endif
+                                                            @role('SUPERVISOR')
                                                             <button type="button" class="btn btn-warning" onclick="modalEditarPartes({{$orden->getOrdenMantenimiento->id_orden_mantenimiento}})">
                                                                 <i class="fas fa-edit"></i>
                                                             </button>
+                                                            @endrole
                                                         </td>
                                                     </tr>                                                    
                                                 @endforeach
@@ -307,11 +322,13 @@
                                     <h5>Orden de Mecanizado</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    @if ($proyecto->tieneOrdenMantAjusteCompleto())
-                                        <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
-                                            Nuevo
-                                        </button>
-                                    @endif
+                                    @role('SUPERVISOR')
+                                        @if ($proyecto->tieneOrdenMantAjusteCompleto())
+                                            <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
+                                                Nuevo
+                                            </button>
+                                        @endif
+                                    @endrole
                                 </div>
                             </div>
                         </div>
