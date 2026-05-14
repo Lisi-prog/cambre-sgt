@@ -30,6 +30,48 @@ $(document).ready(function() {
         e.preventDefault();
         addRowTra();
     })
+
+    $("#formCrearHDR").on('submit', function(evt){
+        evt.preventDefault();
+
+        var form = this;
+
+        // Validación HTML5 normal
+        if(!form.checkValidity()){
+            form.reportValidity();
+            return;
+        }
+
+        let horas = document.querySelectorAll('input[name="horas_ope[]"]');
+        let minutos = document.querySelectorAll('input[name="minutos_ope[]"]');
+
+        let tiempoValido = true;
+
+        for(let i = 0; i < horas.length; i++){
+
+            let hora = parseInt(horas[i].value) || 0;
+            let minuto = parseInt(minutos[i].value) || 0;
+
+            // Si ambos son 0
+            if(hora === 0 && minuto === 0){
+                tiempoValido = false;
+
+                alert(`La operación N.° ${i + 1} debe tener un tiempo estimado cargado y el mismo no debe ser 0.`);
+
+                minutos[i].focus();
+
+                document.getElementById('btnGuardarHdr').disabled= false;
+                break;
+            }
+        }
+
+        if(!tiempoValido){
+            return;
+        }
+
+        form.submit();
+    });
+
 });
 
 function addRow() {
@@ -90,7 +132,7 @@ function addRow() {
                     <div class="d-flex justify-content-center gap-1">
                         <button type="button" class="btn btn-primary btn-up">⬆</button>
                         <button type="button" class="btn btn-primary btn-down">⬇</button>
-                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                        <button type="button" class="btn btn-danger delete-btn">Eliminar</button>
                     </div>
                 </td>
             `;
@@ -239,7 +281,7 @@ function addRowRe() {
                         </div>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-danger delete-btn">Eliminar</button>
+                        <button type="button" class="btn btn-danger delete-btn">Eliminar</button>
                     </td>
                 `;
 
