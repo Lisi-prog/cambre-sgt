@@ -43,7 +43,14 @@
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">         
                 <div class="d-flex mt-4">
                     <div class="form-group ml-auto mb-0 pb-0">
-                        <label>Horas:</label>
+                        <label for="horas" class="control-label" style="white-space: nowrap; ">Horas:</label> 
+                        <span class="obligatorio">*</span> 
+                        <div class= "input-group">
+                            <input class="form-control" name="horas" type="number" min="0" value="00" id="horas_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico()" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
+                        </div>
+                        {{-- <label>Horas:</label>
                         <div class="d-flex">
                             <input 
                                 class="form-control" 
@@ -69,7 +76,7 @@
                                 onkeyup="checkSendNuevoParteDiagnostico()"
                                 required
                             >
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>

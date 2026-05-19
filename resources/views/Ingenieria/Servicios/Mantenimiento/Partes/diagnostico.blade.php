@@ -60,7 +60,16 @@
                         </div>
                     </div>
                     <div style="width: 40%;" class="d-flex">
-                        <div class="form-group ml-auto">
+                        <div class="form-group"> 
+                            <label for="horas" class="control-label" style="white-space: nowrap; ">Horas:</label> 
+                            <span class="obligatorio">*</span> 
+                            <div class= "input-group">
+                                <input class="form-control" name="horas" type="number" min="0" value="00" id="horas" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico()" required>
+                                <span class="input-group-text">:</span>
+                                <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
+                            </div>
+                        </div>
+                        {{-- <div class="form-group ml-auto">
                             <span class="obligatorio">*</span>
                             <label>Horas:</label>
                             <div class="d-flex">
@@ -89,7 +98,7 @@
                                     required
                                 >
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group ml-2">
                             <span class="obligatorio">*</span>
                             <label>Fecha:</label>

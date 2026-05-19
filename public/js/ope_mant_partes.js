@@ -544,8 +544,8 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
             showSpanAviso();
-            $("#horas_inspeccion").val('')
-            $("#minutos_inspeccion").val('')
+            $("#horas_inspeccion").val('00')
+            $("#minutos_inspeccion").val('00')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)
@@ -674,8 +674,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
-            $("#horas_ajuste").val('')            
-            $("#minutos_ajuste").val('')
+            $("#horas_ajuste").val('00')            
+            $("#minutos_ajuste").val('00')
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }

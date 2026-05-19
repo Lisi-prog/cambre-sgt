@@ -4,6 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 
 class Activo extends Model
@@ -104,5 +105,31 @@ class Activo extends Model
         $tareasUsadasIds = array_merge($tareasUsadasIds, $this->getTipoActivo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray());
 
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+    }
+
+    public function getTotalTareasMantenimientoPreventiva(){
+        return $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo')->count();
+    }
+
+    public function getTotalTareasMantenimientoPreventivaPendientes(){
+       return $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+    }
+
+    public function getProgreso(){
+        $totTareaPreventivas = $this->getTotalTareasMantenimientoPreventiva();
+        $totTareaPreventivasPend = $this->getTotalTareasMantenimientoPreventivaPendientes();
+        $progreso = 0;
+
+        if ($totTareaPreventivas == 0) {
+            return 0;
+        }
+        
+        try {
+            $progreso = ($totTareaPreventivasPend * 100) / $totTareaPreventivas;
+        } catch (\Throwable $th) {
+            $progreso = 0;
+        }
+
+        return $progreso;     
     }
 }

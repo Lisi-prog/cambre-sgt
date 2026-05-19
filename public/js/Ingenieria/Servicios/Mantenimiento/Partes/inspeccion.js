@@ -339,8 +339,8 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
             showSpanAviso();
-            $("#horas_inspeccion").val('')
-            $("#minutos_inspeccion").val('')
+            $("#horas_inspeccion").val('00')
+            $("#minutos_inspeccion").val('00')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)

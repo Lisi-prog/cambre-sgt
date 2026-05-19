@@ -116,8 +116,8 @@ function openModalNuevoParteDiagnostico(id_orden){
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
-    $("#horas").val('');
-    $("minutos").val('');
+    // $("#horas").val('');
+    // $("minutos").val('');
     $("#horas").removeAttr('disabled');
     $("#minutos").removeAttr('disabled');
     let hoy = new Date()
@@ -313,4 +313,14 @@ function diagnosticoPreSubmit(tipo){
         $("#completado_diagnostico").prop('checked', false);
     }
     $("#formNuevoParteDiagnostico").trigger( "submit" );
+}
+
+function checkMinutos(input) {
+    if (parseInt(input.value) > 59) {
+        input.value = 59;
+    }
+
+    if (parseInt(input.value) < 0) {
+        input.value = 0;
+    }
 }
