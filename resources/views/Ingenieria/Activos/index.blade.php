@@ -97,7 +97,7 @@
                                                     }else if($activo->getProgreso() >= 50){
                                                         $color = 'bg-warning';
                                                     }else{
-                                                       $color = '';
+                                                       $color = 'bg-success';
                                                     }
                                                 @endphp
                                                 <div class="progress position-relative" style="background-color: #b2baf8">
@@ -122,6 +122,12 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
+                                                         <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+                                                            </div>
+                                                        </div>
+                                                        
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
                                                                 {!! Form::open([
@@ -154,6 +160,7 @@
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
     {{-- @include('Ingenieria.Maquinaria.modal.crear-maquinaria')--}}
     @include('Ingenieria.Activos.modal.crear-activo') 
+    @include('Ingenieria.Activos.modal.crear-serv-mant')
 
 <script>
     $(document).ready(function () {
