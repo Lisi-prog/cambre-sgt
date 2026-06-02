@@ -3,257 +3,221 @@
 @section('titulo', 'Inicio')
 
 @section('content')
-    <style>
-        .sombra{
+<style>
+    .menu-wrap {
+        padding: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+
+    }
+ 
+    .menu-section {
+        margin-bottom: 2rem;
+    }
+ 
+    .menu-section-label {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-bottom: 10px;
+        padding-left: 2px;
+    }
+ 
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 10px;
+    }
+ 
+    .menu-tile {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 18px 10px 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+    }
+ 
+    .menu-tile:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+        text-decoration: none;
+        color: inherit;
+    }
+ 
+    .menu-tile:active {
+        transform: scale(0.97);
+    }
+ 
+    .menu-tile-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+ 
+    .menu-tile-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: #111827;
+        text-align: center;
+    }
+ 
+    .sombra{
             box-shadow: 2px 2px 5px;
         }
-    </style>
+</style>
     <section class="section">
         <div class="section-header">
             <h3 class="page__heading">CAMBRE SGI</h3>
         </div>
         <div class="section-body">
             @include('layouts.modal.mensajes')
-            <div style="display:flex;">
-                <ul>
-                    @can('VER-MENU-SERVICIOS')
-                    <div class="row" style="margin-bottom:2vh;">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
-                            <h4>Servicios</h4>
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="height:150px; width:150px; margin:auto;">
-                                <div class="m-auto rounded-4">
-                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 2)}}" title="Proyectos">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-sitemap m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="m-auto " style="">
-                                        {!! Form::label('proyectos', 'Proyectos', ['class' => 'text-center fs-7 my-auto']) !!}
-                                        {{-- 'style' => 'font-size:0.9em;' --}}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px;margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 3)}}" title="Servicio de ingenieria">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-tape m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('ssi', 'SI', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
+            <div class="menu-wrap">
+ 
+                {{-- SERVICIOS --}}
+                @can('VER-MENU-SERVICIOS')
+                <div class="menu-section">
+                    <h5>Servicios</h5>
+                    <div class="menu-grid">
+                        <a href="{{route('proyecto.indexprefijo', 2)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon">
+                                <i class="fas fa-sitemap m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Proyectos</span>
+                        </a>
+                        <a href="{{route('proyecto.indexprefijo', 3)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-teal">
+                                <i class="fas fa-tape m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>SI</span>
+                        </a>
+                        <a href="{{route('proyecto.indexprefijo', 5)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-blue">
+                                <i class="fas fa-wrench m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>SM</span>
+                        </a>
+                        <a href="{{route('proyecto.indexprefijo', 4)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-amber">
+                                <i class="fas fa-star m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>TMC</span>
+                        </a>
+                    </div>
+                </div>
+                @endcan
 
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px;margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 5)}}" title="Servicio de mantenimiento">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-wrench m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('sm', 'SM', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-    
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('proyecto.indexprefijo', 4)}}" title="Mejora continua">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-star m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('tmc', 'TMC', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </div>
+                {{-- ÓRDENES --}}
+                @can('VER-MENU-ORDENES')
+                <div class="menu-section">
+                    <h5>Ordenes</h5>
+                    <div class="menu-grid">
+                        <a href="{{route('ordenes.tipo', 1)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ">
+                                <i class="fas fa-tasks m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Trabajo</span>
+                        </a>
+                        @can(['VER-ORDEN-MANUFACTURA'])
+                        <a href="{{route('ordenes.tipo', 2)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-teal">
+                                <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Manufactura</span>
+                        </a>
+                        @endcan
+                        @can(['VER-ORDEN-MECANIZADO'])
+                        <a href="{{route('ordenes.tipo', 3)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-blue">
+                                <i class="fas fa-screwdriver m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Mecanizado</span>
+                        </a>
+                        @endcan
+                        <a href="{{route('orden_mantenimiento.index')}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-amber">
+                                <i class="fas fa-hammer m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Operaciones</span>
+                        </a>
                     </div>
-                    @endcan
-                    @can('VER-MENU-ORDENES')
-                    <div class="row" style="margin-bottom:2vh">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
-                            <h4>Ordenes</h4>
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px; margin:auto;">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-tasks m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('trabajo', 'Trabajo', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @can(['VER-ORDEN-MANUFACTURA'])
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('manufactura', 'Manufactura', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @endcan
-                            @can(['VER-ORDEN-MECANIZADO'])
-                            {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-screwdriver m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('mecanizado', 'Mecanizado', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @endcan
-                            {{-- <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-wrench m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('mantenimiento', 'Mantenimiento', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li> --}}
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('orden_mantenimiento.index')}}" title="Operaciones">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-hammer m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('operaciones', 'Operaciones', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </div>
-                    </div>
-                    @endcan
-                    @can('VER-MENU-PARTES')
-                    <div class="row" style="margin-bottom:2vh">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
-                            <h4>Partes</h4>
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px; margin:auto;">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('partes.tipo', 1)}}" title="Trabajo">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-tasks m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('trabajo', 'Trabajo', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @can(['VER-PARTE-MANUFACTURA'])
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('manufactura', 'Manufactura', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @endcan
-                            @can(['VER-PARTE-MECANIZADO'])
-                            {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('partes.tipo', 3)}}" title="Mecanizado">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-screwdriver m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('mecanizado', 'Mecanizado', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @endcan
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-hammer m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('operaciones', 'Operaciones', ['class' => 'text-center my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                        </div>
-                    </div>
-                    @endcan
-                    @can('VER-MENU-SOLICITUDES')
-                    <div class="row" style="margin-bottom:2vh;">
-                        <div class="row m-auto rounded-2 p-2" style="background-color:aliceblue; width:90vw">
-                            <h4>Solicitudes</h4>
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="height:150px; width:150px; margin:auto">
-                                <div class="m-auto rounded-4">
-                                    <a class="nav-link" href="{{route('s_s_i.index')}}" title="Solicitud de servicios de ingenieria">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1.2em; "></i>
-                                    </div>
-                                    <div class="m-auto " style="">
-                                        {!! Form::label('ssi', 'S.S.I', ['class' => 'text-center fs-7 my-auto']) !!}
-                                        {{-- 'style' => 'font-size:0.9em;' --}}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px;margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('p_m.index')}}" title="Propuesta de mejora">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('pm', 'P.M', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
+                </div>
+                @endcan
 
-                            @can('VER-MENU-RI')
-                            <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
-                                <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('r_i.index')}}" title="Requerimiento de ingenieria">
-                                    <div class="row m-auto text-center" style="">
-                                        <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1.2em;"></i>
-                                    </div>
-                                    <div class="row m-auto" style="">
-                                        {!! Form::label('ri', 'R.I', ['class' => 'text-center fs-7 my-auto', 'style' => '']) !!}
-                                    </div>
-                                    </a>
-                                </div>
-                            </li>
-                            @endcan
-                        </div>
+                @can('VER-MENU-PARTES')
+                <div class="menu-section">
+                    <h5>Partes</h5>
+                    <div class="menu-grid">
+                        <a href="{{route('partes.tipo', 1)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ">
+                                <i class="fas fa-tasks m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Trabajo</span>
+                        </a>
+                        @can(['VER-PARTE-MANUFACTURA'])
+                        <a href="{{route('partes.tipo', 2)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-teal">
+                                <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Manufactura</span>
+                        </a>
+                        @endcan
+                        @can(['VER-PARTE-MECANIZADO'])
+                        <a href="{{route('partes.tipo', 3)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-blue">
+                                <i class="fas fa-screwdriver m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Mecanizado</span>
+                        </a>
+                        @endcan
+                        <a href="{{route('partes.tipo', 5)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-amber">
+                                <i class="fas fa-hammer m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Operaciones</span>
+                        </a>
                     </div>
-                    @endcan
-                </ul>
+                </div>
+                @endcan
+
+                @can('VER-MENU-SOLICITUDES')
+                <div class="menu-section">
+                    <h5>Solicitudes</h5>
+                    <div class="menu-grid">
+                        <a href="{{route('s_s_i.index')}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ">
+                                <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>S.S.I</span>
+                        </a>
+                        <a href="{{route('p_m.index')}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-teal">
+                                <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>P.M</span>
+                        </a>
+                        @can('VER-MENU-RI')
+                        <a href="{{route('r_i.index')}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-blue">
+                                <i class="fas fa-clipboard-list m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>R.I</span>
+                        </a>
+                        @endcan
+                    </div>
+                </div>
+                @endcan
+            
             </div>
         </div>
         @role('SUPERVISOR')
