@@ -6,7 +6,6 @@ let b;
 var table;
 $("#loading").show();
 $(document).ready( function () {
-    var url = '{{url('/')}}';
     document.getElementById('volver').href = url;
     document.getElementById('ayudin').hidden = false;
     let nombreArchivo = 'orden';

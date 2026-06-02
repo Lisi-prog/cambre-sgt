@@ -289,6 +289,7 @@
 
 <script>
     const ordenHdrRoute = "{{ url('/ordenes/hdr') }}";
+    var url = '{{url('/')}}';
 </script>
 <script src="{{ asset('js/filter-to-filter.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
