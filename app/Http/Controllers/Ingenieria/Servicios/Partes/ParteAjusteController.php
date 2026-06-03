@@ -111,7 +111,7 @@ class ParteAjusteController extends Controller{
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
-            'getTareasAjuste.getTareaMantenimiento',
+            'getTareasAjuste.getTareaMantenimiento.getZonaTarea',
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();
@@ -229,7 +229,7 @@ class ParteAjusteController extends Controller{
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
-            'getTareasAjuste.getTareaMantenimiento',
+            'getTareasAjuste.getTareaMantenimiento.getZonaTarea',
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();
@@ -244,7 +244,7 @@ class ParteAjusteController extends Controller{
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
-            'getTareasAjuste.getTareaMantenimiento',
+            'getTareasAjuste.getTareaMantenimiento.getZonaTarea',
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();

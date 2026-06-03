@@ -652,7 +652,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
                     console.log(d)
                     d.get_tareas_mantenimiento.forEach(tarea => {
                         tabla_ajustes.row.add([
-                            (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                            j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                             tarea.get_accion_para_tarea.nombre_accion,
                             `<select class="form-select" required name="tareas[${j}][zona]">
                                 <option value="">Seleccionar...</option>
@@ -789,7 +789,7 @@ function openModalConfirmarParteAjuste(id_orden, nombre_act, proyecto){
             let bandera = 0
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                     tarea.get_accion_tarea.nombre_accion,
                     tarea.get_zona.nombre_zona,
                     tarea.get_maquinaria.alias_maquinaria,
@@ -849,7 +849,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
             let j=0;
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                     tarea.get_accion_tarea.nombre_accion,
                     `<select id="tareas_zona_${j}" class="form-select" required name="tareas[${j}][zona]">
                         <option value="">Seleccionar...</option>
@@ -904,7 +904,7 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
             let j=0;
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                     tarea.get_accion_tarea.nombre_accion,
                     tarea.get_zona.nombre_zona,
                     tarea.get_maquinaria.alias_maquinaria,
