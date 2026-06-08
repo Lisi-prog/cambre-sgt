@@ -360,7 +360,8 @@ function changeTdColor() {
         "Temple": "#ebd577",
         "A Evaluar": "#d1d424",
         "Rechazado": "#d2cab5",
-        "Aceptado": "#92d050"
+        "Aceptado": "#92d050",
+        "Disponible": "#5d8d2a",
     };
 
     // Recorrer todas las tablas
