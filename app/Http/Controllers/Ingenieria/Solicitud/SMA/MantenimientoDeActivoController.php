@@ -723,4 +723,8 @@ class MantenimientoDeActivoController extends Controller
                              ->with('error', 'Ocurrio un problema al crear la orden de mecanizado: '.$e->getMessage());
         }
     }
+
+    public function crearSMAdesdeActivo(Request $request){
+        return $request;
+    }
 }

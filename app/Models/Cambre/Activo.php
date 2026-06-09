@@ -115,6 +115,10 @@ class Activo extends Model
        return $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
     }
 
+    public function getTareasMantenimientoPreventivaPendientes(){
+       return $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()]);
+    }
+
     public function getProgreso(){
         $totTareaPreventivas = $this->getTotalTareasMantenimientoPreventiva();
         $totTareaPreventivasPend = $this->getTotalTareasMantenimientoPreventivaPendientes();
@@ -131,5 +135,30 @@ class Activo extends Model
         }
 
         return $progreso;     
+    }
+
+    public function getNombreServicioMan(){
+        $existeServicioMant = Servicio::where('id_subtipo_servicio', 6)->where('id_activo', $this->id_activo)->orderBy('id_servicio', 'desc')->first();
+
+        if ($existeServicioMant) {
+            $ultNombre = $existeServicioMant->codigo_servicio;
+
+            // obtener los últimos 4 caracteres
+            $numeroNom = substr($ultNombre, -4);
+
+            // pasarlo a entero y sumar 1
+            $nuevoNumero = (int)$numeroNom + 1;
+
+            // volver a formatear a 4 dígitos
+            $numServ = str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+        } else {
+            $numServ = '0001';
+        }
+
+        $codActivo = Activo::find($this->id_activo)->codigo_activo;
+
+        // $numServ = 0001;
+
+        return $codigo_proyecto = $codActivo.'-MAN-'.$numServ;
     }
 }

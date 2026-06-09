@@ -472,6 +472,26 @@ class ActivoController extends Controller
 
     public function obtenerTareasPendientes(Request $request){
         $id_activo = $request->input('activo');
-        return $activo = Activo::find($id_activo);
+        
+        $activo = Activo::find($id_activo);
+
+        $tareas = array();
+
+        foreach ($activo->getTareasMantenimientoPreventivaPendientes as $ta) {
+            array_push($tareas, (object)[
+                'id_tarea_prev_x_activo' => $ta->id_tarea_prev_x_activo,
+                'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
+                'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
+                'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
+                'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+            ]);
+        }
+
+        return [
+            'activo' => $activo,
+            'nombre_proyecto' => $activo-> getNombreServicioMan(),
+            'tareas_pend' => $tareas
+        ];
     }
+    
 }

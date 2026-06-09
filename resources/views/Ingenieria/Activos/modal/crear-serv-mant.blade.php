@@ -6,8 +6,8 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Servicio Mantenimiento</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            {!! Form::open(['method' => 'POST', 'route' => ['activo.crearsma'], 'style' => '', 'id' => 'form-serv-mant']) !!}
             <div class="modal-body">
-                 {{-- {!! Form::open(['method' => 'GET', 'route' => ['sma.aceptar', $Ssi->id_solicitud], 'style' => '', 'id' => 'form-serv-mant']) !!} --}}
                         <div class="row">
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
@@ -106,6 +106,7 @@
                                         <th class='text-center' style="color:#fff;">Tarea</th>
                                         <th class='text-center' style="color:#fff;">Ejecucion</th>
                                         <th class='text-center' style="color:#fff;">Zona</th>
+                                        <th class='text-center' style="color:#fff;">Ult. Ejecucion</th>
                                     </thead>
                                     <tbody id="tareas-prev">
                                         
@@ -113,12 +114,12 @@
                                 </table>
                             </div>
                         </div>
-                        {{-- {!! Form::close() !!} --}}
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits" id="btn-guardar">Aceptar y crear servicio</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
+            {!! Form::close() !!}
         </div>
     </div>
 </div>
