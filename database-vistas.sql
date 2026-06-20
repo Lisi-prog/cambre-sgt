@@ -282,7 +282,9 @@ SELECT
     emp.id_empleado as id_empleado_asignado,
     emp.nombre_empleado as nombre_empleado_asignado,
     act.id_activo,
-    act.nombre_activo
+    act.codigo_activo,
+    ta.id_tipo_activo,
+    ta.nombre_tipo_activo
 FROM orden o 
 INNER JOIN orden_mantenimiento oman ON o.id_orden = oman.id_orden
 inner join tipo_orden_mantenimiento tom on tom.id_tipo_orden_mantenimiento=oman.id_tipo_orden_mantenimiento
@@ -291,7 +293,8 @@ INNER JOIN ParteRanked p_rank
     ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
 INNER JOIN etapa et ON et.id_etapa = o.id_etapa
 INNER JOIN servicio se ON se.id_servicio = et.id_servicio
-INNER JOIN activo act on act.id_activo=se.id_activo;
+INNER JOIN activo act on act.id_activo=se.id_activo
+INNER JOIN tipo_activo ta on ta.id_tipo_activo=act.id_tipo_activo;
 
 CREATE VIEW vw_parte_trabajo AS
 WITH
