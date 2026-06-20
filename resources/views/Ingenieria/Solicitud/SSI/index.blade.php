@@ -180,6 +180,7 @@
                                     <th class='text-center' style="color:#fff; max-width: 3vw;">Fecha requerida</th>
                                     <th class='text-center' style="color:#fff; max-width: 2vw;">Estado</th>
                                     <th class='text-center' style="color:#fff; max-width: 2vw;">Prioridad</th>
+                                    <th class='text-center' style="color:#fff; max-width: 2vw;">Activo</th>
                                     <th class='text-center' style="color: #fff; max-width: 4vw;">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -208,6 +209,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getServicio ? $Ssi->getSolicitud->getServicio->getEstado() : $Ssi->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getActivo->codigo_activo ?? '-'}}</td>
                                             
                                             @if (optional($Ssi->getSolicitud->getEmpleado)->id_empleado == optional(Auth::user()->getEmpleado)->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
                                             <td>

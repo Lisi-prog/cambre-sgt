@@ -343,12 +343,18 @@
             $es_sup = 0;
         @endphp
     @endrole
-    <script src="{{ asset('js/change-td-color.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
+    <script src="{{ asset('js/change-td-color.js') }}?v={{ filemtime(public_path('js/change-td-color.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/filter.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/ordenes.js')) }}"></script>
+    <script src="{{ asset('js/filter-to-filter.js') }}?v={{ filemtime(public_path('js/filter-to-filter.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js')) }}"></script>
+
+    {{-- <script src="{{ asset('js/change-td-color.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script> --}}
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
-    <script src="{{ asset('js/filter-to-filter.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js') }}"></script>
+    {{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/filter-to-filter.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js') }}"></script> --}}
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;
@@ -505,12 +511,6 @@
 
     $('#example tbody').on('click', 'tr', function () {
         ind_rw = table.row(this).index();
-        // let a = table.row(this).index();
-        // var temp = table.row(a).data();
-        // temp[0] = 'Tom';
-        // table.row(this)
-        // .data(temp)
-        // .draw();
    });
 
     $('#verPartesModal').on('hidden.bs.modal', function (e) {
@@ -602,48 +602,6 @@
                                         </div>`;
                     $('#alertOrd').html(html)
                     setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
-                    /*
-                    opcion = parseInt(data.resultado);
-                    switch (opcion) {
-                        case 1:
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte creado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 2:
-                            id = document.getElementById('m-id-parte').value;
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte cod. `+id+` actualizado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 6:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        No se puede actualizar un parte de la cual no eres responsable.
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                        default:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        Ocurrio un error
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                    }
-                    $('#alert').html(html)
-                    recargarPartes(id_orden, data.tipo_orden);
-                    nuevoParte();
-                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-                    */
                 }
             });
             actRow();

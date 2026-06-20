@@ -6,7 +6,6 @@ let b;
 var table;
 $("#loading").show();
 $(document).ready( function () {
-    var url = '{{url('/')}}';
     document.getElementById('volver').href = url;
     document.getElementById('ayudin').hidden = false;
     let nombreArchivo = 'orden';
@@ -1278,7 +1277,7 @@ function buscarPorFiltros(){
                     7: '-',
                     8: ope.nombre_estado == 'Espera' && ope.esta_activo ? 'Disponible' : ope.nombre_estado,
                     9: '-',
-                    10: ope.nombre_empleado?.nombre_empleado ?? '-',
+                    10: ope.nombre_empleado_asignado ?? '-',
                     11: ope.horas,
                     12: ope.esta_activo ? 'SI' : 'NO',
                     13: ope.cantidad ?? '-',
