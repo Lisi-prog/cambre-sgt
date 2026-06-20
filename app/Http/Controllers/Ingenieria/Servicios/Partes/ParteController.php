@@ -421,6 +421,9 @@ class ParteController extends Controller
         $observaciones = $request->input('observaciones');
         $cont = 0;
 
+        $duracionHoras = $request->input('duracion_horas');
+        $duracionMinutos = $request->input('duracion_minutos');
+
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $fecha = Carbon::now()->format('Y-m-d');
         try {
@@ -437,19 +440,18 @@ class ParteController extends Controller
 
                 $opcion =  $orden->getOrdenDe->getTipoOrden();
 
+                // $tiempo = $tiempos[$cont];
+
+                // list($hora, $minutos) = explode(':', $tiempo);
                 
 
-                $tiempo = $tiempos[$cont];
+                // $hora = (int)$hora;
+                // $minutos = (int)$minutos;
 
-                list($hora, $minutos) = explode(':', $tiempo);
+                // $horas = $hora . ':' . $minutos;
 
-                $hora = (int)$hora;
-                $minutos = (int)$minutos;
-                // preg_match('/(\d+)h\s+(\d+)m/', $tiempo, $matches);
-
-                // $hora = (int)$matches[1];
-                // $minutos = (int)$matches[2];
-
+                $hora = (int) $duracionHoras[$cont];
+                $minutos = (int) $duracionMinutos[$cont];
                 $horas = $hora . ':' . $minutos;
                 
                 $costo = $hora*$puesto->costo_hora + $minutos * ($puesto->costo_hora/60);
