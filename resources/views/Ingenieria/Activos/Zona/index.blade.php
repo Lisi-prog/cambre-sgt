@@ -34,7 +34,7 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -42,6 +42,7 @@
                                 <thead style="height:50px;">
                                     <th class='text-center' style="color:#fff;max-width:5vh">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
+                                    <th class='text-center' style="color:#fff;">Tipo Activo</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -53,6 +54,8 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$zona->id_zona}}</td>
 
                                             <td class='text-start' style="vertical-align: middle;">{{$zona->nombre_zona}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;">{{$zona->getTipos() != null ? $zona->getTipos() : '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="d-flex gap-2">
