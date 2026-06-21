@@ -1248,6 +1248,30 @@ CREATE TABLE `tarea_prev_x_tipo_activo` (
 	CONSTRAINT `FK_tpxta_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
 );
 
+CREATE TABLE tarea_prev_x_activo_historial (
+    `id_historial` INT NOT NULL AUTO_INCREMENT,
+    `id_tarea_prev_x_activo` INT NOT NULL,
+    `id_activo` INT NOT NULL,
+    `id_tarea_mantenimiento` INT NOT NULL,
+    `intervalo_dias INT NOT NULL`,
+    `cant_golpes` INT NOT NULL,
+    `fecha_ultima_ejecucion` DATE NULL,
+    `fecha_carga` DATETIME NOT NULL,
+    PRIMARY KEY (`id_historial`)
+);
+
+CREATE TABLE tarea_prev_x_tipo_activo_historial (
+    `id_historial` INT NOT NULL AUTO_INCREMENT,
+    `id_tarea_prev_x_tipo_activo` INT NOT NULL,
+    `id_tipo_activo` INT NOT NULL,
+    `id_tarea_mantenimiento` INT NOT NULL,
+    `intervalo_dias` INT NOT NULL,
+    `cant_golpes` INT NOT NULL,
+    `fecha_ultima_ejecucion` DATE NULL,
+    `fecha_carga` DATETIME NOT NULL,
+    PRIMARY KEY (`id_historial`)
+);
+
 CREATE TABLE `activo_x_tarea_mant` (
 	`id_activo_x_tarea_mant` INT NOT NULL AUTO_INCREMENT,
 	`id_activo` INT NOT NULL,
@@ -1331,6 +1355,13 @@ CREATE TABLE `zona` (
 	`id_zona` INT NOT NULL AUTO_INCREMENT,
 	`nombre_zona` INT NULL DEFAULT NULL,
 	PRIMARY KEY (`id_zona`)
+);
+
+CREATE TABLE `zona_x_tipo_activo` (
+  `id_zona_x_tipo_activo` INT NOT NULL AUTO_INCREMENT,
+	`id_zona` INT NOT NULL,
+	`id_tipo_activo` int NOT NULL,
+	PRIMARY KEY (`id_zona_x_tipo_activo`)
 );
 
 CREATE TABLE `tarea_ajuste` (

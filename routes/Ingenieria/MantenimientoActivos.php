@@ -57,6 +57,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::get('get-parte-ajuste-completado/{id_orden}', [ParteAjusteController::class, 'get_parte_ajuste_completado'])->name('get_parte_ajuste_completado');   
     Route::get('get-parte-ajuste-porcion/{id_parte}', [ParteAjusteController::class, 'get_parte_ajuste_porcion'])->name('get_parte_ajuste_porcion');   
     Route::post('procesar-parte-ajuste', [ParteAjusteController::class, 'procesar_parte_ajuste'])->name('procesar_parte_ajuste');   
+    Route::get('zona/asignar-tipo/{id}', [ZonaController::class, 'verAsignarTipo'])->name('zona.asignar.tipo');
+    Route::post('zona/asignar-tipo-guardar/{id}', [ZonaController::class, 'asignarSubTipo'])->name('zona.asignar.tipo.guardar');
     Route::resource('zona', ZonaController::class);
     Route::get('ordenes/mant/operaciones', [OrdenMantenimientoController::class, 'index'])->name('orden_mantenimiento.index');
     Route::post('get_operaciones', [OrdenMantenimientoController::class, 'get_operaciones'])->name('get_operaciones');

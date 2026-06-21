@@ -69,7 +69,7 @@
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color:#fff;">Activo</th>
                                     <th class='text-center' style="color:#fff;">Tipo</th>
-                                    <th class='text-center' style="color:#fff;">Tareas Preventivas (Pendientes/Total)</th>
+                                    <th class='text-center' style="color:#fff;">Tareas Preventivas (Vencidas/Total)</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">

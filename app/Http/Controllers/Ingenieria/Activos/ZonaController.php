@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Cambre\Zona;
+use App\Models\Cambre\Zona_x_tipo_activo;
+use App\Models\Cambre\Tipo_activo;
+use Illuminate\Support\Facades\DB;
 
 
 class ZonaController extends Controller
@@ -56,5 +59,54 @@ class ZonaController extends Controller
         $zona = Zona::findOrFail($id);  
         $zona->delete();
         return redirect()->route('zona.index')->with('success','Zona eliminada exitosamente.');
+    }
+
+    public function verAsignarTipo($id){
+        $zona = Zona::findOrFail($id);
+        $tipos = Tipo_activo::orderBy('nombre_tipo_activo')->get();
+        return view('Ingenieria.Activos.Zona.asignar-tipo', compact('zona', 'tipos'));
+    }
+
+    public function asignarSubTipo(Request $request, $id){
+        
+        try {    
+            DB::beginTransaction();
+
+            if(empty($request->input('subtipo'))){
+                //return 'llega vacio';
+
+                $subTipoAnt = Zona_x_tipo_activo::where('id_zona', '=', $id)->get();
+                
+                foreach($subTipoAnt as $sta){
+                    Zona_x_tipo_activo::where('id_zona', $id)->where('id_tipo_activo', $sta->id_tipo_activo)->first()->delete();
+                }
+    
+            }else{
+                //return 'llega con algo';
+                $subTipoAnt = Zona_x_tipo_activo::where('id_zona', '=', $id)->get();
+                
+                foreach($subTipoAnt as $sta){
+                    Zona_x_tipo_activo::where('id_zona', $id)->where('id_tipo_activo', $sta->id_tipo_activo)->delete();
+                }
+
+                $ids_subtipos = $request->input('subtipo');
+
+                foreach ($ids_subtipos as $idst) {
+                    Zona_x_tipo_activo::create([
+                        'id_zona' => $id,
+                        'id_tipo_activo' => $idst
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('zona.index')->with('mensaje', 'Se asignaron los tipo activo a la zona con éxito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al asignar los tipo activo a la zona: '.$e->getMessage());
+        }
     }
 }
