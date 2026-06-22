@@ -86,7 +86,7 @@
             </div>
             <div class="modal-footer">
                 <div class="form-group ml-auto mr-2 align-items-bottom mb-0 mr-4">
-                    <input type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
+                    <input onchange="checkCompletoAjuste()" type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
                     <label for="completado_ajuste">COMPLETADO</label>
                 </div>
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>

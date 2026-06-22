@@ -54,13 +54,13 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                         tabla_ajustes.row.add([
                             (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
                             tarea.get_accion_para_tarea.nombre_accion,
-                            `<select class="form-select" required name="tareas[${j}][zona]">
+                            `<select class="form-select" name="tareas[${j}][zona]">
                                 <option value="">Seleccionar...</option>
                                 ${$("#zona_select_div").html()}
                             </select>
                             <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_para_tarea.id_accion_tarea}">
                             <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
-                            `<select class="form-select" required name="tareas[${j}][maquina]">
+                            `<select class="form-select" name="tareas[${j}][maquina]">
                                 <option value="">Seleccionar...</option>
                                 ${$("#maquina_select_div").html()}
                             </select>`,
@@ -77,14 +77,14 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
             $("#horas_ajuste").val('00')            
             $("#minutos_ajuste").val('00')            
             tabla_ajustes.draw();
-            tabla_ajustes.columns.adjust();
+            tabla_ajustes.columns.adjust();            
+            checkCompletoAjuste()
         }
     });
 }
 
 function agregarNuevoAjusteRow(){
     let j = tabla_ajustes.rows().count();
-
     const rowNode = tabla_ajustes.row.add([
         '<div class="d-flex"><div class="my-auto">' + (j + 1) + ` - </div>
         <select style="width: 85%" class="m-auto form-select" name="tareas[${j}][tarea_mant]">
@@ -96,21 +96,22 @@ function agregarNuevoAjusteRow(){
             <option value="">Seleccionar...</option>
             ${$("#accion_select_div").html()}
         </select>`,
-        `<select class="form-select" required name="tareas[${j}][zona]">
+        `<select class="form-select" required name="tareas[${j}][zona]" id="tareas_zona_${j}">
             <option value="">Seleccionar...</option>
             ${$("#zona_select_div").html()}
         </select>`,                    
-        `<select class="form-select" required name="tareas[${j}][maquina]">
+        `<select class="form-select" required name="tareas[${j}][maquina]" id="tareas_maquina_${j}">
             <option value="">Seleccionar...</option>
             ${$("#maquina_select_div").html()}
         </select>`,
-        `<input onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" name="tareas[${j}][hecho]">
+        `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" name="tareas[${j}][hecho]">
          <button type="button" onclick="eliminarRowAjuste(${j})" class="btn btn-danger ms-2">X</button>`
     ]).node();
     rowNode.id = `ajuste_${j}`;
     
     tabla_ajustes.draw();
     $("#completado_ajuste").prop('checked', false)
+    checkCompletoAjuste()
 }
 
 
@@ -140,17 +141,29 @@ function reordenarFilasAjuste() {
     tabla_ajustes.draw(false);
 }
 
-
 function checkCompletoAjuste() {
-    const checkboxes = document.querySelectorAll('input[name^="tareas"][name$="[hecho]"]');
 
-    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    const checkboxes = document.querySelectorAll(
+        'input[name^="tareas"][name$="[hecho]"]'
+    );
 
-    if (allChecked) {
-        $("#completado_ajuste").prop('checked', true)
-    } else {
-        $("#completado_ajuste").prop('checked', false)
-    }
+    let allChecked = true;
+
+    checkboxes.forEach(cb => {
+        const id = cb.id.replace('tarea_hecho_', '');
+
+        const zona = document.getElementById(`tareas_zona_${id}`);
+        const maquina = document.getElementById(`tarea_maquina_${id}`);
+
+        if (zona) zona.required = cb.checked;
+        if (maquina) maquina.required = cb.checked;
+
+        if (!cb.checked) {
+            allChecked = false;
+        }
+    });
+
+    $("#completado_ajuste").prop('checked', allChecked);
 }
 
 
@@ -195,6 +208,7 @@ function openModalConfirmarParteAjuste(id_orden){
             $("#bandera_refabricar").val(bandera)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
+            //checkCompletoAjuste()
         }
     });
 }
@@ -251,8 +265,8 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                     name="tareas[${j}][hecho]">`
                 ]);
                 tabla_ajustes.draw();
-                $(`#tarea_maquina_${j}`).val(tarea.get_maquinaria.id_maquinaria)
-                $(`#tareas_zona_${j}`).val(tarea.get_zona.id_zona)
+                $(`#tarea_maquina_${j}`).val(tarea.get_maquinaria?.id_maquinaria ?? '')
+                $(`#tareas_zona_${j}`).val(tarea.get_zona?.id_zona ?? '')
                 tarea.hecho? $(`#tarea_hecho_${j}`).prop('checked', true): $(`#tarea_hecho_${j}`).prop('checked', false)
                 j++;
             }); 
@@ -264,6 +278,8 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
             $("#minutos_ajuste").val('00')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
+            
+            checkCompletoAjuste()
         }
     });
 }
@@ -279,7 +295,7 @@ function openModalVerParteAjuste(id_orden){
     $("#minutos_ajuste").attr('disabled', 'disabled')
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
-    $("#completado_ajuste").prop('checked', true)
+    $("#completado_ajuste").prop('checked', true)    
     // $("#herramental_ajuste").val($("#activo").val());
     document.getElementById('nombreActivoAjuste').textContent = $("#activo").val();
     tabla_ajustes.clear();
@@ -304,6 +320,7 @@ function openModalVerParteAjuste(id_orden){
             $("#minutos_ajuste").val(mn);            
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
+            checkCompletoAjuste()
         }
     });
 }
@@ -335,8 +352,8 @@ function verParteDeAjuste(id_parte, estado){
                 tabla_ajustes.row.add([
                     j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
                     tarea.get_accion_tarea.nombre_accion,
-                    tarea.get_zona.nombre_zona,
-                    tarea.get_maquinaria.alias_maquinaria,
+                    tarea.get_zona?.nombre_zona ?? 'Sin seleccionar',
+                    tarea.get_maquinaria?.alias_maquinaria ?? 'Sin seleccionar',
                     tarea.hecho? 'SI': 'NO'
                 ]);
                 j++;
