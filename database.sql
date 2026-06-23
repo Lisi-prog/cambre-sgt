@@ -1378,3 +1378,13 @@ CREATE TABLE `tarea_ajuste` (
 	CONSTRAINT `FK_ta_x_parte_ajuste` FOREIGN KEY (`id_parte_ajuste`) REFERENCES `parte_ajuste` (`id_parte_ajuste`),
 	CONSTRAINT `FK_ta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
 );
+
+CREATE TABLE `Serv_mant_x_tarea_mant` (
+	`id_serv_mant_x_tar_pre` INT NOT NULL AUTO_INCREMENT,
+	`id_servicio` INT NOT NULL,
+	`id_tarea_prev_x_activo` INT,
+	`id_tarea_prev_x_tipo_activo` INT,
+	`fecha_carga` DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`fecha_hecho` DATETIME,
+	PRIMARY KEY (`id_serv_mant_x_tar_pre`)
+);
