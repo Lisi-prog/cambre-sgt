@@ -480,7 +480,9 @@ class MantenimientoDeActivoController extends Controller
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
                                 ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
-        $zonas = Zona::orderBy('nombre_zona')->get();
+        $zonas = Zona::join('zona_x_tipo_activo as z', 'z.id_zona', '=', 'zona.id_zona')
+        ->where('z.id_tipo_activo', $proyecto->getActivo->getTipoActivo->id_tipo_activo)
+        ->orderBy('nombre_zona')->get();
         $tareas_mantenimiento = Tarea_mantenimiento::select('tarea_mantenimiento.*', 'tipo_activo_x_tarea_mant.id_tipo_activo', 'activo_x_tarea_mant.id_activo')
         ->orderBy('nombre_tarea')
         ->leftJoin('tipo_activo_x_tarea_mant', 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')

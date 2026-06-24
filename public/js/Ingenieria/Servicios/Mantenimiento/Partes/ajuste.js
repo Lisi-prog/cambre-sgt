@@ -1,4 +1,4 @@
-var tabla_ajustes
+var tabla_ajustes, tabla_mecanizado
 
 $(document).ready(function () {
     tabla_ajustes = $('#tabla_ajustes').DataTable({
@@ -23,6 +23,24 @@ $(document).ready(function () {
             "aaSorting": []
     });    
     $("#nombre_proyecto_ajuste").val($("#nombre_proyecto_i").val())
+    tabla_mecanizado = $('#tablaOrdenMec').DataTable({
+        autoWidth: false,
+        language: {
+                lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                zeroRecords: 'No se ha encontrado registros',
+                info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                infoEmpty: 'No se ha encontrado registros',
+                infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                search: 'Buscar',
+                paginate:{
+                    first:"Prim.",
+                    last: "Ult.",
+                    previous: 'Ant.',
+                    next: 'Sig.',
+                },
+            },
+            "aaSorting": []
+    });    
 });
 
 
@@ -206,6 +224,16 @@ function openModalConfirmarParteAjuste(id_orden){
             $("#horas_ajuste").val(hr);
             $("#minutos_ajuste").val(mn);
             $("#bandera_refabricar").val(bandera)
+            let tieneFinalizacion = tabla_mecanizado.rows().data().toArray()
+            .some(r => r[3] !== null && r[3] !== '' && r[3] !== '____-__-__');
+
+            if (bandera == 1 && !tieneFinalizacion) {
+                $("#mensaje_refabricar").show();
+                $("#btnAceptarAjusteReview").prop('disabled', true);
+            } else {
+                $("#mensaje_refabricar").hide();
+                $("#btnAceptarAjusteReview").prop('disabled', false);
+            }
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
             //checkCompletoAjuste()

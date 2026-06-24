@@ -92,7 +92,8 @@
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
-                        <button onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
+                        <span id="mensaje_refabricar" class="text-danger mr-2"><b>No podrá aceptarse el ajuste hasta que se finalize al menos una orden de mecanizado.</b></span>
+                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
                         <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Ajuste</button>
                     </div>
                 </div>
