@@ -7,6 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             {!! Form::open(['method' => 'POST', 'route' => ['activo.crearsma'], 'style' => '', 'id' => 'form-serv-mant']) !!}
+            {!! Form::text('id_act', null, ['class' => 'form-control', 'hidden', 'id' => 'id_activo_serv_mant']) !!}
             <div class="modal-body">
                         <div class="row">
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -40,7 +41,8 @@
                                     {!! Form::select('lider', $empleados, Auth::user()->getEmpleado->id_empleado, [
                                         'placeholder' => 'Seleccionar',
                                         'class' => 'form-select form-control',
-                                        'id' => 'lider_serv_mant'
+                                        'id' => 'lider_serv_mant',
+                                        'required'
                                     ]) !!}
                                 </div>
                             </div>
@@ -107,6 +109,7 @@
                                         <th class='text-center' style="color:#fff;">Ejecucion</th>
                                         <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Ult. Ejecucion</th>
+                                        <th class='text-center' style="color:#fff;">Situacion</th>
                                     </thead>
                                     <tbody id="tareas-prev">
                                         
@@ -124,4 +127,4 @@
     </div>
 </div>
 
-<script src="{{ asset('js/Ingenieria/Activo/crear-serv-mant.js') }}"></script>
+<script src="{{ asset('js/Ingenieria/Activo/crear-serv-mant.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Activo/crear-serv-mant.js')) }}"></script>

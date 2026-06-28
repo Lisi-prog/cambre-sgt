@@ -19,6 +19,6 @@ class Zona_tarea extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'nombre_zona_tarea'
+        'nombre_zona'
     ];
 }

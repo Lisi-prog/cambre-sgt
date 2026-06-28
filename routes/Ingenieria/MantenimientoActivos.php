@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::put('tipo_activo/set_tareas_mantenimiento', [ActivoController::class, 'set_tareas_mantenimiento_tipo_activo'])->name('tipo_activo.set_tareas_mantenimiento');
     Route::put('tipo_activo/set_tareas_mantenimiento_preventivas', [ActivoController::class, 'set_tareas_mantenimiento_preventivas_tipo_activo'])->name('tipo_activo.set_tareas_mantenimiento_preventivas');
     Route::delete('tipo_activo/destroy_tarea_mantenimiento/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_tipo_activo'])->name('tipo_activo.destroy_tarea_mantenimiento');
+    Route::delete('activo/destroy_tarea_mantenimiento/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_activo'])->name('activo.destroy_tarea_mantenimiento');
     Route::delete('tipo_activo/destroy_tarea_mantenimiento_preventivas/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_preventiva_tipo_activo'])->name('tipo_activo.destroy_tarea_mantenimiento_preventiva');
     Route::put('activo/set_tareas_mantenimiento', [ActivoController::class, 'set_tareas_mantenimiento_activo'])->name('activo.set_tareas_mantenimiento');
     Route::put('activo/set_tareas_mantenimiento_preventiva', [ActivoController::class, 'set_tareas_mantenimiento_preventiva_activo'])->name('activo.set_tareas_mantenimiento_preventiva');

@@ -1386,5 +1386,8 @@ CREATE TABLE `Serv_mant_x_tarea_mant` (
 	`id_tarea_prev_x_tipo_activo` INT,
 	`fecha_carga` DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`fecha_hecho` DATETIME,
-	PRIMARY KEY (`id_serv_mant_x_tar_pre`)
+	PRIMARY KEY (`id_serv_mant_x_tar_pre`),
+  CONSTRAINT `FK_smxtm_x_serv` FOREIGN KEY (`id_servicio`) REFERENCES `servicio` (`id_servicio`),
+  CONSTRAINT `FK_smxtm_x_tpxa` FOREIGN KEY (`id_tarea_prev_x_activo`) REFERENCES `tarea_prev_x_activo` (`id_tarea_prev_x_activo`),
+  CONSTRAINT `FK_smxtm_x_tpxta` FOREIGN KEY (`id_tarea_prev_x_tipo_activo`) REFERENCES `tarea_prev_x_tipo_activo` (`id_tarea_prev_x_tipo_activo`)
 );

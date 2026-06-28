@@ -479,11 +479,25 @@ class ActivoController extends Controller
 
         foreach ($activo->getTareasMantenimientoPreventivaPendientes as $ta) {
             array_push($tareas, (object)[
-                'id_tarea_prev_x_activo' => $ta->id_tarea_prev_x_activo,
+                'id' => $ta->id_tarea_prev_x_activo,
+                'tipo' => 'activo',
                 'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
                 'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
                 'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
                 'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+                'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
+            ]);
+        }
+
+        foreach ($activo->getTareasMantenimientoPreventivaPendientesTipo as $ta) {
+            array_push($tareas, (object)[
+                'id' => $ta->id_tarea_prev_x_tipo_activo,
+                'tipo' => 'tipo_activo',
+                'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
+                'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
+                'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
+                'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+                'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
             ]);
         }
 

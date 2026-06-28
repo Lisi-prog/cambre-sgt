@@ -108,15 +108,31 @@ class Activo extends Model
     }
 
     public function getTotalTareasMantenimientoPreventiva(){
-        return $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo')->count();
+        $TotTaMantAct = 0;
+        $TotTaMantTipAct = 0;
+
+        $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo')->count();
+        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo')->count();
+
+        return $TotTaMantAct + $TotTaMantTipAct;
     }
 
     public function getTotalTareasMantenimientoPreventivaPendientes(){
-       return $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+        $TotTaMantAct = 0;
+        $TotTaMantTipAct = 0;
+
+        $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+
+       return $TotTaMantAct + $TotTaMantTipAct;
     }
 
     public function getTareasMantenimientoPreventivaPendientes(){
        return $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()]);
+    }
+
+    public function getTareasMantenimientoPreventivaPendientesTipo(){
+       return $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()]);
     }
 
     public function getProgreso(){
