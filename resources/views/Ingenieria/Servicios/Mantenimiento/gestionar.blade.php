@@ -123,6 +123,8 @@
                         </div>
                     </div>
                 </div>
+                @else
+                    {!! Form::text('activo', $proyecto->getActivo->codigo_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true', 'hidden', 'id' => 'activo']) !!}
                 @endif
                 {{-- -------------------------------- --}}
             </div>
@@ -361,11 +363,7 @@
                                             $opcion = 1;
                                         @endphp
                                         @foreach ($ordenes_mecanizado as $orden)
-                                            @if ($orden->id_estado < 7)
                                                 <tr>
-                                            @else
-                                                <tr style="display: none;">
-                                            @endif     
                                                     <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
 
                                                     {{-- <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
@@ -609,9 +607,10 @@
             });
         });
     </script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}"></script>
+
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/gestionar.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js')) }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

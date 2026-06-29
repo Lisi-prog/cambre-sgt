@@ -67,7 +67,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
             let opciones = ''
             data.forEach(d => 
                 {
-                    console.log(d)
+                    // console.log(d)
                     d.get_tareas_mantenimiento.forEach(tarea => {
                         tabla_ajustes.row.add([
                             (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,

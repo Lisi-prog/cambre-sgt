@@ -1168,6 +1168,15 @@ CREATE TABLE `tipo_activo_x_sintoma` (
 	CONSTRAINT `FK_taxs_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
 );
 
+CREATE TABLE `sol_serv_man_x_sintoma` (
+	`id_sol_serv_man_x_sintoma` INT NOT NULL AUTO_INCREMENT,
+	`id_servicio_de_mantenimiento` INT NOT NULL,
+	`id_sintoma` INT NOT NULL,
+	PRIMARY KEY (`id_sol_serv_man_x_sintoma`),
+	CONSTRAINT `FK_ssmxs_x_sintoma` FOREIGN KEY (`id_sintoma`) REFERENCES `sintoma` (`id_sintoma`),
+	CONSTRAINT `FK_ssmxs_x_sol_servicio_de_mant` FOREIGN KEY (`id_servicio_de_mantenimiento`) REFERENCES `sol_servicio_de_mantenimiento` (`id_servicio_de_mantenimiento`)
+);
+
 CREATE TABLE `sol_serv_ing_x_sintoma` (
 	`id_sol_serv_ing_x_sintoma` INT NOT NULL AUTO_INCREMENT,
 	`id_servicio_de_ingenieria` INT NOT NULL,
@@ -1361,7 +1370,9 @@ CREATE TABLE `zona_x_tipo_activo` (
   `id_zona_x_tipo_activo` INT NOT NULL AUTO_INCREMENT,
 	`id_zona` INT NOT NULL,
 	`id_tipo_activo` int NOT NULL,
-	PRIMARY KEY (`id_zona_x_tipo_activo`)
+	PRIMARY KEY (`id_zona_x_tipo_activo`),
+  CONSTRAINT `FK_zxta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`),
+  CONSTRAINT `FK_zxta_x_tipo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
 );
 
 CREATE TABLE `tarea_ajuste` (
@@ -1379,7 +1390,7 @@ CREATE TABLE `tarea_ajuste` (
 	CONSTRAINT `FK_ta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
 );
 
-CREATE TABLE `Serv_mant_x_tarea_mant` (
+CREATE TABLE `serv_mant_x_tarea_mant` (
 	`id_serv_mant_x_tar_pre` INT NOT NULL AUTO_INCREMENT,
 	`id_servicio` INT NOT NULL,
 	`id_tarea_prev_x_activo` INT,

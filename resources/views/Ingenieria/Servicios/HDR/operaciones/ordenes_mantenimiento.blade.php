@@ -294,8 +294,9 @@
 <script src="{{ asset('js/filter-to-filter.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
-<script src="{{ asset('js/ordenes_mantenimiento.js') }}"></script>
-<script src="{{ asset('js/ope_mant_partes.js') }}"></script>
+
+<script src="{{ asset('js/ordenes_mantenimiento.js') }}?ver={{ filemtime(public_path('js/ordenes_mantenimiento.js')) }}"></script>
+<script src="{{ asset('js/ope_mant_partes.js') }}?ver={{ filemtime(public_path('js/ope_mant_partes.js')) }}"></script>
 <script type="module" > 
         import {cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.cargarModalVerOrden = cargarModalVerOrden;

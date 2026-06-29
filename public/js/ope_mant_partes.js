@@ -242,8 +242,8 @@ function openModalParteDiagnosticoPendiente(id_orden, activo, proyecto){
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
-    $("#horas").val('');
-    $("#minutos").val('');
+    $("#horas").val('00');
+    $("#minutos").val('00');
     $("#horas").removeAttr('disabled');
     $("#minutos").removeAttr('disabled');
     $("#observaciones_diagonstico").removeAttr('disabled');
@@ -311,8 +311,8 @@ function openModalCrearParteDiagnostico(id_orden, nombre_activo, proyecto){
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
-    $("#horas").val('');
-    $("#minutos").val('');
+    $("#horas").val('00');
+    $("#minutos").val('00');
     $("#horas").removeAttr('disabled');
     $("#minutos").removeAttr('disabled');
     let hoy = new Date()
@@ -649,7 +649,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
             let opciones = ''
             data.forEach(d => 
                 {
-                    console.log(d)
+                    // console.log(d)
                     d.get_tareas_mantenimiento.forEach(tarea => {
                         tabla_ajustes.row.add([
                             j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
