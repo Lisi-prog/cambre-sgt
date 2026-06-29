@@ -56,7 +56,7 @@
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="p-1">
-                                    {!! Form::open(['method' => 'GET', 'route' => 'tipo_activo.index', 'style' => '']) !!}
+                                    {!! Form::open(['method' => 'GET', 'route' => 'zona.index', 'style' => '']) !!}
                                     {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}
                                 </div>
