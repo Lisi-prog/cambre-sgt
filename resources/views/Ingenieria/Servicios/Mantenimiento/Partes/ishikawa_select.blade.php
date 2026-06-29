@@ -15,7 +15,7 @@
 </div>
 <div id="zona_select_div">
     @foreach ($zonas as $zona)
-        <option value="{{ $zona->id_zona }}">{{ $zona->nombre_zona }}</option>
+        <option value="{{ $zona->id_zona }}" data-id_tipos="[{{ $zona->getIdTipos()->implode(',') }}]">{{ $zona->nombre_zona }}</option>
     @endforeach
 </div>
 <div id="maquina_select_div">

@@ -107,7 +107,7 @@ class ParteAjusteController extends Controller{
         $query->where('id_orden', $id_orden);
         })
         ->with(
-            'getParte.getOrden', 
+            'getParte.getOrden.getEtapa.getServicio.getActivo', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
@@ -225,7 +225,7 @@ class ParteAjusteController extends Controller{
         $query->where('id_orden', $id_orden)->whereIn('id_estado_mantenimiento', [2,3]);
         })
         ->with(
-            'getParte.getOrden', 
+            'getParte.getOrden.getEtapa.getServicio.getActivo', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',
@@ -240,7 +240,7 @@ class ParteAjusteController extends Controller{
     public function get_parte_ajuste_porcion($id_parte){
         $parte_ajuste = Parte_ajuste::where('id_parte', $id_parte)
         ->with(
-            'getParte.getOrden', 
+            'getParte.getOrden.getEtapa.getServicio.getActivo', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
             'getTareasAjuste.getMaquinaria',

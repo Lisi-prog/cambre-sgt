@@ -573,20 +573,20 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
         success: function(data) {
             let zona_actual = null;
             data.get_parte.get_orden.parte_inspe_x_tareas_mantenimiento.forEach(tarea => {
-                if (tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona !== zona_actual) {
-                    zona_actual = tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona;
+                if (tarea.get_tarea_mantenimiento?.get_zona_tarea.nombre_zona !== zona_actual) {
+                    zona_actual = tarea.get_tarea_mantenimiento?.get_zona_tarea.nombre_zona;
                     addZonaHeader(zona_actual)
                 }
 
                 let ok = `<div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled checked>
-                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento?.id_tarea_mantenimiento ?? ''}" disabled checked>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento?.id_tarea_mantenimiento ?? ''}">
                             </label>
                           </div>`;
 
                 let not_ok = `<div class="form-check">
-                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}" disabled>
-                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">
+                            <input class="form-check-input" type="radio" name="radioDisabled${tarea.get_tarea_mantenimiento?.id_tarea_mantenimiento ?? ''}" disabled>
+                            <label class="form-check-label" for="radioDisabled${tarea.get_tarea_mantenimiento?.id_tarea_mantenimiento ?? ''}">
                             </label>
                           </div>`;
 
@@ -765,52 +765,6 @@ function checkCompletoAjuste() {
     }
 }
 
-
-
-function openModalConfirmarParteAjuste(id_orden, nombre_act, proyecto){
-    $('#modalNuevoParteAjuste').modal('show');
-    $("#id_orden_ajuste").val(id_orden);
-    $("#btnGuardarNuevoParteAjuste").hide()
-    $("#previewAceptarAjusteReview").show()
-    $("#btnRowNuevoAjuste").hide()
-    $("#horas_ajuste").attr('disabled', 'disabled')
-    $("#minutos_ajuste").attr('disabled', 'disabled')
-    $("#fecha_ajuste").attr('disabled', 'disabled')
-    $("#completado_ajuste").attr('disabled', 'disabled')
-    $("#completado_ajuste").prop('checked', true)
-    $("#herramental_ajuste").val(nombre_act);
-    $("#nombre_proyecto_ajuste").val(proyecto);
-    tabla_ajustes.clear();
-     $.ajax({
-        type: 'GET',
-        url: '/get-parte-ajuste/' + id_orden,
-        success: function(data) {
-            let j=0;
-            let bandera = 0
-            data.get_tareas_ajuste.forEach(tarea => {
-                tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
-                    tarea.get_accion_tarea.nombre_accion,
-                    tarea.get_zona.nombre_zona,
-                    tarea.get_maquinaria.alias_maquinaria,
-                    tarea.hecho? 'SI': 'NO'
-                ]);
-                j++;
-                if(tarea.get_accion_tarea.nombre_accion == 'REFABRICAR' || tarea.get_accion_tarea.nombre_accion== 'Refabricar'){
-                    bandera = 1
-                }
-            }); 
-            $("#fecha_ajuste").val(data.get_parte.fecha)
-            let [hr, mn] = data.horas.split(':');
-            $("#horas_ajuste").val(hr);
-            $("#minutos_ajuste").val(mn);
-            $("#bandera_refabricar").val(bandera)
-            tabla_ajustes.draw();
-            tabla_ajustes.columns.adjust();
-        }
-    });
-}
-
 function procesarAjuste(accion){
     $.ajax({
         type: 'post',
@@ -846,29 +800,45 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
         type: 'GET',
         url: '/get-parte-ajuste/' + id_orden,
         success: function(data) {
-            let j=0;
+            let j=0;            
             data.get_tareas_ajuste.forEach(tarea => {
-                tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
-                    tarea.get_accion_tarea.nombre_accion,
-                    `<select id="tareas_zona_${j}" class="form-select" required name="tareas[${j}][zona]">
-                        <option value="">Seleccionar...</option>
-                        ${$("#zona_select_div").html()}
-                    </select>
-                    <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_tarea.id_accion_tarea}">
-                    <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
-                    `<select class="form-select" required id="tarea_maquina_${j}" name="tareas[${j}][maquina]">
-                        <option value="">Seleccionar...</option>
-                        ${$("#maquina_select_div").html()}
-                    </select>`,
-                    `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
-                    name="tareas[${j}][hecho]">`
-                ]);
+                    tabla_ajustes.row.add([
+                        j+1 + ' - ' + tarea.get_tarea_mantenimiento?.nombre_tarea ?? '' + ' (' + tarea.get_tarea_mantenimiento?.get_zona_tarea.nombre_zona ?? '' + ')',
+                        tarea.get_accion_tarea.nombre_accion,
+                        `<select id="tareas_zona_${j}" class="form-select" required name="tareas[${j}][zona]">
+                            <option value="">Seleccionar...</option>
+                            ${$("#zona_select_div").html()}
+                        </select>
+                        <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_tarea.id_accion_tarea}">
+                        <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
+                        `<select class="form-select" required id="tarea_maquina_${j}" name="tareas[${j}][maquina]">
+                            <option value="">Seleccionar...</option>
+                            ${$("#maquina_select_div").html()}
+                        </select>`,
+                        `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
+                        name="tareas[${j}][hecho]">`
+                    ]);
                 tabla_ajustes.draw();
                 $(`#tarea_maquina_${j}`).val(tarea.get_maquinaria.id_maquinaria)
                 $(`#tareas_zona_${j}`).val(tarea.get_zona.id_zona)
                 tarea.hecho? $(`#tarea_hecho_${j}`).prop('checked', true): $(`#tarea_hecho_${j}`).prop('checked', false)
+                let idTipoActivo = data.get_parte.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo;
+                let $select = $(`#tareas_zona_${j}`);
+
+                $select.find('option').each(function () {
+                    if ($(this).val() === '') return;
+
+                    let tipos = $(this).attr('data-id_tipos');
+                    tipos = tipos ? JSON.parse(tipos) : [];
+
+                    if (!tipos.includes(idTipoActivo)) {
+                        $(this).hide();
+                    }
+
+                });
                 j++;
+
+                
             }); 
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -904,10 +874,10 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
             let j=0;
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
-                    tarea.get_accion_tarea.nombre_accion,
-                    tarea.get_zona.nombre_zona,
-                    tarea.get_maquinaria.alias_maquinaria,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento?.nombre_tarea ?? '' + ' (' + tarea.get_tarea_mantenimiento?.get_zona_tarea.nombre_zona ?? '' + ')',
+                    tarea.get_accion_tarea?.nombre_accion ?? '',
+                    tarea.get_zona?.nombre_zona ?? '',
+                    tarea.get_maquinaria?.alias_maquinaria ?? '',
                     tarea.hecho? 'SI': 'NO'
                 ]);
                 j++;
