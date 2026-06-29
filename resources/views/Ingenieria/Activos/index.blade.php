@@ -37,6 +37,63 @@
             <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                 <div class="card">
                     <div class="card-body">
+
+                        <div class="row">
+                            <button type="button" class="btn btn-primary-outline m-1 rounded"
+                                onclick="mostrarFiltro('demo')">
+                                Filtros <i class="fas fa-caret-down"></i>
+                            </button>
+                        </div>
+
+                        <div class="row" id="demo" hidden>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                <div class="card-body">
+
+                                    <div class="mb-2">
+                                        <label>Tipo:</label>
+                                        {{-- <input type="search" class="mx-2" placeholder="Buscar"
+                                            onkeyup="fil_filtro('tipo', this)"> --}}
+                                    </div>
+
+                                    <div class="overflow-auto"
+                                        style="
+                                            display: grid;
+                                            grid-auto-flow: column;
+                                            grid-template-rows: repeat(3, auto);
+                                            gap: 6px 30px;
+                                            max-height: 200px;
+                                            width: max-content;
+                                        ">
+
+                                        <label style="font-style: italic">
+                                            <input name="filter" type="checkbox" value="tipo" checked>
+                                            (Seleccionar todo)
+                                        </label>
+
+                                        @foreach ($tipos_activo as $value)
+                                            <label>
+                                                <input class="input-filter" name="tipo" type="checkbox"
+                                                    value="{{$value}}" checked>
+                                                {{$value}}
+                                            </label>
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                <div class="card">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
                                 <thead>
@@ -57,11 +114,11 @@
                                         <tr class="my-auto">
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->id_activo}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->codigo_activo ?? '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$activo->codigo_activo ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->nombre_activo ?? '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$activo->nombre_activo ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->esta_activo ? 'SI' : 'NO'}}</td>
 
@@ -138,7 +195,7 @@
     {{-- @include('Ingenieria.Maquinaria.modal.crear-maquinaria')--}}
     @include('Ingenieria.Activos.modal.crear-activo') 
     @include('Ingenieria.Activos.modal.crear-serv-mant')
-
+<script src="{{ asset('js/filter-to-filter.js') }}"></script>
 <script>
     $(document).ready(function () {
         var url = '{{url('/')}}';
@@ -160,7 +217,26 @@
                 console.log(error);
             }
         }));
-        $('#example').DataTable({
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+            var positions = $('input:checkbox[name="tipo"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+            if (positions.length === 0) {
+                return true;
+            }
+            
+            if (positions.indexOf(searchData[5]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+
+        table = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
@@ -175,8 +251,58 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: [[1, 'asc']],
+        });
+
+        $('input:checkbox').on('change', function () {
+            table.draw();
         });
     });
 </script> 
+<script>
+    function mostrarFiltro(){
+        let cuadro_filtro = document.getElementById("demo");
+        if ($('#demo').is(":hidden")) {
+            cuadro_filtro.hidden = false;
+        }else{
+            cuadro_filtro.hidden = true;
+        }
+    }
+
+    function limpiarFiltro(){
+        $('input[type=checkbox]').prop("checked", false);
+        var table = $('#example').DataTable();
+        table.draw();
+    }
+
+    document.querySelectorAll('input[name=filter]').forEach(item => {
+        item.addEventListener('change', event => {
+            if (item.checked) {
+                //console.log("Checkbox is checked..");
+                selects($(item).val());
+            } else {
+                //console.log("Checkbox is not checked..");
+                deSelect($(item).val());
+            }
+            validarFiltro();
+        })
+    });
+
+    function selects(name){  
+        var ele=document.getElementsByName(name);  
+        for(var i=0; i<ele.length; i++){  
+            if(ele[i].type=='checkbox')  
+                ele[i].checked=true;  
+        }  
+    }  
+
+    function deSelect(name){  
+        var ele=document.getElementsByName(name);  
+        for(var i=0; i<ele.length; i++){  
+            if(ele[i].type=='checkbox')  
+                ele[i].checked=false;  
+                
+        }  
+    }  
+</script>
 @endsection
