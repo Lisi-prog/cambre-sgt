@@ -26,6 +26,8 @@ use App\Models\Cambre\Activo_x_sintoma;
 use App\Models\Cambre\Activo_x_tarea_mant;
 use App\Models\Cambre\Tipo_activo_x_tarea_mant;
 use App\Models\Cambre\Tarea_prev_x_activo;
+use App\Models\User;
+use App\Models\Cambre\Empleado;
 
 class ActivoController extends Controller
 {
@@ -42,11 +44,28 @@ class ActivoController extends Controller
     {   
         $activos = Activo::orderBy('id_activo')->get();
         $tipos_activo = Tipo_activo::orderBy('nombre_tipo_activo')->pluck('nombre_tipo_activo','id_tipo_activo');
-        return view('Ingenieria.Activos.index', compact('activos', 'tipos_activo'));
+        $empleados = $this->obtenerSupervisoresAdmin();
+        return view('Ingenieria.Activos.index', compact('activos', 'tipos_activo', 'empleados'));
     }
 
     public function create()
     {
+    }
+
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->where('esta_activo', 1)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function store(Request $request)
@@ -450,4 +469,43 @@ class ActivoController extends Controller
         }
         return redirect()->back()->with('mensaje','Tarea de mantenimiento eliminada del tipo de activo exitosamente.');
     }
+
+    public function obtenerTareasPendientes(Request $request){
+        $id_activo = $request->input('activo');
+        
+        $activo = Activo::find($id_activo);
+
+        $tareas = array();
+
+        foreach ($activo->getTareasMantenimientoPreventivaPendientes as $ta) {
+            array_push($tareas, (object)[
+                'id' => $ta->id_tarea_prev_x_activo,
+                'tipo' => 'activo',
+                'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
+                'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
+                'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
+                'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+                'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
+            ]);
+        }
+
+        foreach ($activo->getTareasMantenimientoPreventivaPendientesTipo as $ta) {
+            array_push($tareas, (object)[
+                'id' => $ta->id_tarea_prev_x_tipo_activo,
+                'tipo' => 'tipo_activo',
+                'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
+                'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
+                'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
+                'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+                'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
+            ]);
+        }
+
+        return [
+            'activo' => $activo,
+            'nombre_proyecto' => $activo-> getNombreServicioMan(),
+            'tareas_pend' => $tareas
+        ];
+    }
+    
 }

@@ -134,25 +134,6 @@
                         </div>
                         <div class="row" id="eta_act_td_dv">
                             @include('Ingenieria.Servicios.Proyectos.layout.opciones-crear-servicio')
-                            {{-- <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                                <div class="form-group">
-                                    {!! Form::label('opt', 'Opciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="1" id="flexRadioEtp" name="op_act_se_eta" checked>
-                                        <label class="form-check-label" for="flexRadioEtp">
-                                            Crear Servicio y etapa con estado "En proceso".
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="sin-pri" name="sin-pri">
-                                        <label class="form-check-label" for="sin-pri">
-                                            Sin prioridad.
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            </div> --}}
                         </div>
                         {!! Form::close() !!}
                     </div>
@@ -247,6 +228,76 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($Ssi->getActivo->getTotalTareasMantenimientoPreventivaPendientes() > 0)
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {!! Form::label('tar_prev', 'Tareas Preventivas Pendientes:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <span class="obligatorio">*</span>
+                                <table class="table table-striped mt-2 table-sm" id="example">
+                                    <thead>
+                                        <th class='text-center' style="color:#fff;">Asignar</th>
+                                        <th class='text-center' style="color:#fff;">Tarea</th>
+                                        <th class='text-center' style="color:#fff;">Ejecucion</th>
+                                        <th class='text-center' style="color:#fff;">Zona</th>
+                                        <th class='text-center' style="color:#fff;">Ult. Ejecucion</th>
+                                        <th class='text-center' style="color:#fff;">Situacion</th>
+                                    </thead>
+                                    <tbody id="tareas-prev">
+                                        {{-- Tareas por activo --}}
+                                        @foreach ($Ssi->getActivo->getTareasMantenimientoPreventivaPendientes as $ta)
+                                            <tr onclick="toggleCheck('activo_{{$ta->id_tarea_prev_x_activo}}')">
+                                                <td class="text-center">
+                                                    @if ($ta->estaEnProceso())
+                                                        -
+                                                    @else
+                                                        <div class="form-check">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="checkbox"
+                                                                id="chkTareaPrendactivo_{{$ta->id_tarea_prev_x_activo}}"
+                                                                value="activo_{{$ta->id_tarea_prev_x_activo}}"
+                                                                name="tareas_prev[]">
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <td>{{$ta->getTareaMantenimiento->nombre_tarea}}</td>
+                                                <td>{{$ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
+                                                <td>{{$ta->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
+                                                <td>{{$ta->fecha_ultima_ejecucion}}</td>
+                                                <td>{{$ta->estaEnProceso() ? 'En Proceso' : 'Disponible'}}</td>
+                                            </tr>
+                                        @endforeach
+
+                                        {{-- Tareas por tipo de activo --}}
+                                        @foreach ($Ssi->getActivo->getTareasMantenimientoPreventivaPendientesTipo as $ta)
+                                            <tr onclick="toggleCheck('tipo_activo_{{$ta->id_tarea_prev_x_tipo_activo}}')">
+                                                <td class="text-center">
+                                                    @if ($ta->estaEnProceso())
+                                                        -
+                                                    @else
+                                                        <div class="form-check">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="checkbox"
+                                                                id="chkTareaPrendtipo_activo_{{$ta->id_tarea_prev_x_tipo_activo}}"
+                                                                value="tipo_activo_{{$ta->id_tarea_prev_x_tipo_activo}}"
+                                                                name="tareas_prev[]">
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <td>{{$ta->getTareaMantenimiento->nombre_tarea}}</td>
+                                                <td>{{$ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
+                                                <td>{{$ta->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
+                                                <td>{{$ta->fecha_ultima_ejecucion}}</td>
+                                                <td>{{$ta->estaEnProceso() ? 'En Proceso' : 'Disponible'}}</td>
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        @endif
                         {!! Form::close() !!}
                     </div>
                     @endif
@@ -260,5 +311,5 @@
     </div>
 </div>
 
-<script src="{{ asset('js/Ingenieria/Solicitud/buscar-prefijo.js') }}"></script>
-<script src="{{ asset('js/Ingenieria/Solicitud/m-crear-servicio-ssi-man.js') }}"></script>
+<script src="{{ asset('js/Ingenieria/Solicitud/buscar-prefijo.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Solicitud/buscar-prefijo.js')) }}"></script>
+<script src="{{ asset('js/Ingenieria/Solicitud/m-crear-servicio-ssi-man.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Solicitud/m-crear-servicio-ssi-man.js')) }}"></script>

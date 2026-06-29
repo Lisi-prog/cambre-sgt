@@ -43,8 +43,40 @@
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">         
                 <div class="d-flex mt-4">
                     <div class="form-group ml-auto mb-0 pb-0">
-                        <label>Horas:</label>
-                        <input id="horas_ajuste" name="horas" style="width: 170px;" required type="time" class="form-control">
+                        <label for="horas" class="control-label" style="white-space: nowrap; ">Horas:</label> 
+                        <span class="obligatorio">*</span> 
+                        <div class= "input-group">
+                            <input class="form-control" name="horas" type="number" min="0" value="00" id="horas_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico()" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
+                        </div>
+                        {{-- <label>Horas:</label>
+                        <div class="d-flex">
+                            <input 
+                                class="form-control" 
+                                id="horas_ajuste"  
+                                type="number" 
+                                min="0" 
+                                value="00" 
+                                name="horas" 
+                                onclick="this.select()" 
+                                onkeyup="checkSendNuevoParteDiagnostico()"
+                                required
+                            >
+                            <span class="input-group-text">:</span>
+                            <input 
+                                class="form-control" 
+                                id="minutos_ajuste" 
+                                type="number" 
+                                min="0" 
+                                max="59" 
+                                value="00" 
+                                name="minutos"
+                                onclick="this.select()"
+                                onkeyup="checkSendNuevoParteDiagnostico()"
+                                required
+                            >
+                        </div> --}}
                     </div>
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>
@@ -54,13 +86,14 @@
             </div>
             <div class="modal-footer">
                 <div class="form-group ml-auto mr-2 align-items-bottom mb-0 mr-4">
-                    <input type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
+                    <input onchange="checkCompletoAjuste()" type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
                     <label for="completado_ajuste">COMPLETADO</label>
                 </div>
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
-                        <button onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
+                        <span id="mensaje_refabricar" class="text-danger mr-2"><b>No podrá aceptarse el ajuste hasta que se finalize al menos una orden de mecanizado.</b></span>
+                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
                         <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Ajuste</button>
                     </div>
                 </div>

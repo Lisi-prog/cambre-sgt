@@ -157,7 +157,9 @@ function openModalNuevoParteDiagnostico(id_orden){
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
+    $("#minutos").val('');
     $("#horas").removeAttr('disabled');
+    $("#minutos").removeAttr('disabled');
     let hoy = new Date()
     hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
     '-' + hoy.getDate().toString().padStart(2, 0)
@@ -178,6 +180,7 @@ function openModalVerParteDiagnostico(id_orden, activo){
     $("#btnAgregarFilaDiagnostico").hide();
     $("#fecha").attr('disabled', 'disabled');
     $("#horas").attr('disabled', 'disabled');
+    $("#minutos").attr('disabled', 'disabled');
     $('.obligatorio').hide();
     $("#label_ob_diagnostico").hide();
     $("#completado_diagnostico").prop('disabled', 'disabled');
@@ -196,7 +199,9 @@ function openModalVerParteDiagnostico(id_orden, activo){
                 return;
             }
             let diag = data[0];
-            $("#horas").val(diag.get_parte.horas);
+            let [hr, mn] = diag.get_parte.horas.split(':');
+            $("#horas").val(hr);
+            $("#minutos").val(mn);
             $("#fecha").val(diag.get_parte.fecha);
             $("#observaciones_diagonstico").val(diag.get_parte.observaciones);
             $("#completado_diagnostico").prop('checked', true);
@@ -237,8 +242,10 @@ function openModalParteDiagnosticoPendiente(id_orden, activo, proyecto){
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
-    $("#horas").val('');
+    $("#horas").val('00');
+    $("#minutos").val('00');
     $("#horas").removeAttr('disabled');
+    $("#minutos").removeAttr('disabled');
     $("#observaciones_diagonstico").removeAttr('disabled');
     $("#completado_diagnostico").removeAttr('checked');
     $("#completado_diagnostico").removeAttr('disabled');
@@ -304,8 +311,10 @@ function openModalCrearParteDiagnostico(id_orden, nombre_activo, proyecto){
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
-    $("#horas").val('');
+    $("#horas").val('00');
+    $("#minutos").val('00');
     $("#horas").removeAttr('disabled');
+    $("#minutos").removeAttr('disabled');
     let hoy = new Date()
     hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
     '-' + hoy.getDate().toString().padStart(2, 0)
@@ -338,6 +347,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proye
     $("#herramental_inspeccion").val(nombre_activo);
     $("#nombre_proyecto_inspeccion").val(proyecto);
     $("#horas_inspeccion").removeAttr('disabled')
+    $("#minutos_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
     let hoy = new Date()
     hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -465,6 +475,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
     $("#herramental_inspeccion").val(nombre_activo);
     $("#nombre_proyecto_inspeccion").val(proyecto);
     $("#horas_inspeccion").removeAttr('disabled')
+    $("#minutos_inspeccion").removeAttr('disabled')
     $("#completado_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
 
@@ -533,7 +544,8 @@ function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, p
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
             showSpanAviso();
-            $("#horas_inspeccion").val('')
+            $("#horas_inspeccion").val('00')
+            $("#minutos_inspeccion").val('00')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)
@@ -549,6 +561,7 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
     $("#btnGuardarNuevoParteInspeccion").hide()
     $("#previewAceptarInspeccionReview").hide()
     $("#horas_inspeccion").attr('disabled', 'disabled')
+    $("#minutos_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val(nombre_activo);
@@ -601,7 +614,9 @@ function openModalVerParteInspeccion(id_orden, nombre_activo){
                 ]);
             });
             $("#fecha_inspeccion").val(data.get_parte.fecha)
-            $("#horas_inspeccion").val(data.horas)
+            let [hr, mn] = data.horas.split(':');
+            $("#horas_inspeccion").val(hr);
+            $("#minutos_inspeccion").val(mn);
             tabla_inspecciones.draw();
             showSpanAviso();
             tabla_inspecciones.columns.adjust();
@@ -618,6 +633,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
     $("#herramental_ajuste").val(nombre_activo)
     $("#nombre_proyecto_ajuste").val(proyecto)
     $("#horas_ajuste").removeAttr('disabled')
+    $("#minutos_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#id_activo_para_orden").val(id_act)
     $("#id_tipo_activo_para_orden").val(id_tipo)
@@ -633,10 +649,10 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
             let opciones = ''
             data.forEach(d => 
                 {
-                    console.log(d)
+                    // console.log(d)
                     d.get_tareas_mantenimiento.forEach(tarea => {
                         tabla_ajustes.row.add([
-                            (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                            j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                             tarea.get_accion_para_tarea.nombre_accion,
                             `<select class="form-select" required name="tareas[${j}][zona]">
                                 <option value="">Seleccionar...</option>
@@ -658,7 +674,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
-            $("#horas_ajuste").val('')            
+            $("#horas_ajuste").val('00')            
+            $("#minutos_ajuste").val('00')
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -757,6 +774,7 @@ function openModalConfirmarParteAjuste(id_orden, nombre_act, proyecto){
     $("#previewAceptarAjusteReview").show()
     $("#btnRowNuevoAjuste").hide()
     $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#minutos_ajuste").attr('disabled', 'disabled')
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
@@ -771,7 +789,7 @@ function openModalConfirmarParteAjuste(id_orden, nombre_act, proyecto){
             let bandera = 0
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                     tarea.get_accion_tarea.nombre_accion,
                     tarea.get_zona.nombre_zona,
                     tarea.get_maquinaria.alias_maquinaria,
@@ -783,7 +801,9 @@ function openModalConfirmarParteAjuste(id_orden, nombre_act, proyecto){
                 }
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.horas)
+            let [hr, mn] = data.horas.split(':');
+            $("#horas_ajuste").val(hr);
+            $("#minutos_ajuste").val(mn);
             $("#bandera_refabricar").val(bandera)
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
@@ -814,6 +834,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
     $("#previewAceptarAjusteReview").hide()
     $("#btnRowNuevoAjuste").show()
     $("#horas_ajuste").removeAttr('disabled')
+    $("#minutos_ajuste").removeAttr('disabled')
     $("#fecha_ajuste").removeAttr('disabled')
     $("#completado_ajuste").removeAttr('disabled')
     $("#herramental_ajuste").val(nombre_activo);
@@ -828,7 +849,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
             let j=0;
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                     tarea.get_accion_tarea.nombre_accion,
                     `<select id="tareas_zona_${j}" class="form-select" required name="tareas[${j}][zona]">
                         <option value="">Seleccionar...</option>
@@ -854,6 +875,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
             '-' + hoy.getDate().toString().padStart(2, 0)
             $("#fecha_ajuste").val(hoy)
             $("#horas_ajuste").val('')       
+            $("#minutos_ajuste").val('')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }
@@ -868,6 +890,7 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
     $("#previewAceptarAjusteReview").hide()
     $("#btnRowNuevoAjuste").hide()
     $("#horas_ajuste").attr('disabled', 'disabled')
+    $("#minutos_ajuste").attr('disabled', 'disabled')
     $("#fecha_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").attr('disabled', 'disabled')
     $("#completado_ajuste").prop('checked', true)
@@ -881,7 +904,7 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
             let j=0;
             data.get_tareas_ajuste.forEach(tarea => {
                 tabla_ajustes.row.add([
-                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                    j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                     tarea.get_accion_tarea.nombre_accion,
                     tarea.get_zona.nombre_zona,
                     tarea.get_maquinaria.alias_maquinaria,
@@ -890,7 +913,9 @@ function openModalVerParteAjuste(id_orden, nombre_activo){
                 j++;
             }); 
             $("#fecha_ajuste").val(data.get_parte.fecha)
-            $("#horas_ajuste").val(data.horas)
+            let [hr, mn] = data.horas.split(':');
+            $("#horas_ajuste").val(hr);
+            $("#minutos_ajuste").val(mn);               
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
         }

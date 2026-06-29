@@ -37,7 +37,9 @@ class Vw_orden_mantenimiento extends Model
         'id_empleado_asignado',
         'nombre_empleado_asignado',
         'id_activo',
-        'nombre_activo'
+        'codigo_activo',
+        'id_tipo_activo',
+        'nombre_tipo_activo'
     ];
 
     public function getProgreso(){

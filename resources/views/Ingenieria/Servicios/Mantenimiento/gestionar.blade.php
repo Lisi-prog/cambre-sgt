@@ -13,26 +13,28 @@
                     <h4 class="my-auto">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
                         <input type="text" hidden id="nombre_proyecto_i" value="{{ $proyecto->codigo_servicio }}">
                 </div>
+                <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">Actualizaciones</button>
             </div>
         </div>
         <div class="section-body">
             <div class="row">
                 @include('layouts.modal.mensajes')
                 {{-- Informacion de la solicitud --}}
+                @if($solicitud)
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        @role('SUPERVISOR')
+                        {{-- @role('SUPERVISOR')
                             <div class="card-head pt-3 m-auto d-flex w-100">
                                 <h5 class="ml-auto">Solicitud</h5>
                                 <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">
                                     Actualizaciones
                                 </button>
                             </div>
-                        @else
+                        @else --}}
                             <div class="card-head pt-3 m-auto">
                                 <h5 class="ml-auto">Solicitud</h5>
                             </div>
-                        @endrole
+                        {{-- @endrole --}}
                         
                         <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
@@ -121,6 +123,9 @@
                         </div>
                     </div>
                 </div>
+                @else
+                    {!! Form::text('activo', $proyecto->getActivo->codigo_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true', 'hidden', 'id' => 'activo']) !!}
+                @endif
                 {{-- -------------------------------- --}}
             </div>
             {{-- Ordenes y partes --}}
@@ -358,11 +363,7 @@
                                             $opcion = 1;
                                         @endphp
                                         @foreach ($ordenes_mecanizado as $orden)
-                                            @if ($orden->id_estado < 7)
                                                 <tr>
-                                            @else
-                                                <tr style="display: none;">
-                                            @endif     
                                                     <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
 
                                                     {{-- <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
@@ -606,9 +607,10 @@
             });
         });
     </script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}"></script>
+
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/gestionar.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js')) }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

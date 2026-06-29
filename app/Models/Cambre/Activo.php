@@ -4,6 +4,7 @@ namespace App\Models\Cambre;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 
 class Activo extends Model
@@ -104,5 +105,76 @@ class Activo extends Model
         $tareasUsadasIds = array_merge($tareasUsadasIds, $this->getTipoActivo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray());
 
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+    }
+
+    public function getTotalTareasMantenimientoPreventiva(){
+        $TotTaMantAct = 0;
+        $TotTaMantTipAct = 0;
+
+        $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo')->count();
+        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo')->count();
+
+        return $TotTaMantAct + $TotTaMantTipAct;
+    }
+
+    public function getTotalTareasMantenimientoPreventivaPendientes(){
+        $TotTaMantAct = 0;
+        $TotTaMantTipAct = 0;
+
+        $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+
+       return $TotTaMantAct + $TotTaMantTipAct;
+    }
+
+    public function getTareasMantenimientoPreventivaPendientes(){
+       return $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()]);
+    }
+
+    public function getTareasMantenimientoPreventivaPendientesTipo(){
+       return $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()]);
+    }
+
+    public function getProgreso(){
+        $totTareaPreventivas = $this->getTotalTareasMantenimientoPreventiva();
+        $totTareaPreventivasPend = $this->getTotalTareasMantenimientoPreventivaPendientes();
+        $progreso = 0;
+
+        if ($totTareaPreventivas == 0) {
+            return 0;
+        }
+        
+        try {
+            $progreso = ($totTareaPreventivasPend * 100) / $totTareaPreventivas;
+        } catch (\Throwable $th) {
+            $progreso = 0;
+        }
+
+        return $progreso;     
+    }
+
+    public function getNombreServicioMan(){
+        $existeServicioMant = Servicio::where('id_subtipo_servicio', 6)->where('id_activo', $this->id_activo)->orderBy('id_servicio', 'desc')->first();
+
+        if ($existeServicioMant) {
+            $ultNombre = $existeServicioMant->codigo_servicio;
+
+            // obtener los últimos 4 caracteres
+            $numeroNom = substr($ultNombre, -4);
+
+            // pasarlo a entero y sumar 1
+            $nuevoNumero = (int)$numeroNom + 1;
+
+            // volver a formatear a 4 dígitos
+            $numServ = str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+        } else {
+            $numServ = '0001';
+        }
+
+        $codActivo = Activo::find($this->id_activo)->codigo_activo;
+
+        // $numServ = 0001;
+
+        return $codigo_proyecto = $codActivo.'-MAN-'.$numServ;
     }
 }

@@ -93,7 +93,7 @@ function eliminarDiagnostico(indice){
 }
 
 function checkSendNuevoParteDiagnostico(){
-    if(tabla_diagnosticos.rows().count() > 0 && $("#fecha").val() && $("#horas").val()){
+    if(tabla_diagnosticos.rows().count() > 0 && $("#fecha").val() && $("#horas").val() && $("#minutos").val()){
         $("#btnGuardarNuevoParteDiagnostico").removeAttr('disabled');
         $("#btnGuardarNuevoParteDiagnosticoCerrar").removeAttr('disabled');
     }
@@ -116,8 +116,10 @@ function openModalNuevoParteDiagnostico(id_orden){
     $("#btnGuardarNuevoParteDiagnostico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
-    $("#horas").val('');
+    // $("#horas").val('');
+    // $("minutos").val('');
     $("#horas").removeAttr('disabled');
+    $("#minutos").removeAttr('disabled');
     let hoy = new Date()
     hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
     '-' + hoy.getDate().toString().padStart(2, 0)
@@ -137,6 +139,7 @@ function openModalVerParteDiagnostico(id_orden){
     $("#btnAgregarFilaDiagnostico").hide();
     $("#fecha").attr('disabled', 'disabled');
     $("#horas").attr('disabled', 'disabled');
+    $("#minutos").attr('disabled', 'disabled');
     $('.obligatorio').hide();
     $("#label_ob_diagnostico").hide();
     $("#completado_diagnostico").prop('disabled', 'disabled');
@@ -176,7 +179,9 @@ function openModalVerParteDiagnostico(id_orden){
                     i++;
                 });
             });
-            $("#horas").val(data[0].horas);
+            let [hr, mn] = data[0].horas.split(':');
+            $("#horas").val(hr);
+            $("#minutos").val(mn);
             tabla_diagnosticos.columns.adjust();
             tabla_diagnosticos.draw();
         }
@@ -196,7 +201,9 @@ function openModalParteDiagnosticoPendiente(id_orden){
     $("#btnGuardarNuevoParteDiagnosticoCerrar").attr('disabled', 'disabled');
     $("input:radio[name=a_resolver]").removeAttr('disabled');
     $("#horas").val('');
+    $("#minutos").val('');
     $("#horas").removeAttr('disabled');
+    $("#minutos").removeAttr('disabled');
     $("#observaciones_diagonstico").removeAttr('disabled');
     $("#completado_diagnostico").removeAttr('checked');
     $("#completado_diagnostico").removeAttr('disabled');
@@ -250,6 +257,7 @@ function verParteDeDiagnostico(id_parte, completado){
     $("#btnAgregarFilaDiagnostico").hide();
     $("#fecha").attr('disabled', 'disabled');
     $("#horas").attr('disabled', 'disabled');
+    $("#minutos").attr('disabled', 'disabled');
     $("#herramental_inspeccion").val($("#activo").val());
     $("#observaciones_diagonstico").attr('disabled', 'disabled');
     $("#btnGuardarNuevoParteDiagnostico").hide();   
@@ -286,7 +294,9 @@ function verParteDeDiagnostico(id_parte, completado){
                 ]);
                 i++;
             });
-            $("#horas").val(diag.get_parte.horas);
+            let [hr, mn] = diag.get_parte.horas.split(':');
+            $("#horas").val(hr);
+            $("#minutos").val(mn);
             $("#fecha").val(diag.get_parte.fecha);
             tabla_diagnosticos.columns.adjust();
             tabla_diagnosticos.draw();
@@ -303,4 +313,14 @@ function diagnosticoPreSubmit(tipo){
         $("#completado_diagnostico").prop('checked', false);
     }
     $("#formNuevoParteDiagnostico").trigger( "submit" );
+}
+
+function checkMinutos(input) {
+    if (parseInt(input.value) > 59) {
+        input.value = 59;
+    }
+
+    if (parseInt(input.value) < 0) {
+        input.value = 0;
+    }
 }

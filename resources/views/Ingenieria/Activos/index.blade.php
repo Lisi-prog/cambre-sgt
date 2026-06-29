@@ -15,34 +15,26 @@
     }
 </style>
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Activos</h5>
+    <div class="section-header d-flex">
+        <div class="flex-grow-1">
+            <h4 class="titulo page__heading my-auto">Activos</h5>
+        </div>
+        <div class="pe-2">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="{{ route('tipo_activo.index') }}" class="btn btn-primary">Tipo Activo</a>
+                <a href="{{ route('zona.index') }}" class="btn btn-primary">Zona</a>
             </div>
-            <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2 d-flex">
-                {!! Form::open(['method' => 'GET', 'route' => ['tipo_activo.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Tipo Activo', ['class' => 'btn btn-primary']) !!}
-                {!! Form::close() !!}
-                {!! Form::open(['method' => 'GET', 'route' => ['zona.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Zona', ['class' => 'btn btn-primary ml-2']) !!}
-                {!! Form::close() !!}
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
-                {{-- <a href="{{route('operacion.index')}}" class="btn btn-primary">Operacion</a> --}}
-            </div>
-            
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 d-flex justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
-                    Nuevo activo
-                </button>
-            </div>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
+                Nuevo activo
+            </button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -54,6 +46,7 @@
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color:#fff;">Activo</th>
                                     <th class='text-center' style="color:#fff;">Tipo</th>
+                                    <th class='text-center' style="color:#fff;">Tareas Preventivas (Vencidas/Total)</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -74,6 +67,23 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->getTipoActivo->nombre_tipo_activo ?? '-'}}</td>
 
+                                            <td class= 'text-center' style="vertical-align: middle;">
+                                                @php
+                                                    if ($activo->getProgreso() >= 90) {
+                                                       $color = 'bg-danger';
+                                                    }else if($activo->getProgreso() >= 50){
+                                                        $color = 'bg-warning';
+                                                    }else{
+                                                       $color = 'bg-success';
+                                                    }
+                                                @endphp
+                                                <div class="progress position-relative" style="background-color: #b2baf8">
+                                                    <div class="progress-bar progress-bar-striped {{$color}}" role="progressbar" style="width: {{$activo->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$activo->getTotalTareasMantenimientoPreventivaPendientes().'/'.$activo->getTotalTareasMantenimientoPreventiva()}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
@@ -89,6 +99,12 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
+                                                         <div class="row my-2 justify-content-center">
+                                                            <div class="col-12">
+                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+                                                            </div>
+                                                        </div>
+                                                        
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
                                                                 {!! Form::open([
@@ -121,6 +137,7 @@
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
     {{-- @include('Ingenieria.Maquinaria.modal.crear-maquinaria')--}}
     @include('Ingenieria.Activos.modal.crear-activo') 
+    @include('Ingenieria.Activos.modal.crear-serv-mant')
 
 <script>
     $(document).ready(function () {

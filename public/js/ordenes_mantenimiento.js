@@ -190,16 +190,16 @@ table = $('#example').DataTable({
             columnDefs: [
                 {
                     targets: 0,
-                    visible: false,   // 👈 arranca oculta
+                    visible: false,     
                     orderable: false
                 },
-                { targets: [4], visible: false },
-                { targets: 1,  // Prio. Operacion
+                { targets: [4,12], visible: false },
+                { targets: 1,  
                   createdCell: function (td, cellData, rowData, row, col) {
                       $(td).attr('data-order', rowData._order_prioridad);
                   } 
                 }, 
-                { targets: 2,  // Prio. Global
+                { targets: 2,  
                   createdCell: function (td, cellData, rowData, row, col) {
                   $(td).attr('data-order', rowData._order_prioridad_servicio);
                 }
@@ -207,59 +207,58 @@ table = $('#example').DataTable({
                 {className: "text-center align-middle",
                  targets: [1,2,3,5,6,7,8,9,10,11,12,13,14]}
             ],
-            // order: [[ 1, 'asc' ], [2, 'asc']],
             "pageLength": 100
     });
     
-$('input:checkbox').on('change', function () {
-    saveFilters();
-    table.draw();
-});
+    $('input:checkbox').on('change', function () {
+        saveFilters();
+        table.draw();
+    });
 
-table.on('draw', function () {
-    changeTdColor();
-})
+    table.on('draw', function () {
+        changeTdColor();
+    })
 
-$('#example tbody').on('click', 'tr', function () {
-    ind_rw = table.row(this).index();
-});
+    $('#example tbody').on('click', 'tr', function () {
+        ind_rw = table.row(this).index();
+    });
 
-$('#verPartesModal').on('hidden.bs.modal', function (e) {
-    nuevoParte();
-    actRow();
-})
-
-$('#editarOrdenModal').on('hidden.bs.modal', function (e) {
-    actRow();
-})
-
-$(".nuevo-editar-orden").on('submit', function(evt){
-        evt.preventDefault();     
-        
-        var url_php = $(this).attr("action"); 
-        var type_method = $(this).attr("method"); 
-        var form_data = $(this).serialize();
-
-        $.ajax({
-            type: type_method,
-            url: url_php,
-            data: form_data,
-            success: function(data) {
-                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
-                                        `+data+`
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                $('#alertOrd').html(html)
-                setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
-                
-            }
-        });
+    $('#verPartesModal').on('hidden.bs.modal', function (e) {
+        nuevoParte();
         actRow();
-});
-buscarPorFiltros()
-$("#loading").hide();
+    })
+
+    $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
+        actRow();
+    })
+
+    $(".nuevo-editar-orden").on('submit', function(evt){
+            evt.preventDefault();     
+            
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                            `+data+`
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                    $('#alertOrd').html(html)
+                    setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                    
+                }
+            });
+            actRow();
+    });
+    buscarPorFiltros()
+    $("#loading").hide();
 } );
 
 $('.input-filter, input[name="filter"], input[name="sup"], input[name="res"], input[name="est"], input[name="asig"], input[name="soloAct"]').on('change', function(){
@@ -1008,7 +1007,7 @@ function buscarPorFiltrosOLD(){
                     5: ope.get_orden.nombre_orden ?? '-',
                     6: ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento,
                     7: '-',
-                    8: ope.estado_actual,
+                    8: ope.estado_actual == 'Espera' && ope.esta_activo ? 'Disponible' : ope.estado_actual,
                     9: '-',
                     10: ope.get_empleado?.nombre_empleado ?? '-',
                     11: ope.horas,
@@ -1276,7 +1275,7 @@ function buscarPorFiltros(){
                     5: ope.nombre_orden ?? '-',
                     6: ope.nombre_tipo_orden_mantenimiento,
                     7: '-',
-                    8: ope.nombre_estado,
+                    8: ope.nombre_estado == 'Espera' && ope.esta_activo ? 'Disponible' : ope.nombre_estado,
                     9: '-',
                     10: ope.nombre_empleado_asignado ?? '-',
                     11: ope.horas,
@@ -1317,4 +1316,3 @@ function getSelectedFilters() {
         soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO'
     };
 }
-

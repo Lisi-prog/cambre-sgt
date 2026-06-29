@@ -25,7 +25,7 @@ class ParteDiagnosticoController extends Controller{
                 $parte->observaciones = $request->observacion;
                 $parte->id_orden = $request->id_orden;
                 $parte->fecha = $request->fecha;
-                $parte->horas = $request->horas;
+                $parte->horas = $request->horas . ':' . $request->minutos;
                 $parte->fecha_carga = Carbon::now();
                 $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
                 $responsabilidad = Responsabilidad::create([

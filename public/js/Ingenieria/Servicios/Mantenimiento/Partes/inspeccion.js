@@ -3,7 +3,7 @@ $(document).ready(function () {
     tabla_inspecciones = $('#tabla_inspecciones').DataTable({headerCallback: function(thead) {
         $(thead).hide();
     },columnDefs: [
-            { className: "text-center", targets: [0,1,2,3,4 ] }
+            { className: "text-center", targets: [2,3,4 ] }
         ],
         order: [],
         language: {
@@ -37,6 +37,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
     $("#herramental_inspeccion").val($("#activo").val());
     document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     $("#horas_inspeccion").removeAttr('disabled')
+    $("#minutos_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
     let hoy = new Date()
     hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
@@ -146,6 +147,7 @@ function openModalConfirmarParteInspeccion(id_orden){
     $("#btnGuardarNuevoParteInspeccion").hide()
     $("#previewAceptarInspeccionReview").show()
     $("#horas_inspeccion").attr('disabled', 'disabled')
+    $("#minutos_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").attr('checked', 'checked')
     $("#herramental_inspeccion").val($("#activo").val());
@@ -200,7 +202,9 @@ function openModalConfirmarParteInspeccion(id_orden){
                 ]);
             });
             $("#fecha_inspeccion").val(data.get_parte.fecha)
-            $("#horas_inspeccion").val(data.horas)
+            let [hr, mn] = data.horas.split(':');
+            $("#horas_inspeccion").val(hr);
+            $("#minutos_inspeccion").val(mn);
             showSpanAviso();
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
@@ -247,6 +251,7 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
     $("#herramental_inspeccion").val($("#activo").val());
     document.getElementById('nombreActivoInspeccion').textContent = $("#activo").val();
     $("#horas_inspeccion").removeAttr('disabled')
+    $("#minutos_inspeccion").removeAttr('disabled')
     $("#fecha_inspeccion").removeAttr('disabled')
 
     tabla_inspecciones.clear();
@@ -263,21 +268,41 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
                     zona_actual = tarea.get_zona_tarea.nombre_zona;
                     addZonaHeader(zona_actual)
                 } 
+                let disabled = tarea.ok !== null ? 'disabled' : '';
+
                 tabla_inspecciones.row.add([
                     tarea.nombre_tarea,
 
                     tarea.get_ejecucion.nombre_ejecucion,
 
                     `<input type="radio"
-                        name="tareas[${j}][ok]" value="ok"  
-                        checked  id="ok_${tarea.id_tarea_mantenimiento}"
+                        name="tareas[${j}][ok]" 
+                        value="ok"
+                        ${disabled}
+                        id="ok_${tarea.id_tarea_mantenimiento}"
                         onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})">
-                    <input type="hidden" name="tareas[${j}][id]" value="${tarea.id_tarea_mantenimiento}">`,
 
-                    `<input id="not_ok_${tarea.id_tarea_mantenimiento}" type="radio" onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})" name="tareas[${j}][ok]" value="not_ok">`,
+                    <input type="hidden" 
+                        name="tareas[${j}][id]" 
+                        value="${tarea.id_tarea_mantenimiento}">`,
+
+                    `<input 
+                        id="not_ok_${tarea.id_tarea_mantenimiento}" 
+                        type="radio"
+                        ${disabled}
+                        onchange="checkboxTareaRealizada(${j},${tarea.id_tarea_mantenimiento})"
+                        name="tareas[${j}][ok]" 
+                        value="not_ok">`,
 
                     `<div id="label_accion_${tarea.id_tarea_mantenimiento}">-</div>
-                    <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_tarea_mantenimiento}">
+
+                    <select 
+                        onchange="showSpanAviso()" 
+                        name="tareas[${j}][accion]" 
+                        class="form-select" 
+                        hidden 
+                        id="accion_${tarea.id_tarea_mantenimiento}"
+                        ${disabled}>
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                     </select>`
@@ -314,7 +339,8 @@ function openModalParteInspeccionPendiente(id_activo, id_orden){
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust(); 
             showSpanAviso();
-            $("#horas_inspeccion").val('')
+            $("#horas_inspeccion").val('00')
+            $("#minutos_inspeccion").val('00')
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)
@@ -330,6 +356,7 @@ function openModalVerParteInspeccion(id_orden){
     $("#btnGuardarNuevoParteInspeccion").hide()
     $("#previewAceptarInspeccionReview").hide()
     $("#horas_inspeccion").attr('disabled', 'disabled')
+    $("#minutos_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val($("#activo").val());
@@ -382,7 +409,9 @@ function openModalVerParteInspeccion(id_orden){
                 ]);
             });
             $("#fecha_inspeccion").val(data.get_parte.fecha)
-            $("#horas_inspeccion").val(data.horas)
+            let [hr, mn] = data.horas.split(':');
+            $("#horas_inspeccion").val(hr);
+            $("#minutos_inspeccion").val(mn);
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
             showSpanAviso();
@@ -395,6 +424,7 @@ function verParteDeInspeccion(id_parte, completado){
     $("#btnGuardarNuevoParteInspeccion").hide()
     $("#previewAceptarInspeccionReview").hide()
     $("#horas_inspeccion").attr('disabled', 'disabled')
+    $("#minutos_inspeccion").attr('disabled', 'disabled')
     $("#fecha_inspeccion").attr('disabled', 'disabled')
     $("#completado_inspeccion").prop('checked', true)
     $("#herramental_inspeccion").val($("#activo").val());
@@ -456,7 +486,9 @@ function verParteDeInspeccion(id_parte, completado){
             });
             
             $("#fecha_inspeccion").val(data.get_parte.fecha)            
-            $("#horas_inspeccion").val(data.get_parte.horas)
+            let [hr, mn] = data.get_parte.horas.split(':');
+            $("#horas_inspeccion").val(hr);
+            $("#minutos_inspeccion").val(mn);
             tabla_inspecciones.draw();
             tabla_inspecciones.columns.adjust();
             showSpanAviso();

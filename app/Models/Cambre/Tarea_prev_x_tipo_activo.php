@@ -30,4 +30,8 @@ class Tarea_prev_x_tipo_activo extends Model
     public function getTareaMantenimiento(){
         return $this->hasOne(Tarea_mantenimiento::class, 'id_tarea_mantenimiento', 'id_tarea_mantenimiento');
     }
+
+    public function estaEnProceso(){
+        return Serv_mant_x_tarea_mant::where('id_tarea_prev_x_tipo_activo', $this->id_tarea_prev_x_tipo_activo)->whereNull('fecha_hecho')->count() > 0;
+    }
 }
