@@ -31,7 +31,7 @@ class ParteAjusteController extends Controller{
             })
             ->with([
                 'getParte.getResponsable.getEmpleado',
-                'getParte.getOrden.getEtapa',
+                'getParte.getOrden.getEtapa.getServicio.getActivo',
                 'getTareasMantenimiento' => function ($query) {
                     $query->where('ok', 0);
                 },

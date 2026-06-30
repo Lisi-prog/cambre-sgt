@@ -647,6 +647,21 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
         success: function(data) {
             let j=0;
             let opciones = ''
+            let idTipoActivo = data[0].get_parte.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo;
+            let zonas = $('<div>').html($("#zona_select_div").html());
+            zonas.find('option').each(function () {
+                if ($(this).val() === '') return;
+
+                let tipos = $(this).data('id_tipos');
+
+                if (typeof tipos === 'string') {
+                    tipos = JSON.parse(tipos);
+                }
+
+                if (!tipos.includes(idTipoActivo)) {
+                    $(this).remove();   // or .hide()
+                }
+            });
             data.forEach(d => 
                 {
                     // console.log(d)
@@ -654,19 +669,19 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
                         tabla_ajustes.row.add([
                             j+1 + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea + ' (' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona + ')',
                             tarea.get_accion_para_tarea.nombre_accion,
-                            `<select class="form-select" required name="tareas[${j}][zona]">
+                            `<select id="tareas_zona_${j}" class="form-select" required name="tareas[${j}][zona]">
                                 <option value="">Seleccionar...</option>
-                                ${$("#zona_select_div").html()}
+                                ${zonas.html()}
                             </select>
                             <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_para_tarea.id_accion_tarea}">
                             <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
-                            `<select class="form-select" required name="tareas[${j}][maquina]">
+                            `<select id="tarea_maquina_${j}"  class="form-select" required name="tareas[${j}][maquina]">
                                 <option value="">Seleccionar...</option>
                                 ${$("#maquina_select_div").html()}
                             </select>`,
-                            `<input  onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
+                            `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
                             name="tareas[${j}][hecho]">`
-                        ]);                
+                        ]);              
                     j++;
                 });               
             })
@@ -678,6 +693,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
             $("#minutos_ajuste").val('00')
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
+            checkCompletoAjuste()
         }
     });
 }
@@ -709,20 +725,34 @@ function agregarNuevoAjusteRow(){
             ${$("#accion_select_div").html()}
         </select>`,
         `<select class="form-select" required name="tareas[${j}][zona]">
-            <option value="">Seleccionar...</option>
-            ${$("#zona_select_div").html()}
+            ${$(`[name=tareas[${j-1}][zona]]`).html()}
         </select>`,                    
-        `<select class="form-select" required name="tareas[${j}][maquina]">
+        `<select id="tarea_maquina_${j}"  class="form-select" required name="tareas[${j}][maquina]">
             <option value="">Seleccionar...</option>
             ${$("#maquina_select_div").html()}
         </select>`,
-        `<input onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" name="tareas[${j}][hecho]">
+        `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" name="tareas[${j}][hecho]">
          <button type="button" onclick="eliminarRowAjuste(${j})" class="btn btn-danger ms-2">X</button>`
     ]).node();
     rowNode.id = `ajuste_${j}`;
     
+    let idTipoActivo = data.get_parte.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo;
+    let $select = $(`#tareas_zona_${j}`);
+
+    $select.find('option').each(function () {
+        if ($(this).val() === '') return;
+
+        let tipos = $(this).attr('data-id_tipos');
+        tipos = tipos ? JSON.parse(tipos) : [];
+
+        if (!tipos.includes(idTipoActivo)) {
+            $(this).hide();
+        }
+
+    });
     tabla_ajustes.draw();
-    $("#completado_ajuste").prop('checked', false)
+    $("#completado_ajuste").prop('checked', false)    
+    checkCompletoAjuste()
 }
 
 
@@ -753,17 +783,32 @@ function reordenarFilasAjuste() {
 }
 
 
+
 function checkCompletoAjuste() {
-    const checkboxes = document.querySelectorAll('input[name^="tareas"][name$="[hecho]"]');
 
-    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    const checkboxes = document.querySelectorAll(
+        'input[name^="tareas"][name$="[hecho]"]'
+    );
+    console.log(checkboxes)
+    let allChecked = true;
 
-    if (allChecked) {
-        $("#completado_ajuste").prop('checked', true)
-    } else {
-        $("#completado_ajuste").prop('checked', false)
-    }
+    checkboxes.forEach(cb => {
+        const id = cb.id.replace('tarea_hecho_', '');
+        console.log(id)
+        const zona = document.getElementById(`tareas_zona_${id}`);
+        const maquina = document.getElementById(`tarea_maquina_${id}`);
+        console.log(zona, maquina)  
+        if (zona) zona.required = cb.checked;
+        if (maquina) maquina.required = cb.checked;
+        console.log(cb.checked)
+        if (!cb.checked) {
+            allChecked = false;
+        }
+    });
+
+    $("#completado_ajuste").prop('checked', allChecked);
 }
+
 
 function procesarAjuste(accion){
     $.ajax({
@@ -819,8 +864,8 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
                         name="tareas[${j}][hecho]">`
                     ]);
                 tabla_ajustes.draw();
-                $(`#tarea_maquina_${j}`).val(tarea.get_maquinaria.id_maquinaria)
-                $(`#tareas_zona_${j}`).val(tarea.get_zona.id_zona)
+                $(`#tarea_maquina_${j}`).val(tarea.get_maquinaria?.id_maquinaria)
+                $(`#tareas_zona_${j}`).val(tarea.get_zona?.id_zona)
                 tarea.hecho? $(`#tarea_hecho_${j}`).prop('checked', true): $(`#tarea_hecho_${j}`).prop('checked', false)
                 let idTipoActivo = data.get_parte.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo;
                 let $select = $(`#tareas_zona_${j}`);
@@ -848,6 +893,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa, nombre_activo, proyec
             $("#minutos_ajuste").val('')       
             tabla_ajustes.draw();
             tabla_ajustes.columns.adjust();
+            checkCompletoAjuste()
         }
     });
 }
