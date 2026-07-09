@@ -156,11 +156,14 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
-                                                         <div class="row my-2 justify-content-center">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+
+                                                        @if ($activo->getTotalTareasMantenimientoPreventivaPendientes() > 0)
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
                                                         
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
