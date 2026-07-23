@@ -113,13 +113,15 @@ function recargarPartes(id, tipo_orden){
                     btn_editar = '-';
                 }
 
+                let vObservacion = element.observaciones ?? '';
+
                 html += `<tr>
                             <td class="text-center">`+element.id_parte+`</td>
                             <td class="text-center">`+element.fecha+`</td>
                             <td class="text-center">`+fecha_lim+`</td>
                             <td class="text-center">`+element.estado+`</td>
                             <td class="text-center">`+element.horas+`</td>
-                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center"><abbr title="${vObservacion}" style="text-decoration:none; font-variant: none;">${observacion.slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
                             <td class="text-center">`+element.responsable+`</td>
                             <td class="text-center">`+element.supervisor+`</td>
                             <td class="text-center">
