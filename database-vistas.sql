@@ -315,7 +315,8 @@ select
     p.fecha_limite,
     p.fecha_carga,
 	e.nombre_estado as estado,
-	p.horas, 
+	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
     p.observaciones,
     se.id_servicio,
     se.codigo_servicio,
@@ -350,9 +351,11 @@ Res_ord AS (
 select 
 	p.id_parte,
 	o.nombre_orden,
-	p.fecha, p.fecha_limite,
+	p.fecha, 
+    p.fecha_limite,
 	e.nombre_estado_manufactura as estado,
 	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
     p.observaciones,
     se.id_servicio,
     se.codigo_servicio,
@@ -372,7 +375,6 @@ inner join etapa et on et.id_etapa = o.id_etapa
 inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
-
 CREATE VIEW vw_parte_mecanizado AS
 WITH
 Res_ord AS (
@@ -391,6 +393,45 @@ select
 	p.fecha, p.fecha_limite,
 	e.nombre_estado_mecanizado as estado,
 	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
+    p.observaciones,
+    se.id_servicio,
+    se.codigo_servicio,
+    se.nombre_servicio,
+    et.descripcion_etapa,
+	emp.nombre_empleado as responsable,
+    emp.id_empleado as id_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_supervisor
+from parte p 
+inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+inner join estado_mecanizado e on e.id_estado_mecanizado = pt.id_estado_mecanizado
+inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+inner join empleado emp on emp.id_empleado = res.id_empleado
+inner join orden o on o.id_orden = p.id_orden
+inner join etapa et on et.id_etapa = o.id_etapa
+inner join servicio se on se.id_servicio = et.id_servicio
+inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
+
+CREATE VIEW vw_parte_mecanizadoALT AS
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+select 
+	p.id_parte,
+	o.nombre_orden,
+	p.fecha, p.fecha_limite,
+	e.nombre_estado_mecanizado as estado,
+	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
     p.observaciones,
     se.id_servicio,
     se.codigo_servicio,
