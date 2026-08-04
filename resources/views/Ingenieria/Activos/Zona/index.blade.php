@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('titulo', 'Zona')
+@section('titulo', 'Elementos')
 
 @section('content')
 <style>
@@ -18,7 +18,7 @@
     <div class="d-flex section-header justify-content-center">
         <div class="d-flex flex-row col-12">
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Zona</h5>
+                <h4 class="titulo page__heading my-auto">Elemento</h5>
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -59,19 +59,19 @@
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="d-flex gap-2">
-                                                    <a href="{{ route('zona.edit', $zona->id_zona)}}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Editar">
+                                                    <a href="{{ route('elemento.edit', $zona->id_zona)}}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Editar">
                                                         <i class="fas fa-pen"></i>
                                                     </a>
-                                                    <a href="{{ route('zona.asignar.tipo', $zona->id_zona) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="SubTipos">
+                                                    <a href="{{ route('elemento.asignar.tipo', $zona->id_zona) }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="SubTipos">
                                                         <i class="fas fa-tags"></i>
                                                     </a>
                                                     {{-- {!! Form::open([
                                                                 'method' => 'DELETE',
                                                                 'class' => 'formulario',
-                                                                'route' => ['zona.destroy', $zona->id_zona],
+                                                                'route' => ['elemento.destroy', $zona->id_zona],
                                                                 'style' => 'display:inline',
                                                             ]) !!}
-                                                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro que desea ELIMINAR la zona?');" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro que desea ELIMINAR el elemento?');" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-trash"></i></button>
                                                     {!! Form::close() !!} --}}
                                                 </div>
                                             </td>

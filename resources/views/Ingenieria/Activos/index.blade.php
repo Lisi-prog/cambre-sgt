@@ -22,7 +22,7 @@
         <div class="pe-2">
             <div class="btn-group" role="group" aria-label="Basic example">
                 <a href="{{ route('tipo_activo.index') }}" class="btn btn-primary">Tipo Activo</a>
-                <a href="{{ route('zona.index') }}" class="btn btn-primary">Zona</a>
+                <a href="{{ route('elemento.index') }}" class="btn btn-primary">Elemento</a>
             </div>
         </div>
         <div class="">

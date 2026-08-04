@@ -28,7 +28,7 @@ class ZonaController extends Controller
             $zona = new Zona();
             $zona->nombre_zona = $request->input('zona');
             $zona->save();
-            return redirect()->route('zona.index')->with('success', 'Zona creada exitosamente.');
+            return redirect()->route('elemento.index')->with('success', 'Zona creada exitosamente.');
         } 
         catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al crear zona: ' . $e->getMessage())->withInput();
@@ -49,16 +49,16 @@ class ZonaController extends Controller
             $zona = Zona::findOrFail($id); 
             $zona->nombre_zona = $request->input('zona');
             $zona->save();
-            return redirect()->route('zona.index')->with('success', 'Zona actualizada exitosamente.');
+            return redirect()->route('elemento.index')->with('success', 'Elemento actualizado exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al actualizar zona: ' . $e->getMessage())->withInput();;
+            return redirect()->back()->with('error', 'Error al actualizar elemento: ' . $e->getMessage())->withInput();;
         }   
     }
 
     public function destroy($id){
         $zona = Zona::findOrFail($id);  
         $zona->delete();
-        return redirect()->route('zona.index')->with('success','Zona eliminada exitosamente.');
+        return redirect()->route('elemento.index')->with('success','Elemento eliminado exitosamente.');
     }
 
     public function verAsignarTipo($id){
@@ -101,12 +101,12 @@ class ZonaController extends Controller
 
             DB::commit();
 
-            return redirect()->route('zona.index')->with('mensaje', 'Se asignaron los tipo activo a la zona con éxito.');                      
+            return redirect()->route('elemento.index')->with('mensaje', 'Se asignaron los tipo activo al elemento con éxito.');                      
     
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
-                             ->with('error', 'Ocurrio un problema al asignar los tipo activo a la zona: '.$e->getMessage());
+                             ->with('error', 'Ocurrio un problema al asignar los tipo activo al elemento: '.$e->getMessage());
         }
     }
 }
