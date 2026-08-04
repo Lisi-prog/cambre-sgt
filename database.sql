@@ -1223,6 +1223,15 @@ CREATE TABLE `zona_tarea` (
 	PRIMARY KEY (`id_zona_tarea`)
 );
 
+CREATE TABLE `zona_tarea_x_tipo_activo` (
+	`id_zona_tarea_x_tipo_activo` INT NOT NULL AUTO_INCREMENT,
+	`id_tipo_activo` INT NOT NULL,
+	`id_zona_tarea` INT NOT NULL,
+	PRIMARY KEY (`id_zona_tarea_x_tipo_activo`),
+  CONSTRAINT `FK_ztxta_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`),
+	CONSTRAINT `FK_ztxta_x_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)
+);
+
 CREATE TABLE `tarea_mantenimiento` (
 	`id_tarea_mantenimiento` INT NOT NULL AUTO_INCREMENT,
 	`nombre_tarea` VARCHAR(200) NOT NULL,
@@ -1233,31 +1242,67 @@ CREATE TABLE `tarea_mantenimiento` (
 	CONSTRAINT `FK_tm_x_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)
 );
 
-CREATE TABLE `tarea_prev_x_activo` (
-	`id_tarea_prev_x_activo` INT NOT NULL AUTO_INCREMENT,
-	`id_activo` INT NOT NULL,
-	`id_tarea_mantenimiento` INT NOT NULL,
-  `intervalo_dias` INT NOT NULL,
-  `cant_golpes` int not null,
-  `fecha_ultima_ejecucion` date null,
-	PRIMARY KEY (`id_tarea_prev_x_activo`),
-	CONSTRAINT `FK_tpxa_activo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`),
-	CONSTRAINT `FK_tpxa_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`)
-);
-
 CREATE TABLE `tarea_prev_x_tipo_activo` (
-	`id_tarea_prev_x_tipo_activo` INT NOT NULL AUTO_INCREMENT,
-	`id_tipo_activo` INT NOT NULL,
-	`id_tarea_mantenimiento` INT NOT NULL,
-  `intervalo_dias` INT NOT NULL,
-  `cant_golpes` int not null,
-  `fecha_ultima_ejecucion` date null,
-	PRIMARY KEY (`id_tarea_prev_x_tipo_activo`),
-	CONSTRAINT `FK_tpxta_x_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`),
-	CONSTRAINT `FK_tpxta_x_tipo_activo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
+    `id_tarea_prev_x_tipo_activo` INT NOT NULL AUTO_INCREMENT,
+    `id_tipo_activo` INT NOT NULL,
+    `id_tarea_mantenimiento` INT NOT NULL,
+    `intervalo_dias` INT NULL,
+    `cant_golpes` INT NULL,
+
+    PRIMARY KEY (`id_tarea_prev_x_tipo_activo`),
+
+    CONSTRAINT `FK_tpxta_tarea_mantenimiento`
+        FOREIGN KEY (`id_tarea_mantenimiento`)
+        REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`),
+
+    CONSTRAINT `FK_tpxta_tipo_activo`
+        FOREIGN KEY (`id_tipo_activo`)
+        REFERENCES `tipo_activo` (`id_tipo_activo`),
+
+    CONSTRAINT `UK_tpxta_tipo_tarea`
+        UNIQUE (`id_tipo_activo`, `id_tarea_mantenimiento`),
+
+    CONSTRAINT `CHK_tpxta_frecuencia`
+        CHECK (
+            `intervalo_dias` IS NOT NULL
+            OR `cant_golpes` IS NOT NULL
+        )
 );
 
-CREATE TABLE tarea_prev_x_activo_historial (
+CREATE TABLE `tarea_prev_x_activo` (
+    `id_tarea_prev_x_activo` INT NOT NULL AUTO_INCREMENT,
+    `id_activo` INT NOT NULL,
+    `id_tarea_mantenimiento` INT NOT NULL,
+    `id_tarea_prev_x_tipo_activo` INT NULL,
+    `intervalo_dias` INT NULL,
+    `cant_golpes` INT NULL,
+    `fecha_ultima_ejecucion` DATE NULL,
+
+    PRIMARY KEY (`id_tarea_prev_x_activo`),
+
+    CONSTRAINT `FK_tpxa_activo`
+        FOREIGN KEY (`id_activo`)
+        REFERENCES `activo` (`id_activo`),
+
+    CONSTRAINT `FK_tpxa_tarea_mantenimiento`
+        FOREIGN KEY (`id_tarea_mantenimiento`)
+        REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`),
+
+    CONSTRAINT `FK_tpxa_plantilla`
+        FOREIGN KEY (`id_tarea_prev_x_tipo_activo`)
+        REFERENCES `tarea_prev_x_tipo_activo` (`id_tarea_prev_x_tipo_activo`),
+
+    CONSTRAINT `UK_tpxa_activo_tarea`
+        UNIQUE (`id_activo`, `id_tarea_mantenimiento`),
+
+    CONSTRAINT `CHK_tpxa_frecuencia`
+        CHECK (
+            `intervalo_dias` IS NOT NULL
+            OR `cant_golpes` IS NOT NULL
+        )
+);
+
+CREATE TABLE `tarea_prev_x_activo_historial` (
     `id_historial` INT NOT NULL AUTO_INCREMENT,
     `id_tarea_prev_x_activo` INT NOT NULL,
     `id_activo` INT NOT NULL,
@@ -1269,16 +1314,15 @@ CREATE TABLE tarea_prev_x_activo_historial (
     PRIMARY KEY (`id_historial`)
 );
 
-CREATE TABLE tarea_prev_x_tipo_activo_historial (
-    `id_historial` INT NOT NULL AUTO_INCREMENT,
-    `id_tarea_prev_x_tipo_activo` INT NOT NULL,
-    `id_tipo_activo` INT NOT NULL,
-    `id_tarea_mantenimiento` INT NOT NULL,
-    `intervalo_dias` INT NOT NULL,
-    `cant_golpes` INT NOT NULL,
-    `fecha_ultima_ejecucion` DATE NULL,
-    `fecha_carga` DATETIME NOT NULL,
-    PRIMARY KEY (`id_historial`)
+CREATE TABLE `serv_mant_x_tarea_mant` (
+	`id_serv_mant_x_tar_pre` INT NOT NULL AUTO_INCREMENT,
+	`id_servicio` INT NOT NULL,
+	`id_tarea_prev_x_activo` INT,
+	`fecha_carga` DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`fecha_hecho` DATETIME,
+	PRIMARY KEY (`id_serv_mant_x_tar_pre`),
+  CONSTRAINT `FK_smxtm_x_serv` FOREIGN KEY (`id_servicio`) REFERENCES `servicio` (`id_servicio`),
+  CONSTRAINT `FK_smxtm_x_tpxa` FOREIGN KEY (`id_tarea_prev_x_activo`) REFERENCES `tarea_prev_x_activo` (`id_tarea_prev_x_activo`)
 );
 
 CREATE TABLE `activo_x_tarea_mant` (
@@ -1388,17 +1432,4 @@ CREATE TABLE `tarea_ajuste` (
 	CONSTRAINT `FK_ta_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria` (`id_maquinaria`),
 	CONSTRAINT `FK_ta_x_parte_ajuste` FOREIGN KEY (`id_parte_ajuste`) REFERENCES `parte_ajuste` (`id_parte_ajuste`),
 	CONSTRAINT `FK_ta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
-);
-
-CREATE TABLE `serv_mant_x_tarea_mant` (
-	`id_serv_mant_x_tar_pre` INT NOT NULL AUTO_INCREMENT,
-	`id_servicio` INT NOT NULL,
-	`id_tarea_prev_x_activo` INT,
-	`id_tarea_prev_x_tipo_activo` INT,
-	`fecha_carga` DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`fecha_hecho` DATETIME,
-	PRIMARY KEY (`id_serv_mant_x_tar_pre`),
-  CONSTRAINT `FK_smxtm_x_serv` FOREIGN KEY (`id_servicio`) REFERENCES `servicio` (`id_servicio`),
-  CONSTRAINT `FK_smxtm_x_tpxa` FOREIGN KEY (`id_tarea_prev_x_activo`) REFERENCES `tarea_prev_x_activo` (`id_tarea_prev_x_activo`),
-  CONSTRAINT `FK_smxtm_x_tpxta` FOREIGN KEY (`id_tarea_prev_x_tipo_activo`) REFERENCES `tarea_prev_x_tipo_activo` (`id_tarea_prev_x_tipo_activo`)
 );

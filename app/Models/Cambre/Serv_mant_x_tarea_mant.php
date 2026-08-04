@@ -22,7 +22,6 @@ class Serv_mant_x_tarea_mant extends Model
         'id_serv_mant_x_tar_pre',
 	    'id_servicio',
 	    'id_tarea_prev_x_activo',
-	    'id_tarea_prev_x_tipo_activo',
 	    'fecha_carga',
 	    'fecha_hecho',
     ];

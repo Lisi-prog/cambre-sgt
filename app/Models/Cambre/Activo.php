@@ -112,7 +112,7 @@ class Activo extends Model
         $TotTaMantTipAct = 0;
 
         $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo')->count();
-        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo')->count();
+        // $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo')->count();
 
         return $TotTaMantAct + $TotTaMantTipAct;
     }
@@ -122,7 +122,7 @@ class Activo extends Model
         $TotTaMantTipAct = 0;
 
         $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
-        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+        // $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
 
        return $TotTaMantAct + $TotTaMantTipAct;
     }

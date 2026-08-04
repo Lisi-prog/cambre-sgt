@@ -146,7 +146,7 @@
                                         <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Intervalo</th>
                                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
-                                        <th class='text-center' style="color:#fff;">Última Ejecución</th>
+                                        {{-- <th class='text-center' style="color:#fff;">Última Ejecución</th> --}}
                                         <th class='text-center' style="color:#fff;">Eliminar</th>
                                     </thead>
                                     <tbody>
@@ -161,9 +161,9 @@
                                                 <td class="text-center">
                                                     {{$tarea->cant_golpes}}
                                                 </td>
-                                                <td class="text-center">
+                                                {{-- <td class="text-center">
                                                     {{$tarea->fecha_ultima_ejecucion}}
-                                                </td>
+                                                </td> --}}
                                                 <td class="text-center">
                                                     {!! Form::open([
                                                         'method' => 'DELETE',

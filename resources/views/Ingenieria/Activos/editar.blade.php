@@ -257,7 +257,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach 
-                                        @foreach ($activo->getTipoActivo->getTareasMantenimientoPreventiva as $tarea)
+                                        {{-- @foreach ($activo->getTipoActivo->getTareasMantenimientoPreventiva as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
                                                 <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
@@ -275,7 +275,7 @@
                                                     Esta tarea pertenece al tipo de activo.
                                                 </td>
                                             </tr>
-                                        @endforeach 
+                                        @endforeach  --}}
                                     </tbody>
                                 </table>
                             </div>

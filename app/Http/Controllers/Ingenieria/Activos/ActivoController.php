@@ -428,7 +428,7 @@ class ActivoController extends Controller
         return redirect()->back()->with('mensaje','Tareas de mantenimiento asignadas al tipo de activo exitosamente.');
     }
 
-    public function set_tareas_mantenimiento_preventivas_tipo_activo(Request $request){
+    public function set_tareas_mantenimiento_preventivas_tipo_activoOLD(Request $request){
         $id_tipo_activo = $request->id_tipo_activo;
         $tareas = $request->tareas_mantenimiento ?? [];
 
@@ -450,6 +450,79 @@ class ActivoController extends Controller
         }
 
         return redirect()->back()->with('success', 'Tareas preventivas asignadas correctamente.');
+    }
+
+    public function set_tareas_mantenimiento_preventivas_tipo_activo(Request $request)
+    {
+        $request->validate([
+            'id_tipo_activo' => ['required', 'integer', 'exists:tipo_activo,id_tipo_activo'],
+            'tareas_mantenimiento' => ['required', 'array', 'min:1'],
+            'tareas_mantenimiento.*' => [
+                'integer',
+                'exists:tarea_mantenimiento,id_tarea_mantenimiento',
+            ],
+        ]);
+
+        $idTipoActivo = $request->id_tipo_activo;
+        $tareas = $request->tareas_mantenimiento ?? [];
+
+        try {    
+            DB::beginTransaction();
+
+            foreach ($tareas as $idTarea) {
+                $intervaloDias = $request->input('duracion_' . $idTarea);
+                $cantGolpes = $request->input('cant_golpes_' . $idTarea);
+
+                /*
+                * Guarda o actualiza la plantilla del tipo de activo.
+                */
+                $plantilla = Tarea_prev_x_tipo_activo::updateOrCreate(
+                    [
+                        'id_tipo_activo' => $idTipoActivo,
+                        'id_tarea_mantenimiento' => $idTarea,
+                    ],
+                    [
+                        'intervalo_dias' => $intervaloDias,
+                        'cant_golpes' => $cantGolpes,
+                    ]
+                );
+
+                /*
+                * Busca todos los activos existentes de ese tipo.
+                */
+                $activos = Activo::where('id_tipo_activo', $idTipoActivo)
+                    ->pluck('id_activo');
+
+                /*
+                * Crea una tarea preventiva independiente para cada activo.
+                */
+                foreach ($activos as $idActivo) {
+                    Tarea_prev_x_activo::firstOrCreate(
+                        [
+                            'id_activo' => $idActivo,
+                            'id_tarea_mantenimiento' => $idTarea,
+                        ],
+                        [
+                            'id_tarea_prev_x_tipo_activo' =>
+                                $plantilla->id_tarea_prev_x_tipo_activo,
+
+                            'intervalo_dias' => $intervaloDias,
+                            'cant_golpes' => $cantGolpes,
+                            'fecha_ultima_ejecucion' => Carbon::now()->format('Y-m-d'),
+                        ]
+                    );
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Tareas preventivas asignadas correctamente.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                            ->with('error', 'Ocurrio un problema al crear las Tareas preventivas: '.$e->getMessage());
+        }
     }
 
     
@@ -489,17 +562,17 @@ class ActivoController extends Controller
             ]);
         }
 
-        foreach ($activo->getTareasMantenimientoPreventivaPendientesTipo as $ta) {
-            array_push($tareas, (object)[
-                'id' => $ta->id_tarea_prev_x_tipo_activo,
-                'tipo' => 'tipo_activo',
-                'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
-                'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
-                'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
-                'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
-                'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
-            ]);
-        }
+        // foreach ($activo->getTareasMantenimientoPreventivaPendientesTipo as $ta) {
+        //     array_push($tareas, (object)[
+        //         'id' => $ta->id_tarea_prev_x_tipo_activo,
+        //         'tipo' => 'tipo_activo',
+        //         'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
+        //         'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
+        //         'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
+        //         'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+        //         'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
+        //     ]);
+        // }
 
         return [
             'activo' => $activo,
