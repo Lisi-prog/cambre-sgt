@@ -247,6 +247,11 @@
                                                     {{$tarea->fecha_ultima_ejecucion}}
                                                 </td>
                                                 <td class="text-center">
+                                                    <button type="button" 
+                                                            class="btn btn-warning"
+                                                            onclick="editarTareaPreventiva({{ $tarea->id_tarea_prev_x_activo }})">
+                                                        Editar
+                                                    </button>
                                                     {!! Form::open([
                                                         'method' => 'DELETE',
                                                         'route' => ['activo.destroy_tarea_mantenimiento_preventiva', [$tarea->id_tarea_mantenimiento, $activo->id_activo]],
@@ -414,5 +419,38 @@
             inputs.val(''); // optional: clear values
         }
     });
+
+    function editarTareaPreventiva(id){
+        $.ajax({
+            url: '/activo/tarea-preventiva/' + id,
+            type: 'GET',
+            success:function(data){
+
+                $("#edit_id_tarea_prev_x_activo").val(data.id_tarea_prev_x_activo);
+
+                $("#edit_nombre_activo")
+                    .val(data.get_activo?.nombre_activo ?? '');
+
+                $("#edit_nombre_tarea")
+                    .val(data.get_tarea_mantenimiento?.nombre_tarea ?? '');
+
+                $("#edit_intervalo_dias")
+                    .val(data.intervalo_dias);
+
+                $("#edit_cant_golpes")
+                    .val(data.cant_golpes);
+
+                $("#edit_fecha_ultima_ejecucion")
+                    .val(data.fecha_ultima_ejecucion);
+                $("#formEditarTareaPreventiva")
+                    .attr('action','/activo/tarea-preventiva/'+id);
+                $("#editarTareaPreventivaModal").modal('show');
+            },
+            error:function(xhr){
+                console.log(xhr.responseText);
+                alert('Error al cargar tarea preventiva');
+            }
+        });
+    }
 </script>
 @endsection

@@ -44,3 +44,79 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="editarTareaPreventivaModal" tabindex="-1" aria-labelledby="editarTareaPreventivaModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Tarea Preventiva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+                {!! Form::open([
+                    'method'=>'PUT',
+                    'id'=>'formEditarTareaPreventiva'
+                ]) !!}
+            <div class="modal-body">
+
+                {!! Form::hidden('id_tarea_prev_x_activo', null, ['id'=>'edit_id_tarea_prev_x_activo']) !!}
+
+                <div class="mb-3">
+                    <label>Activo</label>
+                    <input type="text" 
+                           id="edit_nombre_activo" 
+                           class="form-control" 
+                           readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label>Tarea</label>
+                    <input type="text" 
+                           id="edit_nombre_tarea" 
+                           class="form-control" 
+                           readonly>
+                </div>
+
+                <div class="mb-3">
+                    {!! Form::label('intervalo_dias','Intervalo días') !!}
+                    {!! Form::number('intervalo_dias', null, [
+                        'class'=>'form-control',
+                        'id'=>'edit_intervalo_dias'
+                    ]) !!}
+                </div>
+
+                <div class="mb-3">
+                    {!! Form::label('cant_golpes','Cantidad golpes') !!}
+                    {!! Form::number('cant_golpes', null, [
+                        'class'=>'form-control',
+                        'id'=>'edit_cant_golpes'
+                    ]) !!}
+                </div>
+
+                <div class="mb-3">
+                    {!! Form::label('fecha_ultima_ejecucion','Última ejecución') !!}
+                    {!! Form::date('fecha_ultima_ejecucion', null, [
+                        'class'=>'form-control',
+                        'id'=>'edit_fecha_ultima_ejecucion'
+                    ]) !!}
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">
+                    Guardar
+                </button>
+
+                <button type="button" 
+                        class="btn btn-danger" 
+                        data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+
+            {!! Form::close() !!}
+
+        </div>
+    </div>
+</div>

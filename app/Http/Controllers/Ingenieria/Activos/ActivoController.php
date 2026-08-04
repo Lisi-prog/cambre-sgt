@@ -581,4 +581,31 @@ class ActivoController extends Controller
         ];
     }
     
+    public function getTareaPreventiva($id)
+    {
+        $tarea = Tarea_prev_x_activo::with('getTareaMantenimiento', 'getActivo')
+            ->findOrFail($id);
+
+        return response()->json($tarea);
+    }
+
+    public function updateTareaPreventiva(Request $request, $id)
+    {
+        $request->validate([
+            'intervalo_dias' => 'nullable|integer|min:0',
+            'cant_golpes' => 'nullable|integer|min:0',
+            'fecha_ultima_ejecucion' => 'nullable|date',
+        ]);
+
+        $tarea = Tarea_prev_x_activo::findOrFail($id);
+
+        $tarea->update([
+            'intervalo_dias' => $request->intervalo_dias,
+            'cant_golpes' => $request->cant_golpes,
+            'fecha_ultima_ejecucion' => $request->fecha_ultima_ejecucion,
+        ]);
+
+        return redirect()->back()->with('mensaje', 'Tarea preventiva actualizada exitosamente.');
+    }
+
 }
