@@ -7,7 +7,7 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h5 class="titulo page__heading my-auto mr-5">Editar activo #{{$activo->id_activo}}</h5>
+            <h5 class="titulo page__heading my-auto mr-5">Editar Activo #{{$activo->id_activo}}</h5>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
