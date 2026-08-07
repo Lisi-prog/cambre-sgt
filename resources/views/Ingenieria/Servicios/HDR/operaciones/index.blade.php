@@ -358,6 +358,14 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <a target="_blank" type="button" class="btn btn-info w-100"
+                                                                    href="/ordenes/mec/{{$ope->getHdr->getOrdMec->id_orden}}/hdr">
+                                                                        Hoja de Ruta
+                                                                    </a>
+                                                                </div>
+                                                            </div>                                                                
                                                         @endif
                                                         <div class="row my-2">
                                                             <div class="col-12">
