@@ -50,9 +50,18 @@ class Tipo_activo extends Model
 
     public function getTareasMantenimientoSinUsar()
     {
-        $tareasUsadasIds = $this->getTareasMantenimiento()->pluck('id_tarea_mantenimiento')->toArray();
+        $tareasUsadasIds = $this->getTareasMantenimiento()
+            ->pluck('id_tarea_mantenimiento')
+            ->toArray();
 
-        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+        $zonasIds = $this->getZonas()
+            ->pluck('zona_tarea.id_zona_tarea')
+            ->toArray();
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
+            ->whereIn('id_zona_tarea', $zonasIds)
+            ->orderBy('nombre_tarea', 'ASC')
+            ->get();
     }
 
     public function setTareasMantenimiento($tareasIds)
@@ -71,9 +80,28 @@ class Tipo_activo extends Model
 
     public function getTareasMantenimientoSinUsarPreventiva()
     {
-        $tareasUsadasIds = $this->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray();
+        $tareasUsadasIds = $this->getTareasMantenimientoPreventiva()
+            ->pluck('id_tarea_mantenimiento')
+            ->toArray();
 
-        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+        $zonasIds = $this->getZonas()
+            ->pluck('zona_tarea.id_zona_tarea')
+            ->toArray();
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
+            ->whereIn('id_zona_tarea', $zonasIds)
+            ->orderBy('nombre_tarea', 'ASC')
+            ->get();
+    }
+
+    public function getZonas()
+    {
+        return $this->belongsToMany(
+            Zona_tarea::class,
+            'zona_tarea_x_tipo_activo',
+            'id_tipo_activo',
+            'id_zona_tarea'
+        );
     }
 
 }

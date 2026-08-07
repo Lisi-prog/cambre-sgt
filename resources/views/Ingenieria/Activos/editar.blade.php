@@ -115,56 +115,74 @@
 
                     </div>
                 </div>
-                              
                 <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
-                            <h5>Síntomas</h5>      
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarSintomasModal">
-                                Agregar
-                            </button>                     
-                        </div>
-                        <div>
-                            <table id="tabla_sintomas" class="table table-striped">
-                                <thead>
-                                    <th class='text-center' style="color:#fff;">Síntoma</th>
-                                    <th class='text-center' style="color:#fff;">Tipo de Sintoma</th>
-                                    <th class='text-center' style="color:#fff;">Eliminar</th>
-                                </thead>
-                                <tbody>
-                                    @foreach ($activo->getSintomas as $sintoma)
-                                        <tr>
-                                            <td>{{$sintoma->getSintoma->nombre_sintoma}}</td>
-                                            <td>{{$sintoma->getSintoma->getTipoSintoma->nombre_tipo_sintoma}}</td>
-                                            <td class="text-center">
-                                                {!! Form::open([
-                                                    'method' => 'DELETE',
-                                                    'route' => ['activo.destroy_sintoma', [$sintoma->id_sintoma, $activo->id_activo]],
-                                                    'style' => 'display:inline'
-                                                ]) !!}
-                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
-                                                {!! Form::close() !!}
-                                            </td>
-                                        </tr>
-                                    @endforeach 
-                                    @foreach ($activo->getTipoActivo->getSintomas as $sintoma)
-                                        <tr>
-                                            <td>{{$sintoma->getSintoma->nombre_sintoma}}</td>
-                                            <td>{{$sintoma->getSintoma->getTipoSintoma->nombre_tipo_sintoma}}</td>
-                                            <td class="text-center">
-                                                Este síntoma pertenece al tipo de activo.
-                                            </td>
-                                        </tr>
-                                    @endforeach 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>                        
+                    <div><h6 class="p-2">Configuración</h6></div>
+                    <div class="card-body d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-primary btn-config"
+                                data-target="#card-sintomas" style="width: 32%;"> 
+                            Síntomas
+                        </button>    
+                        <button type="button" class="btn btn-outline-primary btn-config"
+                                data-target="#card-correctivas" style="width: 32%;">
+                            Correctivas
+                        </button>    
+                        <button type="button" class="btn btn-outline-primary btn-config"
+                                data-target="#card-preventivas" style="width: 32%;">
+                            Preventivas
+                        </button>
+                    </div>
                 </div>
+                              
+                
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                <div class="d-flex flex-column">                      
-                    <div class="card">
+                <div class="d-flex flex-column">           
+                    <div id="card-sintomas" class="card d-none card-config">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h5>Síntomas</h5>      
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarSintomasModal">
+                                    Agregar
+                                </button>                     
+                            </div>
+                            <div>
+                                <table id="tabla_sintomas" class="table table-striped">
+                                    <thead>
+                                        <th class='text-center' style="color:#fff;">Síntoma</th>
+                                        <th class='text-center' style="color:#fff;">Tipo de Sintoma</th>
+                                        <th class='text-center' style="color:#fff;">Eliminar</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($activo->getSintomas as $sintoma)
+                                            <tr>
+                                                <td>{{$sintoma->getSintoma->nombre_sintoma}}</td>
+                                                <td>{{$sintoma->getSintoma->getTipoSintoma->nombre_tipo_sintoma}}</td>
+                                                <td class="text-center">
+                                                    {!! Form::open([
+                                                        'method' => 'DELETE',
+                                                        'route' => ['activo.destroy_sintoma', [$sintoma->id_sintoma, $activo->id_activo]],
+                                                        'style' => 'display:inline'
+                                                    ]) !!}
+                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                    {!! Form::close() !!}
+                                                </td>
+                                            </tr>
+                                        @endforeach 
+                                        @foreach ($activo->getTipoActivo->getSintomas as $sintoma)
+                                            <tr>
+                                                <td>{{$sintoma->getSintoma->nombre_sintoma}}</td>
+                                                <td>{{$sintoma->getSintoma->getTipoSintoma->nombre_tipo_sintoma}}</td>
+                                                <td class="text-center">
+                                                    Este síntoma pertenece al tipo de activo.
+                                                </td>
+                                            </tr>
+                                        @endforeach 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                    <div id="card-correctivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
                                 <h5>Tareas de Mantenimiento Correctivas (INSPECCIÓN)</h5>      
@@ -212,7 +230,7 @@
                             </div>
                         </div>                        
                     </div>
-                    <div class="card">
+                    <div id="card-preventivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
                                 <h5>Tareas de Mantenimiento Preventivas</h5>      
@@ -285,6 +303,7 @@
                                 </table>
                             </div>
                         </div>                        
+                    </div>
                     </div>
                 </div>
             </div>
@@ -452,5 +471,13 @@
             }
         });
     }
+
+    $('.btn-config').click(function () {
+
+        $('.card-config').addClass('d-none');
+
+        $($(this).data('target'))
+            .removeClass('d-none');
+    });
 </script>
 @endsection

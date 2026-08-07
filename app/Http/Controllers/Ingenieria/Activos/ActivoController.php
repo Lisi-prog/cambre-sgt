@@ -26,6 +26,7 @@ use App\Models\Cambre\Activo_x_sintoma;
 use App\Models\Cambre\Activo_x_tarea_mant;
 use App\Models\Cambre\Tipo_activo_x_tarea_mant;
 use App\Models\Cambre\Tarea_prev_x_activo;
+use App\Models\Cambre\Zona_tarea;
 use App\Models\User;
 use App\Models\Cambre\Empleado;
 
@@ -326,7 +327,8 @@ class ActivoController extends Controller
 
     public function tipo_activo_edit($id){
         $ta = Tipo_activo::find($id);
-        return view('Ingenieria.Activos.Tipo_activo.edit', compact('ta'));
+        $zonas = Zona_tarea::orderBy('nombre_zona')->get();
+        return view('Ingenieria.Activos.Tipo_activo.edit', compact('ta', 'zonas'));
     }
 
     public function tipo_activo_update(Request $request, $id){
@@ -606,6 +608,15 @@ class ActivoController extends Controller
         ]);
 
         return redirect()->back()->with('mensaje', 'Tarea preventiva actualizada exitosamente.');
+    }
+
+    public function set_zonas(Request $request, $id)
+    {
+        $tipo = Tipo_activo::findOrFail($id);
+
+        $tipo->getZonas()->sync($request->zonas ?? []);
+
+        return back()->with('success', 'Zonas actualizadas correctamente.');
     }
 
 }

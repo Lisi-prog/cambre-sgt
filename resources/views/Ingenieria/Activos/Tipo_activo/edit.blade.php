@@ -51,6 +51,34 @@
                     </div>
                 </div>
                 <div class="card">
+                    <div><h6 class="p-2">Configuración</h6></div>
+                    <div class="card-body d-flex justify-content-between">
+                        <button class="btn btn-outline-primary btn-config"
+                                data-target="#card-sintomas" style="width: 23%;"> 
+                            Síntomas
+                        </button>
+    
+                        <button class="btn btn-outline-primary btn-config"
+                                data-target="#card-correctivas" style="width: 23%;">
+                            Correctivas
+                        </button>
+    
+                        <button class="btn btn-outline-primary btn-config"
+                                data-target="#card-preventivas" style="width: 23%;">
+                            Preventivas
+                        </button>
+    
+                        <button class="btn btn-outline-primary btn-config"
+                                data-target="#card-zonas" style="width: 23%;">
+                            Zonas
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
+                <div class="d-flex flex-column">                    
+                    <div id="card-sintomas" class="card d-none card-config">
                     {{-- {!! Form::model($ta, ['method' => 'PUT', 'route' => ['tipo_activo.set_sintomas', $ta->id_tipo_activo], 'class' => '']) !!} --}}
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
@@ -87,11 +115,7 @@
                         </div>
                     </div>                        
                 </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
-                <div class="d-flex flex-column">
-                    
-                    <div class="card">
+                    <div id="card-correctivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
                                 <h5>Tareas de Mantenimiento Correctivas (INSPECCIÓN)</h5>      
@@ -130,7 +154,7 @@
                         </div>                        
                     </div>
 
-                    <div class="card">
+                    <div id="card-preventivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
                                 <h5>Tareas de Mantenimiento Preventivas</h5>      
@@ -179,6 +203,70 @@
                                 </table>
                             </div>
                         </div>                        
+                    </div>
+
+                    <div id="card-zonas" class="card card-config d-none">
+                        <div class="card-body">
+
+                            {!! Form::open([
+                                'method' => 'PUT',
+                                'route' => ['tipo_activo.set_zonas', $ta->id_tipo_activo]
+                            ]) !!}
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="mb-0">Zonas Asociadas</h5>
+                                    <small class="text-muted">
+                                        Seleccione las zonas que corresponden a este tipo de activo.
+                                    </small>
+                                </div>
+
+                                {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
+                            </div>
+
+                            <div class="row">
+
+                                @foreach($zonas as $zona)
+
+                                    <div class="col-md-4 mb-2">
+
+                                        <div class="border rounded p-2">
+
+                                            <div class="form-check">
+
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="zonas[]"
+                                                    value="{{ $zona->id_zona_tarea }}"
+                                                    id="zona{{ $zona->id_zona_tarea }}"
+
+                                                    {{ in_array(
+                                                        $zona->id_zona_tarea,
+                                                        $ta->getZonas->pluck('id_zona_tarea')->toArray()
+                                                    ) ? 'checked' : '' }}
+                                                >
+
+                                                <label
+                                                    class="form-check-label"
+                                                    for="zona{{ $zona->id_zona_tarea }}"
+                                                >
+                                                    {{ $zona->nombre_zona }}
+                                                </label>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+
+                            {!! Form::close() !!}
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -310,6 +398,14 @@
             inputs.prop('required', false);
             inputs.val(''); // optional: clear values
         }
+    });
+
+    $('.btn-config').click(function () {
+
+        $('.card-config').addClass('d-none');
+
+        $($(this).data('target'))
+            .removeClass('d-none');
     });
 </script>
 @endsection
