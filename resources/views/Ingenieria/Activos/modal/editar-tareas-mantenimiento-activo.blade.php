@@ -8,6 +8,76 @@
             {!! Form::open(['route' => 'activo.set_tareas_mantenimiento', 'method' => 'PUT', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <h5>Tareas Disponibles</h5>
+                <button type="button" class="btn btn-success" onclick="mostrarNuevaTarea('card-nueva-tarea-mantenimiento')">
+                    + Nueva tarea
+                </button>
+                <div id="card-nueva-tarea-mantenimiento" class="card mb-3 d-none">
+                    <div class="card-header">
+                        Nueva tarea de mantenimiento preventiva
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {{-- Zona --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('id_zona_tarea_nueva', 'Zona de tarea:', [
+                                        'class' => 'control-label fs-7'
+                                    ]) !!}
+                                    <span class="obligatorio">*</span>
+                                    {!! Form::select(
+                                        'id_zona_tarea_nueva',
+                                        $zonas->pluck('nombre_zona', 'id_zona_tarea'),
+                                        null,
+                                        [
+                                            'class' => 'form-control',
+                                            'placeholder' => 'Seleccione una zona',
+                                            'id' => 'id_zona_tarea_nueva'
+                                        ]
+                                    ) !!}
+                                </div>
+                            </div>
+                            {{-- Ejecución --}}
+                            <div class="col-md-6 d-flex justify-content-between">
+                                <div class="form-group" style="90%;">
+                                    {!! Form::label('id_ejecucion', 'Ejecución de tarea:') !!}
+
+                                    {!! Form::select('id_ejecucion_nueva', $ejecuciones->pluck('nombre_ejecucion', 'id_ejecucion'), null, [
+                                        'class' => 'form-control',
+                                        'placeholder' => 'Seleccione una ejecución',
+                                        'id' => 'id_ejecucion_nueva'
+                                    ]) !!}
+
+                                    {!! Form::text('ejecucion_nueva', null, [
+                                        'class' => 'form-control mt-2',
+                                        'placeholder' => 'Nueva ejecución',
+                                        'id' => 'ejecucion_nueva',
+                                        'style'=>'display:none;'
+                                    ]) !!}
+                                </div>
+
+                                <div class="ms-2 mt-4">
+                                    <button type="button" class="btn btn-success" onclick="mostrarInputEjecucion()">
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- Nombre tarea --}}
+                            <div class="col-md-12 mt-3">
+                                {!! Form::label('nombre_tarea_nueva', 'Nombre tarea:') !!}
+
+                                {!! Form::text('nombre_tarea_nueva', null, [
+                                    'class'=>'form-control',
+                                    'placeholder'=>'Nombre de la tarea'
+                                ]) !!}
+                            </div>
+                            <div class="col-md-12 mt-3 text-end">
+                                <button type="button" class="btn btn-primary" onclick="guardarNuevaTarea()">
+                                    Guardar nueva tarea
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <table id="tabla_set_tareas_mantenimiento" class="table table-striped">
                     <thead>
                         <th class='text-center' style="color:#fff;">Asignar</th>

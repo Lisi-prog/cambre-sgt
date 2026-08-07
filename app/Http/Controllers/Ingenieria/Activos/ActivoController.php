@@ -27,6 +27,7 @@ use App\Models\Cambre\Activo_x_tarea_mant;
 use App\Models\Cambre\Tipo_activo_x_tarea_mant;
 use App\Models\Cambre\Tarea_prev_x_activo;
 use App\Models\Cambre\Zona_tarea;
+use App\Models\Cambre\Tarea_ejecucion;
 use App\Models\User;
 use App\Models\Cambre\Empleado;
 
@@ -183,8 +184,12 @@ class ActivoController extends Controller
     public function edit($id)
     {
         $activo = Activo::find($id);
+        $ejecuciones = Tarea_ejecucion::all();
+        $zonas = Zona_tarea::whereHas('getTiposActivo', function($q) use ($activo) {
+            $q->where('tipo_activo.id_tipo_activo', $activo->id_tipo_activo);
+        })->get();
         $tipos_activo = Tipo_activo::orderBy('nombre_tipo_activo')->pluck('nombre_tipo_activo','id_tipo_activo');
-        return view('Ingenieria.Activos.editar', compact('activo', 'tipos_activo'));
+        return view('Ingenieria.Activos.editar', compact('activo', 'tipos_activo', 'zonas', 'ejecuciones'));
     }
     
     public function update(Request $request, $id)

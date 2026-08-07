@@ -479,5 +479,31 @@
         $($(this).data('target'))
             .removeClass('d-none');
     });
+
+    function mostrarNuevaTarea(id){
+        $(`#${id}`).toggleClass("d-none");
+    }
+
+    function guardarNuevaTarea(){
+        $.ajax({
+            url: '{{ route('tarea_mantenimiento.store') }}',
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+
+                nombre_tarea: $("#nombre_tarea_nueva").val() ?? $("#nombre_tarea_nueva_m").val(),
+                id_zona_tarea: $("#id_zona_tarea_nueva").val() ?? $("#id_zona_tarea_nueva_m").val(),
+                id_ejecucion: $("#id_ejecucion_nueva").val() ?? $("#id_ejecucion_nueva_m").val(),
+                id_activo: $("#id_activo").val() ?? $("#id_activo").val(),
+            },
+            success:function(response){
+                location.reload();
+            },
+            error:function(){                
+                alert('Error al crear la tarea');
+            }
+        });
+
+    }
 </script>
 @endsection
