@@ -5,27 +5,20 @@
 @section('content')
 
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 my-auto">
-                <h4 class="titulo page__heading my-auto">Tareas de Mantenimiento</h4>
+    <div class="section-header d-flex">
+        <div class="flex-grow-1">
+            <h4 class="titulo page__heading my-auto">Tareas de Mantenimiento</h5>
+        </div>
+        <div class="pe-2">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="{{ route('tarea_ejecucion.index') }}" class="btn btn-primary">Ejecuciones</a>
+                <a href="{{ route('zona_tarea.index') }}" class="btn btn-primary">Zonas</a>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 d-flex justify-content-evenly">
-                {!! Form::open(['method' => 'GET', 'route' => ['tarea_ejecucion.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Ejecuciones', ['class' => 'btn btn-primary', 'style' => 'width:100px']) !!}
-                {!! Form::close() !!}
-                {!! Form::open(['method' => 'GET', 'route' => ['zona_tarea.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Zonas', ['class' => 'btn btn-primary', 'style' => 'width:100px']) !!}
-                {!! Form::close() !!}
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
-            </div>
-            
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 d-flex justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaTareaModal">
-                    Nueva Tarea de Mantenimiento
-                </button>
-            </div>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaTareaModal">
+                Nueva Tarea de Mantenimiento
+            </button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -41,7 +34,7 @@
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Zona</th>
                                     <th class='text-center' style="color:#fff;">Ejecución</th>
-                                    <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
                                 <tbody id="tabla_tareas_body">
                                     @php
@@ -49,12 +42,29 @@
                                     @endphp
                                     @foreach ($tareas as $tarea)
                                         <tr>
-                                            <td class="text-center">{{ $tarea->id_tarea_mantenimiento ?? '-'}}</td>
-                                            <td class="text-center">{{ $tarea->nombre_tarea }}</td>
-                                            <td class="text-center">{{ $tarea->getZonaTarea->nombre_zona }}</td>
-                                            <td class="text-center">{{ $tarea->getEjecucion->nombre_ejecucion }}</td>
-                                            <td class="text-center">
-                                                <div class="row justify-content-center">
+                                            <td class="text-center" style="vertical-align: middle;">{{ $tarea->id_tarea_mantenimiento ?? '-'}}</td>
+                                            <td class="text-start" style="vertical-align: middle;">{{ $tarea->nombre_tarea }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $tarea->getZonaTarea->nombre_zona }}</td>
+                                            <td class="text-start" style="vertical-align: middle;">{{ $tarea->getEjecucion->nombre_ejecucion }}</td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <div class="me-1" style="width: 50% !important;">
+                                                        <a type="button" class="btn btn-primary w-100" href="{{route('tarea_mantenimiento.edit', $tarea->id_tarea_mantenimiento)}}"><i class="fas fa-edit"></i></a>
+                                                    </div>
+                                                    <div class="me-1" style="width: 50% !important;">
+                                                        {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['tarea_mantenimiento.destroy', $tarea->id_tarea_mantenimiento],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('¿Está seguro que desea ELIMINAR la tarea?');">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
                                                         <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTarea{{$idCount}}" aria-expanded="false" aria-controls="collapseTarea{{$idCount}}">
                                                             Opciones
@@ -81,7 +91,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </td>
                                         </tr>
                                         @php
@@ -118,7 +128,7 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: [1, 'asc']
         });
     });
 

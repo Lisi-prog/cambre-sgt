@@ -26,9 +26,9 @@ class ZonaController extends Controller
         ]);
         try{ 
             $zona = new Zona();
-            $zona->nombre_zona = $request->input('zona');
+            $zona->nombre_zona = strtoupper($request->input('zona'));
             $zona->save();
-            return redirect()->route('elemento.index')->with('success', 'Zona creada exitosamente.');
+            return redirect()->route('elemento.index')->with('mensaje', 'Zona creada exitosamente.');
         } 
         catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al crear zona: ' . $e->getMessage())->withInput();
@@ -47,9 +47,9 @@ class ZonaController extends Controller
         ]);
         try{   
             $zona = Zona::findOrFail($id); 
-            $zona->nombre_zona = $request->input('zona');
+            $zona->nombre_zona = strtoupper($request->input('zona'));
             $zona->save();
-            return redirect()->route('elemento.index')->with('success', 'Elemento actualizado exitosamente.');
+            return redirect()->route('elemento.index')->with('mensaje', 'Elemento actualizado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al actualizar elemento: ' . $e->getMessage())->withInput();;
         }   
@@ -58,7 +58,7 @@ class ZonaController extends Controller
     public function destroy($id){
         $zona = Zona::findOrFail($id);  
         $zona->delete();
-        return redirect()->route('elemento.index')->with('success','Elemento eliminado exitosamente.');
+        return redirect()->route('elemento.index')->with('mensaje','Elemento eliminado exitosamente.');
     }
 
     public function verAsignarTipo($id){

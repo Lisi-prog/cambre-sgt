@@ -47,9 +47,13 @@ class TareaEjecucionController extends Controller
 
     public function destroy($id)
     {
-        $ejecucion = Tarea_ejecucion::find($id);
-        $ejecucion->delete();
-
+        try {
+            $ejecucion = Tarea_ejecucion::find($id);
+            $ejecucion->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('tarea_ejecucion.index')->with('error', 'La ejecución ya se encuentra relacionada con una tarea.');
+        }
+        
         return redirect()->route('tarea_ejecucion.index')->with('success', 'Ejecución eliminada exitosamente.');
     }
 }

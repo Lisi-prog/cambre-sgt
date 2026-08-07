@@ -10,13 +10,15 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             {!! Form::label('zona', 'Elemento:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('zona', null, [
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
-                                'id' => 'zona'
+                                'id' => 'zona',
+                                'style' => 'text-transform: uppercase;',
+                                'autocomplete' => 'off',
                             ]) !!}
                         </div>
                     </div>

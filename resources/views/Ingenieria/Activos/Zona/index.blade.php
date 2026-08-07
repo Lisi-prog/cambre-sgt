@@ -15,23 +15,16 @@
     }
 </style>
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Elemento</h5>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            </div>
-            
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 d-flex justify-content-end">
-                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#nuevaZonaModal">
-                    Nueva
-                </button>
-            </div>
+    <div class="section-header d-flex">
+        <div class="flex-grow-1">
+            <h4 class="titulo page__heading my-auto">Elemento</h5>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaZonaModal">Nuevo Elemento</button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
+
     <div class="section-body">
         <div class="row">
             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -43,7 +36,7 @@
                                     <th class='text-center' style="color:#fff;max-width:5vh">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Tipo Activo</th>
-                                    <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
                                     @php
@@ -55,7 +48,7 @@
 
                                             <td class='text-start' style="vertical-align: middle;">{{$zona->nombre_zona}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$zona->getTipos() != null ? $zona->getTipos() : '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$zona->getTipos() != null ? $zona->getTipos() : '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="d-flex gap-2">
@@ -113,7 +106,7 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: [1, 'asc']
         });
         
     });

@@ -80,10 +80,14 @@ class TareaMantenimientoController extends Controller
 
     public function destroy($id)
     {
-        $tarea = Tarea_mantenimiento::find($id);
-        $tarea->delete();
-
-        return redirect()->route('tarea_mantenimiento.index')->with('success', 'Tarea eliminada exitosamente.');
+        try {
+            $tarea = Tarea_mantenimiento::find($id);
+            $tarea->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('tarea_mantenimiento.index')->with('error', 'La Tarea ya se encuentra relacionado con algun parte.');
+        }
+        
+        return redirect()->route('tarea_mantenimiento.index')->with('mensaje', 'Tarea eliminada exitosamente.');
     }
 }
 

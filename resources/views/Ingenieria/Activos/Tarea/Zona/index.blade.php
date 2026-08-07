@@ -31,7 +31,7 @@
                                 <thead>
                                     <th class='text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color: #fff;width:9vh">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
                                 <tbody id="tabla_zonas_body">
                                     @php
@@ -39,9 +39,9 @@
                                     @endphp
                                     @foreach ($zonas as $zona)
                                         <tr>
-                                            <td class='text-center'>{{ $zona->id_zona_tarea }}</td>
-                                            <td class='text-start'>{{ $zona->nombre_zona }}</td>
-                                            <td>
+                                            <td class='text-center' style="vertical-align: middle;">{{ $zona->id_zona_tarea }}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{ $zona->nombre_zona }}</td>
+                                            <td >
                                                 <div class="d-flex">
                                                     <div class="me-1" style="width: 50% !important;">
                                                         <a type="button" class="btn btn-primary w-100" href="{{route('zona_tarea.edit', $zona->id_zona_tarea)}}"><i class="fas fa-edit"></i></a>
