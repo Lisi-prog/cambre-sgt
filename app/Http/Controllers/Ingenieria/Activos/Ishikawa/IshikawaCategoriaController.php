@@ -22,10 +22,10 @@ class IshikawaCategoriaController extends Controller
            'nombre_categoria' => 'required|string|max:100',
        ]);
        $categoria = new Ishikawa_categoria();
-       $categoria->codigo_categoria = $request->input('codigo_categoria');
-       $categoria->nombre_categoria = $request->input('nombre_categoria');
+       $categoria->codigo_categoria = strtoupper($request->input('codigo_categoria'));
+       $categoria->nombre_categoria = strtoupper($request->input('nombre_categoria'));
        $categoria->save();
-       return redirect()->route('ishikawa_categoria.index')->with('success', 'Categoría creada exitosamente.');
+       return redirect()->route('ishikawa_categoria.index')->with('mensaje', 'Categoría creada exitosamente.');
     }
     
     public function edit($id)
@@ -40,15 +40,20 @@ class IshikawaCategoriaController extends Controller
               'nombre_categoria' => 'required|string|max:100',
          ]);
          $categoria = Ishikawa_categoria::find($id);
-         $categoria->codigo_categoria = $request->input('codigo_categoria');
-         $categoria->nombre_categoria = $request->input('nombre_categoria');
+         $categoria->codigo_categoria = strtoupper($request->input('codigo_categoria'));
+         $categoria->nombre_categoria = strtoupper($request->input('nombre_categoria'));
          $categoria->save();
-         return redirect()->route('ishikawa_categoria.index')->with('success', 'Categoría actualizada exitosamente.');       
+         return redirect()->route('ishikawa_categoria.index')->with('mensaje', 'Categoría actualizada exitosamente.');       
     }   
 
     public function destroy($id){
-       $categoria = Ishikawa_categoria::find($id);
-       $categoria->delete();
-       return redirect()->route('ishikawa_categoria.index')->with('success', 'Categoría eliminada exitosamente.');
+        try {
+            $categoria = Ishikawa_categoria::find($id);
+            $categoria->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('ishikawa_categoria.index')->with('error', 'La Categoría se encuentra relacionada con un diagnóstico.');
+        }
+        
+        return redirect()->route('ishikawa_categoria.index')->with('mensaje', 'Categoría eliminada exitosamente.');
     }
 }

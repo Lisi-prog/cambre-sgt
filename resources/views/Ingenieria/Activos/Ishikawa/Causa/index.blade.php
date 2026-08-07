@@ -1,28 +1,23 @@
 @extends('layouts.app')
 
-@section('titulo', 'Causas - Diagrama de Ishikawa')
+@section('titulo', 'Las 5M - Diagnóstico')
 
 @section('content')
 
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 my-auto">
-                <h4 class="titulo page__heading my-auto">Causas - Diagrama de Ishikawa</h4>
+    <div class="section-header d-flex">
+        <div class="flex-grow-1">
+            <h4 class="titulo page__heading my-auto">Las 5M - Diagnóstico</h5>
+        </div>
+        <div class="pe-2">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="{{ route('ishikawa_categoria.index') }}" class="btn btn-primary">Categoria</a>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
-                {!! Form::open(['method' => 'GET', 'route' => ['ishikawa_categoria.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Categorías - Diagrama de Ishikawa', ['class' => 'btn btn-primary']) !!}
-                {!! Form::close() !!}
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-5">
-            </div>
-            
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 d-flex justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaCausaModal">
-                    Nueva causa
-                </button>
-            </div>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaCausaModal">
+                Nuevo Diagnóstico
+            </button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -35,10 +30,10 @@
                             <table class="table table-striped mt-2" id="tabla_causas">
                                 <thead>
                                     <th class='text-center' style="color:#fff;">ID</th>
-                                    <th class='text-center' style="color:#fff;">Nombre</th>
+                                    <th class='text-center' style="color:#fff;">Diagnóstico</th>
                                     <th class='text-center' style="color:#fff;">Explicación</th>
                                     <th class='text-center' style="color:#fff;">Categoria</th>
-                                    <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
                                 <tbody id="tabla_causas_body">
                                     @php
@@ -47,11 +42,28 @@
                                     @foreach ($causas as $causa)
                                         <tr>
                                             <td class="text-center">{{ $causa->id_ishikawa_causa }}</td>
-                                            <td class="text-center">{{ $causa->nombre_causa }}</td>
-                                            <td class="text-center">{{ $causa->explicacion }}</td>
+                                            <td class="text-start">{{ $causa->nombre_causa }}</td>
+                                            <td class="text-start">{{ $causa->explicacion }}</td>
                                             <td class="text-center">{{ $causa->getCategoria->nombre_categoria }}</td>
-                                            <td class="text-center">
-                                                <div class="row justify-content-center">
+                                            <td>
+                                                <div class="d-flex">
+                                                    <div class="me-1" style="width: 50% !important;">
+                                                        <a type="button" class="btn btn-primary w-100" href="{{route('ishikawa_causa.edit', $causa->id_ishikawa_causa)}}"><i class="fas fa-edit"></i></a>
+                                                    </div>
+                                                    <div class="me-1" style="width: 50% !important;">
+                                                        {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['ishikawa_causa.destroy', $causa->id_ishikawa_causa],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('¿Está seguro que desea ELIMINAR el diagnóstico?');">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
                                                         <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCausa{{$idCount}}" aria-expanded="false" aria-controls="collapseCausa{{$idCount}}">
                                                             Opciones
@@ -78,7 +90,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </td>
                                         </tr>
                                         @php
