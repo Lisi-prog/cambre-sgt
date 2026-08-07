@@ -92,7 +92,7 @@
                                 <thead>
                                     <th class='text-center' style="color:#fff;">Síntoma</th>
                                     <th class='text-center' style="color:#fff;">Tipo de Sintoma</th>
-                                    <th class='text-center' style="color:#fff;">Eliminar</th>
+                                    <th class='text-center' style="color:#fff;">Acciones</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($ta->getSintomas as $sintoma)
@@ -105,7 +105,9 @@
                                                     'route' => ['tipo_activo.destroy_sintoma', [$sintoma->id_sintoma, $ta->id_tipo_activo]],
                                                     'style' => 'display:inline'
                                                 ]) !!}
-                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                                 {!! Form::close() !!}
                                             </td>
                                         </tr>
@@ -129,7 +131,7 @@
                                         <th class='text-center' style="color:#fff;">Tarea</th>
                                         <th class='text-center' style="color:#fff;">Ejecución</th>
                                         <th class='text-center' style="color:#fff;">Zona</th>
-                                        <th class='text-center' style="color:#fff;">Eliminar</th>
+                                        <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($ta->getTareasMantenimiento as $tarea)
@@ -143,7 +145,9 @@
                                                         'route' => ['tipo_activo.destroy_tarea_mantenimiento', [$tarea->id_tarea_mantenimiento, $ta->id_tipo_activo]],
                                                         'style' => 'display:inline'
                                                     ]) !!}
-                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                     <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                     {!! Form::close() !!}
                                                 </td>
                                             </tr>
@@ -171,7 +175,7 @@
                                         <th class='text-center' style="color:#fff;">Intervalo</th>
                                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
                                         {{-- <th class='text-center' style="color:#fff;">Última Ejecución</th> --}}
-                                        <th class='text-center' style="color:#fff;">Eliminar</th>
+                                        <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($ta->getTareasMantenimientoPreventiva as $tarea)
@@ -194,7 +198,9 @@
                                                         'route' => ['tipo_activo.destroy_tarea_mantenimiento_preventiva', [$tarea->id_tarea_mantenimiento, $ta->id_tipo_activo]],
                                                         'style' => 'display:inline'
                                                     ]) !!}
-                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                     <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                     {!! Form::close() !!}
                                                 </td>
                                             </tr>
