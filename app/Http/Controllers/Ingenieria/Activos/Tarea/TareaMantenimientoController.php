@@ -33,6 +33,13 @@ class TareaMantenimientoController extends Controller
         } else {
             $tarea->id_ejecucion = $request->id_ejecucion;
         }
+        if ($request->zona_nueva) {
+        $zona = Zona_tarea::create([
+            'nombre_zona' => strtoupper($request->zona_nueva)
+        ]);
+        $request->merge([
+            'id_zona_tarea' => $zona->id_zona_tarea
+        ]);    }
         $tarea->id_zona_tarea = $request->id_zona_tarea;
         $tarea->save();
 
