@@ -15,7 +15,9 @@
                             {!! Form::text('nombre_sintoma', null, [
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
-                                'id' => 'nombre_sintoma'
+                                'id' => 'nombre_sintoma',
+                                'autocomplete' => 'off',
+                                'style' => 'text-transform: uppercase;'
                             ]) !!}
                         </div>
                     </div>

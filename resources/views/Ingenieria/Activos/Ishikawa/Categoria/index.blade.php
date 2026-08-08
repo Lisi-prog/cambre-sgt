@@ -5,19 +5,16 @@
 @section('content')
 
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-auto">
-                <h4 class="titulo page__heading my-auto">Las 5M - Categorías</h4>
-            </div>
-            <div class="col-xs-12 col-sm-1 col-md-5 col-lg-5">
-            </div>
-            
-            <div class="col-xs-12 col-sm-5 col-md-3 col-lg-3 d-flex justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
-                    Nueva categoría
-                </button>
-            </div>
+    <div class="section-header d-flex">
+        <div class="flex-grow-1">
+            <h4 class="titulo page__heading my-auto">Las 5M - Categorías</h5>
+        </div>
+        <div class="pe-2">
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
+                Nueva categoría
+            </button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
