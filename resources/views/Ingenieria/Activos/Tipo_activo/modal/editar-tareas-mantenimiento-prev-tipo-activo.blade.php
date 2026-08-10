@@ -16,7 +16,7 @@
                         <th class='text-center' style="color:#fff;">Zona</th>
                         <th class='text-center' style="color:#fff;">Intervalo</th>
                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
-                        <th class='text-center' style="color:#fff;">Última Ejecución</th>
+                        {{-- <th class='text-center' style="color:#fff;">Última Ejecución</th> --}}
                     </thead>
                     <tbody>                    
                         @foreach($ta->getTareasMantenimientoSinUsarPreventiva() as $tarea_mantenimiento_disponible)
@@ -59,14 +59,14 @@
                                         'disabled'
                                     ]) !!}
                                 </td>
-                                <td>
+                                {{-- <td>
                                     {!! Form::date('fecha_ultima_ejecucion_'.$tarea_mantenimiento_disponible->id_tarea_mantenimiento, null, [
                                         'class' => 'form-control input-tarea w-100',
                                         'data-id' => $tarea_mantenimiento_disponible->id_tarea_mantenimiento,
                                         'placeholder' => 'Fecha',
                                         'disabled'
                                     ]) !!}
-                                </td>
+                                </td> --}}
 
                             </tr>
                         @endforeach 

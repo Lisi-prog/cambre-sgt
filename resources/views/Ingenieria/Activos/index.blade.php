@@ -22,7 +22,7 @@
         <div class="pe-2">
             <div class="btn-group" role="group" aria-label="Basic example">
                 <a href="{{ route('tipo_activo.index') }}" class="btn btn-primary">Tipo Activo</a>
-                <a href="{{ route('zona.index') }}" class="btn btn-primary">Zona</a>
+                <a href="{{ route('elemento.index') }}" class="btn btn-primary">Elemento</a>
             </div>
         </div>
         <div class="">
@@ -79,6 +79,21 @@
                                             </label>
                                         @endforeach
 
+                                    </div>
+                                    <div class="mb-2 mt-3">
+                                        <label>Activo:</label>
+                                    </div>
+
+                                    <div>
+                                        <label style="margin-right:15px;">
+                                            <input class="input-filter" name="activo" type="checkbox" value="SI" checked>
+                                            SI
+                                        </label>
+
+                                        <label>
+                                            <input class="input-filter" name="activo" type="checkbox" value="NO" checked>
+                                            NO
+                                        </label>
                                     </div>
 
                                 </div>
@@ -156,11 +171,14 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
-                                                         <div class="row my-2 justify-content-center">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+
+                                                        @if ($activo->getTotalTareasMantenimientoPreventivaPendientes() > 0)
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
                                                         
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
@@ -218,23 +236,17 @@
             }
         }));
 
-        $.fn.dataTable.ext.search.push(
-            function( settings, searchData, index, rowData, counter ) {
-            var positions = $('input:checkbox[name="tipo"]:checked').map(function() {
+        $.fn.dataTable.ext.search.push(function(settings, searchData) {
+            var tipos = $('input:checkbox[name="tipo"]:checked').map(function () {
                 return this.value;
             }).get();
-        
-            if (positions.length === 0) {
-                return true;
-            }
-            
-            if (positions.indexOf(searchData[5]) !== -1) {
-                return true;
-            }
-            
-            return false;
-            }
-        );
+            var activos = $('input:checkbox[name="activo"]:checked').map(function () {
+                return this.value;
+            }).get();
+            var pasaTipo = tipos.length === 0 || tipos.indexOf(searchData[5]) !== -1;
+            var pasaActivo = activos.length === 0 || activos.indexOf(searchData[4]) !== -1;
+            return pasaTipo && pasaActivo;
+        });
 
         table = $('#example').DataTable({
             language: {

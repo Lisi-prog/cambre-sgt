@@ -79,10 +79,25 @@ class Activo extends Model
 
     public function getTareasMantenimientoSinUsar()
     {
-        $tareasUsadasIds = $this->getTareasMantenimiento()->pluck('id_tarea_mantenimiento')->toArray();
-        $tareasUsadasIds = array_merge($tareasUsadasIds, $this->getTipoActivo->getTareasMantenimiento()->pluck('id_tarea_mantenimiento')->toArray());
+        $tareasUsadasIds = $this->getTareasMantenimiento()
+            ->pluck('id_tarea_mantenimiento')
+            ->toArray();
 
-        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+        $tareasUsadasIds = array_merge(
+            $tareasUsadasIds,
+            $this->getTipoActivo->getTareasMantenimiento()
+                ->pluck('id_tarea_mantenimiento')
+                ->toArray()
+        );
+
+        $zonasIds = $this->getTipoActivo->getZonas()
+            ->pluck('zona_tarea.id_zona_tarea')
+            ->toArray();
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
+            ->whereIn('id_zona_tarea', $zonasIds)
+            ->orderBy('nombre_tarea', 'ASC')
+            ->get();
     }
 
     public function setTareasMantenimiento($tareasIds)
@@ -101,10 +116,25 @@ class Activo extends Model
 
     public function getTareasMantenimientoSinUsarPreventiva()
     {
-        $tareasUsadasIds = $this->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray();
-        $tareasUsadasIds = array_merge($tareasUsadasIds, $this->getTipoActivo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento')->toArray());
+        $tareasUsadasIds = $this->getTareasMantenimientoPreventiva()
+            ->pluck('id_tarea_mantenimiento')
+            ->toArray();
 
-        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)->orderBy('nombre_tarea', 'ASC')->get();
+        $tareasUsadasIds = array_merge(
+            $tareasUsadasIds,
+            $this->getTipoActivo->getTareasMantenimientoPreventiva()
+                ->pluck('id_tarea_mantenimiento')
+                ->toArray()
+        );
+
+        $zonasIds = $this->getTipoActivo->getZonas()
+            ->pluck('zona_tarea.id_zona_tarea')
+            ->toArray();
+
+        return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
+            ->whereIn('id_zona_tarea', $zonasIds)
+            ->orderBy('nombre_tarea', 'ASC')
+            ->get();
     }
 
     public function getTotalTareasMantenimientoPreventiva(){
@@ -112,7 +142,7 @@ class Activo extends Model
         $TotTaMantTipAct = 0;
 
         $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class,'id_activo','id_activo')->count();
-        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo')->count();
+        // $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class,'id_tipo_activo','id_tipo_activo')->count();
 
         return $TotTaMantAct + $TotTaMantTipAct;
     }
@@ -122,7 +152,7 @@ class Activo extends Model
         $TotTaMantTipAct = 0;
 
         $TotTaMantAct = $this->hasMany(Tarea_prev_x_activo::class, 'id_activo', 'id_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
-        $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
+        // $TotTaMantTipAct = $this->hasMany(Tarea_prev_x_tipo_activo::class, 'id_tipo_activo', 'id_tipo_activo')->whereRaw("DATE_ADD(fecha_ultima_ejecucion, INTERVAL intervalo_dias DAY) <= ?", [Carbon::today()])->count();
 
        return $TotTaMantAct + $TotTaMantTipAct;
     }

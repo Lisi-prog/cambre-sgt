@@ -786,6 +786,14 @@ function buscarPorFiltrosOLD(){
                                 Ver Ord Mec
                             </button>
                         </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <a type="button" class="btn btn-info w-100" target="_blank"
+                            href="/ordenes/mec/${ope.get_hdr.get_ord_mec.id_orden}/hdr">
+                                Hoja de Ruta
+                            </a>
+                        </div>
                     </div>`;
                 }
                 opciones += `
@@ -961,16 +969,6 @@ function buscarPorFiltrosOLD(){
                             </div>
                         </div>`;
                     }
-                    else if(ope.estado_actual == 'Revisar' && $("#es_supervisor").val() == 1){
-                        opciones += `
-                        <div class="row my-2">
-                            <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalConfirmarParteAjuste(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
-                                    Revisar
-                                </button>
-                            </div>
-                        </div>`;
-                    }
                     else{
                         opciones += `
                         <div class="row my-2">
@@ -1053,6 +1051,14 @@ function buscarPorFiltros(){
                             data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(${ope.get_hdr.get_ord_mec.id_orden}, 3)">
                                 Ver Ord Mec
                             </button>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <a type="button" class="btn btn-info w-100" target="_blank" 
+                            href="/ordenes/mec/${ope.get_hdr.get_ord_mec.id_orden}/hdr">
+                                Hoja de Ruta
+                            </a>
                         </div>
                     </div>`;
                 }
@@ -1228,17 +1234,7 @@ function buscarPorFiltros(){
                                 </button>
                             </div>
                         </div>`;
-                    }
-                    else if(ope.nombre_estado == 'Revisar'){
-                        opciones += `
-                        <div class="row my-2">
-                            <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalConfirmarParteAjuste(${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
-                                    Revisar
-                                </button>
-                            </div>
-                        </div>`;
-                    }
+                    }                    
                     else{
                         opciones += `
                         <div class="row my-2">

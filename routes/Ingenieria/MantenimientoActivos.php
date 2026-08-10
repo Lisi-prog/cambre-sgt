@@ -30,6 +30,9 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::delete('tipo_activo/destroy_tarea_mantenimiento/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_tipo_activo'])->name('tipo_activo.destroy_tarea_mantenimiento');
     Route::delete('activo/destroy_tarea_mantenimiento/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_activo'])->name('activo.destroy_tarea_mantenimiento');
     Route::delete('tipo_activo/destroy_tarea_mantenimiento_preventivas/{id_tarea_mant}/{id_tipo_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_preventiva_tipo_activo'])->name('tipo_activo.destroy_tarea_mantenimiento_preventiva');
+    Route::get('/activo/tarea-preventiva/{id}', [ActivoController::class, 'getTareaPreventiva']);
+    Route::put('/activo/tarea-preventiva/{id}', [ActivoController::class, 'updateTareaPreventiva']);
+    Route::put('/activo/tipo-activo/{id}/zonas', [ActivoController::class, 'set_zonas'])->name('tipo_activo.set_zonas');
     Route::put('activo/set_tareas_mantenimiento', [ActivoController::class, 'set_tareas_mantenimiento_activo'])->name('activo.set_tareas_mantenimiento');
     Route::put('activo/set_tareas_mantenimiento_preventiva', [ActivoController::class, 'set_tareas_mantenimiento_preventiva_activo'])->name('activo.set_tareas_mantenimiento_preventiva');
     Route::delete('activo/destroy_tarea_mantenimiento_preventiva/{id_tarea_mant}/{id_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_preventiva_activo'])->name('activo.destroy_tarea_mantenimiento_preventiva');
@@ -58,9 +61,9 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::get('get-parte-ajuste-completado/{id_orden}', [ParteAjusteController::class, 'get_parte_ajuste_completado'])->name('get_parte_ajuste_completado');   
     Route::get('get-parte-ajuste-porcion/{id_parte}', [ParteAjusteController::class, 'get_parte_ajuste_porcion'])->name('get_parte_ajuste_porcion');   
     Route::post('procesar-parte-ajuste', [ParteAjusteController::class, 'procesar_parte_ajuste'])->name('procesar_parte_ajuste');   
-    Route::get('zona/asignar-tipo/{id}', [ZonaController::class, 'verAsignarTipo'])->name('zona.asignar.tipo');
-    Route::post('zona/asignar-tipo-guardar/{id}', [ZonaController::class, 'asignarSubTipo'])->name('zona.asignar.tipo.guardar');
-    Route::resource('zona', ZonaController::class);
+    Route::get('elemento/asignar-tipo/{id}', [ZonaController::class, 'verAsignarTipo'])->name('elemento.asignar.tipo');
+    Route::post('elemento/asignar-tipo-guardar/{id}', [ZonaController::class, 'asignarSubTipo'])->name('elemento.asignar.tipo.guardar');
+    Route::resource('elemento', ZonaController::class);
     Route::get('ordenes/mant/operaciones', [OrdenMantenimientoController::class, 'index'])->name('orden_mantenimiento.index');
     Route::post('get_operaciones', [OrdenMantenimientoController::class, 'get_operaciones'])->name('get_operaciones');
     Route::get('orden_mantenimiento/check_pre_editar', [OrdenMantenimientoController::class, 'check_pre_editar'])->name('orden_mantenimiento.check_pre_editar');

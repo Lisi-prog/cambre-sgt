@@ -25,11 +25,11 @@ class IshikawaCausaController extends Controller
             'explicacion_causa' => 'required|string|max:200',
         ]);
         $causa = new Ishikawa_causa();
-        $causa->nombre_causa = $request->input('nombre_causa');
+        $causa->nombre_causa = strtoupper($request->input('nombre_causa'));
         $causa->id_ishikawa_categoria = $request->input('ishikawa_categoria');
-        $causa->explicacion = $request->input('explicacion_causa');
+        $causa->explicacion = strtoupper($request->input('explicacion_causa'));
         $causa->save();
-        return redirect()->route('ishikawa_causa.index')->with('success', 'Causa creada exitosamente.');
+        return redirect()->route('ishikawa_causa.index')->with('mensaje', 'Causa creada exitosamente.');
     }
     
     public function edit($id)
@@ -46,16 +46,20 @@ class IshikawaCausaController extends Controller
             'explicacion_causa' => 'nullable|string|max:200',
         ]);
         $causa = Ishikawa_causa::find($id);
-        $causa->nombre_causa = $request->input('nombre_causa');
+        $causa->nombre_causa = strtoupper($request->input('nombre_causa'));
         $causa->id_ishikawa_categoria = $request->input('ishikawa_categoria');
-        $causa->explicacion = $request->input('explicacion_causa');
+        $causa->explicacion = strtoupper($request->input('explicacion_causa'));
         $causa->save();
-        return redirect()->route('ishikawa_causa.index')->with('success', 'Causa actualizada exitosamente.');
+        return redirect()->route('ishikawa_causa.index')->with('mensaje', 'Causa actualizada exitosamente.');
     }   
 
     public function destroy($id){
-       $causa = Ishikawa_causa::find($id);
-       $causa->delete();
-       return redirect()->route('ishikawa_causa.index')->with('success', 'Causa eliminada exitosamente.');
+        try {
+            $causa = Ishikawa_causa::find($id);
+            $causa->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('ishikawa_causa.index')->with('error', 'El diagnóstico ya se encuentra relacionado a un parte.');
+        }
+        return redirect()->route('ishikawa_causa.index')->with('mensaje', 'Diagnóstico eliminado exitosamente.');
     }
 }

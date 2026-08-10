@@ -3,20 +3,22 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">Nueva Zona</h1>
+                <h1 class="modal-title fs-5">Nuevo Elemento</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'zona.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+            {!! Form::open(['route' => 'elemento.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            {!! Form::label('zona', 'Zona:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                        <div class="form-group mb-0">
+                            {!! Form::label('zona', 'Elemento:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('zona', null, [
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
-                                'id' => 'zona'
+                                'id' => 'zona',
+                                'style' => 'text-transform: uppercase;',
+                                'autocomplete' => 'off',
                             ]) !!}
                         </div>
                     </div>

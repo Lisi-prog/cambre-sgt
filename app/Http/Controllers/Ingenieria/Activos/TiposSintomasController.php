@@ -26,9 +26,9 @@ class TiposSintomasController extends Controller
         ]);
         try{ 
             $tipo_sintoma = new Tipo_sintoma();
-            $tipo_sintoma->nombre_tipo_sintoma = $request->input('tipo_sintoma');
+            $tipo_sintoma->nombre_tipo_sintoma = strtoupper($request->input('tipo_sintoma'));
             $tipo_sintoma->save();
-            return redirect()->route('tipo_sintoma.index')->with('success', 'Tipo de síntoma creado exitosamente.');
+            return redirect()->route('tipo_sintoma.index')->with('mensaje', 'Tipo de síntoma creado exitosamente.');
         } 
         catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al crear el tipo de síntoma: ' . $e->getMessage())->withInput();
@@ -47,17 +47,21 @@ class TiposSintomasController extends Controller
         ]);
         try{   
             $tipo_sintoma = Tipo_sintoma::findOrFail($id); 
-            $tipo_sintoma->nombre_tipo_sintoma = $request->input('tipo_sintoma');
+            $tipo_sintoma->nombre_tipo_sintoma = strtoupper($request->input('tipo_sintoma'));
             $tipo_sintoma->save();
-            return redirect()->route('tipo_sintoma.index')->with('success', 'Tipo de síntoma actualizado exitosamente.');
+            return redirect()->route('tipo_sintoma.index')->with('mensaje', 'Tipo de síntoma actualizado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al actualizar el tipo de síntoma: ' . $e->getMessage())->withInput();;
         }   
     }
 
     public function destroy($id){
-        $tipo_sintoma = Tipo_sintoma::findOrFail($id);  
-        $tipo_sintoma->delete();
+        try {
+            $tipo_sintoma = Tipo_sintoma::findOrFail($id);  
+            $tipo_sintoma->delete();
+        } catch (\Throwable $th) {
+            return redirect()->route('tipo_sintoma.index')->with('error','Tipo de síntoma ya se encuentra asociado a un sintoma.');
+        }
         return redirect()->route('tipo_sintoma.index')->with('success','Tipo de síntoma eliminado exitosamente.');
     }
 }

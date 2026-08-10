@@ -28,7 +28,7 @@
                     <thead>
                         <th class="text-center" scope="col" style="color:#fff;">TAREA</th>
                         <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
-                        <th class="text-center" scope="col" style="color:#fff;">ZONA</th>
+                        <th class="text-center" scope="col" style="color:#fff;">ELEMENTO</th>
                         <th class="text-center" scope="col" style="color:#fff;">MÁQUINA</th>
                         <th class="text-center" scope="col" style="color:#fff;">HECHO</th>
                     </thead>

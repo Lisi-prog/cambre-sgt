@@ -288,12 +288,12 @@
                     </li>
                     <li>
                         <a class="nav-link" href="{{route('tarea_mantenimiento.index')}}" title="Tareas Activo">
-                            <i class="fas fa-clipboard"></i><span>Tareas Activo</span>
+                            <i class="fas fa-clipboard"></i><span>Tareas de Mant.</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{route('zona.index')}}" title="Zona">
-                            <i class="fas fa-sign"></i><span>Zona</span>
+                        <a class="nav-link" href="{{route('elemento.index')}}" title="Elemento">
+                            <i class="fas fa-sign"></i><span>Elemento</span>
                         </a>
                     </li>
                 </ul>

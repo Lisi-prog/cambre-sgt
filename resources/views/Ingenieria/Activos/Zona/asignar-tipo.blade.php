@@ -7,12 +7,12 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h5 class="titulo page__heading my-auto mr-5">Asignar Zona a Tipo Activo</h5>
+            <h5 class="titulo page__heading my-auto mr-5">Asignar Elemento a Tipo Activo</h5>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
-        {!! Form::open(['route' => ['zona.asignar.tipo.guardar', $zona->id_zona], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+        {!! Form::open(['route' => ['elemento.asignar.tipo.guardar', $zona->id_zona], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="card">
@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {!! Form::label('zona', 'Tipo Síntoma:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    {!! Form::label('zona', 'Elemento:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                     {!! Form::text('zona', $zona->nombre_zona, [
                                         'class' => 'form-control',
                                         'id' => 'zona',
@@ -56,7 +56,7 @@
                                     {!! Form::close() !!}
                                 </div>
                                 <div class="p-1">
-                                    {!! Form::open(['method' => 'GET', 'route' => 'zona.index', 'style' => '']) !!}
+                                    {!! Form::open(['method' => 'GET', 'route' => 'elemento.index', 'style' => '']) !!}
                                     {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}
                                 </div>
@@ -71,7 +71,7 @@
 </section>
 <script>
     $(document).ready(function () {
-        var url = '{{route('zona.index')}}';
+        var url = '{{route('elemento.index')}}';
         document.getElementById('volver').href = url;
     });
 </script>
