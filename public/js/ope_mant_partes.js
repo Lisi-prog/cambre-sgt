@@ -647,7 +647,8 @@ function openModalNuevoParteAjuste(id_orden, id_etapa, nombre_activo, proyecto, 
         success: function(data) {
             let j=0;
             let opciones = ''
-            let idTipoActivo = data[0].get_parte.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo;
+            // let idTipoActivo = data[0].get_parte.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo;
+            let idTipoActivo = data?.[0]?.get_parte?.get_orden?.get_etapa?.get_servicio?.get_activo?.id_tipo_activo ?? null;
             let zonas = $('<div>').html($("#zona_select_div").html());
             zonas.find('option').each(function () {
                 if ($(this).val() === '') return;
