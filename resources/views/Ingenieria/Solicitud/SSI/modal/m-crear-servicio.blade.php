@@ -267,32 +267,6 @@
                                                 <td>{{$ta->estaEnProceso() ? 'En Proceso' : 'Disponible'}}</td>
                                             </tr>
                                         @endforeach
-
-                                        {{-- Tareas por tipo de activo --}}
-                                        @foreach ($Ssi->getActivo->getTareasMantenimientoPreventivaPendientesTipo as $ta)
-                                            <tr onclick="toggleCheck('tipo_activo_{{$ta->id_tarea_prev_x_tipo_activo}}')">
-                                                <td class="text-center">
-                                                    @if ($ta->estaEnProceso())
-                                                        -
-                                                    @else
-                                                        <div class="form-check">
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="checkbox"
-                                                                id="chkTareaPrendtipo_activo_{{$ta->id_tarea_prev_x_tipo_activo}}"
-                                                                value="tipo_activo_{{$ta->id_tarea_prev_x_tipo_activo}}"
-                                                                name="tareas_prev[]">
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                                <td>{{$ta->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$ta->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
-                                                <td>{{$ta->fecha_ultima_ejecucion}}</td>
-                                                <td>{{$ta->estaEnProceso() ? 'En Proceso' : 'Disponible'}}</td>
-                                            </tr>
-                                        @endforeach
-
                                     </tbody>
                                 </table>
                             </div>
