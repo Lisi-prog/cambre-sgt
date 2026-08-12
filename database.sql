@@ -1307,11 +1307,14 @@ CREATE TABLE `tarea_prev_x_activo_historial` (
     `id_tarea_prev_x_activo` INT NOT NULL,
     `id_activo` INT NOT NULL,
     `id_tarea_mantenimiento` INT NOT NULL,
-    `intervalo_dias INT NOT NULL`,
-    `cant_golpes` INT NOT NULL,
+    `id_tarea_prev_x_tipo_activo` INT NULL,
+    `intervalo_dias` INT NULL,
+    `cant_golpes` INT NULL,
     `fecha_ultima_ejecucion` DATE NULL,
-    `fecha_carga` DATETIME NOT NULL,
-    PRIMARY KEY (`id_historial`)
+    `fecha_carga` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (`id_historial`),
+    INDEX `IDX_historial_tarea_activo` (`id_tarea_prev_x_activo`)
 );
 
 CREATE TABLE `serv_mant_x_tarea_mant` (
