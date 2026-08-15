@@ -190,20 +190,28 @@ public function index(){
         $estados = $request->input('est');
         $asignados = $request->input('asig');
         $activo = $request->input('soloAct') === 'SI' ? 1 : 0;
+        $tipoOperacion = $request->input('tipoOperacion', 'TODAS');
+
+        $operaciones = [];
        
-        $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones_flt)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
-            ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
-            ->with('getHdr.getOrdMec')->get();
-        
+        if (in_array($tipoOperacion, ['TODAS', 'HDR'])) {
+            $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones_flt)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
+                ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+                ->with('getHdr.getOrdMec')->get();
+        }
         
 
         $operaciones_mantenimiento = [];
 
-        $operaciones_mantenimiento = Vw_orden_mantenimiento::servicio($servicios)->mantenimiento($operaciones_flt)->estado($estados)->asignado($asignados)->activo($activo)->get();
-
-        foreach($operaciones_mantenimiento as $om){
-            $om->horas = $om->getOrden->getHoras();
+        if (in_array($tipoOperacion, ['TODAS', 'MANTENIMIENTO'])) {
+            $operaciones_mantenimiento = Vw_orden_mantenimiento::servicio($servicios)->mantenimiento($operaciones_flt)->estado($estados)->asignado($asignados)->activo($activo)->get();
+            
+            foreach($operaciones_mantenimiento as $om){
+                $om->horas = $om->getOrden->getHoras();
+            }
         }
+
+        
 
         $operaciones_todas['generales'] = $operaciones;
         $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;

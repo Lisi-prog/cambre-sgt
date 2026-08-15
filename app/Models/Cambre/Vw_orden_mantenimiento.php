@@ -111,20 +111,65 @@ class Vw_orden_mantenimiento extends Model
         }
     }
 
+    // public function scopeEstado($query, $estados){
+    //     if ($estados == '') {
+    //         return $query;
+    //     } else{
+    //         return $query->whereIn('nombre_estado', $estados);
+    //     }
+    // }
+
     public function scopeEstado($query, $estados){
-        if ($estados == '') {
+        if (empty($estados)) {
             return $query;
-        } else{
-            return $query->whereIn('nombre_estado', $estados);
         }
+
+        $incluyeDisponible = in_array('Disponible', $estados);
+        $estadosReales = array_diff($estados, ['Disponible']);
+
+        return $query->where(function ($query) use ($estadosReales, $incluyeDisponible) {
+            if (!empty($estadosReales)) {
+                $query->whereIn('nombre_estado', $estadosReales);
+            }
+
+            if ($incluyeDisponible) {
+                $metodo = empty($estadosReales) ? 'where' : 'orWhere';
+
+                $query->{$metodo}(function ($query) {
+                    $query->where('nombre_estado', 'Espera')
+                        ->where('esta_activo', 1);
+                });
+            }
+        });
     }
 
-    public function scopeAsignado($query, $asignados){
-        if ($asignados == '') {
+    // public function scopeAsignado($query, $asignados){
+    //     if ($asignados == '') {
+    //         return $query;
+    //     } else{
+    //         return $query->whereIn('nombre_empleado_asignado', $asignados);
+    //     }
+    // }
+
+    public function scopeAsignado($query, $asignados)
+    {
+        if (empty($asignados)) {
             return $query;
-        } else{
-            return $query->whereIn('nombre_empleado_asignado', $asignados);
         }
+
+        $incluyeSinAsignar = in_array('-', $asignados);
+        $asignadosReales = array_diff($asignados, ['-']);
+
+        return $query->where(function ($query) use ($asignadosReales, $incluyeSinAsignar) {
+            if (!empty($asignadosReales)) {
+                $query->whereIn('nombre_empleado_asignado', $asignadosReales);
+            }
+
+            if ($incluyeSinAsignar) {
+                $metodo = empty($asignadosReales) ? 'whereNull' : 'orWhereNull';
+                $query->{$metodo}('nombre_empleado_asignado');
+            }
+        });
     }
 
     public function scopeActivo($query, $activo){

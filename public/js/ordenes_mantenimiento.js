@@ -23,8 +23,8 @@ $(document).ready( function () {
             console.log(error);
         }
     }));
-    saveDefaultFilters();
-    loadFilters();
+    // saveDefaultFilters();
+    // loadFilters();
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
 
@@ -1309,6 +1309,9 @@ function getSelectedFilters() {
             return this.value;
         }).get(),
 
-        soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO'
+        soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO',
+
+        tipoOperacion:
+            $('input[name="tipoOperacion"]:checked').val() ?? 'TODAS'
     };
 }
