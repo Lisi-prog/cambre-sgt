@@ -124,12 +124,33 @@ class Vw_operaciones_de_hdr extends Model
         }
     }
 
-    public function scopeAsignado($query, $asignados){
-        if ($asignados == '') {
+    // public function scopeAsignado($query, $asignados){
+    //     if ($asignados == '') {
+    //         return $query;
+    //     } else{
+    //         return $query->whereIn('tecnico_asignado', $asignados);
+    //     }
+    // }
+
+    public function scopeAsignado($query, $asignados)
+    {
+        if (empty($asignados)) {
             return $query;
-        } else{
-            return $query->whereIn('tecnico_asignado', $asignados);
         }
+
+        $incluyeSinAsignar = in_array('-', $asignados);
+        $asignadosReales = array_diff($asignados, ['-']);
+
+        return $query->where(function ($query) use ($asignadosReales, $incluyeSinAsignar) {
+            if (!empty($asignadosReales)) {
+                $query->whereIn('tecnico_asignado', $asignadosReales);
+            }
+
+            if ($incluyeSinAsignar) {
+                $metodo = empty($asignadosReales) ? 'whereNull' : 'orWhereNull';
+                $query->{$metodo}('tecnico_asignado');
+            }
+        });
     }
 
     public function scopeActivo($query, $activo){

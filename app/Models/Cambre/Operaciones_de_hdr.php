@@ -38,6 +38,23 @@ class Operaciones_de_hdr extends Model
         return $this->hasMany(Parte_ope_hdr::class, 'id_ope_de_hdr');
     }
 
+    public function getSiguenteOpe(){
+        try {
+            $sgteOpe = Vw_operaciones_de_hdr::where('id_hoja_de_ruta', $this->id_hoja_de_ruta)->where('numero', $this->numero + 1)->first();
+
+            if ($sgteOpe->tecnico_asignado != null) {
+                $el_tecnico_asig = ', Asignado a '.$sgteOpe->tecnico_asignado;
+            } else {
+                $el_tecnico_asig = '';
+            }
+            
+            
+            return $sgteOpe->nombre_operacion.$el_tecnico_asig;
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
+
     public function getTotaPartesActual(){
         return $this->getPartes()->count();
     }

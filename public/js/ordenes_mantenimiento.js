@@ -23,8 +23,8 @@ $(document).ready( function () {
             console.log(error);
         }
     }));
-    saveDefaultFilters();
-    loadFilters();
+    // saveDefaultFilters();
+    // loadFilters();
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
 
@@ -525,6 +525,7 @@ document.getElementById('checkSelAll').addEventListener('change', event => {
 
 function cargarModalVerPartesOpe(id){
     let html = '';
+    let html2 = '';
     obtenerEstados(5);
     document.getElementById('m-id-ope-hdr').value = id;
     
@@ -571,13 +572,27 @@ function cargarModalVerPartesOpe(id){
                 idCount ++;
             });
 
+            response.operaciones_hdr.forEach(e => {
+                html2 += `<tr>
+                    <td class="text-center" style="vertical-align: middle;">${e.id_ope_de_hdr}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.numero}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.ultimo_res ?? '-'}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.tecnico_asignado ?? '-'}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.codigo_maquinaria ?? '-'}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.nombre_operacion}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.nombre_estado_hdr}</td>
+                </tr>`;
+            });
+
             if (response.medida_chk) {
                 document.getElementById('section-medida').hidden = true;
             } else {
                 document.getElementById('section-medida').hidden = false;
             }
             document.getElementById('body_ver_parte_ope').innerHTML = html;
+            document.getElementById('body_ver_ope').innerHTML = html2;
             document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
+            document.getElementById('mv-prox-operacion').value = response.prox_ope;
             document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
             document.getElementById('mv-estado').value = response.partes_ope[0].estado;
             document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
@@ -1309,6 +1324,9 @@ function getSelectedFilters() {
             return this.value;
         }).get(),
 
-        soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO'
+        soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO',
+
+        tipoOperacion:
+            $('input[name="tipoOperacion"]:checked').val() ?? 'TODAS'
     };
 }

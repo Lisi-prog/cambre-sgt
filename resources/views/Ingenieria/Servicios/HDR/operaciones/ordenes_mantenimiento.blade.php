@@ -131,7 +131,10 @@
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="sup" checked> (Seleccionar todo)</label>
-                                                    @if (empty($flt_operaciones_tec))
+                                                    @foreach ($flt_operaciones as $operacion)
+                                                        <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
+                                                    @endforeach
+                                                    {{-- @if (empty($flt_operaciones_tec))
                                                         @foreach ($flt_operaciones as $operacion)
                                                             <label><input name="sup" type="checkbox" value="{{$operacion}}" checked> {{$operacion}}</label>
                                                         @endforeach
@@ -139,7 +142,7 @@
                                                         @foreach ($flt_operaciones as $operacion)
                                                             <label><input name="sup" type="checkbox" value="{{$operacion}}" {{in_array($operacion, $flt_operaciones_tec->toArray()) ? 'checked' : ''}}> {{$operacion}}</label>
                                                         @endforeach
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -176,7 +179,10 @@
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
                                                     @foreach ($flt_estados as $estado)
-                                                        <label><input name="est" type="checkbox" value="{{$estado}}" {{$estado != 'Completo' && $estado != 'Descartar'  ? 'checked' : ''}}> {{$estado}}</label>
+                                                        <label><input name="est" type="checkbox" value="{{$estado}}" {{$estado != 'Completo' && $estado != 'Descartar' && $estado != 'Cancelado' ? 'checked' : ''}}> {{$estado}}</label>
+                                                        @if ($estado === 'Espera')
+                                                           <label><input name="est" type="checkbox" value="Disponible" checked> Disponible</label>
+                                                        @endif
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -192,11 +198,13 @@
                                                 </div>
                                                 <div class="d-flex flex-column overflow-auto">
                                                     <label style="font-style: italic"><input name="filter" type="checkbox" value="asig"> (Seleccionar todo)</label>
-                                                    @role('TECNICO') 
-                                                        <label><input name="asig" type="checkbox" value="-" checked> -</label>
-                                                    @endrole
+                                                    <label><input name="asig" type="checkbox" value="-"> Sin asignar</label>
+                                                    {{-- @role('TECNICO') 
+                                                        <label><input name="asig" type="checkbox" value="-" checked> Sin asignar</label>
+                                                    @endrole --}}
                                                     @foreach ($flt_tecnicos as $tec)
-                                                        @role('TECNICO') 
+                                                        <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
+                                                        {{-- @role('TECNICO') 
                                                             @if (Auth::user()->getEmpleado->nombre_empleado === $tec->nombre_empleado)
                                                                 <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}" checked> {{$tec->nombre_empleado}}</label>
                                                             @else
@@ -204,7 +212,7 @@
                                                             @endif
                                                         @else
                                                             <label><input name="asig" type="checkbox" value="{{$tec->nombre_empleado}}"> {{$tec->nombre_empleado}}</label>
-                                                        @endrole
+                                                        @endrole --}}
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -223,11 +231,49 @@
                                                     Solo activos.
                                                 </label>
                                             </div>
+                                            <div class="form-check">
+                                                <input
+                                                    name="tipoOperacion"
+                                                    class="form-check-input input-filter"
+                                                    type="radio"
+                                                    value="TODAS"
+                                                    id="tipoTodas"
+                                                    checked
+                                                >
+                                                <label class="form-check-label" for="tipoTodas">
+                                                    Todas
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input
+                                                    name="tipoOperacion"
+                                                    class="form-check-input input-filter"
+                                                    type="radio"
+                                                    value="HDR"
+                                                    id="tipoHdr"
+                                                >
+                                                <label class="form-check-label" for="tipoHdr">
+                                                    Solo operaciones de HDR
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input
+                                                    name="tipoOperacion"
+                                                    class="form-check-input input-filter"
+                                                    type="radio"
+                                                    value="MANTENIMIENTO"
+                                                    id="tipoMantenimiento"
+                                                >
+                                                <label class="form-check-label" for="tipoMantenimiento">
+                                                    Solo órdenes de mantenimiento
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row justify-content-center">
+                            <div class="row justify-content-center" hidden>
                                 <div class="col-auto">
                                     <button type="button" class="btn btn-outline-secondary m-1 rounded"
                                             onclick="resetFilters()">
@@ -291,6 +337,7 @@
     const ordenHdrRoute = "{{ url('/ordenes/hdr') }}";
     var url = '{{url('/')}}';
 </script>
+
 <script src="{{ asset('js/filter-to-filter.js') }}"></script>
 <script src="{{ asset('js/change-td-color.js') }}"></script>
 <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
