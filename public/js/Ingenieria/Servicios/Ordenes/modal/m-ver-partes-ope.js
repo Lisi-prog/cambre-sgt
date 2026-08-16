@@ -27,6 +27,8 @@ $(document).ready(function () {
                     console.log(error);
                 }
             });
+        document.getElementById('body_ver_ope').innerHTML = '';
+        document.getElementById('mv-prox-operacion').value = null;
     })
 
     

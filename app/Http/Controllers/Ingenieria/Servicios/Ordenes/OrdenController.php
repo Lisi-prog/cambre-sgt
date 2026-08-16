@@ -2428,9 +2428,13 @@ class OrdenController extends Controller
                     ]);
         }
 
+        $opes = $op->getHdr ? $op->getHdr->getVistaOperacionesHdr : [];
+        $prox_ope = $op->getSiguenteOpe();
         return [
             'partes_ope' => $partes_arr,
-            'medida_chk' => $op->getMedidaEstado()
+            'medida_chk' => $op->getMedidaEstado(),
+            'operaciones_hdr' => $opes,
+            'prox_ope' => $prox_ope
         ];
     }
 
