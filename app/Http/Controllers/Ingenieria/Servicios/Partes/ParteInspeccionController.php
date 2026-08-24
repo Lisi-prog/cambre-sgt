@@ -17,6 +17,7 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Tarea_mantenimiento;
 use App\Models\Cambre\Parte_inspe_x_tarea_mant;
+use App\Models\Cambre\Tarea_ajuste;
 
 class ParteInspeccionController extends Controller{
     public function store(Request $request){
@@ -117,6 +118,29 @@ class ParteInspeccionController extends Controller{
                 $parte_ajuste_nueva->id_parte = $parte->id_parte;
                 $parte_ajuste_nueva->id_estado_mantenimiento = 1;
                 $parte_ajuste_nueva->save();
+                $activo = $parte->getOrden->getEtapa->getServicio->getActivo;
+                $tareas_pre_activo = $activo->getTareasMantenimientoPreventiva()->get();
+                $tareas_pre_tipo_activo = $activo->getTipoActivo->getTareasMantenimientoPreventiva()->get();
+                foreach($tareas_pre_activo as $tarea){
+                    $tarea_ajuste = new Tarea_ajuste;
+                    $tarea_ajuste->id_parte_ajuste = $parte_ajuste_nueva->id_parte_ajuste;
+                    $tarea_ajuste->id_accion_tarea = 5; //CONTROL
+                    $tarea_ajuste->id_zona = $tarea->getTareaMantenimiento->id_zona_tarea;
+                    $tarea_ajuste->id_maquinaria = $activo->id_maquinaria;
+                    $tarea_ajuste->hecho = 0;
+                    $tarea_ajuste->id_tarea_mantenimiento = $tarea->id_tarea_mantenimiento;
+                    $tarea_ajuste->save();
+                }
+                foreach($tareas_pre_tipo_activo as $tarea){
+                    $tarea_ajuste = new Tarea_ajuste;
+                    $tarea_ajuste->id_parte_ajuste = $parte_ajuste_nueva->id_parte_ajuste;
+                    $tarea_ajuste->id_accion_tarea = 5; //CONTROL
+                    $tarea_ajuste->id_zona = $tarea->getTareaMantenimiento->id_zona_tarea;
+                    $tarea_ajuste->id_maquinaria = $activo->id_maquinaria;
+                    $tarea_ajuste->hecho = 0;
+                    $tarea_ajuste->id_tarea_mantenimiento = $tarea->id_tarea_mantenimiento;
+                    $tarea_ajuste->save();
+                }
             }
             DB::commit();
             return redirect()->back()->with('mensaje', 'Se ha creado con éxito el parte de inspección.');

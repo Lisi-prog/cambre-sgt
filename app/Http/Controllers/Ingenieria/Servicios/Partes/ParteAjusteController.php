@@ -43,7 +43,23 @@ class ParteAjusteController extends Controller{
             ->orderByDesc('id_parte_inspeccion')
             ->get();
 
-        return $parte_inspeccion;
+             // TAREAS PREVENTIVAS CREADAS EN EL AJUSTE
+        $tareas_preventivas = Tarea_ajuste::whereHas('getParteAjuste.getParte.getOrden', function ($query) use ($id_etapa) {
+                $query->where('id_etapa', $id_etapa);
+            })
+            ->with([
+                'getAccionTarea',
+                'getZona',
+                'getMaquinaria',
+                'getTareaMantenimiento.getZonaTarea',
+            ])
+            ->get();
+
+
+        return [
+        'partes_inspeccion' => $parte_inspeccion,
+        'tareas_preventivas' => $tareas_preventivas,
+         ];
     }
 
     public function store(Request $request){

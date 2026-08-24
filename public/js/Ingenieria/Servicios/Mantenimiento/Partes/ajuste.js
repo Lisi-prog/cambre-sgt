@@ -65,7 +65,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
         success: function(data) {
             let j=0;
             let opciones = ''
-            data.forEach(d => 
+            data.partes_inspeccion.forEach(d => 
                 {
                     // console.log(d)
                     d.get_tareas_mantenimiento.forEach(tarea => {
@@ -87,6 +87,26 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                         ]);                
                     j++;
                 });               
+            })
+            data.tareas_preventivas.forEach(tarea => 
+                {
+                    tabla_ajustes.row.add([
+                        (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
+                        tarea.get_accion_tarea.nombre_accion,
+                        `<select class="form-select" name="tareas[${j}][zona]">
+                            <option value="">Seleccionar...</option>
+                            ${$("#zona_select_div").html()}
+                        </select>
+                        <input hidden name="tareas[${j}][accion]" value="${tarea.get_accion_tarea.id_accion_tarea}">
+                        <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,                    
+                        `<select class="form-select" name="tareas[${j}][maquina]">
+                            <option value="">Seleccionar...</option>
+                            ${$("#maquina_select_div").html()}
+                        </select>`,
+                        `<input  onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
+                        name="tareas[${j}][hecho]">`
+                    ]);                
+                j++;         
             })
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
