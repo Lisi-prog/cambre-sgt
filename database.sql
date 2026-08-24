@@ -762,7 +762,12 @@ VALUES
     ('Modificacion', 1),
     ('Tarea', 1),
     ('Servicio de ingenieria', 2),
-    ('Servicio de mantenimiento', 3);
+    ('Servicio de mantenimiento', 3),
+    ('Gestión', 1),
+    ('Herramental', 1),
+    ('Producto', 1),
+    ('Procesos', 1);
+
 
 -- INSERT INTO tipo_servicio (nombre_tipo_servicio)
 -- VALUES
