@@ -440,12 +440,51 @@
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="card h-100">
-                        <div class="card-head pt-3 m-auto">
-                            <h5>Suministros</h5>
+                        <div class="card-head">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="sumi-tab" data-bs-toggle="tab"
+                                     data-bs-target="#sumi" type="button" role="tab" aria-controls="sumi" 
+                                     aria-selected="true">
+                                        <h5 class="p-2">Suministros</h5>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="prev-tab" data-bs-toggle="tab" data-bs-target="#prev" type="button" 
+                                    role="tab" aria-controls="prev" aria-selected="false">
+                                        <h5 class="p-2">Tareas Preventivas</h5>
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
-                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
-                        </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="sumi" role="tabpanel" aria-labelledby="sumi-tab">                                    
+                                    
+                                </div>
+                                <div class="tab-pane" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                                    <table id="tabla_serv_prev" class="table w-100">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" scope="col" style="color:#fff;">Nombre</th>
+                                                <th class="text-center" scope="col" style="color:#fff;">Ejecución</th>
+                                                <th class="text-center" scope="col" style="color:#fff;">Zona Tarea</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($tareas_preventivas as $tarea)
+                                                <tr>
+                                                    <td>{{ $tarea->getTarea->getTareaMantenimiento->nombre_tarea }}</td>
+                                                    <td>{{ $tarea->getTarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion }}</td>
+                                                    <td style="color: gray !important;">{{ $tarea->getTarea->getTareaMantenimiento->getZonaTarea->nombre_zona }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>                                
+                            </div>
+                            
+                        </div>                           
                     </div>
                 </div>
             </div>
@@ -489,6 +528,24 @@
             });
 
             $('#table-orden').DataTable({
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
+                },
+                "aaSorting": []
+            });
+
+            $('#tabla_serv_prev').DataTable({
                 language: {
                         lengthMenu: 'Mostrar _MENU_ registros por pagina',
                         zeroRecords: 'No se ha encontrado registros',

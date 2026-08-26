@@ -118,8 +118,8 @@ class ParteInspeccionController extends Controller{
                 $parte_ajuste_nueva->id_parte = $parte->id_parte;
                 $parte_ajuste_nueva->id_estado_mantenimiento = 1;
                 $parte_ajuste_nueva->save();
-                $activo = $parte->getOrden->getEtapa->getServicio->getActivo;
-                $tareas_pre_activo = $activo->getTareasMantenimientoPreventiva()->get();
+                /*$activo = $parte->getOrden->getEtapa->getServicio->getActivo;
+                 $tareas_pre_activo = $activo->getTareasMantenimientoPreventiva()->get();
                 $tareas_pre_tipo_activo = $activo->getTipoActivo->getTareasMantenimientoPreventiva()->get();
                 foreach($tareas_pre_activo as $tarea){
                     $tarea_ajuste = new Tarea_ajuste;
@@ -140,7 +140,7 @@ class ParteInspeccionController extends Controller{
                     $tarea_ajuste->hecho = 0;
                     $tarea_ajuste->id_tarea_mantenimiento = $tarea->id_tarea_mantenimiento;
                     $tarea_ajuste->save();
-                }
+                } */
             }
             DB::commit();
             return redirect()->back()->with('mensaje', 'Se ha creado con éxito el parte de inspección.');

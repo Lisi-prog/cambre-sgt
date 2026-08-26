@@ -88,7 +88,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                     j++;
                 });               
             })
-            data.tareas_preventivas.forEach(tarea => 
+            /* data.tareas_preventivas.forEach(tarea => 
                 {
                     tabla_ajustes.row.add([
                         (j+1) + ' - ' + tarea.get_tarea_mantenimiento.nombre_tarea,
@@ -107,7 +107,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                         name="tareas[${j}][hecho]">`
                     ]);                
                 j++;         
-            })
+            }) */
             let hoy = new Date()
             hoy = hoy.getFullYear().toString() + '-' + (hoy.getMonth() + 1).toString().padStart(2, 0) +
             '-' + hoy.getDate().toString().padStart(2, 0)

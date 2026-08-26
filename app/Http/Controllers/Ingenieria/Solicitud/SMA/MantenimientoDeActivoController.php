@@ -532,6 +532,7 @@ class MantenimientoDeActivoController extends Controller
                         ->get();
         }
         
+        $tareas_preventivas = Serv_mant_x_tarea_mant::where('id_servicio', $id)->get();
 
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
         $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
@@ -552,7 +553,7 @@ class MantenimientoDeActivoController extends Controller
                         ->get();
         return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 
         'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento', 'estados',
-        'supervisores_admin'));
+        'supervisores_admin', 'tareas_preventivas'));
     }
 
     public function obtenerSupervisoresAdmin(){

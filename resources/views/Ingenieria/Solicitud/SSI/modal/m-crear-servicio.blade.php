@@ -245,7 +245,7 @@
                                     <tbody id="tareas-prev">
                                         {{-- Tareas por activo --}}
                                         @foreach ($Ssi->getActivo->getTareasMantenimientoPreventivaPendientes as $ta)
-                                            <tr onclick="toggleCheck('activo_{{$ta->id_tarea_prev_x_activo}}')">
+                                            <tr onclick="toggleCheck('chkTareaPrendactivo_{{$ta->id_tarea_prev_x_activo}}')">
                                                 <td class="text-center">
                                                     @if ($ta->estaEnProceso())
                                                         -
@@ -256,10 +256,12 @@
                                                                 type="checkbox"
                                                                 id="chkTareaPrendactivo_{{$ta->id_tarea_prev_x_activo}}"
                                                                 value="activo_{{$ta->id_tarea_prev_x_activo}}"
-                                                                name="tareas_prev[]">
+                                                                name="tareas_prev[]"
+                                                            >
                                                         </div>
                                                     @endif
                                                 </td>
+
                                                 <td>{{$ta->getTareaMantenimiento->nombre_tarea}}</td>
                                                 <td>{{$ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
                                                 <td>{{$ta->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>

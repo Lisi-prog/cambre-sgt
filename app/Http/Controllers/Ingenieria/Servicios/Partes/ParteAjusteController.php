@@ -17,7 +17,7 @@ use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
-use App\Models\Cambre\Orden_mantenimiento;
+use App\Models\Cambre\Sol_servicio_de_mantenimiento;
 
 class ParteAjusteController extends Controller{
     public function get_pre_acciones_ajuste($id_etapa)
