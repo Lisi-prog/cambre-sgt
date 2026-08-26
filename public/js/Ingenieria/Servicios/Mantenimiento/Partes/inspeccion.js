@@ -3,6 +3,7 @@ $(document).ready(function () {
     tabla_inspecciones = $('#tabla_inspecciones').DataTable({headerCallback: function(thead) {
         $(thead).hide();
     },columnDefs: [
+            { targets: 1, visible: false },
             { className: "text-center", targets: [2,3,4 ] }
         ],
         order: [],

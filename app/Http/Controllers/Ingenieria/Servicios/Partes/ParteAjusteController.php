@@ -15,9 +15,10 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Orden;
+use App\Models\Cambre\Tarea_prev_x_activo;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
-use App\Models\Cambre\Sol_servicio_de_mantenimiento;
+use App\Models\Cambre\Serv_mant_x_tarea_mant;
 
 class ParteAjusteController extends Controller{
     public function get_pre_acciones_ajuste($id_etapa)
@@ -44,7 +45,7 @@ class ParteAjusteController extends Controller{
             ->get();
 
              // TAREAS PREVENTIVAS CREADAS EN EL AJUSTE
-        $tareas_preventivas = Tarea_ajuste::whereHas('getParteAjuste.getParte.getOrden', function ($query) use ($id_etapa) {
+            $tareas_preventivas = Tarea_ajuste::whereHas('getParteAjuste.getParte.getOrden', function ($query) use ($id_etapa) {
                 $query->where('id_etapa', $id_etapa);
             })
             ->with([
@@ -96,6 +97,7 @@ class ParteAjusteController extends Controller{
             $parte_ajuste->id_estado_mantenimiento = $next;
             $parte_ajuste->save();
             //TAREAS DE AJUSTE   
+            if($request['tareas']){
             foreach ($request['tareas'] as $tarea) {
                 $accion = $tarea['accion'];
                 $zona = $tarea['zona'];
@@ -107,8 +109,22 @@ class ParteAjusteController extends Controller{
                 $tarea_nueva->id_tarea_mantenimiento = $tarea['tarea_mant'];
                 $tarea_nueva->id_maquinaria = $maquina;
                 $tarea_nueva->hecho = isset($tarea['hecho']) ? 1 : 0;
+                $serv = Serv_mant_x_tarea_mant::where('id_servicio', $parte_revisar->getOrden->getEtapa->getServicio->id_servicio)
+                 ->whereHas('getTarea', function ($query) use ($tarea) {
+                        $query->where('id_tarea_mantenimiento', $tarea['tarea_mant']);
+                    })
+                ->first();
+                if($serv){
+                    $serv->fecha_hecho =  $request->fecha;
+                }
+                $mant = Tarea_prev_x_activo::where('id_tarea_mantenimiento', $tarea['tarea_mant'])
+                ->where('id_activo', $parte_revisar->getOrden->getEtapa->getServicio->id_activo)->first();
+                if($mant && $tarea_nueva->hecho == 1){
+                    $mant->fecha_ultima_ejecucion = $request->fecha;
+                    $mant->save();
+                }
                 $tarea_nueva->save();
-            }
+            }}
             DB::commit();
             return redirect()->back()->with('mensaje', 'Se ha creado con éxito el parte de ajuste.');
         }
