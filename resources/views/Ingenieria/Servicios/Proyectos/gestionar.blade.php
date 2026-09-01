@@ -195,6 +195,33 @@
                                     </div>
                                 </div>
                             </div>
+                            @if ($proyecto->id_servicio_padre && $proyecto->servicioPadre)
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        {!! Form::label(
+                                            'nom_proyecto_pa',
+                                            'Nombre proyecto Padre:',
+                                            ['class' => 'control-label']
+                                        ) !!}
+
+                                        <div class="input-group mb-3">
+                                            {!! Form::text(
+                                                'nom_proyecto_pa',
+                                                $proyecto->servicioPadre->codigo_servicio . ' - ' .
+                                                $proyecto->servicioPadre->nombre_servicio,
+                                                ['class' => 'form-control', 'readonly' => true]
+                                            ) !!}
+
+                                            <a href="{{ route('proyectos.gestionar', $proyecto->id_servicio_padre) }}"
+                                            class="btn btn-outline-secondary"
+                                            target="_blank"
+                                            rel="noopener noreferrer">
+                                                Gestionar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

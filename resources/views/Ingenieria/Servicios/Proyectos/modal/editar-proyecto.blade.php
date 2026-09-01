@@ -76,6 +76,25 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            {!! Form::label('editar_id_servicio_padre', 'Proyecto padre (opcional):', ['class' => 'control-label fs-7']) !!}
+                            <select name="id_servicio_padre" id="editar_id_servicio_padre" class="form-select" style="width: 100%">
+                                <option value=""></option>
+                                @if ($proyecto->id_servicio_padre && $proyecto->servicioPadre)
+                                    <option value="{{ $proyecto->servicioPadre->id_servicio }}" selected>
+                                        {{ $proyecto->servicioPadre->codigo_servicio }} - {{ $proyecto->servicioPadre->nombre_servicio }}
+                                    </option>
+                                @endif
+                            </select>
+                            <small class="form-text text-muted">
+                                Seleccione otro proyecto para cambiarlo o use la × para quitar el vínculo.
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Guardar</button>
@@ -85,3 +104,72 @@
         </div>
     </div>
 </div>
+
+<style>
+    #editarProyectoModal .select2-selection--single {
+        position: relative;
+    }
+
+    #editarProyectoModal .select2-selection__rendered {
+        padding-right: 55px;
+    }
+
+    #editarProyectoModal .select2-selection__clear {
+        position: absolute;
+        top: 50%;
+        right: 30px;
+        z-index: 2;
+        margin: 0;
+        transform: translateY(-50%);
+    }
+
+    #editarProyectoModal .select2-selection__arrow {
+        right: 0;
+    }
+</style>
+
+<script>
+    window.addEventListener('load', function () {
+        const $modalEditarProyecto = $('#editarProyectoModal');
+        const $servicioPadre = $('#editar_id_servicio_padre');
+
+        $modalEditarProyecto.on('shown.bs.modal', function () {
+            if (!$servicioPadre.hasClass('select2-hidden-accessible')) {
+                $servicioPadre.select2({
+                    width: '100%',
+                    dropdownParent: $modalEditarProyecto,
+                    placeholder: 'Sin proyecto padre',
+                    allowClear: true,
+                    minimumInputLength: 2,
+                    ajax: {
+                        url: '{{ route('proyectos.buscar-servicios-padre') }}',
+                        dataType: 'json',
+                        delay: 300,
+                        data: function (params) {
+                            return {
+                                q: params.term,
+                                excluir_id: {{ $proyecto->id_servicio }}
+                            };
+                        },
+                        processResults: function (data) {
+                            return data;
+                        },
+                        cache: true
+                    },
+                    language: {
+                        inputTooShort: function () { return 'Ingrese al menos 2 caracteres'; },
+                        searching: function () { return 'Buscando...'; },
+                        noResults: function () { return 'No se encontraron proyectos'; },
+                        errorLoading: function () { return 'No se pudieron cargar los proyectos'; }
+                    }
+                });
+
+                $servicioPadre.on('select2:open', function () {
+                    setTimeout(function () {
+                        document.querySelector('.select2-container--open .select2-search__field').focus();
+                    }, 0);
+                });
+            }
+        });
+    });
+</script>

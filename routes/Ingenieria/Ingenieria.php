@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('proyectos/obtener-proyecto-prefijo/{opcion}', [ProyectoController::class, 'indexPorPrefijo'])->name('proyecto.indexprefijo');
     Route::get('proyectos/obtener-proyecto-tipo-activo', [ProyectoController::class, 'indexPorActivo'])->name('proyecto.indexactivo');
     Route::post('/proyectos/obtener-mayor-prefijo/{id}', [ProyectoController::class, 'obtenerMayorCodigoServicioPrefijo']);
+    Route::get('/proyectos/buscar-servicios-padre', [ProyectoController::class, 'buscarServiciosPadre'])->name('proyectos.buscar-servicios-padre');
     Route::post('/servicio/{id}/obtener-ord-tra-mec', [ProyectoController::class, 'obtenerOrdMecOrdTraUnServicio']);
     Route::post('/servicio/{id}/obtener-ord-man', [ProyectoController::class, 'obtenerOrdManUnServicio']);
     Route::resource('proyectos', ProyectoController::class);

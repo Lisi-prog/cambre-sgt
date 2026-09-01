@@ -25,7 +25,8 @@ class Servicio extends Model
         'id_responsabilidad',
         'id_subtipo_servicio',
         'prioridad_servicio',
-        'id_activo'
+        'id_activo',
+        'id_servicio_padre'
     ];
 
     public function getSubTipoServicio()
@@ -36,6 +37,16 @@ class Servicio extends Model
     public function getActivo()
     {
         return $this->belongsTo(Activo::class, 'id_activo');
+    }
+
+    public function servicioPadre()
+    {
+        return $this->belongsTo(Servicio::class, 'id_servicio_padre');
+    }
+
+    public function serviciosHijos()
+    {
+        return $this->hasMany(Servicio::class, 'id_servicio_padre');
     }
 
     public function getResponsabilidad()
