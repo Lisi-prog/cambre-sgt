@@ -107,8 +107,8 @@ class ProyectoController extends Controller
         $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
         $empleados = $this->obtenerSupervisoresAdmin();
-        $Tipos_servicios = Subtipo_servicio::where('id_subtipo_servicio', '<', 7)->orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        // $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        // $Tipos_servicios = Subtipo_servicio::where('id_subtipo_servicio', '<', 7)->orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $Tipos_servicios = Subtipo_servicio::whereIn('id_subtipo_servicio', [3, 8, 9, 10, 11])->orderByRaw('FIELD(id_subtipo_servicio, "3", "8", "9", "10", "11")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
 
@@ -248,7 +248,9 @@ class ProyectoController extends Controller
             'prioridad' => 'required',
             'fecha_ini' => 'required',
             'fecha_req' => 'required',
-            'prioridad' => 'required'
+            'prioridad' => 'required',
+            'vincular_servicio_padre' => 'nullable|boolean',
+            'id_servicio_padre' => 'required_if:vincular_servicio_padre,1|nullable|integer|exists:servicio,id_servicio'
         ],
         [
             'codigo_proyecto.required' => 'Se necesita el codigo del proyecto',
@@ -269,6 +271,36 @@ class ProyectoController extends Controller
         }     
         //return redirect()->route('proyectos.index')->with('mensaje', 'El proyecto se ha creado con exito.');   
                         
+    }
+
+    public function buscarServiciosPadre(Request $request)
+    {
+        $termino = trim((string) $request->input('q'));
+
+        if (mb_strlen($termino) < 2) {
+            return response()->json(['results' => []]);
+        }
+
+        $servicios = Servicio::query()
+            ->when($request->filled('excluir_id'), function ($query) use ($request) {
+                $query->where('id_servicio', '<>', $request->input('excluir_id'));
+            })
+            ->where(function ($query) use ($termino) {
+                $query->where('codigo_servicio', 'like', '%' . $termino . '%')
+                    ->orWhere('nombre_servicio', 'like', '%' . $termino . '%');
+            })
+            ->orderBy('codigo_servicio')
+            ->limit(20)
+            ->get(['id_servicio', 'codigo_servicio', 'nombre_servicio']);
+
+        return response()->json([
+            'results' => $servicios->map(function ($servicio) {
+                return [
+                    'id' => $servicio->id_servicio,
+                    'text' => $servicio->codigo_servicio . ' - ' . $servicio->nombre_servicio,
+                ];
+            })->values(),
+        ]);
     }
 
     public function guardarProyecto(Request $request){
@@ -318,7 +350,10 @@ class ProyectoController extends Controller
             'id_responsabilidad' => $responsabilidad->id_responsabilidad,
             'fecha_inicio' => $fecha_ini,
             'prioridad_servicio' => $prioridadMax,
-            'id_activo' => $activo
+            'id_activo' => $activo,
+            'id_servicio_padre' => $request->boolean('vincular_servicio_padre')
+                ? $request->input('id_servicio_padre')
+                : null
         ]);
 
         Servicio_info::create([
@@ -347,25 +382,49 @@ class ProyectoController extends Controller
             'id_servicio' => $proyecto->id_servicio
         ]);
 
-        $etapa = Etapa::create([
-            'descripcion_etapa' => $nombre_proyecto,
-            'fecha_inicio' => $fecha_ini,
-            'id_servicio' => $proyecto->id_servicio,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
+        $nombres_eta_arr = ['Investigación', 'Desarrollo', 'Manufactura', 'Puesta a Punto'];
 
-        $actualizacionEtapa = Actualizacion::create([
-            'descripcion' => 'Creacion de etapa.',
-            'fecha_limite' => $fecha_req,
-            'fecha_carga' => $fecha_carga,
-            'id_estado' => $estado->id_estado,
-            'id_responsabilidad' => $responsabilidad->id_responsabilidad
-        ]);
+        foreach ($nombres_eta_arr as $nom_eta) {
+            $etapa = Etapa::create([
+                'descripcion_etapa' => $nom_eta,
+                'fecha_inicio' => $fecha_ini,
+                'id_servicio' => $proyecto->id_servicio,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            ]);
 
-        $actualizacion_etapa = Actualizacion_etapa::create([
-            'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
-            'id_etapa' => $etapa->id_etapa
-        ]);
+            $actualizacionEtapa = Actualizacion::create([
+                'descripcion' => 'Creacion de etapa.',
+                'fecha_limite' => $fecha_req,
+                'fecha_carga' => $fecha_carga,
+                'id_estado' => $estado->id_estado,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            ]);
+
+            $actualizacion_etapa = Actualizacion_etapa::create([
+                'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+                'id_etapa' => $etapa->id_etapa
+            ]);
+        }
+
+        // $etapa = Etapa::create([
+        //     'descripcion_etapa' => $nombre_proyecto,
+        //     'fecha_inicio' => $fecha_ini,
+        //     'id_servicio' => $proyecto->id_servicio,
+        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        // ]);
+
+        // $actualizacionEtapa = Actualizacion::create([
+        //     'descripcion' => 'Creacion de etapa.',
+        //     'fecha_limite' => $fecha_req,
+        //     'fecha_carga' => $fecha_carga,
+        //     'id_estado' => $estado->id_estado,
+        //     'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        // ]);
+
+        // $actualizacion_etapa = Actualizacion_etapa::create([
+        //     'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+        //     'id_etapa' => $etapa->id_etapa
+        // ]);
 
         return $proyecto->id_servicio;
     }
@@ -547,9 +606,33 @@ class ProyectoController extends Controller
             'id_tipo_proyecto' => 'required',
             'lider' => 'required',
             'fecha_inicio' => 'required',
+            'id_servicio_padre' => 'nullable|integer|exists:servicio,id_servicio|not_in:' . $id,
         ]);
 
         $servicio = Servicio::find($id);
+
+        $idServicioPadre = $request->input('id_servicio_padre');
+        $idsRevisados = [];
+        $posiblePadre = $idServicioPadre ? Servicio::find($idServicioPadre) : null;
+
+        while ($posiblePadre) {
+            if ((int) $posiblePadre->id_servicio === (int) $id) {
+                return redirect()->back()
+                    ->withErrors(['id_servicio_padre' => 'El proyecto seleccionado produciría una relación circular.'])
+                    ->withInput();
+            }
+
+            if (in_array($posiblePadre->id_servicio, $idsRevisados)) {
+                return redirect()->back()
+                    ->withErrors(['id_servicio_padre' => 'La jerarquía seleccionada ya contiene una relación circular.'])
+                    ->withInput();
+            }
+
+            $idsRevisados[] = $posiblePadre->id_servicio;
+            $posiblePadre = $posiblePadre->id_servicio_padre
+                ? Servicio::find($posiblePadre->id_servicio_padre)
+                : null;
+        }
 
         $codigo = $request->input('codigo_proyecto');
 
@@ -566,6 +649,7 @@ class ProyectoController extends Controller
             'nombre_servicio' => $nombre,
             'fecha_inicio' => $fecha_inicio,
             'id_subtipo_servicio' => $tipo,
+            'id_servicio_padre' => $idServicioPadre ?: null,
         ]);
 
 
