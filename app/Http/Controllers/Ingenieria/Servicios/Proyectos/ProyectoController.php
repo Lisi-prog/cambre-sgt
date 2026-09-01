@@ -429,6 +429,108 @@ class ProyectoController extends Controller
         return $proyecto->id_servicio;
     }
 
+    public function guardarProyectoServIng(Request $request){
+        $activo = $request->input('id_activo');
+        $codigo_proyecto = strtoupper($request->input('codigo_proyecto'));
+        $nombre_proyecto = $request->input('nombre_proyecto');
+        $tipo_proyecto = $request->input('id_tipo_proyecto');
+        $lider = $request->input('lider');
+        $fecha_ini = Carbon::parse($request->input('fecha_ini'))->format('Y-m-d');
+        $fecha_req = Carbon::parse($request->input('fecha_req'))->format('Y-m-d');
+        // $prioridad = $request->input('prioridad');
+        $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+        if ($request->input('sin-pri')) {
+            $prioridadMax = null;
+        }else{
+            $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+        }
+        
+        $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
+
+        $opt_est = $request->input('op_act_se_eta');
+        if ($opt_est) {
+            $estado = Estado::where('nombre_estado', 'En proceso')->first();
+        } else {
+            $estado = Estado::where('nombre_estado', 'espera')->first();
+        }
+        
+        
+        // $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
+        $tipo_servicio = $request->input('id_tipo_proyecto');
+        
+        // if (Servicio::where('prioridad_servicio', $prioridad)->get()) {
+        //     $this->actualizarPrioridades($prioridad);
+        // }
+
+        $responsabilidad = Responsabilidad::create([
+            // 'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_empleado' => $lider,
+            'id_rol_empleado' => $rol_empleado->id_rol_empleado
+        ]);
+        
+        $proyecto = Servicio::create([
+            'codigo_servicio' => $codigo_proyecto,
+            'nombre_servicio' => $nombre_proyecto,
+            'id_subtipo_servicio' => $tipo_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+            'fecha_inicio' => $fecha_ini,
+            'prioridad_servicio' => $prioridadMax,
+            'id_activo' => $activo,
+            'id_servicio_padre' => $request->boolean('vincular_servicio_padre')
+                ? $request->input('id_servicio_padre')
+                : null
+        ]);
+
+        Servicio_info::create([
+            'id_servicio' => $proyecto->id_servicio, 
+            'tot_ord' => 0,
+            'tot_ord_completa' => 0,
+            'progreso' => 0
+        ]);
+
+        $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+        $responsabilidad_act = Responsabilidad::create([
+            'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+            'id_rol_empleado' => $rol_empleado_act->id_rol_empleado
+        ]);
+
+        $actualizacionServicio = Actualizacion::create([
+            'descripcion' => 'Creacion de proyecto.',
+            'fecha_limite' => $fecha_req,
+            'fecha_carga' => $fecha_carga,
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $responsabilidad_act->id_responsabilidad
+        ]);
+
+        $actualizacion_servicio = Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacionServicio->id_actualizacion,
+            'id_servicio' => $proyecto->id_servicio
+        ]);
+
+        $etapa = Etapa::create([
+            'descripcion_etapa' => $nombre_proyecto,
+            'fecha_inicio' => $fecha_ini,
+            'id_servicio' => $proyecto->id_servicio,
+            'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacionEtapa = Actualizacion::create([
+             'descripcion' => 'Creacion de etapa.',
+             'fecha_limite' => $fecha_req,
+             'fecha_carga' => $fecha_carga,
+             'id_estado' => $estado->id_estado,
+             'id_responsabilidad' => $responsabilidad->id_responsabilidad
+        ]);
+
+        $actualizacion_etapa = Actualizacion_etapa::create([
+             'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+             'id_etapa' => $etapa->id_etapa
+        ]);
+
+        return $proyecto->id_servicio;
+    }
+
     public function actualizarPrioridadServicio(Request $request){
         //return $request;
         $this->validate($request, [
@@ -548,7 +650,7 @@ class ProyectoController extends Controller
             'id_estado_solicitud' => $id_estado_solicitud
         ]);
 
-        $id_servicio = $this->guardarProyecto($request);
+        $id_servicio = $this->guardarProyectoServIng($request);
 
 
         $solicitud->update([
