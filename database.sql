@@ -1403,6 +1403,18 @@ CREATE TABLE `parte_inspe_x_tarea_mant` (
 	CONSTRAINT `FK_pixtm_tarea_mantenimiento` FOREIGN KEY (`id_tarea_mantenimiento`) REFERENCES `tarea_mantenimiento` (`id_tarea_mantenimiento`)
 );
 
+CREATE TABLE `parte_inspe_x_elemento` (
+	`id_parte_inspe_x_elemento` INT NOT NULL AUTO_INCREMENT,
+	`id_parte_inspeccion` INT NOT NULL,
+	`id_zona` INT NOT NULL,
+	`ok` boolean NOT NULL DEFAULT 0,
+	`id_accion` INT NULL DEFAULT NULL,
+	PRIMARY KEY (`id_parte_inspe_x_elemento`),
+	CONSTRAINT `FK_pixe_accion` FOREIGN KEY (`id_accion`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
+	CONSTRAINT `FK_pixe_parte_inspeccion` FOREIGN KEY (`id_parte_inspeccion`) REFERENCES `parte_inspeccion` (`id_parte_inspeccion`),
+	CONSTRAINT `FK_pixe_elemento` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
+);
+
 CREATE TABLE `parte_ajuste` (
 	`id_parte_ajuste` INT NOT NULL AUTO_INCREMENT,
 	`id_estado_mantenimiento` INT NOT NULL,
@@ -1427,6 +1439,24 @@ CREATE TABLE `zona_x_tipo_activo` (
   CONSTRAINT `FK_zxta_x_tipo` FOREIGN KEY (`id_tipo_activo`) REFERENCES `tipo_activo` (`id_tipo_activo`)
 );
 
+CREATE TABLE `zona_x_activo` (
+  `id_zona_x_activo` INT NOT NULL AUTO_INCREMENT,
+	`id_zona` INT NOT NULL,
+	`id_activo` int NOT NULL,
+	PRIMARY KEY (`id_zona_x_activo`),
+  CONSTRAINT `FK_zxa_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`),
+  CONSTRAINT `FK_zxa_x_tipo` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`)
+);
+
+CREATE TABLE `zona_x_zona_tarea` (
+  `id_zona_x_zona_tarea` INT NOT NULL AUTO_INCREMENT,
+	`id_zona` INT NOT NULL,
+	`id_zona_tarea` int NOT NULL,
+	PRIMARY KEY (`id_zona_x_zona_tarea`),
+  CONSTRAINT `FK_zxzt_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`),
+  CONSTRAINT `FK_zxzt_x_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)
+);
+
 CREATE TABLE `tarea_ajuste` (
 	`id_tarea_ajuste` INT NOT NULL AUTO_INCREMENT,
 	`id_parte_ajuste` INT NOT NULL,
@@ -1435,6 +1465,7 @@ CREATE TABLE `tarea_ajuste` (
 	`id_maquinaria` INT NOT NULL,
 	`hecho` boolean NOT NULL DEFAULT 0,
   `id_tarea_mantenimiento` INT,
+  `observaciones` varchar(100),
 	PRIMARY KEY (`id_tarea_ajuste`),
 	CONSTRAINT `FK_ta_x_accion_tarea` FOREIGN KEY (`id_accion_tarea`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
 	CONSTRAINT `FK_ta_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria` (`id_maquinaria`),
