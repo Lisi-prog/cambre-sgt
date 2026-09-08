@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Ingenieria\Activos;
 use App\Http\Controllers\Controller;
 
+use App\Models\Cambre\Zona_tarea;
 use Illuminate\Http\Request;
 
 use App\Models\Cambre\Zona;
 use App\Models\Cambre\Zona_x_tipo_activo;
 use App\Models\Cambre\Tipo_activo;
+use App\Models\Cambre\Zona_x_zona_tarea;
 use Illuminate\Support\Facades\DB;
 
 
@@ -64,7 +66,8 @@ class ZonaController extends Controller
     public function verAsignarTipo($id){
         $zona = Zona::findOrFail($id);
         $tipos = Tipo_activo::orderBy('nombre_tipo_activo')->get();
-        return view('Ingenieria.Activos.Zona.asignar-tipo', compact('zona', 'tipos'));
+        $zonas = Zona_tarea::orderBy('nombre_zona')->get();
+        return view('Ingenieria.Activos.Zona.asignar-tipo', compact('zona', 'tipos', 'zonas'));
     }
 
     public function asignarSubTipo(Request $request, $id){
@@ -95,6 +98,30 @@ class ZonaController extends Controller
                     Zona_x_tipo_activo::create([
                         'id_zona' => $id,
                         'id_tipo_activo' => $idst
+                    ]);
+                }
+            }
+
+            if(empty($request->input('zona_tarea'))){
+
+                $zonaTareaAnt = Zona_x_zona_tarea::where('id_zona', '=', $id)->get();
+                
+                foreach($zonaTareaAnt as $zta){
+                    Zona_x_zona_tarea::where('id_zona', $id)->where('id_zona_tarea', $zta->id_zona_tarea)->first()->delete();
+                }
+            }else{
+                $zonaTareaAnt = Zona_x_zona_tarea::where('id_zona', '=', $id)->get();
+                
+                foreach($zonaTareaAnt as $zta){
+                    Zona_x_zona_tarea::where('id_zona', $id)->where('id_zona_tarea', $zta->id_zona_tarea)->delete();
+                }
+
+                $ids_zonasTareas = $request->input('zona_tarea');
+
+                foreach ($ids_zonasTareas as $idzta) {
+                    Zona_x_zona_tarea::create([
+                        'id_zona' => $id,
+                        'id_zona_tarea' => $idzta
                     ]);
                 }
             }

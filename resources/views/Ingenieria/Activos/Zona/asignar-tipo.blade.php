@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                 {!! Form::label('sbti', 'Sub-Tipos:', ['class' => 'form-label']) !!}
                                 @php
                                     $subtipoasig = $zona->getIdTipos()->toArray();
@@ -41,6 +41,20 @@
                                         <input name="subtipo[]" class="form-check-input" type="checkbox" value="{{$t->id_tipo_activo}}" id="checkDefault{{$t->id_tipo_activo}}" {{in_array($t->id_tipo_activo, $subtipoasig) ? 'checked' : ''}}>
                                         <label class="form-check-label" for="checkDefault{{$t->id_tipo_activo}}">
                                         {{$t->nombre_tipo_activo}}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                {!! Form::label('znas', 'Zonas:', ['class' => 'form-label']) !!}
+                                 @php
+                                    $zonaasig = $zona->getIdZonasTareas()->toArray();
+                                @endphp
+                                @foreach ($zonas as $z)
+                                    <div class="form-check">
+                                        <input name="zona_tarea[]" class="form-check-input" type="checkbox" value="{{$z->id_zona_tarea}}" id="checkDefault2{{$z->id_zona_tarea}}" {{in_array($z->id_zona_tarea, $zonaasig) ? 'checked' : ''}}>
+                                        <label class="form-check-label" for="checkDefault2{{$z->id_zona_tarea}}">
+                                        {{$z->nombre_zona}}
                                         </label>
                                     </div>
                                 @endforeach
