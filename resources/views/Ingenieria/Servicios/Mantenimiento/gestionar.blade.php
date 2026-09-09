@@ -215,9 +215,15 @@
                                                                     </button>
                                                                 @endif
                                                             @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar' && Auth::user()->hasRole('SUPERVISOR'))
-                                                                <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
-                                                                    <i class="fas fa-eye"></i>
-                                                                </button>
+                                                                    @if ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                        <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
+                                                                            <i class="fas fa-eye"></i>
+                                                                        </button>
+                                                                    @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
+                                                                        <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary">
+                                                                            <i class="fas fa-eye"></i>
+                                                                        </button>
+                                                                    @endif
                                                             @else
                                                                 @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
                                                                     <button type="button" onclick="openModalVerParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary">

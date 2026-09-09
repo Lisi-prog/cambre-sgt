@@ -46,8 +46,14 @@ class ParteDiagnosticoController extends Controller{
                 }
                 $next = 2;
                 if($request->completado){
-                    $parte_diagnostico->id_estado = 4;
-                    $parte_diagnostico->completado = 1;
+                    if( $parte_diagnostico->en_maquina == 1){
+                        $parte_diagnostico->id_estado = 3;
+                        $parte_diagnostico->completado = 1;
+                    }
+                    else{
+                        $parte_diagnostico->id_estado = 4;
+                        $parte_diagnostico->completado = 1;
+                    }                    
                 }
                 else{
                     $next = 1;
@@ -65,7 +71,7 @@ class ParteDiagnosticoController extends Controller{
                         $parte_diag_x_causa->save();
                     }
                 }
-                if($next == 2){
+                if($next == 2 &&  $parte_diagnostico->en_maquina == 0){
                     $orden_vieja = Orden::find($request->id_orden);    
                     $orden_nueva = new Orden;                
                     $orden_nueva->nombre_orden = $request->nombre_proyecto . '-INSPECCIÓN';
@@ -133,7 +139,7 @@ class ParteDiagnosticoController extends Controller{
 
     public function get_parte_diagnostico_completado($id_orden_mantenimiento){
         $parte_diagnostico = Parte_diagnostico::whereHas('getParte', function($query) use ($id_orden_mantenimiento){
-        $query->where('id_orden', $id_orden_mantenimiento)->whereIn('id_estado', [2,4]);
+        $query->where('id_orden', $id_orden_mantenimiento)->whereIn('id_estado', [2, 3, 4]);
         })
         ->with('getParte.getResponsable.getEmpleado',
             'getParte.getOrden',
@@ -154,4 +160,24 @@ class ParteDiagnosticoController extends Controller{
         return response()->json($parte_diagnostico);
     }
 
+    public function aceptar_mantenimiento_diagnostico(Request $request){
+        try {
+            DB::beginTransaction();
+            $parte_diagnostico = Parte_diagnostico::whereHas('getParte', function($query) use ($request){
+            $query->where('id_orden', $request->id_orden)->whereIn('id_estado', [3]);
+            })
+            ->first();
+            $parte_diagnostico->id_estado = 4;
+            $parte_diagnostico->completado = 1;
+            $parte_diagnostico->save();
+            DB::commit();
+            return response()->json([
+                'success' => true, 
+                'message' => 'Mantenimiento aceptado exitosamente.'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }
