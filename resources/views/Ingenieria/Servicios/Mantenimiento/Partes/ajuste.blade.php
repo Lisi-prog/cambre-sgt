@@ -26,9 +26,9 @@
                 <hr>
                 <table class="table table-striped w-100" id="tabla_ajustes">
                     <thead>
-                        <th class="text-center" scope="col" style="color:#fff;">TAREA</th>
-                        <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
                         <th class="text-center" scope="col" style="color:#fff;">ELEMENTO</th>
+                        <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
+                        <th class="text-center" scope="col" style="color:#fff;">OBSERVACIONES</th>
                         <th class="text-center" scope="col" style="color:#fff;">MÁQUINA</th>
                         <th class="text-center" scope="col" style="color:#fff;">HECHO</th>
                     </thead>
@@ -50,33 +50,6 @@
                             <span class="input-group-text">:</span>
                             <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
                         </div>
-                        {{-- <label>Horas:</label>
-                        <div class="d-flex">
-                            <input 
-                                class="form-control" 
-                                id="horas_ajuste"  
-                                type="number" 
-                                min="0" 
-                                value="00" 
-                                name="horas" 
-                                onclick="this.select()" 
-                                onkeyup="checkSendNuevoParteDiagnostico()"
-                                required
-                            >
-                            <span class="input-group-text">:</span>
-                            <input 
-                                class="form-control" 
-                                id="minutos_ajuste" 
-                                type="number" 
-                                min="0" 
-                                max="59" 
-                                value="00" 
-                                name="minutos"
-                                onclick="this.select()"
-                                onkeyup="checkSendNuevoParteDiagnostico()"
-                                required
-                            >
-                        </div> --}}
                     </div>
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>
