@@ -4,7 +4,7 @@ $(document).ready(function () {
         headerCallback: function(thead) {
             $(thead).hide();
         },
-        columnDefs: [
+        columnDefs: [{ visible: false, targets: [3] },
             { className: "text-center", targets: [1, 2, 3] }
         ],
         order: [],

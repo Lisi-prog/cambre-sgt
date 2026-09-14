@@ -280,7 +280,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                             ${$("#accion_select_div").html()}
                         </select>
                         <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.get_tarea_mantenimiento.id_tarea_mantenimiento}">`,
-                        `<input type="text" class="form-control" name="tareas[${j}][observaciones]" placeholder="Observaciones...">`,
+                        `<input type="text" class="form-control" name="tareas[${j}][observaciones]" placeholder="Observaciones..." value="${tarea.observaciones ?? ''}">`,
                         `<select id="tarea_maquina_${j}" class="form-select" name="tareas[${j}][maquina]">
                             <option value="">Seleccionar...</option>
                             ${$("#maquina_select_div").html()}
@@ -297,7 +297,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                             ${$("#accion_select_div").html()}
                         </select>
                         <input hidden name="tareas[${j}][tarea_mant]" value="${tarea.id_zona}-${tarea.id_zona_tarea}">`,
-                        `<input type="text" class="form-control" name="tareas[${j}][observaciones]" placeholder="Observaciones...">`,
+                        `<input type="text" class="form-control" name="tareas[${j}][observaciones]" value="${tarea.observaciones ?? ''}" placeholder="Observaciones...">`,
                         `<select id="tarea_maquina_${j}" class="form-select" name="tareas[${j}][maquina]">
                             <option value="">Seleccionar...</option>
                             ${$("#maquina_select_div").html()}
