@@ -67,7 +67,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                     if(tarea.id_tarea_mantenimiento != null){
                     tabla_ajustes.row.add([
                         tarea.get_zona.nombre_zona + ' - ' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona,
-                        `<select class="form-select" name="tareas[${j}][accion]">
+                        `<select onchange="showSpanAviso()" id="accion_${tarea.id_tarea_mantenimiento}" class="form-select" name="tareas[${j}][accion]">
                             <option value="">Seleccionar...</option>
                             ${$("#accion_select_div").html()}
                         </select>
@@ -84,7 +84,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                     else{
                         tabla_ajustes.row.add([
                         tarea.get_zona.nombre_zona + ' - ' + tarea.get_zona_tarea.nombre_zona,
-                        `<select class="form-select" name="tareas[${j}][accion]">
+                        `<select onchange="showSpanAviso()" id="accion_${tarea.id_zona}-${tarea.id_zona_tarea}" class="form-select" name="tareas[${j}][accion]">
                             <option value="">Seleccionar...</option>
                             ${$("#accion_select_div").html()}
                         </select>
@@ -113,14 +113,44 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
     });
 }
 
+
+function showSpanAviso() {
+    let hayRefabricar = false;
+
+    $("select[id^='accion_']").each(function () {
+        let text = $(this).find("option:selected").text();
+        if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+            hayRefabricar = true;
+            return false;
+        }
+    });
+
+    if (!hayRefabricar) {
+        $("#tabla_ajustes tbody tr").each(function () {
+            let text = $(this).find("td").eq(1).text();
+
+            if (text && text.trim().toUpperCase() === 'REFABRICAR') {
+                hayRefabricar = true;
+                return false;
+            }
+        });
+    }
+
+    if (hayRefabricar) {
+        $("#span_aviso_mecanizado").show();
+    } else {
+        $("#span_aviso_mecanizado").hide();
+    }
+}
+
 function agregarNuevoAjusteRow(){
     let j = tabla_ajustes.rows().count();
     const rowNode = tabla_ajustes.row.add([
         `<select style="width: 100%" class="form-select" name="tareas[${j}][tarea_mant]">
             <option value="">Seleccionar...</option>
-            ${$("#tarea_mantenimiento").html()}
+            ${$("#elementos_div").html()}
         </select>`,
-        `<select class="form-select" required name="tareas[${j}][accion]">
+        `<select onchange="showSpanAviso()" id="accion_${j}" class="form-select" required name="tareas[${j}][accion]">
             <option value="">Seleccionar...</option>
             ${$("#accion_select_div").html()}
         </select>`,
@@ -275,7 +305,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                 if(tarea.id_tarea_mantenimiento != null){
                     tabla_ajustes.row.add([
                         tarea.get_zona.nombre_zona + ' - ' + tarea.get_tarea_mantenimiento.get_zona_tarea.nombre_zona,
-                        `<select class="form-select" name="tareas[${j}][accion]">
+                        `<select onchange="showSpanAviso()" id="accion_${j}" class="form-select" name="tareas[${j}][accion]">
                             <option value="">Seleccionar...</option>
                             ${$("#accion_select_div").html()}
                         </select>
@@ -292,7 +322,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                 else{
                     tabla_ajustes.row.add([
                         tarea.get_zona.nombre_zona + ' - ' + tarea.get_zona_tarea.nombre_zona,
-                        `<select class="form-select" name="tareas[${j}][accion]">
+                        `<select onchange="showSpanAviso()" id="accion_${j}" class="form-select" name="tareas[${j}][accion]">
                             <option value="">Seleccionar...</option>
                             ${$("#accion_select_div").html()}
                         </select>

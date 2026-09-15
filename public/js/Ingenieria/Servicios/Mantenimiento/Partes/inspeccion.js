@@ -66,7 +66,7 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
                      <input type="hidden" name="tareas[${j}][id]" value="${tarea.id_zona}-${tarea.id_zona_tarea}">`,
                     `<input type="radio" onchange="checkboxTareaRealizada(${j},'${tarea.id_zona}-${tarea.id_zona_tarea}')" name="tareas[${j}][ok]" value="not_ok">`,
                     `<div id="label_accion_${tarea.id_zona}-${tarea.id_zona_tarea}">-</div>
-                     <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_zona}-${tarea.id_zona_tarea}">
+                     <select name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tarea.id_zona}-${tarea.id_zona_tarea}">
                         <option value="NO ACCION" hidden>Seleccionar...</option>
                         ${$("#accion_select_div").html()}
                      </select>`
@@ -110,15 +110,6 @@ function addZonaHeader(nombreZona) {
 
 function checkboxTareaRealizada(j, idTarea){
     const radio = $(`input[name="tareas[${j}][ok]"]:checked`).val();
-
-    if (radio === 'not_ok') {
-        $("#label_accion_" + idTarea).attr('hidden', true);
-        $("#accion_" + idTarea).removeAttr('hidden').prop('disabled', false).attr('required', 'required');
-    } else {
-        $("#accion_" + idTarea).attr('hidden', true).removeAttr('required').val('').prop('disabled', true);
-        $("#label_accion_" + idTarea).html('No se requiere acción');
-        $("#label_accion_" + idTarea).removeAttr('hidden');
-    }
     
     let completo = validarRadios();
     if(completo){
@@ -486,33 +477,4 @@ function verParteDeInspeccion(id_parte, completado){
             showSpanAviso();
         }
     });
-}
-
-function showSpanAviso() {
-    let hayRefabricar = false;
-
-    $("select[id^='accion_']").each(function () {
-        let text = $(this).find("option:selected").text();
-        if (text && text.trim().toUpperCase() === 'REFABRICAR') {
-            hayRefabricar = true;
-            return false;
-        }
-    });
-
-    if (!hayRefabricar) {
-        $("#tabla_inspecciones tbody tr").each(function () {
-            let text = $(this).find("td").eq(3).text();
-
-            if (text && text.trim().toUpperCase() === 'REFABRICAR') {
-                hayRefabricar = true;
-                return false;
-            }
-        });
-    }
-
-    if (hayRefabricar) {
-        $("#span_aviso_mecanizado").show();
-    } else {
-        $("#span_aviso_mecanizado").hide();
-    }
 }

@@ -58,6 +58,7 @@
                 </div>              
             </div>
             <div class="modal-footer">
+                <span id="span_aviso_mecanizado" style="display: none;" class="text-warning">Se recomienda crear una orden de mecanizado.</span>
                 <div class="form-group ml-auto mr-2 align-items-bottom mb-0 mr-4">
                     <input onchange="checkCompletoAjuste()" type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
                     <label for="completado_ajuste">COMPLETADO</label>
