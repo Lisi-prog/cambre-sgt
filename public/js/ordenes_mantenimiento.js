@@ -902,7 +902,7 @@ function buscarPorFiltrosOLD(){
                 if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
@@ -912,7 +912,7 @@ function buscarPorFiltrosOLD(){
                     }
                     else if(ope.estado_actual == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
@@ -934,7 +934,7 @@ function buscarPorFiltrosOLD(){
                 else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'INSPECCIÓN'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo},${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
@@ -944,7 +944,7 @@ function buscarPorFiltrosOLD(){
                     }
                     else if(ope.estado_actual == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" onclick="openModalParteInspeccionPendiente(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}, ${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')"  class="btn btn-info w-100">
                                     Procesar
@@ -966,7 +966,7 @@ function buscarPorFiltrosOLD(){
                 else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo}')">
                                     Procesar
@@ -976,7 +976,7 @@ function buscarPorFiltrosOLD(){
                     }
                     else if(ope.estado_actual == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo}')">
                                     Procesar
@@ -1168,7 +1168,7 @@ function buscarPorFiltros(){
                 if(ope.nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO'){
                     if(ope.nombre_estado == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
                                     Procesar
@@ -1178,7 +1178,7 @@ function buscarPorFiltros(){
                     }
                     else if(ope.nombre_estado == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
                                     Procesar
@@ -1200,7 +1200,7 @@ function buscarPorFiltros(){
                 else if(ope.nombre_tipo_orden_mantenimiento == 'INSPECCIÓN'){
                     if(ope.nombre_estado == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.id_activo},${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
                                     Procesar
@@ -1210,7 +1210,7 @@ function buscarPorFiltros(){
                     }
                     else if(ope.nombre_estado == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" onclick="openModalParteInspeccionPendiente(${ope.id_activo}, ${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')"  class="btn btn-info w-100">
                                     Procesar
@@ -1232,7 +1232,7 @@ function buscarPorFiltros(){
                 else if(ope.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
                     if(ope.nombre_estado == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.id_orden}, ${ope.id_etapa}, '${ope.codigo_activo}', '${ope.codigo_servicio}', '${ope.id_activo}', '${ope.id_tipo_activo}')">
                                     Procesar
@@ -1242,7 +1242,7 @@ function buscarPorFiltros(){
                     }
                     else if(ope.nombre_estado == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.id_orden}, ${ope.id_etapa}, '${ope.codigo_activo}', '${ope.codigo_servicio}', '${ope.id_activo}', '${ope.id_tipo_activo}')">
                                     Procesar

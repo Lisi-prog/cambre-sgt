@@ -30,6 +30,6 @@
 </div >
 <div id="elementos_div">
     @foreach ($elementos as $elemento)
-        <option value="{{ $elemento->id_zona }}-{{ $elemento->id_zona_tarea }}">{{ $elemento->elemento }} ({{ $elemento->nombre_zona }})</option>
+        <option data-tipo="{{ $elemento->id_tipo_activo }}" value="{{ $elemento->id_zona }}-{{ $elemento->id_zona_tarea }}">{{ $elemento->elemento }} ({{ $elemento->nombre_zona }})</option>
     @endforeach
 </div >
