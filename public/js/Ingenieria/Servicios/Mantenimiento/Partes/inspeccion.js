@@ -55,7 +55,11 @@ function openModalNuevoParteInspeccion(id_activo, id_orden){
 
             let zona_actual = null;
             let j = 0;
-            data.tareas_x_activo.forEach(tarea => {
+            // Mantener juntas las tareas de cada zona para no repetir encabezados.
+            const tareasOrdenadas = [...data.tareas_x_activo].sort((a, b) =>
+                (a.nombre_zona || '').localeCompare(b.nombre_zona || '', 'es')
+            );
+            tareasOrdenadas.forEach(tarea => {
                 if (tarea.nombre_zona !== zona_actual) {
                     zona_actual = tarea.nombre_zona;
                     addZonaHeader(zona_actual);

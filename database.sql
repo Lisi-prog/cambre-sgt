@@ -1409,10 +1409,12 @@ CREATE TABLE `parte_inspe_x_elemento` (
 	`id_zona` INT NOT NULL,
 	`ok` boolean NOT NULL DEFAULT 0,
 	`id_accion` INT NULL DEFAULT NULL,
+  `id_zona_tarea` INT NOT NULL,
 	PRIMARY KEY (`id_parte_inspe_x_elemento`),
 	CONSTRAINT `FK_pixe_accion` FOREIGN KEY (`id_accion`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
 	CONSTRAINT `FK_pixe_parte_inspeccion` FOREIGN KEY (`id_parte_inspeccion`) REFERENCES `parte_inspeccion` (`id_parte_inspeccion`),
-	CONSTRAINT `FK_pixe_elemento` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
+	CONSTRAINT `FK_pixe_elemento` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`),
+  CONSTRAINT `FK_pixe_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)
 );
 
 CREATE TABLE `parte_ajuste` (
@@ -1466,9 +1468,11 @@ CREATE TABLE `tarea_ajuste` (
 	`hecho` boolean NOT NULL DEFAULT 0,
   `id_tarea_mantenimiento` INT,
   `observaciones` varchar(100),
+  `id_zona_tarea` INT NULL,
 	PRIMARY KEY (`id_tarea_ajuste`),
 	CONSTRAINT `FK_ta_x_accion_tarea` FOREIGN KEY (`id_accion_tarea`) REFERENCES `accion_para_tarea` (`id_accion_tarea`),
 	CONSTRAINT `FK_ta_x_maquinaria` FOREIGN KEY (`id_maquinaria`) REFERENCES `maquinaria` (`id_maquinaria`),
 	CONSTRAINT `FK_ta_x_parte_ajuste` FOREIGN KEY (`id_parte_ajuste`) REFERENCES `parte_ajuste` (`id_parte_ajuste`),
-	CONSTRAINT `FK_ta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`)
+	CONSTRAINT `FK_ta_x_zona` FOREIGN KEY (`id_zona`) REFERENCES `zona` (`id_zona`),
+  CONSTRAINT `FK_ta_x_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)
 );
