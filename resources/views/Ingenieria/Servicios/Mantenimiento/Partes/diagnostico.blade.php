@@ -69,36 +69,6 @@
                                 <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
                             </div>
                         </div>
-                        {{-- <div class="form-group ml-auto">
-                            <span class="obligatorio">*</span>
-                            <label>Horas:</label>
-                            <div class="d-flex">
-                                <input 
-                                    class="form-control" 
-                                    name="horas"  
-                                    type="number" 
-                                    min="0" 
-                                    value="00" 
-                                    id="horas" 
-                                    onclick="this.select()" 
-                                    onkeyup="checkSendNuevoParteDiagnostico()"
-                                    required
-                                >
-                                <span class="input-group-text">:</span>
-                                <input 
-                                    class="form-control" 
-                                    name="minutos" 
-                                    type="number" 
-                                    min="0" 
-                                    max="59" 
-                                    value="00" 
-                                    id="minutos"
-                                    onclick="this.select()"
-                                    onkeyup="checkSendNuevoParteDiagnostico()"
-                                    required
-                                >
-                            </div>
-                        </div> --}}
                         <div class="form-group ml-2">
                             <span class="obligatorio">*</span>
                             <label>Fecha:</label>
@@ -113,6 +83,7 @@
                 <div class="me-auto" id="label_ob_diagnostico">
                     (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                 </div>
+                <button type="button" onclick="aceptarManDiag()" class="btn btn-success" id="btnAceptarManDiag">Finalizar Mantenimiento</button>
                 <button onclick="diagnosticoPreSubmit('G')" id="btnGuardarNuevoParteDiagnostico" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button onclick="diagnosticoPreSubmit('C')" id="btnGuardarNuevoParteDiagnosticoCerrar" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar y Completar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

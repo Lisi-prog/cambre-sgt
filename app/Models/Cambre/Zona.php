@@ -32,4 +32,8 @@ class Zona extends Model
 
         return $subtipos = Tipo_activo::whereIn('id_tipo_activo', $idSubTipos)->orderBy('nombre_tipo_activo')->get()->pluck('nombre_tipo_activo')->implode(' - ');
     }
+
+    public function getIdZonasTareas(){
+        return $idZonasTareas = Zona_x_zona_tarea::where('id_zona', $this->id_zona)->pluck('id_zona_tarea');
+    }
 }

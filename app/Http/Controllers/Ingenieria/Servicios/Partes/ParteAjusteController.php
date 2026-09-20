@@ -15,45 +15,37 @@ use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Orden;
+use App\Models\Cambre\Tarea_prev_x_activo;
 use App\Models\Cambre\Actualizacion;
 use App\Models\Cambre\Actualizacion_servicio;
-use App\Models\Cambre\Orden_mantenimiento;
+use App\Models\Cambre\Serv_mant_x_tarea_mant;
 
 class ParteAjusteController extends Controller{
     public function get_pre_acciones_ajuste($id_etapa)
     {
-        $parte_inspeccion = Parte_inspeccion::whereHas('getParte.getOrden', function ($query) use ($id_etapa) {
-                $query->where('id_etapa', $id_etapa)
-                    ->whereIn('id_estado_mantenimiento', [2,4]);
-            })
-            ->whereHas('getTareasMantenimiento.getTareaMantenimiento', function ($query) {
-                $query->where('ok', 0);
-            })
-            ->with([
-                'getParte.getResponsable.getEmpleado',
-                'getParte.getOrden.getEtapa.getServicio.getActivo',
-                'getTareasMantenimiento' => function ($query) {
-                    $query->where('ok', 0);
-                },
+        $tareas_preventivas = Tarea_ajuste::whereHas('getParteAjuste.getParte.getOrden', function ($query) use ($id_etapa) {
+            $query->where('id_etapa', $id_etapa);
+        })
+        ->with([
+            'getAccionTarea',
+            'getZona',
+            'getZonaTarea',
+            'getMaquinaria',
+            'getTareaMantenimiento.getZonaTarea',
+        ])
+        ->get();
 
-                'getTareasMantenimiento.getTareaMantenimiento.getZonaTarea',
-                'getTareasMantenimiento.getTareaMantenimiento.getEjecucion',
-                'getTareasMantenimiento.getAccionParaTarea'
-            ])
-            ->orderByDesc('id_parte_inspeccion')
-            ->get();
 
-        return $parte_inspeccion;
+        return $tareas_preventivas;
     }
 
     public function store(Request $request){
-        //return $request;    
         try{
             DB::beginTransaction();
             $completo =  isset($request->completado) ? 1 : 0;
             //PARTE
             $parte_revisar = new Parte;
-            $parte_revisar->observaciones = "Alta de parte de ajuste, pendiente de revisión";;
+            $parte_revisar->observaciones = "Alta de parte de ajuste, pendiente de revisión";
             $parte_revisar->fecha = $request->fecha;
             $parte_revisar->fecha_carga = Carbon::now();
             $parte_revisar->horas = $request->horas . ':' . $request->minutos;
@@ -74,24 +66,63 @@ class ParteAjusteController extends Controller{
                 $parte_revisar->observaciones = "Realizando proceso de ajuste";                
             }
             $parte_revisar->save();
+            
             //PARTE AJUSTE
             $parte_ajuste = new Parte_ajuste;
             $parte_ajuste->id_parte = $parte_revisar->id_parte;
             $parte_ajuste->id_estado_mantenimiento = $next;
             $parte_ajuste->save();
+
             //TAREAS DE AJUSTE   
-            foreach ($request['tareas'] as $tarea) {
-                $accion = $tarea['accion'];
-                $zona = $tarea['zona'];
-                $maquina = $tarea['maquina'];
-                $tarea_nueva = new Tarea_ajuste;
-                $tarea_nueva->id_parte_ajuste = $parte_ajuste->id_parte_ajuste;
-                $tarea_nueva->id_accion_tarea = $accion;
-                $tarea_nueva->id_zona = $zona;
-                $tarea_nueva->id_tarea_mantenimiento = $tarea['tarea_mant'];
-                $tarea_nueva->id_maquinaria = $maquina;
-                $tarea_nueva->hecho = isset($tarea['hecho']) ? 1 : 0;
-                $tarea_nueva->save();
+            if($request['tareas']){
+                foreach ($request['tareas'] as $tarea) {
+                    $accion = $tarea['accion'] ?? null;
+                    $maquina = $tarea['maquina'] ?? null;
+                    $elemento = $tarea['elemento'] ?? null; // Elemento asociado/NO OK de inspección
+                    $observaciones = $tarea['observaciones'] ?? null; // Nueva columna observaciones
+
+                    $tarea_nueva = new Tarea_ajuste;
+                    $tarea_nueva->id_parte_ajuste = $parte_ajuste->id_parte_ajuste;
+                    $tarea_nueva->id_accion_tarea = $accion;
+                    
+                    if (str_contains($tarea['tarea_mant'], '-')) {
+                        $clean = trim($tarea['tarea_mant'], "'");
+                        $id = array_map('intval',explode('-',$clean));
+                        $tarea_nueva->id_zona = $id[0];
+                        $tarea_nueva->id_zona_tarea = $id[1];
+                    }
+                    else{
+                        $tarea_nueva->id_tarea_mantenimiento = $tarea['tarea_mant'] ?? null;
+                    }
+                    $tarea_nueva->id_maquinaria = $maquina;
+                    // Se pueden guardar campos adicionales de elemento u observaciones si la tabla cuenta con las columnas correspondientes
+                    if (isset($tarea['observaciones'])) {
+                        $tarea_nueva->observaciones = $observaciones;
+                    }
+                    if (isset($tarea['elemento'])) {
+                        $tarea_nueva->id_elemento = $elemento;
+                    }
+                    
+                    $tarea_nueva->hecho = isset($tarea['hecho']) ? 1 : 0;
+                    
+                    if($tarea_nueva->id_tarea_mantenimiento) {
+                        $serv = Serv_mant_x_tarea_mant::where('id_servicio', $parte_revisar->getOrden->getEtapa->getServicio->id_servicio)
+                         ->whereHas('getTarea', function ($query) use ($tarea) {
+                                $query->where('id_tarea_mantenimiento', $tarea['tarea_mant']);
+                            })
+                        ->first();
+                        if($serv){
+                            $serv->fecha_hecho =  $request->fecha;
+                        }
+                        $mant = Tarea_prev_x_activo::where('id_tarea_mantenimiento', $tarea['tarea_mant'])
+                        ->where('id_activo', $parte_revisar->getOrden->getEtapa->getServicio->id_activo)->first();
+                        if($mant && $tarea_nueva->hecho == 1){
+                            $mant->fecha_ultima_ejecucion = $request->fecha;
+                            $mant->save();
+                        }
+                    }
+                    $tarea_nueva->save();
+                }
             }
             DB::commit();
             return redirect()->back()->with('mensaje', 'Se ha creado con éxito el parte de ajuste.');
@@ -110,12 +141,15 @@ class ParteAjusteController extends Controller{
             'getParte.getOrden.getEtapa.getServicio.getActivo', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
+            'getTareasAjuste.getZonaTarea',
             'getTareasAjuste.getMaquinaria',
             'getTareasAjuste.getTareaMantenimiento.getZonaTarea',
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();
-        $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
+        if($parte_ajuste) {
+            $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
+        }
         return response()->json($parte_ajuste);
     }
 
@@ -228,12 +262,15 @@ class ParteAjusteController extends Controller{
             'getParte.getOrden.getEtapa.getServicio.getActivo', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
+            'getTareasAjuste.getZonaTarea',
             'getTareasAjuste.getMaquinaria',
             'getTareasAjuste.getTareaMantenimiento.getZonaTarea',
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();
-        $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
+        if($parte_ajuste) {
+            $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
+        }
         return response()->json($parte_ajuste);
     }
 
@@ -243,6 +280,7 @@ class ParteAjusteController extends Controller{
             'getParte.getOrden.getEtapa.getServicio.getActivo', 
             'getTareasAjuste.getAccionTarea', 
             'getTareasAjuste.getZona',
+            'getTareasAjuste.getZonaTarea',
             'getTareasAjuste.getMaquinaria',
             'getTareasAjuste.getTareaMantenimiento.getZonaTarea',
         )
@@ -250,5 +288,4 @@ class ParteAjusteController extends Controller{
         ->first();
         return response()->json($parte_ajuste);
     }
-
 }

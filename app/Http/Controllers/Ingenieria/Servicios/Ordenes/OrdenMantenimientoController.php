@@ -11,6 +11,7 @@ use \PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cambre\Estado_hdr;
+use App\Models\Cambre\Zona_tarea_x_tipo_activo;
 use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Maquinaria;
@@ -75,6 +76,20 @@ public function index(){
         ->leftJoin('tipo_activo_x_tarea_mant', 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
         ->leftJoin('activo_x_tarea_mant', 'activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')        
         ->get();
+        $elementos =  Zona_tarea_x_tipo_activo::join('zona_x_zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_x_zona_tarea.id_zona_tarea')
+            ->join('zona_x_tipo_activo', function ($join) {
+                $join->on('zona_x_zona_tarea.id_zona', '=', 'zona_x_tipo_activo.id_zona')
+                     ->on('zona_tarea_x_tipo_activo.id_tipo_activo', '=', 'zona_x_tipo_activo.id_tipo_activo');
+            })
+            ->join('zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_tarea.id_zona_tarea')
+            ->join('zona', 'zona_x_zona_tarea.id_zona', '=', 'zona.id_zona')
+            ->select(
+                'zona_tarea_x_tipo_activo.*', 
+                'zona_x_tipo_activo.id_zona',
+                'zona_tarea.nombre_zona', 
+                'zona.nombre_zona as elemento'
+            )
+            ->get();
         
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
@@ -92,7 +107,7 @@ public function index(){
         $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
  */
         return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos',
-        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas', 'tareas_mantenimiento'
+        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas', 'tareas_mantenimiento', 'elementos'
         ));
     }
 

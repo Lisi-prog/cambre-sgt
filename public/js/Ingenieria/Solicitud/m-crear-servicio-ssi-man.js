@@ -44,11 +44,10 @@ document.querySelectorAll('form').forEach(form => {
 });
 
 function toggleCheck(id) {
-    const check = document.getElementById(`chkTareaPrend${id}`);
+    const checkbox = document.getElementById(id);
 
-    if (!check) {
-        return;
+
+    if (checkbox) {
+        checkbox.checked = !checkbox.checked;
     }
-
-    check.checked = !check.checked;
 }

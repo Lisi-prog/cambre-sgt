@@ -28,3 +28,8 @@
         <option data-activo="{{ $tarea->id_activo }}" data-tipo="{{ $tarea->id_tipo_activo }}" value="{{ $tarea->id_tarea_mantenimiento }}">{{ $tarea->nombre_tarea }} ({{ $tarea->getZonaTarea->nombre_zona }})</option>
     @endforeach
 </div >
+<div id="elementos_div">
+    @foreach ($elementos as $elemento)
+        <option data-tipo="{{ $elemento->id_tipo_activo }}" value="{{ $elemento->id_zona }}-{{ $elemento->id_zona_tarea }}">{{ $elemento->elemento }} ({{ $elemento->nombre_zona }})</option>
+    @endforeach
+</div >

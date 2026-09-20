@@ -31,4 +31,9 @@ class Serv_mant_x_tarea_mant extends Model
         return $this->belongsTo(Servicio::class, 'id_servicio');
     }
 
+    public function getTarea()
+    {
+        return $this->belongsTo(Tarea_prev_x_activo::class, 'id_tarea_prev_x_activo');
+    }
+
 }

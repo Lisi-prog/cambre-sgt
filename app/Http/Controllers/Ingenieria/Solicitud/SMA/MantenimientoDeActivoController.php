@@ -23,6 +23,7 @@ use App\Models\Cambre\Sol_estado_solicitud;
 use App\Models\Cambre\Sol_solicitud;
 use App\Models\Cambre\Sol_archivo_solicitud;
 use App\Models\Cambre\Sol_servicio_de_mantenimiento;
+use App\Models\Cambre\Zona_tarea_x_tipo_activo;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Activo;
 use App\Models\Cambre\Empleado;
@@ -518,7 +519,21 @@ class MantenimientoDeActivoController extends Controller
         ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $proyecto->getActivo->id_tipo_activo)
         ->get();
         $estados = Estado::orderBy('id_estado')->get();
-        
+        $elementos =  Zona_tarea_x_tipo_activo::where('zona_tarea_x_tipo_activo.id_tipo_activo', $proyecto->getActivo->id_tipo_activo)
+            ->join('zona_x_zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_x_zona_tarea.id_zona_tarea')
+            ->join('zona_x_tipo_activo', function ($join) {
+                $join->on('zona_x_zona_tarea.id_zona', '=', 'zona_x_tipo_activo.id_zona')
+                     ->on('zona_tarea_x_tipo_activo.id_tipo_activo', '=', 'zona_x_tipo_activo.id_tipo_activo');
+            })
+            ->join('zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_tarea.id_zona_tarea')
+            ->join('zona', 'zona_x_zona_tarea.id_zona', '=', 'zona.id_zona')
+            ->select(
+                'zona_tarea_x_tipo_activo.*', 
+                'zona_x_tipo_activo.id_zona',
+                'zona_tarea.nombre_zona', 
+                'zona.nombre_zona as elemento'
+            )
+            ->get();
         //todas las maquinas
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
 
@@ -532,6 +547,7 @@ class MantenimientoDeActivoController extends Controller
                         ->get();
         }
         
+        $tareas_preventivas = Serv_mant_x_tarea_mant::where('id_servicio', $id)->get();
 
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
         $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
@@ -552,7 +568,7 @@ class MantenimientoDeActivoController extends Controller
                         ->get();
         return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 
         'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento', 'estados',
-        'supervisores_admin'));
+        'supervisores_admin', 'tareas_preventivas', 'elementos'));
     }
 
     public function obtenerSupervisoresAdmin(){
