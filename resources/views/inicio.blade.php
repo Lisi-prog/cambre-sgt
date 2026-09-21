@@ -144,6 +144,14 @@
                             <span>Mecanizado</span>
                         </a>
                         @endcan
+                        @can(['VER-ORDEN-MANTENIMIENTO'])
+                        <a href="{{route('ordenes.tipo', 4)}}" class="menu-tile sombra menu-hover">
+                            <div class="menu-tile-icon ic-blue">
+                                <i class="fas fas fa-wrench m-auto p-2" style="font-size:1em;"></i>
+                            </div>
+                            <span>Mantenimiento</span>
+                        </a>
+                        @endcan
                         <a href="{{route('orden_mantenimiento.index')}}" class="menu-tile sombra menu-hover">
                             <div class="menu-tile-icon ic-amber">
                                 <i class="fas fa-hammer m-auto p-2" style="font-size:1em;"></i>

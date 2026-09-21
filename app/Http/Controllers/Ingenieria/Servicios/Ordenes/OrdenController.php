@@ -32,6 +32,7 @@ use App\Models\Cambre\Tipo_servicio;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
+use App\Models\Cambre\Estado_mantenimiento;
 use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
@@ -50,6 +51,7 @@ use App\Models\Cambre\Archivo_hdr;
 use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Parte_mecanizado;
 use App\Models\Cambre\Tipo_relacion_gantt;
+use App\Models\Cambre\Tipo_orden_mantenimiento;
 use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
@@ -1074,10 +1076,17 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mantenimiento::responsable($id_empleado)->get();
                 }
 
-                $tipo = 'Mantenimiento';
-                // $estados = $this->listarTodosLosEstadosDe(1);
+                foreach($ordenes as $om){
+                    $om->horas = $om->getOrden->getHoras();
+                }
 
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mantenimiento', compact('ordenes'));
+                $tipo = 'Mantenimiento';
+                $flt_tipos = Tipo_orden_mantenimiento::orderBy('nombre_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
+                $flt_activos = Vw_orden_mantenimiento::distinct()->orderBy('codigo_activo')->pluck('codigo_activo');
+                $flt_estados = Estado_mantenimiento::pluck('nombre_estado_mantenimiento');
+                $flt_estados->push('Disponible');
+
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mantenimiento', compact('ordenes', 'flt_tipos', 'flt_activos', 'flt_estados'));
 
                 break;
         }

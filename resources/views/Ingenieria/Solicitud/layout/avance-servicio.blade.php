@@ -90,9 +90,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                @role('SUPERVISOR')
+                @if (Auth::user()->can('VER-GESTIONAR-MANTENIMIENTO'))
                     <a id="btn-avance-gest" href="" class="btn btn-primary" target="_blank">Gestionar</a>
-                @endrole
+                @endif
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>

@@ -212,7 +212,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getActivo->codigo_activo ?? '-'}}</td>
                                             
-                                            @if (optional($Ssi->getSolicitud->getEmpleado)->id_empleado == optional(Auth::user()->getEmpleado)->id_empleado || Auth::user()->hasRole('SUPERVISOR'))
+                                            @if (Auth::user()->can('VER-GESTIONAR-MANTENIMIENTO'))
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
@@ -247,7 +247,7 @@
                                                             @endif
                                                         </div> 
                                                         <div class="row my-2">
-                                                            @if (Auth::user()->hasRole('SUPERVISOR'))
+                                                            {{-- @if (Auth::user()->hasRole('SUPERVISOR'))
                                                                 <div class="col-12">
                                                                     {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.edit', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
                                                                     {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
@@ -259,7 +259,7 @@
                                                                     {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
                                                                     {!! Form::close() !!}
                                                                 @endif
-                                                            @endif
+                                                            @endif --}}
                                                         </div>
                                                     </div>
                                                 </div>
