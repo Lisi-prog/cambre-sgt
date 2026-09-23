@@ -164,10 +164,9 @@ function recargarPartes(id, tipo_orden){
 
 function cargarModalVerPartes(id, tipo_orden){
     let html = '';
-    obtenerEstados(tipo_orden);
-    modificarModalVerPartesEstadoFechaLimite(id);
     let orden = document.getElementById('m-ver-parte-orden');
     orden.value = id;
+    modificarModalVerPartesEstadoFechaLimite(id, tipo_orden);
     let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
     
     
@@ -302,8 +301,8 @@ function cargarModalVerPartes(id, tipo_orden){
 function obtenerEstados(opcion){
     let select_estados = document.getElementById('m-ver-parte-estado');
     select_estados.innerHTML = '<option value="">Seleccionar</option>';
-    html_estados = '';
-    $.when($.ajax({
+    let html_estados = '';
+    return $.ajax({
         type: "post",
         url: '/orden/obtener-estados-de/'+opcion, 
         data: {
@@ -324,30 +323,75 @@ function obtenerEstados(opcion){
     error: function (error) {
         console.log(error);
     }
-    }));
+    });
 }
 
-function modificarModalVerPartesEstadoFechaLimite(id){
+let solicitudEstadoParte = 0;
+
+function modificarModalVerPartesEstadoFechaLimite(id, tipo_orden){
     let fecha_limite = document.getElementById('m-ver-parte-fecha-limite');
     let estado = document.getElementById('m-ver-parte-estado');
+    const guardar = document.getElementById('m-ver-parte-orden-btn');
+    const mensaje = document.getElementById('m-ver-parte-estado-mensaje');
+    const solicitud = ++solicitudEstadoParte;
     let estado_tecnico = [1, 6, 7];
-    $.when($.ajax({
+    estado.disabled = true;
+    guardar.disabled = true;
+    estado.value = '';
+    fecha_limite.value = '';
+    if (mensaje) {
+        mensaje.hidden = false;
+        mensaje.className = 'text-muted';
+        mensaje.textContent = 'Cargando estado actual...';
+    }
+    const mostrarError = function () {
+        if (solicitud !== solicitudEstadoParte) return;
+        if (mensaje) {
+            mensaje.className = 'text-danger';
+            mensaje.textContent = 'No se pudo cargar el estado. Cierre y vuelva a abrir el modal para reintentar.';
+            mensaje.hidden = false;
+        }
+    };
+    const opciones = estado.dataset.estadosPrecargados === '1' || tipo_orden === undefined
+        ? $.Deferred().resolve().promise()
+        : obtenerEstados(tipo_orden);
+
+    return opciones.then(function () {
+        if (solicitud !== solicitudEstadoParte) return;
+        return $.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id, 
         data: {
             
         },
     success: function (response) {
-
-        estado.value= response[0].id_estado;
+        if (solicitud !== solicitudEstadoParte) return;
+        if (!response || !response[0]) {
+            mostrarError();
+            return;
+        }
+        const idEstado = Number(response[0].id_estado);
+        Array.from(estado.options).forEach(function (opt) {
+            opt.hidden = false;
+            opt.disabled = false;
+            opt.style.display = '';
+        });
+        estado.value = String(idEstado);
         fecha_limite.value= response[0].fecha_limite;
+
+        if (estado.value === '') {
+            mostrarError();
+            return;
+        }
 
         if (response[0].tec){ //Si es tecnico
 
-            if (estado_tecnico.includes(response[0].id_estado)) { //si el estado del orden es uno de los validos para el tecnico
+            if (estado_tecnico.includes(idEstado)) { //si el estado del orden es uno de los validos para el tecnico
                 document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
                     if (!estado_tecnico.includes(parseInt(opt.value))) {
                         opt.style.display = 'none';
+                        opt.hidden = true;
+                        opt.disabled = true;
                     }
                 });
             }
@@ -355,17 +399,24 @@ function modificarModalVerPartesEstadoFechaLimite(id){
                 document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
                     if (opt.value != response[0].id_estado) {
                         opt.style.display = 'none';
+                        opt.hidden = true;
+                        opt.disabled = true;
                     }
                 });
 
             }
 
         }
+        estado.disabled = false;
+        guardar.disabled = false;
+        if (mensaje) mensaje.hidden = true;
     },
     error: function (error) {
+        mostrarError();
         console.log(error);
     }
-    }));
+        });
+    }, mostrarError);
 }
 
 function colorEncabezadoPartePorTipoDeOrden(tipo_orden){

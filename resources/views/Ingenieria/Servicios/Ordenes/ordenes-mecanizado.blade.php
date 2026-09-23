@@ -2,44 +2,7 @@
 @section('titulo', 'Ordenes Mecanizado')
 @section('content')
 
-<style>
-    .tableFixHead {
-       overflow-y: auto;
-       height: 300px;
-     }
-     .tableFixHead thead th {
-       position: sticky; 
-       top: 0px; 
-     }
-     #viv table {
-       border-collapse: collapse;
-       width: 100%;
-     }
-     
-     #viv th {
-       background: #ee9b27;
-     } 
-
-    #example thead input {
-        width: 100%;
-    }
-
-    .btn-primary-outline {
-        background-color: transparent;
-        border-color: transparent;
-    }
-
-    .table {
-        zoom: 100%;
-    }
-
-    table.dataTable tbody td {
-        padding: 0px 10px;
-    }
-    .col-4 {
-        padding: 5px;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/estilos-tabla.css') }}">
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
@@ -359,7 +322,7 @@
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
+@include('Ingenieria.Servicios.Ordenes.modal.ver-partes', ['estadosParte' => $estados])
 @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
 
 <script>
@@ -887,7 +850,8 @@
             success: function (res) {
                 let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
                 let rowIndex = table.row(fila).index();
-                table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+                table.cell(rowIndex, 7).data(res.nombre_estado);
+                changeTdColor();
             },
             error: function (error) {
                 console.log(error);
