@@ -3,31 +3,31 @@
 @section('content')
 
 <style>
-.tabla-ordenes {
-    width: 100%;
-    table-layout: auto;
-}
+    .tabla-ordenes {
+        width: 100%;
+        table-layout: auto;
+    }
 
-.tabla-ordenes th {
-    color: #fff;
-    text-align: center;
-    vertical-align: middle;
-}
+    .tabla-ordenes th {
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+    }
 
-.tabla-ordenes th,
-.tabla-ordenes td {
-    padding: .5rem .75rem;
-}
+    .tabla-ordenes th,
+    .tabla-ordenes td {
+        padding: .5rem .75rem;
+    }
 
-/* Reservar espacio para las columnas con textos más largos */
-.tabla-ordenes .col-proyecto,
-.tabla-ordenes .col-activo {
-    min-width: 180px;
-}
+    /* Reservar espacio para las columnas con textos más largos */
+    .tabla-ordenes .col-proyecto,
+    .tabla-ordenes .col-activo {
+        min-width: 180px;
+    }
 
-.tabla-ordenes td {
-    overflow-wrap: anywhere;
-}
+    .tabla-ordenes td {
+        overflow-wrap: anywhere;
+    }
 </style>
 
 <section class="section">

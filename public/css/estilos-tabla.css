@@ -1,0 +1,30 @@
+.tableFixHead {
+    overflow-y: auto;
+    height: 300px;
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0px;
+}
+
+#example thead input {
+    width: 100%;
+}
+
+.btn-primary-outline {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.table {
+    zoom: 100%;
+}
+
+table.dataTable tbody td {
+    padding: 0px 10px;
+}
+
+.col-4 {
+    padding: 5px;
+}

@@ -2,48 +2,7 @@
 @section('titulo', 'Ordenes Manufactura')
 @section('content')
 
-<style>
-    .tableFixHead {
-       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-       height: 300px; /* gives an initial height of 200px to the table */
-     }
-     .tableFixHead thead th {
-       position: sticky; /* make the table heads sticky */
-       top: 0px; /* table head will be placed from the top of the table and sticks to it */
-     }
-     #viv table {
-       border-collapse: collapse; /* make the table borders collapse to each other */
-       width: 100%;
-     }
-     /* #viv th,
-     #viv td {
-       padding: 8px 16px;
-       border: 1px solid #ccc;
-     }*/
-     #viv th {
-       background: #ee9b27;
-     } 
-
-    #example thead input {
-        width: 100%;
-    }
-
-    .btn-primary-outline {
-        background-color: transparent;
-        border-color: transparent;
-    }
-
-    .table {
-        zoom: 100%;
-    }
-
-    table.dataTable tbody td {
-        padding: 0px 10px;
-    }
-    .col-4 {
-        padding: 5px;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/estilos-tabla.css') }}">
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
@@ -76,24 +35,6 @@
         </div>
     </div>
     {!! Form::text('opcion_tipo', 2, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Ordenes de Manufactura</h5>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
-                </div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
-                    Carga Multiple
-                </button>
-            </div>
-        </div>
-    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -358,11 +299,10 @@
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
+@include('Ingenieria.Servicios.Ordenes.modal.ver-partes', ['estadosParte' => $estados])
 @include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
 @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
 @include('Ingenieria.Servicios.Ordenes.modal.ord-man-activar')
-{{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
     let x = '';
@@ -891,7 +831,8 @@
             success: function (res) {
                 let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
                 let rowIndex = table.row(fila).index();
-                table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+                table.cell(rowIndex, 7).data(res.nombre_estado);
+                changeTdColor();
             },
             error: function (error) {
                 console.log(error);

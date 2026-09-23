@@ -95,9 +95,13 @@
                             <div class="form-group">
                                 {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                 <span class="obligatorio">*</span>
-                                <select class="form-select" id="m-ver-parte-estado" name="estado">
+                                <select class="form-select" id="m-ver-parte-estado" name="estado" data-estados-precargados="{{ isset($estadosParte) ? '1' : '0' }}">
                                     <option selected="selected" value="">Seleccionar</option>
+                                    @foreach ($estadosParte ?? [] as $estadoParte)
+                                        <option value="{{ $estadoParte->id_estado }}">{{ $estadoParte->nombre }}</option>
+                                    @endforeach
                                 </select>
+                                <small id="m-ver-parte-estado-mensaje" class="text-muted" role="status" hidden></small>
                             </div>
                         </div>
                         
