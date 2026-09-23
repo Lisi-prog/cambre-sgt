@@ -935,7 +935,7 @@ class ProyectoController extends Controller
 
     public function guardarActualizacion(Request $request, $id){
         $this->validate($request, [
-            'm-ver-act-descripcion' => 'required',
+            // 'm-ver-act-descripcion' => 'required',
             'm-ver-act-id_estado' => 'required',
             'm-ver-act-lider' => 'required',
             'm-ver-act-fecha_limite' => 'required'
@@ -1035,7 +1035,7 @@ class ProyectoController extends Controller
     public function guardarActualizacionServicio(Request $request){
 
         $this->validate($request, [
-            'm-ver-act-descripcion' => 'required',
+            // 'm-ver-act-descripcion' => 'required',
             'm-ver-act-id_estado' => 'required',
             'm-ver-act-lider' => 'required',
             'm-ver-act-fecha_limite' => 'required'
