@@ -71,6 +71,19 @@ class Vw_parte_trabajo extends Model
     public function scopeFecha($query, $from, $to)
     {
         if ($from != '') {
+            $query->where('fecha', '>=', $from);
+        }
+
+        if ($to != '') {
+            $query->where('fecha', '<=', $to);
+        }
+
+        return $query;
+    }
+
+    /*public function scopeFecha($query, $from, $to)
+    {
+        if ($from != '') {
             return $query->where('fecha', '>=', $from);
         }
 
@@ -83,5 +96,5 @@ class Vw_parte_trabajo extends Model
         } else {
             return $query->whereBetween('fecha', [$from, $to]); 
         } 
-    }
+    }*/
 }

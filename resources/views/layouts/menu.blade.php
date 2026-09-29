@@ -155,7 +155,7 @@
                     Partes
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('partes.tipo', 1)}}" title="Trabajo">
+                    <a class="nav-link" href="{{route('ver.parte.trabajo')}}" title="Trabajo">
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>

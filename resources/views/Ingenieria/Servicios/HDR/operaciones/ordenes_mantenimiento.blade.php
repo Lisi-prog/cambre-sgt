@@ -158,7 +158,7 @@
                                                     </div>
                                                     <div class="d-flex flex-column overflow-auto">
                                                         <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
-                                                        <label><input name="res" type="checkbox" value="-" checked> NO APLICA</label>
+                                                        <label><input name="res" type="checkbox" value="-"> NO APLICA</label>
                                                         @foreach ($flt_maquinas as $maquina)
                                                             <label><input name="res" type="checkbox" value="{{$maquina}}"> {{$maquina}}</label>
                                                         @endforeach

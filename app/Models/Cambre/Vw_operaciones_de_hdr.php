@@ -45,11 +45,18 @@ class Vw_operaciones_de_hdr extends Model
         'medidas'
     ];
 
+    protected $appends = ['cantidad_hdr'];
+
     protected $casts = [
         'horas_estimada' => HoraMinutoCast::class,
         'total_horas_maquina' => HoraMinutoCast::class,
         'total_horas' => HoraMinutoCast::class
     ];
+
+    public function getCantidadHdrAttribute()
+    {
+        return $this->getHdr->cantidad ?? null;
+    }
 
     public function getMedidasAttribute()
     {
