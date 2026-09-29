@@ -1149,7 +1149,7 @@ function buscarPorFiltros(){
                     10: ope.tecnico_asignado ?? '-',
                     11: ope.total_horas ?? '-',
                     12: ope.activo ? 'SI' : 'NO',
-                    13: ope.cantidad ?? '-',
+                    13: ope.cantidad_hdr ?? '-',
                     14: opciones,
                 }).node().id = ope.id_ope_de_hdr;     
                 idCount++;

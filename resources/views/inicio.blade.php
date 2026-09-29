@@ -166,7 +166,7 @@
                 <div class="menu-section">
                     <h5>Partes</h5>
                     <div class="menu-grid">
-                        <a href="{{route('partes.tipo', 1)}}" class="menu-tile sombra menu-hover">
+                        <a href="{{route('ver.parte.trabajo')}}" class="menu-tile sombra menu-hover">
                             <div class="menu-tile-icon ">
                                 <i class="fas fa-tasks m-auto p-2" style="font-size:1em;"></i>
                             </div>
