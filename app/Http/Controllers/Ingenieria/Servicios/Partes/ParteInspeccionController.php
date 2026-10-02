@@ -26,6 +26,11 @@ class ParteInspeccionController extends Controller
 {
     public function store(Request $request)
     {
+        $request->validate([
+            'tareas' => 'nullable|array',
+            'tareas.*.ok' => 'nullable|in:ok,not_ok,no_revisa',
+        ]);
+
         try {
             DB::beginTransaction();
             $completo = isset($request->completo) ? 1 : 0;
@@ -65,6 +70,7 @@ class ParteInspeccionController extends Controller
                         $clean = trim($tarea['id'], "'");
                         $id = array_map('intval', explode('-', $clean));
                         $ok = $tarea['ok'];
+                        $resultado = ['ok' => 1, 'not_ok' => 0, 'no_revisa' => 2][$ok];
                         $accion = $tarea['accion'] ?? null;
 
                         $tarea_existe = Parte_inspe_x_elemento::where('id_zona', $id[0])
@@ -75,16 +81,16 @@ class ParteInspeccionController extends Controller
                             ->first();
 
                         if ($tarea_existe) {
-                            $tarea_existe->ok = ($ok === 'ok') ? 1 : 0;
-                            $tarea_existe->id_accion = ($ok === 'ok') ? null : $accion;
+                            $tarea_existe->ok = $resultado;
+                            $tarea_existe->id_accion = ($ok === 'not_ok') ? $accion : null;
                             $tarea_existe->save();
                         } else {
                             $tarea_nueva = new Parte_inspe_x_elemento;
                             $tarea_nueva->id_parte_inspeccion = $parte_inspeccion->id_parte_inspeccion;
                             $tarea_nueva->id_zona = $id[0];
                             $tarea_nueva->id_zona_tarea = $id[1];
-                            $tarea_nueva->ok = ($ok === 'ok') ? 1 : 0;
-                            $tarea_nueva->id_accion = ($ok === 'ok') ? null : $accion;
+                            $tarea_nueva->ok = $resultado;
+                            $tarea_nueva->id_accion = ($ok === 'not_ok') ? $accion : null;
                             $tarea_nueva->save();
                         }
                     }

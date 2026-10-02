@@ -33,7 +33,7 @@ function getTablaInspecciones() {
         if ($('#tabla_inspecciones').length > 0) {
             tabla_inspecciones = $('#tabla_inspecciones').DataTable({
                 headerCallback: function (thead) { $(thead).hide(); },
-                columnDefs: [{ className: "text-center", targets: [0, 1, 2, 3, 4] }],
+                columnDefs: [{ visible: false, targets: [4] }, { className: "text-center", targets: [0, 1, 2, 3, 4] }],
                 language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
@@ -319,234 +319,176 @@ function diagnosticoPreSubmit(tipo) {
 /* ==========================================================================
    SECCIÓN INSPECCIÓN
    ========================================================================== */
-function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proyecto) {
-    let activoFinal = nombre_activo || $("#activo").val();
-    let proyectoFinal = proyecto || $("#nombre_proyecto_i").val();
-
+function prepararModalInspeccion(id_orden, nombre_activo, proyecto, consulta) {
+    const activo = nombre_activo || $('#activo').val() || $('#herramental_inspeccion').val();
     $('#modalNuevoParteInspeccion').modal('show');
-    $("#id_orden_inspeccion").val(id_orden);
-    $("#btnGuardarNuevoParteInspeccion").show();
-    $("#previewAceptarInspeccionReview").hide();
-
-    $("#herramental_inspeccion").val(activoFinal);
-    $("#nombre_proyecto_inspeccion").val(proyectoFinal);
-    if (document.getElementById('nombreActivoInspeccion')) document.getElementById('nombreActivoInspeccion').textContent = activoFinal;
-
-    $("#horas_inspeccion, #minutos_inspeccion, #fecha_inspeccion").removeAttr('disabled');
-    $("#fecha_inspeccion").val(getFechaHoy());
-
-    let tabla = getTablaInspecciones();
-    if (tabla) tabla.clear();
-
-    $.ajax({
-        type: 'GET',
-        url: '/get-tareas-por-activo/' + id_activo,
-        success: function (data) {
-            let tabla = getTablaInspecciones();
-            if (!tabla || !data.tareas_x_activo.length) return;
-
-            let zona_actual = null;
-            let j = 0;
-            data.tareas_x_activo.forEach(tarea => {
-                let nombreZona = tarea.nombre_zona || (tarea.get_zona_tarea ? tarea.get_zona_tarea.nombre_zona : 'Sin Zona');
-                if (nombreZona !== zona_actual) {
-                    zona_actual = nombreZona;
-                    addZonaHeader(zona_actual);
-                }
-                let tareaId = tarea.id_tarea_mantenimiento || `${tarea.id_zona}-${tarea.id_zona_tarea}`;
-
-                tabla.row.add([
-                    tarea.nombre_tarea || tarea.elemento,
-                    tarea.get_ejecucion ? tarea.get_ejecucion.nombre_ejecucion : '-',
-                    `<input type="radio" name="tareas[${j}][ok]" value="ok" onchange="checkboxTareaRealizada(${j}, '${tareaId}')">
-                     <input type="hidden" name="tareas[${j}][id]" value="${tareaId}">`,
-                    `<input type="radio" onchange="checkboxTareaRealizada(${j}, '${tareaId}')" name="tareas[${j}][ok]" value="not_ok">`,
-                    `<div id="label_accion_${tareaId}">-</div>
-                     <select onchange="showSpanAviso()" required name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tareaId}">
-                        <option value="NO ACCION" hidden>Seleccionar...</option>
-                        ${$("#accion_select_div").html()}
-                     </select>`
-                ]);
-                j++;
-            });
-            tabla.draw();
-            tabla.columns.adjust();
-        }
-    });
+    $('#id_orden_inspeccion').val(id_orden);
+    $('#herramental_inspeccion').val(activo);
+    $('#nombreActivoInspeccion').text(activo);
+    $('#nombre_proyecto_inspeccion').val(proyecto || $('#nombre_proyecto_i').val());
+    $('#btnGuardarNuevoParteInspeccion').toggle(!consulta);
+    $('#previewAceptarInspeccionReview').hide();
+    $('#horas_inspeccion, #minutos_inspeccion, #fecha_inspeccion').prop('disabled', consulta);
+    $('#completado_inspeccion_value, #completado_inspeccion').prop('checked', false);
+    const hoy = new Date();
+    $('#fecha_inspeccion').val(`${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`);
+    $('#horas_inspeccion, #minutos_inspeccion').val('00');
+    getTablaInspecciones().clear().draw();
 }
 
 function addZonaHeader(nombreZona) {
-    let tabla = getTablaInspecciones();
-    if (!tabla) return;
+    const tabla = getTablaInspecciones();
+    // Conservar cinco celdas reales para que DataTables pueda redibujar y paginar.
+    const zona = tabla.row.add([nombreZona, '', '', '', '']).node();
+    $(zona).addClass('text-center fw-bold text-dark').css('background-color', '#2b56843b');
+    const encabezado = tabla.row.add(['Elemento', 'OK', 'NO OK', '<abbr title="NO REVISA">N/R</abbr>', 'Acción']).node();
+    $(encabezado).addClass('zona-columns text-light');
+    $(encabezado).find('td').css({color: '#fff', backgroundColor: '#2b5684', fontWeight: 'bold'});
+}
 
-    let zonaRow = tabla.row.add([nombreZona, "", "", "", ""]).node();
+function agregarElementoInspeccion(tarea, indice, consulta) {
+    const tabla = getTablaInspecciones();
+    const tareaId = `${tarea.id_zona}-${tarea.id_zona_tarea}`;
+    const respondida = tarea.ok !== null && tarea.ok !== undefined;
+    const estado = respondida ? Number(tarea.ok) : null;
+    const disabled = consulta ? 'disabled' : '';
+    const radio = (valor, resultado, titulo) => `<input type="radio" class="form-check-input" aria-label="${titulo}" name="tareas[${indice}][ok]" value="${valor}" ${disabled} ${estado === resultado ? 'checked' : ''} onchange="checkboxTareaRealizada(${indice}, '${tareaId}')">`;
+    const accion = estado === 0 ? (tarea.get_accion_para_tarea?.nombre_accion || '-') : '-';
+    const accionHtml = consulta ? accion : `<div id="label_accion_${tareaId}" ${estado === 0 ? 'hidden' : ''}>${estado === 2 ? 'NO REVISA' : estado === 1 ? 'No se requiere acción' : '-'}</div>
+        <select onchange="showSpanAviso()" name="tareas[${indice}][accion]" class="form-select" id="accion_${tareaId}" hidden disabled>
+            <option value="">Seleccionar...</option>${$('#accion_select_div').html()}
+        </select>`;
+    const fila = tabla.row.add([
+        tarea.get_zona?.nombre_zona || tarea.elemento || tarea.nombre_tarea,
+        radio('ok', 1, 'OK') + (consulta ? '' : `<input type="hidden" name="tareas[${indice}][id]" value="${tareaId}">`),
+        radio('not_ok', 0, 'NO OK'),
+        radio('no_revisa', 2, 'NO REVISA'),
+        accionHtml
+    ]).node();
+    if (!consulta && estado === 0) {
+        $(fila).find('select').val(tarea.id_accion_tarea ?? tarea.id_accion);
+    }
+}
 
-    $(zonaRow).find('td').eq(0).attr('colspan', 5).addClass('text-center fw-bold text-dark');
-    $(zonaRow).find('td:gt(0)').remove();
-    $(zonaRow).removeClass('odd even').attr('style', "color: #fff; background-color: #2b56843b; font-weight: bold;");
-
-    let headerRow = tabla.row.add(["Tarea / Elemento", "Ejecución", "OK", "NO OK", "Acción"]).node();
-    $(headerRow).removeClass('odd even').addClass('zona-columns text-light');
-    $(headerRow).find('td').attr('style', "color: #fff !important; background-color: #2b5684; font-weight: bold;");
+function cargarElementosInspeccion(tareas, consulta) {
+    const tabla = getTablaInspecciones();
+    tabla.clear();
+    const ordenadas = [...tareas].sort((a, b) =>
+        (a.get_zona_tarea?.nombre_zona || a.nombre_zona || '').localeCompare(b.get_zona_tarea?.nombre_zona || b.nombre_zona || '', 'es')
+    );
+    let zonaActual = null;
+    ordenadas.forEach((tarea, indice) => {
+        const zona = tarea.get_zona_tarea?.nombre_zona || tarea.nombre_zona || 'Sin Zona';
+        if (zona !== zonaActual) {
+            zonaActual = zona;
+            addZonaHeader(zona);
+        }
+        agregarElementoInspeccion(tarea, indice, consulta);
+    });
+    tabla.draw();
+    tabla.columns.adjust();
+    if (!consulta) {
+        $('#completado_inspeccion_value, #completado_inspeccion').prop('checked', validarRadios());
+    }
+    showSpanAviso();
 }
 
 function checkboxTareaRealizada(j, idTarea) {
-    const radio = $(`input[name="tareas[${j}][ok]"]:checked`).val();
-
-    if (radio === 'not_ok') {
-        $("#label_accion_" + idTarea).attr('hidden', true);
-        $("#accion_" + idTarea).removeAttr('hidden').attr('required', 'required');
+    const fila = getTablaInspecciones().rows().nodes().to$().find(`input[name="tareas[${j}][ok]"]:checked`);
+    const resultado = fila.val();
+    const select = getTablaInspecciones().rows().nodes().to$().find(`#accion_${idTarea}`);
+    const label = getTablaInspecciones().rows().nodes().to$().find(`#label_accion_${idTarea}`);
+    if (resultado === 'not_ok') {
+        label.prop('hidden', true);
+        // Acción ya no se utiliza en la carga de inspección.
+        select.prop({hidden: true, disabled: true, required: false});
     } else {
-        $("#accion_" + idTarea).attr('hidden', true).removeAttr('required');
-        $("#label_accion_" + idTarea).html('No se requiere acción').removeAttr('hidden');
+        select.val('').prop({hidden: true, disabled: true, required: false});
+        label.text(resultado === 'no_revisa' ? 'NO REVISA' : 'No se requiere acción').prop('hidden', false);
     }
-
-    let completo = validarRadios();
-    $("#completado_inspeccion_value, #completado_inspeccion").prop('checked', completo);
+    $('#completado_inspeccion_value, #completado_inspeccion').prop('checked', validarRadios());
+    showSpanAviso();
 }
 
 function validarRadios() {
-    let completos = true;
-    const grupos = {};
-    $('input[type="radio"][name^="tareas"]').each(function () {
-        grupos[$(this).attr('name')] = true;
-    });
-    for (let name in grupos) {
-        if ($(`input[name="${name}"]:checked`).length === 0) {
-            completos = false;
-            break;
-        }
-    }
-    return completos;
+    const radios = getTablaInspecciones().rows().nodes().to$().find('input[type="radio"][name^="tareas"]');
+    const grupos = new Set(radios.map(function () { return this.name; }).get());
+    return grupos.size > 0 && [...grupos].every(nombre => radios.filter(function () {
+        return this.name === nombre && this.checked;
+    }).length > 0);
+}
+
+function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proyecto) {
+    prepararModalInspeccion(id_orden, nombre_activo, proyecto, false);
+    $.get('/get-tareas-por-activo/' + id_activo, data => cargarElementosInspeccion(data.tareas_x_activo || [], false));
 }
 
 function openModalParteInspeccionPendiente(id_activo, id_orden, nombre_activo, proyecto) {
-    openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proyecto);
+    prepararModalInspeccion(id_orden, nombre_activo, proyecto, false);
+    $.get('/get-parte-inspeccion-pendiente/' + id_activo + '/' + id_orden, data =>
+        cargarElementosInspeccion(data.tareasMantenimiento || data.tareas_x_activo || [], false)
+    );
+}
 
-    $.ajax({
-        type: 'GET',
-        url: '/get-parte-inspeccion-pendiente/' + id_activo + '/' + id_orden,
-        success: function (data) {
-            let tabla = getTablaInspecciones();
-            let j = 0;
-            let tareasList = data.tareasMantenimiento || data.tareas_x_activo;
-            if (!tareasList || !tabla) return;
+function mostrarDatosParteInspeccion(parte, horas) {
+    if (!parte) return;
+    $('#fecha_inspeccion').val(parte.fecha);
+    const [hr, mn] = (horas || parte.horas || '00:00').split(':');
+    $('#horas_inspeccion').val(hr);
+    $('#minutos_inspeccion').val(mn);
+}
 
-            tabla.clear();
-            let zona_actual = null;
-
-            tareasList.forEach(tarea => {
-                let nombreZona = tarea.nombre_zona || (tarea.get_zona_tarea ? tarea.get_zona_tarea.nombre_zona : 'Sin Zona');
-                if (nombreZona !== zona_actual) {
-                    zona_actual = nombreZona;
-                    addZonaHeader(zona_actual);
-                }
-                let tareaId = tarea.id_tarea_mantenimiento || `${tarea.id_zona}-${tarea.id_zona_tarea}`;
-
-                tabla.row.add([
-                    tarea.nombre_tarea || tarea.elemento,
-                    tarea.get_ejecucion ? tarea.get_ejecucion.nombre_ejecucion : '-',
-                    `<input type="radio" name="tareas[${j}][ok]" value="ok" id="ok_${tareaId}" onchange="checkboxTareaRealizada(${j}, '${tareaId}')">
-                     <input type="hidden" name="tareas[${j}][id]" value="${tareaId}">`,
-                    `<input id="not_ok_${tareaId}" type="radio" onchange="checkboxTareaRealizada(${j}, '${tareaId}')" name="tareas[${j}][ok]" value="not_ok">`,
-                    `<div id="label_accion_${tareaId}">-</div>
-                     <select onchange="showSpanAviso()" name="tareas[${j}][accion]" class="form-select" hidden id="accion_${tareaId}">
-                        <option value="NO ACCION" hidden>Seleccionar...</option>
-                        ${$("#accion_select_div").html()}
-                     </select>`
-                ]);
-
-                if (tarea.ok === 0) {
-                    $(`#accion_${tareaId}`).val(tarea.id_accion_tarea).removeAttr('hidden').attr('required', 'required');
-                    $("#label_accion_" + tareaId).attr('hidden', true);
-                    $(`#not_ok_${tareaId}`).prop('checked', true);
-                } else if (tarea.ok == 1) {
-                    $("#label_accion_" + tareaId).html('No se requiere acción').removeAttr('hidden');
-                    $(`#ok_${tareaId}`).prop('checked', true);
-                }
-                j++;
-            });
-
-            tabla.draw();
-            tabla.columns.adjust();
-            showSpanAviso();
+function openModalVerParteInspeccion(id_orden, nombre_activo) {
+    prepararModalInspeccion(id_orden, nombre_activo, null, true);
+    $.get('/get-parte-inspeccion-completado/' + id_orden, partes => {
+        cargarElementosInspeccion(partes.flatMap(parte => parte.elementos || []), true);
+        if (partes.length) {
+            mostrarDatosParteInspeccion(partes[0].get_parte, partes[0].horas);
+            $('#completado_inspeccion').prop('checked', Number(partes[0].id_estado_mantenimiento) === 4);
         }
     });
 }
 
-function openModalVerParteInspeccion(id_orden, nombre_activo) {
-    let activoFinal = nombre_activo || $("#activo").val();
+function openModalConfirmarParteInspeccion(id_orden, nombre_activo) {
+    prepararModalInspeccion(id_orden, nombre_activo, null, true);
+    $.get('/get-parte-inspeccion/' + id_orden, data => {
+        if (!data) return;
+        cargarElementosInspeccion(data.elementos || [], true);
+        mostrarDatosParteInspeccion(data.get_parte, data.horas);
+        $('#completado_inspeccion').prop('checked', true);
+        $('#previewAceptarInspeccionReview').show();
+    });
+}
 
-    $('#modalNuevoParteInspeccion').modal('show');
-    $("#id_orden_inspeccion").val(id_orden);
-    $("#btnGuardarNuevoParteInspeccion, #previewAceptarInspeccionReview").hide();
-    $("#horas_inspeccion, #minutos_inspeccion, #fecha_inspeccion").attr('disabled', 'disabled');
-    $("#completado_inspeccion").prop('checked', true);
-    $("#herramental_inspeccion").val(activoFinal);
-    if (document.getElementById('nombreActivoInspeccion')) document.getElementById('nombreActivoInspeccion').textContent = activoFinal;
-
-    let tabla = getTablaInspecciones();
-    if (tabla) tabla.clear();
-
-    $.ajax({
-        type: 'GET',
-        url: '/get-parte-inspeccion-completado/' + id_orden,
-        success: function (data) {
-            let tabla = getTablaInspecciones();
-            if (!tabla) return;
-            let zona_actual = null;
-            let tareas = data.get_parte?.get_orden?.parte_inspe_x_tareas_mantenimiento || data;
-
-            tareas.forEach(tarea => {
-                let nombreZona = tarea.get_tarea_mantenimiento?.get_zona_tarea?.nombre_zona || 'Sin Zona';
-                if (nombreZona !== zona_actual) {
-                    zona_actual = nombreZona;
-                    addZonaHeader(zona_actual);
-                }
-
-                let isOk = tarea.ok == 1;
-                let okHtml = `<input class="form-check-input" type="radio" disabled ${isOk ? 'checked' : ''}>`;
-                let notOkHtml = `<input class="form-check-input" type="radio" disabled ${!isOk ? 'checked' : ''}>`;
-                let accionText = !isOk && tarea.get_accion_para_tarea ? tarea.get_accion_para_tarea.nombre_accion : '-';
-
-                tabla.row.add([
-                    tarea.get_tarea_mantenimiento?.nombre_tarea || tarea.elemento,
-                    tarea.get_tarea_mantenimiento?.get_ejecucion?.nombre_ejecucion || '-',
-                    okHtml,
-                    notOkHtml,
-                    accionText
-                ]);
-            });
-
-            if (data.get_parte) {
-                $("#fecha_inspeccion").val(data.get_parte.fecha);
-                let [hr, mn] = (data.horas || "00:00").split(':');
-                $("#horas_inspeccion").val(hr);
-                $("#minutos_inspeccion").val(mn);
-            }
-            tabla.draw();
-            tabla.columns.adjust();
-            showSpanAviso();
-        }
+function verParteDeInspeccion(id_parte, completado) {
+    prepararModalInspeccion(null, null, null, true);
+    $.get('/get-parte-inspeccion-porcion/' + id_parte, data => {
+        if (!data) return;
+        cargarElementosInspeccion(data.elementos || [], true);
+        mostrarDatosParteInspeccion(data.get_parte);
+        $('#completado_inspeccion').prop('checked', completado === 'Completo');
     });
 }
 
 function procesarInspeccion(accion) {
     $.ajax({
-        type: 'post',
-        url: '/procesar-parte-inspeccion',
-        data: {
-            id_orden_mantenimiento: $("#id_orden_inspeccion").val(),
-            accion: accion,
-            nombre_proyecto: $("#nombre_proyecto_i").text(),
-        },
-        success: function () {
-            $('#modalNuevoParteInspeccion').modal('hide');
-            location.reload();
-        }
+        type: 'post', url: '/procesar-parte-inspeccion',
+        data: {id_orden_mantenimiento: $('#id_orden_inspeccion').val(), accion: accion, nombre_proyecto: $('#nombre_proyecto_i').val()},
+        success: function () { location.reload(); }
     });
 }
 
+// DataTables mantiene fuera del DOM las otras páginas: incluir sus respuestas al guardar.
+$(document).ready(function () {
+    $('#form_inspeccion_alta').on('submit', function () {
+        const form = this;
+        $(form).find('.inspeccion-paginada').remove();
+        getTablaInspecciones().rows().nodes().to$().find('input, select').each(function () {
+            if (form.contains(this) || this.disabled || !this.name || (this.type === 'radio' && !this.checked)) return;
+            $('<input>', {type: 'hidden', name: this.name, value: $(this).val(), class: 'inspeccion-paginada'}).appendTo(form);
+        });
+    });
+});
 
 /* ==========================================================================
    SECCIÓN AJUSTE
