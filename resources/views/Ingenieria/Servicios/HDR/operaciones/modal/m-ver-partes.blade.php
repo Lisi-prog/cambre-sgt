@@ -123,8 +123,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
                                 {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                <span class="obligatorio">*</span>
-                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                             </div>
                         </div>
                     </div>
@@ -258,8 +257,7 @@
         aviso.hidden = true;
         aviso.textContent = '';
         const tiempos = [
-            ['horas', 'minutos', 'El tiempo de horas hombre debe ser de al menos 1 minuto.'],
-            ['horas_maquina', 'minutos_maquina', 'El tiempo de maquina debe ser de al menos 1 minuto.']
+            ['horas', 'minutos', 'El tiempo de horas hombre debe ser de al menos 1 minuto.']
         ];
 
         for (const [nombreHoras, nombreMinutos, mensaje] of tiempos) {
