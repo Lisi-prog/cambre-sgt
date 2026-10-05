@@ -176,6 +176,7 @@ class ParteController extends Controller
     }
 
     public function obtenerPartesTrabajo(Request $request){
+        $id_empleado = Auth::user()->getEmpleado->id_empleado;
         $servicios = $request->input('cod_serv');
         $respo = $request->input('res');
         $super = $request->input('sup');
@@ -183,6 +184,10 @@ class ParteController extends Controller
         $to = $request->input('fecha_hasta');
 
         $partes = Vw_parte_trabajo::orderBy('id_parte', 'desc');
+
+        if (!Auth::user()->hasRole('SUPERVISOR') || !Auth::user()->hasRole('ADMIN')) {
+            $partes->responsable([$id_empleado]);
+        }
 
         if ($request->boolean('carga_inicial')) {
             $partes->limit(25);
@@ -1009,7 +1014,7 @@ class ParteController extends Controller
 
         $this->validate($request, [
             'id_op' => 'required',
-            'observaciones' => 'required',
+            // 'observaciones' => 'required',
             'fecha' => 'required',
             'horas' => 'required',
             'minutos' => 'required',
