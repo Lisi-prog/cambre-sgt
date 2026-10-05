@@ -170,35 +170,47 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped mt-2" id="example">
+                            <table class="table table-striped table-sm" id="example">
                                 <thead>
-                                    <th class='text-center' style="color:#fff; max-width: 3vw;">Fecha</th>
-                                    <th class='text-center' style="color:#fff; max-width: 2vw;">Codigo</th>
-                                    <th class='text-center' style="color:#fff; max-width: 4vw;">Usuario</th>
-                                    <th class='text-center' style="color:#fff; max-width: 3vw;">Sector</th>
-                                    <th class='text-center' style="color:#fff;">Descripcion</th>
-                                    <th class='text-center' style="color:#fff; max-width: 3vw;">Fecha requerida</th>
-                                    <th class='text-center' style="color:#fff; max-width: 2vw;">Estado</th>
-                                    <th class='text-center' style="color:#fff; max-width: 2vw;">Prioridad</th>
-                                    <th class='text-center' style="color:#fff; max-width: 2vw;">Activo</th>
-                                    <th class='text-center' style="color: #fff; max-width: 4vw;">Acciones</th>
+                                    <th class='text-center' style="color:#fff; width: 10%;">Fecha</th>
+                                    <th class='text-center' style="color:#fff; width: 5%;">Cod.</th>
+                                    <th class='text-center' style="color:#fff; width: 15%;">Usuario</th>
+                                    <th class='text-center' style="color:#fff; width: 5%;">Sector</th>
+                                    <th class='text-center' style="color:#fff; width: 30%;">Descripcion</th>
+                                    <th class='text-center' style="color:#fff; width: 10%;">Fecha Req.</th>
+                                    <th class='text-center' style="color:#fff; width: 5%;">Estado</th>
+                                    <th class='text-center' style="color:#fff; width: 5%;">Prioridad</th>
+                                    <th class='text-center' style="color:#fff; width: 5%;">Activo</th>
+                                    <th class='text-center' style="color: #fff; width: 10%;">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
                                     @php
                                         $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado');
+                                        $usuario = Auth::user();
+                                        $esAdmin = $usuario->hasRole('ADMIN');
+                                        $esTecnico = $usuario->hasRole('TECNICO');
+                                        $esExterno = $usuario->hasRole('EXTERNO');
+                                        $idEmpleado = optional($usuario->getEmpleado)->id_empleado;
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($listaSSI as $Ssi)
                                         <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
+                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ssi->getSolicitud->fecha_carga)->format('Y-m-d')}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->id_solicitud ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSolicitud->getEmpleado->nombre_empleado ?? '-'}}</td>
+                                            <td class='' style="vertical-align: middle;">{{$Ssi->getSolicitud->getEmpleado->nombre_empleado ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getSector->nombre_sector ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;"><abbr title='{{$Ssi->getSolicitud->descripcion_solicitud}}' style="text-decoration:none; font-variant: none;">{{substr($Ssi->getSolicitud->descripcion_solicitud, 0, 20)}} <i class="fas fa-eye"></abbr></td>
+                                            <td class='' style="vertical-align: middle;">
+                                                <abbr title='{{$Ssi->getSolicitud->descripcion_solicitud}}' style="text-decoration:none; font-variant: none;">
+                                                    {{mb_substr($Ssi->getSolicitud->descripcion_solicitud, 0, 100)}}
+                                                    @if (mb_strlen($Ssi->getSolicitud->descripcion_solicitud) > 100)
+                                                        <i class="fas fa-eye"></i>
+                                                    @endif
+                                                </abbr>
+                                            </td>
 
                                             @if (is_null($Ssi->getSolicitud->fecha_requerida))
                                                 <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
@@ -212,7 +224,7 @@
 
                                             <td class='text-center' style="vertical-align: middle;">{{$Ssi->getActivo->codigo_activo ?? '-'}}</td>
                                             
-                                            @if (Auth::user()->can('VER-GESTIONAR-MANTENIMIENTO'))
+                                            @if ($esAdmin || $esTecnico || ($esExterno && $idEmpleado !== null && $Ssi->getSolicitud->id_empleado == $idEmpleado))
                                             <td>
                                                 <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
@@ -223,20 +235,20 @@
                                                     <div class="collapse" data-bs-parent="#accordion" id="collapseSSI{{$idCount}}">
                                                         <div class="row my-2">
                                                             <div class="col-12">
-                                                                @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                @else
-                                                                    @can('EVALUAR-SOLICITUD')
+                                                                {!! Form::open(['method' => 'GET', 'route' => ['s_s_i.show', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
+                                                                {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
+                                                                {!! Form::close() !!}
+                                                            </div>
+                                                        </div>
+                                                        @if ($esAdmin && $Ssi->getSolicitud->id_estado_solicitud < $id_estado_aceptado)
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
                                                                         {!! Form::open(['method' => 'GET', 'route' => ['ssi.evaluar', $Ssi->id_servicio_de_ingenieria], 'style' => 'display:inline']) !!}
                                                                         {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
                                                                         {!! Form::close() !!}
-                                                                    @endcan
-                                                                @endif
+                                                                </div>
                                                             </div>
-                                                            
-                                                        </div> 
+                                                        @endif
                                                         <div class="row my-2">
                                                             @if ($Ssi->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
                                                                 <div class="col-12">
