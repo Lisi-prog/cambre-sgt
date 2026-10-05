@@ -976,6 +976,10 @@ class ProyectoController extends Controller
         //Actualizamos el lider del proyecto
         $servicio = Servicio::where('id_servicio', $id)->first();
 
+        if ($id_estado == 10) {
+            $servicio->cancelarOrdenesMantenimientoPendientes($responsabilidad->id_responsabilidad, $fecha_carga);
+        }
+
         if ($act_eta_com) {
             $etapas_a_actualizar = Vw_etapa::where('id_servicio', $id)->whereNotIn('id_estado', [9, 10])->get();
 
@@ -1080,6 +1084,10 @@ class ProyectoController extends Controller
 
             //Actualizamos el lider del proyecto
             $servicio = Servicio::where('id_servicio', $id)->first();
+
+            if ($id_estado == 10) {
+                $servicio->cancelarOrdenesMantenimientoPendientes($responsabilidad->id_responsabilidad, $fecha_carga);
+            }
 
             if ($act_eta_com) {
                 $etapas_a_actualizar = Vw_etapa::where('id_servicio', $id)->whereNotIn('id_estado', [9, 10])->get();
