@@ -416,7 +416,7 @@
                     "pageLength": 100
             });
         
-        $('input:checkbox').on('change', function () {
+        $('#demo input:checkbox').on('change', function () {
             table.draw();
         });
         
