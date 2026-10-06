@@ -118,38 +118,12 @@
                     </div>
                 </div>
             </div>
-
-            {{-- <div class="row">
-                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-5">
-                                </div>
-                                <div class="col-2">
-                                    <div class="row">
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-5 d-flex">
-                                    <div class="ms-auto">
-                                        {!! Form::open(['method' => 'GET', 'route' => 's_s_i.index', 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </section>
 
     <script>
         $(document).ready(function () {
             var url = '{{url('/s_s_i')}}';
-            //url = url.replace(':id_servicio', id_servicio);
             document.getElementById('volver').href = url;
         });
     </script>
