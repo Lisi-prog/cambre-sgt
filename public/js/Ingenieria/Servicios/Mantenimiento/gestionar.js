@@ -32,7 +32,6 @@ function cargarModalVerPartes(id, tipo_orden){
             id: id,
         },
     success: function (response) {
-        // console.log(response)
         let maq_y_hora = '';
         let idCount = 0;
         let urlLogParte = "/parte/";

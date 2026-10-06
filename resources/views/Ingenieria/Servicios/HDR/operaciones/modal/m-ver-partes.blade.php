@@ -123,8 +123,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
                                 {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                <span class="obligatorio">*</span>
-                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                             </div>
                         </div>
                     </div>
@@ -163,11 +162,7 @@
                                         class="form-control" 
                                         name="minutos" 
                                         type="number" 
-                                        @role('TECNICO') 
-                                            min="1" 
-                                        @else 
-                                            min="0" 
-                                        @endrole 
+                                        min="0"
                                         max="59" 
                                         value="00" 
                                         id="minutos"
@@ -204,11 +199,7 @@
                                         class="form-control" 
                                         name="minutos_maquina" 
                                         type="number" 
-                                        @role('TECNICO') 
-                                            min="1" 
-                                        @else 
-                                            min="0" 
-                                        @endrole  
+                                        min="0"
                                         max="59" 
                                         value="00" 
                                         id="minutos_maquina"
@@ -242,6 +233,8 @@
                 </div>
             </div>
 
+            <div id="error-tiempo-parte" class="alert alert-danger mx-3" role="alert" hidden></div>
+
             <div id="alert" class="mx-3">
                 
             </div>
@@ -257,3 +250,34 @@
 </div>
 
 <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script>
+@role('TECNICO')
+<script>
+    document.getElementById('form-nuevo-parte').addEventListener('submit', function (event) {
+        const aviso = document.getElementById('error-tiempo-parte');
+        aviso.hidden = true;
+        aviso.textContent = '';
+        const tiempos = [
+            ['horas', 'minutos', 'El tiempo de horas hombre debe ser de al menos 1 minuto.']
+        ];
+
+        for (const [nombreHoras, nombreMinutos, mensaje] of tiempos) {
+            const horas = this.elements.namedItem(nombreHoras);
+            const minutos = this.elements.namedItem(nombreMinutos);
+
+            if (horas.valueAsNumber * 60 + minutos.valueAsNumber < 1) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                aviso.textContent = mensaje;
+                aviso.hidden = false;
+                minutos.focus();
+                aviso.scrollIntoView({ block: 'nearest' });
+                return;
+            }
+        }
+    }, true);
+
+    $('#verPartesOpeHdrModal').on('hidden.bs.modal', function () {
+        document.getElementById('error-tiempo-parte').hidden = true;
+    });
+</script>
+@endrole

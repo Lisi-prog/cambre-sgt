@@ -428,28 +428,12 @@
 
     <script src="{{ asset('js/change-td-color.js') }}"></script>
     <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
-    {{-- <script src="{{ asset('js/change-td-color.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
-    <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
-    <script src="{{ asset('js/filter-to-filter.js') }}"></script>
-    <script type="module" > 
-        import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
-        window.crearCuadrOrdenes = crearCuadrOrdenes;
-        window.cargarModalVerOrden = cargarModalVerOrden;
-        window.obtenerPartes = obtenerPartes;
-        window.modificarFormularioConArgumentos= modificarFormularioConArgumentos;
-        window.cargarModalEditarOrden = cargarModalEditarOrden;
-        window.colorEncabezadoPorTipoDeOrden = colorEncabezadoPorTipoDeOrden;
-    </script> --}}
 </section>
 
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-partes')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-carga-multiple')
 @include('Ingenieria.Servicios.HDR.operaciones.modal.m-ver-hdr')
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
-{{-- @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.ver-partes') --}}
 
 <script type="module" > 
         import {cargarModalVerOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';

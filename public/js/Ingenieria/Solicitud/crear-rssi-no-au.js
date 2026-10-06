@@ -48,40 +48,6 @@ function agregarUrgencia(){
 
 let enviando = false;
 
-/* document.getElementById('btn-guardar').addEventListener('click', function () {
-
-    if (enviando) return;
-
-    let tabActiva = document.querySelector('.tab-pane.active');
-    let form = null;
-
-    if (tabActiva.id === 'asistencia') {
-        form = document.getElementById('form-asistencia');
-    }
-
-    if (tabActiva.id === 'mantenimiento') {
-        form = document.getElementById('form-mantenimiento');
-    }
-
-    if (!form) return;
-
-    if (form.id === 'form-mantenimiento') {
-        const checkeados = form.querySelectorAll('input[name="sintomas[]"]:checked');
-
-        if (checkeados.length === 0) {
-            alert('Debe seleccionar al menos un síntoma.');
-            return;
-        }
-    }
-
-    enviando = true;
-
-    this.disabled = true;
-    this.innerHTML = 'Guardando...';
-
-    form.requestSubmit(); // ✅ clave
-}); */
-
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('invalid', () => {
         enviando = false;
@@ -118,27 +84,21 @@ function cargarSintomas(){
                                 </div>
                             </div>`;
                 } else {
-                    Object.entries(res).forEach(([idTipo, infoTipo]) => {
-                        let html_sintomas = '';
-                        infoTipo.sintomas.forEach(s => {
-                            html_sintomas += `<label class="ms-3"><input class="" name="sintomas[]" type="checkbox" value="${s.id}"> ${s.nombre}</label>`
-                        });
-
-                        html += `<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                            <div class="row">
-                                                <div class="d-flex flex-row align-items-start justify-content-around">
-                                                    <div class="card-body d-flex flex-column" style="max-height: 200px;">
-                                                        <div class="">
-                                                            <label>${infoTipo.tipo}:</label>
-                                                        </div>
-                                                        <div class="d-flex flex-column overflow-auto">
-                                                            ${html_sintomas}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>`
+                    const sintomas = Object.values(res)
+                        .flatMap(infoTipo => infoTipo.sintomas)
+                        .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+                    let html_sintomas = '';
+                    sintomas.forEach(s => {
+                        html_sintomas += `<label class="mb-0"><input name="sintomas[]" type="checkbox" value="${s.id}"> ${s.nombre}</label>`;
                     });
+
+                    html += `<div class="col-12">
+                                <div class="card-body overflow-auto" style="max-height: 200px;">
+                                    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 16px; overflow-wrap: anywhere;">
+                                        ${html_sintomas}
+                                    </div>
+                                </div>
+                            </div>`;
                 }
 
                 document.getElementById('sintomas-activo').innerHTML = html;

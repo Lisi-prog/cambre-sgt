@@ -168,6 +168,39 @@ class ParteController extends Controller
         return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'editable', 'flt_serv', 'flt_resp', 'flt_sup', 'servicios', 'respo', 'super', 'from', 'to'));
     }
 
+    public function verPartesTrabajo(){
+        $flt_servicios = $this->obtenerCodigoServicio();
+        $flt_responsable = $this->obtenerEmpleados();
+        $flt_supervisor = $this->obtenerSupervisores();
+        return view('Ingenieria.Servicios.Partes.Trabajo.index', compact('flt_servicios', 'flt_responsable', 'flt_supervisor'));
+    }
+
+    public function obtenerPartesTrabajo(Request $request){
+        $id_empleado = Auth::user()->getEmpleado->id_empleado;
+        $servicios = $request->input('cod_serv');
+        $respo = $request->input('res');
+        $super = $request->input('sup');
+        $from = $request->input('fecha_desde');
+        $to = $request->input('fecha_hasta');
+
+        $partes = Vw_parte_trabajo::orderBy('id_parte', 'desc');
+
+        if (!Auth::user()->hasRole('SUPERVISOR') || !Auth::user()->hasRole('ADMIN')) {
+            $partes->responsable([$id_empleado]);
+        }
+
+        if ($request->boolean('carga_inicial')) {
+            $partes->limit(25);
+        } else {
+            $partes->servicio($servicios)
+                ->responsable($respo)
+                ->supervisor($super)
+                ->fecha($from, $to);
+        }
+        
+        return $partes->orderBy('id_parte', 'desc')->get();
+    }
+
     public function obtenerCodigoServicio(){
         return Servicio::orderBy('prioridad_servicio')->get(['id_servicio', 'codigo_servicio']);
     }
@@ -599,6 +632,10 @@ class ParteController extends Controller
             ];
     }
 
+    public function obtenerUnaParteTrabajo($id){
+        return Vw_parte_trabajo::where('id_parte', $id)->first();
+    }
+
     public function obtenerParteOpeHdr($id){
         $parte = Parte_ope_hdr::find($id);
 
@@ -977,7 +1014,7 @@ class ParteController extends Controller
 
         $this->validate($request, [
             'id_op' => 'required',
-            'observaciones' => 'required',
+            // 'observaciones' => 'required',
             'fecha' => 'required',
             'horas' => 'required',
             'minutos' => 'required',
