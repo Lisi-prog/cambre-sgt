@@ -257,8 +257,9 @@
     </div>
 </div>
 
-<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script>
-@role('TECNICO')
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js')) }}"></script>
+{{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script> --}}
+{{-- @role('TECNICO')
 <script>
     document.getElementById('form-nuevo-parte').addEventListener('submit', function (event) {
         const aviso = document.getElementById('error-tiempo-parte');
@@ -288,4 +289,4 @@
         document.getElementById('error-tiempo-parte').hidden = true;
     });
 </script>
-@endrole
+@endrole --}}
