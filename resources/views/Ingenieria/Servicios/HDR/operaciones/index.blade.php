@@ -1106,6 +1106,7 @@
                 }
                 document.getElementById('body_ver_parte_ope').innerHTML = html;
                 document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
+                document.getElementById('mv-ubicacion').value = response.ubicacion ?? '-';
                 document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
                 document.getElementById('mv-estado').value = response.partes_ope[0].estado;
                 document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;

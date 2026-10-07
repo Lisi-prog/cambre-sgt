@@ -2443,6 +2443,7 @@ class OrdenController extends Controller
             'partes_ope' => $partes_arr,
             'medida_chk' => $op->getMedidaEstado(),
             'operaciones_hdr' => $opes,
+            'ubicacion' => $op->getHdr->ubicacion ?? null,
             'prox_ope' => $prox_ope
         ];
     }
