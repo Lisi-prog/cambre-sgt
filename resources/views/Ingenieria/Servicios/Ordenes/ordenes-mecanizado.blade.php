@@ -48,91 +48,109 @@
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('demo')">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
                         <div class="row" id="demo" hidden>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
+                                                        @foreach ($servicios as $servicio)
+                                                            <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                @foreach ($servicios as $servicio)
-                                                    <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
-                                                @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Manufactura:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="sup"> (Seleccionar todo)</label>
+                                                        @foreach ($manufacturas as $man)
+                                                            @if (!empty($flt_ord))
+                                                                <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" {{$man->id_orden_manufactura == $flt_ord ? 'checked' : ''}}> {{$man->manufactura ?? '-'}}</label>
+                                                            @else
+                                                                <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Estado:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
+                                                        @foreach ($estados as $estado)
+                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre}}" {{$estado->nombre == 'Completo' || $estado->nombre == 'Cancelado' ? '' : 'checked'}}> {{$estado->nombre}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
+                                                        @foreach ($operaciones as $ope)
+                                                            <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}"> {{$ope->ope_act ?? '-'}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('respo', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="respo"> (Seleccionar todo)</label>
+                                                        @foreach ($responsables as $re)
+                                                            <label><input name="respo" type="checkbox" value="{{$re ?? '-'}}"> {{$re ?? '-'}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Manufactura:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="sup"> (Seleccionar todo)</label>
-                                                @foreach ($manufacturas as $man)
-                                                    @if (!empty($flt_ord))
-                                                        <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" {{$man->id_orden_manufactura == $flt_ord ? 'checked' : ''}}> {{$man->manufactura ?? '-'}}</label>
-                                                    @else
-                                                        <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Estado:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
-                                                @foreach ($estados as $estado)
-                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre}}" {{$estado->nombre == 'Completo' || $estado->nombre == 'Cancelado' ? '' : 'checked'}}> {{$estado->nombre}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
-                                                @foreach ($operaciones as $ope)
-                                                    <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}"> {{$ope->ope_act ?? '-'}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('respo', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="respo"> (Seleccionar todo)</label>
-                                                @foreach ($responsables as $re)
-                                                    <label><input name="respo" type="checkbox" value="{{$re ?? '-'}}"> {{$re ?? '-'}}</label>
-                                                @endforeach
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column">
+                                                {!! Form::label('Opciones:') !!}
+                                                <div class="form-check">
+                                                    <input name="snHdr" class="form-check-input" type="checkbox" value="1" id="snHdr">
+                                                    <label class="form-check-label" for="snHdr">
+                                                        Sin Hoja de Ruta.
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -174,7 +192,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ordenes as $orden)
-                                        <tr data-id="{{$orden->id_orden}}">
+                                        <tr data-id="{{$orden->id_orden}}" data-tiene-hdr="{{$ordenesConHdr->has($orden->id_orden) ? '1' : '0'}}">
                                             <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
                                                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                                                   <input class="form-check-input" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]">
@@ -458,6 +476,14 @@
             return false;
             }
         );
+        $.fn.dataTable.ext.search.push(function(settings, searchData, index) {
+            if (settings.nTable.id !== 'example' || !$('#snHdr').prop('checked')) {
+                return true;
+            }
+
+            return settings.aoData[index].nTr.getAttribute('data-tiene-hdr') === '0';
+        });
+
         table = $('#example').DataTable({
                 language: {
                         lengthMenu: 'Mostrar _MENU_ registros por pagina',

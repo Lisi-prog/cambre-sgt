@@ -1062,30 +1062,29 @@
             data: {
                 id: id,
             },
-            success: function (response) {
-                // console.log(response)
-                let ultParte = response.partes_ope.length - 1;
+            success: function (res) {
+                let ultParte = res.partes_ope.length - 1;
                 let idCount = 0;
-                response.partes_ope.forEach(element => {
+                res.partes_ope.forEach(element => {
                     html += `<tr>
-                            <td class="text-center" style="vertical-align: middle;">`+element.id_parte+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+element.horas_maquina+`</td>
-                            <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                            <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
+                            <td class="text-center" style="vertical-align: middle;">${element.id_parte}</td>
+                            <td class="text-center" style="vertical-align: middle;">${element.fecha}</td>
+                            <td class="text-center" style="vertical-align: middle;">${element.estado}</td>
+                            <td class="text-center" style="vertical-align: middle;">${element.horas}</td>
+                            <td class="text-center" style="vertical-align: middle;">${element.horas_maquina}</td>
+                            <td class="text-center" style="vertical-align: middle;"><abbr title="${element.observaciones}" style="text-decoration:none; font-variant: none;">${(element.observaciones ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center" style="vertical-align: middle;">${element.responsable}</td>
+                            <td class="text-center" style="vertical-align: middle;">${element.medidas}</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
-                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOpe`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOpe${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                         Opciones
                                     </button>
                                 </div>
-                                <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOpe`+idCount+`">
+                                <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOpe${idCount}">
                                     <div class="row">
                                         <div class="col-12 my-1">
-                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(${element.id_parte})">
                                                 Editar
                                             </button>
                                         </div>
@@ -1099,17 +1098,18 @@
                     idCount ++;
                 });
 
-                if (response.medida_chk) {
+                if (res.medida_chk) {
                     document.getElementById('section-medida').hidden = true;
                 } else {
                     document.getElementById('section-medida').hidden = false;
                 }
                 document.getElementById('body_ver_parte_ope').innerHTML = html;
-                document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
-                document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
-                document.getElementById('mv-estado').value = response.partes_ope[0].estado;
-                document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
-                obtenerMaquinasPorOpe(response.partes_ope[0].id_operacion);
+                document.getElementById('mv-operacion').value = res.partes_ope[0].operacion;
+                document.getElementById('mv-ubicacion').value = res.ubicacion ?? '-';
+                document.getElementById('mv-ord-mec').value = res.partes_ope[0].orden_mec;
+                document.getElementById('mv-estado').value = res.partes_ope[0].estado;
+                document.getElementById('m-ver-parte-estado').value = res.partes_ope[ultParte].id_estado;
+                obtenerMaquinasPorOpe(res.partes_ope[0].id_operacion);
         },
         complete: function(){
             changeTdColor();
@@ -1124,24 +1124,19 @@
         let select_estados = document.getElementById('m-ver-parte-estado');
         select_estados.innerHTML = '<option value="">Seleccionar</option>';
         html_estados = '';
-        $.when($.ajax({
+        $.ajax({
             type: "post",
-            url: '/orden/obtener-estados-de/'+opcion, 
-            data: {
-            },
-            success: function (response) {
-                response.forEach(element => {
-                    html_estados += `
-                                        <option value="`+element.id_estado+`">`+element.nombre
-                                        +`</option> 
-                                        `
+            url: '/orden/obtener-estados-de/'+opcion,
+            success: function (res) {
+                res.forEach(e => {
+                    html_estados += `<option value="${e.id_estado}">${e.nombre}</option>`;
                 });
                 select_estados.innerHTML += html_estados;
             },
             error: function (error) {
                 console.log(error);
             }
-        }));
+        });
     }
 
     function obtenerMaquinasPorOpe(id){
@@ -1151,19 +1146,14 @@
         let select_maq = null;
         $.ajax({
             type: "post",
-            url: '/operacion/obtener-maquinas-ope-de/'+id, 
-            data: {
-            },
+            url: '/operacion/obtener-maquinas-ope-de/'+id,
             success: function (res) {
                 if (res.length == 1) {
                     select_maq = 'selected';
                 }
 
                 res.forEach(element => {
-                    html_maquinas += `
-                                       <option value="`+element.id_maquinaria+`" ${select_maq}>`+element.codigo_maquinaria
-                                        +`</option> 
-                                        `
+                    html_maquinas += `<option value="${element.id_maquinaria}" ${select_maq}>${element.codigo_maquinaria}</option>`;
                 });
                 select_maquinas.innerHTML += html_maquinas;
             },
@@ -1179,28 +1169,28 @@
             type: "post",
             url: '/orden/mec/hdr/obtener-hdr/'+id,
             data: { id: id },
-            success: function (response) {
-                // console.log(response);
-                document.getElementById('m_ver_ubi').value = response.ubicacion;
-                document.getElementById('m_ver_cant').value = response.cantidad;
-                document.getElementById('m_ver_fec_carga').value = response.fecha_requerida;
-                document.getElementById('m_ver_ruta').value = response.ruta;
-                document.getElementById('m_ver-obser').value = response.observaciones;
-                document.getElementById('m_ver_id_pieza').value = response.nombre_orden;
-                document.getElementById('m_ver_confec').value = response.supervisor;
+            success: function (res) {
+                document.getElementById('m_ver_ubi').value = res.ubicacion;
+                document.getElementById('m_ver_cant').value = res.cantidad;
+                document.getElementById('m_ver_fec_carga').value = res.fecha_requerida;
+                document.getElementById('m_ver_ruta').value = res.ruta;
+                document.getElementById('m_ver-obser').value = res.observaciones;
+                document.getElementById('m_ver_id_pieza').value = res.nombre_orden;
+                document.getElementById('m_ver_confec').value = res.supervisor;
 
-                if (response.obser_fallo) {
+                if (res.obser_fallo) {
                     document.getElementById('obser-fallo').hidden = false;
                 }
 
                 document.getElementById('ver-table-body').innerHTML = '';
-                response.operaciones.forEach(function (op){
+
+                res.operaciones.forEach(function (op){
                     html += `<tr>
-                            <td class="text-center">`+op.numero+`</td>
-                            <td class="text-center">`+op.operacion+`</td>
-                            <td class="text-center">`+op.asignado+`</td>
-                            <td class="text-center">`+op.maquina ?? '-'+`</td>
-                        </tr>`
+                                <td class="text-center">${op.numero}</td>
+                                <td class="text-center">${op.operacion}</td>
+                                <td class="text-center">${op.asignado}</td>
+                                <td class="text-center">${op.maquina ?? '-'}</td>
+                            </tr>`;
                 });
                 document.getElementById('ver-table-body').innerHTML = html;
             },
@@ -1219,8 +1209,8 @@
             data: {
                 id: id_ope,
             },
-            success: function (response) {
-                response.forEach(e => {
+            success: function (res) {
+                res.forEach(e => {
                     let fila = $('#example tbody tr[data-id="' + e.id_ope_de_hdr + '"]');
                     let rowIndex = table.row(fila).index();
 

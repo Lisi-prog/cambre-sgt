@@ -635,6 +635,7 @@
                 var url_php = $(this).attr("action"); 
                 var type_method = $(this).attr("method"); 
                 var form_data = $(this).serialize();
+                const estadoEnviado = $(this).find('[name="m-ver-act-id_estado"]').val();
                 let html = '';
                 $.ajax({
                     type: type_method,
@@ -645,6 +646,10 @@
                         opcion = parseInt(data.resultado);
                         switch (opcion) {
                             case 1:
+                                if (Number(estadoEnviado) === 10) {
+                                    window.location.reload();
+                                    return;
+                                }
                                 html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
                                                 Actualizacion creado con exito.
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

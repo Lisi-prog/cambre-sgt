@@ -1,4 +1,4 @@
-$(document).ready(function () { 
+$(function(){
 
     $('#verPartesOpeHdrModal').on('hidden.bs.modal', function (e) {
         nuevoParte();
@@ -20,7 +20,6 @@ $(document).ready(function () {
                         table.cell(rowIndex, 8).data(e.nombre_estado_hdr);
 
                     });
-                    // table.draw(false);
                     changeTdColor();
                 },
                 error: function (error) {
@@ -38,7 +37,6 @@ $(document).ready(function () {
         var type_method = $(this).attr("method"); 
         var form_data = $(this).serialize();
         let html = '';
-        // let id_orden = document.getElementById('m-ver-parte-orden').value;
         $.ajax({
             type: type_method,
             url: url_php,
@@ -95,26 +93,25 @@ function editarParte(id){
     document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id;
     document.getElementById('m-ver-parte-div').className = document.getElementById('m-ver-parte-div').className.replace( /(?:^|\s)border-warning(?!\S)/g , ' border-primary');
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/parte-ope-hdr/obtener-una/'+id, 
         data: {
             id: id,
         },
-        success: function (response) {
-            // console.log(response);
-            document.getElementById('observaciones').value = response.observaciones;
-            document.getElementById('m-ver-parte-estado').value = response.estado;
-            document.getElementById('fecha').value = response.fecha;
+        success: function (res) {
+            document.getElementById('observaciones').value = res.observaciones;
+            document.getElementById('m-ver-parte-estado').value = res.estado;
+            document.getElementById('fecha').value = res.fecha;
 
-            [hora, minutos] = response.horas.split(':');
+            [hora, minutos] = res.horas.split(':');
 
             document.getElementById('horas').value = hora;
             document.getElementById('minutos').value = minutos;
             document.getElementById('m-editar').value = 1;
-            document.getElementById('m-id-parte-ope').value = response.id_parte_ope_hdr;
+            document.getElementById('m-id-parte-ope').value = res.id_parte_ope_hdr;
 
-            if (response.medidas === 'SI') {
+            if (res.medidas === 'SI') {
                 document.getElementById('checkDefaultMed').checked = true;
             }else{
                 document.getElementById('checkDefaultMed').checked = false;
@@ -125,7 +122,7 @@ function editarParte(id){
         error: function (error) {
             console.log(error);
         }
-    }));
+    });
 }
 
 function nuevoParte(){
@@ -144,12 +141,9 @@ function nuevoParte(){
     let ope_hdr = document.getElementById('m-id-ope-hdr').value;
     document.getElementById('mv-arch-cam').value = '';
     seleccionarEstadoOperacion(ope_hdr);
-    // modificarModalVerPartesEstadoFechaLimite(id_orden);
-    
 }
 
 function seleccionarEstadoOperacion(id) {
-    // console.log(id);
     $.ajax({
         type: "post",
         url: '/ope-hdr/obtener-estado/'+id, 
@@ -179,24 +173,24 @@ function actualizarPartesOpe(id){
             let idCount = 0;
             response.forEach(element => {
                 html += `<tr>
-                        <td class="text-center" style="vertical-align: middle;">`+element.id_parte_ope_hdr+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.horas_maquina+`</td>
-                        <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
+                        <td class="text-center" style="vertical-align: middle;">${element.id_parte_ope_hdr}</td>
+                        <td class="text-center" style="vertical-align: middle;">${element.fecha}</td>
+                        <td class="text-center" style="vertical-align: middle;">${element.estado}</td>
+                        <td class="text-center" style="vertical-align: middle;">${element.horas}</td>
+                        <td class="text-center" style="vertical-align: middle;">${element.horas_maquina}</td>
+                        <td class="text-center" style="vertical-align: middle;"><abbr title="${element.observaciones}" style="text-decoration:none; font-variant: none;">${(element.observaciones ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                        <td class="text-center" style="vertical-align: middle;">${element.responsable}</td>
+                        <td class="text-center" style="vertical-align: middle;">${element.medidas}</td>
                         <td class="text-center">
                             <div class="row justify-content-center" >
-                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenesOpe`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenesOpe${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                     Opciones
                                 </button>
                             </div>
-                            <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOrdenesOpe`+idCount+`">
+                            <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOrdenesOpe${idCount}">
                                 <div class="row">
                                     <div class="col-12 my-1">
-                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte_ope_hdr+`)">
+                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(${element.id_parte_ope_hdr})">
                                             Editar
                                         </button>
                                     </div>
@@ -208,7 +202,6 @@ function actualizarPartesOpe(id){
             });
             document.getElementById('body_ver_parte_ope').innerHTML = html;
             changeTdColor();
-            // document.getElementById('mv-estado').value = response[0].estado_orden;
         },
         error: function (error) {
             console.log(error);

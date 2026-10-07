@@ -44,39 +44,39 @@ function cargarModalVerPartes(id, tipo_orden){
             }
             
             if(tipo_orden == 3){
-                maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                  <td class="text-center">`+element.horas_maquinaria+`</td>
+                maq_y_hora = `<td class="text-center">${element.maquinaria}</td>
+                                  <td class="text-center">${element.horas_maquinaria}</td>
                                  `
             }
 
             html += `<tr>
-                        <td class="text-center">`+element.id_parte+`</td>
-                        <td class="text-center">`+element.fecha+`</td>
-                        <td class="text-center">`+fecha_lim+`</td>
-                        <td class="text-center">`+element.estado+`</td>
-                        <td class="text-center">`+element.horas+`</td>
-                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>
-                        `+maq_y_hora+`
-                        <td class="text-center">`+element.supervisor+`</td>
+                        <td class="text-center">${element.id_parte}</td>
+                        <td class="text-center">${element.fecha}</td>
+                        <td class="text-center">${fecha_lim}</td>
+                        <td class="text-center">${element.estado}</td>
+                        <td class="text-center">${element.horas}</td>
+                        <td class="text-center"><abbr title="${element.observaciones}" style="text-decoration:none; font-variant: none;">${(element.observaciones ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                        <td class="text-center">${element.responsable}</td>
+                        ${maq_y_hora}
+                        <td class="text-center">${element.supervisor}</td>
                         <td class="text-center">
                             <div class="row justify-content-center" >
-                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                     Opciones
                                 </button>
                             </div>
-                            <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+                            <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes${idCount}">
 
                                 <div class="row">
                                     <div class="col-12">
-                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(${element.id_parte})">
                                             Editar
                                         </button>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <a href='`+urlLogParte+element.id_parte+`/logs' target="_blank">
+                                        <a href='${urlLogParte+element.id_parte}/logs' target="_blank">
                                             <button type="button" class="btn btn-warning w-100" >
                                                 Logs
                                             </button>
@@ -131,28 +131,19 @@ function obtenerEstados(opcion){
     let select_estados = document.getElementById('m-ver-parte-estado');
     select_estados.innerHTML = '<option value=0>Seleccionar</option>';
     html_estados = '';
-    $.when($.ajax({
+    $.ajax({
         type: "post",
-        url: '/orden/obtener-estados-de/'+opcion, 
-        data: {
-            
+        url: '/orden/obtener-estados-de/'+opcion,
+        success: function (response) {
+            response.forEach(element => {
+                html_estados += `<option value="${element.id_estado}">${element.nombre}</option>`;
+            });
+            select_estados.innerHTML += html_estados;
         },
-    success: function (response) {
-        // console.log(response);
-        response.forEach(element => {
-            html_estados += `
-                                <option value="`+element.id_estado+`">`+element.nombre
-                                +`</option> 
-                                `
-        });
-        select_estados.innerHTML += html_estados;
-       /* c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
-        c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : ''; */
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }
 
 function modificarModalVerPartesEstadoFechaLimite(id){
@@ -221,75 +212,70 @@ function obtenerMaquinaria(){
     select_maquinaria.innerHTML = '<option value=0>Seleccionar</option>';
     html_maquinaria = '';
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
-        url: '/maquinaria/obtener-maquinarias', 
-        data: {
-            
+        url: '/maquinaria/obtener-maquinarias',
+        success: function (response) {
+            response.forEach(element => {
+                html_maquinaria += `<option value="${element.id_maquinaria}">${element.codigo_maquinaria}</option>`;
+            });
+            select_maquinaria.innerHTML += html_maquinaria;
         },
-    success: function (response) {
-        response.forEach(element => {
-            html_maquinaria += `
-                                <option value="`+element.id_maquinaria+`">`+element.codigo_maquinaria
-                                +`</option> 
-                                `
-        });
-        select_maquinaria.innerHTML += html_maquinaria;
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }
 
 function recargarPartes(id, tipo_orden){
     document.getElementById('body_ver_parte').innerHTML = '';
     let html = '';
     
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/parte/obtener/'+id, 
         data: {
             id: id,
         },
-        success: function (response) {
-            // console.log(response)
+        success: function (res) {
             let maq_y_hora = '';
             let idCount = 0;
-            response.forEach(element => {
-                if (element.fecha_limite) {
-                    fecha_lim = element.fecha_limite;
+            
+            res.forEach(e => {
+
+                if (e.fecha_limite) {
+                    fecha_lim = e.fecha_limite;
                 }else{
                     fecha_lim = '-';
                 }
                 
                 if(tipo_orden == 3){
-                    maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                    <td class="text-center">`+element.horas_maquinaria+`</td>
-                                    `
+                    maq_y_hora = `<td class="text-center">${e.maquinaria}</td>
+                                  <td class="text-center">${e.horas_maquinaria}</td>
+                                 `;
                 }
 
                 html += `<tr>
-                            <td class="text-center">`+element.id_parte+`</td>
-                            <td class="text-center">`+element.fecha+`</td>
-                            <td class="text-center">`+fecha_lim+`</td>
-                            <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.horas+`</td>
-                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                            <td class="text-center">`+element.responsable+`</td>
-                            `+maq_y_hora+`
-                            <td class="text-center">`+element.supervisor+`</td>
+                            <td class="text-center">${e.id_parte}</td>
+                            <td class="text-center">${e.fecha}</td>
+                            <td class="text-center">${fecha_lim}</td>
+                            <td class="text-center">${e.estado}</td>
+                            <td class="text-center">${e.horas}</td>
+                            <td class="text-center"><abbr title="${e.observaciones}" style="text-decoration:none; font-variant: none;">${(e.observaciones ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">${e.responsable}</td>
+                            ${maq_y_hora}
+                            <td class="text-center">${e.supervisor}</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
-                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                         Opciones
                                     </button>
                                 </div>
-                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes${idCount}">
 
                                     <div class="row">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(${e.id_parte})">
                                                 Editar
                                             </button>
                                         </div>
@@ -307,12 +293,12 @@ function recargarPartes(id, tipo_orden){
                 idCount++;
             });
             document.getElementById('body_ver_parte').innerHTML = html;
-            document.getElementById('mv-estado').value = response[0].estado_orden;
+            document.getElementById('mv-estado').value = res[0].estado_orden;
         },
         error: function (error) {
             console.log(error);
         }
-    }));
+    });
 }
 
 function nuevoParte(){
@@ -344,11 +330,11 @@ function editarOrdenMantenimiento(){
             id_orden: $("#id_orden_editar").val(),
             id_empleado: $("#id_editar_empleado").val()
         },
-        success: function (response) {
-            // console.log(response)
+        success: function (res) {
             let maq_y_hora = '';
             let idCount = 0;
-            response.forEach(element => {
+            res.forEach(element => {
+
                 if (element.fecha_limite) {
                     fecha_lim = element.fecha_limite;
                 }else{
@@ -356,32 +342,31 @@ function editarOrdenMantenimiento(){
                 }
                 
                 if(tipo_orden == 3){
-                    maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                    <td class="text-center">`+element.horas_maquinaria+`</td>
-                                    `
+                    maq_y_hora = `<td class="text-center">${element.maquinaria}</td>
+                                  <td class="text-center">${element.horas_maquinaria}</td>`;
                 }
 
                 html += `<tr>
-                            <td class="text-center">`+element.id_parte+`</td>
-                            <td class="text-center">`+element.fecha+`</td>
-                            <td class="text-center">`+fecha_lim+`</td>
-                            <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.horas+`</td>
-                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                            <td class="text-center">`+element.responsable+`</td>
-                            `+maq_y_hora+`
-                            <td class="text-center">`+element.supervisor+`</td>
+                            <td class="text-center">${element.id_parte}</td>
+                            <td class="text-center">${element.fecha}</td>
+                            <td class="text-center">${fecha_lim}</td>
+                            <td class="text-center">${element.estado}</td>
+                            <td class="text-center">${element.horas}</td>
+                            <td class="text-center"><abbr title="${element.observaciones}" style="text-decoration:none; font-variant: none;">${(element.observaciones ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">${element.responsable}</td>
+                            ${maq_y_hora}
+                            <td class="text-center">${element.supervisor}</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
-                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                         Opciones
                                     </button>
                                 </div>
-                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes${idCount}">
 
                                     <div class="row">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(${element.id_parte})">
                                                 Editar
                                             </button>
                                         </div>
@@ -395,11 +380,11 @@ function editarOrdenMantenimiento(){
                                     </div>
                                 </div>
                             </td>
-                        </tr>`
+                        </tr>`;
                 idCount++;
             });
             document.getElementById('body_ver_parte').innerHTML = html;
-            document.getElementById('mv-estado').value = response[0].estado_orden;
+            document.getElementById('mv-estado').value = res[0].estado_orden;
         },
         error: function (error) {
             console.log(error);
@@ -452,29 +437,29 @@ function cargarModalActualizaciones(id_servicio){
         document.getElementById("m-ver-act-btn").hidden = true;
         document.getElementById('m_act_id_serv').value = id_servicio;
         
-        $.when($.ajax({
+        $.ajax({
             type: "post",
             url: '/proyectos/obtener-actualizaciones-proyecto/'+id_servicio, 
             data: {
                 id: id_servicio,
             },
-        success: function (response) {
-            response.forEach(element => {
-                html_act += `<tr>
-                                <td class="text-center">`+element.codigo+`</td>
-                                <td class="text-center">`+element.fecha_carga+`</td>
-                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                                <td class="text-center">`+element.fecha_limite+`</td>
-                                <td class="text-center">`+element.estado+`</td>
-                                <td class="text-center">`+element.responsable+`</td>    
-                                </tr>`
-            });
-            renglones_actualizacion.innerHTML = html_act;
-        },
-        error: function (error) {
-            console.log(error);
-        }
-        }));
+            success: function (response) {
+                response.forEach(element => {
+                    html_act += `<tr>
+                                    <td class="text-center">${element.codigo}</td>
+                                    <td class="text-center">${element.fecha_carga}</td>
+                                    <td class="text-center"><abbr title="${element.descripcion}" style="text-decoration:none; font-variant: none;">${(element.descripcion ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                                    <td class="text-center">${element.fecha_limite}</td>
+                                    <td class="text-center">${element.estado}</td>
+                                    <td class="text-center">${element.responsable}</td>    
+                                    </tr>`
+                });
+                renglones_actualizacion.innerHTML = html_act;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
         cargarFechaEstadoLiderModalVerAct(id_servicio);
 }
 
@@ -527,12 +512,12 @@ function actualizarRecuadroAct(id){
         success: function (response) {
             response.forEach(element => {
                 html_act += `<tr>
-                                <td class="text-center">`+element.codigo+`</td>
-                                <td class="text-center">`+element.fecha_carga+`</td>
-                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                                <td class="text-center">`+element.fecha_limite+`</td>
-                                <td class="text-center">`+element.estado+`</td>
-                                <td class="text-center">`+element.responsable+`</td>    
+                                <td class="text-center">${element.codigo}</td>
+                                <td class="text-center">${element.fecha_carga}</td>
+                                <td class="text-center"><abbr title="${element.descripcion}" style="text-decoration:none; font-variant: none;">${(element.descripcion ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                                <td class="text-center">${element.fecha_limite}</td>
+                                <td class="text-center">${element.estado}</td>
+                                <td class="text-center">${element.responsable}</td>    
                                 </tr>`
             });
             renglones_actualizacion.innerHTML = html_act;

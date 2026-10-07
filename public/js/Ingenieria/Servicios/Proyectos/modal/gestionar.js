@@ -1,76 +1,69 @@
-//const { stubString } = require("lodash");
-$(document).ready(function () { 
+$(function () {
     $('#verPartesModal').on('hidden.bs.modal', function (e) {
         nuevoParte();
     })
 
     $(".nuevo-editar-parte").on('submit', function(evt){
-        //     if (BanderaFormulario) {
-        //         return;
-        //     }
-            evt.preventDefault();     
-            var url_php = $(this).attr("action"); 
-            var type_method = $(this).attr("method"); 
-            var form_data = $(this).serialize();
-            let html = '';
-            let id_orden = document.getElementById('m-ver-parte-orden').value;
-            $.ajax({
-                type: type_method,
-                url: url_php,
-                data: form_data,
-                success: function(data) {
-                    //console.log(data);
-                    opcion = parseInt(data.resultado);
-                    switch (opcion) {
-                        case 1:
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte creado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 2:
-                            id = document.getElementById('m-id-parte').value;
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte cod. `+id+` actualizado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 6:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        No se puede actualizar un parte de la cual no eres responsable.
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                        default:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        Ocurrio un error
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                    }
-                    $('#alert').html(html)
-                    recargarPartes(id_orden, data.tipo_orden);
-                    nuevoParte();
-                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+        evt.preventDefault();     
+        var url_php = $(this).attr("action"); 
+        var type_method = $(this).attr("method"); 
+        var form_data = $(this).serialize();
+        let html = '';
+        let id_orden = document.getElementById('m-ver-parte-orden').value;
 
+        $.ajax({
+            type: type_method,
+            url: url_php,
+            data: form_data,
+            success: function(res) {
+                opcion = parseInt(res.resultado);
+                switch (opcion) {
+                    case 1:
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                        Parte creado con exito
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                        break;
+                    case 2:
+                        id = document.getElementById('m-id-parte').value;
+                        html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                        Parte cod. ${id} actualizado con exito
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>`;
+                        break;
+                    case 6:
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                    No se puede actualizar un parte de la cual no eres responsable.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>`;
+                        break;
+                    default:
+                        html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                    Ocurrio un error
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>`;
+                        break;
                 }
-            });
+                $('#alert').html(html)
+                recargarPartes(id_orden, res.tipo_orden);
+                nuevoParte();
+                setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+            }
+        });
     });
 
     $('#m-ver-act-id_estado').on('change', mostrarOpcionComEtp);
 
     $(".nuevo-editar-orden").on('submit', function(evt){
-        evt.preventDefault();     
-        // console.log('hola');
-
+        evt.preventDefault();
         var url_php = $(this).attr("action"); 
         var type_method = $(this).attr("method"); 
         var form_data = $(this).serialize();
@@ -81,16 +74,15 @@ $(document).ready(function () {
             data: form_data,
             success: function(data) {
                 html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
-                                        `+data+`
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
+                            ${data}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>`;
                 $('#alertOrd').html(html)
                 setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
             }
         });
-        // actRow();
     });
 });
 
@@ -112,16 +104,16 @@ function mostrarActProyecto(id){
         data: {
             id: id,
         },
-    success: function (response) {
-        response.forEach(element => {
+    success: function (res) {
+        res.forEach(e => {
             html_act += `<tr>
-                            <td class="text-center">`+element.codigo+`</td>
-                            <td class="text-center">`+element.fecha_carga+`</td>
-                            <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                            <td class="text-center">`+element.fecha_limite+`</td>
-                            <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.responsable+`</td>    
-                            </tr>`
+                            <td class="text-center">${e.codigo}</td>
+                            <td class="text-center">${e.fecha_carga}</td>
+                            <td class="text-center"><abbr title="${e.descripcion}" style="text-decoration:none; font-variant: none;">${(e.descripcion).slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">${e.fecha_limite}</td>
+                            <td class="text-center">${e.estado}</td>
+                            <td class="text-center">${e.responsable}</td>    
+                        </tr>`;
         });
         renglones_actualizacion.innerHTML = html_act;
     },
@@ -168,26 +160,21 @@ function cargarFechaEstadoLiderModalVerAct(id){
     let fecha_limite = document.getElementById("m-ver-act-fecha_limite");
     let lider = document.getElementById("m-ver-act-cbx_lider");
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/proyectos/obtener-ultima-actualizacion-servicio/'+id, 
         data: {
             id: id,
         },
-    success: function (response) {
-        // console.log(response);
-        estado.value = response[0].estado;
-        fecha_limite.value = response[0].fecha_limite;
-        lider.value = response[0].lider;
-        // response.forEach(element => {
-        //     estado.value = response.estado;
-        // });
-        
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+        success: function (response) {
+            estado.value = response[0].estado;
+            fecha_limite.value = response[0].fecha_limite;
+            lider.value = response[0].lider;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }
 
 function mostrarActEtapa(id){
@@ -203,82 +190,65 @@ function mostrarActEtapa(id){
     let renglones_actualizacion = document.getElementById("cuadro-act-etapa");
     let html_act = '';
 
-    $.when($.ajax({
-        type: "post",
-        url: '/etapas/obtener-actualizaciones-etapa/'+id, 
-        data: {
-            id: id,
-        },
-        success: function (response) {
-            response.forEach(element => {
-                html_act += `<tr>
-                                <td class="text-center">`+element.codigo+`</td>
-                                <td class="text-center">`+element.fecha_carga+`</td>
-                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                                <td class="text-center">`+element.fecha_limite+`</td>
-                                <td class="text-center">`+element.estado+`</td>
-                                <td class="text-center">`+element.responsable+`</td>
-                                </tr>`
-            });
-            renglones_actualizacion.innerHTML = html_act;
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    }));
-
     let fecha_lim = document.getElementById('m-crear-act-eta-feclimite');
     let estado_actual = document.getElementById('m-crear-act-eta-idestado');
-    $.when($.ajax({
-        type: "post",
-        url: '/etapa/obtener-una-etapa/'+id, 
-        data: {
-            id: id,
-        },
-        success: function (response) {
-            fecha_lim.value = response.fecha_limite;
-            estado_actual.value = response.id_estado;
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    }));
+
+    $.when(
+        $.ajax({
+            type: "post",
+            url: '/etapas/obtener-actualizaciones-etapa/'+id, 
+            data: {
+                id: id,
+            }
+        }),
+
+        $.ajax({
+            type: "post",
+            url: '/etapa/obtener-una-etapa/'+id, 
+            data: {
+                id: id,
+            }
+        })
+
+    )
+    .done(function (actualizaciones, etapa) {
+
+        // Respuesta del primer AJAX
+        let responseActualizaciones = actualizaciones[0];
+
+        // Respuesta del segundo AJAX
+        let responseEtapa = etapa[0];
+
+        responseActualizaciones.forEach(element => {
+            html_act += `<tr>
+                <td class="text-center">${element.codigo}</td>
+                <td class="text-center">${element.fecha_carga}</td>
+                <td class="text-center">
+                    ${(element.descripcion ?? '').slice(0, 25)}
+                </td>
+                <td class="text-center">${element.fecha_limite}</td>
+                <td class="text-center">${element.estado}</td>
+                <td class="text-center">${element.responsable}</td>
+            </tr>`;
+        });
+
+        renglones_actualizacion.innerHTML = html_act;
+
+        fecha_lim.value = responseEtapa.fecha_limite;
+        estado_actual.value = responseEtapa.id_estado;
+
+    })
+    .fail(function (error) {
+        console.log(error);
+    });
 }
 
-function mostrarActEtapaAlt(id){
+function mostrarActEtapaAlt(id) {
+
     let id_etapa = document.getElementById('m_cae_id_etapa');
     id_etapa.value = id;
-    let renglones_actualizacion = document.getElementById("cuadro-act-etapa");
-    let html_act = '';
 
-    $.when($.ajax({
-        type: "post",
-        url: '/etapas/obtener-actualizaciones-etapa/'+id, 
-        data: {
-            id: id,
-        },
-        success: function (response) {
-            response.forEach(element => {
-                if (element.fecha_limite) {
-                    fecha_lim = element.fecha_limite;
-                }else{
-                    fecha_lim = '-';
-                }
-                html_act += `<tr>
-                                <td class="text-center">`+element.codigo+`</td>
-                                <td class="text-center">`+element.fecha_carga+`</td>
-                                <td class="text-center"><abbr title="`+element.descripcion+`" style="text-decoration:none; font-variant: none;">`+element.descripcion.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                                <td class="text-center">`+fecha_lim+`</td>
-                                <td class="text-center">`+element.estado+`</td>
-                                <td class="text-center">`+element.responsable+`</td>
-                                </tr>`
-            });
-            renglones_actualizacion.innerHTML = html_act;
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    }));
+    let renglones_actualizacion = document.getElementById("cuadro-act-etapa");
 
     let fecha_lim_etapa = document.getElementById('m-crear-act-eta-feclimite');
     let estado_actual = document.getElementById('m-crear-act-eta-idestado');
@@ -286,26 +256,77 @@ function mostrarActEtapaAlt(id){
     let nombre_estado = document.getElementById("m-ver-act-eta-orden");
     let respo = document.getElementById("m-ver-act-eta-responsable");
     let responsable = document.getElementById("cbx_responsable_etapa");
-    
-    $.when($.ajax({
-        type: "post",
-        url: '/etapa/obtener-una-etapa/'+id, 
-        data: {
-            id: id,
-        },
-        success: function (response) {
-            // console.log(response);
-            fecha_lim_etapa.value = response.fecha_limite;
-            estado_actual.value = response.id_estado;
-            etapa_desc.value = response.descripcion_etapa;
-            nombre_estado.value = response.estado;
-            respo.value = response.responsable;
-            responsable.value = response.id_responsable;
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    }));
+
+    $.when(
+
+        $.ajax({
+            type: "post",
+            url: '/etapas/obtener-actualizaciones-etapa/' + id,
+            data: {
+                id: id
+            }
+        }),
+
+        $.ajax({
+            type: "post",
+            url: '/etapa/obtener-una-etapa/' + id,
+            data: {
+                id: id
+            }
+        })
+
+    ).done(function (actualizaciones, etapa) {
+
+        let responseActualizaciones = actualizaciones[0];
+
+        let html_act = '';
+
+        responseActualizaciones.forEach(element => {
+
+            let fecha_lim = element.fecha_limite ?? '-';
+            let descripcion = element.descripcion ?? '';
+
+            html_act += `
+                <tr>
+                    <td class="text-center">${element.codigo}</td>
+                    <td class="text-center">${element.fecha_carga}</td>
+
+                    <td class="text-center">
+                        <abbr 
+                            title="${descripcion}"
+                            style="text-decoration:none; font-variant:none;"
+                        >
+                            ${descripcion.slice(0, 25)}
+                            <i class="fas fa-eye"></i>
+                        </abbr>
+                    </td>
+
+                    <td class="text-center">${fecha_lim}</td>
+                    <td class="text-center">${element.estado}</td>
+                    <td class="text-center">${element.responsable}</td>
+                </tr>
+            `;
+        });
+
+        renglones_actualizacion.innerHTML = html_act;
+
+        let responseEtapa = etapa[0];
+
+        fecha_lim_etapa.value = responseEtapa.fecha_limite ?? '';
+        estado_actual.value = responseEtapa.id_estado ?? '';
+        etapa_desc.value = responseEtapa.descripcion_etapa ?? '';
+        nombre_estado.value = responseEtapa.estado ?? '';
+        respo.value = responseEtapa.responsable ?? '';
+        responsable.value = responseEtapa.id_responsable ?? '';
+
+        // En este punto LOS DOS AJAX terminaron correctamente
+
+    }).fail(function (error) {
+
+        console.log('Error al obtener los datos de la etapa');
+        console.log(error);
+
+    });
 }
 
 function cargarModalEditarOrden(id_orden){
@@ -314,32 +335,32 @@ function cargarModalEditarOrden(id_orden){
     let input_fec_req = document.getElementById('fec_req');
     let input_horas_estimadas = document.getElementById('horas_estimadas');
     let input_minutos_estimados = document.getElementById('minutos_estimados');
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id_orden, 
         data: {
             id: id_orden,
         },
-    success: function (response) {
-        response.forEach(element => {
-            input_nom_orden.value = element.orden;
-            input_fec_ini.value = element.fecha_inicio;
-            input_fec_req.value = element.fecha_limite;
-            input_horas_estimadas.value = element.duracion_estimada.substring(0, 2);
-            input_minutos_estimados.value = element.duracion_estimada.substring(3, 5);
-            document.querySelector('#cbx_supervisor').element = response.supervisa;
-            document.querySelector('#cbx_responsable').element = response.responsable;
-            document.querySelector('#tipo_orden_trabajo').element = response.tipo;
-            document.querySelector('#cbx_estado').element = response.estado;
-        });
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+        success: function (response) {
+            response.forEach(element => {
+                input_nom_orden.value = element.orden;
+                input_fec_ini.value = element.fecha_inicio;
+                input_fec_req.value = element.fecha_limite;
+                input_horas_estimadas.value = element.duracion_estimada.substring(0, 2);
+                input_minutos_estimados.value = element.duracion_estimada.substring(3, 5);
+                document.querySelector('#cbx_supervisor').element = response.supervisa;
+                document.querySelector('#cbx_responsable').element = response.responsable;
+                document.querySelector('#tipo_orden_trabajo').element = response.tipo;
+                document.querySelector('#cbx_estado').element = response.estado;
+            });
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }
+
 function colorEncabezadoPartePorTipoDeOrden(tipo_orden){
-    // console.log('COLOR');
     switch (tipo_orden) {
         case 1:
             return '#93c180';
@@ -359,6 +380,7 @@ function colorEncabezadoPartePorTipoDeOrden(tipo_orden){
 }
 
 function nuevoParte(){
+
     let id_orden = document.getElementById('m-ver-parte-orden').value;
     let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0];
     document.getElementById('titulo-parte').innerHTML = 'Nuevo parte';
@@ -380,33 +402,33 @@ function nuevoParte(){
 }
 
 function editarParte(id){
+
     document.getElementById('titulo-parte').innerHTML = 'Editar parte cod: '+id;
     document.getElementById('m-ver-parte-div').className = document.getElementById('m-ver-parte-div').className.replace( /(?:^|\s)border-warning(?!\S)/g , ' border-primary');
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/parte/obtener-una/'+id, 
         data: {
             id: id,
         },
-        success: function (response) {
-            // console.log(response);
-            document.getElementById('observaciones').value = response.observaciones;
-            document.getElementById('m-ver-parte-estado').value = response.estado;
-            document.getElementById('fecha').value = response.fecha;
-            document.getElementById('m-ver-parte-fecha-limite').value = response.fecha_limite;
+        success: function (res) {
+            document.getElementById('observaciones').value = res.observaciones;
+            document.getElementById('m-ver-parte-estado').value = res.estado;
+            document.getElementById('fecha').value = res.fecha;
+            document.getElementById('m-ver-parte-fecha-limite').value = res.fecha_limite;
 
-            [hora, minutos] = response.horas.split(':');
+            [hora, minutos] = res.horas.split(':');
 
             document.getElementById('horas').value = hora;
             document.getElementById('minutos').value = minutos;
             document.getElementById('m-editar').value = 1;
-            document.getElementById('m-id-parte').value = response.id_parte;
+            document.getElementById('m-id-parte').value = res.id_parte;
 
-            if (response.maquinaria) {
-                if (response.maquinaria != '-') {
-                    document.getElementById('m-ver-parte-maquina').value = response.maquinaria;
-                    [hora_maquina, minutos_maquina] = response.horas_maquinaria.split(':');
+            if (res.maquinaria) {
+                if (res.maquinaria != '-') {
+                    document.getElementById('m-ver-parte-maquina').value = res.maquinaria;
+                    [hora_maquina, minutos_maquina] = res.horas_maquinaria.split(':');
                     document.getElementById('horas_maquina').value = hora_maquina;
                     document.getElementById('minutos_maquina').value = minutos_maquina;
                 }else{
@@ -419,57 +441,52 @@ function editarParte(id){
         error: function (error) {
             console.log(error);
         }
-    }));
+    });
 }
 
 function recargarPartes(id, tipo_orden){
     document.getElementById('body_ver_parte').innerHTML = '';
     let html = '';
     
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/parte/obtener/'+id, 
         data: {
             id: id,
         },
-        success: function (response) {
-            // console.log(response)
+        success: function (res) {
             let maq_y_hora = '';
             let idCount = 0;
-            response.forEach(element => {
-                if (element.fecha_limite) {
-                    fecha_lim = element.fecha_limite;
-                }else{
-                    fecha_lim = '-';
-                }
-                
+            res.forEach(e => {
+                let fecha_lim = e.fecha_limite ? e.fecha_limite : '-';
+                let observacion = e.observaciones ?? '';
+
                 if(tipo_orden == 3){
-                    maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                    <td class="text-center">`+element.horas_maquinaria+`</td>
-                                    `
+                    maq_y_hora = `<td class="text-center">${e.maquinaria}</td>
+                                  <td class="text-center">${e.horas_maquinaria}</td>`
                 }
 
                 html += `<tr>
-                            <td class="text-center">`+element.id_parte+`</td>
-                            <td class="text-center">`+element.fecha+`</td>
-                            <td class="text-center">`+fecha_lim+`</td>
-                            <td class="text-center">`+element.estado+`</td>
-                            <td class="text-center">`+element.horas+`</td>
-                            <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                            <td class="text-center">`+element.responsable+`</td>
-                            `+maq_y_hora+`
-                            <td class="text-center">`+element.supervisor+`</td>
+                            <td class="text-center">${e.id_parte}</td>
+                            <td class="text-center">${e.fecha}</td>
+                            <td class="text-center">${fecha_lim}</td>
+                            <td class="text-center">${e.estado}</td>
+                            <td class="text-center">${e.horas}</td>
+                            <td class="text-center"><abbr title="${observacion}" style="text-decoration:none; font-variant: none;">${observacion.slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">${e.responsable}</td>
+                            ${maq_y_hora}
+                            <td class="text-center">${e.supervisor}</td>
                             <td class="text-center">
                                 <div class="row justify-content-center" >
-                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                         Opciones
                                     </button>
                                 </div>
-                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes${idCount}">
 
                                     <div class="row">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(${e.id_parte})">
                                                 Editar
                                             </button>
                                         </div>
@@ -483,16 +500,16 @@ function recargarPartes(id, tipo_orden){
                                     </div>
                                 </div>
                             </td>
-                        </tr>`
+                        </tr>`;
                 idCount++;
             });
             document.getElementById('body_ver_parte').innerHTML = html;
-            document.getElementById('mv-estado').value = response[0].estado_orden;
+            document.getElementById('mv-estado').value = res[0].estado_orden;
         },
         error: function (error) {
             console.log(error);
         }
-    }));
+    });
 }
 
 function cargarModalVerPartes(id, tipo_orden){
@@ -502,9 +519,6 @@ function cargarModalVerPartes(id, tipo_orden){
     let orden = document.getElementById('m-ver-parte-orden');
     orden.value = id;
     let color_encabezado = colorEncabezadoPartePorTipoDeOrden(tipo_orden);
-    
-    // document.getElementById('m-ver-parte-div').hidden = true;
-    // document.getElementById('m-ver-parte-orden-btn').hidden = true;
     
     document.getElementById('body_ver_parte').innerHTML = '';
     document.getElementById('encabezado_tabla_parte').style.backgroundColor = color_encabezado;
@@ -522,79 +536,74 @@ function cargarModalVerPartes(id, tipo_orden){
         document.getElementById('column-hora-maq').hidden = true;
     }
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/parte/obtener/'+id, 
         data: {
             id: id,
         },
-    success: function (response) {
-        // console.log(response)
-        let maq_y_hora = '';
-        let idCount = 0;
-        let urlLogParte = "/parte/";
-        
-        response.forEach(element => {
-            if (element.fecha_limite) {
-                fecha_lim = element.fecha_limite;
-            }else{
-                fecha_lim = '-';
-            }
+        success: function (res) {
+            let maq_y_hora = '';
+            let idCount = 0;
+            let urlLogParte = "/parte/";
             
-            if(tipo_orden == 3){
-                maq_y_hora = `<td class="text-center">`+element.maquinaria+`</td>
-                                  <td class="text-center">`+element.horas_maquinaria+`</td>
-                                 `
-            }
+            res.forEach(e => {
+                let fecha_lim = e.fecha_limite ? e.fecha_limite : '-';
+                let observacion = e.observaciones ?? '';
+                
+                if(tipo_orden == 3){
+                    maq_y_hora = `<td class="text-center">${e.maquinaria}</td>
+                                  <td class="text-center">${e.horas_maquinaria}</td>`;
+                }
 
-            html += `<tr>
-                        <td class="text-center">`+element.id_parte+`</td>
-                        <td class="text-center">`+element.fecha+`</td>
-                        <td class="text-center">`+fecha_lim+`</td>
-                        <td class="text-center">`+element.estado+`</td>
-                        <td class="text-center">`+element.horas+`</td>
-                        <td class="text-center"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center">`+element.responsable+`</td>
-                        `+maq_y_hora+`
-                        <td class="text-center">`+element.supervisor+`</td>
-                        <td class="text-center">
-                            <div class="row justify-content-center" >
-                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
-                                    Opciones
-                                </button>
-                            </div>
-                            <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes`+idCount+`">
-
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
-                                            Editar
-                                        </button>
-                                    </div>
+                html += `<tr>
+                            <td class="text-center">${e.id_parte}</td>
+                            <td class="text-center">${e.fecha}</td>
+                            <td class="text-center">${fecha_lim}</td>
+                            <td class="text-center">${e.estado}</td>
+                            <td class="text-center">${e.horas}</td>
+                            <td class="text-center"><abbr title="${observacion}" style="text-decoration:none; font-variant: none;">${observacion.slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                            <td class="text-center">${e.responsable}</td>
+                            ${maq_y_hora}
+                            <td class="text-center">${e.supervisor}</td>
+                            <td class="text-center">
+                                <div class="row justify-content-center" >
+                                    <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
+                                        Opciones
+                                    </button>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <a href='`+urlLogParte+element.id_parte+`/logs' target="_blank">
-                                            <button type="button" class="btn btn-warning w-100" >
-                                                Logs
+                                <div class="collapse" data-bs-parent="#body_ver_parte" id="collapseOrdenes${idCount}">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary w-100" onclick="editarParte(${e.id_parte})">
+                                                Editar
                                             </button>
-                                        </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href='${urlLogParte+e.id_parte}/logs' target="_blank">
+                                                <button type="button" class="btn btn-warning w-100" >
+                                                    Logs
+                                                </button>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>`
-            idCount ++;
-        });
-        document.getElementById('body_ver_parte').innerHTML = html;
-        document.getElementById('mv-orden').value = response[0].orden;
-        document.getElementById('mv-etapa').value = response[0].etapa;
-        document.getElementById('mv-estado').value = response[0].estado_orden;
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+                            </td>
+                        </tr>`;
+                idCount ++;
+            });
+            document.getElementById('body_ver_parte').innerHTML = html;
+            document.getElementById('mv-orden').value = res[0].orden;
+            document.getElementById('mv-etapa').value = res[0].etapa;
+            document.getElementById('mv-estado').value = res[0].estado_orden;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
     
     if(tipo_orden == 3){
         let maquinaria_div = document.getElementById("m-ver-parte-maquinaria");
@@ -630,94 +639,77 @@ function obtenerMaquinaria(){
     select_maquinaria.innerHTML = '<option value=0>Seleccionar</option>';
     html_maquinaria = '';
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
-        url: '/maquinaria/obtener-maquinarias', 
-        data: {
-            
+        url: '/maquinaria/obtener-maquinarias',
+        success: function (res) {
+            res.forEach(e => {
+                html_maquinaria += `<option value="${e.id_maquinaria}">${e.codigo_maquinaria}</option>`;
+            });
+            select_maquinaria.innerHTML += html_maquinaria;
         },
-    success: function (response) {
-        response.forEach(element => {
-            html_maquinaria += `
-                                <option value="`+element.id_maquinaria+`">`+element.codigo_maquinaria
-                                +`</option> 
-                                `
-        });
-        select_maquinaria.innerHTML += html_maquinaria;
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+        error: function (error) {
+            console.log(error);
+        }
+    });
 } 
 
 function obtenerEstados(opcion){
     let select_estados = document.getElementById('m-ver-parte-estado');
     select_estados.innerHTML = '<option value=0>Seleccionar</option>';
     html_estados = '';
-    $.when($.ajax({
+    $.ajax({
         type: "post",
-        url: '/orden/obtener-estados-de/'+opcion, 
-        data: {
-            
+        url: '/orden/obtener-estados-de/'+opcion,
+        success: function (res) {
+            res.forEach(e => {
+                html_estados += `<option value="${e.id_estado}">${e.nombre}</option>`;
+            });
+            select_estados.innerHTML += html_estados;
         },
-    success: function (response) {
-        // console.log(response);
-        response.forEach(element => {
-            html_estados += `
-                                <option value="`+element.id_estado+`">`+element.nombre
-                                +`</option> 
-                                `
-        });
-        select_estados.innerHTML += html_estados;
-       /* c_bx_estados_man != '' ? c_bx_estados_man.innerHTML += html_estados_man : '';
-        c_bx_estados_man_edit != '' ? c_bx_estados_man_edit.innerHTML += html_estados_man : ''; */
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+        error: function (error) {
+            console.log(error);
+        }
+    });
 } 
 
 function modificarModalVerPartesEstadoFechaLimite(id){
     let fecha_limite = document.getElementById('m-ver-parte-fecha-limite');
     let estado = document.getElementById('m-ver-parte-estado');
     let estado_tecnico = [1, 6, 7];
-    $.when($.ajax({
+
+    $.ajax({
         type: "post",
-        url: '/orden/obtener-una-orden-etapa/'+id, 
-        data: {
-            
+        url: '/orden/obtener-una-orden-etapa/'+id,
+        success: function (res) {
+
+            estado.value= res[0].id_estado;
+            fecha_limite.value= res[0].fecha_limite;
+
+            if (res[0].tec){ //Si es tecnico
+
+                if (estado_tecnico.includes(res[0].id_estado)) { //si el estado del orden es uno de los validos para el tecnico
+                    document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
+                        if (!estado_tecnico.includes(parseInt(opt.value))) {
+                            opt.style.display = 'none';
+                        }
+                    });
+                }
+                else{
+                    document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
+                        if (opt.value != res[0].id_estado) {
+                            opt.style.display = 'none';
+                        }
+                    });
+
+                }
+
+            }
         },
-    success: function (response) {
-
-        estado.value= response[0].id_estado;
-        fecha_limite.value= response[0].fecha_limite;
-
-        if (response[0].tec){ //Si es tecnico
-
-            if (estado_tecnico.includes(response[0].id_estado)) { //si el estado del orden es uno de los validos para el tecnico
-                document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
-                    if (!estado_tecnico.includes(parseInt(opt.value))) {
-                        opt.style.display = 'none';
-                    }
-                });
-            }
-            else{
-                document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
-                    if (opt.value != response[0].id_estado) {
-                        opt.style.display = 'none';
-                    }
-                });
-
-            }
-
+        error: function (error) {
+            console.log(error);
         }
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+    });
 }
 
 function verCargarParteModalParte(){
@@ -768,7 +760,6 @@ function mostrarOpcionComEtp() {
 }
 
 function cargarModalProgreso(id) {
-    // console.log('')
     let html = '';
     $.ajax({
         type: "post",
@@ -777,7 +768,6 @@ function cargarModalProgreso(id) {
             id: id
         },
         success: function (res) {
-            // console.log(res)
             document.getElementById('m_prg_ord_man').value = res.nombre_orden;
             document.getElementById('m_prg_est').value = res.estado_orden;
             document.getElementById('span_prg').innerHTML = res.tot_mec_completo+'/'+res.tot_mec;
@@ -785,9 +775,9 @@ function cargarModalProgreso(id) {
 
             res.ordenes_mecanizado.forEach(element => {
                 html += `<tr>
-                                <td class="text-center">`+element.nombre_orden+`</td>
-                                <td class="text-center">`+element.nombre_estado+`</td>
-                                <td class="text-center">`+element.fecha_limite+`</td>    
+                            <td class="text-center">${element.nombre_orden}</td>
+                            <td class="text-center">${element.nombre_estado}</td>
+                            <td class="text-center">${element.fecha_limite}</td>    
                         </tr>`
             });
             document.getElementById('cuadro-prg-orden').innerHTML = html;

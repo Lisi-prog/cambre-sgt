@@ -26,10 +26,11 @@
 
                 <table class="table table-striped w-100" id="tabla_inspecciones">
                     <thead>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
+                        <th class="text-center" scope="col">Elemento</th>
+                        <th class="text-center" scope="col">OK</th>
+                        <th class="text-center" scope="col">NO OK</th>
+                        <th class="text-center" scope="col" title="NO REVISA">N/R</th>
+                        <th class="text-center" scope="col">Acción</th>
                     </thead>
                     <tbody id="tabla_inspecciones_body">
 

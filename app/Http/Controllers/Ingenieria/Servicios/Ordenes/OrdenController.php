@@ -1062,7 +1062,10 @@ class OrdenController extends Controller
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
                 $flt_ord = $request->input('flt_ord');
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones', 'flt_ord'));
+                $ordenesConHdr = Hoja_de_ruta::join('orden_mecanizado as om', 'om.id_orden_mecanizado', '=', 'hoja_de_ruta.id_orden_mecanizado')
+                    ->whereIn('om.id_orden', $ordenes->pluck('id_orden'))
+                    ->distinct()->pluck('om.id_orden')->flip();
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones', 'flt_ord', 'ordenesConHdr'));
                 break;
 
             case 4:
@@ -2443,6 +2446,7 @@ class OrdenController extends Controller
             'partes_ope' => $partes_arr,
             'medida_chk' => $op->getMedidaEstado(),
             'operaciones_hdr' => $opes,
+            'ubicacion' => $op->getHdr->ubicacion ?? null,
             'prox_ope' => $prox_ope
         ];
     }

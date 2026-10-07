@@ -34,6 +34,68 @@ class Servicio extends Model
         return $this->belongsTo(Subtipo_servicio::class, 'id_subtipo_servicio');
     }
 
+    public function cancelarOrdenesMantenimientoPendientes($idResponsabilidad, $fechaCarga)
+    {
+        $ordenes = Orden_mantenimiento::whereHas('getOrden.getEtapa', function ($query) {
+            $query->where('id_servicio', $this->id_servicio);
+        })->get();
+
+        if ($ordenes->isEmpty()) {
+            return;
+        }
+
+        $estadoCancelado = Estado_mantenimiento::where('nombre_estado_mantenimiento', 'Cancelado')->firstOrFail();
+
+        foreach ($ordenes as $orden) {
+            $ultimoParte = $orden->getPartes()->orderByDesc('id_parte')->first();
+            $detalle = $ultimoParte ? $ultimoParte->getParteDe : null;
+
+            if ($detalle) {
+                $idEstado = $detalle instanceof Parte_diagnostico || $detalle instanceof Parte_mantenimiento
+                    ? $detalle->id_estado
+                    : $detalle->id_estado_mantenimiento;
+                $completo = $detalle instanceof Parte_diagnostico
+                    ? (bool) $detalle->completado
+                    : ($detalle instanceof Parte_mantenimiento ? $idEstado == 9 : $idEstado == 4);
+
+                if ($completo || $idEstado == ($detalle instanceof Parte_mantenimiento ? 10 : $estadoCancelado->id_estado_mantenimiento)) {
+                    continue;
+                }
+            }
+
+            $parte = Parte::create([
+                'observaciones' => 'Orden cancelada por cancelación del servicio de mantenimiento.',
+                'fecha' => $fechaCarga,
+                'fecha_carga' => $fechaCarga,
+                'fecha_limite' => $ultimoParte ? $ultimoParte->fecha_limite : null,
+                'horas' => '00:00',
+                'costo' => 0,
+                'id_orden' => $orden->id_orden,
+                'id_responsabilidad' => $idResponsabilidad,
+            ]);
+
+            if ($detalle instanceof Parte_mantenimiento) {
+                Parte_mantenimiento::create(['id_parte' => $parte->id_parte, 'id_estado' => 10]);
+            } elseif ($orden->id_tipo_orden_mantenimiento == 1) {
+                Parte_diagnostico::create([
+                    'id_parte' => $parte->id_parte,
+                    'id_estado' => $estadoCancelado->id_estado_mantenimiento,
+                    'en_maquina' => $detalle ? $detalle->en_maquina : 0,
+                    'en_banco' => $detalle ? $detalle->en_banco : 0,
+                    'completado' => 0,
+                ]);
+            } else {
+                $modelo = $orden->id_tipo_orden_mantenimiento == 2 ? Parte_inspeccion::class : Parte_ajuste::class;
+                $modelo::create([
+                    'id_parte' => $parte->id_parte,
+                    'id_estado_mantenimiento' => $estadoCancelado->id_estado_mantenimiento,
+                ]);
+            }
+
+            $orden->update(['esta_activo' => 0]);
+        }
+    }
+
     public function getActivo()
     {
         return $this->belongsTo(Activo::class, 'id_activo');

@@ -47,6 +47,14 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <div class="form-group">
+                            {!! Form::label('mv-ubicacion', 'Ubicación:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::text('ubicacion', null, [
+                                'class' => 'form-control',
+                                'id' => 'mv-ubicacion',
+                                'readonly'
+                            ]) !!}
+                        </div>
                     </div>
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <div class="form-group">
@@ -249,8 +257,9 @@
     </div>
 </div>
 
-<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script>
-@role('TECNICO')
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js')) }}"></script>
+{{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script> --}}
+{{-- @role('TECNICO')
 <script>
     document.getElementById('form-nuevo-parte').addEventListener('submit', function (event) {
         const aviso = document.getElementById('error-tiempo-parte');
@@ -280,4 +289,4 @@
         document.getElementById('error-tiempo-parte').hidden = true;
     });
 </script>
-@endrole
+@endrole --}}

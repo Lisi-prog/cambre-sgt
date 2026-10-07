@@ -1134,6 +1134,7 @@ INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_ma
 INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('3', 'Revisar');
 INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('4', 'Completo');
 INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('5', 'Rechazado');
+INSERT INTO `estado_mantenimiento` (`id_estado_mantenimiento`, `nombre_estado_mantenimiento`) VALUES ('6', 'Cancelado');
 
 INSERT INTO `sol_servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('1', 'Correctivo');
 INSERT INTO `sol_servicio_requerido` (`id_servicio_requerido`, `nombre_servicio_requerido`) VALUES ('2', 'Preventivo');
