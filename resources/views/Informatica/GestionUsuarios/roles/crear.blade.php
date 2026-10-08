@@ -10,22 +10,22 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card">
                     <div class="card-body">         
-
-                    {!! Form::open(array('route' => 'roles.store','method'=>'POST', 'class'=>'form-prevent-multiple-submits')) !!}
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Nombre del Rol:</label>                                    
-                                    {!! Form::text('name', null, array('class' => 'form-control','style' => 'text-transform:uppercase')) !!}
-                                </div>
-                            </div>       
-                        </div>
-                        <button type="submit" class="btn btn-success mr-2 button-prevent-multiple-submits">Guardar</button>
-                        <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Cancelar</a>
-                    {!! Form::close() !!}
+                        <form method="POST" action="{{route('roles.store')}}" class="form-prevent-multiple-submits">
+                        @csrf
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="name">Nombre del Rol:</label>    
+                                        <input class="form-control" style="text-transform:uppercase" name="name" type="text" id="name">
+                                    </div>
+                                </div>       
+                            </div>
+                            <button type="submit" class="btn btn-success mr-2 button-prevent-multiple-submits">Guardar</button>
+                            <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Cancelar</a>
+                        </form>
                     </div>
                 </div>
             </div>
