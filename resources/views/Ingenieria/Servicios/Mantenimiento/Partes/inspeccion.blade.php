@@ -29,7 +29,6 @@
                         <th class="text-center" scope="col">Elemento</th>
                         <th class="text-center" scope="col">OK</th>
                         <th class="text-center" scope="col">NO OK</th>
-                        <th class="text-center" scope="col" title="NO REVISA">N/R</th>
                         <th class="text-center" scope="col">Acción</th>
                     </thead>
                     <tbody id="tabla_inspecciones_body">
@@ -55,12 +54,8 @@
                 <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_inspeccion">
             </div>
             <div class="modal-footer">
-                <div class="form-group ml-auto mb-0 mr-4">
-                    <input type="checkbox" disabled id="completado_inspeccion" class="form-check-input">
-                    <input hidden type="checkbox"  name="completo"  id="completado_inspeccion_value" class="form-check-input">
-                    <label for="completado_inspeccion">COMPLETADO</label>
-                </div> 
                 <button id="btnGuardarNuevoParteInspeccion" type="submit" class="btn btn-success">Guardar</button>
+                <button id="btnGuardarCompletarParteInspeccion" type="submit" name="completo" value="1" class="btn btn-success">Guardar y Completar</button>
                 <div id="previewAceptarInspeccionReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
                         <button onclick="procesarInspeccion('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Inspección</button>

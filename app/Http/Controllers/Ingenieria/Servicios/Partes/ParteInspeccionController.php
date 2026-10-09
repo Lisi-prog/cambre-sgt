@@ -73,26 +73,14 @@ class ParteInspeccionController extends Controller
                         $resultado = ['ok' => 1, 'not_ok' => 0, 'no_revisa' => 2][$ok];
                         $accion = $tarea['accion'] ?? null;
 
-                        $tarea_existe = Parte_inspe_x_elemento::where('id_zona', $id[0])
-                            ->where('id_zona_tarea', $id[1])
-                            ->whereHas('getParte.getParte.getOrden', function ($query) use ($parte_inspeccion) {
-                                $query->where('id_orden', $parte_inspeccion->getParte->getOrden->id_orden);
-                            })
-                            ->first();
-
-                        if ($tarea_existe) {
-                            $tarea_existe->ok = $resultado;
-                            $tarea_existe->id_accion = ($ok === 'not_ok') ? $accion : null;
-                            $tarea_existe->save();
-                        } else {
-                            $tarea_nueva = new Parte_inspe_x_elemento;
-                            $tarea_nueva->id_parte_inspeccion = $parte_inspeccion->id_parte_inspeccion;
-                            $tarea_nueva->id_zona = $id[0];
-                            $tarea_nueva->id_zona_tarea = $id[1];
-                            $tarea_nueva->ok = $resultado;
-                            $tarea_nueva->id_accion = ($ok === 'not_ok') ? $accion : null;
-                            $tarea_nueva->save();
-                        }
+                        // Cada parte conserva los estados registrados en ese guardado.
+                        $tarea_nueva = new Parte_inspe_x_elemento;
+                        $tarea_nueva->id_parte_inspeccion = $parte_inspeccion->id_parte_inspeccion;
+                        $tarea_nueva->id_zona = $id[0];
+                        $tarea_nueva->id_zona_tarea = $id[1];
+                        $tarea_nueva->ok = $resultado;
+                        $tarea_nueva->id_accion = ($ok === 'not_ok') ? $accion : null;
+                        $tarea_nueva->save();
                     }
                 }
             }
@@ -141,7 +129,11 @@ class ParteInspeccionController extends Controller
 
                 $tareas_no_ok = Parte_inspe_x_elemento::whereHas('getParte.getParte.getOrden', function ($query) use ($request) {
                     $query->where('id_orden', $request->id_orden);
-                })->where('ok', 0)->get();
+                })->orderByDesc('id_parte_inspe_x_elemento')->get()
+                    ->unique(function ($elemento) {
+                        return $elemento->id_zona . '-' . $elemento->id_zona_tarea;
+                    })
+                    ->where('ok', 0);
 
                 foreach ($tareas_no_ok as $tarea_inspeccion) {
                     $tarea_ajuste = new Tarea_ajuste;
@@ -250,11 +242,13 @@ class ParteInspeccionController extends Controller
             ->leftJoin('parte_inspe_x_elemento', function ($join) use ($id_orden) {
                 $join->on('zona_x_zona_tarea.id_zona', '=', 'parte_inspe_x_elemento.id_zona')
                      ->on('zona_x_zona_tarea.id_zona_tarea', '=', 'parte_inspe_x_elemento.id_zona_tarea')
-                     ->whereIn('parte_inspe_x_elemento.id_parte_inspeccion', function ($subQuery) use ($id_orden) {
-                         $subQuery->select('pi.id_parte_inspeccion')
-                             ->from('parte_inspeccion as pi')
+                     ->whereIn('parte_inspe_x_elemento.id_parte_inspe_x_elemento', function ($subQuery) use ($id_orden) {
+                         $subQuery->selectRaw('MAX(pie.id_parte_inspe_x_elemento)')
+                             ->from('parte_inspe_x_elemento as pie')
+                             ->join('parte_inspeccion as pi', 'pie.id_parte_inspeccion', '=', 'pi.id_parte_inspeccion')
                              ->join('parte as p', 'pi.id_parte', '=', 'p.id_parte')
-                             ->where('p.id_orden', $id_orden);
+                             ->where('p.id_orden', $id_orden)
+                             ->groupBy('pie.id_zona', 'pie.id_zona_tarea');
                      });
             })
             ->leftJoin('accion_para_tarea', 'accion_para_tarea.id_accion_tarea', '=', 'parte_inspe_x_elemento.id_accion')
@@ -289,6 +283,7 @@ class ParteInspeccionController extends Controller
         ->orderByDesc('id_parte_inspeccion')
         ->get();
 
+        $elementos_vistos = [];
         foreach ($partes_inspeccion as $parte_inspeccion) {
             $parte_inspeccion->elementos = Parte_inspe_x_elemento::where('parte_inspe_x_elemento.id_parte_inspeccion', $parte_inspeccion->id_parte_inspeccion)
                 ->with(['getZona', 'getZonaTarea', 'getAccionParaTarea'])
@@ -296,6 +291,16 @@ class ParteInspeccionController extends Controller
                 ->orderBy('zona_tarea.nombre_zona', 'asc')
                 ->select('parte_inspe_x_elemento.*')
                 ->get();
+
+            $parte_inspeccion->elementos = $parte_inspeccion->elementos
+                ->filter(function ($elemento) use (&$elementos_vistos) {
+                    $clave = $elemento->id_zona . '-' . $elemento->id_zona_tarea;
+                    if (isset($elementos_vistos[$clave])) {
+                        return false;
+                    }
+                    $elementos_vistos[$clave] = true;
+                    return true;
+                })->values();
 
             $parte_inspeccion->horas = $parte_inspeccion->getParte->getOrden->getHoras();
         }

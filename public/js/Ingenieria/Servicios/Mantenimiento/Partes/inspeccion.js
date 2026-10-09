@@ -4,7 +4,7 @@ $(document).ready(function () {
         headerCallback: function(thead) {
             $(thead).hide();
         },
-        columnDefs: [{ visible: false, targets: [4] }, { className: "text-center", targets: [1, 2, 3, 4] }],
+        columnDefs: [{ visible: false, targets: [3] }, { className: "text-center", targets: [1, 2, 3] }],
         order: [],
         language: {
             lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -38,10 +38,9 @@ function prepararModalInspeccion(id_orden, nombre_activo, proyecto, consulta) {
     $('#herramental_inspeccion').val(activo);
     $('#nombreActivoInspeccion').text(activo);
     $('#nombre_proyecto_inspeccion').val(proyecto || $('#nombre_proyecto_i').val());
-    $('#btnGuardarNuevoParteInspeccion').toggle(!consulta);
+    $('#btnGuardarNuevoParteInspeccion, #btnGuardarCompletarParteInspeccion').toggle(!consulta);
     $('#previewAceptarInspeccionReview').hide();
     $('#horas_inspeccion, #minutos_inspeccion, #fecha_inspeccion').prop('disabled', consulta);
-    $('#completado_inspeccion_value, #completado_inspeccion').prop('checked', false);
     const hoy = new Date();
     $('#fecha_inspeccion').val(`${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`);
     $('#horas_inspeccion, #minutos_inspeccion').val('00');
@@ -50,10 +49,10 @@ function prepararModalInspeccion(id_orden, nombre_activo, proyecto, consulta) {
 
 function addZonaHeader(nombreZona) {
     const tabla = getTablaInspecciones();
-    // Conservar cinco celdas reales para que DataTables pueda redibujar y paginar.
-    const zona = tabla.row.add([nombreZona, '', '', '', '']).node();
+    // Conservar cuatro celdas reales para que DataTables pueda redibujar y paginar.
+    const zona = tabla.row.add([nombreZona, '', '', '']).node();
     $(zona).addClass('text-center fw-bold text-dark').css('background-color', '#2b56843b');
-    const encabezado = tabla.row.add(['Elemento', 'OK', 'NO OK', '<abbr title="NO REVISA">N/R</abbr>', 'Acción']).node();
+    const encabezado = tabla.row.add(['Elemento', 'OK', 'NO OK', 'Acción']).node();
     $(encabezado).addClass('zona-columns text-light');
     $(encabezado).find('td').css({color: '#fff', backgroundColor: '#2b5684', fontWeight: 'bold'});
 }
@@ -62,19 +61,19 @@ function agregarElementoInspeccion(tarea, indice, consulta) {
     const tabla = getTablaInspecciones();
     const tareaId = `${tarea.id_zona}-${tarea.id_zona_tarea}`;
     const respondida = tarea.ok !== null && tarea.ok !== undefined;
-    const estado = respondida ? Number(tarea.ok) : null;
-    const disabled = consulta || respondida ? 'disabled' : '';
-    const radio = (valor, resultado, titulo) => `<input type="radio" class="form-check-input" aria-label="${titulo}" name="tareas[${indice}][ok]" value="${valor}" ${disabled} ${estado === resultado ? 'checked' : ''} onchange="checkboxTareaRealizada(${indice}, '${tareaId}')">`;
+    const estado = respondida ? Number(tarea.ok) : 2;
+    const disabled = consulta || (respondida && estado !== 2) ? 'disabled' : '';
+    const radio = (valor, resultado, titulo, oculto = false) => `<input ${oculto ? 'hidden' : ''} type="radio" class="form-check-input" aria-label="${titulo}" name="tareas[${indice}][ok]" value="${valor}" ${disabled} ${estado === resultado ? 'checked' : ''} onchange="checkboxTareaRealizada(${indice}, '${tareaId}')">`;
     const accion = estado === 0 ? (tarea.get_accion_para_tarea?.nombre_accion || '-') : '-';
     const accionHtml = consulta ? accion : `<div id="label_accion_${tareaId}" ${estado === 0 ? 'hidden' : ''}>${estado === 2 ? 'NO REVISA' : estado === 1 ? 'No se requiere acción' : '-'}</div>
         <select onchange="showSpanAviso()" name="tareas[${indice}][accion]" class="form-select" id="accion_${tareaId}" hidden disabled>
             <option value="">Seleccionar...</option>${$('#accion_select_div').html()}
         </select>`;
     const fila = tabla.row.add([
-        tarea.get_zona?.nombre_zona || tarea.elemento || tarea.nombre_tarea,
-        radio('ok', 1, 'OK') + (consulta ? '' : `<input type="hidden" name="tareas[${indice}][id]" value="${tareaId}">`),
+        (consulta && estado === 2 ? '<span class="badge bg-secondary mr-2 me-2">Sin revisar</span>' : '') +
+            (tarea.get_zona?.nombre_zona || tarea.elemento || tarea.nombre_tarea),
+        radio('ok', 1, 'OK') + radio('no_revisa', 2, 'NO REVISA', true) + (consulta ? '' : `<input type="hidden" name="tareas[${indice}][id]" value="${tareaId}">`),
         radio('not_ok', 0, 'NO OK'),
-        radio('no_revisa', 2, 'NO REVISA'),
         accionHtml
     ]).node();
     if (!consulta && estado === 0) {
@@ -99,9 +98,6 @@ function cargarElementosInspeccion(tareas, consulta) {
     });
     tabla.draw();
     tabla.columns.adjust();
-    if (!consulta) {
-        $('#completado_inspeccion_value, #completado_inspeccion').prop('checked', validarRadios());
-    }
     showSpanAviso();
 }
 
@@ -118,16 +114,7 @@ function checkboxTareaRealizada(j, idTarea) {
         select.val('').prop({hidden: true, disabled: true, required: false});
         label.text(resultado === 'no_revisa' ? 'NO REVISA' : 'No se requiere acción').prop('hidden', false);
     }
-    $('#completado_inspeccion_value, #completado_inspeccion').prop('checked', validarRadios());
     showSpanAviso();
-}
-
-function validarRadios() {
-    const radios = getTablaInspecciones().rows().nodes().to$().find('input[type="radio"][name^="tareas"]');
-    const grupos = new Set(radios.map(function () { return this.name; }).get());
-    return grupos.size > 0 && [...grupos].every(nombre => radios.filter(function () {
-        return this.name === nombre && this.checked;
-    }).length > 0);
 }
 
 function openModalNuevoParteInspeccion(id_activo, id_orden, nombre_activo, proyecto) {
@@ -156,7 +143,6 @@ function openModalVerParteInspeccion(id_orden, nombre_activo) {
         cargarElementosInspeccion(partes.flatMap(parte => parte.elementos || []), true);
         if (partes.length) {
             mostrarDatosParteInspeccion(partes[0].get_parte, partes[0].horas);
-            $('#completado_inspeccion').prop('checked', Number(partes[0].id_estado_mantenimiento) === 4);
         }
     });
 }
@@ -167,7 +153,6 @@ function openModalConfirmarParteInspeccion(id_orden, nombre_activo) {
         if (!data) return;
         cargarElementosInspeccion(data.elementos || [], true);
         mostrarDatosParteInspeccion(data.get_parte, data.horas);
-        $('#completado_inspeccion').prop('checked', true);
         $('#previewAceptarInspeccionReview').show();
     });
 }
@@ -178,7 +163,6 @@ function verParteDeInspeccion(id_parte, completado) {
         if (!data) return;
         cargarElementosInspeccion(data.elementos || [], true);
         mostrarDatosParteInspeccion(data.get_parte);
-        $('#completado_inspeccion').prop('checked', completado === 'Completo');
     });
 }
 
@@ -196,7 +180,10 @@ $(document).ready(function () {
         const form = this;
         $(form).find('.inspeccion-paginada').remove();
         getTablaInspecciones().rows().nodes().to$().find('input, select').each(function () {
-            if (form.contains(this) || this.disabled || !this.name || (this.type === 'radio' && !this.checked)) return;
+            if (!this.name || (this.type === 'radio' && !this.checked)) return;
+            // Incluir los estados previos bloqueados para conservar una foto completa del parte.
+            if (this.disabled && this.type !== 'radio') return;
+            if (form.contains(this) && !this.disabled) return;
             $('<input>', {type: 'hidden', name: this.name, value: $(this).val(), class: 'inspeccion-paginada'}).appendTo(form);
         });
     });
