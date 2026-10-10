@@ -77,7 +77,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                             <option value="">Seleccionar...</option>
                             ${$("#maquina_select_div").html()}
                         </select>`,
-                        `<input onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
+                        `<input onchange="checkCompletoAjuste()" class="form-check-input ajuste-tarea-hecha" type="checkbox" aria-label="Tarea hecha"
                         name="tareas[${j}][hecho]">`
                     ]);        
                     }
@@ -94,7 +94,7 @@ function openModalNuevoParteAjuste(id_orden, id_etapa){
                             <option value="">Seleccionar...</option>
                             ${$("#maquina_select_div").html()}
                         </select>`,
-                        `<input onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox"
+                        `<input onchange="checkCompletoAjuste()" class="form-check-input ajuste-tarea-hecha" type="checkbox" aria-label="Tarea hecha"
                         name="tareas[${j}][hecho]">`
                     ]);        
                     }    
@@ -159,7 +159,7 @@ function agregarNuevoAjusteRow(){
             <option value="">Seleccionar...</option>
             ${$("#maquina_select_div").html()}
         </select>`,
-        `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" name="tareas[${j}][hecho]">
+        `<input id="tarea_hecho_${j}" onchange="checkCompletoAjuste()" class="form-check-input ajuste-tarea-hecha" type="checkbox" aria-label="Tarea hecha" name="tareas[${j}][hecho]">
          <button type="button" onclick="eliminarRowAjuste(${j})" class="btn btn-danger ms-2">X</button>`
     ]).node();
     rowNode.id = `ajuste_${j}`;
@@ -315,7 +315,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                             <option value="">Seleccionar...</option>
                             ${$("#maquina_select_div").html()}
                         </select>`,
-                        `<input onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" id="tarea_hecho_${j}"
+                        `<input onchange="checkCompletoAjuste()" class="form-check-input ajuste-tarea-hecha" type="checkbox" aria-label="Tarea hecha" id="tarea_hecho_${j}"
                         name="tareas[${j}][hecho]">`
                     ]);        
                 }
@@ -332,7 +332,7 @@ function openModalParteAjustePendiente(id_orden, id_etapa){
                             <option value="">Seleccionar...</option>
                             ${$("#maquina_select_div").html()}
                         </select>`,
-                        `<input onchange="checkCompletoAjuste()" class="form-check-input" type="checkbox" id="tarea_hecho_${j}"
+                        `<input onchange="checkCompletoAjuste()" class="form-check-input ajuste-tarea-hecha" type="checkbox" aria-label="Tarea hecha" id="tarea_hecho_${j}"
                         name="tareas[${j}][hecho]">`
                     ]);        
                 }
