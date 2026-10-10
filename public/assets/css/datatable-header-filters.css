@@ -1,0 +1,35 @@
+/* Keep date/number headers in the same direction as text headers. */
+table.dataTable.dt-filtros-cabecera thead th div.dt-column-header {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+table.dataTable.dt-filtros-cabecera thead th div.dt-column-header .dt-column-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  white-space: nowrap;
+  text-align: left;
+}
+table.dataTable.dt-filtros-cabecera thead th div.dt-column-header .dt-column-order {
+  flex: 0 0 12px;
+  margin-left: auto;
+}
+.dt-filtro-boton{display:inline-flex;align-items:center;justify-content:center;flex:0 0 24px;width:24px;height:22px;margin:0;padding:0;border:1px solid #b9c9e6;border-radius:4px;background:white;color:#64748b;cursor:pointer;font-size:11px;line-height:1;vertical-align:middle}
+.dt-filtro-boton:hover,.dt-filtro-boton[aria-expanded="true"]{background:#dbeafe;color:#1e40af}
+.dt-filtro-boton.activo{background:#1e40af;color:white;border-color:#1e40af}
+.dt-filtro-menu{position:fixed;z-index:1000;width:290px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;padding:16px;background:white;border:1px solid #d5deeb;border-radius:10px;box-shadow:0 12px 35px #15243b33;color:#1f2937;font-size:14px}
+.dt-filtro-menu[hidden]{display:none}
+.dt-filtro-menu strong{display:block;margin-bottom:12px}
+.dt-filtro-buscar{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:5px;margin-bottom:12px;font:inherit}
+.dt-filtro-menu label{display:flex;align-items:center;gap:8px;padding:7px 4px;cursor:pointer;overflow-wrap:anywhere}
+.dt-filtro-menu input[type="checkbox"]{accent-color:#1e40af;flex-shrink:0}
+.dt-filtro-todos{border-bottom:1px solid #e2e8f0;margin-bottom:6px}
+.dt-filtro-valores{max-height:210px;overflow-y:auto}
+.dt-filtro-valores label:hover{background:#eff6ff}
+.dt-filtro-vacio{color:#64748b}
+.dt-filtro-acciones{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #e2e8f0;margin-top:12px;padding-top:12px}
+.dt-filtro-acciones button{padding:8px 14px;border:1px solid #cbd5e1;border-radius:5px;background:white;font:inherit;cursor:pointer}
+.dt-filtro-acciones .dt-filtro-aplicar{background:#1e40af;border-color:#1e40af;color:white}
+.dt-filtro-boton:focus-visible,.dt-filtro-menu input:focus-visible,.dt-filtro-menu button:focus-visible{outline:2px solid #2563eb;outline-offset:2px}

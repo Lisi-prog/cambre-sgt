@@ -27,6 +27,7 @@
     @yield('page_css')
 
     <link rel="stylesheet" href="{{asset('assets/css/dataTables.dataTables.min.css')}}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/datatable-header-filters.css') }}">
     @yield('css')
     <link rel="stylesheet" href="{{asset('assets/css/excel-bootstrap-table-filter-style.css')}}"/>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -93,6 +94,7 @@
 <script src="{{ asset('assets/js/bootstrap.min2.js') }}"></script>
 <script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/js/datatables-compat.js') }}"></script>
+<script src="{{ asset('assets/js/datatable-header-filters.js') }}"></script>
 @yield('page_js')
 @yield('scripts')
 <script>

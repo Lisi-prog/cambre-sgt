@@ -11,14 +11,14 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                         <div class="form-group">
-                            {!! Form::label('cod_serv', "ID:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('cod_serv', '-', ['class' => 'form-control', 'required', 'id' => 'cod_serv_input', 'readonly']) !!}
+                            <label for="cod_serv_input" class="control-label" style="white-space: nowrap; ">ID:</label>
+                            <input type="text" name="cod_serv" id="cod_serv_input" class="form-control" value="-" required readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
                         <div class="form-group">
-                            {!! Form::label('nom_serv', "Nombre servicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('nom_serv', '-', ['class' => 'form-control', 'required', 'id' => 'nom_serv_input', 'readonly']) !!}
+                            <label for="nom_serv_input" class="control-label" style="white-space: nowrap; ">Nombre servicio:</label>
+                            <input type="text" name="nom_serv" id="nom_serv_input" class="form-control" value="-" required readonly>
                         </div>
                     </div>
                 </div>
@@ -26,8 +26,8 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
-                            {!! Form::label('lider', "Lider:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('lider', '-', ['class' => 'form-control', 'required', 'id' => 'lider_input', 'readonly']) !!}
+                            <label for="lider_input" class="control-label" style="white-space: nowrap; ">Lider:</label>
+                            <input type="text" name="lider" id="lider_input" class="form-control" value="-" required readonly>
                         </div>
                     </div>   
                 </div>
@@ -35,20 +35,20 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
-                            {!! Form::label('est', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('est', '-', ['class' => 'form-control', 'required', 'id' => 'est_input', 'readonly']) !!}
+                            <label for="est_input" class="control-label" style="white-space: nowrap; ">Estado:</label>
+                            <input type="text" name="est" id="est_input" class="form-control" value="-" required readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                         <div class="form-group">
-                            {!! Form::label('fc_ini', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('fc_ini', '-', ['class' => 'form-control', 'required', 'id' => 'fec_ini_input', 'readonly']) !!}
+                            <label for="fec_ini_input" class="control-label" style="white-space: nowrap; ">Fecha inicio:</label>
+                            <input type="text" name="fc_ini" id="fec_ini_input" class="form-control" value="-" required readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                         <div class="form-group">
-                            {!! Form::label('fc_lim', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('fc_lim', '-', ['class' => 'form-control', 'required', 'id' => 'fec_lim_input', 'readonly']) !!}
+                            <label for="fec_lim_input" class="control-label" style="white-space: nowrap; ">Fecha limite:</label>
+                            <input type="text" name="fc_lim" id="fec_lim_input" class="form-control" value="-" required readonly>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('prog', "Progreso:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="prog" class="control-label" style="white-space: nowrap; ">Progreso:</label>
                             <div class="progress position-relative" style="background-color: #b2baf8">
                                 <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="barra-progreso">
                                     <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff" id="numero-progreso">0%</span>
@@ -70,7 +70,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <div class="form-group">
-                            {!! Form::label('eta', "Etapas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="eta" class="control-label" style="white-space: nowrap; ">Etapas:</label>
                             <div class="table-responsive tableFixHead">
                                 <table id="tablaAct" class="table table-hover mt-2" class="display">
                                     <thead style="background-color:#2970c1" id="tbeta">

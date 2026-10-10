@@ -19,183 +19,149 @@
                 </ul>
                 <div class="tab-content mt-3" id="myTabContent">
                     <div class="tab-pane fade show active" id="serv-ing" role="tabpanel">
-                        {!! Form::open(['route' => ['solicitud.aceptar', $Ssi->getSolicitud->id_solicitud, 1], 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits', 'id' => 'form-serv-ing']) !!}
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                                <div class="form-group">
-                                    {!! Form::label('prefijo_proyecto', 'Prefijo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                    {!! Form::select('prefijo_proyecto', $prefijos, null, [
-                                                    'placeholder' => 'Seleccionar',
-                                                    'class' => 'form-select form-control',
-                                                    'id' => 'prefijo_proyecto'
-                                                    ]) !!}
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-                                <div class="form-group">
-                                    {!! Form::label('codigo_proyecto', 'Codigo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                    <span class="obligatorio">*</span>
-                                    {!! Form::text('codigo_proyecto', null, [
-                                        'class' => 'form-control',
-                                        'style' => 'text-transform:uppercase',
-                                        'required' => 'required',
-                                        'id' => 'codigo_proyecto'
-                                    ]) !!}
-                                </div>
-                            </div>
-                        </div>
+                        <form action="{{route('solicitud.aceptar', [$Ssi->getSolicitud->id_solicitud, 1])}}" method="POST" class="formulario form-prevent-multiple-submits" id="form-serv-ing">
+                        @csrf
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="prefijo_proyecto" class="control-label fs-7" style="white-space: nowrap; ">Prefijo proyecto:</label>
 
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-                                <div class="form-group">
-                                    {!! Form::label('nombre', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                    <span class="obligatorio">*</span>
-                                    {!! Form::text('nombre_proyecto', $Ssi->titulo_propuesta, ['class' => 'form-control']) !!}
+                                        <select class="form-select form-control" id="prefijo_proyecto" name="prefijo_proyecto">
+                                            <option selected="selected" value="">Seleccionar</option>
+                                            @foreach ($prefijos as $id => $nombre)
+                                                <option value="{{ $id }}">
+                                                    {{ $nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <div class="form-group">
+                                        <label for="codigo_proyecto" class="control-label fs-7" style="white-space: nowrap; ">Codigo proyecto:</label>
+                                        <input class="form-control" style="text-transform:uppercase" required id="codigo_proyecto" name="codigo_proyecto" type="text">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                                <div class="form-group">
-                                    {!! Form::label('id_tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    <span class="obligatorio">*</span>
-                                    {!! Form::select('id_tipo_proyecto', $Tipos_servicios, 5, [
-                                        'class' => 'form-select form-control',
-                                        'id' => 'id_tipo_proyecto',
-                                        'required'
-                                    ]) !!}
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <div class="form-group">
-                                        {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <div class="row">
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <div class="form-group">
+                                        <label for="nombre" class="control-label" style="white-space: nowrap; ">Nombre proyecto:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('lider', $empleados, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'lider'
-                                        ]) !!}
+                                        <input class="form-control" name="nombre_proyecto" type="text" value="{{$Ssi->titulo_propuesta}}">
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="id_tipo_proyecto" class="control-label fs-7" style="white-space: nowrap;">Tipo:</label>
+                                        <span class="obligatorio">*</span>
+                                        <select name="id_tipo_proyecto" id="id_tipo_proyecto" class="form-select form-control" required>
+                                            @foreach ($Tipos_servicios as $id => $nombre)
+                                                <option value="{{ $id }}" {{ (string) old('id_tipo_proyecto', 5) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                                <div class="form-group">
-                                    {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    {!! Form::select('id_activo', $activos, $Ssi->id_activo, [
-                                        'placeholder' => 'Seleccionar',
-                                        'class' => 'form-select form-control',
-                                        'id' => 'id_activo'
-                                    ]) !!}
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                <div class="form-group">
-                                    {!! Form::label('prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    <span class="obligatorio">*</span>
-                                    
-                                    {!! Form::text('prioridad', $prioridadMax, ['class' => 'form-control', 'readonly']) !!}
 
-                                    {{-- {!! Form::select('prioridad', $prioridades, null, [
-                                        'placeholder' => 'Seleccionar',
-                                        'class' => 'form-select',
-                                        'id' => 'prioridad',
-                                        'required'
-                                    ]) !!} --}}
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                    <div class="form-group">
+                                            <label for="lider" class="control-label fs-7" style="white-space: nowrap;">Lider:</label>
+                                            <span class="obligatorio">*</span>
+                                            <select name="lider" id="lider" class="form-select form-control">
+                                                <option value="" {{ old('lider', null) == null ? 'selected' : '' }}>Seleccionar</option>
+                                                @foreach ($empleados as $id => $nombre)
+                                                    <option value="{{ $id }}" {{ (string) old('lider', null) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                    <div class="form-group">
+                                        <label for="id_activo" class="control-label fs-7" style="white-space: nowrap;">Activo:</label>
+                                        <select name="id_activo" id="id_activo" class="form-select form-control">
+                                            <option value="" {{ old('id_activo', $Ssi->id_activo) == null ? 'selected' : '' }}>Seleccionar</option>
+                                            @foreach ($activos as $id => $nombre)
+                                                <option value="{{ $id }}" {{ (string) old('id_activo', $Ssi->id_activo) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label for="prioridad" class="control-label fs-7" style="white-space: nowrap;">Prioridad:</label>
+                                        <span class="obligatorio">*</span>
 
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                <div class="form-group">
-                                    {!! Form::label('fec_ini', 'Fecha inicio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                                <span class="obligatorio">*</span>
-                                    {!! Form::date('fecha_ini', \Carbon\Carbon::now(), [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'fec_ini',
-                                        'class' => 'form-control'
-                                    ]) !!}
+                                        <input type="text" name="prioridad" id="prioridad" class="form-control" readonly value="{{ old('prioridad', $prioridadMax) }}">
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                <div class="form-group">
-                                    {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    <span class="obligatorio">*</span>
-                                    {!! Form::date('fecha_req', \Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d'), [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'fec_req',
-                                        'class' => 'form-control'
-                                    ]) !!}
+
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
+                                                    <span class="obligatorio">*</span>
+                                        <input type="date" name="fecha_ini" id="fec_ini" class="form-control" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12' }}" value="{{ old('fecha_ini', \Carbon\Carbon::now()->format('Y-m-d')) }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label>
+                                        <span class="obligatorio">*</span>
+                                        <input type="date" name="fecha_req" id="fec_req" class="form-control" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12' }}" value="{{ old('fecha_req', \Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d')) }}">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row" id="eta_act_td_dv">
-                            @include('Ingenieria.Servicios.Proyectos.layout.opciones-crear-servicio')
-                        </div>
-                        {!! Form::close() !!}
+                            <div class="row" id="eta_act_td_dv">
+                                @include('Ingenieria.Servicios.Proyectos.layout.opciones-crear-servicio')
+                            </div>
+                        </form>
                     </div>
                     @if ($Ssi->getActivo)
-                    <div class="tab-pane fade show" id="serv-mant" role="tabpanel">
-                        {!! Form::open(['method' => 'GET', 'route' => ['sma.aceptar', $Ssi->id_solicitud], 'style' => '', 'id' => 'form-serv-mant']) !!}
+                    <div class="tab-pane fade" id="serv-mant" role="tabpanel">
+                        <form action="{{ route('sma.aceptar', $Ssi->id_solicitud) }}" method="GET" style="" id="form-serv-mant">
+                        @csrf
                         <div class="row">
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    {!! Form::label('codigo_proyecto', 'Codigo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                    {!! Form::text('codigo_proyecto', $Ssi->getNombreServicioMan() ?? null, [
-                                        'class' => 'form-control',
-                                        'style' => 'text-transform:uppercase',
-                                        'id' => 'codigo_serv_mant',
-                                        'disabled'
-                                    ]) !!}
+                                    <label for="codigo_serv_mant" class="control-label fs-7" style="white-space: nowrap; ">Codigo proyecto:</label>
+                                    <input type="text" name="codigo_proyecto" id="codigo_serv_mant" class="form-control" style="text-transform:uppercase" disabled value="{{ old('codigo_proyecto', $Ssi->getNombreServicioMan() ?? null) }}">
                                 </div>
                             </div>
                             <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                 <div class="form-group">
-                                    {!! Form::label('nombre_proyecto', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                    {!! Form::text('nombre_proyecto', $Ssi->getNombreServicioMan() ?? null, [
-                                        'class' => 'form-control',
-                                        'style' => 'text-transform:uppercase',
-                                        'id' => 'nombre_serv_mant',
-                                        'disabled'
-                                    ]) !!}
+                                    <label for="nombre_serv_mant" class="control-label" style="white-space: nowrap; ">Nombre proyecto:</label>
+                                    <input type="text" name="nombre_proyecto" id="nombre_serv_mant" class="form-control" style="text-transform:uppercase" disabled value="{{ old('nombre_proyecto', $Ssi->getNombreServicioMan() ?? null) }}">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    <label for="lider_serv_mant" class="control-label fs-7" style="white-space: nowrap;">Lider:</label>
                                     <span class="obligatorio">*</span>
-                                    {!! Form::select('lider', $empleados, Auth::user()->getEmpleado->id_empleado, [
-                                        'placeholder' => 'Seleccionar',
-                                        'class' => 'form-select form-control',
-                                        'id' => 'lider_serv_mant'
-                                    ]) !!}
+                                    <select name="lider" id="lider_serv_mant" class="form-select form-control">
+                                        <option value="" {{ old('lider', Auth::user()->getEmpleado->id_empleado) == null ? 'selected' : '' }}>Seleccionar</option>
+                                        @foreach ($empleados as $id => $nombre)
+                                            <option value="{{ $id }}" {{ (string) old('lider', Auth::user()->getEmpleado->id_empleado) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
-                                    {!! Form::label('activo_proyecto', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    {!! Form::text('activo_proyecto', $Ssi->getActivo ? $Ssi->getActivo->nombre_activo : null, [
-                                            'class' => 'form-control',
-                                            'style' => 'text-transform:uppercase',
-                                            'id' => 'activo_serv_mant',
-                                            'disabled'
-                                    ]) !!}
+                                    <label for="activo_serv_mant" class="control-label fs-7" style="white-space: nowrap;">Activo:</label>
+                                    <input type="text" name="activo_proyecto" id="activo_serv_mant" class="form-control" style="text-transform:uppercase" disabled value="{{ old('activo_proyecto', $Ssi->getActivo ? $Ssi->getActivo->nombre_activo : null) }}">
                                 </div>
                             </div>
                             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                 <div class="form-group">
-                                    {!! Form::label('tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                    {!! Form::text('tipo_proyecto', 'Servicio de Mantenimiento', [
-                                        'class' => 'form-control',
-                                        'style' => 'text-transform:uppercase',
-                                        'id' => 'tipo_proy_serv_mant',
-                                        'disabled'
-                                    ]) !!}
+                                    <label for="tipo_proy_serv_mant" class="control-label fs-7" style="white-space: nowrap;">Tipo:</label>
+                                    <input type="text" name="tipo_proyecto" id="tipo_proy_serv_mant" class="form-control" style="text-transform:uppercase" disabled value="{{ old('tipo_proyecto', 'Servicio de Mantenimiento') }}">
                                 </div>
                             </div>
                         </div>
@@ -205,33 +171,23 @@
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
-                                    {!! Form::label('fec_ini', 'Fecha inicio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
                                     <span class="obligatorio">*</span>
-                                    {!! Form::date('fecha_ini', \Carbon\Carbon::now(), [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'fec_ini',
-                                        'class' => 'form-control'
-                                    ]) !!}
+                                    <input type="date" name="fecha_ini" id="fec_ini" class="form-control" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12' }}" value="{{ old('fecha_ini', \Carbon\Carbon::now()->format('Y-m-d')) }}">
                                 </div>
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="form-group">
-                                    {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label>
                                     <span class="obligatorio">*</span>
-                                    {!! Form::date('fecha_req', \Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d'), [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'fec_req',
-                                        'class' => 'form-control'
-                                    ]) !!}
+                                    <input type="date" name="fecha_req" id="fec_req" class="form-control" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12' }}" value="{{ old('fecha_req', \Carbon\Carbon::parse($Ssi->getSolicitud->fecha_requerida)->format('Y-m-d')) }}">
                                 </div>
                             </div>
                         </div>
                         @if ($Ssi->getActivo->getTotalTareasMantenimientoPreventivaPendientes() > 0)
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                {!! Form::label('tar_prev', 'Tareas Preventivas Pendientes:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="tar_prev" class="control-label fs-7" style="white-space: nowrap;">Tareas Preventivas Pendientes:</label>
                                 <span class="obligatorio">*</span>
                                 <table class="table table-striped mt-2 table-sm" id="example">
                                     <thead>
@@ -274,7 +230,7 @@
                             </div>
                         </div>
                         @endif
-                        {!! Form::close() !!}
+                        </form>
                     </div>
                     @endif
                 </div>

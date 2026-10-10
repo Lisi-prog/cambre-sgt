@@ -4,7 +4,8 @@ document.getElementById('btn-guardar').addEventListener('click', function () {
 
     if (enviando) return;
 
-    let tabActiva = document.querySelector('.tab-pane.active');
+    let tabActiva = document.querySelector('#crearServicioModal .tab-pane.active');
+    if (!tabActiva) return;
     let form = null;
 
     if (tabActiva.id === 'serv-ing') {

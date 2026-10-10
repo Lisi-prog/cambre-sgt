@@ -131,6 +131,12 @@ class Servicio extends Model
         return $this->hasMany(Actualizacion_servicio::class, 'id_servicio')->orderByDesc('id_actualizacion_servicio')->first();
     }
 
+    public function ultimaActualizacion()
+    {
+        return $this->hasOne(Actualizacion_servicio::class, 'id_servicio')
+            ->latestOfMany('id_actualizacion_servicio');
+    }
+
     public function getEtapas()
     {
         return $this->hasMany(Etapa::class, 'id_servicio');

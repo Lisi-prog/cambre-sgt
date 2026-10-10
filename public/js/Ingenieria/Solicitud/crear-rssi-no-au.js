@@ -1,12 +1,10 @@
 $(function(){
     $('#selected-prioridad').on('change', agregarUrgencia);
-    // $('#ssi-mant-activo').on('change', cargarSintomas);
     $('#activo').on('change', cargarSintomas);
 });
 
 function agregarUrgencia(){
     let prioridad = Number($(this).val());
-    // console.log(prioridad);
     let des = document.getElementById("descrip_urgencia");
     let fec = document.getElementById("fecha_req");
    let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0];
@@ -28,7 +26,7 @@ function agregarUrgencia(){
             html = `<div class="form-group"> 
                         <label for="descrip" class="control-label fs-7 " style="white-space: nowrap; ">Descripcion de la urgencia:</label>
                         <span class="obligatorio">*</span>
-                        <textarea name="descripcion_urgencia" id="descrip" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 40vh" required></textarea>
+                        <textarea name="descripcion_urgencia" id="descrip" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 25vh" required></textarea>
                     </div>`;
             html_fecha = `<div class="form-group">
                     <label for="fec_req" class="control-label fs-7 reset-fecha" style="white-space: nowrap;">Fecha requerida:</label>
@@ -72,7 +70,6 @@ function cargarSintomas(){
             type: "post",
             url: 's_m_a/'+activo+'/cargar-causas', 
             success: function (res) {
-                // console.log(res);
                 if (Object.keys(res).length === 0) {
                     html = `<div class="col-12 d-flex justify-content-center">
                                 <div id="msj-sin-sintomas">

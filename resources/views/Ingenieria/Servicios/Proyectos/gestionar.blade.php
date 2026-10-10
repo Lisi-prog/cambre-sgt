@@ -69,9 +69,10 @@
         </div>
         <div class="section-body">
             <div class="row">
-                @include('layouts.modal.mensajes')
+                
                 {{-- Informacion del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    @include('layouts.modal.mensajes')
                     <div class="card">
                         <div class="card-head">
                             <br>

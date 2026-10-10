@@ -48,42 +48,164 @@ class ServicioDeIngenieriaController extends Controller
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
         //  $this->middleware('permission:BORRAR-PERMISO', ['only' => ['destroy']]);
     }
-    
-    public function index1(Request $request)
-    {        
-        $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
-        $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
-
-        $flt_users = $this->obtenerEmpleadosActivos();
-        $flt_sectores = Sector::orderBy('nombre_sector')->get();
-        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
-        $flt_estados = $this->estadosParaSolicitud();
-        $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
-        
-        return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos', 'flt_users', 'flt_sectores', 'flt_estados', 'flt_prioridades'));
-    }
 
     public function index(Request $request)
-    {        
-        // $idsSol = Sol_servicio_de_ingenieria::pluck('id_solicitud')->merge(
-        //             Sol_servicio_de_mantenimiento::pluck('id_solicitud')
-        //         )
-        //         ->unique()
-        //         ->values();
-        $listaSSI = Sol_servicio_de_ingenieria::orderBy('id_servicio_de_ingenieria', 'desc')->get();
-        // $listaSSI = Vw_sol_solicitud_ssi::get();
-        // $listaSSI = Sol_solicitud::whereIn('id_solicitud', $idsSol)->orderBy('id_solicitud', 'desc')->get();
-        $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
+    {
+        $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')
+            ->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
+        $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')
+            ->pluck('codigo_activo', 'id_activo');
 
-        $flt_users = $this->obtenerEmpleadosActivos();
-        $flt_sectores = Sector::orderBy('nombre_sector')->get();
-        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
-        $flt_estados = $this->estadosParaSolicitud();
-        $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
-        
-        return view('Ingenieria.Solicitud.SSI.index', compact('listaSSI', 'Prioridades', 'activos', 'flt_users', 'flt_sectores', 'flt_estados', 'flt_prioridades'));
+        return view('Ingenieria.Solicitud.SSI.index', compact('Prioridades', 'activos'));
+    }
+
+    public function datos(Request $request)
+    {
+        $request->validate([
+            'draw' => 'required|integer|min:0',
+            'start' => 'required|integer|min:0',
+            'length' => 'required|integer|min:1|max:500',
+            'search.value' => 'nullable|string|max:500',
+            'order' => 'sometimes|array|max:9',
+            'order.*.column' => 'required|integer|between:0,8',
+            'order.*.dir' => 'required|in:asc,desc',
+            'filtrosCabecera' => 'required|json',
+        ]);
+        $filtros = json_decode($request->input('filtrosCabecera'), true);
+        validator(['filtros' => $filtros], [
+            'filtros' => 'array',
+            'filtros.*' => 'array',
+            'filtros.*.incluir' => 'sometimes|array',
+            'filtros.*.incluir.*' => 'string|max:500',
+            'filtros.*.excluir' => 'sometimes|array',
+            'filtros.*.excluir.*' => 'string|max:500',
+        ])->validate();
+
+        $columnas = $this->columnasTablaSSI();
+        $base = $this->consultaTablaSSI();
+        $total = (clone $base)->count();
+        $consulta = clone $base;
+        foreach ($filtros as $indice => $filtro) {
+            if (!isset($columnas[$indice])) continue;
+            $columna = DB::raw($columnas[$indice]);
+            if (array_key_exists('incluir', $filtro)) {
+                $consulta->whereIn($columna, $filtro['incluir']);
+            }
+            if (array_key_exists('excluir', $filtro)) {
+                $consulta->whereNotIn($columna, $filtro['excluir']);
+            }
+        }
+        $busqueda = trim($request->input('search.value', ''));
+        if ($busqueda !== '') {
+            // All terms must match; each term may occur in any searchable column.
+            foreach (preg_split('/\s+/u', $busqueda) as $termino) {
+                $consulta->where(function ($q) use ($columnas, $termino) {
+                    foreach ($columnas as $columna) {
+                        $q->orWhereRaw($columna.' LIKE ?', ['%'.$termino.'%']);
+                    }
+                });
+            }
+        }
+        $filtrados = (clone $consulta)->count();
+        foreach ($request->input('order', []) as $orden) {
+            $consulta->orderByRaw($columnas[$orden['column']].' '.$orden['dir']);
+        }
+        $ids = $consulta->orderByDesc('ssi.id_servicio_de_ingenieria')
+            ->offset((int) $request->input('start'))->limit((int) $request->input('length'))
+            ->pluck('ssi.id_servicio_de_ingenieria');
+        $modelos = Sol_servicio_de_ingenieria::with([
+            'getSolicitud.getEmpleado',
+            'getSolicitud.getEstadoSolicitud',
+            'getSolicitud.getPrioridadSolicitud',
+            'getSolicitud.getServicio.ultimaActualizacion.getActualizacion.getEstado',
+            'getSector', 'getActivo',
+        ])->whereIn('id_servicio_de_ingenieria', $ids)->get()->keyBy('id_servicio_de_ingenieria');
+        $listaSSI = $ids->map(function ($id) use ($modelos) { return $modelos[$id]; });
+
+        $usuario = $request->user();
+        $permisos = [
+            'esAdmin' => $usuario->hasRole('ADMIN'),
+            'esTecnico' => $usuario->hasRole('TECNICO'),
+            'esExterno' => $usuario->hasRole('EXTERNO'),
+            'idEmpleado' => optional($usuario->getEmpleado)->id_empleado,
+            'id_estado_aceptado' => config('myconfig.estado_solicitud_aceptado'),
+        ];
+
+        $datos = $listaSSI->map(function ($Ssi) use ($permisos) {
+            $solicitud = $Ssi->getSolicitud;
+            $descripcion = $solicitud->descripcion_solicitud ?? '';
+            $estado = optional(optional(optional(optional($solicitud->getServicio)->ultimaActualizacion)->getActualizacion)->getEstado)->nombre_estado
+                ?? optional($solicitud->getEstadoSolicitud)->nombre_estado_solicitud ?? '-';
+
+            return [
+                e(Carbon::parse($solicitud->fecha_carga)->format('Y-m-d')),
+                e($solicitud->id_solicitud ?? '-'),
+                e(optional($solicitud->getEmpleado)->nombre_empleado ?? '-'),
+                e(optional($Ssi->getSector)->nombre_sector ?? '-'),
+                '<abbr title="'.e($descripcion).'" style="text-decoration:none; font-variant:none;">'
+                    .e(mb_substr($descripcion, 0, 100))
+                    .(mb_strlen($descripcion) > 100 ? ' <i class="fas fa-eye"></i>' : '').'</abbr>',
+                $solicitud->fecha_requerida === null ? 'Sin fecha' : e(Carbon::parse($solicitud->fecha_requerida)->format('Y-m-d')),
+                e($estado),
+                e(optional($solicitud->getPrioridadSolicitud)->nombre_prioridad_solicitud ?? '-'),
+                e(optional($Ssi->getActivo)->codigo_activo ?? '-'),
+                view('Ingenieria.Solicitud.SSI.acciones-tabla', array_merge($permisos, ['Ssi' => $Ssi]))->render(),
+            ];
+        });
+
+        $respuesta = [
+            'draw' => (int) $request->input('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtrados,
+            'data' => $datos->values(),
+        ];
+        if ($request->boolean('opcionesFiltros')) {
+            // Distinct values across the full table, independent of the current page.
+            $respuesta['opcionesFiltros'] = [];
+            foreach ($columnas as $indice => $columna) {
+                $respuesta['opcionesFiltros'][$indice] = (clone $base)
+                    ->selectRaw($columna.' AS valor')->distinct()->orderBy('valor')
+                    ->get()->pluck('valor')->map(function ($valor) { return (string) $valor; })->values();
+            }
+        }
+        return response()->json($respuesta);
+    }
+
+    private function consultaTablaSSI()
+    {
+        $ultimas = DB::table('actualizacion_servicio')
+            ->select('id_servicio')->selectRaw('MAX(id_actualizacion_servicio) AS id_ultima')
+            ->groupBy('id_servicio');
+
+        return DB::table('sol_servicio_de_ingenieria as ssi')
+            ->join('sol_solicitud as sol', 'sol.id_solicitud', '=', 'ssi.id_solicitud')
+            ->leftJoin('empleado as emp', 'emp.id_empleado', '=', 'sol.id_empleado')
+            ->leftJoin('sector as sec', 'sec.id_sector', '=', 'ssi.id_sector')
+            ->leftJoin('activo as act', 'act.id_activo', '=', 'ssi.id_activo')
+            ->leftJoin('sol_prioridad_solicitud as pri', 'pri.id_prioridad_solicitud', '=', 'sol.id_prioridad_solicitud')
+            ->leftJoin('sol_estado_solicitud as esol', 'esol.id_estado_solicitud', '=', 'sol.id_estado_solicitud')
+            ->leftJoinSub($ultimas, 'ultima', function ($join) {
+                $join->on('ultima.id_servicio', '=', 'sol.id_servicio');
+            })
+            ->leftJoin('actualizacion_servicio as aserv', 'aserv.id_actualizacion_servicio', '=', 'ultima.id_ultima')
+            ->leftJoin('actualizacion as actual', 'actual.id_actualizacion', '=', 'aserv.id_actualizacion')
+            ->leftJoin('estado as est', 'est.id_estado', '=', 'actual.id_estado');
+    }
+
+    private function columnasTablaSSI()
+    {
+        // Only these expressions can be selected, filtered or ordered by the client.
+        return [
+            "DATE_FORMAT(sol.fecha_carga, '%Y-%m-%d')",
+            'sol.id_solicitud',
+            "COALESCE(emp.nombre_empleado, '-')",
+            "COALESCE(sec.nombre_sector, '-')",
+            "COALESCE(LEFT(sol.descripcion_solicitud, 100), '')",
+            "COALESCE(DATE_FORMAT(sol.fecha_requerida, '%Y-%m-%d'), 'Sin fecha')",
+            "COALESCE(est.nombre_estado, esol.nombre_estado_solicitud, '-')",
+            "COALESCE(pri.nombre_prioridad_solicitud, '-')",
+            "COALESCE(act.codigo_activo, '-')",
+        ];
     }
 
     public function obtenerEmpleadosActivos(){
