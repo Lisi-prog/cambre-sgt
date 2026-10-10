@@ -34,9 +34,14 @@ mix.js(
 mix.copy('node_modules/bootstrap/dist/css/bootstrap.min.css',
     'public/assets/css/bootstrap.min.css');
 
-mix.copy('node_modules/datatables.net-dt/css/jquery.dataTables.min.css',
+mix.copy('node_modules/datatables.net-dt/css/dataTables.dataTables.min.css',
+    'public/assets/css/dataTables.dataTables.min.css');
+// Keep historical asset URLs on the same version for cached pages.
+mix.copy('node_modules/datatables.net-dt/css/dataTables.dataTables.css',
+    'public/assets/css/jquery.dataTables.css');
+mix.copy('node_modules/datatables.net-dt/css/dataTables.dataTables.min.css',
     'public/assets/css/jquery.dataTables.min.css');
-mix.copy('node_modules/datatables.net-dt/images', 'public/assets/images');
+
 mix.copy('node_modules/select2/dist/css/select2.min.css',
     'public/assets/css/select2.min.css');
 mix.copy('node_modules/sweetalert/dist/sweetalert.css',
@@ -57,7 +62,11 @@ mix.babel('node_modules/popper.js/dist/umd/popper.min.js',
     'public/assets/js/popper.min.js');
 mix.babel('node_modules/bootstrap/dist/js/bootstrap.min.js',
     'public/assets/js/bootstrap.min.js');
-mix.babel('node_modules/datatables.net/js/jquery.dataTables.min.js',
+mix.copy('node_modules/datatables.net/js/dataTables.min.js',
+    'public/assets/js/dataTables.min.js');
+mix.copy('node_modules/datatables.net/js/dataTables.js',
+    'public/assets/js/jquery.dataTables.js');
+mix.copy('node_modules/datatables.net/js/dataTables.min.js',
     'public/assets/js/jquery.dataTables.min.js');
 mix.babel('node_modules/select2/dist/js/select2.min.js',
     'public/assets/js/select2.min.js');

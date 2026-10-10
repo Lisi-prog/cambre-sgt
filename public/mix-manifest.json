@@ -3,11 +3,11 @@
     "/js/scripts.min.js": "/js/scripts.min.js?id=4773edcccb2e250dc5e36bd0e3421af7",
     "/assets/js/profile.js": "/assets/js/profile.js?id=9c4f7f3a9aef90e075cbc5fc094f61bf",
     "/assets/js/custom/custom.js": "/assets/js/custom/custom.js?id=ec5602fb1996062ebb2d4006f5601999",
-    "/assets/js/custom/custom-datatable.js": "/assets/js/custom/custom-datatable.js?id=b70218e56890553a5f23d0373c297690",
+    "/assets/js/custom/custom-datatable.js": "/assets/js/custom/custom-datatable.js?id=6cae172201502dd83fc466889cec7cae",
     "/css/app.css": "/css/app.css?id=54de6264756ace37980b93177b666732",
     "/css/all.css": "/css/all.css?id=b355bf76ca079ed52922274879e0fb50",
     "/assets/css/bootstrap.min.css": "/assets/css/bootstrap.min.css?id=a4b3f509e79c54a512b890d73235ef04",
-    "/assets/css/jquery.dataTables.min.css": "/assets/css/jquery.dataTables.min.css?id=b69b8cf92ced4b645c6f01a5eafebbd2",
+    "/assets/css/jquery.dataTables.min.css": "/assets/css/jquery.dataTables.min.css?id=c7786106be142e7075cdb92426f10764",
     "/assets/images/favicon.ico": "/assets/images/favicon.ico?id=084b59f3bdde96e986732269d4eed9dd",
     "/assets/images/sort_asc.png": "/assets/images/sort_asc.png?id=9fed1fb817a1d6b8b921d02f43faf040",
     "/assets/images/sort_asc_disabled.png": "/assets/images/sort_asc_disabled.png?id=05e94135bbbe0f7028e7cbfd3a3cad4b",
@@ -50,8 +50,11 @@
     "/assets/js/jquery.min.js": "/assets/js/jquery.min.js?id=583c5a8188b7d93c9c5eab4e112ac44e",
     "/assets/js/popper.min.js": "/assets/js/popper.min.js?id=ab5f6035c1aa8a5dcf54293b51b6ae54",
     "/assets/js/bootstrap.min.js": "/assets/js/bootstrap.min.js?id=faa97721efcb66a6a23b6addfdaf7fb0",
-    "/assets/js/jquery.dataTables.min.js": "/assets/js/jquery.dataTables.min.js?id=bfc2060abd13a3e9aab95757fc3dc448",
+    "/assets/js/jquery.dataTables.min.js": "/assets/js/jquery.dataTables.min.js?id=43239909b23717bb5138af2b69807c96",
     "/assets/js/select2.min.js": "/assets/js/select2.min.js?id=bde23f0b50c81e4c4aa02f8a33f5976d",
     "/assets/js/sweetalert.min.js": "/assets/js/sweetalert.min.js?id=c55e2f3f7d3cd31ddd9aaf26911f1870",
-    "/assets/js/iziToast.min.js": "/assets/js/iziToast.min.js?id=8c0c6d8a29afd0e5b5be3305a0a1c3a5"
+    "/assets/js/iziToast.min.js": "/assets/js/iziToast.min.js?id=8c0c6d8a29afd0e5b5be3305a0a1c3a5",
+    "/assets/js/dataTables.min.js": "/assets/js/dataTables.min.js?id=43239909b23717bb5138af2b69807c96",
+    "/assets/css/dataTables.dataTables.min.css": "/assets/css/dataTables.dataTables.min.css?id=c7786106be142e7075cdb92426f10764",
+    "/assets/js/datatables-compat.js": "/assets/js/datatables-compat.js?id=d84a4c35da40913fbb0d54c8b6326cbc"
 }

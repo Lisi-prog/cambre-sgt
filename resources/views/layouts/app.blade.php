@@ -26,8 +26,7 @@
     <link rel="stylesheet" href="{{ asset('web/css/components.css')}}">
     @yield('page_css')
 
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> --}}
-    <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/dataTables.dataTables.min.css')}}" />
     @yield('css')
     <link rel="stylesheet" href="{{asset('assets/css/excel-bootstrap-table-filter-style.css')}}"/>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -92,8 +91,8 @@
 <script src="{{ mix('assets/js/profile.js') }}"></script>
 <script src="{{ mix('assets/js/custom/custom.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.min2.js') }}"></script>
-{{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script> --}}
-<script src="{{ asset('assets/js/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/js/datatables-compat.js') }}"></script>
 @yield('page_js')
 @yield('scripts')
 <script>
