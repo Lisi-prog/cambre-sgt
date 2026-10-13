@@ -7,28 +7,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
+            <form action="{{ route('p_m.store') }}" method="POST" class="formulario form-prevent-multiple-submits" enctype="multipart/form-data">
+                @csrf
             <div class="modal-body">
-                {!! Form::open(['route' => 'p_m.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="form-group">
-                            {!! Form::label('titulo-propuesta', 'Titulo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <label for="titulo-propuesta" class="control-label fs-7" style="white-space: nowrap;">Titulo:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::text('titulo-propuesta', null, ['class' => 'form-control reset-input']) !!}
+                            <input type="text" name="titulo-propuesta" id="titulo-propuesta" class="form-control reset-input" value="{{ old('titulo-propuesta') }}">
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
-                            {!! Form::label('nombre_emisor', 'Emisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <label for="nombre_emisor" class="control-label fs-7" style="white-space: nowrap;">Emisor:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nombre_emisor', null, ['class' => 'form-control reset-input']) !!}
+                            <input type="text" name="nombre_emisor" id="nombre_emisor" class="form-control reset-input" value="{{ old('nombre_emisor') }}">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="form-group">
-                            {!! Form::label('archivo', 'Archivo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <label for="inputGroupFile02" class="control-label fs-7" style="white-space: nowrap;">Archivo:</label>
                             <div class="input-group mb-3">
                                 <input name="archivos[]" type="file" class="form-control" id="inputGroupFile02" multiple>
                                 <label class="input-group-text" for="inputGroupFile02">Subir</label>
@@ -37,57 +38,58 @@
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
-                            {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <label for="id_activo" class="control-label fs-7" style="white-space: nowrap;">Activo:</label>
                             {{-- <span class="obligatorio">*</span> --}}
                             {{--    ACTIVOS    --}}
-                            {!! Form::select('id_activo', $activos, null, [
-                                'placeholder' => 'Seleccionar',
-                                'class' => 'form-select form-control reset-input',
-                                'id' => 'id_activo'
-                            ]) !!}
+                            <select name="id_activo" id="id_activo" class="form-select form-control reset-input">
+                                <option value="" {{ old('id_activo') == null ? 'selected' : '' }}>Seleccionar</option>
+                                @foreach ($activos as $id => $nombre)
+                                    <option value="{{ $id }}" {{ (string) old('id_activo') === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('obj-propuesta', 'Objetivo de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="obj-propuesta" class="control-label fs-7 reset" style="white-space: nowrap; ">Objetivo de la propuesta:</label>
                             <span class="obligatorio">*</span>
                             <textarea name='obj-propuesta' id="obj-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
-                </div>      
+                </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('desc-propuesta', 'Descripcion de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="desc-propuesta" class="control-label fs-7 reset" style="white-space: nowrap; ">Descripcion de la propuesta:</label>
                             <span class="obligatorio">*</span>
                             <textarea name='desc-propuesta' id="desc-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
-                </div> 
+                </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('an-i-propuesta', 'Analisis de impacto de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="an-i-propuesta" class="control-label fs-7 reset" style="white-space: nowrap; ">Analisis de impacto de la propuesta:</label>
                             <span class="obligatorio">*</span>
                             <textarea name='an-i-propuesta' id="an-i-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
-                </div>    
+                </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('bene-propuesta', 'Beneficios de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="bene-propuesta" class="control-label fs-7 reset" style="white-space: nowrap; ">Beneficios de la propuesta:</label>
                             <span class="obligatorio">*</span>
                             <textarea name='bene-propuesta' id="bene-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
                     </div>
-                </div>     
+                </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('prob-propuesta', 'Problemas de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="prob-propuesta" class="control-label fs-7 reset" style="white-space: nowrap; ">Problemas de la propuesta:</label>
                             <span class="obligatorio">*</span>
                             <textarea name='prob-propuesta' id="prob-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
@@ -96,7 +98,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('eva-propuesta', 'Evaluacion de la propuesta:', ['class' => 'control-label fs-7 reset', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="eva-propuesta" class="control-label fs-7 reset" style="white-space: nowrap; ">Evaluacion de la propuesta:</label>
                             <span class="obligatorio">*</span>
                             <textarea name='eva-propuesta' id="eva-propuesta" class="form-control reset-input" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                         </div>
@@ -104,11 +106,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                        {!! Form::submit('Guardar', ['class' => 'btn btn-success button-prevent-multiple-submits']) !!}
-                {!! Form::close() !!}
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 {{-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button> --}}
             </div>
+            </form>
         </div>
     </div>
 </div>

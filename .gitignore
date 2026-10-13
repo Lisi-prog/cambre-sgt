@@ -18,3 +18,4 @@ yarn-error.log
 .fly/scripts/caches.sh
 Dockerfile
 fly.toml
+/proyecto-datatable

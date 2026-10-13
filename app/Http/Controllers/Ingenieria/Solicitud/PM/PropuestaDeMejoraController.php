@@ -46,19 +46,155 @@ class PropuestaDeMejoraController extends Controller
     }
     
     public function index(Request $request)
-    {        
-        $ListaPM = Sol_propuesta_de_mejora::get();
+    {
         $supervisores = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $activos = Activo::orderBy('codigo_activo')->whereNotNull('codigo_activo')->pluck('codigo_activo', 'id_activo');
+        return view('Ingenieria.Solicitud.PM.index_su', compact('supervisores', 'activos'));
+    }
 
-        $flt_users = $this->obtenerEmpleadosActivos();
-        // $flt_sectores = Sector::orderBy('nombre_sector')->get();
-        // $flt_estados = Sol_estado_solicitud::orderBy('nombre_estado_solicitud')->get();
-        $flt_estados = $this->estadosParaSolicitud();
-        $flt_estados_sol = Sol_estado_solicitud::orderBy('id_estado_solicitud')->get();
-        // $flt_prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->get();
-        $estados_a_buscar = ["Completo", "Cancelado", "Rechazado", "Aceptado"];
-        return view('Ingenieria.Solicitud.PM.index', compact('ListaPM', 'supervisores', 'activos', 'flt_users', 'flt_estados', 'flt_estados_sol', 'estados_a_buscar'));
+    public function datos(Request $request)
+    {
+        $request->validate([
+            'grupo' => 'required|in:sin_calificar,calificadas',
+            'draw' => 'required|integer|min:0',
+            'start' => 'required|integer|min:0',
+            'length' => 'required|integer|min:1|max:500',
+            'search.value' => 'nullable|string|max:500',
+            'order' => 'sometimes|array|max:9',
+            'order.*.column' => 'required|integer|between:0,9',
+            'order.*.dir' => 'required|in:asc,desc',
+            'filtrosCabecera' => 'required|json',
+        ]);
+        $filtros = json_decode($request->input('filtrosCabecera'), true);
+        validator(['filtros' => $filtros], [
+            'filtros' => 'array',
+            'filtros.*' => 'array',
+            'filtros.*.incluir' => 'sometimes|array',
+            'filtros.*.incluir.*' => 'string|max:500',
+            'filtros.*.excluir' => 'sometimes|array',
+            'filtros.*.excluir.*' => 'string|max:500',
+        ])->validate();
+
+        $columnas = $this->columnasTablaPM($request->input('grupo'));
+        $base = $this->consultaTablaPM($request->input('grupo'));
+        $total = (clone $base)->count();
+        $consulta = clone $base;
+        foreach ($filtros as $indice => $filtro) {
+            if (!isset($columnas[$indice])) continue;
+            $columna = DB::raw($columnas[$indice]);
+            if (array_key_exists('incluir', $filtro)) {
+                $consulta->whereIn($columna, $filtro['incluir']);
+            }
+            if (array_key_exists('excluir', $filtro)) {
+                $consulta->whereNotIn($columna, $filtro['excluir']);
+            }
+        }
+        $busqueda = trim($request->input('search.value', ''));
+        if ($busqueda !== '') {
+            // All terms must match; each term may occur in any searchable column.
+            foreach (preg_split('/\s+/u', $busqueda) as $termino) {
+                $consulta->where(function ($q) use ($columnas, $termino) {
+                    foreach ($columnas as $columna) {
+                        $q->orWhereRaw($columna.' LIKE ?', ['%'.$termino.'%']);
+                    }
+                });
+            }
+        }
+        $filtrados = (clone $consulta)->count();
+        foreach ($request->input('order', []) as $orden) {
+            if (isset($columnas[$orden['column']])) {
+                $numericas = [5 => 'pm.calificacion', 6 => 'pm.necesidad', 7 => 'pm.v_total', 8 => 'pm.interes'];
+                $expresion = $request->input('grupo') === 'calificadas'
+                    ? ($numericas[$orden['column']] ?? $columnas[$orden['column']])
+                    : $columnas[$orden['column']];
+                $consulta->orderByRaw($expresion.' '.$orden['dir']);
+            }
+        }
+        $ids = $consulta->orderByDesc('pm.id_propuesta_de_mejora')
+            ->offset((int) $request->input('start'))->limit((int) $request->input('length'))
+            ->pluck('pm.id_propuesta_de_mejora');
+        $modelos = Sol_propuesta_de_mejora::with(['getSolicitud.getEmpleado', 'getSolicitud.getEstadoSolicitud'])
+            ->whereIn('id_propuesta_de_mejora', $ids)->get()->keyBy('id_propuesta_de_mejora');
+        $listaPM = $ids->map(function ($id) use ($modelos) { return $modelos[$id]; });
+
+        $usuario = $request->user();
+        $permisos = [
+            'esAdmin' => $usuario->hasRole('ADMIN'),
+            'esTecnico' => $usuario->hasRole('TECNICO'),
+            'esExterno' => $usuario->hasRole('EXTERNO'),
+            'idEmpleado' => optional($usuario->getEmpleado)->id_empleado,
+            'id_estado_aceptado' => config('myconfig.estado_solicitud_aceptado'),
+        ];
+
+        $grupo = $request->input('grupo');
+        $datos = $listaPM->map(function ($Pm) use ($permisos, $grupo) {
+            $solicitud = $Pm->getSolicitud;
+            $fila = [
+                e(Carbon::parse($solicitud->fecha_carga)->format('Y-m-d')),
+                e($solicitud->id_solicitud),
+                e($Pm->titulo_propuesta ?? ''),
+                e($Pm->nombre_emisor ?? ''),
+                e(optional($solicitud->getEmpleado)->nombre_empleado ?? 'no asignado'),
+            ];
+            if ($grupo === 'calificadas') {
+                foreach (['calificacion', 'necesidad', 'v_total', 'interes'] as $campo) {
+                    $fila[] = e($Pm->$campo ?? '-');
+                }
+                $fila[] = e(optional($solicitud->getEstadoSolicitud)->nombre_estado_solicitud ?? '-');
+            }
+            $esPropietario = $permisos['idEmpleado'] !== null
+                && $solicitud->id_empleado == $permisos['idEmpleado'];
+            $fila[] = view('Ingenieria.Solicitud.PM.'.($grupo === 'sin_calificar' ? 'acciones-calificar' : 'acciones-tabla'),
+                array_merge($permisos, compact('Pm', 'esPropietario')))->render();
+            return $fila;
+        });
+
+        $respuesta = [
+            'draw' => (int) $request->input('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtrados,
+            'data' => $datos->values(),
+        ];
+        if ($request->boolean('opcionesFiltros')) {
+            // Distinct values across the full table, independent of the current page.
+            $respuesta['opcionesFiltros'] = [];
+            foreach ($columnas as $indice => $columna) {
+                $respuesta['opcionesFiltros'][$indice] = (clone $base)
+                    ->selectRaw($columna.' AS valor')->distinct()->orderBy('valor')
+                    ->get()->pluck('valor')->map(function ($valor) { return (string) $valor; })->values();
+            }
+        }
+        return response()->json($respuesta);
+    }
+
+    private function consultaTablaPM($grupo)
+    {
+        $consulta = DB::table('sol_propuesta_de_mejora as pm')
+            ->join('sol_solicitud as sol', 'sol.id_solicitud', '=', 'pm.id_solicitud')
+            ->leftJoin('empleado as emp', 'emp.id_empleado', '=', 'sol.id_empleado')
+            ->leftJoin('sol_estado_solicitud as est', 'est.id_estado_solicitud', '=', 'sol.id_estado_solicitud');
+        return $grupo === 'sin_calificar'
+            ? $consulta->whereNull('pm.calificacion')
+            : $consulta->whereNotNull('pm.calificacion');
+    }
+
+    private function columnasTablaPM($grupo)
+    {
+        $columnas = [
+            "DATE_FORMAT(sol.fecha_carga, '%Y-%m-%d')",
+            'sol.id_solicitud',
+            "COALESCE(pm.titulo_propuesta, '')",
+            "COALESCE(pm.nombre_emisor, '')",
+            "COALESCE(emp.nombre_empleado, 'no asignado')",
+        ];
+        if ($grupo === 'calificadas') {
+            $columnas = array_merge($columnas, [
+                "COALESCE(pm.calificacion, '-')", "COALESCE(pm.necesidad, '-')",
+                "COALESCE(pm.v_total, '-')", "COALESCE(pm.interes, '-')",
+                "COALESCE(est.nombre_estado_solicitud, '-')",
+            ]);
+        }
+        return $columnas;
     }
 
     public function obtenerEmpleadosActivos(){

@@ -135,17 +135,17 @@
                                                                 <div class="row my-2">
                                                                     <div class="col-12">
                                                                         @role(["SUPERVISOR", "ADMIN"])
-                                                                            {!! Form::open(['method' => 'GET', 'route' => ['pm.calificar', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                                {!! Form::submit('Calificar', ['class' => 'btn btn-success w-100']) !!}
-                                                                            {!! Form::close() !!}
+                                                                            <form method="GET" action="{{ route('pm.calificar', $Pm->id_propuesta_de_mejora) }}" style="display:inline">
+                                                                                <button type="submit" class="btn btn-success w-100">Calificar</button>
+                                                                            </form>
                                                                         @endrole
                                                                     </div>
                                                                 </div>
                                                                 <div class="row my-2">
                                                                     <div class="col-12">
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['p_m.edit', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                            {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <form method="GET" action="{{ route('p_m.edit', $Pm->id_propuesta_de_mejora) }}" style="display:inline">
+                                                                            <button type="submit" class="btn btn-warning w-100">Editar</button>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -287,14 +287,14 @@
                                                             <div class="row my-2">
                                                                 <div class="col-12">
                                                                     @if ($Pm->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['p_m.show', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <form method="GET" action="{{ route('p_m.show', $Pm->id_propuesta_de_mejora) }}" style="display:inline">
+                                                                        <button type="submit" class="btn btn-primary w-100">Ver</button>
+                                                                        </form>
                                                                     @else
                                                                         @can('EVALUAR-SOLICITUD')
-                                                                            {!! Form::open(['method' => 'GET', 'route' => ['pm.evaluar', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                            {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
-                                                                            {!! Form::close() !!}
+                                                                            <form method="GET" action="{{ route('pm.evaluar', $Pm->id_propuesta_de_mejora) }}" style="display:inline">
+                                                                            <button type="submit" class="btn btn-success w-100">Evaluar</button>
+                                                                            </form>
                                                                         @endcan
                                                                     @endif
                                                                 </div>
@@ -312,15 +312,15 @@
                                                             <div class="row my-2">
                                                                 @if (Auth::user()->hasRole('SUPERVISOR'))
                                                                     <div class="col-12">
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['p_m.edit', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <form method="GET" action="{{ route('p_m.edit', $Pm->id_propuesta_de_mejora) }}" style="display:inline">
+                                                                        <button type="submit" class="btn btn-warning w-100">Editar</button>
+                                                                        </form>
                                                                     </div>
                                                                 @else
                                                                     @if ($Pm->getSolicitud->getEmpleado->id_empleado ==  Auth::user()->getEmpleado->id_empleado && $Pm->getSolicitud->id_estado_solicitud < $id_estado_aceptado)
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['p_m.edit', $Pm->id_propuesta_de_mejora], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <form method="GET" action="{{ route('p_m.edit', $Pm->id_propuesta_de_mejora) }}" style="display:inline">
+                                                                        <button type="submit" class="btn btn-warning w-100">Editar</button>
+                                                                        </form>
                                                                     @endif
                                                                 @endif
                                                             </div>

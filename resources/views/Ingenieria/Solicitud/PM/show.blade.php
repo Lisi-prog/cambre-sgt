@@ -64,14 +64,14 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                                     <div class="form-group">
-                                        {!! Form::label('titulo-propuesta', 'Titulo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        {!! Form::text('titulo-propuesta', $pm->titulo_propuesta, ['class' => 'form-control', 'readonly']) !!}
+                                        <label for="titulo-propuesta" class="control-label fs-7" style="white-space: nowrap;">Titulo:</label>
+                                        <input type="text" name="titulo-propuesta" id="titulo-propuesta" class="form-control" readonly value="{{ $pm->titulo_propuesta }}">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
-                                        {!! Form::label('nombre_emisor', 'Emisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        {!! Form::text('nombre_emisor', $pm->nombre_emisor, ['class' => 'form-control', 'readonly']) !!}
+                                        <label for="nombre_emisor" class="control-label fs-7" style="white-space: nowrap;">Emisor:</label>
+                                        <input type="text" name="nombre_emisor" id="nombre_emisor" class="form-control" readonly value="{{ $pm->nombre_emisor }}">
                                     </div>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                                     @if (sizeof($pm->getSolicitud->getArchivos) != 0)
                                     <div class="form-group">
-                                        {!! Form::label('archivo', "Archivo/s:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="archivo" class="control-label" style="white-space: nowrap; ">Archivo/s:</label>
                                         <table class="table table-light table-striped">
                                             <thead>
                                               <tr>
@@ -109,22 +109,22 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
-                                        {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="id_activo" class="control-label fs-7" style="white-space: nowrap;">Activo:</label>
                                         <span class="obligatorio">*</span>
                                         {{--    ACTIVOS    --}}
-                                        {!! Form::select('id_activo', $activos, $pm->id_activo, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'id_activo',
-                                            'disabled'
-                                        ]) !!}
+                                        <select name="id_activo" id="id_activo" class="form-select form-control" disabled>
+                                            <option value="" {{ old('id_activo', $pm->id_activo) == null ? 'selected' : '' }}>Seleccionar</option>
+                                            @foreach ($activos as $id => $nombre)
+                                                <option value="{{ $id }}" {{ (string) old('id_activo', $pm->id_activo) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('obj-propuesta', 'Objetivo de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="obj-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Objetivo de la propuesta:</label>
                                         <textarea name='obj-propuesta' id="obj-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" readonly>{{$pm->objetivo_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('desc-propuesta', 'Descripcion de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="desc-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Descripcion de la propuesta:</label>
                                         <textarea name='desc-propuesta' id="desc-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" readonly>{{$pm->descripcion_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -140,7 +140,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('an-i-propuesta', 'Analisis de impacto de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="an-i-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Analisis de impacto de la propuesta:</label>
                                         <textarea name='an-i-propuesta' id="an-i-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" readonly>{{$pm->analisis_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('bene-propuesta', 'Beneficios de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="bene-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Beneficios de la propuesta:</label>
                                         <textarea name='bene-propuesta' id="bene-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" readonly>{{$pm->beneficio_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('prob-propuesta', 'Problemas de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="prob-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Problemas de la propuesta:</label>
                                         <textarea name='prob-propuesta' id="prob-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" readonly>{{$pm->problema_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('eva-propuesta', 'Evaluacion de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="eva-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Evaluacion de la propuesta:</label>
                                         <textarea name='eva-propuesta' id="eva-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" readonly>{{$pm->evaluacion_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('v-tecnica', 'Viabilidad técnica:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="v-tecnica" class="control-label fs-7" style="white-space: nowrap;">Viabilidad técnica:</label>
                                         <div class="form-control rating p-0" id="vt">
                                             <input type="radio" name="rating" id="rate5" value=5><label for="rate5">5</label>
                                             <input type="radio" name="rating" id="rate4" value=4><label for="rate4">4</label> 
@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('v-economica', 'Viabilidad económica:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="v-economica" class="control-label fs-7" style="white-space: nowrap;">Viabilidad económica:</label>
                                         <div class="form-control rating p-0">
                                             <input type="radio" name="ve-rating" id="ve-rate5" value=5><label for="ve-rate5">5</label>
                                             <input type="radio" name="ve-rating" id="ve-rate4" value=4><label for="ve-rate4">4</label> 
@@ -212,7 +212,7 @@
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('v-temporal', 'Viabilidad temporal:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="v-temporal" class="control-label fs-7" style="white-space: nowrap;">Viabilidad temporal:</label>
                                         <div class="form-control rating p-0">
                                             <input type="radio" name="vte-rating" id="vte-rate5" value=5><label for="vte-rate5">5</label>
                                             <input type="radio" name="vte-rating" id="vte-rate4" value=4><label for="vte-rate4">4</label> 
@@ -224,8 +224,8 @@
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('v-total', 'Viabilidad total:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        {!! Form::text('number', 0, ['class' => 'form-control fs-5', 'id'=> 'viv_tot_id', 'readonly']) !!}
+                                        <label for="viv_tot_id" class="control-label fs-7" style="white-space: nowrap;">Viabilidad total:</label>
+                                        <input type="text" name="number" id="viv_tot_id" class="form-control fs-5" readonly value="{{ 0 }}">
                                         {{-- <div class="form-control rating p-0">
                                             <input type="radio" name="vto-rating" id="vto-rate5" value=5><label for="vto-rate5">5</label>
                                             <input type="radio" name="vto-rating" id="vto-rate4" value=4><label for="vto-rate4">4</label> 
@@ -239,7 +239,7 @@
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nececidad', 'Necesidad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="nececidad" class="control-label fs-7" style="white-space: nowrap;">Necesidad:</label>
                                         <div class="form-control rating p-0">
                                             <input type="radio" name="ne-rating" id="ne-rate5" value=5><label for="ne-rate5">5</label>
                                             <input type="radio" name="ne-rating" id="ne-rate4" value=4><label for="ne-rate4">4</label> 
@@ -251,15 +251,15 @@
                                 </div>
                                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('interes', 'Interés:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        {!! Form::text('interes', 0, ['class' => 'form-control fs-5', 'id'=> 'nece_id', 'readonly']) !!}
+                                        <label for="nece_id" class="control-label fs-7" style="white-space: nowrap;">Interés:</label>
+                                        <input type="text" name="interes" id="nece_id" class="form-control fs-5" readonly value="{{ 0 }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('calificacion', 'Calificación:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="calificacion" class="control-label fs-7" style="white-space: nowrap;">Calificación:</label>
                                         <div class="form-control rating p-0">
                                             <input type="radio" name="ca-rating" id="ca-rate10" value=10><label for="ca-rate10">10</label>
                                             <input type="radio" name="ca-rating" id="ca-rate9" value=9><label for="ca-rate9">9</label> 

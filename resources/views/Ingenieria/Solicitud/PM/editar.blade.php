@@ -9,7 +9,9 @@
             </div>
         </div>
         <div class="section-body">
-            {!! Form::model($pm,['method' => 'PUT', 'route' => ['p_m.update', $pm->id_propuesta_de_mejora]]) !!}
+            <form method="POST" action="{{ route('p_m.update', $pm->id_propuesta_de_mejora) }}">
+                @csrf
+                @method('PUT')
             <div class="row">
                 @include('layouts.modal.mensajes')
                 {{-- Informacion del Requerimiento de ingenieria --}}
@@ -19,36 +21,36 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('fecha_carga', "Fecha y hora:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($pm->getSolicitud->fecha_carga)->format('Y-m-d H:i'), ['class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fecha_carga" class="control-label" style="white-space: nowrap; ">Fecha y hora:</label>
+                                        <input type="text" name="fecha_carga" id="fecha_carga" class="form-control" readonly value="{{ old('fecha_carga', \Carbon\Carbon::parse($pm->getSolicitud->fecha_carga)->format('Y-m-d H:i')) }}">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado',$pm->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud, ['class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="estado" class="control-label" style="white-space: nowrap; ">Estado:</label>
+                                        <input type="text" name="estado" id="estado" class="form-control" readonly value="{{ old('estado', $pm->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud) }}">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_solicitante', 'Solicitante:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_solicitante', $pm->getSolicitud->nombre_solicitante, ['class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="nom_solicitante" class="control-label" style="white-space: nowrap; ">Solicitante:</label>
+                                        <input type="text" name="nom_solicitante" id="nom_solicitante" class="form-control" readonly value="{{ old('nom_solicitante', $pm->getSolicitud->nombre_solicitante) }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                                     <div class="form-group">
-                                        {!! Form::label('titulo-propuesta', 'Titulo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="titulo-propuesta" class="control-label fs-7" style="white-space: nowrap;">Titulo:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::text('titulo-propuesta', $pm->titulo_propuesta, ['class' => 'form-control', 'required']) !!}
+                                        <input type="text" name="titulo-propuesta" id="titulo-propuesta" class="form-control" required value="{{ old('titulo-propuesta', $pm->titulo_propuesta) }}">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
-                                        {!! Form::label('nombre_emisor', 'Emisor:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="nombre_emisor" class="control-label fs-7" style="white-space: nowrap;">Emisor:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::text('nombre_emisor', $pm->nombre_emisor, ['class' => 'form-control', 'required']) !!}
+                                        <input type="text" name="nombre_emisor" id="nombre_emisor" class="form-control" required value="{{ old('nombre_emisor', $pm->nombre_emisor) }}">
                                     </div>
                                 </div>
                             </div>
@@ -57,54 +59,55 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     <div class="form-group">
-                                        {!! Form::label('id_activo', 'Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="id_activo" class="control-label fs-7" style="white-space: nowrap;">Activo:</label>
                                         {{-- <span class="obligatorio">*</span> --}}
                                         {{--    ACTIVOS    --}}
-                                        {!! Form::select('id_activo', $activos, $pm->id_activo, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'id_activo'
-                                        ]) !!}
+                                        <select name="id_activo" id="id_activo" class="form-select form-control">
+                                            <option value="" {{ old('id_activo', $pm->id_activo) == null ? 'selected' : '' }}>Seleccionar</option>
+                                            @foreach ($activos as $id => $nombre)
+                                                <option value="{{ $id }}" {{ (string) old('id_activo', $pm->id_activo) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('obj-propuesta', 'Objetivo de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="obj-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Objetivo de la propuesta:</label>
                                         <span class="obligatorio">*</span>
                                         <textarea name='obj-propuesta' id="obj-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$pm->objetivo_propuesta}}</textarea>
                                     </div>
                                 </div>
-                            </div>      
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('desc-propuesta', 'Descripcion de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="desc-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Descripcion de la propuesta:</label>
                                         <textarea name='desc-propuesta' id="desc-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$pm->descripcion_propuesta}}</textarea>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('an-i-propuesta', 'Analisis de impacto de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="an-i-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Analisis de impacto de la propuesta:</label>
                                         <textarea name='an-i-propuesta' id="an-i-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$pm->analisis_propuesta}}</textarea>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('bene-propuesta', 'Beneficios de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="bene-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Beneficios de la propuesta:</label>
                                         <textarea name='bene-propuesta' id="bene-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$pm->beneficio_propuesta}}</textarea>
                                     </div>
                                 </div>
-                            </div>     
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('prob-propuesta', 'Problemas de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="prob-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Problemas de la propuesta:</label>
                                         <textarea name='prob-propuesta' id="prob-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$pm->problema_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -112,7 +115,7 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        {!! Form::label('eva-propuesta', 'Evaluacion de la propuesta:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="eva-propuesta" class="control-label fs-7" style="white-space: nowrap; ">Evaluacion de la propuesta:</label>
                                         <textarea name='eva-propuesta' id="eva-propuesta" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$pm->evaluacion_propuesta}}</textarea>
                                     </div>
                                 </div>
@@ -136,16 +139,13 @@
                                 <div class="col-2">
                                     <div class="row">
                                         @if ($pm->getSolicitud->id_estado_solicitud < $id_estado_aceptado)
-                                            {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
+                                            <button type="submit" class="btn btn-success">Guardar</button>
                                         @endif
-                                        {!! Form::close() !!}
                                     </div>
                                 </div>
                                 <div class="col-5 d-flex">
                                     <div class="ms-auto">
-                                        {{-- {!! Form::open(['method' => 'GET', 'route' => 'p_m.index', 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!} --}}
+
                                     </div>
                                 </div>
                             </div>
@@ -153,8 +153,9 @@
                     </div>
                 </div>
             </div>
+            </form>
         </div>
-       
+
     </section>
     <script>
         $(document).ready(function () {
