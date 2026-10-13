@@ -9,6 +9,8 @@ use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
+use App\Models\Cambre\Sector;
+use App\Models\Cambre\Rol_x_sector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
@@ -56,7 +58,9 @@ class RolController extends Controller
     public function edit(Request $request, $id)
     {
         $rol = Role::find($id);
-        return view('Informatica.GestionUsuarios.roles.editar',compact('rol'));
+        $sectores = Sector::orderBy('nombre_sector')->pluck('nombre_sector', 'id_sector');
+        $rolxsec = Rol_x_sector::where('id_rol', $id)->first();
+        return view('Informatica.GestionUsuarios.roles.editar',compact('rol', 'sectores', 'rolxsec'));
     }
     
     public function update(Request $request, $id)
@@ -66,9 +70,30 @@ class RolController extends Controller
         ]);
     
         $role = Role::find($id);
+
         $role->update([
             'name' => strtoupper($request->input('name')),
         ]);
+
+        $sector = $request->input('sector');
+
+        $rolxsec = Rol_x_sector::where('id_rol', $id)->first();
+
+        if (is_null($sector)) {
+            if ($rolxsec) {
+                Rol_x_sector::where('id_rol', $id)->delete();
+            }
+        } elseif ($rolxsec) {
+            Rol_x_sector::where('id_rol', $id)->update([
+                'id_sector' => $sector
+            ]);
+
+        } else {
+            Rol_x_sector::create([
+                'id_rol' => $id,
+                'id_sector' => $sector
+            ]);
+        }
     
         return redirect()->route('roles.index')->with('mensaje','Rol '.strtoupper($request->input('name')). ' editado con éxito!.');                       
     }
