@@ -60,6 +60,13 @@ CREATE TABLE `sector` (
   PRIMARY KEY (`id_sector`)
 );
 
+CREATE TABLE `rol_x_sector` (
+  `id_rol` int NOT NULL,
+  `id_sector` int NOT NULL,
+  PRIMARY KEY (`id_sector`, `id_rol`),
+  CONSTRAINT `fk_rxs_sector` FOREIGN KEY (`id_sector`) REFERENCES `sector`(`id_sector`)
+);
+
 CREATE TABLE `sol_servicio_de_ingenieria` (
   `id_servicio_de_ingenieria` int NOT NULL AUTO_INCREMENT,
   `id_solicitud` int,
