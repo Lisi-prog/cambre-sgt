@@ -1,3 +1,25 @@
+<style>
+    #tabla_ajustes .ajuste-tarea-hecha {
+        position: static;
+        width: 26px;
+        height: 26px;
+        margin: 6px;
+        vertical-align: middle;
+        border: 2px solid #495057;
+        cursor: pointer;
+    }
+
+    #tabla_ajustes .ajuste-tarea-hecha:checked {
+        background-color: #005f7f;
+        border-color: #005f7f;
+    }
+
+    #tabla_ajustes .ajuste-tarea-hecha:focus-visible {
+        outline: 3px solid #005f7f;
+        outline-offset: 3px;
+    }
+</style>
+
 <div class="modal fade" id="modalNuevoParteAjuste" tabindex="-1" aria-labelledby="modalNuevoParteAjuste" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
