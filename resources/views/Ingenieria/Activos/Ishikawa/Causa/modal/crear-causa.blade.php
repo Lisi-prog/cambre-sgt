@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">Nueva Causa</h1>
+                <h1 class="modal-title fs-5">Nuevo Diagnóstico</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             {!! Form::open(['route' => 'ishikawa_causa.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
@@ -10,12 +10,14 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                           {!! Form::label('nombre_causa', 'Nombre causa:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                           {!! Form::label('nombre_causa', 'Nombre diagnóstico:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('nombre_causa', null, [
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
-                                'id' => 'nombre_causa'
+                                'id' => 'nombre_causa',
+                                'autocomplete' => 'off',
+                                'style' => 'text-transform: uppercase;'
                             ]) !!}
                         </div>
                     </div>
@@ -32,11 +34,13 @@
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                           {!! Form::label('explicacion_causa', 'Explicación causa:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                           {!! Form::label('explicacion_causa', 'Explicación diagnóstico:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                             {!! Form::textarea('explicacion_causa', null, [
                                 'class' => 'form-control reset-input',
                                 'id' => 'explicacion_causa',
-                                'rows' => 3
+                                'rows' => 3,
+                                'autocomplete' => 'off',
+                                'style' => 'text-transform: uppercase; resize:none; width: 100%; height: 10vh;'
                             ]) !!}
                         </div>
                     </div>

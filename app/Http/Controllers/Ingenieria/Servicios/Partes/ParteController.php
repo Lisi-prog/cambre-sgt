@@ -104,28 +104,27 @@ class ParteController extends Controller
                 
             case 2:
                 //PARTE DE MANUFACTURA
-                return redirect()->route('en.desarrollo');
+                //return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_manufactura::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }
                 $tipo = 'Manufactura';
                 $estados = $this->listarTodosLosEstadosDe(2);
                 break;
             case 3:
                 //PARTE DE MECANIZADO
-                return redirect()->route('en.desarrollo');
                 if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
                     //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
-                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable($respo)->supervisor($super)->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
                     $editable = 'readonly';
-                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->get();
+                    $partes = Vw_parte_mecanizado::servicio($servicios)->responsable([$id_empleado])->fecha($from, $to)->orderBy('id_parte', 'desc')->paginate(500);
                 }
                 $tipo = 'Mecanizado';
                 $estados = $this->listarTodosLosEstadosDe(3);
@@ -145,6 +144,17 @@ class ParteController extends Controller
                 break;
             case 5:
                 return redirect()->route('en.desarrollo');
+                //PARTE DE OPERACIONES
+                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
+                    //SI ES SUPERVISOR TRAIGO TODAS LAS PARTES
+                    $partes = Vw_parte_mantenimiento::get();
+                }else{
+                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
+                    $editable = 'readonly';
+                    $partes = Vw_parte_mantenimiento::responsable($id_empleado)->get();
+                }
+                $tipo = 'Operaciones';
+                $estados = $this->listarTodosLosEstadosDe(1);
                 break;
             default:
                 
@@ -156,6 +166,39 @@ class ParteController extends Controller
         $flt_sup = $this->obtenerSupervisores();
 
         return view('Ingenieria.Servicios.Partes.partes', compact('partes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'editable', 'flt_serv', 'flt_resp', 'flt_sup', 'servicios', 'respo', 'super', 'from', 'to'));
+    }
+
+    public function verPartesTrabajo(){
+        $flt_servicios = $this->obtenerCodigoServicio();
+        $flt_responsable = $this->obtenerEmpleados();
+        $flt_supervisor = $this->obtenerSupervisores();
+        return view('Ingenieria.Servicios.Partes.Trabajo.index', compact('flt_servicios', 'flt_responsable', 'flt_supervisor'));
+    }
+
+    public function obtenerPartesTrabajo(Request $request){
+        $id_empleado = Auth::user()->getEmpleado->id_empleado;
+        $servicios = $request->input('cod_serv');
+        $respo = $request->input('res');
+        $super = $request->input('sup');
+        $from = $request->input('fecha_desde');
+        $to = $request->input('fecha_hasta');
+
+        $partes = Vw_parte_trabajo::orderBy('id_parte', 'desc');
+
+        if (!Auth::user()->hasRole('SUPERVISOR') || !Auth::user()->hasRole('ADMIN')) {
+            $partes->responsable([$id_empleado]);
+        }
+
+        if ($request->boolean('carga_inicial')) {
+            $partes->limit(25);
+        } else {
+            $partes->servicio($servicios)
+                ->responsable($respo)
+                ->supervisor($super)
+                ->fecha($from, $to);
+        }
+        
+        return $partes->orderBy('id_parte', 'desc')->get();
     }
 
     public function obtenerCodigoServicio(){
@@ -411,6 +454,9 @@ class ParteController extends Controller
         $observaciones = $request->input('observaciones');
         $cont = 0;
 
+        $duracionHoras = $request->input('duracion_horas');
+        $duracionMinutos = $request->input('duracion_minutos');
+
         $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
         $fecha = Carbon::now()->format('Y-m-d');
         try {
@@ -427,19 +473,18 @@ class ParteController extends Controller
 
                 $opcion =  $orden->getOrdenDe->getTipoOrden();
 
+                // $tiempo = $tiempos[$cont];
+
+                // list($hora, $minutos) = explode(':', $tiempo);
                 
 
-                $tiempo = $tiempos[$cont];
+                // $hora = (int)$hora;
+                // $minutos = (int)$minutos;
 
-                list($hora, $minutos) = explode(':', $tiempo);
+                // $horas = $hora . ':' . $minutos;
 
-                $hora = (int)$hora;
-                $minutos = (int)$minutos;
-                // preg_match('/(\d+)h\s+(\d+)m/', $tiempo, $matches);
-
-                // $hora = (int)$matches[1];
-                // $minutos = (int)$matches[2];
-
+                $hora = (int) $duracionHoras[$cont];
+                $minutos = (int) $duracionMinutos[$cont];
                 $horas = $hora . ':' . $minutos;
                 
                 $costo = $hora*$puesto->costo_hora + $minutos * ($puesto->costo_hora/60);
@@ -585,6 +630,10 @@ class ParteController extends Controller
                 'fecha_limite' => $parte->fecha_limite,
                 'tec' => $es_tecnico
             ];
+    }
+
+    public function obtenerUnaParteTrabajo($id){
+        return Vw_parte_trabajo::where('id_parte', $id)->first();
     }
 
     public function obtenerParteOpeHdr($id){
@@ -965,7 +1014,7 @@ class ParteController extends Controller
 
         $this->validate($request, [
             'id_op' => 'required',
-            'observaciones' => 'required',
+            // 'observaciones' => 'required',
             'fecha' => 'required',
             'horas' => 'required',
             'minutos' => 'required',

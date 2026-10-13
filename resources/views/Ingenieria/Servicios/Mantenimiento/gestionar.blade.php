@@ -13,29 +13,47 @@
                     <h4 class="my-auto">Gestionar Servicio de Mantenimiento - <label id="nombre_proyecto">{{$proyecto->codigo_servicio}}</label></h5>
                         <input type="text" hidden id="nombre_proyecto_i" value="{{ $proyecto->codigo_servicio }}">
                 </div>
+                <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">Actualizaciones</button>
             </div>
         </div>
         <div class="section-body">
             <div class="row">
                 @include('layouts.modal.mensajes')
                 {{-- Informacion de la solicitud --}}
+                @if($solicitud)
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-head pt-3 m-auto">
-                            <h5>Solicitud</h5>
-                        </div>
+                        {{-- @role('SUPERVISOR')
+                            <div class="card-head pt-3 m-auto d-flex w-100">
+                                <h5 class="ml-auto">Solicitud</h5>
+                                <button type="button" class="btn btn-info ml-auto mr-5" onclick="cargarModalActualizaciones({{$proyecto->id_servicio}})">
+                                    Actualizaciones
+                                </button>
+                            </div>
+                        @else --}}
+                            <div class="card-head pt-3 m-auto">
+                                <h5 class="ml-auto">Solicitud</h5>
+                            </div>
+                        {{-- @endrole --}}
+                        
                         <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                     <div class="row">
-                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                             <div class="form-group">
                                                 {!! Form::label('numero', "Numero:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 {!! Form::text('numero', $solicitud->id_solicitud, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
                                             </div>
                                         </div>
                                         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                            <div class="form-group">
+                                                {!! Form::label('solicitante', "Solicitante:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                                {!! Form::text('solicitante', $solicitud->getEmpleado->nombre_empleado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <div class="form-group">
                                                 {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 {!! Form::text('estado', $solicitud->getEstadoSolicitud->nombre_estado_solicitud, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
@@ -82,7 +100,7 @@
                                                 {!! Form::label('sintoma', "Sintomas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                                 <div class="row">
                                                     @foreach ($solicitud->getServicioDeIngenieria->getSintomasAlt() as $grupo)
-                                                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                             <li class="d-flex justify-content-between align-items-start">
                                                                 <div class="ms-2 me-auto">
                                                                     <div class="fw-bold">{{ $grupo['tipo'] }}</div>
@@ -105,6 +123,9 @@
                         </div>
                     </div>
                 </div>
+                @else
+                    {!! Form::text('activo', $proyecto->getActivo->codigo_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true', 'hidden', 'id' => 'activo']) !!}
+                @endif
                 {{-- -------------------------------- --}}
             </div>
             {{-- Ordenes y partes --}}
@@ -193,10 +214,16 @@
                                                                         <i class="fas fa-eye"></i>
                                                                     </button>
                                                                 @endif
-                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar')
-                                                                <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
-                                                                    <i class="fas fa-eye"></i>
-                                                                </button>
+                                                            @elseif ($orden->getOrdenMantenimiento->getEstadoActual() == 'Revisar' && Auth::user()->hasRole('SUPERVISOR'))
+                                                                    @if ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 3)
+                                                                        <button type="button" onclick="openModalConfirmarParteAjuste({{$orden->id_orden}})" class="btn btn-primary">
+                                                                            <i class="fas fa-eye"></i>
+                                                                        </button>
+                                                                    @elseif ($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
+                                                                        <button type="button" onclick="openModalConfirmarParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary">
+                                                                            <i class="fas fa-eye"></i>
+                                                                        </button>
+                                                                    @endif
                                                             @else
                                                                 @if($orden->getOrdenMantenimiento->getTipoOrdenMantenimiento->id_tipo_orden_mantenimiento == 1)
                                                                     <button type="button" onclick="openModalVerParteDiagnostico({{$orden->id_orden}})" class="btn btn-primary">
@@ -212,9 +239,11 @@
                                                                     </button>
                                                                 @endif
                                                             @endif
+                                                            @role('SUPERVISOR')
                                                             <button type="button" class="btn btn-warning" onclick="modalEditarPartes({{$orden->getOrdenMantenimiento->id_orden_mantenimiento}})">
                                                                 <i class="fas fa-edit"></i>
                                                             </button>
+                                                            @endrole
                                                         </td>
                                                     </tr>                                                    
                                                 @endforeach
@@ -274,7 +303,7 @@
                                                                 </button>      
                                                             @endif   
                                                         @elseif($orden_mantenimiento->getOrdenMantenimiento->getTipoOrdenMantenimiento->nombre_tipo_orden_mantenimiento == 'AJUSTE')
-                                                            @if($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Revisar')
+                                                            @if(($parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'En proceso' || $parte->getParteDe->getEstado->nombre_estado_mantenimiento == 'Revisar') && Auth::user()->hasRole('SUPERVISOR'))
                                                                 <button type="button" class="btn btn-primary" onclick="verParteDeAjuste({{ $parte->id_parte }}, '{{ $parte->getParteDe->getEstado->nombre_estado_mantenimiento }}')">
                                                                     <i class="fas fa-eye"></i>
                                                                 </button>      
@@ -304,11 +333,13 @@
                                     <h5>Orden de Mecanizado</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    @if ($proyecto->tieneOrdenMantAjusteCompleto())
-                                        <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
-                                            Nuevo
-                                        </button>
-                                    @endif
+                                    @role('SUPERVISOR')
+                                        @if ($proyecto->tieneOrdenMantAjusteCompleto())
+                                            <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenMecaModal">
+                                                Nuevo
+                                            </button>
+                                        @endif
+                                    @endrole
                                 </div>
                             </div>
                         </div>
@@ -338,11 +369,7 @@
                                             $opcion = 1;
                                         @endphp
                                         @foreach ($ordenes_mecanizado as $orden)
-                                            @if ($orden->id_estado < 7)
                                                 <tr>
-                                            @else
-                                                <tr style="display: none;">
-                                            @endif     
                                                     <td class= 'text-center' style="vertical-align: middle;">{{$orden->nombre_orden}}</td>
 
                                                     {{-- <td class= 'text-center' >{{$orden->nombre_manufactura ?? '-'}}</td>
@@ -419,12 +446,51 @@
 
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="card h-100">
-                        <div class="card-head pt-3 m-auto">
-                            <h5>Suministros</h5>
+                        <div class="card-head">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="sumi-tab" data-bs-toggle="tab"
+                                     data-bs-target="#sumi" type="button" role="tab" aria-controls="sumi" 
+                                     aria-selected="true">
+                                        <h5 class="p-2">Suministros</h5>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="prev-tab" data-bs-toggle="tab" data-bs-target="#prev" type="button" 
+                                    role="tab" aria-controls="prev" aria-selected="false">
+                                        <h5 class="p-2">Tareas Preventivas</h5>
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
-                        <hr style="height:2px;border-width:0;color:gray;background-color:rgb(101, 101, 197);width:100%;">
                         <div class="card-body">
-                        </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="sumi" role="tabpanel" aria-labelledby="sumi-tab">                                    
+                                    
+                                </div>
+                                <div class="tab-pane" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                                    <table id="tabla_serv_prev" class="table w-100">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" scope="col" style="color:#fff;">Nombre</th>
+                                                <th class="text-center" scope="col" style="color:#fff;">Ejecución</th>
+                                                <th class="text-center" scope="col" style="color:#fff;">Zona Tarea</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($tareas_preventivas as $tarea)
+                                                <tr>
+                                                    <td>{{ $tarea->getTarea->getTareaMantenimiento->nombre_tarea }}</td>
+                                                    <td>{{ $tarea->getTarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion }}</td>
+                                                    <td style="color: gray !important;">{{ $tarea->getTarea->getTareaMantenimiento->getZonaTarea->nombre_zona }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>                                
+                            </div>
+                            
+                        </div>                           
                     </div>
                 </div>
             </div>
@@ -437,6 +503,8 @@
     @include('Ingenieria.Servicios.Mantenimiento.Modal.crear-orden-mec')
     @include('Ingenieria.Servicios.Mantenimiento.Modal.ver-partes')
     @include('Ingenieria.Servicios.Mantenimiento.Partes.editar_partes')
+    @include('Ingenieria.Servicios.Proyectos.modal.ver-act-serv')
+
 
     <div hidden>
         @include('Ingenieria.Servicios.Mantenimiento.Partes.ishikawa_select')
@@ -466,19 +534,37 @@
             });
 
             $('#table-orden').DataTable({
-            language: {
-                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                    zeroRecords: 'No se ha encontrado registros',
-                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
-                    infoEmpty: 'No se ha encontrado registros',
-                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                    search: 'Buscar',
-                    paginate:{
-                        first:"Prim.",
-                        last: "Ult.",
-                        previous: 'Ant.',
-                        next: 'Sig.',
-                    },
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
+                },
+                "aaSorting": []
+            });
+
+            $('#tabla_serv_prev').DataTable({
+                language: {
+                        lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                        zeroRecords: 'No se ha encontrado registros',
+                        info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                        infoEmpty: 'No se ha encontrado registros',
+                        infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                        search: 'Buscar',
+                        paginate:{
+                            first:"Prim.",
+                            last: "Ult.",
+                            previous: 'Ant.',
+                            next: 'Sig.',
+                        },
                 },
                 "aaSorting": []
             });
@@ -542,12 +628,57 @@
                         setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
                     }
                 });
-        });
+            });
+
+            $(".nueva-act-serv").on('submit', function(evt){
+                evt.preventDefault();     
+                var url_php = $(this).attr("action"); 
+                var type_method = $(this).attr("method"); 
+                var form_data = $(this).serialize();
+                const estadoEnviado = $(this).find('[name="m-ver-act-id_estado"]').val();
+                let html = '';
+                $.ajax({
+                    type: type_method,
+                    url: url_php,
+                    data: form_data,
+                    success: function(data) {
+                        let id = document.getElementById('m_act_id_serv').value;
+                        opcion = parseInt(data.resultado);
+                        switch (opcion) {
+                            case 1:
+                                if (Number(estadoEnviado) === 10) {
+                                    window.location.reload();
+                                    return;
+                                }
+                                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
+                                                Actualizacion creado con exito.
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>`;
+                                break;
+                            
+                            case 0:
+                                html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
+                                            Ocurrio un error: ${data.error}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                                break;
+                        }
+                        $('#alert-act-serv').html(html)
+                        actualizarRecuadroAct(id);
+                        setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
+                    }
+                });
+            });
         });
     </script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}"></script>
+
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/gestionar.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/gestionar.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/diagnostico.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/inspeccion.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/ajuste.js')) }}"></script>
     <script src="{{ asset('js/change-td-color.js') }}"></script>
 @endsection

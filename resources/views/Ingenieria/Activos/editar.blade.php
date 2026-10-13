@@ -7,7 +7,7 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h5 class="titulo page__heading my-auto mr-5">Editar activo #{{$activo->id_activo}}</h5>
+            <h5 class="titulo page__heading my-auto mr-5">Editar Activo #{{$activo->id_activo}}</h5>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
@@ -115,10 +115,29 @@
 
                     </div>
                 </div>
+                <div class="card">
+                    <div><h6 class="p-2">Configuración</h6></div>
+                    <div class="card-body d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-primary btn-config"
+                                data-target="#card-sintomas" style="width: 32%;"> 
+                            Síntomas
+                        </button>    
+                        <button type="button" class="btn btn-outline-primary btn-config"
+                                data-target="#card-correctivas" style="width: 32%;">
+                            Correctivas
+                        </button>    
+                        <button type="button" class="btn btn-outline-primary btn-config"
+                                data-target="#card-preventivas" style="width: 32%;">
+                            Preventivas
+                        </button>
+                    </div>
+                </div>
+                              
+                
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                <div class="d-flex flex-column">                
-                    <div class="card">
+                <div class="d-flex flex-column">           
+                    <div id="card-sintomas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
                                 <h5>Síntomas</h5>      
@@ -131,7 +150,7 @@
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Síntoma</th>
                                         <th class='text-center' style="color:#fff;">Tipo de Sintoma</th>
-                                        <th class='text-center' style="color:#fff;">Eliminar</th>
+                                        <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($activo->getSintomas as $sintoma)
@@ -144,7 +163,9 @@
                                                         'route' => ['activo.destroy_sintoma', [$sintoma->id_sintoma, $activo->id_activo]],
                                                         'style' => 'display:inline'
                                                     ]) !!}
-                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                     {!! Form::close() !!}
                                                 </td>
                                             </tr>
@@ -161,12 +182,12 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>                        
+                        </div> 
                     </div>
-                    <div class="card">
+                    <div id="card-correctivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
-                                <h5>Tareas de Mantenimiento</h5>      
+                                <h5>Tareas de Mantenimiento Correctivas (INSPECCIÓN)</h5>      
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarTareasMantenimientoModal">
                                     Agregar
                                 </button>                     
@@ -177,7 +198,7 @@
                                         <th class='text-center' style="color:#fff;">Tarea</th>
                                         <th class='text-center' style="color:#fff;">Ejecución</th>
                                         <th class='text-center' style="color:#fff;">Zona</th>
-                                        <th class='text-center' style="color:#fff;">Eliminar</th>
+                                        <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($activo->getTareasMantenimiento as $tarea)
@@ -191,7 +212,9 @@
                                                         'route' => ['activo.destroy_tarea_mantenimiento', [$tarea->id_tarea_mantenimiento, $activo->id_activo]],
                                                         'style' => 'display:inline'
                                                     ]) !!}
-                                                    {!! Form::submit('Eliminar', ['class' => 'btn btn-danger']) !!}
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                     {!! Form::close() !!}
                                                 </td>
                                             </tr>
@@ -211,6 +234,83 @@
                             </div>
                         </div>                        
                     </div>
+                    <div id="card-preventivas" class="card d-none card-config">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h5>Tareas de Mantenimiento Preventivas</h5>      
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarTareasMantenimientoPreventivaModal">
+                                    Agregar
+                                </button>                     
+                            </div>
+                            <div>
+                                <table id="tabla_tareas_mantenimiento_preventivas" class="table table-striped">
+                                    <thead>
+                                        <th class='text-center' style="color:#fff;">Tarea</th>
+                                        <th class='text-center' style="color:#fff;">Ejecución</th>
+                                        <th class='text-center' style="color:#fff;">Zona</th>
+                                        <th class='text-center' style="color:#fff;">Intervalo</th>
+                                        <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
+                                        <th class='text-center' style="color:#fff;">Última Ejecución</th>
+                                        <th class='text-center' style="color:#fff;">Acciones</th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($activo->getTareasMantenimientoPreventiva as $tarea)
+                                            <tr>
+                                                <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
+                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
+                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
+                                                <td class="text-center">
+                                                    {{$tarea->intervalo_dias}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$tarea->cant_golpes}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$tarea->fecha_ultima_ejecucion}}
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" 
+                                                            class="btn btn-warning"
+                                                            onclick="editarTareaPreventiva({{ $tarea->id_tarea_prev_x_activo }})">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </button>
+                                                    {!! Form::open([
+                                                        'method' => 'DELETE',
+                                                        'route' => ['activo.destroy_tarea_mantenimiento_preventiva', [$tarea->id_tarea_mantenimiento, $activo->id_activo]],
+                                                        'style' => 'display:inline'
+                                                    ]) !!}
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    {!! Form::close() !!}
+                                                </td>
+                                            </tr>
+                                        @endforeach 
+                                        {{-- @foreach ($activo->getTipoActivo->getTareasMantenimientoPreventiva as $tarea)
+                                            <tr>
+                                                <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
+                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
+                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
+                                                <td class="text-center">
+                                                    {{$tarea->intervalo_dias}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$tarea->cant_golpes}}
+                                                </td>
+                                                <td class="text-center">
+                                                    {{$tarea->fecha_ultima_ejecucion}}
+                                                </td>
+                                                <td class="text-center">
+                                                    Esta tarea pertenece al tipo de activo.
+                                                </td>
+                                            </tr>
+                                        @endforeach  --}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -218,6 +318,7 @@
 </section>
 @include('Ingenieria.Activos.modal.editar-sintomas-activo')
 @include('Ingenieria.Activos.modal.editar-tareas-mantenimiento-activo')
+@include('Ingenieria.Activos.modal.editar-tareas-mantenimiento-prev-activo')
 <script>
     $(document).ready(function () {
         var url = '{{route('activos.index')}}';
@@ -275,6 +376,23 @@
                 },
                 "aaSorting": []
         });
+        $('#tabla_tareas_mantenimiento_preventivas').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar:',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": []
+        });
         $('#tabla_set_tareas_mantenimiento').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -292,6 +410,106 @@
                 },
                 "aaSorting": []
         });
+        $('#tabla_set_tareas_mantenimiento_preventivas').DataTable({
+            language: {
+                    lengthMenu: 'Mostrar _MENU_ registros por pagina',
+                    zeroRecords: 'No se ha encontrado registros',
+                    info: 'Mostrando pagina _PAGE_ de _PAGES_',
+                    infoEmpty: 'No se ha encontrado registros',
+                    infoFiltered: '(Filtrado de _MAX_ registros totales)',
+                    search: 'Buscar:',
+                    paginate:{
+                        first:"Prim.",
+                        last: "Ult.",
+                        previous: 'Ant.',
+                        next: 'Sig.',
+                    },
+                },
+                "aaSorting": []
+        });
     });
+
+    $(document).on('change', '.check-tarea', function () {
+        let id = $(this).data('id');
+        let checked = $(this).is(':checked');
+
+        let inputs = $('.input-tarea[data-id="' + id + '"]');
+
+        if (checked) {
+            inputs.prop('disabled', false);
+            inputs.prop('required', true);
+        } else {
+            inputs.prop('disabled', true);
+            inputs.prop('required', false);
+            inputs.val(''); // optional: clear values
+        }
+    });
+
+    function editarTareaPreventiva(id){
+        $.ajax({
+            url: '/activo/tarea-preventiva/' + id,
+            type: 'GET',
+            success:function(data){
+
+                $("#edit_id_tarea_prev_x_activo").val(data.id_tarea_prev_x_activo);
+
+                $("#edit_nombre_activo")
+                    .val(data.get_activo?.nombre_activo ?? '');
+
+                $("#edit_nombre_tarea")
+                    .val(data.get_tarea_mantenimiento?.nombre_tarea ?? '');
+
+                $("#edit_intervalo_dias")
+                    .val(data.intervalo_dias);
+
+                $("#edit_cant_golpes")
+                    .val(data.cant_golpes);
+
+                $("#edit_fecha_ultima_ejecucion")
+                    .val(data.fecha_ultima_ejecucion);
+                $("#formEditarTareaPreventiva")
+                    .attr('action','/activo/tarea-preventiva/'+id);
+                $("#editarTareaPreventivaModal").modal('show');
+            },
+            error:function(xhr){
+                console.log(xhr.responseText);
+                alert('Error al cargar tarea preventiva');
+            }
+        });
+    }
+
+    $('.btn-config').click(function () {
+
+        $('.card-config').addClass('d-none');
+
+        $($(this).data('target'))
+            .removeClass('d-none');
+    });
+
+    function mostrarNuevaTarea(id){
+        $(`#${id}`).toggleClass("d-none");
+    }
+
+    function guardarNuevaTarea(){
+        $.ajax({
+            url: '{{ route('tarea_mantenimiento.store') }}',
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+
+                nombre_tarea: $("#nombre_tarea_nueva").val() ?? $("#nombre_tarea_nueva_m").val(),
+                id_zona_tarea: $("#id_zona_tarea_nueva").val() ?? $("#id_zona_tarea_nueva_m").val(),
+                id_ejecucion: $("#id_ejecucion_nueva").val() ?? $("#id_ejecucion_nueva_m").val(),
+                id_activo: $("#id_activo").val() ?? $("#id_activo").val(),
+            },
+            success:function(response){
+                location.reload();
+            },
+            error:function(){                
+                alert('Error al crear la tarea');
+            }
+        });
+
+    }
 </script>
 @endsection

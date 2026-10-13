@@ -32,6 +32,7 @@ use App\Models\Cambre\Tipo_servicio;
 use App\Models\Cambre\Estado;
 use App\Models\Cambre\Estado_manufactura;
 use App\Models\Cambre\Estado_mecanizado;
+use App\Models\Cambre\Estado_mantenimiento;
 use App\Models\Cambre\Estado_hdr;
 use App\Models\Cambre\Etapa;
 use App\Models\Cambre\Actualizacion;
@@ -50,6 +51,7 @@ use App\Models\Cambre\Archivo_hdr;
 use App\Models\Cambre\Parte_manufactura;
 use App\Models\Cambre\Parte_mecanizado;
 use App\Models\Cambre\Tipo_relacion_gantt;
+use App\Models\Cambre\Tipo_orden_mantenimiento;
 use App\Models\Cambre\Orden_gantt;
 use App\Models\Cambre\Vw_orden_trabajo;
 use App\Models\Cambre\Vw_orden_mecanizado;
@@ -1029,7 +1031,8 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_manufactura::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
+                    // $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
+                    $ordenes = Vw_orden_manufactura::get();
                 }
                 $servicios = Vw_orden_manufactura::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $tipo = 'Manufactura';
@@ -1048,16 +1051,21 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mecanizado::get();
                 }else{
                     //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
+                    // $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
+                    $ordenes = Vw_orden_mecanizado::get();
                 }
                 $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
                 $manufacturas = Vw_orden_mecanizado::whereNotNull('manufactura')->orderBy('manufactura')->get(['manufactura', 'id_orden_manufactura'])->unique('manufactura');
                 $operaciones = Vw_orden_mecanizado::whereNotNull('ope_act')->orderBy('ope_act')->get('ope_act')->unique('ope_act');
+                $responsables = Vw_orden_mecanizado::orderBy('responsable')->get('responsable')->unique('responsable')->pluck('responsable');
                 $tipo = 'Mecanizado';
                 $tipo_orden = 3;
                 $estados = $this->listarTodosLosEstadosDe(3);
                 $flt_ord = $request->input('flt_ord');
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones', 'flt_ord'));
+                $ordenesConHdr = Hoja_de_ruta::join('orden_mecanizado as om', 'om.id_orden_mecanizado', '=', 'hoja_de_ruta.id_orden_mecanizado')
+                    ->whereIn('om.id_orden', $ordenes->pluck('id_orden'))
+                    ->distinct()->pluck('om.id_orden')->flip();
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones', 'flt_ord', 'ordenesConHdr'));
                 break;
 
             case 4:
@@ -1071,10 +1079,17 @@ class OrdenController extends Controller
                     $ordenes = Vw_orden_mantenimiento::responsable($id_empleado)->get();
                 }
 
-                $tipo = 'Mantenimiento';
-                // $estados = $this->listarTodosLosEstadosDe(1);
+                foreach($ordenes as $om){
+                    $om->horas = $om->getOrden->getHoras();
+                }
 
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mantenimiento', compact('ordenes'));
+                $tipo = 'Mantenimiento';
+                $flt_tipos = Tipo_orden_mantenimiento::orderBy('nombre_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
+                $flt_activos = Vw_orden_mantenimiento::distinct()->orderBy('codigo_activo')->pluck('codigo_activo');
+                $flt_estados = Estado_mantenimiento::pluck('nombre_estado_mantenimiento');
+                $flt_estados->push('Disponible');
+
+                return view('Ingenieria.Servicios.Ordenes.ordenes-mantenimiento', compact('ordenes', 'flt_tipos', 'flt_activos', 'flt_estados'));
 
                 break;
         }
@@ -2425,9 +2440,14 @@ class OrdenController extends Controller
                     ]);
         }
 
+        $opes = $op->getHdr ? $op->getHdr->getVistaOperacionesHdr : [];
+        $prox_ope = $op->getSiguenteOpe();
         return [
             'partes_ope' => $partes_arr,
-            'medida_chk' => $op->getMedidaEstado()
+            'medida_chk' => $op->getMedidaEstado(),
+            'operaciones_hdr' => $opes,
+            'ubicacion' => $op->getHdr->ubicacion ?? null,
+            'prox_ope' => $prox_ope
         ];
     }
 

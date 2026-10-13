@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Ingenieria\Activos;
 use App\Http\Controllers\Controller;
 
+use App\Models\Cambre\Zona_tarea;
 use Illuminate\Http\Request;
 
 use App\Models\Cambre\Zona;
+use App\Models\Cambre\Zona_x_tipo_activo;
+use App\Models\Cambre\Tipo_activo;
+use App\Models\Cambre\Zona_x_zona_tarea;
+use Illuminate\Support\Facades\DB;
 
 
 class ZonaController extends Controller
@@ -23,9 +28,9 @@ class ZonaController extends Controller
         ]);
         try{ 
             $zona = new Zona();
-            $zona->nombre_zona = $request->input('zona');
+            $zona->nombre_zona = strtoupper($request->input('zona'));
             $zona->save();
-            return redirect()->route('zona.index')->with('success', 'Zona creada exitosamente.');
+            return redirect()->route('elemento.index')->with('mensaje', 'Zona creada exitosamente.');
         } 
         catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al crear zona: ' . $e->getMessage())->withInput();
@@ -44,17 +49,91 @@ class ZonaController extends Controller
         ]);
         try{   
             $zona = Zona::findOrFail($id); 
-            $zona->nombre_zona = $request->input('zona');
+            $zona->nombre_zona = strtoupper($request->input('zona'));
             $zona->save();
-            return redirect()->route('zona.index')->with('success', 'Zona actualizada exitosamente.');
+            return redirect()->route('elemento.index')->with('mensaje', 'Elemento actualizado exitosamente.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al actualizar zona: ' . $e->getMessage())->withInput();;
+            return redirect()->back()->with('error', 'Error al actualizar elemento: ' . $e->getMessage())->withInput();;
         }   
     }
 
     public function destroy($id){
         $zona = Zona::findOrFail($id);  
         $zona->delete();
-        return redirect()->route('zona.index')->with('success','Zona eliminada exitosamente.');
+        return redirect()->route('elemento.index')->with('mensaje','Elemento eliminado exitosamente.');
+    }
+
+    public function verAsignarTipo($id){
+        $zona = Zona::findOrFail($id);
+        $tipos = Tipo_activo::orderBy('nombre_tipo_activo')->get();
+        $zonas = Zona_tarea::orderBy('nombre_zona')->get();
+        return view('Ingenieria.Activos.Zona.asignar-tipo', compact('zona', 'tipos', 'zonas'));
+    }
+
+    public function asignarSubTipo(Request $request, $id){
+        
+        try {    
+            DB::beginTransaction();
+
+            if(empty($request->input('subtipo'))){
+                //return 'llega vacio';
+
+                $subTipoAnt = Zona_x_tipo_activo::where('id_zona', '=', $id)->get();
+                
+                foreach($subTipoAnt as $sta){
+                    Zona_x_tipo_activo::where('id_zona', $id)->where('id_tipo_activo', $sta->id_tipo_activo)->first()->delete();
+                }
+    
+            }else{
+                //return 'llega con algo';
+                $subTipoAnt = Zona_x_tipo_activo::where('id_zona', '=', $id)->get();
+                
+                foreach($subTipoAnt as $sta){
+                    Zona_x_tipo_activo::where('id_zona', $id)->where('id_tipo_activo', $sta->id_tipo_activo)->delete();
+                }
+
+                $ids_subtipos = $request->input('subtipo');
+
+                foreach ($ids_subtipos as $idst) {
+                    Zona_x_tipo_activo::create([
+                        'id_zona' => $id,
+                        'id_tipo_activo' => $idst
+                    ]);
+                }
+            }
+
+            if(empty($request->input('zona_tarea'))){
+
+                $zonaTareaAnt = Zona_x_zona_tarea::where('id_zona', '=', $id)->get();
+                
+                foreach($zonaTareaAnt as $zta){
+                    Zona_x_zona_tarea::where('id_zona', $id)->where('id_zona_tarea', $zta->id_zona_tarea)->first()->delete();
+                }
+            }else{
+                $zonaTareaAnt = Zona_x_zona_tarea::where('id_zona', '=', $id)->get();
+                
+                foreach($zonaTareaAnt as $zta){
+                    Zona_x_zona_tarea::where('id_zona', $id)->where('id_zona_tarea', $zta->id_zona_tarea)->delete();
+                }
+
+                $ids_zonasTareas = $request->input('zona_tarea');
+
+                foreach ($ids_zonasTareas as $idzta) {
+                    Zona_x_zona_tarea::create([
+                        'id_zona' => $id,
+                        'id_zona_tarea' => $idzta
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('elemento.index')->with('mensaje', 'Se asignaron los tipo activo al elemento con éxito.');                      
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al asignar los tipo activo al elemento: '.$e->getMessage());
+        }
     }
 }

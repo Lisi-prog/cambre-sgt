@@ -23,8 +23,10 @@ class Vw_orden_mantenimiento extends Model
         'id_servicio',
         'codigo_servicio',
         'nombre_servicio',
+        'esta_activo',
         'id_orden',
         'id_tipo_orden_mantenimiento',
+        'nombre_tipo_orden_mantenimiento',
         'nombre_orden',
         'id_etapa',
         'descripcion_etapa',
@@ -32,8 +34,12 @@ class Vw_orden_mantenimiento extends Model
         'fecha_finalizacion',
         'id_estado_mantenimiento',
         'nombre_estado',
-        'id_activo0',
-        'nombre_activo'
+        'id_empleado_asignado',
+        'nombre_empleado_asignado',
+        'id_activo',
+        'codigo_activo',
+        'id_tipo_activo',
+        'nombre_tipo_activo'
     ];
 
     public function getProgreso(){
@@ -70,4 +76,111 @@ class Vw_orden_mantenimiento extends Model
         
     // }
 
+    public function getOrden()
+    {
+        return $this->belongsTo(Orden::class, 'id_orden');
+    }
+
+     public function getPartes()
+    {
+        return $this->hasMany(Parte::class, 'id_orden', 'id_orden');
+    }
+
+    public function getEstadoActual(){
+        return $this->getPartes->sortByDesc('id_parte')->first()->getParteDe->getEstado->nombre_estado_mantenimiento;
+    }
+
+    public function getTipoOrden()
+    {
+        return 4;
+    }
+
+    public function scopeServicio($query, $servicios){
+        if ($servicios == '') {
+            return $query;
+        } else{
+            return $query->whereIn('id_servicio', $servicios);
+        }
+    }
+
+    public function scopeMantenimiento($query, $operaciones){
+        if ($operaciones == '') {
+            return $query;
+        } else{
+            return $query->whereIn('nombre_tipo_orden_mantenimiento', $operaciones);
+        }
+    }
+
+    // public function scopeEstado($query, $estados){
+    //     if ($estados == '') {
+    //         return $query;
+    //     } else{
+    //         return $query->whereIn('nombre_estado', $estados);
+    //     }
+    // }
+
+    public function scopeEstado($query, $estados){
+        if (empty($estados)) {
+            return $query;
+        }
+
+        $incluyeDisponible = in_array('Disponible', $estados);
+        $estadosReales = array_diff($estados, ['Disponible']);
+
+        return $query->where(function ($query) use ($estadosReales, $incluyeDisponible) {
+            if (!empty($estadosReales)) {
+                $query->whereIn('nombre_estado', $estadosReales);
+            }
+
+            if ($incluyeDisponible) {
+                $metodo = empty($estadosReales) ? 'where' : 'orWhere';
+
+                $query->{$metodo}(function ($query) {
+                    $query->where('nombre_estado', 'Espera')
+                        ->where('esta_activo', 1);
+                });
+            }
+        });
+    }
+
+    // public function scopeAsignado($query, $asignados){
+    //     if ($asignados == '') {
+    //         return $query;
+    //     } else{
+    //         return $query->whereIn('nombre_empleado_asignado', $asignados);
+    //     }
+    // }
+
+    public function scopeAsignado($query, $asignados)
+    {
+        if (empty($asignados)) {
+            return $query;
+        }
+
+        $incluyeSinAsignar = in_array('-', $asignados);
+        $asignadosReales = array_diff($asignados, ['-']);
+
+        return $query->where(function ($query) use ($asignadosReales, $incluyeSinAsignar) {
+            if (!empty($asignadosReales)) {
+                $query->whereIn('nombre_empleado_asignado', $asignadosReales);
+            }
+
+            if ($incluyeSinAsignar) {
+                $metodo = empty($asignadosReales) ? 'whereNull' : 'orWhereNull';
+                $query->{$metodo}('nombre_empleado_asignado');
+            }
+        });
+    }
+
+    public function scopeActivo($query, $activo){
+        if ($activo == '') {
+            return $query;
+        } else{
+            if ($activo) {
+                return $query->where('esta_activo', 1);
+            } else {
+                return $query;
+            }
+        }
+    }
 }

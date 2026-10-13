@@ -2,44 +2,7 @@
 @section('titulo', 'Ordenes Mecanizado')
 @section('content')
 
-<style>
-    .tableFixHead {
-       overflow-y: auto;
-       height: 300px;
-     }
-     .tableFixHead thead th {
-       position: sticky; 
-       top: 0px; 
-     }
-     #viv table {
-       border-collapse: collapse;
-       width: 100%;
-     }
-     
-     #viv th {
-       background: #ee9b27;
-     } 
-
-    #example thead input {
-        width: 100%;
-    }
-
-    .btn-primary-outline {
-        background-color: transparent;
-        border-color: transparent;
-    }
-
-    .table {
-        zoom: 100%;
-    }
-
-    table.dataTable tbody td {
-        padding: 0px 10px;
-    }
-    .col-4 {
-        padding: 5px;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/estilos-tabla.css') }}">
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
@@ -50,7 +13,11 @@
             </div>
 
             <!-- Botón y menú desplegable -->
+            @role('SUPERVISOR')
             <div class="d-flex align-items-center">
+            @else
+            <div class="d-flex align-items-center d-none">
+            @endrole
                 <div class="form-check form-switch me-3">
                     <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
                     <label class="form-check-label" for="id_selec">Seleccion<br>multiple</label>
@@ -81,74 +48,109 @@
                             <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro('demo')">Filtros <i class="fas fa-caret-down"></i></button> 
                         </div>
                         <div class="row" id="demo" hidden>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Proyectos:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
+                                                        @foreach ($servicios as $servicio)
+                                                            <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                @foreach ($servicios as $servicio)
-                                                    <label><input class="input-filter" name="cod_serv" type="checkbox" value="{{$servicio->codigo_servicio}}" checked> {{$servicio->codigo_servicio}}</label>
-                                                @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Manufactura:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="sup"> (Seleccionar todo)</label>
+                                                        @foreach ($manufacturas as $man)
+                                                            @if (!empty($flt_ord))
+                                                                <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" {{$man->id_orden_manufactura == $flt_ord ? 'checked' : ''}}> {{$man->manufactura ?? '-'}}</label>
+                                                            @else
+                                                                <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Estado:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
+                                                        @foreach ($estados as $estado)
+                                                            <label><input name="est" type="checkbox" value="{{$estado->nombre}}" {{$estado->nombre == 'Completo' || $estado->nombre == 'Cancelado' ? '' : 'checked'}}> {{$estado->nombre}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
+                                                        @foreach ($operaciones as $ope)
+                                                            <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}"> {{$ope->ope_act ?? '-'}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row">
+                                            <div class="d-flex flex-row align-items-start justify-content-around">
+                                                <div class="card-body d-flex flex-column" style="height: 200px;">
+                                                    <div class="">
+                                                        <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('respo', this)">
+                                                    </div>
+                                                    <div class="d-flex flex-column overflow-auto">
+                                                        <label style="font-style: italic"><input name="filter" type="checkbox" value="respo"> (Seleccionar todo)</label>
+                                                        @foreach ($responsables as $re)
+                                                            <label><input name="respo" type="checkbox" value="{{$re ?? '-'}}"> {{$re ?? '-'}}</label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Manufactura:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('sup', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="sup"> (Seleccionar todo)</label>
-                                                @foreach ($manufacturas as $man)
-                                                    @if (!empty($flt_ord))
-                                                        <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}" {{$man->id_orden_manufactura == $flt_ord ? 'checked' : ''}}> {{$man->manufactura ?? '-'}}</label>
-                                                    @else
-                                                        <label><input name="sup" type="checkbox" value="{{$man->manufactura ?? '-'}}"> {{$man->manufactura ?? '-'}}</label>
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Estado:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
-                                                @foreach ($estados as $estado)
-                                                    <label><input name="est" type="checkbox" value="{{$estado->nombre}}" {{$estado->nombre == 'Completo' || $estado->nombre == 'Cancelado' ? '' : 'checked'}}> {{$estado->nombre}}</label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <div class="row">
-                                    <div class="d-flex flex-row align-items-start justify-content-around">
-                                        <div class="card-body d-flex flex-column" style="height: 200px;">
-                                            <div class="">
-                                                <label>Operacion:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
-                                            </div>
-                                            <div class="d-flex flex-column overflow-auto">
-                                                <label style="font-style: italic"><input name="filter" type="checkbox" value="res"> (Seleccionar todo)</label>
-                                                @foreach ($operaciones as $ope)
-                                                    <label><input name="res" type="checkbox" value="{{$ope->ope_act ?? '-'}}"> {{$ope->ope_act ?? '-'}}</label>
-                                                @endforeach
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <div class="d-flex flex-row align-items-start justify-content-around">
+                                            <div class="card-body d-flex flex-column">
+                                                {!! Form::label('Opciones:') !!}
+                                                <div class="form-check">
+                                                    <input name="snHdr" class="form-check-input" type="checkbox" value="1" id="snHdr">
+                                                    <label class="form-check-label" for="snHdr">
+                                                        Sin Hoja de Ruta.
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -181,6 +183,7 @@
                                     <th class='text-center' style="color:#fff;min-width:5vw">Fecha limite</th>
                                     <th class='text-center' style="color:#fff;min-width:3vw">Total Hs. HDR</th>
                                     <th class='text-center' style="color:#fff;min-width:3vw">Cantidad</th>
+                                    <th class='text-center' style="color:#fff;" hidden>Res.</th>
                                     <th class='text-center' style="color: #fff; width:10%">Acciones</th>
                                 </thead>
                                 
@@ -189,7 +192,7 @@
                                         $idCount = 0;
                                     @endphp
                                     @foreach ($ordenes as $orden)
-                                        <tr data-id="{{$orden->id_orden}}">
+                                        <tr data-id="{{$orden->id_orden}}" data-tiene-hdr="{{$ordenesConHdr->has($orden->id_orden) ? '1' : '0'}}">
                                             <td hidden class="chk-input" style="vertical-align: middle; padding: 0;">
                                                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                                                   <input class="form-check-input" type="checkbox" value="{{$orden->id_orden}}" id="flexCheck{{$orden->id_orden}}" name="id_ordenes[]">
@@ -225,15 +228,66 @@
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->total_horas_hdr ?? '00:00'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$orden->cantidad ?? '-'}}</td>
+
+                                            <td class='text-center' style="vertical-align: middle;" hidden>{{$orden->responsable ?? '-'}}</td>
         
                                             <td class='text-center' style="vertical-align: middle;">
                                                 <div class="row justify-content-center" >
-                                                    <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
-                                                            Opciones
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                    @role('SUPERVISOR')
+                                                        <div class="row justify-content-center" >
+                                                            <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdenes{{$idCount}}" aria-expanded="false" aria-controls="collapseOrdenes{{$idCount}}">
+                                                                Opciones
+                                                            </button>
+                                                        </div>
+                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes{{$idCount}}">
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
+                                                                        Ver
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            @if ($tipo_orden === 3)
+                                                                <div class="row my-2">
+                                                                    <div class="col-12">
+                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
+                                                                            {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
+                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
+                                                                        {!! Form::close() !!}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                            
+                                                            <div class="row my-2">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
+                                                                        Partes
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row my-2">
+                                                                @can('EDITAR-ORDENES')
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
+                                                                        Editar
+                                                                    </button> 
+                                                                </div>
+                                                                @endcan
+                                                            </div>
+                                                            <div class="row my-2">
+                                                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                                                    @if ($orden->id_estado_mecanizado != 4 )
+                                                                        <button type="button" class="btn btn-warning" onclick="crearParteOrdMecEspera({{$orden->id_orden}})">Espera</button>
+                                                                    @endif
+
+                                                                    @if ($orden->id_estado_mecanizado != 5 )
+                                                                    <button type="button" class="btn btn-info" onclick="crearParteOrdMecEnProceso({{$orden->id_orden}})">En proceso</button>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @else
                                                         <div class="row my-2">
                                                             <div class="col-12">
                                                                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden({{$orden->id_orden}}, {{$tipo_orden}})">
@@ -241,46 +295,8 @@
                                                                 </button>
                                                             </div>
                                                         </div>
-
-                                                        @if ($tipo_orden === 3)
-                                                            <div class="row my-2">
-                                                                <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                        {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verPartesModal" onclick="cargarModalVerPartes({{$orden->id_orden}}, {{$tipo_orden}})">
-                                                                    Partes
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            @can('EDITAR-ORDENES')
-                                                            <div class="col-12">
-                                                                <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarOrden({{$orden->id_orden}}, '{{$orden->descripcion_etapa}}')">
-                                                                    Editar
-                                                                </button> 
-                                                            </div>
-                                                            @endcan
-                                                        </div>
-                                                        <div class="row my-2">
-                                                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                                                @if ($orden->id_estado_mecanizado != 4 )
-                                                                    <button type="button" class="btn btn-warning" onclick="crearParteOrdMecEspera({{$orden->id_orden}})">Espera</button>
-                                                                @endif
-
-                                                                @if ($orden->id_estado_mecanizado != 5 )
-                                                                <button type="button" class="btn btn-info" onclick="crearParteOrdMecEnProceso({{$orden->id_orden}})">En proceso</button>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    @endrole
+                                                    
                                                 </div>
                                             </td>
                                         </tr>
@@ -324,7 +340,7 @@
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
+@include('Ingenieria.Servicios.Ordenes.modal.ver-partes', ['estadosParte' => $estados])
 @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple')
 
 <script>
@@ -439,6 +455,35 @@
             return false;
             }
         );
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, searchData, index, rowData, counter ) {
+        
+            var offices = $('input:checkbox[name="respo"]:checked').map(function() {
+                return this.value;
+            }).get();
+        
+
+            if (offices.length === 0) {
+                return true;
+            }
+
+
+            if (offices.indexOf(searchData[13]) !== -1) {
+                return true;
+            }
+            
+            return false;
+            }
+        );
+        $.fn.dataTable.ext.search.push(function(settings, searchData, index) {
+            if (settings.nTable.id !== 'example' || !$('#snHdr').prop('checked')) {
+                return true;
+            }
+
+            return settings.aoData[index].nTr.getAttribute('data-tiene-hdr') === '0';
+        });
+
         table = $('#example').DataTable({
                 language: {
                         lengthMenu: 'Mostrar _MENU_ registros por pagina',
@@ -458,7 +503,7 @@
                     "pageLength": 100
             });
             
-        $('input:checkbox').on('change', function () {
+        $('#demo input:checkbox').on('change', function () {
             table.draw();
         });
     
@@ -831,7 +876,8 @@
             success: function (res) {
                 let fila = $('#example tbody tr[data-id="' + res.id_orden+ '"]');
                 let rowIndex = table.row(fila).index();
-                table.cell(rowIndex, 7).data(res.nombre_estado).draw();
+                table.cell(rowIndex, 7).data(res.nombre_estado);
+                changeTdColor();
             },
             error: function (error) {
                 console.log(error);

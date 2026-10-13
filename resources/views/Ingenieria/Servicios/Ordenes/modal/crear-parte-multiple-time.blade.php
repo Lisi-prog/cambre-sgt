@@ -12,24 +12,25 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             {!! Form::label('ope', 'Partes:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            <table class="table table-striped mt-2" id="editableTableCPMT">
-                                <thead>
-                                  <tr>
-                                    <th class='text-center' style="color:#fff; width: 10px !important;">N°</th>
-                                    <th class='text-center' style="color:#fff;">Proyecto/Etapa/Orden</th>
-                                    <th class='text-center' style="color:#fff; width: 25px !important;">Observaciones</th>
-                                    <th class='text-center' style="color:#fff;">Hs. Ini.</th>
-                                    <th class='text-center' style="color:#fff;">Hs. Fin</th>
-                                    <th class='text-center' style="color:#fff;">Horas</th>
-                                    <th class='text-center' style="color:#fff; width: 10px !important;"></th>
-                                  </tr>
-                                </thead>
-                                <tbody id="table-body-CPMT">
-                                </tbody>
-                            </table>
-                              
-                              <!-- Botón para agregar filas -->
-                              <button id="addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
+                            <div class="table-responsive">
+                                <table class="table table-striped mt-2" id="editableTableCPMT">
+                                    <thead>
+                                        <tr>
+                                        <th class='text-center' style="color:#fff; width:5%;">N°</th>
+                                        <th class='text-center' style="color:#fff; width:31%;">Proyecto/Etapa/Orden</th>
+                                        <th class='text-center' style="color:#fff; width:20%;">Observaciones</th>
+                                        <th class='text-center' style="color:#fff; width:13%;">Hs. Ini.</th>
+                                        <th class='text-center' style="color:#fff; width:13%;">Hs. Fin</th>
+                                        <th class='text-center' style="color:#fff; width:13%;">Horas</th>
+                                        <th class='text-center' style="color:#fff; width:5%;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body-CPMT">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Botón para agregar filas -->
+                            <button id="addRow" class="btn btn-primary mt-3">Agregar Fila</button>                        
                         </div>
                     </div>
                 </div>

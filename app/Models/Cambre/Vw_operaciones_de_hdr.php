@@ -21,6 +21,7 @@ class Vw_operaciones_de_hdr extends Model
     protected $fillable = [ 
         'prioridad_servicio',
         'prioridad',
+        'id_servicio',
         'codigo_servicio',
         'nombre_servicio',
         'descripcion_etapa',
@@ -44,11 +45,18 @@ class Vw_operaciones_de_hdr extends Model
         'medidas'
     ];
 
+    protected $appends = ['cantidad_hdr'];
+
     protected $casts = [
         'horas_estimada' => HoraMinutoCast::class,
         'total_horas_maquina' => HoraMinutoCast::class,
         'total_horas' => HoraMinutoCast::class
     ];
+
+    public function getCantidadHdrAttribute()
+    {
+        return $this->getHdr->cantidad ?? null;
+    }
 
     public function getMedidasAttribute()
     {
@@ -87,4 +95,81 @@ class Vw_operaciones_de_hdr extends Model
         
     } */
 
+    public function scopeServicio($query, $servicios){
+        if ($servicios == '') {
+            return $query;
+        } else{
+            return $query->whereIn('id_servicio', $servicios);
+        }
+    }
+
+    public function scopeOperacion($query, $operaciones){
+        if ($operaciones == '') {
+            return $query;
+        } else{
+            return $query->whereIn('nombre_operacion', $operaciones);
+        }
+    }
+
+    public function scopeMaquina($query, $maquinas){
+        if ($maquinas == '') {
+            return $query;
+        } else{
+            if (in_array('-', $maquinas)) {
+                return $query->whereIn('codigo_maquinaria', $maquinas)->orWhereNull('codigo_maquinaria');
+            } else {
+                return $query->whereIn('codigo_maquinaria', $maquinas);
+            }
+        }
+    }
+
+    public function scopeEstado($query, $estados){
+        if ($estados == '') {
+            return $query;
+        } else{
+            return $query->whereIn('nombre_estado_hdr', $estados);
+        }
+    }
+
+    // public function scopeAsignado($query, $asignados){
+    //     if ($asignados == '') {
+    //         return $query;
+    //     } else{
+    //         return $query->whereIn('tecnico_asignado', $asignados);
+    //     }
+    // }
+
+    public function scopeAsignado($query, $asignados)
+    {
+        if (empty($asignados)) {
+            return $query;
+        }
+
+        $incluyeSinAsignar = in_array('-', $asignados);
+        $asignadosReales = array_diff($asignados, ['-']);
+
+        return $query->where(function ($query) use ($asignadosReales, $incluyeSinAsignar) {
+            if (!empty($asignadosReales)) {
+                $query->whereIn('tecnico_asignado', $asignadosReales);
+            }
+
+            if ($incluyeSinAsignar) {
+                $metodo = empty($asignadosReales) ? 'whereNull' : 'orWhereNull';
+                $query->{$metodo}('tecnico_asignado');
+            }
+        });
+    }
+
+    public function scopeActivo($query, $activo){
+        if ($activo == '') {
+            return $query;
+        } else{
+            if ($activo) {
+                return $query->where('activo', 1);
+            } else {
+                return $query;
+            }
+        }
+    }
+    
 }

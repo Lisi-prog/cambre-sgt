@@ -25,7 +25,8 @@
                                     {!! Form::text('nombre_zona', $zona->nombre_zona, [
                                         'class' => 'form-control',
                                         'required' => 'required',
-                                        'id' => 'nombre_zona'
+                                        'id' => 'nombre_zona',
+                                        'style' => 'text-transform: uppercase;'
                                     ]) !!}
                                 </div>
                             </div>

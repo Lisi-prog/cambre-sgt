@@ -117,25 +117,27 @@
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
-                @role(['ADMIN', 'SUPERVISOR'])
+                @can(['VER-ORDEN-MANUFACTURA'])
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
+                @endcan
+                @can(['VER-ORDEN-MECANIZADO'])
                 <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
-                @endrole
-                <li hidden>
+                @endcan
+                <li>
                     <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
                         <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>Mantenimiento</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.indexhdr')}}" title="Operaciones">
+                    <a class="nav-link" href="{{route('orden_mantenimiento.index')}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
                     </a>
                 </li>
@@ -153,22 +155,24 @@
                     Partes
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('partes.tipo', 1)}}" title="Trabajo">
+                    <a class="nav-link" href="{{route('ver.parte.trabajo')}}" title="Trabajo">
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
-                @role(['ADMIN', 'SUPERVISOR'])
+                @can(['VER-PARTE-MANUFACTURA'])
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 2)}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
+                @endcan
+                @can(['VER-PARTE-MECANIZADO'])
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 3)}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
-                @endrole
+                @endcan
                 <li>
                     <a class="nav-link" href="{{route('partes.tipo', 5)}}" title="Operaciones">
                         <i class="fas fa-hammer" style="font-size:1.2em;"></i><span>Operaciones</span>
@@ -284,12 +288,12 @@
                     </li>
                     <li>
                         <a class="nav-link" href="{{route('tarea_mantenimiento.index')}}" title="Tareas Activo">
-                            <i class="fas fa-clipboard"></i><span>Tareas Activo</span>
+                            <i class="fas fa-clipboard"></i><span>Tareas de Mant.</span>
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{route('zona.index')}}" title="Zona">
-                            <i class="fas fa-sign"></i><span>Zona</span>
+                        <a class="nav-link" href="{{route('elemento.index')}}" title="Elemento">
+                            <i class="fas fa-sign"></i><span>Elemento</span>
                         </a>
                     </li>
                 </ul>

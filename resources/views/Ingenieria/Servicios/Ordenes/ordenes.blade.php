@@ -2,48 +2,7 @@
 @section('titulo', 'Ordenes')
 @section('content')
 
-<style>
-    .tableFixHead {
-       overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-       height: 300px; /* gives an initial height of 200px to the table */
-     }
-     .tableFixHead thead th {
-       position: sticky; /* make the table heads sticky */
-       top: 0px; /* table head will be placed from the top of the table and sticks to it */
-     }
-     #viv table {
-       border-collapse: collapse; /* make the table borders collapse to each other */
-       width: 100%;
-     }
-     /* #viv th,
-     #viv td {
-       padding: 8px 16px;
-       border: 1px solid #ccc;
-     }*/
-     #viv th {
-       background: #ee9b27;
-     } 
-
-    #example thead input {
-        width: 100%;
-    }
-
-    .btn-primary-outline {
-        background-color: transparent;
-        border-color: transparent;
-    }
-
-    .table {
-        zoom: 100%;
-    }
-
-    table.dataTable tbody td {
-        padding: 0px 10px;
-    }
-    .col-4 {
-        padding: 5px;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/estilos-tabla.css') }}">
 
 <section class="section">
     <div class="d-flex section-header justify-content-center">
@@ -55,54 +14,12 @@
 
             <!-- Botón y menú desplegable -->
             <div class="d-flex align-items-center">
-                {{-- <div id="sideMenu" class="me-2 d-flex flex-row align-items-center gap-2">
-                    <div id="herr" class="d-flex flex-row align-items-center gap-2">
-                        <button type="button" class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#verEditarMulti"
-                                onclick="cargarEditMultiple()"
-                                id="btn-edit-mul" hidden>
-                            Carga múlt.
-                        </button>
-                        <div class="form-check m-0" hidden id="chk-sel-all">
-                            <input class="form-check-input" type="checkbox" value="" id="checkSelAll">
-                            <label class="form-check-label" for="checkSelAll">
-                            Selecc. todo
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-check form-switch my-auto">
-                        <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                        <label class="form-check-label" for="id_selec">Sel. múlt.</label>
-                    </div>
-                </div> --}}
-
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMultiTime" onclick="" id="btn-sel-mul-ti">
                     Carga Multiple
                 </button>
             </div>
         </div>
     </div>
-
-    {{-- <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="">Ordenes de {{$tipo}}</h5>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 m-auto">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="id_selec">
-                    <label class="form-check-label" for="id_selec">Seleccion multiple</label>
-                </div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verCargaMulti" onclick="cargarMMultiple()" id="btn-sel-mul" hidden>
-                    Carga Multiple
-                </button>
-            </div>
-        </div>
-    </div> --}}
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -343,12 +260,13 @@
             $es_sup = 0;
         @endphp
     @endrole
-    <script src="{{ asset('js/change-td-color.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}"></script>
+    <script src="{{ asset('js/change-td-color.js') }}?v={{ filemtime(public_path('js/change-td-color.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/filter.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/filter.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/ordenes.js')) }}"></script>
+    <script src="{{ asset('js/filter-to-filter.js') }}?v={{ filemtime(public_path('js/filter-to-filter.js')) }}"></script>
+    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js') }}?v={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js')) }}"></script>
+
     <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/ordenes.js') }}"></script>
-    <script src="{{ asset('js/filter-to-filter.js') }}"></script>
-    <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/crear-parte-multiple-time.js') }}"></script>
     <script type="module" > 
         import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, modificarFormularioConArgumentos, cargarModalEditarOrden, colorEncabezadoPorTipoDeOrden} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
         window.crearCuadrOrdenes = crearCuadrOrdenes;
@@ -362,9 +280,8 @@
 
 @include('Ingenieria.Servicios.Ordenes.modal.ver-orden')
 @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
-@include('Ingenieria.Servicios.Ordenes.modal.ver-partes')
+@include('Ingenieria.Servicios.Ordenes.modal.ver-partes', ['estadosParte' => $estados])
 @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple-time')
-{{-- @include('Ingenieria.Servicios.Ordenes.modal.crear-parte-multiple') --}}
 
 <script>
     let x = '';
@@ -505,12 +422,6 @@
 
     $('#example tbody').on('click', 'tr', function () {
         ind_rw = table.row(this).index();
-        // let a = table.row(this).index();
-        // var temp = table.row(a).data();
-        // temp[0] = 'Tom';
-        // table.row(this)
-        // .data(temp)
-        // .draw();
    });
 
     $('#verPartesModal').on('hidden.bs.modal', function (e) {
@@ -602,48 +513,6 @@
                                         </div>`;
                     $('#alertOrd').html(html)
                     setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
-                    /*
-                    opcion = parseInt(data.resultado);
-                    switch (opcion) {
-                        case 1:
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte creado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 2:
-                            id = document.getElementById('m-id-parte').value;
-                            html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modal">
-                                            Parte cod. `+id+` actualizado con exito
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>`;
-                            break;
-                        case 6:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        No se puede actualizar un parte de la cual no eres responsable.
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                        default:
-                            html = `<div class="alert alert-danger alert-dismissible fade show" role="alert" id="msj-modal">
-                                        Ocurrio un error
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                            break;
-                    }
-                    $('#alert').html(html)
-                    recargarPartes(id_orden, data.tipo_orden);
-                    nuevoParte();
-                    setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
-                    */
                 }
             });
             actRow();

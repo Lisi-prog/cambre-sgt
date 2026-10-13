@@ -85,7 +85,8 @@
                             @endrole
                             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 my-auto">
                                 <div class="form-group my-auto">
-                                    {!! Form::submit('Generar', ['class' => 'btn btn-success w-100']) !!}
+                                    <button type="submit" class="btn btn-success w-100" id="btnInforme">Generar</button>
+                                    {{-- {!! Form::submit('Generar', ['class' => 'btn btn-success w-100', 'id' => 'btnInforme']) !!} --}}
                                 </div>
                             </div>
                         </div>
@@ -116,7 +117,6 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="ver-informes" hidden>
                 <div class="card">
                     <div class="card-body">
-                        @include('layouts.loanding')
                         <div class="row mb-2">
                             <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                             </div>

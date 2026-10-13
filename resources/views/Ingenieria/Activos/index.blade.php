@@ -15,34 +15,98 @@
     }
 </style>
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-auto">
-                <h4 class="titulo page__heading my-auto">Activos</h5>
+    <div class="section-header d-flex">
+        <div class="flex-grow-1">
+            <h4 class="titulo page__heading my-auto">Activos</h5>
+        </div>
+        <div class="pe-2">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="{{ route('tipo_activo.index') }}" class="btn btn-primary">Tipo Activo</a>
+                <a href="{{ route('elemento.index') }}" class="btn btn-primary">Elemento</a>
             </div>
-            <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2 d-flex">
-                {!! Form::open(['method' => 'GET', 'route' => ['tipo_activo.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Tipo Activo', ['class' => 'btn btn-primary']) !!}
-                {!! Form::close() !!}
-                {!! Form::open(['method' => 'GET', 'route' => ['zona.index'], 'class' => 'd-flex justify-content-end']) !!}
-                    {!! Form::submit('Zona', ['class' => 'btn btn-primary ml-2']) !!}
-                {!! Form::close() !!}
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">
-                {{-- <a href="{{route('operacion.index')}}" class="btn btn-primary">Operacion</a> --}}
-            </div>
-            
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 d-flex justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
-                    Nuevo activo
-                </button>
-            </div>
+        </div>
+        <div class="">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoActivoModal">
+                Nuevo activo
+            </button>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <button type="button" class="btn btn-primary-outline m-1 rounded"
+                                onclick="mostrarFiltro('demo')">
+                                Filtros <i class="fas fa-caret-down"></i>
+                            </button>
+                        </div>
+
+                        <div class="row" id="demo" hidden>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                <div class="card-body">
+
+                                    <div class="mb-2">
+                                        <label>Tipo:</label>
+                                        {{-- <input type="search" class="mx-2" placeholder="Buscar"
+                                            onkeyup="fil_filtro('tipo', this)"> --}}
+                                    </div>
+
+                                    <div class="overflow-auto"
+                                        style="
+                                            display: grid;
+                                            grid-auto-flow: column;
+                                            grid-template-rows: repeat(3, auto);
+                                            gap: 6px 30px;
+                                            max-height: 200px;
+                                            width: max-content;
+                                        ">
+
+                                        <label style="font-style: italic">
+                                            <input name="filter" type="checkbox" value="tipo" checked>
+                                            (Seleccionar todo)
+                                        </label>
+
+                                        @foreach ($tipos_activo as $value)
+                                            <label>
+                                                <input class="input-filter" name="tipo" type="checkbox"
+                                                    value="{{$value}}" checked>
+                                                {{$value}}
+                                            </label>
+                                        @endforeach
+
+                                    </div>
+                                    <div class="mb-2 mt-3">
+                                        <label>Activo:</label>
+                                    </div>
+
+                                    <div>
+                                        <label style="margin-right:15px;">
+                                            <input class="input-filter" name="activo" type="checkbox" value="SI" checked>
+                                            SI
+                                        </label>
+
+                                        <label>
+                                            <input class="input-filter" name="activo" type="checkbox" value="NO" checked>
+                                            NO
+                                        </label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -54,6 +118,7 @@
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
                                     <th class='text-center' style="color:#fff;">Activo</th>
                                     <th class='text-center' style="color:#fff;">Tipo</th>
+                                    <th class='text-center' style="color:#fff;">Tareas Preventivas (Vencidas/Total)</th>
                                     <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
                                 </thead>
                                 <tbody id="accordion">
@@ -64,15 +129,32 @@
                                         <tr class="my-auto">
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->id_activo}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->codigo_activo ?? '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$activo->codigo_activo ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->nombre_activo ?? '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$activo->nombre_activo ?? '-'}}</td>
 
-                                            <td class='text-center' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{$activo->descripcion_activo ?? '-'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->esta_activo ? 'SI' : 'NO'}}</td>
 
                                             <td class='text-center' style="vertical-align: middle;">{{$activo->getTipoActivo->nombre_tipo_activo ?? '-'}}</td>
+
+                                            <td class= 'text-center' style="vertical-align: middle;">
+                                                @php
+                                                    if ($activo->getProgreso() >= 90) {
+                                                       $color = 'bg-danger';
+                                                    }else if($activo->getProgreso() >= 50){
+                                                        $color = 'bg-warning';
+                                                    }else{
+                                                       $color = 'bg-success';
+                                                    }
+                                                @endphp
+                                                <div class="progress position-relative" style="background-color: #b2baf8">
+                                                    <div class="progress-bar progress-bar-striped {{$color}}" role="progressbar" style="width: {{$activo->getProgreso()}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff">{{$activo->getTotalTareasMantenimientoPreventivaPendientes().'/'.$activo->getTotalTareasMantenimientoPreventiva()}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
 
                                             <td>
                                                 <div class="row justify-content-center">
@@ -89,6 +171,15 @@
                                                                 {!! Form::close() !!}
                                                             </div>
                                                         </div>
+
+                                                        @if ($activo->getTotalTareasMantenimientoPreventivaPendientes() > 0)
+                                                            <div class="row my-2 justify-content-center">
+                                                                <div class="col-12">
+                                                                    <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#crearServicioMantModal" onclick="cargarServMant({{$activo->id_activo}})">Nuevo Mant.</button>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
                                                                 {!! Form::open([
@@ -121,7 +212,8 @@
     {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
     {{-- @include('Ingenieria.Maquinaria.modal.crear-maquinaria')--}}
     @include('Ingenieria.Activos.modal.crear-activo') 
-
+    @include('Ingenieria.Activos.modal.crear-serv-mant')
+<script src="{{ asset('js/filter-to-filter.js') }}"></script>
 <script>
     $(document).ready(function () {
         var url = '{{url('/')}}';
@@ -143,7 +235,20 @@
                 console.log(error);
             }
         }));
-        $('#example').DataTable({
+
+        $.fn.dataTable.ext.search.push(function(settings, searchData) {
+            var tipos = $('input:checkbox[name="tipo"]:checked').map(function () {
+                return this.value;
+            }).get();
+            var activos = $('input:checkbox[name="activo"]:checked').map(function () {
+                return this.value;
+            }).get();
+            var pasaTipo = tipos.length === 0 || tipos.indexOf(searchData[5]) !== -1;
+            var pasaActivo = activos.length === 0 || activos.indexOf(searchData[4]) !== -1;
+            return pasaTipo && pasaActivo;
+        });
+
+        table = $('#example').DataTable({
             language: {
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
@@ -158,8 +263,58 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: [[1, 'asc']],
+        });
+
+        $('input:checkbox').on('change', function () {
+            table.draw();
         });
     });
 </script> 
+<script>
+    function mostrarFiltro(){
+        let cuadro_filtro = document.getElementById("demo");
+        if ($('#demo').is(":hidden")) {
+            cuadro_filtro.hidden = false;
+        }else{
+            cuadro_filtro.hidden = true;
+        }
+    }
+
+    function limpiarFiltro(){
+        $('input[type=checkbox]').prop("checked", false);
+        var table = $('#example').DataTable();
+        table.draw();
+    }
+
+    document.querySelectorAll('input[name=filter]').forEach(item => {
+        item.addEventListener('change', event => {
+            if (item.checked) {
+                //console.log("Checkbox is checked..");
+                selects($(item).val());
+            } else {
+                //console.log("Checkbox is not checked..");
+                deSelect($(item).val());
+            }
+            validarFiltro();
+        })
+    });
+
+    function selects(name){  
+        var ele=document.getElementsByName(name);  
+        for(var i=0; i<ele.length; i++){  
+            if(ele[i].type=='checkbox')  
+                ele[i].checked=true;  
+        }  
+    }  
+
+    function deSelect(name){  
+        var ele=document.getElementsByName(name);  
+        for(var i=0; i<ele.length; i++){  
+            if(ele[i].type=='checkbox')  
+                ele[i].checked=false;  
+                
+        }  
+    }  
+</script>
 @endsection

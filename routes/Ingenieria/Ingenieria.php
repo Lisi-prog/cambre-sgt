@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
     Route::get('proyectos/obtener-proyecto-prefijo/{opcion}', [ProyectoController::class, 'indexPorPrefijo'])->name('proyecto.indexprefijo');
     Route::get('proyectos/obtener-proyecto-tipo-activo', [ProyectoController::class, 'indexPorActivo'])->name('proyecto.indexactivo');
     Route::post('/proyectos/obtener-mayor-prefijo/{id}', [ProyectoController::class, 'obtenerMayorCodigoServicioPrefijo']);
+    Route::get('/proyectos/buscar-servicios-padre', [ProyectoController::class, 'buscarServiciosPadre'])->name('proyectos.buscar-servicios-padre');
     Route::post('/servicio/{id}/obtener-ord-tra-mec', [ProyectoController::class, 'obtenerOrdMecOrdTraUnServicio']);
     Route::post('/servicio/{id}/obtener-ord-man', [ProyectoController::class, 'obtenerOrdManUnServicio']);
     Route::resource('proyectos', ProyectoController::class);
@@ -115,6 +116,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
         Route::post('parte-ope/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOpe']);
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
+        Route::post('parte-trabajo/obtener-una/{id}', [ParteController::class, 'obtenerUnaParteTrabajo']);
         Route::post('parte-ope-hdr/obtener-una/{id}', [ParteController::class, 'obtenerParteOpeHdr']);
         Route::post('ope-hdr/obtener-estado/{id}', [ParteController::class, 'obtenerEstadoOpeHdr']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
@@ -214,10 +216,13 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
          //RUTAS PARTES
         Route::resource('partes', ParteController::class);
         Route::get('partes/ver/{tipo_orden}', [ParteController::class, 'obtenerPartes'])->name('partes.tipo');
+        Route::get('parte-trabajo/ver', [ParteController::class, 'verPartesTrabajo'])->name('ver.parte.trabajo');
+        Route::post('parte-trabajo/obtener', [ParteController::class, 'obtenerPartesTrabajo'])->name('obtener.partes.trabajo');
         Route::get('orden/partes/{id}/{tipo_orden}', [ParteController::class, 'indexOrden'])->name('orden.partes');
         Route::get('parte/{id}/logs', [ParteController::class, 'obtenerLogs'])->name('parte.logs');
         Route::post('parte/obtener/{id}', [ParteController::class, 'obtenerPartesDeUnaOrden']);
         Route::post('parte/obtener-una/{id}', [ParteController::class, 'obtenerParte']);
+        Route::post('parte-trabajo/obtener-una/{id}', [ParteController::class, 'obtenerUnaParteTrabajo']);
         Route::post('parte/obtener-ultimo/{id}', [ParteController::class, 'ultimoParteOrden']);
         Route::post('/parte/guardar-o-act-parte', [ParteController::class, 'guardarActualizarParte'])->name('partes.guardar.act');
         Route::post('/parte-multiple/carga-multiple', [ParteController::class, 'cargaMultipleParte'])->name('partes.carga.multiple');

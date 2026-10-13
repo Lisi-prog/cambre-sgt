@@ -19,7 +19,7 @@ class Tarea_ajuste extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'id_parte_ajuste', 'id_accion_tarea', 'id_zona', 'id_maquinaria', 'hecho', 'id_tarea_mantenimiento'
+        'id_parte_ajuste', 'id_accion_tarea', 'id_zona', 'id_maquinaria', 'hecho', 'id_tarea_mantenimiento', 'id_zona_tarea'
     ];
 
     public function getParteAjuste()
@@ -41,5 +41,9 @@ class Tarea_ajuste extends Model
 
     public function getTareaMantenimiento(){
         return $this->hasOne(Tarea_mantenimiento::class, 'id_tarea_mantenimiento', 'id_tarea_mantenimiento');
+    }
+
+    public function getZonaTarea(){
+        return $this->hasOne(Zona_tarea::class, 'id_zona_tarea', 'id_zona_tarea');
     }
 }

@@ -9,21 +9,34 @@
     </div>
     <div class="section-body">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                    {!! Form::model($rol, ['method' => 'PATCH','route' => ['roles.update', $rol->id]]) !!}
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
-                                <div class="form-group">
-                                    <label for="">Nombre del Rol:</label>                                    
-                                    {!! Form::text('name', $rol->name, array('class' => 'form-control','style' => 'text-transform:uppercase')) !!}
-                                </div>
-                            </div>       
-                        </div>
-                        <button type="submit" class="btn btn-success mr-2">Guardar</button>
-                        <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Cancelar</a>
-                    {!! Form::close() !!}
+                        <form method="POST" action="{{route('roles.update', $rol->id)}}" class="form-prevent-multiple-submits">
+                        @csrf
+                        @method('PATCH')
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="name">Nombre del Rol:</label>      
+                                        <input class="form-control" style="text-transform:uppercase" name="name" type="text" id="name" value="{{$rol->name}}">
+                                    </div>
+                                </div>     
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="sector">Sector Asociado:</label>      
+                                        <select class="form-select" id="sector" name="sector">
+                                            <option selected="selected" value="">Seleccionar</option>
+                                            @foreach ($sectores as $key => $value)
+                                                <option value="{{$key}}" {{$rolxsec?->id_sector==$key ? 'selected' : ''}}>{{$value}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>     
+                            </div>
+                            <button type="submit" class="btn btn-success mr-2">Guardar</button>
+                            <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Cancelar</a>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -33,7 +46,6 @@
 <script>
     $(document).ready(function () {
         var url = '{{route('roles.index')}}';
-        //url = url.replace(':id_servicio', id_servicio);
         document.getElementById('volver').href = url;
     });
 </script>

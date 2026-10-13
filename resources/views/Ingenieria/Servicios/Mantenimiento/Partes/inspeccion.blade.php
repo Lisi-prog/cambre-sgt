@@ -21,27 +21,31 @@
             </div>            
             {!! Form::open(['route' => 'parte_inspeccion.store', 'method' => 'POST', 'id' => 'form_inspeccion_alta']) !!}
             <div class="modal-body">
-                                <hr>
+                <hr>
                 <input type="hidden" name="tareasPendientes" id="tareasPendientesInput">
 
                 <table class="table table-striped w-100" id="tabla_inspecciones">
                     <thead>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
-                        <th class="text-center" scope="col" style="color:#fff;"></th>
+                        <th class="text-center" scope="col">Elemento</th>
+                        <th class="text-center" scope="col">OK</th>
+                        <th class="text-center" scope="col">NO OK</th>
+                        <th class="text-center" scope="col">Acción</th>
                     </thead>
                     <tbody id="tabla_inspecciones_body">
 
                     </tbody>
                 </table>       
                 <input type="text" hidden id="id_orden_inspeccion" name="id_orden">        
-                <div class="d-flex">                    
+                <div class="d-flex">  
                     <div class="form-group ml-auto mb-0 pb-0">
-                        <label>Horas:</label>
-                        <input id="horas_inspeccion" style="width: 170px;" name="horas" required type="time" class="form-control">
-                    </div>
+                        <label for="horas" class="control-label" style="white-space: nowrap; ">Horas:</label> 
+                        <span class="obligatorio">*</span> 
+                        <div class= "input-group">
+                            <input class="form-control" name="horas" type="number" min="0" value="00" id="horas_inspeccion" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico()" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos_inspeccion" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
+                        </div>
+                    </div>               
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>
                         <input id="fecha_inspeccion" style="width: 170px;" name="fecha" required type="date" class="form-control">
@@ -50,12 +54,8 @@
                 <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_inspeccion">
             </div>
             <div class="modal-footer">
-                <div class="form-group ml-auto mb-0 mr-4">
-                    <input type="checkbox" disabled id="completado_inspeccion" class="form-check-input">
-                    <input hidden type="checkbox"  name="completo"  id="completado_inspeccion_value" class="form-check-input">
-                    <label for="completado_inspeccion">COMPLETADO</label>
-                </div> 
                 <button id="btnGuardarNuevoParteInspeccion" type="submit" class="btn btn-success">Guardar</button>
+                <button id="btnGuardarCompletarParteInspeccion" type="submit" name="completo" value="1" class="btn btn-success">Guardar y Completar</button>
                 <div id="previewAceptarInspeccionReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
                         <button onclick="procesarInspeccion('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Inspección</button>

@@ -14,7 +14,7 @@
 
             <div class="modal-body" id="modal-body-ver-partes">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('operacion', 'Operacion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::text('operacion', null, [
@@ -24,7 +24,7 @@
                             ]) !!}
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                         <div class="form-group">
                             {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::text('estado', null, [
@@ -34,7 +34,7 @@
                             ]) !!}
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                         <div class="form-group">
                             {!! Form::label('ord_mec', 'Orden Mecanizado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             {!! Form::text('etapa', null, [
@@ -45,25 +45,77 @@
                         </div>
                     </div>
                 </div>
-                    <div class="table-responsive tableFixHead">
-                        <table class="table table-sm table-striped" id="verPartes" >
-                            <thead id="encabezado_tabla_parte" style="background: #558540">
-                                <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
-                                {{-- <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th> --}}
-                                <th class="text-center" scope="col" style="color:#fff;">Estado</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Horas</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Horas Maquina</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Medidas</th>
-                                <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
-                            </thead>
-                            <tbody id="body_ver_parte_ope">
-                                
-                            </tbody>
-                        </table>
+                <div class="row">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                        <div class="form-group">
+                            {!! Form::label('mv-ubicacion', 'Ubicación:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::text('ubicacion', null, [
+                                'class' => 'form-control',
+                                'id' => 'mv-ubicacion',
+                                'readonly'
+                            ]) !!}
+                        </div>
                     </div>
+                    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                        <div class="form-group">
+                            {!! Form::label('operacion', 'Proxima Operacion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::text('operacion', null, [
+                                'class' => 'form-control',
+                                'id' => 'mv-prox-operacion',
+                                'readonly'
+                            ]) !!}
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="det-tab" data-bs-toggle="tab" data-bs-target="#tb_partes" type="button" role="tab">Partes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="det_adju_tab" data-bs-toggle="tab" data-bs-target="#tb_operaciones" type="button" role="tab">Operaciones de HDR</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tb_partes" role="tabpanel">
+                        <div class="table-responsive tableFixHead">
+                            <table class="table table-sm table-striped" id="verPartes" >
+                                <thead id="encabezado_tabla_parte" style="background: #558540">
+                                    <th class="text-center" scope="col" style="color:#fff;">Cod.</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
+                                    {{-- <th class="text-center" scope="col" style="color:#fff;">Fecha limite</th> --}}
+                                    <th class="text-center" scope="col" style="color:#fff;">Estado</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Horas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Horas Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Observaciones</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Medidas</th>
+                                    <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
+                                </thead>
+                                <tbody id="body_ver_parte_ope">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tb_operaciones" role="tabpanel">
+                        <div class="table-responsive tableFixHead">
+                            <table class="table table-sm table-striped" id="verOOpe" >
+                                <thead>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 6%;">Cod. HDR</th>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 5%;">N°</th>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 17%;">Ultimo Res.</th>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 17%;">Asignado</th>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 16%;">Maquina</th>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 16%;">Operacion</th>
+                                    <th class="text-center" scope="col" style="color:#fff; width: 10%;">Estado</th>
+                                </thead>
+                                <tbody id="body_ver_ope">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mb-2">
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-2">
                         <button type="button" class="btn btn-warning" onclick="nuevoParte()">Nuevo parte</button>
@@ -79,8 +131,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
                                 {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                <span class="obligatorio">*</span>
-                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
+                                <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh"></textarea>
                             </div>
                         </div>
                     </div>
@@ -119,11 +170,7 @@
                                         class="form-control" 
                                         name="minutos" 
                                         type="number" 
-                                        @role('TECNICO') 
-                                            min="1" 
-                                        @else 
-                                            min="0" 
-                                        @endrole 
+                                        min="0"
                                         max="59" 
                                         value="00" 
                                         id="minutos"
@@ -160,11 +207,7 @@
                                         class="form-control" 
                                         name="minutos_maquina" 
                                         type="number" 
-                                        @role('TECNICO') 
-                                            min="1" 
-                                        @else 
-                                            min="0" 
-                                        @endrole  
+                                        min="0"
                                         max="59" 
                                         value="00" 
                                         id="minutos_maquina"
@@ -198,6 +241,8 @@
                 </div>
             </div>
 
+            <div id="error-tiempo-parte" class="alert alert-danger mx-3" role="alert" hidden></div>
+
             <div id="alert" class="mx-3">
                 
             </div>
@@ -212,4 +257,36 @@
     </div>
 </div>
 
-<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script>
+<script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js')) }}"></script>
+{{-- <script src="{{ asset('js/Ingenieria/Servicios/Ordenes/modal/m-ver-partes-ope.js') }}"></script> --}}
+{{-- @role('TECNICO')
+<script>
+    document.getElementById('form-nuevo-parte').addEventListener('submit', function (event) {
+        const aviso = document.getElementById('error-tiempo-parte');
+        aviso.hidden = true;
+        aviso.textContent = '';
+        const tiempos = [
+            ['horas', 'minutos', 'El tiempo de horas hombre debe ser de al menos 1 minuto.']
+        ];
+
+        for (const [nombreHoras, nombreMinutos, mensaje] of tiempos) {
+            const horas = this.elements.namedItem(nombreHoras);
+            const minutos = this.elements.namedItem(nombreMinutos);
+
+            if (horas.valueAsNumber * 60 + minutos.valueAsNumber < 1) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                aviso.textContent = mensaje;
+                aviso.hidden = false;
+                minutos.focus();
+                aviso.scrollIntoView({ block: 'nearest' });
+                return;
+            }
+        }
+    }, true);
+
+    $('#verPartesOpeHdrModal').on('hidden.bs.modal', function () {
+        document.getElementById('error-tiempo-parte').hidden = true;
+    });
+</script>
+@endrole --}}

@@ -23,6 +23,7 @@ use App\Models\Cambre\Sol_estado_solicitud;
 use App\Models\Cambre\Sol_solicitud;
 use App\Models\Cambre\Sol_archivo_solicitud;
 use App\Models\Cambre\Sol_servicio_de_mantenimiento;
+use App\Models\Cambre\Zona_tarea_x_tipo_activo;
 use App\Models\Cambre\Sector;
 use App\Models\Cambre\Activo;
 use App\Models\Cambre\Empleado;
@@ -59,12 +60,14 @@ use App\Models\Cambre\Ishikawa_causa;
 use App\Models\Cambre\Zona;
 use App\Models\Cambre\Vw_gest_orden_mecanizado;
 use App\Models\Cambre\Estado_mecanizado;
+use App\Models\Cambre\Tarea_mantenimiento;
+use App\Models\Cambre\Serv_mant_x_tarea_mant;
 
 class MantenimientoDeActivoController extends Controller
 {
     function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
         //  $this->middleware('permission:VER-PERMISO|CREAR-PERMISO|EDITAR-PERMISO|BORRAR-PERMISO', ['only' => ['index']]);
         //  $this->middleware('permission:CREAR-PERMISO', ['only' => ['create','store']]);
         //  $this->middleware('permission:EDITAR-PERMISO', ['only' => ['edit','update']]);
@@ -361,6 +364,32 @@ class MantenimientoDeActivoController extends Controller
             'id_activo' => $activo
         ]);
 
+        if ($request->input('tareas_prev')) {
+            $tareas_prev = $request->input('tareas_prev');
+
+            foreach ($tareas_prev as $ta) {
+
+                if (str_starts_with($ta, 'activo_')) {
+                    $id = str_replace('activo_', '', $ta);
+
+                    Serv_mant_x_tarea_mant::create([
+                        'id_servicio' => $proyecto->id_servicio,
+                        'id_tarea_prev_x_activo' => $id,
+                        'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+
+                } elseif (str_starts_with($ta, 'tipo_activo_')) {
+                    $id = str_replace('tipo_activo_', '', $ta);
+
+                    Serv_mant_x_tarea_mant::create([
+                        'id_servicio' => $proyecto->id_servicio,
+                        'id_tarea_prev_x_tipo_activo' => $id,
+                        'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]);
+                }
+            }
+        }
+
         Servicio_info::create([
             'id_servicio' => $proyecto->id_servicio, 
             'tot_ord' => 0,
@@ -479,7 +508,32 @@ class MantenimientoDeActivoController extends Controller
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
                                 ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
-        $zonas = Zona::orderBy('nombre_zona')->get();
+        $zonas = Zona::join('zona_x_tipo_activo as z', 'z.id_zona', '=', 'zona.id_zona')
+        ->where('z.id_tipo_activo', $proyecto->getActivo->getTipoActivo->id_tipo_activo)
+        ->orderBy('nombre_zona')->get();
+        $tareas_mantenimiento = Tarea_mantenimiento::select('tarea_mantenimiento.*', 'tipo_activo_x_tarea_mant.id_tipo_activo', 'activo_x_tarea_mant.id_activo')
+        ->orderBy('nombre_tarea')
+        ->leftJoin('tipo_activo_x_tarea_mant', 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
+        ->leftJoin('activo_x_tarea_mant', 'activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
+        ->where('activo_x_tarea_mant.id_activo', $proyecto->id_activo)
+        ->orWhere('tipo_activo_x_tarea_mant.id_tipo_activo', $proyecto->getActivo->id_tipo_activo)
+        ->get();
+        $estados = Estado::orderBy('id_estado')->get();
+        $elementos =  Zona_tarea_x_tipo_activo::where('zona_tarea_x_tipo_activo.id_tipo_activo', $proyecto->getActivo->id_tipo_activo)
+            ->join('zona_x_zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_x_zona_tarea.id_zona_tarea')
+            ->join('zona_x_tipo_activo', function ($join) {
+                $join->on('zona_x_zona_tarea.id_zona', '=', 'zona_x_tipo_activo.id_zona')
+                     ->on('zona_tarea_x_tipo_activo.id_tipo_activo', '=', 'zona_x_tipo_activo.id_tipo_activo');
+            })
+            ->join('zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_tarea.id_zona_tarea')
+            ->join('zona', 'zona_x_zona_tarea.id_zona', '=', 'zona.id_zona')
+            ->select(
+                'zona_tarea_x_tipo_activo.*', 
+                'zona_x_tipo_activo.id_zona',
+                'zona_tarea.nombre_zona', 
+                'zona.nombre_zona as elemento'
+            )
+            ->get();
         //todas las maquinas
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
 
@@ -493,10 +547,12 @@ class MantenimientoDeActivoController extends Controller
                         ->get();
         }
         
+        $tareas_preventivas = Serv_mant_x_tarea_mant::where('id_servicio', $id)->get();
 
         $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
         $estados_mecanizado = Estado_mecanizado::pluck('nombre_estado_mecanizado', 'id_estado_mecanizado');
         $supervisores = $this->obtenerSupervisores()->pluck('nombre_empleado', 'id_empleado');
+        $supervisores_admin = $this->obtenerSupervisoresAdmin();
         //todos los empleados
         // $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
 
@@ -510,7 +566,25 @@ class MantenimientoDeActivoController extends Controller
                         ->select('emp.id_empleado', 'emp.nombre_empleado') // opcional, podés ajustar
                         ->orderBy('emp.nombre_empleado')
                         ->get();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores'));
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 
+        'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento', 'estados',
+        'supervisores_admin', 'tareas_preventivas', 'elementos'));
+    }
+
+    public function obtenerSupervisoresAdmin(){
+        $usuariosSupervisor = User::role(['SUPERVISOR', 'ADMIN'])->get();
+
+        if ($usuariosSupervisor) {
+            foreach ($usuariosSupervisor as $userSupervisor) {
+                try {
+                    $id_supervisores[] = $userSupervisor->getEmpleado->id_empleado; 
+                } catch (\Throwable $th) {
+                    $id_supervisores[] = null; 
+                }
+                  
+            }
+        }
+        return Empleado::whereIn('id_empleado', $id_supervisores)->where('esta_activo', 1)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
     }
 
     public function destroy($id)
@@ -692,6 +766,217 @@ class MantenimientoDeActivoController extends Controller
             DB::rollBack();
             return redirect()->back()
                              ->with('error', 'Ocurrio un problema al crear la orden de mecanizado: '.$e->getMessage());
+        }
+    }
+
+    public function crearSMAdesdeActivo(Request $request){
+        // return $request;
+        try {    
+            DB::beginTransaction();
+
+            $activo = $request->input('id_act');
+
+            $existeServicioMant = Servicio::where('id_subtipo_servicio', 6)->where('id_activo', $activo)->orderBy('id_servicio', 'desc')->first();
+
+            if ($existeServicioMant) {
+                $ultNombre = $existeServicioMant->codigo_servicio;
+                // obtener los últimos 4 caracteres
+                $numeroNom = substr($ultNombre, -4);
+
+                // pasarlo a entero y sumar 1
+                $nuevoNumero = (int)$numeroNom + 1;
+
+                // volver a formatear a 4 dígitos
+                $numServ = str_pad($nuevoNumero, 4, '0', STR_PAD_LEFT);
+            } else {
+                $numServ = '0001';
+            }
+
+            $codActivo = Activo::find($activo)->codigo_activo;
+
+            // $numServ = 0001;
+
+            $codigo_proyecto = $codActivo.'-MAN-'.$numServ;
+
+            $nombre_proyecto = $codActivo.'-MAN-'.$numServ;
+
+            $lider = $request->input('lider');
+
+            $fecha_ini = $request->input('fecha_ini');
+            $fecha_req = $request->input('fecha_req');
+            $fecha_carga = Carbon::now()->format('Y-m-d H:i:s');
+
+            if (1) {
+                $prioridadMax = null;
+            }else{
+                $prioridadMax = Servicio::max('prioridad_servicio') + 1;
+            }
+            
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'lider')->first();
+
+            if (1) {
+                $estado = Estado::where('nombre_estado', 'En proceso')->first();
+            } else {
+                $estado = Estado::where('nombre_estado', 'espera')->first();
+            }
+            
+            $tipo_servicio = Subtipo_servicio::where('nombre_subtipo_servicio', 'Servicio de mantenimiento')->first()->id_subtipo_servicio;
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => $lider,
+                'id_rol_empleado' => $rol_empleado->id_rol_empleado
+            ]);
+            
+            $proyecto = Servicio::create([
+                'codigo_servicio' => $codigo_proyecto,
+                'nombre_servicio' => $nombre_proyecto,
+                'id_subtipo_servicio' => $tipo_servicio,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                'fecha_inicio' => $fecha_ini,
+                'prioridad_servicio' => $prioridadMax,
+                'id_activo' => $activo
+            ]);
+
+            if ($request->input('tareas_prev')) {
+                $tareas_prev = $request->input('tareas_prev');
+
+                foreach ($tareas_prev as $ta) {
+
+                    if (str_starts_with($ta, 'activo_')) {
+                        $id = str_replace('activo_', '', $ta);
+
+                        Serv_mant_x_tarea_mant::create([
+                            'id_servicio' => $proyecto->id_servicio,
+                            'id_tarea_prev_x_activo' => $id,
+                            'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+
+                    } elseif (str_starts_with($ta, 'tipo_activo_')) {
+                        $id = str_replace('tipo_activo_', '', $ta);
+
+                        Serv_mant_x_tarea_mant::create([
+                            'id_servicio' => $proyecto->id_servicio,
+                            'id_tarea_prev_x_tipo_activo' => $id,
+                            'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s')
+                        ]);
+                    }
+                }
+            }
+
+            Servicio_info::create([
+                'id_servicio' => $proyecto->id_servicio, 
+                'tot_ord' => 0,
+                'tot_ord_completa' => 0,
+                'progreso' => 0
+            ]);
+
+            $rol_empleado_act = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first();
+            $responsabilidad_act = Responsabilidad::create([
+                'id_empleado' => Auth::user()->getEmpleado->id_empleado,
+                'id_rol_empleado' => $rol_empleado_act->id_rol_empleado
+            ]);
+
+            $actualizacionServicio = Actualizacion::create([
+                'descripcion' => 'Creacion de servicio de mantenimiento.',
+                'fecha_limite' => $fecha_req,
+                'fecha_carga' => $fecha_carga,
+                'id_estado' => $estado->id_estado,
+                'id_responsabilidad' => $responsabilidad_act->id_responsabilidad
+            ]);
+
+            $actualizacion_servicio = Actualizacion_servicio::create([
+                'id_actualizacion' => $actualizacionServicio->id_actualizacion,
+                'id_servicio' => $proyecto->id_servicio
+            ]);
+
+            $etapa = Etapa::create([
+                'descripcion_etapa' => $nombre_proyecto,
+                'fecha_inicio' => $fecha_ini,
+                'id_servicio' => $proyecto->id_servicio,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            ]);
+
+            $actualizacionEtapa = Actualizacion::create([
+                'descripcion' => 'Creacion de etapa.',
+                'fecha_limite' => $fecha_req,
+                'fecha_carga' => $fecha_carga,
+                'id_estado' => $estado->id_estado,
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad
+            ]);
+
+            $actualizacion_etapa = Actualizacion_etapa::create([
+                'id_actualizacion' => $actualizacionEtapa->id_actualizacion,
+                'id_etapa' => $etapa->id_etapa
+            ]);
+
+            //Crear orden de mantenimiento de tipo diagnostico
+            $id_responsable = Auth::user()->getEmpleado->id_empleado;
+            $id_supervisor = $request->input('lider');
+            $rol_empleado = Rol_empleado::where('nombre_rol_empleado', 'responsable')->first()->id_rol_empleado;
+            $rol_empleado_supervisor = Rol_empleado::where('nombre_rol_empleado', 'supervisor')->first()->id_rol_empleado;
+
+            $responsabilidad = Responsabilidad::create([
+                'id_empleado' => $id_responsable,
+                'id_rol_empleado' => $rol_empleado
+            ]);
+
+            $responsabilidad_supervisor = Responsabilidad::create([
+                'id_empleado' => $id_supervisor,
+                'id_rol_empleado' => $rol_empleado_supervisor
+            ]);
+
+            $orden = Orden::create([
+                        'nombre_orden' => $nombre_proyecto.'-DIAGNÓSTICO',
+                        'fecha_inicio' => $fecha_ini,
+                        'id_etapa' => $etapa->id_etapa
+                    ]);
+
+            Responsabilidad_orden::create([
+                'id_responsabilidad' => $responsabilidad->id_responsabilidad,
+                'id_orden' => $orden->id_orden
+            ]);
+
+            Responsabilidad_orden::create([
+                'id_responsabilidad' => $responsabilidad_supervisor->id_responsabilidad,
+                'id_orden' => $orden->id_orden
+            ]);
+            
+            Orden_mantenimiento::create([
+                'id_tipo_orden_mantenimiento' => 1,
+                'id_orden' => $orden->id_orden,
+                'esta_activo' => 1
+            ]);
+
+            $responsabilidad_parte = Responsabilidad::create([
+                'id_empleado' => 999,
+                'id_rol_empleado' => $rol_empleado
+            ]);
+            
+            $parte = Parte::create([
+                'observaciones' => 'Generacion de orden de mantenimiento de diagnostico',
+                'fecha' => $fecha_ini,
+                'fecha_limite' => $fecha_req,
+                'fecha_carga' => $fecha_carga,
+                'horas' => '00:00',
+                'id_orden' => $orden->id_orden,
+                'id_responsabilidad' => $responsabilidad_parte->id_responsabilidad
+            ]);
+
+            Parte_diagnostico::create([
+                'id_parte' => $parte->id_parte, 
+                'id_estado' => 1,
+                'en_maquina' => 0,
+                'en_banco' => 0
+            ]);
+            
+            DB::commit();
+
+            return redirect()->route('servicio_mantenimiento.gestionar', $proyecto->id_servicio)->with('mensaje', 'El servicio de mantenimiento se ha creado con exito.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                             ->with('error', 'Ocurrio un problema al aceptar la solicitud de mantenimiento de activo: '.$e->getMessage());
         }
     }
 }

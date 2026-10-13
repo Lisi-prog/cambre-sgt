@@ -42,3 +42,12 @@ document.querySelectorAll('form').forEach(form => {
         btn.innerHTML = 'Guardar';
     }, true);
 });
+
+function toggleCheck(id) {
+    const checkbox = document.getElementById(id);
+
+
+    if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+    }
+}

@@ -17,6 +17,8 @@
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'id' => 'tipo_sintoma',
+                                'autocomplete' => 'off',
+                                'style' => 'text-transform: uppercase;'
                             ]) !!}
                         </div>
                     </div>

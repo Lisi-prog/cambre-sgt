@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Hoja de Ruta</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::model($orden, ['method' => 'PUT', 'route' => ['hdr.crear', $orden->getOrdenDe->id_orden_mecanizado], 'class' => 'formulario form-prevent-multiple-submits', 'enctype' => 'multipart/form-data', 'id'=>'formCrearHDR']) !!}
             <div class="modal-body">
                 <div class="row">
                     <button type="button" class="btn btn-primary-outline m-1 rounded" onclick="mostrarFiltro()">HDR anteriores <i class="fas fa-caret-down"></i></button> 
@@ -144,7 +144,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
+                <button type="submit" class="btn btn-success button-prevent-multiple-submits" id="btnGuardarHdr">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
 

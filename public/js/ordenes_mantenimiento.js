@@ -4,14 +4,16 @@ let id_emp = $("#id_emp").val();
 let b;
 
 var table;
+let peticionFiltros = null;
+let temporizadorFiltros = null;
+let versionFiltros = 0;
 $("#loading").show();
 $(document).ready( function () {
-    var url = '{{url('/')}}';
     document.getElementById('volver').href = url;
     document.getElementById('ayudin').hidden = false;
     let nombreArchivo = 'orden';
 
-    $.when($.ajax({
+    $.ajax({
         type: "post",
         url: '/documentacion/obtener/'+nombreArchivo, 
         data: {
@@ -23,9 +25,8 @@ $(document).ready( function () {
         error: function (error) {
             console.log(error);
         }
-    }));
-    saveDefaultFilters();
-    loadFilters();
+    });
+    
     $.fn.dataTable.ext.search.push(
         function( settings, searchData, index, rowData, counter ) {
 
@@ -173,7 +174,7 @@ $(document).ready( function () {
         });
     };
 
-table = $('#example').DataTable({
+    table = $('#example').DataTable({
         language: {
                 lengthMenu: 'Mostrar _MENU_ registros por pagina',
                 zeroRecords: 'No se ha encontrado registros',
@@ -191,16 +192,16 @@ table = $('#example').DataTable({
             columnDefs: [
                 {
                     targets: 0,
-                    visible: false,   // 👈 arranca oculta
+                    visible: false,     
                     orderable: false
                 },
-                { targets: [4], visible: false },
-                { targets: 1,  // Prio. Operacion
+                { targets: [4,12], visible: false },
+                { targets: 1,  
                   createdCell: function (td, cellData, rowData, row, col) {
                       $(td).attr('data-order', rowData._order_prioridad);
                   } 
                 }, 
-                { targets: 2,  // Prio. Global
+                { targets: 2,  
                   createdCell: function (td, cellData, rowData, row, col) {
                   $(td).attr('data-order', rowData._order_prioridad_servicio);
                 }
@@ -208,62 +209,57 @@ table = $('#example').DataTable({
                 {className: "text-center align-middle",
                  targets: [1,2,3,5,6,7,8,9,10,11,12,13,14]}
             ],
-            // order: [[ 1, 'asc' ], [2, 'asc']],
             "pageLength": 100
     });
     
-$('input:checkbox').on('change', function () {
-    saveFilters();
-    table.draw();
-});
+    table.on('draw', function () {
+        changeTdColor();
+    })
 
-table.on('draw', function () {
-    changeTdColor();
-})
+    $('#example tbody').on('click', 'tr', function () {
+        ind_rw = table.row(this).index();
+    });
 
-$('#example tbody').on('click', 'tr', function () {
-    ind_rw = table.row(this).index();
-});
-
-$('#verPartesModal').on('hidden.bs.modal', function (e) {
-    nuevoParte();
-    actRow();
-})
-
-$('#editarOrdenModal').on('hidden.bs.modal', function (e) {
-    actRow();
-})
-
-$(".nuevo-editar-orden").on('submit', function(evt){
-        evt.preventDefault();     
-        
-        var url_php = $(this).attr("action"); 
-        var type_method = $(this).attr("method"); 
-        var form_data = $(this).serialize();
-
-        $.ajax({
-            type: type_method,
-            url: url_php,
-            data: form_data,
-            success: function(data) {
-                html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
-                                        `+data+`
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>`;
-                $('#alertOrd').html(html)
-                setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
-                
-            }
-        });
+    $('#verPartesModal').on('hidden.bs.modal', function (e) {
+        nuevoParte();
         actRow();
-});
-buscarPorFiltros()
-$("#loading").hide();
+    })
+
+    $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
+        actRow();
+    })
+
+    $(".nuevo-editar-orden").on('submit', function(evt){
+            evt.preventDefault();     
+            
+            var url_php = $(this).attr("action"); 
+            var type_method = $(this).attr("method"); 
+            var form_data = $(this).serialize();
+
+            $.ajax({
+                type: type_method,
+                url: url_php,
+                data: form_data,
+                success: function(data) {
+                    html = `<div class="alert alert-success alert-dismissible fade show " role="alert" id="msj-modalOrd">
+                                            `+data+`
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>`;
+                    $('#alertOrd').html(html)
+                    setTimeout(function(){document.getElementById('msj-modalOrd').hidden = true;},3000);
+                    
+                }
+            });
+            actRow();
+    });
+    buscarPorFiltros()
+    $("#loading").hide();
 } );
 
 $('.input-filter, input[name="filter"], input[name="sup"], input[name="res"], input[name="est"], input[name="asig"], input[name="soloAct"]').on('change', function(){
+    saveFilters();
     buscarPorFiltros();
 });
 
@@ -324,7 +320,7 @@ function resetFilters() {
 
     // Redibuja la tabla
     table.search('').columns().search('');
-    table.draw();
+    buscarPorFiltros();
 }
 
 function mostrarFiltro(id){
@@ -344,22 +340,17 @@ function limpiarFiltro(){
 
 function mostrarSelec() {
     let colum_sel = document.getElementsByClassName('chk-input');
-    // let enca = document.getElementById('enc_sel');
     let chk_sel_all = document.getElementById('chk-sel-all');
 
     if ($("#id_selec").is(":checked")) {
-        // enca.hidden = false;
         table.column(0).visible(true);
         chk_sel_all.hidden = false;
         table.rows().nodes().to$().find('td.chk-input').removeAttr('hidden');
-        // Mostrar la columna de checkboxes
         table.column('.chk-input', { search: 'applied' }).visible(true);
     } else {
-        // enca.hidden = true;
         table.column(0).visible(false);
         chk_sel_all.hidden = true;
         table.rows().nodes().to$().find('td.chk-input').attr('hidden', true);
-        // Ocultar la columna de checkboxes
         table.column('.chk-input', { search: 'applied' }).visible(false);
     }
 
@@ -377,14 +368,13 @@ function cargarMultiple(){
         data: {
             id: valores,
         },
-        success: function (response) {
-            response.forEach(e => {
+        success: function (res) {
+            res.forEach(e => {
                 html += `<tr>
-                            <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
+                            <td class="text-center" style="vertical-align: middle;">${e.proyecto}</td>
+                            <td class="text-center" style="vertical-align: middle;">${e.orden}</td>
                         </tr>`;
             });
-
             document.getElementById('npm_body_ord').innerHTML = html;
         },
         error: function (error) {
@@ -410,9 +400,9 @@ function cargarEditMultiple(){
         success: function (response) {
             response.forEach(e => {
                 html += `<tr>
-                            <td class="text-center" style="vertical-align: middle;">`+e.proyecto+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+e.orden+`</td>
-                            <td class="text-center" style="vertical-align: middle;">`+e.operacion+`</td>
+                            <td class="text-center" style="vertical-align: middle;">${e.proyecto}</td>
+                            <td class="text-center" style="vertical-align: middle;">${e.orden}</td>
+                            <td class="text-center" style="vertical-align: middle;">${e.operacion}</td>
                         </tr>`;
             });
 
@@ -527,6 +517,7 @@ document.getElementById('checkSelAll').addEventListener('change', event => {
 
 function cargarModalVerPartesOpe(id){
     let html = '';
+    let html2 = '';
     obtenerEstados(5);
     document.getElementById('m-id-ope-hdr').value = id;
     
@@ -536,30 +527,30 @@ function cargarModalVerPartesOpe(id){
         data: {
             id: id,
         },
-        success: function (response) {
-            // console.log(response)
-            let ultParte = response.partes_ope.length - 1;
+        success: function (res) {
+            // console.log(res)
+            let ultParte = res.partes_ope.length - 1;
             let idCount = 0;
-            response.partes_ope.forEach(element => {
+            res.partes_ope.forEach(e => {
                 html += `<tr>
-                        <td class="text-center" style="vertical-align: middle;">`+element.id_parte+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.fecha+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.estado+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.horas+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.horas_maquina+`</td>
-                        <td class="text-center" style="vertical-align: middle;"><abbr title="`+element.observaciones+`" style="text-decoration:none; font-variant: none;">`+element.observaciones.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.responsable+`</td>
-                        <td class="text-center" style="vertical-align: middle;">`+element.medidas+`</td>
+                        <td class="text-center" style="vertical-align: middle;">${e.id_parte}</td>
+                        <td class="text-center" style="vertical-align: middle;">${e.fecha}</td>
+                        <td class="text-center" style="vertical-align: middle;">${e.estado}</td>
+                        <td class="text-center" style="vertical-align: middle;">${e.horas}</td>
+                        <td class="text-center" style="vertical-align: middle;">${e.horas_maquina}</td>
+                        <td class="text-center" style="vertical-align: middle;"><abbr title="${e.observaciones}" style="text-decoration:none; font-variant: none;">${(e.observaciones ?? '').slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                        <td class="text-center" style="vertical-align: middle;">${e.responsable}</td>
+                        <td class="text-center" style="vertical-align: middle;">${e.medidas}</td>
                         <td class="text-center">
                             <div class="row justify-content-center" >
-                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOpe`+idCount+`" aria-expanded="false" aria-controls="collapseOrdenes`+idCount+`">
+                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOpe${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
                                     Opciones
                                 </button>
                             </div>
-                            <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOpe`+idCount+`">
+                            <div class="collapse" data-bs-parent="#body_ver_parte_ope" id="collapseOpe${idCount}">
                                 <div class="row">
                                     <div class="col-12 my-1">
-                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(`+element.id_parte+`)">
+                                        <button type="button" class="btn btn-primary w-100" onclick="editarParte(${e.id_parte})">
                                             Editar
                                         </button>
                                     </div>
@@ -573,24 +564,39 @@ function cargarModalVerPartesOpe(id){
                 idCount ++;
             });
 
-            if (response.medida_chk) {
+            res.operaciones_hdr.forEach(e => {
+                html2 += `<tr>
+                    <td class="text-center" style="vertical-align: middle;">${e.id_ope_de_hdr}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.numero}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.ultimo_res ?? '-'}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.tecnico_asignado ?? '-'}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.codigo_maquinaria ?? '-'}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.nombre_operacion}</td>
+                    <td class="text-center" style="vertical-align: middle;">${e.nombre_estado_hdr}</td>
+                </tr>`;
+            });
+
+            if (res.medida_chk) {
                 document.getElementById('section-medida').hidden = true;
             } else {
                 document.getElementById('section-medida').hidden = false;
             }
             document.getElementById('body_ver_parte_ope').innerHTML = html;
-            document.getElementById('mv-operacion').value = response.partes_ope[0].operacion;
-            document.getElementById('mv-ord-mec').value = response.partes_ope[0].orden_mec;
-            document.getElementById('mv-estado').value = response.partes_ope[0].estado;
-            document.getElementById('m-ver-parte-estado').value = response.partes_ope[ultParte].id_estado;
-            obtenerMaquinasPorOpe(response.partes_ope[0].id_operacion);
-    },
-    complete: function(){
-        changeTdColor();
-    },
-    error: function (error) {
-        console.log(error);
-    }
+            document.getElementById('body_ver_ope').innerHTML = html2;
+            document.getElementById('mv-operacion').value = res.partes_ope[0].operacion;
+            document.getElementById('mv-prox-operacion').value = res.prox_ope;
+            document.getElementById('mv-ubicacion').value = res.ubicacion ?? '-';
+            document.getElementById('mv-ord-mec').value = res.partes_ope[0].orden_mec;
+            document.getElementById('mv-estado').value = res.partes_ope[0].estado;
+            document.getElementById('m-ver-parte-estado').value = res.partes_ope[ultParte].id_estado;
+            obtenerMaquinasPorOpe(res.partes_ope[0].id_operacion);
+        },
+        complete: function(){
+            changeTdColor();
+        },
+        error: function (error) {
+            console.log(error);
+        }
     });
 }
 
@@ -598,24 +604,19 @@ function obtenerEstados(opcion){
     let select_estados = document.getElementById('m-ver-parte-estado');
     select_estados.innerHTML = '<option value="">Seleccionar</option>';
     html_estados = '';
-    $.when($.ajax({
+    $.ajax({
         type: "post",
-        url: '/orden/obtener-estados-de/'+opcion, 
-        data: {
-        },
-        success: function (response) {
-            response.forEach(element => {
-                html_estados += `
-                                    <option value="`+element.id_estado+`">`+element.nombre
-                                    +`</option> 
-                                    `
+        url: '/orden/obtener-estados-de/'+opcion,
+        success: function (res) {
+            res.forEach(element => {
+                html_estados += `<option value="${element.id_estado}">${element.nombre}</option>`;
             });
             select_estados.innerHTML += html_estados;
         },
         error: function (error) {
             console.log(error);
         }
-    }));
+    });
 }
 
 function obtenerMaquinasPorOpe(id){
@@ -625,19 +626,14 @@ function obtenerMaquinasPorOpe(id){
     let select_maq = null;
     $.ajax({
         type: "post",
-        url: '/operacion/obtener-maquinas-ope-de/'+id, 
-        data: {
-        },
+        url: '/operacion/obtener-maquinas-ope-de/'+id,
         success: function (res) {
             if (res.length == 1) {
                 select_maq = 'selected';
             }
 
-            res.forEach(element => {
-                html_maquinas += `
-                                    <option value="`+element.id_maquinaria+`" ${select_maq}>`+element.codigo_maquinaria
-                                    +`</option> 
-                                    `
+            res.forEach(e => {
+                html_maquinas += `<option value="${e.id_maquinaria}" ${select_maq}>${e.codigo_maquinaria}</option>`;
             });
             select_maquinas.innerHTML += html_maquinas;
         },
@@ -653,28 +649,27 @@ function cargarHdrVer(id){
         type: "post",
         url: '/orden/mec/hdr/obtener-hdr/'+id,
         data: { id: id },
-        success: function (response) {
-            // console.log(response);
-            document.getElementById('m_ver_ubi').value = response.ubicacion;
-            document.getElementById('m_ver_cant').value = response.cantidad;
-            document.getElementById('m_ver_fec_carga').value = response.fecha_requerida;
-            document.getElementById('m_ver_ruta').value = response.ruta;
-            document.getElementById('m_ver-obser').value = response.observaciones;
-            document.getElementById('m_ver_id_pieza').value = response.nombre_orden;
-            document.getElementById('m_ver_confec').value = response.supervisor;
+        success: function (res) {
+            document.getElementById('m_ver_ubi').value = res.ubicacion;
+            document.getElementById('m_ver_cant').value = res.cantidad;
+            document.getElementById('m_ver_fec_carga').value = res.fecha_requerida;
+            document.getElementById('m_ver_ruta').value = res.ruta;
+            document.getElementById('m_ver-obser').value = res.observaciones;
+            document.getElementById('m_ver_id_pieza').value = res.nombre_orden;
+            document.getElementById('m_ver_confec').value = res.supervisor;
 
-            if (response.obser_fallo) {
+            if (res.obser_fallo) {
                 document.getElementById('obser-fallo').hidden = false;
             }
 
             document.getElementById('ver-table-body').innerHTML = '';
-            response.operaciones.forEach(function (op){
+            res.operaciones.forEach(function (op){
                 html += `<tr>
-                        <td class="text-center">`+op.numero+`</td>
-                        <td class="text-center">`+op.operacion+`</td>
-                        <td class="text-center">`+op.asignado+`</td>
-                        <td class="text-center">`+op.maquina ?? '-'+`</td>
-                    </tr>`
+                            <td class="text-center">${op.numero}</td>
+                            <td class="text-center">${op.operacion}</td>
+                            <td class="text-center">${op.asignado}</td>
+                            <td class="text-center">${op.maquina ?? '-'}</td>
+                        </tr>`;
             });
             document.getElementById('ver-table-body').innerHTML = html;
         },
@@ -758,7 +753,7 @@ function isSupervisor() {
     return userRoles.includes('SUPERVISOR');
 }
 
-function buscarPorFiltros(){
+function buscarPorFiltrosOLD(){
     let filtros = getSelectedFilters();
     table.clear().draw()
     $.ajax({
@@ -787,6 +782,14 @@ function buscarPorFiltros(){
                             data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(${ope.get_hdr.get_ord_mec.id_orden}, 3)">
                                 Ver Ord Mec
                             </button>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <a type="button" class="btn btn-info w-100" target="_blank"
+                            href="/ordenes/mec/${ope.get_hdr.get_ord_mec.id_orden}/hdr">
+                                Hoja de Ruta
+                            </a>
                         </div>
                     </div>`;
                 }
@@ -881,7 +884,7 @@ function buscarPorFiltros(){
                 if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
@@ -891,7 +894,7 @@ function buscarPorFiltros(){
                     }
                     else if(ope.estado_actual == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
@@ -913,7 +916,7 @@ function buscarPorFiltros(){
                 else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'INSPECCIÓN'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo},${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
                                     Procesar
@@ -923,7 +926,7 @@ function buscarPorFiltros(){
                     }
                     else if(ope.estado_actual == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
                                 <button type="button" onclick="openModalParteInspeccionPendiente(${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}, ${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')"  class="btn btn-info w-100">
                                     Procesar
@@ -945,9 +948,9 @@ function buscarPorFiltros(){
                 else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden>
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
+                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo}')">
                                     Procesar
                                 </button>
                             </div>
@@ -955,20 +958,10 @@ function buscarPorFiltros(){
                     }
                     else if(ope.estado_actual == 'En proceso'){
                         opciones += `
-                        <div class="row my-2">
+                        <div class="row my-2" hidden hidden>
                             <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.get_orden.id_orden}, ${ope.get_orden.get_etapa.id_etapa}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_activo}', '${ope.get_orden.get_etapa.get_servicio.get_activo.id_tipo_activo}')">
                                     Procesar
-                                </button>
-                            </div>
-                        </div>`;
-                    }
-                    else if(ope.estado_actual == 'Revisar'){
-                        opciones += `
-                        <div class="row my-2">
-                            <div class="col-12">                               
-                                <button type="button" class="btn btn-info w-100" onclick="openModalConfirmarParteAjuste(${ope.get_orden.id_orden}, '${ope.get_orden.get_etapa.get_servicio.get_activo.codigo_activo}', '${ope.get_orden.get_etapa.get_servicio.codigo_servicio}')">
-                                    Revisar
                                 </button>
                             </div>
                         </div>`;
@@ -1009,9 +1002,288 @@ function buscarPorFiltros(){
                     5: ope.get_orden.nombre_orden ?? '-',
                     6: ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento,
                     7: '-',
-                    8: ope.estado_actual,
+                    8: ope.estado_actual == 'Espera' && ope.esta_activo ? 'Disponible' : ope.estado_actual,
                     9: '-',
                     10: ope.get_empleado?.nombre_empleado ?? '-',
+                    11: ope.horas,
+                    12: ope.esta_activo ? 'SI' : 'NO',
+                    13: ope.cantidad ?? '-',
+                    14: opciones,
+                }).node().id = ope.id_ope_de_hdr;     
+                idCount++;
+            });
+
+            table.draw()      
+        }
+    });
+}
+
+function buscarPorFiltros(){
+    const version = ++versionFiltros;
+    clearTimeout(temporizadorFiltros);
+    if (peticionFiltros) {
+        peticionFiltros.abort();
+        peticionFiltros = null;
+    }
+    temporizadorFiltros = setTimeout(function () {
+        cargarOperacionesPorFiltros(version);
+    }, 200);
+}
+
+function cargarOperacionesPorFiltros(version){
+    let filtros = getSelectedFilters();
+    peticionFiltros = $.ajax({
+        type: 'POST',
+        data: filtros,
+        url: '/get_operaciones',
+        success: function(operaciones) {
+            if (version !== versionFiltros) return;
+            table.clear();
+            // console.log(operaciones);
+            let idCount = 0;
+            let opciones = ''
+
+            //OPERACIONES GENERALES
+            operaciones['generales'].forEach(ope => {
+                opciones = `<div class="row justify-content-center">
+                            <div class="row justify-content-center">
+                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
+                                    Opciones
+                                </button>
+                            </div>
+                            <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes${idCount}">`;
+                if (ope.id_hoja_de_ruta) {
+                    opciones += `
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" 
+                            data-bs-target="#verOrdenModal" onclick="cargarModalVerOrden(${ope.get_hdr.get_ord_mec.id_orden}, 3)">
+                                Ver Ord Mec
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <a type="button" class="btn btn-info w-100" target="_blank" 
+                            href="/ordenes/mec/${ope.get_hdr.get_ord_mec.id_orden}/hdr">
+                                Hoja de Ruta
+                            </a>
+                        </div>
+                    </div>`;
+                }
+                opciones += `
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" 
+                            data-bs-target="#verPartesOpeHdrModal" onclick="cargarModalVerPartesOpe(${ope.id_ope_de_hdr})">
+                                Partes
+                            </button>
+                        </div>
+                    </div>`;        
+                if (ope.getHdr) {
+                    if (ope.can_hdr) {
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <form method="GET" action="${ordenHdrRoute}/${ope.get_hdr.get_ord_mec.id_orden}" target="_blank" style="display:inline">
+                                    <input type="hidden" name="vieneDesde" value="3">
+                                    <button type="submit" class="btn btn-info w-100">
+                                        HDR
+                                    </button>
+                                </form>
+                            </div>
+                        </div>`;
+                    }
+                    opciones += `
+                    <div class="row my-2">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" 
+                            data-bs-target="#verHdrOpe" onclick="cargarHdrVer(${ope.get_hdr.id_hoja_de_ruta})">
+                                Ver HDR
+                            </button>
+                        </div>
+                    </div>`;
+                }
+                if (ope.can_hdr) {
+                    opciones += `
+                    <div class="row my-2">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        ${ope.id_estado_hdr != 1 ? 
+                            `<button type="button" class="btn btn-warning" onclick="crearParteOpeEspera(${ope.id_ope_de_hdr})">
+                            Espera
+                            </button>` : ''
+                        }
+                        ${ope.id_estado_hdr != 2 ? 
+                            `<button type="button" class="btn btn-info" onclick="crearParteOpeEnProceso(${ope.id_ope_de_hdr})">
+                            En proceso
+                            </button>` : ''
+                        }
+                        </div>
+                    </div>`;
+                }
+                opciones += `</div></div>`;
+               
+                table.row.add({
+                    0 : `<div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <input class="form-check-input" type="checkbox" value="${ope.id_ope_de_hdr}" id="flexCheck${ope.id_ope_de_hdr}" name="id_ope[]">
+                    </div>`,
+                    1 : ope.prioridad ?? 'S/P',
+                    _order_prioridad: ope.prioridad ?? 999,
+                    2: ope.prioridad_servicio ?? 'S/P',
+                    _order_prioridad_servicio: ope.prioridad_servicio ?? 999,
+                    3: `<abbr title="${ope.nombre_servicio ?? '-'}" style="text-decoration:none; font-variant: none;">
+                            ${ope.codigo_servicio ?? '-'}<i class="fas fa-eye"></i>
+                        </abbr>`,
+                    4: ope.codigo_servicio ?? '-',
+                    5: ope.nombre_orden ?? '-',
+                    6: ope.nombre_operacion ?? '-',
+                    7: ope.codigo_maquinaria ?? '-',
+                    8: ope.nombre_estado_hdr ?? '-',
+                    9: ope.ultimo_res ?? '-',
+                    10: ope.tecnico_asignado ?? '-',
+                    11: ope.total_horas ?? '-',
+                    12: ope.activo ? 'SI' : 'NO',
+                    13: ope.cantidad_hdr ?? '-',
+                    14: opciones,
+                }).node().id = ope.id_ope_de_hdr;     
+                idCount++;
+            });
+
+            //OPERACIONES DE MANTENIMIENTO
+            operaciones['mantenimiento'].forEach(ope => {
+                opciones = `<div class="row justify-content-center">
+                            <div class="row justify-content-center">
+                                <button class="btn btn-primary w-100 btn-opciones" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseOrdenes${idCount}" aria-expanded="false" aria-controls="collapseOrdenes${idCount}">
+                                    Opciones
+                                </button>
+                            </div>
+                            <div class="collapse" data-bs-parent="#accordion" id="collapseOrdenes${idCount}">`;
+                if(ope.nombre_tipo_orden_mantenimiento == 'DIAGNÓSTICO'){
+                    if(ope.nombre_estado == 'Espera'){
+                        opciones += `
+                        <div class="row my-2" hidden>
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalCrearParteDiagnostico(${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.nombre_estado == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2" hidden>
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteDiagnosticoPendiente(${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else{
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalVerParteDiagnostico(${ope.id_orden}, '${ope.codigo_activo}')">
+                                    Ver parte
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                }
+                else if(ope.nombre_tipo_orden_mantenimiento == 'INSPECCIÓN'){
+                    if(ope.nombre_estado == 'Espera'){
+                        opciones += `
+                        <div class="row my-2" hidden>
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalNuevoParteInspeccion(${ope.id_activo},${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.nombre_estado == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2" hidden>
+                            <div class="col-12">                               
+                                <button type="button" onclick="openModalParteInspeccionPendiente(${ope.id_activo}, ${ope.id_orden}, '${ope.codigo_activo}', '${ope.codigo_servicio}')"  class="btn btn-info w-100">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else{
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalVerParteInspeccion(${ope.id_orden}, '${ope.codigo_activo}')">
+                                    Ver parte
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                }
+                else if(ope.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
+                    if(ope.nombre_estado == 'Espera'){
+                        opciones += `
+                        <div class="row my-2" hidden>
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100"  onclick="openModalNuevoParteAjuste(${ope.id_orden}, ${ope.id_etapa}, '${ope.codigo_activo}', '${ope.codigo_servicio}', '${ope.id_activo}', '${ope.id_tipo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                    else if(ope.nombre_estado == 'En proceso'){
+                        opciones += `
+                        <div class="row my-2" hidden>
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalParteAjustePendiente(${ope.id_orden}, ${ope.id_etapa}, '${ope.codigo_activo}', '${ope.codigo_servicio}', '${ope.id_activo}', '${ope.id_tipo_activo}')">
+                                    Procesar
+                                </button>
+                            </div>
+                        </div>`;
+                    }                    
+                    else{
+                        opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <button type="button" class="btn btn-info w-100" onclick="openModalVerParteAjuste(${ope.id_orden}, '${ope.codigo_activo}')">
+                                    Ver parte
+                                </button>
+                            </div>
+                        </div>`;
+                    }
+                }
+                opciones += `
+                        <div class="row my-2">
+                            <div class="col-12">                               
+                                <a target="_blank" href="/s_m_a/gestionar/${ope.id_servicio}" type="button" class="btn btn-warning w-100">
+                                    Ir a gestionar
+                                </a>
+                            </div>
+                        </div>`;
+                opciones += `</div></div>`;
+
+                table.row.add({
+                    0 : `<div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <input class="form-check-input" type="checkbox" value="${ope.id_ope_de_hdr}" id="flexCheck${ope.id_ope_de_hdr}" name="id_ope[]">
+                    </div>`,
+                    1 : 'S/P',
+                    _order_prioridad: 999,
+                    2: ope.prioridad_servicio ?? 'S/P',
+                    _order_prioridad_servicio: ope.prioridad_servicio ?? 999,
+                    3: `<abbr title="${ope.nombre_servicio ?? '-'}" style="text-decoration:none; font-variant: none;">
+                            ${ope.codigo_servicio ?? '-'}<i class="fas fa-eye"></i>
+                        </abbr>`,
+                    4: ope.codigo_servicio ?? '-',
+                    5: ope.nombre_orden ?? '-',
+                    6: ope.nombre_tipo_orden_mantenimiento,
+                    7: '-',
+                    8: ope.nombre_estado == 'Espera' && ope.esta_activo ? 'Disponible' : ope.nombre_estado,
+                    9: '-',
+                    10: ope.nombre_empleado_asignado ?? '-',
                     11: ope.horas,
                     12: ope.esta_activo ? 'SI' : 'NO',
                     13: ope.cantidad ?? '-',
@@ -1047,7 +1319,9 @@ function getSelectedFilters() {
             return this.value;
         }).get(),
 
-        soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO'
+        soloAct: $('input[name="soloAct"]').is(':checked') ? 'SI' : 'NO',
+
+        tipoOperacion:
+            $('input[name="tipoOperacion"]:checked').val() ?? 'TODAS'
     };
 }
-

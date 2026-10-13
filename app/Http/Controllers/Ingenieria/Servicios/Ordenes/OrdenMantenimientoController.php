@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ingenieria\Servicios\Ordenes;
 use App\Http\Controllers\Controller;
 
+use App\Models\Cambre\Tarea_mantenimiento;
 use Illuminate\Http\Request;
 
 //agregamos
@@ -10,6 +11,7 @@ use \PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cambre\Estado_hdr;
+use App\Models\Cambre\Zona_tarea_x_tipo_activo;
 use App\Models\Cambre\Operacion;
 use App\Models\Cambre\Empleado;
 use App\Models\Cambre\Maquinaria;
@@ -20,6 +22,7 @@ use App\Models\Cambre\Ishikawa_categoria;
 use App\Models\Cambre\Ishikawa_causa;
 use App\Models\Cambre\Accion_para_tarea;
 use App\Models\Cambre\Zona;
+use App\Models\Cambre\Vw_orden_mantenimiento;
 
 class OrdenMantenimientoController extends Controller
 {
@@ -40,21 +43,27 @@ public function index(){
         $flt_maquinas = Maquinaria::orderBy('alias_maquinaria')->pluck('alias_maquinaria');
         
 
-        $flt_proyectos = collect(DB::select('
-                    select s.codigo_servicio
-                    from servicio s
-                    left join etapa et 
-                        on et.id_servicio = s.id_servicio
-                    left join orden o 
-                        on o.id_etapa = et.id_etapa
-                    left join orden_mecanizado om 
-                        on om.id_orden = o.id_orden
-                    left join hoja_de_ruta hdr 
-                        on hdr.id_orden_mecanizado = om.id_orden_mecanizado
-                    left join operaciones_de_hdr op_hdr 
-                        on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
-                    group by s.id_servicio, s.codigo_servicio
-                '))->pluck('codigo_servicio');
+        /*$flt_proyectos = collect(DB::select('select 
+                                                s.codigo_servicio, 
+                                                s.id_servicio
+                                            from servicio s
+                                            left join etapa et 
+                                                on et.id_servicio = s.id_servicio
+                                            left join orden o 
+                                                on o.id_etapa = et.id_etapa
+                                            left join orden_mecanizado om 
+                                                on om.id_orden = o.id_orden
+                                            left join hoja_de_ruta hdr 
+                                                on hdr.id_orden_mecanizado = om.id_orden_mecanizado
+                                            left join operaciones_de_hdr op_hdr 
+                                                on op_hdr.id_hoja_de_ruta = hdr.id_hoja_de_ruta
+                                            group by s.id_servicio, s.codigo_servicio
+                                        '))->pluck('codigo_servicio', 'id_servicio'); */
+
+        $flt_proy_ope = Vw_operaciones_de_hdr::orderBy('codigo_servicio')->get(['id_servicio','codigo_servicio'])->unique('codigo_servicio')->pluck('codigo_servicio', 'id_servicio');
+        $flt_proy_ord_mant = Vw_orden_mantenimiento::orderBy('codigo_servicio')->get(['id_servicio','codigo_servicio'])->unique('codigo_servicio')->pluck('codigo_servicio', 'id_servicio');
+
+        $flt_proyectos = $flt_proy_ope->union($flt_proy_ord_mant)->sort();
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
@@ -62,6 +71,26 @@ public function index(){
         $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $zonas = Zona::orderBy('nombre_zona')->get();
+        $tareas_mantenimiento = Tarea_mantenimiento::select('tarea_mantenimiento.*', 'tipo_activo_x_tarea_mant.id_tipo_activo', 'activo_x_tarea_mant.id_activo')
+        ->orderBy('nombre_tarea')
+        ->leftJoin('tipo_activo_x_tarea_mant', 'tipo_activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')
+        ->leftJoin('activo_x_tarea_mant', 'activo_x_tarea_mant.id_tarea_mantenimiento', '=', 'tarea_mantenimiento.id_tarea_mantenimiento')        
+        ->get();
+        $elementos =  Zona_tarea_x_tipo_activo::join('zona_x_zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_x_zona_tarea.id_zona_tarea')
+            ->join('zona_x_tipo_activo', function ($join) {
+                $join->on('zona_x_zona_tarea.id_zona', '=', 'zona_x_tipo_activo.id_zona')
+                     ->on('zona_tarea_x_tipo_activo.id_tipo_activo', '=', 'zona_x_tipo_activo.id_tipo_activo');
+            })
+            ->join('zona_tarea', 'zona_tarea_x_tipo_activo.id_zona_tarea', '=', 'zona_tarea.id_zona_tarea')
+            ->join('zona', 'zona_x_zona_tarea.id_zona', '=', 'zona.id_zona')
+            ->select(
+                'zona_tarea_x_tipo_activo.*', 
+                'zona_x_tipo_activo.id_zona',
+                'zona_tarea.nombre_zona', 
+                'zona.nombre_zona as elemento'
+            )
+            ->get();
+        
         // $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
         if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
             $maquinas = Maquinaria::orderBy('alias_maquinaria')->get();
@@ -78,7 +107,7 @@ public function index(){
         $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
  */
         return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos',
-        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas'
+        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas', 'tareas_mantenimiento', 'elementos'
         ));
     }
 
@@ -86,7 +115,7 @@ public function index(){
         return Empleado::orderBy('nombre_empleado')->activo()->HabilitadoOperacion()->get();
     }
 
-    public function get_operaciones(Request $request){
+    public function get_operacionesOLD(Request $request){
        //return $request;
        
         $operaciones = Vw_operaciones_de_hdr::orderByRaw('ISNULL(prioridad), prioridad')
@@ -164,6 +193,46 @@ public function index(){
     
     
         return $operaciones_todas;
+    }
+
+    public function get_operaciones(Request $request){
+        //return $request;
+
+        //variables 
+        $servicios = $request->input('cod_serv');
+        $operaciones_flt = $request->input('sup');
+        $maquinas = $request->input('res');
+        $estados = $request->input('est');
+        $asignados = $request->input('asig');
+        $activo = $request->input('soloAct') === 'SI' ? 1 : 0;
+        $tipoOperacion = $request->input('tipoOperacion', 'TODAS');
+
+        $operaciones = [];
+       
+        if (in_array($tipoOperacion, ['TODAS', 'HDR'])) {
+            $operaciones = Vw_operaciones_de_hdr::servicio($servicios)->operacion($operaciones_flt)->maquina($maquinas)->estado($estados)->asignado($asignados)->activo($activo)->orderByRaw('ISNULL(prioridad), prioridad')
+                ->orderByRaw('ISNULL(prioridad_servicio), prioridad_servicio')
+                ->with('getHdr.getOrdMec')->get();
+        }
+        
+
+        $operaciones_mantenimiento = [];
+
+        if (in_array($tipoOperacion, ['TODAS', 'MANTENIMIENTO'])) {
+            $operaciones_mantenimiento = Vw_orden_mantenimiento::servicio($servicios)->mantenimiento($operaciones_flt)->estado($estados)->asignado($asignados)->activo($activo)->get();
+            
+            foreach($operaciones_mantenimiento as $om){
+                $om->horas = $om->getOrden->getHoras();
+            }
+        }
+
+        
+
+        $operaciones_todas['generales'] = $operaciones;
+        $operaciones_todas['mantenimiento'] = $operaciones_mantenimiento;
+    
+    
+        return $operaciones_todas;  
     }
 
     public function editar(Request $request){

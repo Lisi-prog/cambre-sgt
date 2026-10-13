@@ -33,6 +33,13 @@ class TareaMantenimientoController extends Controller
         } else {
             $tarea->id_ejecucion = $request->id_ejecucion;
         }
+        if ($request->zona_nueva) {
+        $zona = Zona_tarea::create([
+            'nombre_zona' => strtoupper($request->zona_nueva)
+        ]);
+        $request->merge([
+            'id_zona_tarea' => $zona->id_zona_tarea
+        ]);    }
         $tarea->id_zona_tarea = $request->id_zona_tarea;
         $tarea->save();
 
@@ -73,10 +80,14 @@ class TareaMantenimientoController extends Controller
 
     public function destroy($id)
     {
-        $tarea = Tarea_mantenimiento::find($id);
-        $tarea->delete();
-
-        return redirect()->route('tarea_mantenimiento.index')->with('success', 'Tarea eliminada exitosamente.');
+        try {
+            $tarea = Tarea_mantenimiento::find($id);
+            $tarea->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('tarea_mantenimiento.index')->with('error', 'La Tarea ya se encuentra relacionado con algun parte.');
+        }
+        
+        return redirect()->route('tarea_mantenimiento.index')->with('mensaje', 'Tarea eliminada exitosamente.');
     }
 }
 

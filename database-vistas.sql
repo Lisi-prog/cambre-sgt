@@ -204,6 +204,8 @@ WITH
         th.total_horas,
         ro.nombre_empleado as supervisor,
 		ro.id_empleado as id_empleado_supervisor,
+        roo.nombre_empleado as responsable,
+        roo.id_empleado as id_empleado_responsable,
         ObtenerOpeActivaOrdMec(omec.id_orden_mecanizado) as ope_act,
         omec.id_orden_manufactura,
         man.nombre_orden as manufactura,
@@ -218,8 +220,81 @@ WITH
     inner join (SELECT  p.id_orden, SEC_TO_TIME( SUM( TIME_TO_SEC( `horas` ) ) ) AS total_horas FROM parte p group by p.id_orden) as th on th.id_orden = o.id_orden
     left join (select om.id_orden_manufactura, o.nombre_orden from orden o inner join orden_manufactura om on o.id_orden = om.id_orden) man on man.id_orden_manufactura = omec.id_orden_manufactura
     inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+    inner join Res_ord as roo on roo.id_orden = o.id_orden and roo.id_rol_empleado = 2
     inner join etapa et on et.id_etapa = o.id_etapa
     inner join servicio se on se.id_servicio = et.id_servicio;
+
+CREATE VIEW vw_orden_mantenimiento AS
+WITH PartesUnificadas AS (
+    SELECT p.id_parte, p.id_orden, p.fecha_limite, p.fecha,
+           pi.id_estado_mantenimiento
+    FROM parte p
+    INNER JOIN parte_inspeccion pi ON pi.id_parte = p.id_parte
+
+    UNION ALL
+
+    SELECT p.id_parte, p.id_orden, p.fecha_limite, p.fecha,
+           pd.id_estado as id_estado_mantenimiento
+    FROM parte p
+    INNER JOIN parte_diagnostico pd ON pd.id_parte = p.id_parte
+
+    UNION ALL
+
+    SELECT p.id_parte, p.id_orden, p.fecha_limite, p.fecha,
+           pa.id_estado_mantenimiento
+    FROM parte p
+    INNER JOIN parte_ajuste pa ON pa.id_parte = p.id_parte
+),
+
+ParteRanked AS (
+    SELECT
+        pu.*,
+        est.nombre_estado_mantenimiento,
+        CASE
+            WHEN pu.id_estado_mantenimiento = 4 THEN pu.fecha
+            ELSE NULL
+        END as fecha_finalizacion,
+        ROW_NUMBER() OVER (PARTITION BY pu.id_orden ORDER BY pu.id_parte DESC) AS rn
+    FROM PartesUnificadas pu
+    INNER JOIN estado_mantenimiento est 
+        ON est.id_estado_mantenimiento = pu.id_estado_mantenimiento
+)
+
+SELECT 
+    se.prioridad_servicio,
+    se.id_servicio,
+    se.codigo_servicio,
+    se.nombre_servicio,
+    case 
+		when oman.esta_activo is null then 0
+        else oman.esta_activo
+    end as esta_activo,
+    o.id_orden,
+    tom.id_tipo_orden_mantenimiento,
+    tom.nombre_tipo_orden_mantenimiento,
+    o.nombre_orden,
+    et.id_etapa,
+    et.descripcion_etapa,
+    p_rank.fecha_limite,
+    p_rank.fecha_finalizacion,
+    p_rank.id_estado_mantenimiento,
+    p_rank.nombre_estado_mantenimiento as nombre_estado,
+    emp.id_empleado as id_empleado_asignado,
+    emp.nombre_empleado as nombre_empleado_asignado,
+    act.id_activo,
+    act.codigo_activo,
+    ta.id_tipo_activo,
+    ta.nombre_tipo_activo
+FROM orden o 
+INNER JOIN orden_mantenimiento oman ON o.id_orden = oman.id_orden
+inner join tipo_orden_mantenimiento tom on tom.id_tipo_orden_mantenimiento=oman.id_tipo_orden_mantenimiento
+LEFT JOIN empleado emp on emp.id_empleado=oman.id_empleado
+INNER JOIN ParteRanked p_rank 
+    ON p_rank.id_orden = o.id_orden AND p_rank.rn = 1
+INNER JOIN etapa et ON et.id_etapa = o.id_etapa
+INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+INNER JOIN activo act on act.id_activo=se.id_activo
+INNER JOIN tipo_activo ta on ta.id_tipo_activo=act.id_tipo_activo;
 
 CREATE VIEW vw_parte_trabajo AS
 WITH
@@ -237,10 +312,11 @@ select
 	p.id_parte,
 	o.nombre_orden,
 	p.fecha, 
-  p.fecha_limite,
-  p.fecha_carga,
+    p.fecha_limite,
+    p.fecha_carga,
 	e.nombre_estado as estado,
-	p.horas, 
+	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
     p.observaciones,
     se.id_servicio,
     se.codigo_servicio,
@@ -275,9 +351,11 @@ Res_ord AS (
 select 
 	p.id_parte,
 	o.nombre_orden,
-	p.fecha, p.fecha_limite,
+	p.fecha, 
+    p.fecha_limite,
 	e.nombre_estado_manufactura as estado,
 	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
     p.observaciones,
     se.id_servicio,
     se.codigo_servicio,
@@ -297,7 +375,6 @@ inner join etapa et on et.id_etapa = o.id_etapa
 inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
-
 CREATE VIEW vw_parte_mecanizado AS
 WITH
 Res_ord AS (
@@ -316,6 +393,45 @@ select
 	p.fecha, p.fecha_limite,
 	e.nombre_estado_mecanizado as estado,
 	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
+    p.observaciones,
+    se.id_servicio,
+    se.codigo_servicio,
+    se.nombre_servicio,
+    et.descripcion_etapa,
+	emp.nombre_empleado as responsable,
+    emp.id_empleado as id_responsable,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_supervisor
+from parte p 
+inner join parte_mecanizado pt on pt.id_parte = p.id_parte
+inner join estado_mecanizado e on e.id_estado_mecanizado = pt.id_estado_mecanizado
+inner join responsabilidad res on res.id_responsabilidad = p.id_responsabilidad
+inner join empleado emp on emp.id_empleado = res.id_empleado
+inner join orden o on o.id_orden = p.id_orden
+inner join etapa et on et.id_etapa = o.id_etapa
+inner join servicio se on se.id_servicio = et.id_servicio
+inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
+
+CREATE VIEW vw_parte_mecanizadoALT AS
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+select 
+	p.id_parte,
+	o.nombre_orden,
+	p.fecha, p.fecha_limite,
+	e.nombre_estado_mecanizado as estado,
+	p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
     p.observaciones,
     se.id_servicio,
     se.codigo_servicio,
@@ -652,6 +768,7 @@ with
 select
 	se.prioridad_servicio,
 	op_hdr.prioridad,
+    se.id_servicio,
 	se.codigo_servicio,
 	se.nombre_servicio,
 	et.descripcion_etapa,
@@ -729,3 +846,52 @@ select
     from hoja_de_ruta as hdr
     INNER JOIN OpeRanked AS o_rank ON o_rank.id_hoja_de_ruta = hdr.id_hoja_de_ruta AND o_rank.rn = 1
     INNER JOIN ParteRanked AS p_rank ON p_rank.id_ope_de_hdr = o_rank.id_ope_de_hdr AND p_rank.rn = 1;
+
+create view vw_parte_operaciones as
+WITH
+Res_ord AS (
+	select 
+		res_ord.id_orden,
+		res.id_rol_empleado,
+		emp.nombre_empleado,
+        emp.id_empleado
+	from responsabilidad_orden res_ord
+	inner join responsabilidad res on res.id_responsabilidad = res_ord.id_responsabilidad
+	inner join empleado emp on res.id_empleado = emp.id_empleado
+)
+SELECT 
+    poh.id_parte_ope_hdr,
+    poh.fecha,
+    poh.fecha_carga,
+    poh.observaciones,
+    emp.id_empleado as id_responsable,
+    emp.nombre_empleado responsable,
+    poh.horas,
+    poh.horas_maquina,
+    maq.id_maquinaria,
+    maq.codigo_maquinaria,
+    ehdr.id_estado_hdr,
+    ehdr.nombre_estado_hdr,
+    odh.id_ope_de_hdr,
+    op.nombre_operacion,
+    hdr.id_hoja_de_ruta,
+    omec.id_orden_mecanizado,
+    o.id_orden,
+    o.nombre_orden,
+    ro.nombre_empleado as supervisor,
+    ro.id_empleado as id_supervisor
+FROM parte_ope_hdr poh
+left join operaciones_de_hdr odh on odh.id_ope_de_hdr = poh.id_ope_de_hdr
+left join operacion op on op.id_operacion = odh.id_operacion
+left join responsabilidad res on res.id_responsabilidad = poh.id_responsabilidad
+left join empleado emp on emp.id_empleado = res.id_empleado
+left join maquinaria maq on maq.id_maquinaria = poh.id_maquinaria
+inner join estado_hdr ehdr on ehdr.id_estado_hdr = poh.id_estado_hdr
+left join hoja_de_ruta hdr on hdr.id_hoja_de_ruta = odh.id_hoja_de_ruta
+left join orden_mecanizado omec on omec.id_orden_mecanizado = hdr.id_orden_mecanizado
+left join orden o on o.id_orden = omec.id_orden
+left join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3
+left join etapa et on et.id_etapa = o.id_etapa
+left join servicio se on se.id_servicio = et.id_servicio
+order by poh.id_parte_ope_hdr desc
+;

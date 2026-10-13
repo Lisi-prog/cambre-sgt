@@ -8,41 +8,139 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RESUMEN SEMANAL</title>
 </head>
-<body>
-    <header style="margin-left: -380px; margin-top: -50px;">
-        <img class= "logo column-2 header-logo" alt="image"  src="{{asset('img/logo-cambre.png') }}">
-        {{-- <img class= "logo" alt="image"  src="{{asset('img/logo_iprodha.jpg') }}" style="width: 260px !important; height:40px; !important"> --}}
-    </header>
-    {{-- <div class="contenido" style="margin-left: -30px; margin-top: 150px;"> --}}
-    <div class="contenido" style="margin-left: -30px;">
-        <div class="column-4" style="width: 150px; height: 80% !important; margin-top: 90px;" >
-            {{-- <img src="{{'data:image/jpeg;base64,'.$sello}}" width="130" height="60" style="transform: rotate(-15deg);"/> --}}
-            {{-- @foreach ($sellos as $sello)
-                <img src="{{'data:image/jpeg;base64,'.$sello->imgSello}}" width="{{$sello->ancho}}" height="{{$sello->alto}}" style="transform: rotate(-15deg); margin-bottom: 100px; margin-right: 20px"/>
-            @endforeach --}}
-        </div>
-        <section class="section">
-            <div class="section-header">
-                <h4 style="text-align: center;">RESUMEN AVANCE DE PROYECTOS</h4>
-            </div>
-            <div class="section-body" style="margin-right: -30px;">
-                @foreach($data['data']['info'] as $item)
-                    {{ $item->codigo_servicio }}
-                @endforeach
-               {{-- <div class="column-4r" style="text-align: right;">
-                    <p style="
-                    font-family: Verdana, Geneva, sans-serif;
-                    font-size: 14px;              /* Equivalente a 10.5pt */
-                    text-align: justify;
-                    line-height: 1.8;
-                    margin: 0;
-                  ">-------------Por la presente, el <strong>INSTITUTO PROVINCIAL DE DESARROLLO HABITACIONAL</strong> certifica la Cancelación Total del Saldo de Capital <strong>{{$nom_ad}} – {{$nom_cat}} – {{$esArrMiCasa ? '' : 'B°'}}{{$nom_barrio}}</strong> de la localidad de {{$localidad}}, por el precio de venta <strong>{{$capital}}, (PESOS {{$capital_en_letras}})</strong>, cuyo Titular es <strong>{{$titular}}</strong>, en fecha <strong>{{$fecha_pago_cuota}}</strong>, de conformidad a las normas establecidas en la Ley N° 21.581, modificatorias y Resoluciones Reglamentarias vigentes.</br> A partir de la fecha el INSTITUTO PROVINCIAL DE DESARROLLO HABITACIONAL se aparta y desiste, renunciando a todos los derechos y acciones que le pudieran corresponder, quedando como único responsable de la unidad el Adquirente. <br><br>Posadas, Misiones,  <strong>{{$fechaHoy}}</strong>.-</p>
-                  <div class="" style="text-align: right; margin-top: 100px;">
-                    <img src="{{'data:image/jpeg;base64,'.$firma['imgSello']}}" width="{{$firma['ancho']}}" height="{{$firma['alto']}}" style=""/>
-                  </div>
-               </div> --}}
-            </div>
-        </section>
-    </div>
+<body class="page-border">
+    <table>
+        <tr>
+            <td rowspan="2" class="sin-borde">
+                <img class= "logo column-2 header-logo" alt="image"  src="{{asset('img/logo-cambre.png') }}">
+            </td>
+            <td colspan="3" class="titulo">RESUMEN SEMANAL</td>
+        </tr>
+        <tr>
+            <td colspan="3"><strong>SUPERVISOR:</strong> {{$nombre ?? '-'}} <strong>PERIODO:</strong> {{ $fechaIni ?? '-'}} al {{$fechaFin ?? '-'}}</td>
+        </tr>
+    </table>
+
+    <table class="observaciones">
+        <tr>
+            <th colspan="2">AVANCE SUPERVISOR</th>
+        </tr>
+        <tr>
+            <td>Grafico:</td>
+            <td>Avances Proyectos:</td>
+        </tr>
+        <tr>
+            <td>
+                <div class="" style="width: 300px; height: 200px; position: relative;">
+                    <img src="{{ $data['data']['chart_base64'] }}" style="width: 100%; height: auto;">
+                </div>
+            </td>
+            <td style="width: 400px !important;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="ml-3 text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Proyecto</th>
+                            <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Horas</th>
+                            <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Porcentaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(collect($data['data']['info'])->sortByDesc('porcentaje') as $item)
+                            <tr style="">
+                                <td class="text-end" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%; text-align: right;">{{$item->codigo_servicio}}</td>
+                                                                    
+                                <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->h_total}}</td>
+                                                                    
+                                <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->porcentaje}}%</td>
+                                                                    
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table class="observaciones" style="page-break-inside: avoid;">
+        <tr>
+            <th colspan="2">AVANCE SUBORDINADOS</th>
+        </tr>
+        <tr>
+            <td>Avances Proyectos:</td>
+            <td>Graficos:</td>
+        </tr>
+        <tr>
+            <td style="width: 400px !important;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="ml-3 text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Empleado</th>
+                            <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Horas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(collect($data['data']['datos_sub'])->sortByDesc('total_horas') as $sub)
+                            <tr style="">
+                                <td class="text-end" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%; text-align: right;">{{ $sub['name'] }}</td>
+                                                                    
+                                <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{ $sub['total_horas'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                <div class="" style="width: 300px; height: 200px; position: relative;">
+                    <img src="{{ $data['data']['chart_base64'] }}" style="width: 100%; height: auto;">
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    @foreach (collect($data['data']['datos_sub'])->sortByDesc('total_horas') as $sub)
+        @if ($sub['total_horas'] != 0)
+            <table class="observaciones" style="page-break-inside: avoid;">
+                <tr>
+                    <th colspan="2">{{ $sub['name'] }}</th>
+                </tr>
+                <tr>
+                    <td>Avances Proyectos:</td>
+                    <td>Graficos:</td>
+                </tr>
+                <tr style="">
+                    <td style="">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="ml-3 text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Proyecto</th>
+                                    <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Horas</th>
+                                    <th class="text-center" style="color:#000; border: 1px solid #000; border-spacing: 0; width: 25%;">Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(collect($sub['info'])->sortByDesc('porcentaje') as $item)
+                                    <tr style="">
+                                        <td class="text-end" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%; text-align: right;">{{$item->codigo_servicio}}</td>
+                                                                            
+                                        <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->h_total}}</td>
+                                                                            
+                                        <td class="text-center" style="vertical-align: middle; border: 1px solid #000; border-spacing: 0; width: 25%;">{{$item->porcentaje}}%</td>                                         
+                                    </tr>
+                                @endforeach
+                                    <tr>
+                                        <td colspan=3 style="vertical-align: middle;">Total Hs: <strong>{{ $sub['total_horas'] }}</strong></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="width: 100px; text-align: center;">
+                        <div style="width: 200px; height: 200px; overflow: hidden; position: relative;">
+                            <img src="{{ $sub['chart_base64'] }}" style="width: 100%; height: auto;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        @endif
+    @endforeach
 </body>
 </html>

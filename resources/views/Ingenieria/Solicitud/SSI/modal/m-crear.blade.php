@@ -40,7 +40,7 @@
                     </div>
                     <div class="row" id="row-sintomas" hidden>
                         <div class="form-group">
-                            {!! Form::label('descrip', 'Sintomas sobre Activo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            {!! Form::label('descrip', 'Sintomas:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <div class="row" id="sintomas-activo">
                                 
                             </div>
@@ -86,4 +86,4 @@
     </div>
 </div>
 
-<script src="{{ asset('js/Ingenieria/Solicitud/crear-rssi-no-au.js') }}"></script>
+<script src="{{ asset('js/Ingenieria/Solicitud/crear-rssi-no-au.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Solicitud/crear-rssi-no-au.js')) }}"></script>

@@ -1,3 +1,25 @@
+<style>
+    #tabla_ajustes .ajuste-tarea-hecha {
+        position: static;
+        width: 26px;
+        height: 26px;
+        margin: 6px;
+        vertical-align: middle;
+        border: 2px solid #495057;
+        cursor: pointer;
+    }
+
+    #tabla_ajustes .ajuste-tarea-hecha:checked {
+        background-color: #005f7f;
+        border-color: #005f7f;
+    }
+
+    #tabla_ajustes .ajuste-tarea-hecha:focus-visible {
+        outline: 3px solid #005f7f;
+        outline-offset: 3px;
+    }
+</style>
+
 <div class="modal fade" id="modalNuevoParteAjuste" tabindex="-1" aria-labelledby="modalNuevoParteAjuste" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -16,6 +38,8 @@
                             <input id="herramental_ajuste" disabled class="form-control" hidden>
                         </div>
                     </div>
+                    <input type="text" hidden id="id_activo_para_orden">
+                    <input type="text" hidden id="id_tipo_activo_para_orden">
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>            
@@ -24,9 +48,9 @@
                 <hr>
                 <table class="table table-striped w-100" id="tabla_ajustes">
                     <thead>
-                        <th class="text-center" scope="col" style="color:#fff;">TAREA</th>
+                        <th class="text-center" scope="col" style="color:#fff;">ELEMENTO</th>
                         <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
-                        <th class="text-center" scope="col" style="color:#fff;">ZONA</th>
+                        <th class="text-center" scope="col" style="color:#fff;">OBSERVACIONES</th>
                         <th class="text-center" scope="col" style="color:#fff;">MÁQUINA</th>
                         <th class="text-center" scope="col" style="color:#fff;">HECHO</th>
                     </thead>
@@ -41,8 +65,13 @@
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">         
                 <div class="d-flex mt-4">
                     <div class="form-group ml-auto mb-0 pb-0">
-                        <label>Horas:</label>
-                        <input id="horas_ajuste" name="horas" style="width: 170px;" required type="time" class="form-control">
+                        <label for="horas" class="control-label" style="white-space: nowrap; ">Horas:</label> 
+                        <span class="obligatorio">*</span> 
+                        <div class= "input-group">
+                            <input class="form-control" name="horas" type="number" min="0" value="00" id="horas_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico()" required>
+                            <span class="input-group-text">:</span>
+                            <input class="form-control" name="minutos" type="number" min="0" max="59" value="00" id="minutos_ajuste" onclick="this.select()"  onkeyup="checkSendNuevoParteDiagnostico(), checkMinutos(this)" required>
+                        </div>
                     </div>
                     <div class="form-group ml-4 mb-0 pb-0">
                         <label>Fecha:</label>
@@ -51,14 +80,16 @@
                 </div>              
             </div>
             <div class="modal-footer">
+                <span id="span_aviso_mecanizado" style="display: none;" class="text-warning">Se recomienda crear una orden de mecanizado.</span>
                 <div class="form-group ml-auto mr-2 align-items-bottom mb-0 mr-4">
-                    <input type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
+                    <input onchange="checkCompletoAjuste()" type="checkbox" name="completado" id="completado_ajuste" class="form-check-input">
                     <label for="completado_ajuste">COMPLETADO</label>
                 </div>
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
-                        <button onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
+                        <span id="mensaje_refabricar" class="text-danger mr-2"><b>No podrá aceptarse el ajuste hasta que se finalize al menos una orden de mecanizado.</b></span>
+                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
                         <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Ajuste</button>
                     </div>
                 </div>

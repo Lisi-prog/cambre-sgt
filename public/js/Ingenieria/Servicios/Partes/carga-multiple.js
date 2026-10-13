@@ -1,26 +1,24 @@
 $(function(){
-    // $('#buscarubro').on('keyup', buscarRubro);
-    // $('#addRow').on('click', nuevoCrono);
     $('#id_servicio').on('change', cargarCbxEtapas);
     $('#id_etapa').on('change', cargarCbxOrdenes);
     $('#id_orden').on('change', modificarModalVerPartesEstadoFechaLimite);
 });
 
 function cargarCbxEtapas(){
-    // console.log('ingreso a cargar etapas')
     id = document.getElementById('id_servicio').value;
     cbx_etapas = document.getElementById('id_etapa');
-    $.when($.ajax({
-            type: "post",
-            url: '/etapa/etapas-de-servicio/'+id, 
-            data: {
-                id: id,
-            },
-        success: function (response) {
+    $.ajax({
+        type: "post",
+        url: '/etapa/etapas-de-servicio/'+id, 
+        data: {
+            id: id,
+        },
+        success: function (res) {
             vaciarComboSinPlaceholder('id_etapa');
             vaciarComboSinPlaceholder('id_orden');
             habilitarBotonAgregarSiSeleccionado();
-            response.forEach(function(opcion) { 
+
+            res.forEach(function(opcion) { 
                 var optionElement = document.createElement("option"); 
                 optionElement.value = opcion.id_etapa; 
                 optionElement.text = opcion.descripcion_etapa; 
@@ -30,25 +28,23 @@ function cargarCbxEtapas(){
         error: function (error) {
             console.log(error);
         }
-    }));
-    
+    });
 }
 
 function cargarCbxOrdenes(){
-    // console.log('ingreso a cargar orden')
     id = document.getElementById('id_etapa').value;
     cbx_ordenes = document.getElementById('id_orden');
-    $.when($.ajax({
+    $.ajax({
             type: "post",
             url: '/orden/obtener-ordenes-etapa/'+id, 
             data: {
                 id: id,
             },
-        success: function (response) {
+        success: function (res) {
             vaciarComboSinPlaceholder('id_orden');
             habilitarBotonAgregarSiSeleccionado();
-            response.forEach(function(opcion) { 
-                // console.log(opcion)
+
+            res.forEach(function(opcion) { 
                 var optionElement = document.createElement("option"); 
                 optionElement.value = opcion.id_orden; 
                 optionElement.text = opcion.nombre_orden; 
@@ -58,7 +54,7 @@ function cargarCbxOrdenes(){
         error: function (error) {
             console.log(error);
         }
-    }));
+    });
     
 }
 
@@ -68,41 +64,41 @@ function modificarModalVerPartesEstadoFechaLimite(){
     let fecha_limite = document.getElementById('m-ver-parte-fecha-limite');
     let estado = document.getElementById('m-ver-parte-estado');
     let estado_tecnico = [1, 6, 7];
-    $.when($.ajax({
+
+    $.ajax({
         type: "post",
         url: '/orden/obtener-una-orden-etapa/'+id, 
         data: {
             
         },
-    success: function (response) {
-        // console.log(response)
-        estado.value= response[0].id_estado;
-        fecha_limite.value= response[0].fecha_limite;
+        success: function (response) {
+            estado.value= response[0].id_estado;
+            fecha_limite.value= response[0].fecha_limite;
 
-        if (response[0].tec){ //Si es tecnico
+            if (response[0].tec){ //Si es tecnico
 
-            if (estado_tecnico.includes(response[0].id_estado)) { //si el estado del orden es uno de los validos para el tecnico
-                document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
-                    if (!estado_tecnico.includes(parseInt(opt.value))) {
-                        opt.style.display = 'none';
-                    }
-                });
+                if (estado_tecnico.includes(response[0].id_estado)) { //si el estado del orden es uno de los validos para el tecnico
+                    document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
+                        if (!estado_tecnico.includes(parseInt(opt.value))) {
+                            opt.style.display = 'none';
+                        }
+                    });
+                }
+                else{
+                    document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
+                        if (opt.value != response[0].id_estado) {
+                            opt.style.display = 'none';
+                        }
+                    });
+
+                }
+
             }
-            else{
-                document.querySelectorAll("#m-ver-parte-estado option").forEach(opt => {
-                    if (opt.value != response[0].id_estado) {
-                        opt.style.display = 'none';
-                    }
-                });
-
-            }
-
+        },
+        error: function (error) {
+            console.log(error);
         }
-    },
-    error: function (error) {
-        console.log(error);
-    }
-    }));
+    });
     habilitarBotonAgregarSiSeleccionado();
 }
 
@@ -144,16 +140,16 @@ function agregarRenglon(){
     let ho = '00:00'
     // let proyectoRw = document.getElementById('id_servicio').options[document.getElementById('id_servicio').selectedIndex].text;
     html_act += `<tr>
-                    <td class="text-center">`+pr+`</td>
-                    <td class="text-center">`+et+`</td>
-                    <td class="text-center"><abbr title="`+ord+`" style="text-decoration:none; font-variant: none;">`+ord.slice(0, 25)+` <i class="fas fa-eye"></i></abbr></td>
-                    <td class="text-center">`+obs+`</td>
-                    <td class="text-center">`+est+`</td>
-                    <td class="text-center">`+fc_li+`</td>
-                    <td class="text-center">`+fc+`</td>
-                    <td class="text-center">`+ho+`</td>
-                    <td class="text-center">`+element+`</td>
-                </tr>`
+                    <td class="text-center">${pr}</td>
+                    <td class="text-center">${et}</td>
+                    <td class="text-center"><abbr title="${ord}" style="text-decoration:none; font-variant: none;">${ord.slice(0, 25)} <i class="fas fa-eye"></i></abbr></td>
+                    <td class="text-center">${obs}</td>
+                    <td class="text-center">${est}</td>
+                    <td class="text-center">${fc_li}</td>
+                    <td class="text-center">${fc}</td>
+                    <td class="text-center">${ho}</td>
+                    <td class="text-center">${element}</td>
+                </tr>`;
     tabla.innerHTML += html_act;
 }
 

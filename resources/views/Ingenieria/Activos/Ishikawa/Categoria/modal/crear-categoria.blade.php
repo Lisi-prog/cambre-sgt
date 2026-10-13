@@ -16,17 +16,21 @@
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'id' => 'nombre_categoria',
+                                'autocomplete' => 'off',
+                                'style' => 'text-transform: uppercase;'
                             ]) !!}
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             {!! Form::label('codigo_categoria', 'Código Categoría:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
                             <span class="obligatorio">*</span>
                             {!! Form::text('codigo_categoria', null, [
                                 'class' => 'form-control reset-input',
                                 'required' => 'required',
                                 'id' => 'codigo_categoria',
+                                'autocomplete' => 'off',
+                                'style' => 'text-transform: uppercase;'
                             ]) !!}
                         </div>
                     </div>

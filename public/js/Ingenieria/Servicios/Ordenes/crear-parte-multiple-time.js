@@ -46,8 +46,8 @@ $(document).ready(function() {
         addRow();
     })
 
-    document.querySelector('#editableTableCPMT').addEventListener('input', function (e) {
-    if (e.target && e.target.matches('input[name="hora-fin[]"]')) {
+    /*document.querySelector('#editableTableCPMT').addEventListener('input', function (e) {
+        if (e.target && e.target.matches('input[name="hora-fin[]"]')) {
             const row = e.target.closest('tr');
             const horaIniInput = row.querySelector('input[name="hora-ini[]"]');
             const horaFinInput = row.querySelector('input[name="hora-fin[]"]');
@@ -81,10 +81,77 @@ $(document).ready(function() {
                 horasInput.value = '';
             }
         }
+    });*/
+
+    document.querySelector('#editableTableCPMT').addEventListener('input', function (e) {
+
+        if (
+            e.target.matches('input[name="hora_ini_horas[]"]') ||
+            e.target.matches('input[name="hora_ini_minutos[]"]') ||
+            e.target.matches('input[name="hora_fin_horas[]"]') ||
+            e.target.matches('input[name="hora_fin_minutos[]"]')
+        ) {
+
+            const row = e.target.closest('tr');
+
+            const iniH = parseInt(row.querySelector('input[name="hora_ini_horas[]"]').value) || 0;
+            const iniM = parseInt(row.querySelector('input[name="hora_ini_minutos[]"]').value) || 0;
+
+            const finH = parseInt(row.querySelector('input[name="hora_fin_horas[]"]').value) || 0;
+            const finM = parseInt(row.querySelector('input[name="hora_fin_minutos[]"]').value) || 0;
+
+            const duracionHoras = row.querySelector('input[name="duracion_horas[]"]');
+            const duracionMinutos = row.querySelector('input[name="duracion_minutos[]"]');
+
+            const inicio = (iniH * 60) + iniM;
+            const fin = (finH * 60) + finM;
+
+            // Solo calcular si la hora final es mayor
+            if (fin > inicio) {
+
+                const diff = fin - inicio;
+
+                const horas = Math.floor(diff / 60);
+                const minutos = diff % 60;
+
+                duracionHoras.value = horas;
+                duracionMinutos.value = minutos;
+
+            } else {
+
+                duracionHoras.value = '00';
+                duracionMinutos.value = '00';
+
+            }
+        }
     });
 
     $('#verCargaMultiTime').on('hidden.bs.modal', function (e) {
         document.getElementById('table-body-CPMT').innerHTML = '';
+    });
+
+    $(document).on('input', '.horaInPM', function () {
+        let valor = parseInt($(this).val()) || 0;
+
+        if (valor > 23) {
+            $(this).val(23);
+        }
+
+        if (valor < 0) {
+            $(this).val(0);
+        }
+    });
+
+    $(document).on('input', '.minutoInPM', function () {
+        let valor = parseInt($(this).val()) || 0;
+
+        if (valor > 59) {
+            $(this).val(59);
+        }
+
+        if (valor < 0) {
+            $(this).val(0);
+        }
     });
 });
 
@@ -120,16 +187,34 @@ function addRow() {
                     </select>
                 </td>
                 <td>
-                    <textarea name='observaciones[]' class="form-control" rows="10" cols="10" style="resize:none; width: 40vh; height: 15vh"></textarea>
+                    <textarea name='observaciones[]' class="form-control" rows="10" cols="10" style="resize:none; width: 100%; height: 10vh"></textarea>
                 </td>
-                <td>
-                    <input type="time" name="hora-ini[]" class="form-control" value="">
+                <td class="p-2">
+                    <div class="input-group">
+                        <input class="form-control horaInPM" name="hora_ini_horas[]" type="number"
+                            min="0" max="23" value="00" onclick="this.select();">
+                        <span class="input-group-text p-1">:</span>
+                        <input class="form-control minutoInPM" name="hora_ini_minutos[]" type="number"
+                            min="0" max="59" value="00" onclick="this.select();">
+                    </div>
                 </td>
-                <td>
-                    <input type="time" name="hora-fin[]" class="form-control" value="">
+                <td class="p-2">
+                    <div class="input-group">
+                        <input class="form-control horaInPM" name="hora_fin_horas[]" type="number"
+                            min="0" max="23" value="00" onclick="this.select();">
+                        <span class="input-group-text p-1">:</span>
+                        <input class="form-control minutoInPM" name="hora_fin_minutos[]" type="number"
+                            min="0" max="59" value="00" onclick="this.select();">
+                    </div>
                 </td>
-                <td>
-                    <input class="form-control" name="horas[]" type="time" value="00:00" required>
+                <td class="p-2">
+                    <div class="input-group">
+                        <input class="form-control horaInPM" name="duracion_horas[]" type="number"
+                            min="0" value="00" onclick="this.select();" required>
+                        <span class="input-group-text p-1">:</span>
+                        <input class="form-control minutoInPM" name="duracion_minutos[]" type="number"
+                            min="0" max="59" value="00" onclick="this.select();" required>
+                    </div>
                 </td>
                 <td class="text-center">
                     <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i></button>

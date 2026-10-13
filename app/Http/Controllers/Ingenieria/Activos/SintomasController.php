@@ -28,10 +28,10 @@ class SintomasController extends Controller
         ]);
         try{
             $sintoma = new Sintoma();
-            $sintoma->nombre_sintoma = $request->input('nombre_sintoma');
+            $sintoma->nombre_sintoma = strtoupper($request->input('nombre_sintoma'));
             $sintoma->id_tipo_sintoma = $request->input('tipo_sintoma');
             $sintoma->save();
-            return redirect()->route('sintoma.index')->with('success', 'Síntoma creado exitosamente.');
+            return redirect()->route('sintoma.index')->with('mensaje', 'Síntoma creado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al crear el síntoma: ' . $e->getMessage())->withInput();
         }
@@ -51,10 +51,10 @@ class SintomasController extends Controller
         ]);
         try{   
             $sintoma = Sintoma::findOrFail($id); 
-            $sintoma->nombre_sintoma = $request->input('nombre_sintoma');
+            $sintoma->nombre_sintoma = strtoupper($request->input('nombre_sintoma'));
             $sintoma->id_tipo_sintoma = $request->input('tipo_sintoma');
             $sintoma->save();
-            return redirect()->route('sintoma.index')->with('success', 'Síntoma actualizado exitosamente.');
+            return redirect()->route('sintoma.index')->with('mensaje', 'Síntoma actualizado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al actualizar el síntoma: ' . $e->getMessage())->withInput();;
         }   
@@ -64,7 +64,7 @@ class SintomasController extends Controller
         try{
             $sintoma = Sintoma::findOrFail($id);  
             $sintoma->delete();
-            return redirect()->route('sintoma.index')->with('success', 'Síntoma eliminado exitosamente.');
+            return redirect()->route('sintoma.index')->with('mensaje', 'Síntoma eliminado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al eliminar el síntoma: ' . $e->getMessage());
         }

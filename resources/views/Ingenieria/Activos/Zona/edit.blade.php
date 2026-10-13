@@ -7,12 +7,12 @@
 <section class="section">
     <div class="section-header d-flex">
         <div class="">
-            <h5 class="titulo page__heading my-auto mr-5">Editar Zona</h5>
+            <h5 class="titulo page__heading my-auto mr-5">Editar Elemento</h5>
         </div>
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
-        {!! Form::model($zona, ['method' => 'PUT', 'route' => ['zona.update', $zona->id_zona], 'class' => '']   ) !!}
+        {!! Form::model($zona, ['method' => 'PUT', 'route' => ['elemento.update', $zona->id_zona], 'class' => '']   ) !!}
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="card">
@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {!! Form::label('zona', 'Tipo Síntoma:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    {!! Form::label('zona', 'Elemento:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
                                     <span class="obligatorio">*</span>
                                     {!! Form::text('zona', $zona->nombre_zona, [
                                         'class' => 'form-control',
@@ -56,7 +56,7 @@
 </section>
 <script>
     $(document).ready(function () {
-        var url = '{{route('zona.index')}}';
+        var url = '{{route('elemento.index')}}';
         document.getElementById('volver').href = url;
     });
 </script>

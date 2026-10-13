@@ -20,10 +20,10 @@ class ZonaTareaController extends Controller
         ]); 
 
         $zona = new Zona_tarea();
-        $zona->nombre_zona = $request->nombre_zona;
+        $zona->nombre_zona = strtoupper($request->nombre_zona);
         $zona->save();
 
-        return redirect()->route('zona_tarea.index')->with('success', 'Zona creada exitosamente.');
+        return redirect()->route('zona_tarea.index')->with('mensaje', 'Zona creada exitosamente.');
     }
 
     public function edit($id)
@@ -39,18 +39,22 @@ class ZonaTareaController extends Controller
         ]);
 
         $zona = Zona_tarea::find($id);
-        $zona->nombre_zona = $request->nombre_zona;
+        $zona->nombre_zona = strtoupper($request->nombre_zona);
         $zona->save();
 
-        return redirect()->route('zona_tarea.index')->with('success', 'Zona actualizada exitosamente.');
+        return redirect()->route('zona_tarea.index')->with('mensaje', 'Zona actualizada exitosamente.');
     }
 
     public function destroy($id)
     {
-        $zona = Zona_tarea::find($id);
-        $zona->delete();
-
-        return redirect()->route('zona_tarea.index')->with('success', 'Zona eliminada exitosamente.');
+        try {
+            $zona = Zona_tarea::find($id);
+            $zona->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('zona_tarea.index')->with('error', 'La zona ya esta relacionada con una tarea de mantenimiento.');
+        }
+        
+        return redirect()->route('zona_tarea.index')->with('mensaje', 'Zona eliminada exitosamente.');
     }
 }
 

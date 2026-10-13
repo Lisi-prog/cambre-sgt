@@ -23,7 +23,7 @@
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -31,7 +31,7 @@
                                 <thead>
                                     <th class='text-center' style="color:#fff;">ID</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color: #fff;width:13vh">Acciones</th>
+                                    <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
                                 <tbody id="tabla_zonas_body">
                                     @php
@@ -39,10 +39,27 @@
                                     @endphp
                                     @foreach ($zonas as $zona)
                                         <tr>
-                                            <td class='text-center'>{{ $zona->id_zona_tarea }}</td>
-                                            <td class='text-center'>{{ $zona->nombre_zona }}</td>
-                                            <td>
-                                                <div class="row justify-content-center">
+                                            <td class='text-center' style="vertical-align: middle;">{{ $zona->id_zona_tarea }}</td>
+                                            <td class='text-start' style="vertical-align: middle;">{{ $zona->nombre_zona }}</td>
+                                            <td >
+                                                <div class="d-flex">
+                                                    <div class="me-1" style="width: 50% !important;">
+                                                        <a type="button" class="btn btn-primary w-100" href="{{route('zona_tarea.edit', $zona->id_zona_tarea)}}"><i class="fas fa-edit"></i></a>
+                                                    </div>
+                                                    <div class="me-1" style="width: 50% !important;">
+                                                        {!! Form::open([
+                                                                    'method' => 'DELETE',
+                                                                    'class' => 'formulario',
+                                                                    'route' => ['zona_tarea.destroy', $zona->id_zona_tarea],
+                                                                    'style' => 'display:inline',
+                                                                ]) !!}
+                                                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('¿Está seguro que desea ELIMINAR la zona?');">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                        {!! Form::close() !!}
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="row justify-content-center">
                                                     <div class="row justify-content-center" >
                                                         <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseZona{{$idCount}}" aria-expanded="false" aria-controls="collapseZona{{$idCount}}">
                                                             Opciones
@@ -72,7 +89,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </td>
                                         </tr>
                                         @php
@@ -109,7 +126,7 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order:[1, 'asc']
         });
     });
 </script> 
