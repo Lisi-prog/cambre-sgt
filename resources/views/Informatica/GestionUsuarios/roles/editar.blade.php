@@ -18,10 +18,21 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        <label for="">Nombre del Rol:</label>      
+                                        <label for="name">Nombre del Rol:</label>      
                                         <input class="form-control" style="text-transform:uppercase" name="name" type="text" id="name" value="{{$rol->name}}">
                                     </div>
-                                </div>       
+                                </div>     
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="sector">Sector Asociado:</label>      
+                                        <select class="form-select" id="sector" name="sector">
+                                            <option selected="selected" value="">Seleccionar</option>
+                                            @foreach ($sectores as $key => $value)
+                                                <option value="{{$key}}" {{$rolxsec?->id_sector==$key ? 'selected' : ''}}>{{$value}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>     
                             </div>
                             <button type="submit" class="btn btn-success mr-2">Guardar</button>
                             <a href="{{ route('roles.index') }}"class="btn btn-danger fo">Cancelar</a>
