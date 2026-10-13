@@ -19,7 +19,7 @@
     <div class="section-header d-flex mb-3">
         <div class="d-flex">
             <div class="my-auto me-2">
-                <h4 class="titulo page__heading my-auto">Propuesta de mejora</h4>
+                <h4 class="titulo page__heading my-auto">Propuesta de Mejora - PM</h4>
             </div>
             <div class="">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">

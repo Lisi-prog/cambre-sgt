@@ -39,9 +39,125 @@ class RequerimientoDeIngenieriaController extends Controller
     public function index(Request $request)
     {        
         //$permisos = Permission::orderBy('name', 'asc')->get();
-        $ListaRI = Sol_requerimiento_de_ingenieria::get();
+
         $Prioridades = Sol_prioridad_solicitud::orderBy('id_prioridad_solicitud', 'asc')->pluck('nombre_prioridad_solicitud', 'id_prioridad_solicitud');
-        return view('Ingenieria.Solicitud.RI.index', compact('ListaRI', 'Prioridades'));
+        return view('Ingenieria.Solicitud.RI.index', compact('Prioridades'));
+    }
+
+    public function datos(Request $request)
+    {
+        $request->validate([
+            'draw' => 'required|integer|min:0',
+            'start' => 'required|integer|min:0',
+            'length' => 'required|integer|min:1|max:500',
+            'search.value' => 'nullable|string|max:500',
+            'order' => 'sometimes|array|max:9',
+            'order.*.column' => 'required|integer|between:0,7',
+            'order.*.dir' => 'required|in:asc,desc',
+            'filtrosCabecera' => 'required|json',
+        ]);
+        $filtros = json_decode($request->input('filtrosCabecera'), true);
+        validator(['filtros' => $filtros], [
+            'filtros' => 'array',
+            'filtros.*' => 'array',
+            'filtros.*.incluir' => 'sometimes|array',
+            'filtros.*.incluir.*' => 'string',
+            'filtros.*.excluir' => 'sometimes|array',
+            'filtros.*.excluir.*' => 'string',
+        ])->validate();
+
+        $columnas = $this->columnasTablaRI();
+        $base = $this->consultaTablaRI();
+        $total = (clone $base)->count();
+        $consulta = clone $base;
+        foreach ($filtros as $indice => $filtro) {
+            if (!isset($columnas[$indice])) continue;
+            $columna = DB::raw($columnas[$indice]);
+            if (array_key_exists('incluir', $filtro)) {
+                $consulta->whereIn($columna, $filtro['incluir']);
+            }
+            if (array_key_exists('excluir', $filtro)) {
+                $consulta->whereNotIn($columna, $filtro['excluir']);
+            }
+        }
+        $busqueda = trim($request->input('search.value', ''));
+        if ($busqueda !== '') {
+            // All terms must match; each term may occur in any searchable column.
+            foreach (preg_split('/\s+/u', $busqueda) as $termino) {
+                $consulta->where(function ($q) use ($columnas, $termino) {
+                    foreach ($columnas as $columna) {
+                        $q->orWhereRaw($columna.' LIKE ?', ['%'.$termino.'%']);
+                    }
+                });
+            }
+        }
+        $filtrados = (clone $consulta)->count();
+        foreach ($request->input('order', []) as $orden) {
+            $consulta->orderByRaw($columnas[$orden['column']].' '.$orden['dir']);
+        }
+        $ids = $consulta->orderByDesc('ri.id_requerimiento_de_ingenieria')
+            ->offset((int) $request->input('start'))->limit((int) $request->input('length'))
+            ->pluck('ri.id_requerimiento_de_ingenieria');
+        $modelos = Sol_requerimiento_de_ingenieria::with([
+            'getSolicitud.getEmpleado', 'getSolicitud.getEstadoSolicitud',
+            'getSolicitud.getPrioridadSolicitud', 'getSector',
+        ])->whereIn('id_requerimiento_de_ingenieria', $ids)->get()->keyBy('id_requerimiento_de_ingenieria');
+        $listaRI = $ids->map(function ($id) use ($modelos) { return $modelos[$id]; });
+
+        $permisos = ['id_estado_aceptado' => config('myconfig.estado_solicitud_aceptado')];
+
+        $datos = $listaRI->map(function ($Ri) use ($permisos) {
+            $solicitud = $Ri->getSolicitud;
+            return [
+                e(Carbon::parse($solicitud->fecha_carga)->format('Y-m-d')),
+                e($solicitud->id_solicitud ?? '-'),
+                e(optional($solicitud->getEmpleado)->nombre_empleado ?? '-'),
+                e(optional($Ri->getSector)->nombre_sector ?? '-'),
+                e($solicitud->descripcion_solicitud ?? '-'),
+                $solicitud->fecha_requerida === null ? 'Sin fecha' : e(Carbon::parse($solicitud->fecha_requerida)->format('Y-m-d')),
+                e(optional($solicitud->getEstadoSolicitud)->nombre_estado_solicitud ?? '-'),
+                e(optional($solicitud->getPrioridadSolicitud)->nombre_prioridad_solicitud ?? '-'),
+                view('Ingenieria.Solicitud.RI.acciones-tabla', array_merge($permisos, ['Ri' => $Ri]))->render(),
+            ];
+        });
+
+        $respuesta = [
+            'draw' => (int) $request->input('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtrados,
+            'data' => $datos->values(),
+        ];
+        if ($request->boolean('opcionesFiltros')) {
+            // Distinct values across the full table, independent of the current page.
+            $respuesta['opcionesFiltros'] = [];
+            foreach ($columnas as $indice => $columna) {
+                $respuesta['opcionesFiltros'][$indice] = (clone $base)
+                    ->selectRaw($columna.' AS valor')->distinct()->orderBy('valor')
+                    ->get()->pluck('valor')->map(function ($valor) { return (string) $valor; })->values();
+            }
+        }
+        return response()->json($respuesta);
+    }
+
+    private function consultaTablaRI()
+    {
+        return DB::table('sol_requerimiento_de_ingenieria as ri')
+            ->join('sol_solicitud as sol', 'sol.id_solicitud', '=', 'ri.id_solicitud')
+            ->leftJoin('empleado as emp', 'emp.id_empleado', '=', 'sol.id_empleado')
+            ->leftJoin('sector as sec', 'sec.id_sector', '=', 'ri.id_sector')
+            ->leftJoin('sol_prioridad_solicitud as pri', 'pri.id_prioridad_solicitud', '=', 'sol.id_prioridad_solicitud')
+            ->leftJoin('sol_estado_solicitud as est', 'est.id_estado_solicitud', '=', 'sol.id_estado_solicitud');
+    }
+
+    private function columnasTablaRI()
+    {
+        return [
+            "DATE_FORMAT(sol.fecha_carga, '%Y-%m-%d')", 'sol.id_solicitud',
+            "COALESCE(emp.nombre_empleado, '-')", "COALESCE(sec.nombre_sector, '-')",
+            "COALESCE(sol.descripcion_solicitud, '-')",
+            "COALESCE(DATE_FORMAT(sol.fecha_requerida, '%Y-%m-%d'), 'Sin fecha')",
+            "COALESCE(est.nombre_estado_solicitud, '-')", "COALESCE(pri.nombre_prioridad_solicitud, '-')",
+        ];
     }
 
     public function crearAlt(Request $request)

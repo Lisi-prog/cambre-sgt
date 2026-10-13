@@ -11,37 +11,35 @@
                     Requerimiento de ingenieria.
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['route' => 'ri.sa.guardar', 'method' => 'POST', 'class' => 'formulario']) !!}
+                    <form action="{{ route('ri.sa.guardar') }}" method="POST" class="formulario">
+                        @csrf
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
                             <div class="form-group">
-                                {!! Form::label('nom_comp', 'Nombre completo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                <label for="nom_comp" class="control-label fs-7" style="white-space: nowrap;">Nombre completo:</label>
                                 <span class="obligatorio">*</span>
-                                {!! Form::text('nombre_completo', null, [
-                                    'class' => 'form-control',
-                                    'required' => 'required',
-                                    'id' => 'nom_comp'
-                                ]) !!}
+                                <input type="text" name="nombre_completo" id="nom_comp" value="{{ old('nombre_completo') }}" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                             <div class="form-group">
-                                {!! Form::label('id_Sector', 'Sector:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="id_sector" class="control-label fs-7" style="white-space: nowrap;">Sector:</label>
                                 <span class="obligatorio">*</span>
-                                {!! Form::select('id_sector', $Sectores, null, [
-                                    'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
-                                    'required',
-                                ]) !!}
+                                <select name="id_sector" id="id_sector" class="form-select" required>
+                                    <option value="" {{ old('id_sector') === null || old('id_sector') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                    @foreach ($Sectores as $valor => $nombre)
+                                        <option value="{{ $valor }}" {{ (string) old('id_sector') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                {!! Form::label('descrip', 'Descripcion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                <label for="descrip" class="control-label fs-7" style="white-space: nowrap;">Descripcion:</label>
                                 <span class="obligatorio">*</span>
-                                <textarea name='descripcion' id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh"></textarea>
+                                <textarea name='descripcion' id="descrip" class="form-control" rows="54" cols="54" style="resize:none; height: 40vh">{{ old('descripcion') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -51,38 +49,26 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                             <div class="form-group">
-                                {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label>
                                 <span class="obligatorio">*</span>
-                                {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
-                                    'min' => '2023-01-01',
-                                    'max' => \Carbon\Carbon::now()->year . '-12',
-                                    'id' => 'fec_req',
-                                    'class' => 'form-control'
-                                ]) !!}
+                                <input type="date" name="fecha_req" id="fec_req" value="{{ old('fecha_req', now()->format('Y-m-d')) }}" min="2023-01-01" max="{{ now()->year }}-12-31" class="form-control">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                             <div class="form-group">
-                                {!! Form::label('selected-prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="selected-prioridad" class="control-label fs-7" style="white-space: nowrap;">Prioridad:</label>
                                 <span class="obligatorio">*</span>
-                                {!! Form::select('id_prioridad', $Prioridades, null, [
-                                    'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
-                                    'id' => 'selected-prioridad',
-                                    'required'
-                                ]) !!}
+                                <select name="id_prioridad" id="selected-prioridad" class="form-select" required>
+                                    <option value="" {{ old('id_prioridad') === null || old('id_prioridad') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                    @foreach ($Prioridades as $valor => $nombre)
+                                        <option value="{{ $valor }}" {{ (string) old('id_prioridad') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="row" id='descrip_urgencia'>
-                        {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                {!! Form::label('desc_urg', 'Descripcion urgencia', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                                <span class="obligatorio">*</span>
-                                <textarea id='desc_urg' name='descripcion_urgencia' class="form-control" rows="54" cols="54" style="resize:none; height: 40vh"></textarea>
-                            </div>
-                        </div> --}}
                     </div>
 
                     <div class="row">
@@ -90,20 +76,18 @@
 
                         </div>
                         <div class="col-2">
-                                {!! Form::submit('Enviar', ['class' => 'btn btn-success']) !!}
-                            {!! Form::close() !!}
+                                <button type="submit" class="btn btn-success">Enviar</button>
                         </div>
                         <div class="col-2">
-                            
-                            {!! Form::open(['method' => 'GET', 'route' => ['home'], 'style' => '']) !!}
-                            {!! Form::submit('Limpiar', ['class' => 'btn btn-secondary']) !!}
-                            {!! Form::close() !!}
+
+                            <a href="{{ route('home') }}" class="btn btn-secondary">Limpiar</a>
                         </div>
                         <div class="col-4">
 
                         </div>
-                        
-                    </div>                   
+
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -164,6 +164,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|VER-M
     Route::get('r_i/rechazar/{id}', [RequerimientoDeIngenieriaController::class, 'rechazar'])->name('ri.rechazar');
     Route::get('p_m/rechazar/{id}', [PropuestaDeMejoraController::class, 'rechazar'])->name('pm.rechazar');
     Route::get('s_s_i/rechazar/{id}', [ServicioDeIngenieriaController::class, 'rechazar'])->name('ssi.rechazar');
+    Route::post('r_i/datos', [RequerimientoDeIngenieriaController::class, 'datos'])->name('ri.datos');
     Route::resource('r_i', RequerimientoDeIngenieriaController::class);
     Route::post('p_m/datos', [PropuestaDeMejoraController::class, 'datos'])->name('pm.datos');
     Route::resource('p_m', PropuestaDeMejoraController::class);

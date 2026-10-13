@@ -1,33 +1,23 @@
 @extends('layouts.app')
-
 @section('titulo', 'R.I.')
-
 @section('content')
 
-@include('layouts.modal.delete', ['modo' => 'Agregar'])
-<style>
-    .table {
-        zoom: 100%;
-    }
-    table.dataTable tbody td {
-        padding: 0px 10px;
-    }
-    .col-4 {
-        padding: 5px;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/estilos-tabla.css') }}">
+
 <section class="section">
-    <div class="d-flex section-header justify-content-center">
-        <div class="d-flex flex-row col-12">
-        
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 my-auto">
-                <h4 class="titulo page__heading my-auto">Requerimientos de ingenieria</h5>
+    <div class="section-header d-flex mb-3">
+        <div class="d-flex">
+            <div class="my-auto">
+                <h4 class="titulo page__heading my-auto">Requerimientos de ingenieria - RI</h4>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        </div>
+
+        <div class="d-flex ms-auto">
+            <div class="me-2">
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-4">
-                <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearRIModal">
-                    Nuevo   
+            <div class="">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRIModal">
+                    Nuevo
                 </button>
             </div>
         </div>
@@ -40,9 +30,9 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="example">
-                                <thead style="height:50px;">
+                                <thead style="height:50px;"><tr>
                                     <th class='text-center' style="color:#fff;">Fecha</th>
-                                    <th class='ml-3 text-center' style="color:#fff;">Codigo</th>
+                                    <th class='text-center' style="color:#fff;">Codigo</th>
                                     <th class='text-center' style="color:#fff;">Empleado</th>
                                     <th class='text-center' style="color:#fff;">Sector</th>
                                     <th class='text-center' style="color:#fff;">Descripcion</th>
@@ -50,75 +40,8 @@
                                     <th class='text-center' style="color:#fff;">Estado</th>
                                     <th class='text-center' style="color:#fff;">Prioridad</th>
                                     <th class='text-center' style="color: #fff;">Acciones</th>
-                                </thead>
-                                <tbody id="accordion">
-                                    @php
-                                        $id_estado_aceptado = Config::get('myconfig.estado_solicitud_aceptado');
-                                        $idCount = 0;
-                                    @endphp
-
-                                    @foreach ($ListaRI as $Ri)
-                                        <tr>
-                                            <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_carga)->format('Y-m-d H:i')}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->id_solicitud ?? '-'}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getEmpleado->nombre_empleado ?? '-'}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSector->nombre_sector ?? '-'}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->descripcion_solicitud ?? '-'}}</td>
-
-                                            @if (is_null($Ri->getSolicitud->fecha_requerida))
-                                            <td class='text-center' style="vertical-align: middle;">Sin fecha</td>
-                                            @else
-                                                <td class='text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($Ri->getSolicitud->fecha_requerida)->format('Y-m-d')}}</td>
-                                            @endif
-                                            
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getEstadoSolicitud->nombre_estado_solicitud ?? '-'}}</td>
-
-                                            <td class='text-center' style="vertical-align: middle;">{{$Ri->getSolicitud->getPrioridadSolicitud->nombre_prioridad_solicitud ?? '-'}}</td>
-
-                                            <td>
-                                                <div class="row justify-content-center">
-                                                    <div class="row justify-content-center" >
-                                                        <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRI{{$idCount}}" aria-expanded="false" aria-controls="collapseRI{{$idCount}}">
-                                                            Opciones
-                                                        </button>
-                                                    </div>
-                                                    <div class="collapse" data-bs-parent="#accordion" id="collapseRI{{$idCount}}">
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                @if ($Ri->getSolicitud->id_estado_solicitud >= $id_estado_aceptado)
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['r_i.show', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                    {!! Form::submit('Ver', ['class' => 'btn btn-primary w-100']) !!}
-                                                                    {!! Form::close() !!}
-                                                                @else
-                                                                    @can('EVALUAR-SOLICITUD')
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ri.evaluar', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Evaluar', ['class' => 'btn btn-success w-100']) !!}
-                                                                        {!! Form::close() !!}
-                                                                    @endcan
-                                                                @endif
-                                                            </div>
-                                                        </div> 
-                                                        <div class="row my-2">
-                                                            <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['r_i.edit', $Ri->id_requerimiento_de_ingenieria], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Editar', ['class' => 'btn btn-warning w-100']) !!}
-                                                                {!! Form::close() !!}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @php    
-                                            $idCount +=1;
-                                        @endphp
-                                    @endforeach
-                                </tbody>
+                                </tr></thead>
+                                <tbody id="accordion"></tbody>
                             </table>
                         </div>
                     </div>
@@ -128,11 +51,6 @@
     </div>
 </section>
 @include('Ingenieria.Solicitud.RI.modal.m-crear')
-
-    {{-- <script src="{{ asset('js/usuarios/index_usuarios.js') }}"></script> --}}
-
-{{-- <script src="{{ asset('js/categorialaboral/index_categorialaboral.js') }}"></script> --}}
-{{-- <script src="{{ asset('js/modal/success.js') }}"></script> --}}
 
 <script>
     $(document).ready(function () {
@@ -144,7 +62,7 @@
 
         $.when($.ajax({
             type: "post",
-            url: '/documentacion/obtener/'+nombreArchivo, 
+            url: '/documentacion/obtener/'+nombreArchivo,
             data: {
                 nombreArchivo: nombreArchivo,
             },
@@ -155,8 +73,43 @@
                 console.log(error);
             }
         }));
+        const filtrosRI = {};
+        let valoresRI = null;
         $('#example').DataTable({
+            serverSide: true,
+            processing: true,
+            searchDelay: 350,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100, 500],
+            ajax: {
+                url: '{{ route('ri.datos') }}',
+                type: 'POST',
+                headers: {'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content},
+                data: function (datos) {
+                    datos.filtrosCabecera = JSON.stringify(filtrosRI);
+                    datos.opcionesFiltros = valoresRI === null;
+                },
+                dataSrc: function (respuesta) {
+                    if (respuesta.opcionesFiltros) valoresRI = respuesta.opcionesFiltros;
+                    return respuesta.data;
+                }
+            },
+            columnDefs: [
+                {targets: '_all', defaultContent: '-', className: 'align-middle'},
+                {targets: [0, 1, 2, 3, 5, 6, 7, 8], className: 'text-center'},
+                {targets: 4, className: 'text-left text-start'},
+                {targets: 8, orderable: false, searchable: false}
+            ],
+            initComplete: function () {
+                agregarFiltrosCabecera(this.api(), {
+                    columnas: [0, 1, 2, 3, 4, 5, 6, 7],
+                    servidor: {valores: valoresRI, selecciones: filtrosRI}
+                });
+            },
             language: {
+                    emptyTable: 'No hay datos disponibles en la tabla',
+                    processing: 'Procesando...',
+                    loadingRecords: 'Cargando requerimientos...',
                     lengthMenu: 'Mostrar _MENU_ registros por pagina',
                     zeroRecords: 'No se ha encontrado registros',
                     info: 'Mostrando pagina _PAGE_ de _PAGES_',
@@ -170,10 +123,10 @@
                         next: 'Sig.',
                     },
                 },
-                "aaSorting": []
+                order: []
         });
     });
 </script>
 
-    
+
 @endsection
