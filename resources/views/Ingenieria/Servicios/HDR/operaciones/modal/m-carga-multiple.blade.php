@@ -106,6 +106,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                        @include('layouts.usuario-conectado')
+                                        <br>
                                         <button type="submit" class="btn btn-success button-prevent-multiple-submits-3sec">Guardar</button>
                                     </div>
                                 </div>
