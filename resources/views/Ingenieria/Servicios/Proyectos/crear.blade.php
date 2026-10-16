@@ -7,7 +7,8 @@
         </div>
         <div class="section-body">
             <div class="row">
-                {!! Form::open(['route' => 'proyectos.store', 'method' => 'POST', 'class' => 'formulario']) !!}
+                <form action="{{ route('proyectos.store') }}" method="POST" class="formulario">
+                    @csrf
                 @include('layouts.modal.mensajes')
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
@@ -15,138 +16,108 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('codigo_proyecto', 'Codigo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="codigo_proyecto" class="control-label fs-7" style="white-space: nowrap;">Codigo proyecto:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::text('codigo_proyecto', null, [
-                                            'class' => 'form-control',
-                                            'required' => 'required',
-                                            'id' => 'codigo_proyecto'
-                                        ]) !!}
+                                        <input type="text" name="codigo_proyecto" id="codigo_proyecto" value="{{ old('codigo_proyecto') }}" class="form-control" required>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                                     <div class="form-group">
-                                        {!! Form::label('nombre_proyecto', 'Nombre proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                        <label for="nombre_proyecto" class="control-label fs-7" style="white-space: nowrap;">Nombre proyecto:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::text('nombre_proyecto', null, [
-                                            'class' => 'form-control',
-                                            'required' => 'required',
-                                            'id' => 'nombre_proyecto'
-                                        ]) !!}
+                                        <input type="text" name="nombre_proyecto" id="nombre_proyecto" value="{{ old('nombre_proyecto') }}" class="form-control" required>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('id_tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="id_tipo_proyecto" class="control-label fs-7" style="white-space: nowrap;">Tipo:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('id_tipo_proyecto', $Tipos_servicios, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select',
-                                            'id' => 'id_tipo_proyecto',
-                                            'required'
-                                        ]) !!}
+                                        <select name="id_tipo_proyecto" id="id_tipo_proyecto" class="form-select" required>
+                                            <option value="" {{ old('id_tipo_proyecto') === null || old('id_tipo_proyecto') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                            @foreach ($Tipos_servicios as $valor => $nombre)
+                                                <option value="{{ $valor }}" {{ (string) old('id_tipo_proyecto') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2" id="fecha_req">
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
-                                        {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
-                                            'min' => '2023-01-01',
-                                            'max' => \Carbon\Carbon::now()->year . '-12',
-                                            'id' => 'fec_req',
-                                            'class' => 'form-control'
-                                        ]) !!}
-                                    </div> --}}
+
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="lider" class="control-label fs-7" style="white-space: nowrap;">Lider:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('lider', $empleados, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select',
-                                            'id' => 'lider',
-                                            'required'
-                                        ]) !!}
+                                        <select name="lider" id="lider" class="form-select" required>
+                                            <option value="" {{ old('lider') === null || old('lider') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                            @foreach ($empleados as $valor => $nombre)
+                                                <option value="{{ $valor }}" {{ (string) old('lider') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini', 'Fecha inicio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="fec_ini" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::date('fecha_ini', \Carbon\Carbon::now(), [
-                                            'min' => '2023-01-01',
-                                            'max' => \Carbon\Carbon::now()->year . '-12',
-                                            'id' => 'fec_ini',
-                                            'class' => 'form-control'
-                                        ]) !!}
+                                        <input type="date" name="fecha_ini" id="fec_ini" value="{{ old('fecha_ini', now()->format('Y-m-d')) }}" min="2023-01-01" max="{{ now()->year }}-12-31" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_req', 'Fecha requerida:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="fec_req" class="control-label fs-7" style="white-space: nowrap;">Fecha requerida:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::date('fecha_req', \Carbon\Carbon::now(), [
-                                            'min' => '2023-01-01',
-                                            'max' => \Carbon\Carbon::now()->year . '-12',
-                                            'id' => 'fec_req',
-                                            'class' => 'form-control'
-                                        ]) !!}
+                                        <input type="date" name="fecha_req" id="fec_req" value="{{ old('fecha_req', now()->format('Y-m-d')) }}" min="2023-01-01" max="{{ now()->year }}-12-31" class="form-control">
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('prioridad', 'Prioridad:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                        <label for="prioridad" class="control-label fs-7" style="white-space: nowrap;">Prioridad:</label>
                                         <span class="obligatorio">*</span>
-                                        {!! Form::select('prioridad', $prioridades, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select',
-                                            'id' => 'prioridad',
-                                            'required'
-                                        ]) !!}
+                                        <select name="prioridad" id="prioridad" class="form-select" required>
+                                            <option value="" {{ old('prioridad') === null || old('prioridad') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                            @foreach ($prioridades as $valor => $nombre)
+                                                <option value="{{ $valor }}" {{ (string) old('prioridad') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
 
-                           
 
-                            
-                            
-                            
-                    
+
+
+
+
+
                             <div class="row pt-3">
                                 <div class="d-flex">
                                     <div class="me-auto">
                                         (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                                     </div>
                                     <div class="p-1">
-                                        {{-- @can('CREAR-OBRAVIVIENDA') --}}
-                                            {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
-                                        {{-- @endcan --}}
-                                        {!! Form::close() !!}
+
+                                            <button type="submit" class="btn btn-success">Guardar</button>
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'r_i.index', 'style' => '']) !!}
-                                        {!! Form::submit('Cancelar', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
+                                        <a href="{{ route('r_i.index') }}" class="btn btn-primary">Cancelar</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </section>
-    {{-- <script src="{{ asset('js/Ingenieria/Solicitud/crear-rssi-no-au.js') }}"></script> --}}
+
 @endsection

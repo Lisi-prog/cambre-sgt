@@ -6,31 +6,29 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Proyecto</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::model($proyecto, ['method' => 'PUT', 'route' => ['proyectos.update', $proyecto->id_servicio], 'class' => '']) !!}
+            <form action="{{ route('proyectos.update', $proyecto->id_servicio) }}" method="POST">
+                @csrf
+                @method('PUT')
 
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
                         <div class="form-group">
-                            {!! Form::label('codigo_proyecto', 'Codigo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="codigo_proyecto" class="control-label fs-7" style="white-space: nowrap;">Codigo proyecto:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::text('codigo_proyecto', $proyecto->codigo_servicio, [
-                                'class' => 'form-control',
-                                'required' => 'required',
-                                'id' => 'codigo_proyecto'
-                            ]) !!}
+                            <input type="text" name="codigo_proyecto" id="codigo_proyecto" value="{{ old('codigo_proyecto', $proyecto->codigo_servicio) }}" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
-                            {!! Form::label('id_tipo_proyecto', 'Tipo:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <label for="id_tipo_proyecto" class="control-label fs-7" style="white-space: nowrap;">Tipo:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::select('id_tipo_proyecto', $Tipos_servicios, $proyecto->getSubTipoServicio->id_subtipo_servicio, [
-                                'placeholder' => 'Seleccionar',
-                                'class' => 'form-select',
-                                'id' => 'id_tipo_proyecto',
-                                'required'
-                            ]) !!}
+                            <select name="id_tipo_proyecto" id="id_tipo_proyecto" class="form-select" required>
+                                    <option value="" {{ old('id_tipo_proyecto', $proyecto->getSubTipoServicio->id_subtipo_servicio) === null || old('id_tipo_proyecto', $proyecto->getSubTipoServicio->id_subtipo_servicio) === '' ? 'selected' : '' }}>Seleccionar</option>
+                                    @foreach ($Tipos_servicios as $id => $nombre)
+                                        <option value="{{ $id }}" {{ (string) old('id_tipo_proyecto', $proyecto->getSubTipoServicio->id_subtipo_servicio) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                    @endforeach
+                                </select>
                         </div>
                     </div>
                 </div>
@@ -38,9 +36,9 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('nombre', "Nombre proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="nombre_proyecto" class="control-label" style="white-space: nowrap;">Nombre proyecto:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::text('nombre_proyecto', $proyecto->nombre_servicio, ['class' => 'form-control', 'required']) !!}
+                            <input type="text" name="nombre_proyecto" id="nombre_proyecto" value="{{ old('nombre_proyecto', $proyecto->nombre_servicio) }}" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -50,29 +48,23 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
                             <div class="form-group">
-                                {!! Form::label('lider', 'Lider:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="lider" class="control-label fs-7" style="white-space: nowrap;">Lider:</label>
                                 <span class="obligatorio">*</span>
-                                {!! Form::select('lider', $supervisores, $proyecto->getResponsabilidad->getEmpleado->id_empleado, [
-                                    'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select',
-                                    'id' => 'lider',
-                                    'required'
-                                ]) !!}
+                                <select name="lider" id="lider" class="form-select" required>
+                                    <option value="" {{ old('lider', $proyecto->getResponsabilidad->getEmpleado->id_empleado) === null || old('lider', $proyecto->getResponsabilidad->getEmpleado->id_empleado) === '' ? 'selected' : '' }}>Seleccionar</option>
+                                    @foreach ($supervisores as $id => $nombre)
+                                        <option value="{{ $id }}" {{ (string) old('lider', $proyecto->getResponsabilidad->getEmpleado->id_empleado) === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
                 
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                         <div class="form-group">
-                            {!! Form::label('fecha_inicio', 'Fecha inicio:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <label for="fecha_inicio" class="control-label fs-7" style="white-space: nowrap;">Fecha inicio:</label>
                                         <span class="obligatorio">*</span>
-                            {!! Form::date('fecha_inicio', $proyecto->fecha_inicio, [
-                                'min' => '2023-01-01',
-                                'max' => \Carbon\Carbon::now()->year . '-12',
-                                'id' => 'fecha_inicio',
-                                'class' => 'form-control',
-                                'required'
-                            ]) !!}
+                            <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ old('fecha_inicio', $proyecto->fecha_inicio ? \Carbon\Carbon::parse($proyecto->fecha_inicio)->format('Y-m-d') : '') }}" min="2023-01-01" max="{{ now()->year }}-12-31" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -80,7 +72,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            {!! Form::label('editar_id_servicio_padre', 'Proyecto padre (opcional):', ['class' => 'control-label fs-7']) !!}
+                            <label for="editar_id_servicio_padre" class="control-label fs-7">Proyecto padre (opcional):</label>
                             <select name="id_servicio_padre" id="editar_id_servicio_padre" class="form-select" style="width: 100%">
                                 <option value=""></option>
                                 @if ($proyecto->id_servicio_padre && $proyecto->servicioPadre)
@@ -100,7 +92,7 @@
                 <button type="submit" class="btn btn-success">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
-            {!! Form::close() !!}
+            </form>
         </div>
     </div>
 </div>

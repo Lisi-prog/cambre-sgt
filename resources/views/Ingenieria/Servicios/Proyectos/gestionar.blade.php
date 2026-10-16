@@ -54,75 +54,56 @@
 @php
     $formato_fecha= Config::get('myconfig.formato_fecha');
     $formato_fecha_hora= Config::get('myconfig.formato_fecha_hora');
+    $ultimaActualizacion = optional($proyecto->ultimaActualizacion)->getActualizacion;
 @endphp
     <section class="section">
-        <div class="d-flex section-header justify-content-center">
-            <div class="d-flex flex-row col-12">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 my-auto">
-                    <h4 class="">Gestionar Servicio</h5>
+        <div class="section-header d-flex mb-3">
+            <div class="d-flex">
+                <div class="my-auto">
+                    <h4 class="titulo page__heading my-auto">Gestionar Servicio Cod.: {{$proyecto->id_servicio}}</h4>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+            </div>
+            
+            <div class="d-flex ms-auto">
+                <div class="me-2">
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-4">
+                <div class="">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verActServOrdenModal" onclick="mostrarActProyectoAlt({{$proyecto->id_servicio}})">Actualizaciones</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">Editar</button>
+                        <a type="button" class="btn btn-primary" href="{{route('proyectos.costos', $proyecto->id_servicio)}}">Costos</a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="section-body">
             <div class="row">
-                
-                {{-- Informacion del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     @include('layouts.modal.mensajes')
                     <div class="card">
-                        <div class="card-head">
-                            <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-    
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center my-auto">
-                                    <h5 class="text-center">Proyecto</h5>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                                    <button class="btn btn-primary col-9 my-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProyecto" aria-expanded="false" aria-controls="collapsecollapseProyecto">
-                                        Opciones
-                                    </button>
-                                    <div class="collapse" id="collapseProyecto">
-                                        <button type="button" class="btn btn-primary col-9" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
-                                            Editar
-                                        </button>
-                                        <button type="button" class="btn btn-primary my-2 col-9" data-bs-toggle="modal" data-bs-target="#verActServOrdenModal" onclick="mostrarActProyectoAlt({{$proyecto->id_servicio}})">
-                                            Actualizaciones
-                                        </button>
-                                        {{-- <button type="button" class="btn btn-primary my-2 col-9" onclick="mostrarActProyecto({{$proyecto->id_servicio}})">
-                                            Actualizaciones
-                                        </button> --}}
-                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.costos', $proyecto->id_servicio], 'style' => 'display:inline']) !!}
-                                        {!! Form::submit('Costos actualizados', ['class' => 'btn btn-primary col-9']) !!}
-                                        {!! Form::close() !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {!! Form::text('id_proyecto_dat', $proyecto->id_servicio, ['class' => 'form-control', 'hidden', 'id' => 'id-servicio-dat']) !!}
+                        <input type="hidden" name="id_proyecto_dat" id="id-servicio-dat" value="{{ $proyecto->id_servicio }}" class="form-control">
                         <div class="card-body">
+                            <div class="card-title">
+                                <h5 class="text-center">Proyecto</h5>
+                            </div>
+                            <hr>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_proyecto', "ID:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_proyecto', $proyecto->codigo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_proyecto" class="control-label" style="white-space:nowrap;">ID:</label>
+                                        <input type="text" name="id_proyecto" id="id_proyecto" value="{{ $proyecto->codigo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_proyecto', 'Nombre proyecto:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_proyecto', $proyecto->nombre_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="nom_proyecto" class="control-label" style="white-space:nowrap;">Nombre proyecto:</label>
+                                        <input type="text" name="nom_proyecto" id="nom_proyecto" value="{{ $proyecto->nombre_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_tipo', 'Tipo:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_sector', $proyecto->getSubTipoServicio->nombre_subtipo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_tipo" class="control-label" style="white-space:nowrap;">Tipo:</label>
+                                        <input type="text" name="id_sector" id="id_tipo" value="{{ $proyecto->getSubTipoServicio->nombre_subtipo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -131,87 +112,72 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('lider_proyecto', "Lider de proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad',$proyecto->getResponsabilidad->getEmpleado->nombre_empleado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="lider_proyecto" class="control-label" style="white-space:nowrap;">Lider de proyecto:</label>
+                                        <input type="text" name="prioridad" id="lider_proyecto" value="{{ optional(optional($proyecto->getResponsabilidad)->getEmpleado)->nombre_empleado ?? '-' }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($proyecto->fecha_inicio)->format($formato_fecha), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_ini" class="control-label" style="white-space:nowrap;">Fecha inicio:</label>
+                                        <input type="text" name="fecha_carga" id="fec_ini" value="{{ \Carbon\Carbon::parse($proyecto->fecha_inicio)->format($formato_fecha) }}" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite', $proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite ? \Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format($formato_fecha) : '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_limite" class="control-label" style="white-space:nowrap;">Fecha limite:</label>
+                                        <input type="text" name="fecha_limite" id="fec_limite" value="{{ optional($ultimaActualizacion)->fecha_limite ? \Carbon\Carbon::parse($ultimaActualizacion->fecha_limite)->format($formato_fecha) : '-' }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="estado" class="control-label" style="white-space:nowrap;">Estado:</label>
+                                        <input type="text" name="estado" id="estado" value="{{ optional(optional($ultimaActualizacion)->getEstado)->nombre_estado ?? '-' }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('prioridad', "Prioridad Nº:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', $proyecto->prioridad_servicio ?? 'S/P', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="prioridad" class="control-label" style="white-space:nowrap;">Prioridad Nº:</label>
+                                        <input type="text" name="prioridad" id="prioridad" value="{{ $proyecto->prioridad_servicio ?? 'S/P' }}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                
+
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    {{-- @if($proyecto->id_activo)
-                                        <div class="form-group">
-                                            {!! Form::label('activo', "Codigo activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                            {!! Form::text('activo', $proyecto->getActivo->codigo_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                        </div>
-                                    @endif --}}
+
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                     @if($proyecto->id_activo)
                                         <div class="form-group">
-                                            {!! Form::label('activo', "Activo asociado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                            {!! Form::text('activo', $proyecto->getActivo->codigo_activo.' - '.$proyecto->getActivo->nombre_activo, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                            <label for="activo" class="control-label" style="white-space:nowrap;">Activo asociado:</label>
+                                            <input type="text" name="activo" id="activo" value="{{ $proyecto->getActivo->codigo_activo.' - '.$proyecto->getActivo->nombre_activo }}" class="form-control" readonly>
                                         </div>
                                     @endif
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {{-- {!! Form::label('costo_estimado', "Costo estimado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_estimado', $costo_estimado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
-                                        {!! Form::label('horas_estimada', "Horas estimadas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('horas_estimada', $horas_estimada ?? '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+
+                                        <label for="horas_estimada" class="control-label" style="white-space:nowrap;">Horas estimadas:</label>
+                                        <input type="text" name="horas_estimada" id="horas_estimada" value="{{ $horas_estimada ?? '-' }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {{-- {!! Form::label('costo_real', "Costo real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_real', $costo_real, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
-                                        {!! Form::label('horas_real', "Horas real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('horas_real', $horas_real ?? '-', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+
+                                        <label for="horas_real" class="control-label" style="white-space:nowrap;">Horas real:</label>
+                                        <input type="text" name="horas_real" id="horas_real" value="{{ $horas_real ?? '-' }}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
                             @if ($proyecto->id_servicio_padre && $proyecto->servicioPadre)
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label(
-                                            'nom_proyecto_pa',
-                                            'Nombre proyecto Padre:',
-                                            ['class' => 'control-label']
-                                        ) !!}
+                                        <label for="nom_proyecto_pa" class="control-label" style="white-space:nowrap;">Nombre proyecto Padre:</label>
 
                                         <div class="input-group mb-3">
-                                            {!! Form::text(
-                                                'nom_proyecto_pa',
-                                                $proyecto->servicioPadre->codigo_servicio . ' - ' .
-                                                $proyecto->servicioPadre->nombre_servicio,
-                                                ['class' => 'form-control', 'readonly' => true]
-                                            ) !!}
+                                            <input type="text" name="nom_proyecto_pa" id="nom_proyecto_pa" value="{{ $proyecto->servicioPadre->codigo_servicio . ' - ' .
+                                                $proyecto->servicioPadre->nombre_servicio }}" class="form-control" readonly>
 
                                             <a href="{{ route('proyectos.gestionar', $proyecto->id_servicio_padre) }}"
                                             class="btn btn-outline-secondary"
@@ -226,96 +192,20 @@
                         </div>
                     </div>
                 </div>
-                {{-- ------------- --}}
-                
 
-                {{-- Etapas del proyecto --}}
-                <div class="col-xs-12 col-sm-12 col-md-12">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
-                        <div class="card-head">
-                            <br>
-                            <div class="d-flex justify-content-between">
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                </div>
-                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-center my-auto">
-                                    <h5 class="text-center my-auto" onclick="mostrarFiltro('flt_etapa')" style="cursor: pointer;">Etapas <i class="fas fa-filter"></i></h5>
-                                </div>
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 mx-2">
-                                    <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
+                        <div class="card-body">
+                                <div class="card-title align-items-center" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px;">
+                                    <h5 class="text-center mb-0" style="grid-column: 2;">Etapas</h5>
+                                    <button type="button" class="btn btn-success" style="grid-column: 3; justify-self: end;" data-bs-toggle="modal" data-bs-target="#crearEtapaModal">
                                         Nueva etapa
                                     </button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card-head" id="flt_etapa" hidden>
-                            <div class="row" id="demo" >
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="row">
-                                        <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 170px;">
-                                                <div class="">
-                                                    <label>Etapa:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('cod_serv', this)">
-                                                </div>
-                                                <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="cod_serv" checked> (Seleccionar todo)</label>
-                                                    @foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa)
-                                                        <label><input class="eta-ckb" name="cod_serv" type="checkbox" value="{{$etapa->descripcion_etapa}}" checked> {{$etapa->descripcion_etapa}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="row">
-                                        <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 170px;">
-                                                <div class="">
-                                                    <label>Estados:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('est', this)">
-                                                </div>
-                                                <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="est" checked> (Seleccionar todo)</label>
-                                                    @foreach ($flt_estados as $estado)
-                                                        @if ($estado->id_estado < 9)
-                                                            <label><input class="eta-ckb" name="est" type="checkbox" value="{{$estado->nombre_estado}}" checked> {{$estado->nombre_estado}}</label>
-                                                        @else
-                                                            <label><input class="eta-ckb" name="est" type="checkbox" value="{{$estado->nombre_estado}}"> {{$estado->nombre_estado}}</label>
-                                                        @endif
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                    <div class="row">
-                                        <div class="d-flex flex-row align-items-start justify-content-around">
-                                            <div class="card-body d-flex flex-column" style="height: 170px;">
-                                                <div class="">
-                                                    <label>Responsable:</label><input type="search" class="mx-2" placeholder="Buscar" onkeyup="fil_filtro('res', this)">
-                                                </div>
-                                                <div class="d-flex flex-column overflow-auto">
-                                                    <label style="font-style: italic"><input class="eta-ckb" name="filter" type="checkbox" value="res" checked> (Seleccionar todo)</label>
-                                                    @foreach ($filtros['responsables_etapa'] as $responsable)
-                                                        <label><input class="eta-ckb" name="res" type="checkbox" value="{{$responsable}}" checked> {{$responsable}}</label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                {{-- <div class="row">
-                                    <button type="button" class="btn btn-primary-outline rounded" onclick="limpiarFiltro()">Limpiar</i></button> 
-                                </div> --}}
-                            </div>   
-                        </div>
-                        <div class="card-body">
-                            {{-- <div class="table-responsive tableFixHead"> --}}
+                                <hr>
                                 <table id="tablaEtapas" class="table table-hover mt-2">
-                                    <thead style="background-color: #2970c1" id="viv">
+                                    <thead style="background-color: #2970c1" id="viv"><tr>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;min-width:10vw">Etapa</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center apply-filter" scope="col" style="color:#fff;">Responsable</th>
@@ -325,89 +215,20 @@
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Ultima actualizacion</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Horas estimadas</th>
                                         <th class="text-center apply-filter no-filter no-search" scope="col" style="color:#fff;">Horas reales</th>
-                                        <th class="text-center" scope="col" style="color:#fff; min-width:6vw">Acciones</th>                                                           
-                                    </thead>
-                                    <tbody id="accordion">
-                                        @php 
-                                            $idCount = 0;
-                                        @endphp
-                                        @foreach ($etapas as $etapa)
-                                            
-                                            @if ($etapa->id_estado < 9)
-                                                <tr>
-                                            @else
-                                                <tr style="display: none;">
-                                            @endif     
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->descripcion_etapa}}</td>
-                                                
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->nombre_estado}}</td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->responsable}}</td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->fecha_inicio}}</td>
-
-                                                {{-- <td class= 'text-center' style="vertical-align: middle;">{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_limite)->format('d-m-Y')}}</td> --}}
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->fecha_limite}}</td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->fecha_finalizacion}}</td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->fecha_ult_act}}</td>
-
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->horas_estimada}}</td>
-                                                
-                                                <td class= 'text-center' style="vertical-align: middle;">{{$etapa->horas_real}}</td>
-
-                                                <td class='text-center' style="vertical-align: middle;">
-                                                    <div class="row justify-content-center">
-                                                        <div class="row justify-content-center">
-                                                            <button class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEtapa{{$idCount}}" aria-expanded="false" aria-controls="collapseEtapa{{$idCount}}">
-                                                                Opciones <i class="fas fa-filter" hidden></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="collapse" data-bs-parent="#accordion" id="collapseEtapa{{$idCount}}">
-                                                            <div class="row ">
-                                                                <div class="col-12">
-                                                                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditarEtapa({{$etapa->id_etapa}})">
-                                                                        Editar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#verActEtapaOrdenModal" onclick="mostrarActEtapaAlt({{$etapa->id_etapa}})">
-                                                                        Actualizaciones
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-12">
-                                                                    <button type="button" class="btn btn-info w-100" name="flt-for-eta" value="{{$etapa->descripcion_etapa}}">
-                                                                        Filtro
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @php 
-                                            $idCount += 1;
-                                        @endphp
-                                        @endforeach
-                                    </tbody>
+                                        <th class="text-center" scope="col" style="color:#fff; min-width:6vw">Acciones</th>
+                                    </tr></thead>
+                                    <tbody id="accordion"></tbody>
                                 </table>
-                            {{-- </div> --}}
+
                         </div>
                     </div>
                 </div>
-                {{-- ------------- --}}
 
-                @include('Ingenieria.Servicios.Proyectos.layout.gestionar-ordenes-v1')
 
-                
-                {{-- Partes del proyecto --}}
+                @include('Ingenieria.Servicios.Proyectos.layout.gestionar-ordenes')
+
+
+
                 <div class="col-xs-12 col-sm-12 col-md-12" id='parte_de_trabajo' hidden>
                     <div class="card">
                         <div class="card-head">
@@ -419,13 +240,10 @@
                                     <h5 class="text-center  my-auto">Partes</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
+
                                 </div>
                             </div>
-                            {{-- <br>
-                            <div class="text-center"><h5>Viviendas</h5></div>                         --}}
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -439,10 +257,10 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Horas</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Supervisor</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Supervisor</th>
                                     </thead>
                                     <tbody id="renglones_parte">
-                                        
+
                                     </tbody>
                                 </table>
                                 </div>
@@ -450,18 +268,11 @@
                         </div>
                     </div>
                 </div>
-                {{-- ------------- --}}
+
                 <div class="p-1 position-fixed" style="bottom:2vh; left:0.5vh;" hidden>
-                    {{-- {!! Form::open(['method' => 'GET', 'route' => 'proyectos.index', 'style' => '']) !!}
-                    <button class="btn btn-primary">
-                        <a class="nav-link" href="{{route('proyectos.index')}}" title="volver">
-                            <i class="fas fa-arrow-left " style="margin-right:5px"></i>
-                        </a>
-                    </button>
-                    {{-- {!! Form::submit('', ['class' => 'btn btn-primary']) !!}
-                    {!! Form::close() !!} --}}
+
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12" hidden> 
+                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12" hidden>
                     <div class="card">
                         <div class="card-body">
                             <div class="row" >
@@ -474,7 +285,7 @@
             </div>
         </div>
 
-        <script type="module"> 
+        <script type="module">
             import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes, cargarModalNuevaActProyecto, cargarModalEditarEtapa} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
             window.crearCuadrOrdenes = crearCuadrOrdenes;
             window.cargarModalVerOrden = cargarModalVerOrden;
@@ -482,14 +293,14 @@
             window.cargarModalNuevaActProyecto = cargarModalNuevaActProyecto;
             window.cargarModalEditarEtapa = cargarModalEditarEtapa;
         </script>
-        
+
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js')) }}"></script>
 
-        {{-- <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}"></script> --}}
+
 
         <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js')) }}"></script>
-        {{-- <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/gestionar.js') }}"></script> --}}
-        <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/FilterGestionar.js') }}"></script>
+
+
 
         <script>
             // let oord = Array();
@@ -497,17 +308,17 @@
             let opt_act = 0;
             $(document).ready(function () {
                 let opcion = '{{$opcion}}';
-                
+
                 var url = '{{route('proyecto.indexprefijo', ':opcion')}}';
                 url = url.replace(':opcion', opcion);
                 document.getElementById('volver').href = url;
                 document.getElementById('ayudin').hidden = false;
                 let nombreArchivo = 'gestionar';
-                
+
 
                 $.when($.ajax({
                     type: "post",
-                    url: '/documentacion/obtener/'+nombreArchivo, 
+                    url: '/documentacion/obtener/'+nombreArchivo,
                     data: {
                         nombreArchivo: nombreArchivo,
                     },
@@ -519,121 +330,10 @@
                     }
                 }));
                 // document.getElementById('volver').href = '{{route('proyectos.index')}}';
-               $('#tablaEtapas').DataTable({
-                    paging: false,
-                    scrollCollapse: true,
-                    scrollY: '400px',
-                    language: {
-                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                            zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
-                            infoEmpty: 'No se ha encontrado registros',
-                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                            search: 'Buscar',
-                            paginate:{
-                                first:"Prim.",
-                                last: "Ult.",
-                                previous: 'Ant.',
-                                next: 'Sig.',
-                            },
-                        },
-                        order: [[4, 'asc']],
-                });
-
-                var tableOrdTra = $('#tablaOrdenTrabajo').DataTable({
-                    paging: false,
-                    scrollCollapse: true,
-                    scrollY: '400px',
-                    language: {
-                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                            zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ de _PAGES_ de _TOTAL_ registros.',
-                            infoEmpty: 'No se ha encontrado registros',
-                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                            search: 'Buscar',
-                            paginate:{
-                                first:"Prim.",
-                                last: "Ult.",
-                                previous: 'Ant.',
-                                next: 'Sig.',
-                            },
-                        },
-                        "aaSorting": []
-                });
-
-                tableOrdTra.on('draw',function () {
-                    changeTdColor();
-                } )
-
-                $('#tablaOrdenMan').DataTable({
-                    paging: false,
-                    scrollCollapse: true,
-                    scrollY: '400px',
-                    language: {
-                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                            zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
-                            infoEmpty: 'No se ha encontrado registros',
-                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                            search: 'Buscar',
-                            paginate:{
-                                first:"Prim.",
-                                last: "Ult.",
-                                previous: 'Ant.',
-                                next: 'Sig.',
-                            },
-                        },
-                        "aaSorting": []
-                });
-
-                $('#tablaOrdenMec').DataTable({
-                    paging: false,
-                    scrollCollapse: true,
-                    scrollY: '400px',
-                    language: {
-                            lengthMenu: 'Mostrar _MENU_ registros por pagina',
-                            zeroRecords: 'No se ha encontrado registros',
-                            info: 'Mostrando pagina _PAGE_ de _PAGES_',
-                            infoEmpty: 'No se ha encontrado registros',
-                            infoFiltered: '(Filtrado de _MAX_ registros totales)',
-                            search: 'Buscar',
-                            paginate:{
-                                first:"Prim.",
-                                last: "Ult.",
-                                previous: 'Ant.',
-                                next: 'Sig.',
-                            },
-                        },
-                        "aaSorting": []
-                });
-
-                $('#tablaOrdenTrabajo tbody').on('click', 'tr', function () {
-                        ind_rw = tableOrdTra.row(this).index();
-                        opt_act = 1;
-                });
-
-                $('#verPartesModal').on('hidden.bs.modal', function (e) {
-                    switch (opt_act) {
-                        case 1:
-                            actRowOrdTra(tableOrdTra);
-                            break;
-                    
-                        default:
-                            break;
-                    }
-                })
-
-                $('#editarOrdenModal').on('hidden.bs.modal', function (e) {
-                    switch (opt_act) {
-                        case 1:
-                            actRowOrdTra(tableOrdTra);
-                            break;
-                    
-                        default:
-                            break;
-                    }
-                })
-                
+               inicializarGestionProyecto(@json($proyecto->id_servicio), @json((int) $opcion),
+                    '{{ route('proyectos.gestion.datos', $proyecto->id_servicio) }}', @json($exclusionesGestion));
+                $('#verPartesModal, #editarOrdenModal, #editarEtapaModal, #crearEtapaModal, #crearOrdenModal, #verActEtapaOrdenModal, #verActServOrdenModal')
+                    .on('hidden.bs.modal', function () { recargarTablasGestion(); });
                 $('#verActEtapaOrdenModal').on('hidden.bs.modal', function (e) {
                     // console.log('holi');
                     document.getElementById('m-ver-act-eta-descripcion').value = '';
@@ -646,104 +346,9 @@
                 });
             });
 
-            function actRowOrdTra(LaTabla){
-                let id_orden = document.getElementById('m-ver-parte-orden').value 
-                                ? document.getElementById('m-ver-parte-orden').value 
-                                : document.getElementById('id_orden_edit').value;
-                $.when($.ajax({
-                    type: "post",
-                    url: '/orden/obtener-orden-tra/'+id_orden,
-                    data: {
-                    },
-                    success: function (response) { 
-                        // console.log(response)
-                        LaTabla.cell(ind_rw, 0).data(response.nombre_orden).draw(false);
-                        LaTabla.cell(ind_rw, 2).data(response.nombre_estado).draw(false);
-                        LaTabla.cell(ind_rw, 3).data(response.supervisor).draw(false);
-                        LaTabla.cell(ind_rw, 4).data(response.responsable).draw(false);
-                        LaTabla.cell(ind_rw, 5).data(response.fecha_limite).draw(false);
-                        LaTabla.cell(ind_rw, 6).data(response.fecha_finalizacion).draw(false);
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                }));
-            }
         </script>
 
-        <script>
-            document.querySelectorAll('input[name=filter]').forEach(item => {
-                item.addEventListener('change', event => {
-                    if (item.checked) {
-                        //console.log("Checkbox is checked..");
-                        selects($(item).val());
-                    } else {
-                        //console.log("Checkbox is not checked..");
-                        deSelect($(item).val());
-                    }
-                    // validarFiltro();
-                })
-            });
 
-            document.querySelectorAll('button[name=flt-for-eta]').forEach(item => {
-                item.addEventListener('click', event => {
-                    filtrarAllOrdenes(item);
-                })
-            });
-
-            function filtrarAllOrdenes(b){
-                let flt_ord = document.getElementsByClassName("flt_x_eta");
-                
-                deSelect('ot_etapa');
-                deSelect('om_etapa');
-                deSelect('ome_etapa');
-
-                
-                for (let i = 0; i < flt_ord.length; i++) {
-                    if (String(flt_ord[i].value) == String(b.value)) {
-                        flt_ord[i].checked = true;
-                    }
-                }
-                buscarYfiltrarOrdTrabajo('tablaOrdenTrabajo');
-                buscarYfiltrarOrdMan('tablaOrdenMan');
-                buscarYfiltrarOrdMec('tablaOrdenMec');
-            
-                /*console.log("dawdaw");
-                selects('ot_etapa');
-                selects('om_etapa');
-                selects('ome_etapa');
-                buscarYfiltrarOrdTrabajo('tablaOrdenTrabajo');
-                buscarYfiltrarOrdMan('tablaOrdenMan');
-                buscarYfiltrarOrdMec('tablaOrdenMec'); */
-                
-            }
-
-            function selects(name){  
-                var ele=document.getElementsByName(name);  
-                for(var i=0; i<ele.length; i++){  
-                    if(ele[i].type=='checkbox')  
-                        ele[i].checked=true;  
-                }  
-            }  
-
-            function deSelect(name){  
-                var ele=document.getElementsByName(name);  
-                for(var i=0; i<ele.length; i++){  
-                    if(ele[i].type=='checkbox')  
-                        ele[i].checked=false;  
-                        
-                }  
-            } 
-
-            function mostrarFiltro(a){
-                let cuadro_filtro = document.getElementById(a);
-                if ($('#'+a).is(":hidden")) {
-                    cuadro_filtro.hidden = false;
-                }else{
-                    cuadro_filtro.hidden = true;
-                }
-            }
-        </script>
         <script src="{{ asset('js/change-td-color.js') }}"></script>
     </section>
     @include('Ingenieria.Servicios.Proyectos.modal.crear-etapa')
@@ -751,16 +356,16 @@
     @include('Ingenieria.Servicios.Proyectos.modal.crear-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.editar-proyecto')
-    {{-- @include('Ingenieria.Servicios.Proyectos.modal.crear-act') --}}
-    {{-- @include('Ingenieria.Servicios.Proyectos.modal.crear-act-eta') --}}
+
+
     @include('Ingenieria.Servicios.Proyectos.modal.ver-partes')
     @include('Ingenieria.Servicios.Ordenes.modal.editar-orden')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-servicio')
     @include('Ingenieria.Servicios.Proyectos.modal.ver-act-etapa')
     @include('Ingenieria.Servicios.Proyectos.modal.progreso-orden-man')
-    {{-- @include('layouts.modal.confirmation') --}}
+
 @endsection
 
-@section('js')
-
+@section('scripts')
+    <script src="{{ asset('assets/js/proyecto-gestion-tablas.js') }}"></script>
 @endsection

@@ -31,7 +31,7 @@
         <div class="section-body">
             <div class="row">
                 @include('layouts.modal.mensajes')
-                {{-- Informacion del proyecto --}}
+
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-head">
@@ -42,114 +42,70 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_proyecto', "ID:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_proyecto', $proyecto->codigo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_proyecto" class="control-label" style="white-space: nowrap;">ID:</label>
+                                        <input type="text" name="id_proyecto" id="id_proyecto" value="{{ $proyecto->codigo_servicio }}" class="form-control" readonly>
 
-                                        {{-- {!! Form::text('fecha_carga',\Carbon\Carbon::parse($Req_ing->getSolicitud->fecha_carga)->format('d-m-Y H:i:s'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!} --}}
+
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_proyecto', 'Nombre proyecto:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_proyecto', $proyecto->nombre_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="nom_proyecto" class="control-label" style="white-space: nowrap;">Nombre proyecto:</label>
+                                        <input type="text" name="nom_proyecto" id="nom_proyecto" value="{{ $proyecto->nombre_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_tipo', 'Tipo:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_sector', $proyecto->getSubTipoServicio->nombre_subtipo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_tipo" class="control-label" style="white-space: nowrap;">Tipo:</label>
+                                        <input type="text" name="id_sector" id="id_tipo" value="{{ $proyecto->getSubTipoServicio->nombre_subtipo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    {{-- @if (!is_null($Req_ing->getSolicitud->fecha_requerida))
-                                        <div class="form-group">
-                                            {!! Form::label('fecha_req', "Fecha requerida:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                            {!! Form::text('fecha_req',\Carbon\Carbon::parse($Req_ing->getSolicitud->fecha_requerida)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                        </div>
-                                    @endif --}}
+
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('lider_proyecto', "Lider de proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad',$proyecto->getResponsabilidad->getEmpleado->nombre_empleado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="lider_proyecto" class="control-label" style="white-space: nowrap;">Lider de proyecto:</label>
+                                        <input type="text" name="prioridad" id="lider_proyecto" value="{{ $proyecto->getResponsabilidad->getEmpleado->nombre_empleado }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_ini" class="control-label" style="white-space: nowrap;">Fecha inicio:</label>
+                                        <input type="text" name="fecha_carga" id="fec_ini" value="{{ \Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y') }}" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite', \Carbon\Carbon::parse($proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_limite" class="control-label" style="white-space: nowrap;">Fecha limite:</label>
+                                        <input type="text" name="fecha_limite" id="fec_limite" value="{{ \Carbon\Carbon::parse($proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y') }}" class="form-control" readonly>
                                     </div>
-                                    {{-- <div class="form-group">
-                                        {!! Form::label('empleado', "Empleado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::select('id_empleado', $Empleados, $Req_ing->getEmpleado->id_empleado, [
-                                            'class' => 'form-select form-control',
-                                            'required',
-                                        ]) !!}
-                                    </div> --}}
+
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="estado" class="control-label" style="white-space: nowrap;">Estado:</label>
+                                        <input type="text" name="estado" id="estado" value="{{ $proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('prioridad', "Prioridad Nº:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', null, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="prioridad" class="control-label" style="white-space: nowrap;">Prioridad Nº:</label>
+                                        <input type="text" name="prioridad" id="prioridad" value="{{ null }}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                    {!! Form::label('descrip', "Descripcion de la solicitud:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($Req_ing->getSolicitud->fecha_carga)->format('d-m-Y H:i:s'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
 
-                                    {{-- <textarea id='descrip' class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" readonly>{{$Req_ing->getSolicitud->descripcion_solicitud}}</textarea> 
-                                </div>
-                                {{-- @if (!is_null($Req_ing->getSolicitud->descripcion_urgencia))
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                        {!! Form::label('descrip_urg', "Descripcion urgencia:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        <textarea id='descrip_urg' class="form-control" rows="54" cols="54" style="resize:none; height: 40vh" readonly>{{$Req_ing->getSolicitud->descripcion_urgencia ?? ''}}</textarea>
-                                    </div>
-                                @endif 
-                                
-                            </div>--}}
-                            {{-- <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                    <div class="form-group">
-                                        {!! Form::label('Empresa:', null, ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_emp', $obra->getEmpresa->nom_emp, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    <div class="form-group">
-                                        {!! Form::label('Tipo obra:', null, ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_emp', $obra->getTipoObra->tipo_obra ?? '--', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
-                                    <div class="form-group">
-                                        {!! Form::label('Operatoria:', null, ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_emp', $obra->getOperatoria->operatoria ?? '--', ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div>
-                            </div> --}}
+
                         </div>
                     </div>
                 </div>
-                {{-- ------------- --}}
 
-                {{-- Etapas del proyecto --}}
+
+
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="card">
                         <div class="card-head">
@@ -161,13 +117,10 @@
                                     <h5 class="text-center">Etapas</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
+
                                 </div>
                             </div>
-                            {{-- <br>
-                            <div class="text-center"><h5>Viviendas</h5></div>                         --}}
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -181,13 +134,13 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Fecha fin real</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Ultima actualizacion</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($proyecto->getEtapas as $etapa)
-                                            <tr>    
+                                            <tr>
                                                 <td class= 'text-center' >{{$etapa->descripcion_etapa}}</td>
-                                                
+
                                                 <td class= 'text-center' >{{$etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->getEstado->nombre_estado}}</td>
 
                                                 <td class= 'text-center' >{{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
@@ -201,9 +154,7 @@
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($etapa->getActualizaciones->sortByDesc('id_actualizacion_etapa')->first()->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
 
                                                 <td>
-                                                    {!! Form::open(['method' => 'GET', 'route' => ['empleados.index'], 'style' => '']) !!}
-                                                    {!! Form::submit('Ordenes', ['class' => 'btn btn-warning w-100']) !!}
-                                                    {!! Form::close() !!}
+                                                    <a href="{{ route('empleados.index') }}" class="btn btn-warning w-100">Ordenes</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -214,21 +165,19 @@
                         </div>
                     </div>
                 </div>
-                 {{-- ------------- --}}
+
                 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="d-flex">
                                     <div class="me-auto">
-                                        {{-- (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong> --}}
+
                                     </div>
                                     <div class="p-1">
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'proyectos.index', 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
+                                        <a href="{{ route('proyectos.index') }}" class="btn btn-primary">Volver</a>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +187,7 @@
             </div>
         </div>
     </section>
-{{-- @include('layouts.modal.confirmation') --}}
+
 @endsection
 
 @section('js')

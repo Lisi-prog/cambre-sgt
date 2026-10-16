@@ -18,9 +18,14 @@ use App\Http\Controllers\Ingenieria\Operacion\OperacionController;
 use App\Http\Controllers\Ingenieria\Maquinaria\MaquinariaController;
 use App\Http\Controllers\Ingenieria\Servicios\Proyectos\PrefijoProyectoController;
 
+// The data endpoint checks the access rules for each listing mode.
+Route::post('proyectos/datos', [ProyectoController::class, 'datos'])->middleware('auth')->name('proyectos.datos');
+
 //Gestion de proyectos
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     // RUTAS PROYECTOS
+    Route::post('proyectos/datos', [ProyectoController::class, 'datos'])->name('proyectos.datos');
+    Route::post('proyectos/gestionar/{id}/datos', [ProyectoController::class, 'datosGestion'])->name('proyectos.gestion.datos');
     Route::get('proyectos/gestionar/{id}', [ProyectoController::class, 'gestionar'])->name('proyectos.gestionar');
     Route::get('proyectos/costos/{id}', [ProyectoController::class, 'costos'])->name('proyectos.costos');
     Route::get('proyectos/actualizaciones/{id}', [ProyectoController::class, 'verActualizaciones'])->name('proyectos.actualizaciones');

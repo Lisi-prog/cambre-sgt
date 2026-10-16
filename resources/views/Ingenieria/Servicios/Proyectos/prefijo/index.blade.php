@@ -68,9 +68,9 @@
                                                         {{-- @can('EDITAR-ROL') --}}
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
-                                                                {!! Form::open(['method' => 'GET', 'route' => ['prefijo_proyecto.edit', $prefijo->id_prefijo_proyecto], 'style' => 'display:inline']) !!}
-                                                                {!! Form::submit('Editar', ['class' => 'btn btn-primary mr-2 w-100']) !!}
-                                                                {!! Form::close() !!}
+                                                                <form method="GET" action="{{ route('prefijo_proyecto.edit', $prefijo->id_prefijo_proyecto) }}" style="display:inline">
+                                                                <button type="submit" class="btn btn-primary mr-2 w-100">Editar</button>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                         {{-- @endcan --}}
@@ -78,14 +78,11 @@
                                                         {{-- @can('BORRAR-ROL') --}}
                                                         <div class="row my-2 justify-content-center">
                                                             <div class="col-12">
-                                                                {!! Form::open([
-                                                                    'method' => 'DELETE',
-                                                                    'class' => 'formulario',
-                                                                    'route' => ['prefijo_proyecto.destroy', $prefijo->id_prefijo_proyecto],
-                                                                    'style' => 'display:inline',
-                                                                ]) !!}
-                                                                {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea ELIMINAR el prefijo proyecto?');"]) !!}
-                                                                {!! Form::close() !!}
+                                                                <form method="POST" action="{{ route('prefijo_proyecto.destroy', $prefijo->id_prefijo_proyecto) }}" class="formulario" style="display:inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('¿Está seguro que desea ELIMINAR el prefijo proyecto?');">Eliminar</button>
+                                                                </form>
                                                             </div>
                                                         </div>
                                                         {{-- @endcan --}}

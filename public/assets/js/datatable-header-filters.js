@@ -50,9 +50,13 @@ function crearFiltro(columna, indice, excluidos, instancia, controlador, servido
   if (!servidor) columna.cells(null, indice).every(function () {
     valoresPorFila.set(this.index().row, texto(this.render('display')));
   });
-  const valores = Array.from(new Set(servidor ? servidor.valores[indice] || [] : valoresPorFila.values())).sort((a, b) =>
+  let valores = Array.from(new Set(servidor ? servidor.valores[indice] || [] : valoresPorFila.values())).sort((a, b) =>
     String(a).localeCompare(String(b), 'es', {numeric: true}));
-  let seleccion = new Set(valores.filter(valor => !excluidos.includes(valor)));
+  const inicial = servidor ? servidor.selecciones[indice] : null;
+  let seleccion = new Set(valores.filter(valor => {
+    if (inicial && Array.isArray(inicial.incluir)) return inicial.incluir.includes(valor);
+    return !(inicial && inicial.excluir || excluidos).includes(valor);
+  }));
   const boton = document.createElement('button');
   boton.type = 'button';
   boton.className = 'dt-filtro-boton';
@@ -139,6 +143,25 @@ function crearFiltro(columna, indice, excluidos, instancia, controlador, servido
     }
     boton.setAttribute('aria-label', `Filtrar ${titulo}${activo ? ' (filtro activo)' : ''}`);
     cerrar(redibujar);
+  }
+
+  if (servidor) {
+    escuchar(tabla.table().node(), 'datatable-filtro-columna', evento => {
+      if (evento.detail.indice !== indice) return;
+      borrador = new Set(evento.detail.valores);
+      aplicar(evento.detail.redibujar !== false);
+    });
+    escuchar(tabla.table().node(), 'datatable-opciones-filtros', evento => {
+      const filtro = servidor.selecciones[indice];
+      valores = Array.from(new Set(evento.detail[indice] || [])).sort((a, b) =>
+        String(a).localeCompare(String(b), 'es', {numeric: true}));
+      seleccion = new Set(valores.filter(valor => {
+        if (filtro && Array.isArray(filtro.incluir)) return filtro.incluir.includes(valor);
+        return !(filtro && filtro.excluir || []).includes(valor);
+      }));
+      borrador = new Set(seleccion);
+      aplicar(false);
+    });
   }
 
   borrador = new Set(seleccion);

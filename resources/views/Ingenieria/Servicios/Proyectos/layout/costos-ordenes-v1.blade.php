@@ -1,25 +1,10 @@
 {{-- Ordenes de trabajo del proyecto --}}
-<style>
-    .table {
-        zoom: 100%;
-    }
-    table.dataTable tbody td {
-        padding: 0px 10px;
-    }
-    .col-4 {
-        padding: 5px;
-    }
-    .col-5 {
-        padding: 5px;
-    }
-    </style>
 <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes_de_trabajo'>
     <div class="card">
         <div class="card-head">
             <br>
             <div class="d-flex justify-content-center">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 text-center  my-auto">
-                   {{-- <h5 id="label-orden-trabajo" class="text-center  my-auto">Orden de trabajo <i class="fas fa-caret-down"></i></h5> --}}
                    <h5 class="text-center  my-auto">Orden de trabajo</h5>
                 </div>
             </div>
@@ -98,9 +83,6 @@
                     <h5 class="text-center  my-auto">Orden de manufactura</h5>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                    {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                        Nueva orden trabajo
-                    </button> --}}
                 </div>
             </div>
         </div>
@@ -178,9 +160,6 @@
                     <h5 class="text-center  my-auto">Orden de mecanizado</h5>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                    {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                        Nueva orden trabajo
-                    </button> --}}
                 </div>
             </div>
         </div>
@@ -261,9 +240,6 @@
                     <h5 class="text-center  my-auto">Orden de mantenimiento</h5>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 mx-2">
-                    {{-- <button type="button" class="btn btn-success col-9" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
-                        Nueva orden trabajo
-                    </button> --}}
                 </div>
             </div>
         </div>
@@ -314,29 +290,3 @@
         </div>
     </div>
 </div>
-{{-- ------------- --}}
-
-{{-- <script>
-    $(function(){
-        $('#label-orden-trabajo').on('click', mostrarTablaTrabajo);
-    });
-
-    const etiqueta = document.getElementById('label-orden-trabajo');
-
-    etiqueta.addEventListener('mouseover', () => {
-        etiqueta.style.cursor = 'pointer';
-    });
-
-    etiqueta.addEventListener('mouseout', () => {
-        etiqueta.style.cursor = 'default';
-    }); 
-
-    function mostrarTablaTrabajo(){
-        let cuadro_oculto_de_ordenes = document.getElementById('tabla_de_ordenes_trabajo');
-        if ($('#tabla_de_ordenes_trabajo').is(":hidden")) {
-            cuadro_oculto_de_ordenes.hidden = false;
-        }else{
-            cuadro_oculto_de_ordenes.hidden = true;
-        }
-    }
-</script> --}}

@@ -12,7 +12,9 @@
     </div>
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
     <div class="section-body">
-        {!! Form::model($prefijo, ['method' => 'PUT', 'route' => ['prefijo_proyecto.update', $prefijo->id_prefijo_proyecto], 'class' => '']) !!}
+        <form action="{{ route('prefijo_proyecto.update', $prefijo->id_prefijo_proyecto) }}" method="POST">
+            @csrf
+            @method('PUT')
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                 <div class="card">
@@ -20,14 +22,9 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {!! Form::label('nombre_prefijo', 'Nombre prefijo proyecto:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                    <label for="nombre_prefijo" class="control-label fs-7" style="white-space: nowrap;">Nombre prefijo proyecto:</label>
                                     <span class="obligatorio">*</span>
-                                    {!! Form::text('nombre_prefijo', $prefijo->nombre_prefijo_proyecto, [
-                                        'class' => 'form-control',
-                                        'required' => 'required',
-                                        'style' => 'text-transform:uppercase',
-                                        'id' => 'nombre_prefijo'
-                                    ]) !!}
+                                    <input type="text" name="nombre_prefijo" id="nombre_prefijo" value="{{ old('nombre_prefijo', $prefijo->nombre_prefijo_proyecto) }}" class="form-control" style="text-transform:uppercase" required>
                                 </div>
                             </div>
                         </div>
@@ -35,8 +32,8 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                    <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{$prefijo->descripcion_prefijo_proyecto}}</textarea>
+                                    <label for="descripcion" class="control-label" style="white-space: nowrap;">Descripcion:</label>
+                                    <textarea name='descripcion' id="descripcion" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh">{{ old('descripcion', $prefijo->descripcion_prefijo_proyecto) }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -48,14 +45,11 @@
                                 </div>
                                 <div class="p-1">
                                     {{-- @can('CREAR-OBRAVIVIENDA') --}}
-                                        {!! Form::submit('Guardar', ['class' => 'btn btn-success']) !!}
+                                        <button type="submit" class="btn btn-success">Guardar</button>
                                     {{-- @endcan --}}
-                                    {!! Form::close() !!}
                                 </div>
                                 <div class="p-1">
-                                    {!! Form::open(['method' => 'GET', 'route' => 'prefijo_proyecto.index', 'style' => '']) !!}
-                                    {!! Form::submit('Cancelar', ['class' => 'btn btn-danger']) !!}
-                                    {!! Form::close() !!}
+                                    <a href="{{ route('prefijo_proyecto.index') }}" class="btn btn-danger">Cancelar</a>
                                 </div>
                             </div>
                         </div>
@@ -64,6 +58,7 @@
                 </div>
             </div>
         </div>
+        </form>
     </div>
 </section>
 @endsection

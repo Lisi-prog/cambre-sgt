@@ -1,6 +1,6 @@
 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
     <div class="form-group">
-        {!! Form::label('opt', 'Opciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+        <label for="opt" class="control-label fs-7" style="white-space: nowrap;">Opciones:</label>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value=1 id="siGestionar" checked name="gesti">
             <label class="form-check-label" for="siGestionar">

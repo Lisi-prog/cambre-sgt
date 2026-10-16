@@ -6,39 +6,35 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Orden</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {!! Form::open(['route' => 'ordenes.crear', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
+            <form action="{{ route('ordenes.crear') }}" method="POST" class="formulario form-prevent-multiple-submits">
+                @csrf
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::text('id_servicio', $proyecto->id_servicio, [
-                                            'class' => 'form-control',
-                                            'required' => 'required',
-                                            'id' => 'id_servicio',
-                                            'hidden' => true
-                                        ]) !!}
-                            {!! Form::label('tipo_orden', "Tipo orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <input type="hidden" name="id_servicio" id="id_servicio" value="{{ $proyecto->id_servicio }}" class="form-control" required>
+                            <label for="selected-tipo-orden" class="control-label" style="white-space: nowrap;">Tipo orden:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::select('tipo_orden', [1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 3 => 'Orden de mecanizado',4 => 'Orden de mantenimiento'], null, [
-                                    'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select form-group',
-                                    'id' => 'selected-tipo-orden',
-                                    'required'
-                                ]) !!}
+                            <select name="tipo_orden" id="selected-tipo-orden" class="form-select form-group" required>
+                                <option value="" {{ old('tipo_orden') === null || old('tipo_orden') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                @foreach ([1 => 'Orden de trabajo', 2 => 'Orden de manufactura', 3 => 'Orden de mecanizado', 4 => 'Orden de mantenimiento'] as $valor => $nombre)
+                                    <option value="{{ $valor }}" {{ (string) old('tipo_orden') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('num_etapa', "Etapa:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                            <label for="num_etapa" class="control-label" style="white-space: nowrap;">Etapa:</label>
                             <span class="obligatorio">*</span>
-                            {!! Form::select('num_etapa', $etapas_plk, null, [
-                                    'placeholder' => 'Seleccionar',
-                                    'class' => 'form-select form-group reset-input',
-                                    'required',
-                                    'id' => 'num_etapa'
-                                ]) !!}
+                            <select name="num_etapa" id="num_etapa" class="form-select form-group reset-input" required>
+                                <option value="" {{ old('num_etapa') === null || old('num_etapa') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                @foreach ($etapas_plk as $valor => $nombre)
+                                    <option value="{{ $valor }}" {{ (string) old('num_etapa') === (string) $valor ? 'selected' : '' }}>{{ $nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -50,7 +46,7 @@
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
-            {!! Form::close() !!}
+            </form>
         </div>
     </div>
 </div>

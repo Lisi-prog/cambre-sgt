@@ -11,32 +11,20 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
-                            {!! Form::label('m-ver-act-etapa', 'Etapa:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('m-ver-act-etapa', null, [
-                                'class' => 'form-control',
-                                'id' => 'm-ver-act-etapa',
-                                'readonly'
-                            ]) !!}
+                            <label for="m-ver-act-etapa" class="control-label fs-7" style="white-space: nowrap;">Etapa:</label>
+                            <input type="text" name="m-ver-act-etapa" id="m-ver-act-etapa" value="{{ old('m-ver-act-etapa') }}" class="form-control" readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                         <div class="form-group">
-                            {!! Form::label('m-ver-act-eta-estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('orden', null, [
-                                'class' => 'form-control',
-                                'id' => 'm-ver-act-eta-orden',
-                                'readonly'
-                            ]) !!}
+                            <label for="m-ver-act-eta-orden" class="control-label fs-7" style="white-space: nowrap;">Estado:</label>
+                            <input type="text" name="orden" id="m-ver-act-eta-orden" value="{{ old('orden') }}" class="form-control" readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                         <div class="form-group">
-                            {!! Form::label('m-ver-act-eta-responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('m-ver-act-eta-responsable', null, [
-                                'class' => 'form-control',
-                                'id' => 'm-ver-act-eta-responsable',
-                                'readonly'
-                            ]) !!}
+                            <label for="m-ver-act-eta-responsable" class="control-label fs-7" style="white-space: nowrap;">Responsable:</label>
+                            <input type="text" name="m-ver-act-eta-responsable" id="m-ver-act-eta-responsable" value="{{ old('m-ver-act-eta-responsable') }}" class="form-control" readonly>
                         </div>
                     </div>
                 </div>
@@ -67,64 +55,48 @@
                     </div>
                 </div>
                 <div class="row" id="m-ver-act-eta-div" hidden>
-                {!! Form::open(['route' => ['actualizacion-etapa.crear', $proyecto->id_servicio], 'method' => 'POST', 'class' => 'formulario']) !!}
-                    {!! Form::text('m-crear-act-eta-id_etapa', null, ['class' => 'form-control', 'hidden', 'id' => 'm_cae_id_etapa']) !!}
+                <form id="form-actualizacion-etapa" action="{{ route('actualizacion-etapa.crear', $proyecto->id_servicio) }}" method="POST" class="formulario">
+                    @csrf
+                    <input type="hidden" name="m-crear-act-eta-id_etapa" id="m_cae_id_etapa" value="{{ old('m-crear-act-eta-id_etapa') }}" class="form-control">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                                 <div class="form-group">
-                                    {!! Form::label('descripcion', "Descripcion:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                    <label for="m-ver-act-eta-descripcion" class="control-label" style="white-space: nowrap;">Descripcion:</label>
                                     <span class="obligatorio">*</span>
-                                    {!! Form::text('m-ver-act-eta-descripcion', null, ['class' => 'form-control', 'required', 'id' => 'm-ver-act-eta-descripcion']) !!}
+                                    <input type="text" name="m-ver-act-eta-descripcion" id="m-ver-act-eta-descripcion" value="{{ old('m-ver-act-eta-descripcion') }}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 <div class="form-group">
-                                    {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
+                                    <label for="m-crear-act-eta-idestado" class="control-label" style="white-space: nowrap;">Estado:</label>
                                     <span class="obligatorio">*</span>
-                                    {!! Form::select('m-crear-act-eta-idestado', $estados, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'required',
-                                            'id' => 'm-crear-act-eta-idestado'
-                                        ]) !!}
+                                    <select name="m-crear-act-eta-idestado" id="m-crear-act-eta-idestado" class="form-select form-control" required>
+                                        <option value="" {{ old('m-crear-act-eta-idestado') === null || old('m-crear-act-eta-idestado') === '' ? 'selected' : '' }}>Seleccionar</option>
+                                        @foreach ($estados as $id => $nombre)
+                                            <option value="{{ $id }}" {{ (string) old('m-crear-act-eta-idestado') === (string) $id ? 'selected' : '' }}>{{ $nombre }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                 <div class="form-group">
-                                    {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                                {{-- <span class="obligatorio">*</span> --}}
-                                    {!! Form::date('m-crear-act-eta-feclimite', null, [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'm-crear-act-eta-feclimite',
-                                        'class' => 'form-control'
-                                    ]) !!}
+                                    <label for="m-crear-act-eta-feclimite" class="control-label fs-7" style="white-space: nowrap;">Fecha limite:</label>
+                                                
+                                    <input type="date" name="m-crear-act-eta-feclimite" id="m-crear-act-eta-feclimite" value="{{ old('m-crear-act-eta-feclimite') }}" min="2023-01-01" max="{{ now()->year }}-12-31" class="form-control">
                                 </div>
                             </div>
-                            {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        {!! Form::label('responsable', 'Responsable:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                                        <span class="obligatorio">*</span>
-                                        {!! Form::select('responsable', $supervisores_admin, null, [
-                                            'placeholder' => 'Seleccionar',
-                                            'class' => 'form-select form-control',
-                                            'id' => 'cbx_responsable_etapa'
-                                        ]) !!}
-                                    </div>
-                                </div>
-                            </div> --}}
+                            
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
-                {{-- <button type="submit" class="btn btn-success">Guardar</button> --}}
-                <button type="submit" class="btn btn-success" id="m-ver-act-eta-btn" hidden>Guardar</button>
+                
+                <button type="submit" class="btn btn-success" id="m-ver-act-eta-btn" form="form-actualizacion-etapa" hidden>Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
-            {!! Form::close() !!}
         </div>
     </div>
 </div>

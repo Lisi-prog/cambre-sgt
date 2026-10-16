@@ -52,20 +52,20 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_proyecto', "ID:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_proyecto', $proyecto->codigo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_proyecto" class="control-label" style="white-space: nowrap;">ID:</label>
+                                        <input type="text" name="id_proyecto" id="id_proyecto" value="{{ $proyecto->codigo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_proyecto', 'Nombre proyecto:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_proyecto', $proyecto->nombre_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="nom_proyecto" class="control-label" style="white-space: nowrap;">Nombre proyecto:</label>
+                                        <input type="text" name="nom_proyecto" id="nom_proyecto" value="{{ $proyecto->nombre_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_tipo', 'Tipo:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_sector', $proyecto->getSubTipoServicio->nombre_subtipo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_tipo" class="control-label" style="white-space: nowrap;">Tipo:</label>
+                                        <input type="text" name="id_sector" id="id_tipo" value="{{ $proyecto->getSubTipoServicio->nombre_subtipo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -74,33 +74,33 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('lider_proyecto', "Lider de proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad',$proyecto->getResponsabilidad->getEmpleado->nombre_empleado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="lider_proyecto" class="control-label" style="white-space: nowrap;">Lider de proyecto:</label>
+                                        <input type="text" name="prioridad" id="lider_proyecto" value="{{ $proyecto->getResponsabilidad->getEmpleado->nombre_empleado }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_ini" class="control-label" style="white-space: nowrap;">Fecha inicio:</label>
+                                        <input type="text" name="fecha_carga" id="fec_ini" value="{{ \Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y') }}" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite', \Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_limite" class="control-label" style="white-space: nowrap;">Fecha limite:</label>
+                                        <input type="text" name="fecha_limite" id="fec_limite" value="{{ \Carbon\Carbon::parse($proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y') }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="estado" class="control-label" style="white-space: nowrap;">Estado:</label>
+                                        <input type="text" name="estado" id="estado" value="{{ $proyecto->getActualizaciones->sortByDesc('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('prioridad', "Prioridad Nº:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', $proyecto->prioridad_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="prioridad" class="control-label" style="white-space: nowrap;">Prioridad Nº:</label>
+                                        <input type="text" name="prioridad" id="prioridad" value="{{ $proyecto->prioridad_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -110,14 +110,14 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('costo_estimado', "Costo estimado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_estimado', $proyecto->getCostoEstimado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="costo_estimado" class="control-label" style="white-space: nowrap;">Costo estimado:</label>
+                                        <input type="text" name="costo_estimado" id="costo_estimado" value="{{ $proyecto->getCostoEstimado() }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('costo_real', "Costo real:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('costo_real', $proyecto->getCostoReal(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="costo_real" class="control-label" style="white-space: nowrap;">Costo real:</label>
+                                        <input type="text" name="costo_real" id="costo_real" value="{{ $proyecto->getCostoReal() }}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -337,9 +337,7 @@
                                     <h5 class="text-center  my-auto">Partes</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
+                                    
                                 </div>
                             </div>
                             {{-- <br>
@@ -381,9 +379,7 @@
                                     <div class="p-1">
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $proyecto->id_servicio], 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
+                                        <a href="{{ route('proyectos.gestionar', $proyecto->id_servicio) }}" class="btn btn-primary">Volver</a>
                                     </div>
                                 </div>
                             </div>

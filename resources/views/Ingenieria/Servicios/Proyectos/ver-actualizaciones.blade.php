@@ -53,20 +53,20 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_proyecto', "ID:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_proyecto', $proyecto->codigo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_proyecto" class="control-label" style="white-space: nowrap;">ID:</label>
+                                        <input type="text" name="id_proyecto" id="id_proyecto" value="{{ $proyecto->codigo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_proyecto', 'Nombre proyecto:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_proyecto', $proyecto->nombre_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="nom_proyecto" class="control-label" style="white-space: nowrap;">Nombre proyecto:</label>
+                                        <input type="text" name="nom_proyecto" id="nom_proyecto" value="{{ $proyecto->nombre_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                                     <div class="form-group">
-                                        {!! Form::label('id_tipo', 'Tipo:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('id_sector', $proyecto->getSubTipoServicio->nombre_subtipo_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="id_tipo" class="control-label" style="white-space: nowrap;">Tipo:</label>
+                                        <input type="text" name="id_sector" id="id_tipo" value="{{ $proyecto->getSubTipoServicio->nombre_subtipo_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
@@ -75,33 +75,33 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('lider_proyecto', "Lider de proyecto:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad',$proyecto->getResponsabilidad->getEmpleado->nombre_empleado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="lider_proyecto" class="control-label" style="white-space: nowrap;">Lider de proyecto:</label>
+                                        <input type="text" name="prioridad" id="lider_proyecto" value="{{ $proyecto->getResponsabilidad->getEmpleado->nombre_empleado }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_carga',\Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_ini" class="control-label" style="white-space: nowrap;">Fecha inicio:</label>
+                                        <input type="text" name="fecha_carga" id="fec_ini" value="{{ \Carbon\Carbon::parse($proyecto->fecha_inicio)->format('d-m-Y') }}" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_limite', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite', \Carbon\Carbon::parse($proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y'), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fec_limite" class="control-label" style="white-space: nowrap;">Fecha limite:</label>
+                                        <input type="text" name="fecha_limite" id="fec_limite" value="{{ \Carbon\Carbon::parse($proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->fecha_limite)->format('d-m-Y') }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado', $proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="estado" class="control-label" style="white-space: nowrap;">Estado:</label>
+                                        <input type="text" name="estado" id="estado" value="{{ $proyecto->getActualizaciones->sortBy('id_actualizacion_servicio')->first()->getActualizacion->getEstado->nombre_estado }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('prioridad', "Prioridad Nº:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', $proyecto->prioridad_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="prioridad" class="control-label" style="white-space: nowrap;">Prioridad Nº:</label>
+                                        <input type="text" name="prioridad" id="prioridad" value="{{ $proyecto->prioridad_servicio }}" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 {{-- ------------- --}}
-                
+
                 {{-- Etapas del proyecto --}}
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="card">
@@ -138,7 +138,7 @@
                                         <th class="text-center" scope="col" style="color:#fff;">Estado</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Responsable</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Fecha limite</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($proyecto->getActualizaciones as $actualizacion_servicio)
@@ -146,7 +146,7 @@
                                                 <td class= 'text-center' >{{\Carbon\Carbon::parse($actualizacion_servicio->getActualizacion->fecha_carga)->format('d-m-Y H:i')}}</td>
 
                                                 <td class= 'text-center' >{{$actualizacion_servicio->getActualizacion->descripcion}}</td>
-                                                
+
                                                 <td class= 'text-center' >{{$actualizacion_servicio->getActualizacion->getEstado->nombre_estado}}</td>
 
                                                 <td class= 'text-center' >{{$actualizacion_servicio->getActualizacion->getResponsable->first()->getEmpleado->nombre_empleado}}</td>
@@ -154,25 +154,7 @@
                                                 <td class= 'text-center'>{{\Carbon\Carbon::parse($actualizacion_servicio->getActualizacion->fecha_limite)->format('d-m-Y')}}</td>
 
                                                 <td class='text-center'>
-                                                    {{-- <div class="row my-2">
-                                                        <div class="col-6">
-                                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEtapaModal" onclick="cargarModalEditar({{$etapa->id_etapa}}, {{$etapa->nombre_etapa}}, {{$etapa->fecha_inicio}}, {{$etapa->getResponsable->first()->getEmpleado->nombre_empleado}})">
-                                                                Editar
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            {!! Form::open(['method' => 'DELETE', 'route' => ['etapas.destroy', $etapa->id_etapa], 'style' => '']) !!}
-                                                            {!! Form::submit('Borrar', ['class' => 'btn btn-danger w-100']) !!}
-                                                            {!! Form::close() !!}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row my-2">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-warning w-100" onclick="window.crearCuadrOrdenes({{$etapa->id_etapa}})">
-                                                                Ordenes
-                                                            </button>
-                                                        </div>
-                                                    </div> --}}
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -186,7 +168,7 @@
                 {{-- ------------- --}}
 
                 {{-- Ordenes del proyecto --}}
-                
+
                     <div class="col-xs-12 col-sm-12 col-md-12" id='cuadro_de_ordenes' hidden>
                         <div class="card">
                             <div class="card-head">
@@ -211,7 +193,7 @@
                                         <thead style="">
                                             <th class="text-center" scope="col" style="color:#fff;width:50%;">Orden</th>
                                             <th class="text-center" scope="col" style="color:#fff;width:25%;">Tipo orden</th>
-                                            <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>                                                           
+                                            <th class="text-center" scope="col" style="color:#fff;width:20%;">Acciones</th>
                                         </thead>
                                         <tbody id="cuadro-ordenes">
                                         </tbody>
@@ -221,12 +203,12 @@
                             </div>
                         </div>
                     </div>
-                
-                
+
+
                 {{-- ------------- --}}
 
                 {{-- Orden de trabajo del proyecto --}}
-                
+
                 <div id='cuadro-orden-de-trabajo' class="col-xs-12 col-sm-12 col-md-12" hidden>
                     <div class="card">
                         <div class="card-head">
@@ -241,9 +223,7 @@
                                     {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearOrdenModal">
                                         Nueva
                                     </button> --}}
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
+
                                 </div>
                             </div>
                             {{-- <br>
@@ -269,11 +249,11 @@
                                         <th class="text-center" scope="col" style="color:#fff;">Duracion real</th>
                                         <th class="text-center" scope="col" style="color:#fff;">Fecha</th>
                                         <th class="text-center" scope="col" style="color:#fff;width: 50%;">Descripcion</th>
-                                        <th class="text-center" scope="col" style="color:#fff;">Supervisa</th>                                                              
+                                        <th class="text-center" scope="col" style="color:#fff;">Supervisa</th>
                                     </thead>
-                                    
+
                                     <tbody id="cuadro-ordenes-trabajo">
-                                        
+
                                     </tbody>
                                 </table>
                                 </div>
@@ -281,8 +261,8 @@
                         </div>
                     </div>
                 </div>
-            
-            
+
+
             {{-- ------------- --}}
 
                 {{-- Partes del proyecto --}}
@@ -297,9 +277,7 @@
                                     <h5 class="text-center">Parte de trabajo</h5>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
-                                    {{-- {!! Form::open(['method' => 'GET', 'route' => ['obravivienda.nuevavivalt', $obra->id_obr], 'style' => '']) !!}
-                                    {!! Form::submit('Crear', ['class' => 'btn btn-success w-100']) !!}
-                                    {!! Form::close() !!} --}}
+
                                 </div>
                             </div>
                             {{-- <br>
@@ -317,10 +295,10 @@
                                         <th class="text-center" scope="col" style="color:#fff;width:15%">Fecha limite</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:10%;">Horas</th>
                                         <th class="text-center" scope="col" style="color:#fff;width:15%;">Responsable</th>
-                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Supervisor</th>                                                           
+                                        <th class="text-center" scope="col" style="color:#fff;width:5%;">Supervisor</th>
                                     </thead>
                                     <tbody id="renglones_parte">
-                                        
+
                                     </tbody>
                                 </table>
                                 </div>
@@ -341,9 +319,7 @@
                                     <div class="p-1">
                                     </div>
                                     <div class="p-1">
-                                        {!! Form::open(['method' => 'GET', 'route' => 'proyectos.index', 'style' => '']) !!}
-                                        {!! Form::submit('Volver', ['class' => 'btn btn-primary']) !!}
-                                        {!! Form::close() !!}
+                                        <a href="{{ route('proyectos.index') }}" class="btn btn-primary">Volver</a>
                                     </div>
                                 </div>
                             </div>
@@ -353,7 +329,7 @@
             </div>
         </div>
 
-        <script type="module"> 
+        <script type="module">
             // import {crearCuadrOrdenes, cargarModalVerOrden, obtenerPartes} from '../../js/Ingenieria/Servicios/Proyectos/modal/crear-form.js';
             // window.crearCuadrOrdenes = crearCuadrOrdenes;
             // window.cargarModalVerOrden = cargarModalVerOrden;
@@ -361,7 +337,7 @@
         </script>
 
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">
-            
+
         </script>
         {{-- <script src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form2.js') }}"></script> --}}
 
@@ -385,7 +361,7 @@
                         "aaSorting": []
                 });
             });
-            
+
             function cargarModalEditar(id, nombre, fecha, lider){
                 let input_nombre_etapa = document.getElementById('input-nombre_etapa');
                 let input_fec_ini = document.getElementById('input-fec_ini');
@@ -410,7 +386,7 @@
     </section>
 
 
-    
+
 @endsection
 
 @section('js')

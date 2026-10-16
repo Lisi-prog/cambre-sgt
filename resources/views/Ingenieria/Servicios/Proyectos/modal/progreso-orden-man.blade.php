@@ -11,29 +11,19 @@
                 <div class="row mb-3">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
-                            {!! Form::label('prg_ord_man', 'Orden Manufactura:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            {!! Form::text('prg_ord_man', null, [
-                                    'class' => 'form-control',
-                                    'required' => 'required',
-                                    'id' => 'm_prg_ord_man',
-                                    'readonly'
-                                ]) !!}
+                            <label for="m_prg_ord_man" class="control-label fs-7" style="white-space: nowrap;">Orden Manufactura:</label>
+                            <input type="text" name="prg_ord_man" id="m_prg_ord_man" class="form-control" required readonly>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="form-group">
-                            {!! Form::label('prg_est', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            {!! Form::text('prg_est', null, [
-                                    'class' => 'form-control',
-                                    'required' => 'required',
-                                    'id' => 'm_prg_est',
-                                    'readonly'
-                                ]) !!}
+                            <label for="m_prg_est" class="control-label fs-7" style="white-space: nowrap;">Estado:</label>
+                            <input type="text" name="prg_est" id="m_prg_est" class="form-control" required readonly>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 my-auto">
                         <div class="form-group">
-                            {!! Form::label('prg_progreso', 'Progreso:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="control-label fs-7" style="white-space: nowrap;">Progreso:</span>
                             <div class="progress position-relative" style="background-color: #b2baf8; z-index:1">
                                 <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="div-prg-bar">
                                     <span class="justify-content-center d-flex position-absolute w-100" style="color: #ffffff" id="span_prg">10 / 10</span>
@@ -46,7 +36,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            {!! Form::label('prg_ord_mec', 'Ordenes de Mecanizado Faltantes:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                            <span class="control-label fs-7" style="white-space: nowrap;">Ordenes de Mecanizado Faltantes:</span>
                             <div class="table-responsive">
                                 <table id="tablaPrg" class="table table-hover table-sm mt-2" class="display">
                                     <thead style="background-color: #d37c00">

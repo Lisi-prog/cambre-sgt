@@ -60,137 +60,238 @@ class ProyectoController extends Controller
     }
     
     public function index(Request $request)
-    {        
-        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
-
-        if($tipo_servicio){
-            foreach ($tipo_servicio->getSubTipos as $subTipo) {
-                $id_subtipos[] = $subTipo->id_subtipo_servicio;
-            }
-            $proyectos = Servicio::whereIn('id_subtipo_servicio', $id_subtipos)->get();
-        }else{
-            $proyectos = [];
-        }
-        
-        
-        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
-        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $prioridades = [];
-        $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
-        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-        
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos'));
+    {
+        return $this->vistaListadoProyectos($request, ['modo' => 'todos', 'opcion' => 1], 'Proyectos');
     }
 
     public function indexPorTipo(Request $request, $opcion)
-    {   
-        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
-        $tipo = Subtipo_servicio::where('id_subtipo_servicio', $opcion)->first();
-
-        if($tipo_servicio){
-            $proyectos = Servicio::where('id_subtipo_servicio', $opcion)->get();
-        }else{
-            $proyectos = [];
-        }
-        $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
-        $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-        $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $prioridadMax = Servicio::max('prioridad_servicio') + 1;
-        $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'tipo', 'prefijos', 'activos'));
+    {
+        $tipo = Subtipo_servicio::findOrFail($opcion);
+        return $this->vistaListadoProyectos($request,
+            ['modo' => 'tipo', 'opcion' => 1, 'subtipo' => (int) $opcion], $tipo->nombre_subtipo_servicio);
     }
 
-    public function indexPorPrefijo(Request $request, $opcion){
-        // return $request->input('tipos');
-        // return  Vw_servicio::servicio($request->input('cod_serv'))->get();
-        $tipo_servicio = Tipo_servicio::where('nombre_tipo_servicio', 'proyecto')->first();
+    public function indexPorPrefijo(Request $request, $opcion)
+    {
+        $titulos = [1 => 'Servicios', 2 => 'Proyectos', 3 => 'Servicio de ingenieria',
+            4 => 'Mejora continua', 5 => 'Servicio de mantenimiento'];
+        abort_unless(isset($titulos[$opcion]), 404);
+        return $this->vistaListadoProyectos($request,
+            ['modo' => 'prefijo', 'opcion' => (int) $opcion], $titulos[$opcion]);
+    }
+
+    private function vistaListadoProyectos(Request $request, array $alcance, $tipo)
+    {
+        $opcion = $alcance['opcion'];
         $prefijos = Prefijo_proyecto::orderBy('nombre_prefijo_proyecto')->pluck('nombre_prefijo_proyecto', 'id_prefijo_proyecto');
-        $empleados = $this->obtenerSupervisoresAdmin();
-        // $Tipos_servicios = Subtipo_servicio::where('id_subtipo_servicio', '<', 7)->orderByRaw('FIELD(id_subtipo_servicio, "1", "2", "4", "3", "5", "6")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $Tipos_servicios = Subtipo_servicio::whereIn('id_subtipo_servicio', [3, 8, 9, 10, 11])->orderByRaw('FIELD(id_subtipo_servicio, "3", "8", "9", "10", "11")')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
+        $supervisores_admin = $this->obtenerSupervisoresAdmin();
+        $empleados = $alcance['modo'] === 'prefijo' ? $supervisores_admin
+            : Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        $Tipos_servicios = $alcance['modo'] === 'prefijo'
+            ? Subtipo_servicio::whereIn('id_subtipo_servicio', [3, 8, 9, 10, 11])
+                ->orderByRaw('FIELD(id_subtipo_servicio, 3, 8, 9, 10, 11)')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio')
+            : Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
         $prioridadMax = Servicio::max('prioridad_servicio') + 1;
         $activos = Activo::whereNotNull('codigo_activo')->orderBy('codigo_activo')->pluck('codigo_activo', 'id_activo');
-
-        switch ($opcion) {
-            case 1:
-                $tipo = 'Servicios';
-                $prefijos_busq = array();
-                // $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', '<>', 7)->orderBy('codigo_servicio')->get();
-                break;
-
-            case 2:
-                $tipo = 'Proyectos';
-                $prefijos_busq = array('AU-', 'IN-PROY-', 'DP-', 'PROY-GESTING-', 'PROY-GESTADM-', '-TAR-');
-                // $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
-                //                                                                         foreach ($prefijos_busq as $prefijo){
-                //                                                                             $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                //                                                                         }      
-                //                                                                     })->orderBy('prioridad_servicio')->get();
-                break;
-
-            case 3:
-                $tipo = 'Servicio de ingenieria';
-                $prefijos_busq = array('SSI-', 'SI-');
-                // $proyectosFilter = Vw_servicio::where('id_subtipo_servicio', 5)->where('id_estado', '<', 9)->orWhere(function ($query) use($prefijos_busq) {
-                //                                                                                                 foreach ($prefijos_busq as $prefijo){
-                //                                                                                                     $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                //                                                                                                 }      
-                //                                                                                             })->orderBy('prioridad_servicio')->get();
-                break;
-
-            case 4:
-                $tipo = 'Mejora continua';
-                $prefijos_busq = array('TMC');
-                // $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
-                //                                                                         foreach ($prefijos_busq as $prefijo){
-                //                                                                             $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                //                                                                         }      
-                //                                                                     })->orderBy('prioridad_servicio')->get();
-                break;
-            case 5:
-                $tipo = 'Servicio de mantenimiento';
-                $prefijos_busq = array('MAN');
-                // $proyectosFilter = Vw_servicio::where('id_estado', '<', 9)->where(function ($query) use($prefijos_busq) {
-                //                                                                         foreach ($prefijos_busq as $prefijo){
-                //                                                                             $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                //                                                                         }      
-                //                                                                     })->orderBy('prioridad_servicio')->get();
-                break;
+        $estados = Estado::orderBy('id_estado')->get();
+        $desplazamiento = $opcion === 3 ? 1 : 0;
+        $filtrosIniciales = [];
+        foreach ([
+            'cod_serv' => [1 + $desplazamiento, Servicio::query(), 'id_servicio', 'codigo_servicio'],
+            'tipos' => [3 + $desplazamiento, Subtipo_servicio::query(), 'id_subtipo_servicio', 'nombre_subtipo_servicio'],
+            'lid' => [4 + $desplazamiento, Empleado::query(), 'id_empleado', 'nombre_empleado'],
+            'estados' => [6 + $desplazamiento, Estado::query(), 'id_estado', 'nombre_estado'],
+        ] as $parametro => $filtro) {
+            if ($request->filled($parametro)) {
+                $request->validate([$parametro => 'array', $parametro.'.*' => 'integer']);
+                [$indice, $consulta, $id, $nombre] = $filtro;
+                $filtrosIniciales[$indice] = ['incluir' => $consulta->whereIn($id, $request->input($parametro))->pluck($nombre)->all()];
+            }
         }
+        if (!$request->filled('estados')) {
+            $filtrosIniciales[6 + $desplazamiento] = ['excluir' => $estados->where('id_estado', '>=', 9)->pluck('nombre_estado')->values()->all()];
+        }
+        $filtrosIniciales = (object) $filtrosIniciales;
+        return view('Ingenieria.Servicios.Proyectos.index', compact('empleados', 'Tipos_servicios',
+            'prioridadMax', 'prefijos', 'activos', 'tipo', 'estados', 'opcion', 'supervisores_admin', 'alcance', 'filtrosIniciales'));
+    }
 
-        // $proyectos = Vw_servicio::servicio($request->input('cod_serv'))->tipo($request->input('tipos'))->prefijo($opcion, $prefijos_busq)->lider($request->input('lid'))->estado($request->input('estados'))->where('id_subtipo_servicio', '<>', 7)->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
-        $proyectos = Vw_servicio::where('id_subtipo_servicio', '<>', 7)
-                                ->where(function ($query) use($prefijos_busq) {
-                                        foreach ($prefijos_busq as $prefijo){
-                                            $query->orwhere('codigo_servicio', 'like', '%'.$prefijo.'%');
-                                        }      
-                                })->orderByRaw('id_estado = 8')                
-                                ->orderByRaw('prioridad_servicio IS NULL') 
-                                ->orderBy('prioridad_servicio')
-                                ->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'id_subtipo_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso']);
-        
-        
-        //Para el filtro
-            $supervisores = $this->obtenerSupervisoresFiltro();
-            $codigos_servicio = $this->obtenerCodigoServicio();
-            $subtipos_servicio = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->get();
-            $estados = Estado::orderBy('id_estado')->get();
+    public function datos(Request $request)
+    {
+        $request->validate([
+            'alcance.modo' => 'required|in:todos,tipo,prefijo,activos',
+            'alcance.opcion' => 'required|integer|between:1,5',
+            'alcance.subtipo' => 'required_if:alcance.modo,tipo|integer|exists:subtipo_servicio,id_subtipo_servicio',
+            'draw' => 'required|integer|min:0',
+            'start' => 'required|integer|min:0',
+            'length' => 'required|integer|min:1|max:500',
+            'search.value' => 'nullable|string|max:500',
+            'order' => 'sometimes|array|max:9',
+            'order.*.column' => 'required|integer|between:0,9',
+            'order.*.dir' => 'required|in:asc,desc',
+            'filtrosCabecera' => 'required|json',
+        ]);
+        $filtros = json_decode($request->input('filtrosCabecera'), true);
+        validator(['filtros' => $filtros], [
+            'filtros' => 'array',
+            'filtros.*' => 'array',
+            'filtros.*.incluir' => 'sometimes|array',
+            'filtros.*.incluir.*' => 'string',
+            'filtros.*.excluir' => 'sometimes|array',
+            'filtros.*.excluir.*' => 'string',
+        ])->validate();
 
-            $flt_serv = $request->input('cod_serv');
-            $flt_tip = $request->input('tipos');
-            $flt_lid = $request->input('lid');
-            $flt_est = $request->input('estados');
-        //------------------
-        $supervisores_admin = $this->obtenerSupervisoresAdmin();
-        return view('Ingenieria.Servicios.Proyectos.index', compact('proyectos', 'empleados', 'Tipos_servicios', 'prioridadMax', 'prefijos', 'activos', 'tipo', 'supervisores', 'codigos_servicio', 'subtipos_servicio', 'estados', 'flt_serv', 'flt_tip', 'flt_lid', 'flt_est', 'opcion', 'supervisores_admin'));
+        if ($request->input('alcance.modo') === 'todos') {
+            abort_unless($request->user()->can('VER-MENU-PROYECTO'), 403);
+        } else {
+            abort_unless($request->user()->hasAnyRole(['ADMIN', 'SUPERVISOR']), 403);
+        }
+        $esActivo = $request->input('alcance.modo') === 'activos';
+        $columnas = $this->columnasTablaProyectos($request->input('alcance.opcion'), $esActivo);
+        $base = $this->consultaTablaProyectos($request->input('alcance'));
+        $total = (clone $base)->count();
+        $consulta = clone $base;
+        foreach ($filtros as $indice => $filtro) {
+            if (!isset($columnas[$indice])) continue;
+            $columna = DB::raw($columnas[$indice]);
+            if (array_key_exists('incluir', $filtro)) {
+                $consulta->whereIn($columna, $filtro['incluir']);
+            }
+            if (array_key_exists('excluir', $filtro)) {
+                $consulta->whereNotIn($columna, $filtro['excluir']);
+            }
+        }
+        $busqueda = trim($request->input('search.value', ''));
+        if ($busqueda !== '') {
+            // All terms must match; each term may occur in any searchable column.
+            foreach (preg_split('/\s+/u', $busqueda) as $termino) {
+                $consulta->where(function ($q) use ($columnas, $termino) {
+                    foreach ($columnas as $columna) {
+                        $q->orWhereRaw($columna.' LIKE ?', ['%'.$termino.'%']);
+                    }
+                });
+            }
+        }
+        $filtrados = (clone $consulta)->count();
+        if (!$esActivo) $consulta->orderByRaw('v.id_estado = 8');
+        foreach ($request->input('order', []) as $orden) {
+            $indice = (int) $orden['column'];
+            if (!isset($columnas[$indice])) continue;
+            $expresion = $columnas[$indice];
+            if (!$esActivo && $indice === 0) {
+                $consulta->orderByRaw('v.prioridad_servicio IS NULL');
+                $expresion = 'v.prioridad_servicio';
+            }
+            if (!$esActivo && $indice === ((int) $request->input('alcance.opcion') === 3 ? 6 : 5)) {
+                $expresion = 'v.progreso';
+            }
+            $consulta->orderByRaw($expresion.' '.$orden['dir']);
+        }
+        $opcion = (int) $request->input('alcance.opcion');
+        $campos = ['v.*', 'solicitud.id_solicitud as ssi'];
+        if ($esActivo) $campos[] = 'activo.descripcion_activo';
+        $proyectos = $consulta->orderBy('v.id_servicio')
+            ->offset((int) $request->input('start'))->limit((int) $request->input('length'))
+            ->select($campos)->get();
+
+        $serviciosPorActivo = collect();
+        if ($esActivo && $proyectos->isNotEmpty()) {
+            $activosPagina = $proyectos->pluck('id_activo');
+            $serviciosPorActivo = Servicio::where(function ($q) use ($activosPagina) {
+                $q->whereIn('id_activo', $activosPagina->filter(function ($id) { return $id !== null; }));
+                if ($activosPagina->contains(null)) $q->orWhereNull('id_activo');
+            })->get(['id_activo', 'id_servicio'])->groupBy('id_activo');
+        }
+        $datos = $proyectos->map(function ($proyecto) use ($opcion, $esActivo, $serviciosPorActivo) {
+            if ($esActivo) {
+                $servicios = $serviciosPorActivo->get($proyecto->id_activo ?? '', collect())
+                    ->where('id_servicio', '<>', $proyecto->id_servicio)->pluck('id_servicio');
+                return [e($proyecto->codigo_servicio ?? '-'), e($proyecto->nombre_servicio ?? '-'),
+                    e($proyecto->descripcion_activo ?? '-'),
+                    view('Ingenieria.Servicios.Proyectos.acciones-activos', compact('proyecto', 'opcion', 'servicios'))->render()];
+            }
+            $fila = [e($proyecto->prioridad_servicio ?? 'S/P')];
+            if ($opcion === 3) $fila[] = e($proyecto->ssi ?? '-');
+            foreach (['codigo_servicio', 'nombre_servicio', 'nombre_subtipo_servicio', 'lider'] as $campo) {
+                $fila[] = e($proyecto->$campo ?? '-');
+            }
+            $porcentaje = max(0, min(100, (float) $proyecto->progreso));
+            $fila[] = '<div class="progress position-relative" style="background-color:#b2baf8">'
+                .'<div class="progress-bar progress-bar-striped" role="progressbar" style="width:'.$porcentaje.'%;"'
+                .' aria-valuenow="'.$porcentaje.'" aria-valuemin="0" aria-valuemax="100">'
+                .'<span class="justify-content-center d-flex position-absolute w-100" style="color:#fff">'
+                .e(($proyecto->total_ord_completa ?? 0).'/'.($proyecto->total_ord ?? 0)).'</span></div></div>';
+            $fila[] = e($proyecto->nombre_estado ?? '-');
+            $fila[] = $proyecto->fecha_inicio ? Carbon::parse($proyecto->fecha_inicio)->format('Y-m-d') : '-';
+            $fila[] = $proyecto->fecha_limite ? Carbon::parse($proyecto->fecha_limite)->format('Y-m-d') : '-';
+            $fila[] = view('Ingenieria.Servicios.Proyectos.acciones-tabla', compact('proyecto', 'opcion'))->render();
+            return $fila;
+        });
+
+        $respuesta = [
+            'draw' => (int) $request->input('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtrados,
+            'data' => $datos->values(),
+        ];
+        if ($request->boolean('opcionesFiltros')) {
+            // Distinct values across the full table, independent of the current page.
+            $respuesta['opcionesFiltros'] = [];
+            foreach ($columnas as $indice => $columna) {
+                $respuesta['opcionesFiltros'][$indice] = (clone $base)
+                    ->selectRaw($columna.' AS valor')->distinct()->orderBy('valor')
+                    ->get()->pluck('valor')->map(function ($valor) { return (string) $valor; })->values();
+            }
+        }
+        return response()->json($respuesta);
+    }
+
+    private function consultaTablaProyectos(array $alcance)
+    {
+        $solicitudes = DB::table('sol_solicitud')->select('id_servicio')
+            ->selectRaw('MIN(id_solicitud) as id_solicitud')->whereNotNull('id_servicio')->groupBy('id_servicio');
+        $consulta = DB::table('vw_servicio as v')->leftJoinSub($solicitudes, 'solicitud', function ($join) {
+            $join->on('solicitud.id_servicio', '=', 'v.id_servicio');
+        });
+        if ($alcance['modo'] === 'activos') {
+            $consulta->leftJoin('activo', 'activo.id_activo', '=', 'v.id_activo')->where('v.id_subtipo_servicio', 7);
+        } elseif ($alcance['modo'] === 'todos') {
+            $consulta->where('v.nombre_tipo_servicio', 'proyecto');
+        } elseif ($alcance['modo'] === 'tipo') {
+            $consulta->where('v.id_subtipo_servicio', $alcance['subtipo']);
+        } else {
+            $consulta->where('v.id_subtipo_servicio', '<>', 7);
+            $prefijos = [1 => [], 2 => ['AU-', 'IN-PROY-', 'DP-', 'PROY-GESTING-', 'PROY-GESTADM-', '-TAR-'],
+                3 => ['SSI-', 'SI-'], 4 => ['TMC'], 5 => ['MAN']];
+            if ($prefijos[$alcance['opcion']]) {
+                $consulta->where(function ($q) use ($prefijos, $alcance) {
+                    foreach ($prefijos[$alcance['opcion']] as $prefijo) {
+                        $q->orWhere('v.codigo_servicio', 'like', '%'.$prefijo.'%');
+                    }
+                });
+            }
+        }
+        return $consulta;
+    }
+
+    private function columnasTablaProyectos($opcion, $esActivo = false)
+    {
+        if ($esActivo) return ["COALESCE(v.codigo_servicio, '-')", "COALESCE(v.nombre_servicio, '-')",
+            "COALESCE(activo.descripcion_activo, '-')"];
+        $columnas = ["COALESCE(v.prioridad_servicio, 'S/P')"];
+        if ((int) $opcion === 3) $columnas[] = "COALESCE(solicitud.id_solicitud, '-')";
+        return array_merge($columnas, [
+            "COALESCE(v.codigo_servicio, '-')", "COALESCE(v.nombre_servicio, '-')",
+            "COALESCE(v.nombre_subtipo_servicio, '-')", "COALESCE(v.lider, '-')",
+            "CONCAT(COALESCE(v.total_ord_completa, 0), '/', COALESCE(v.total_ord, 0))",
+            "COALESCE(v.nombre_estado, '-')", "COALESCE(DATE_FORMAT(v.fecha_inicio, '%Y-%m-%d'), '-')",
+            "COALESCE(DATE_FORMAT(v.fecha_limite, '%Y-%m-%d'), '-')",
+        ]);
     }
 
     public function indexPorActivo(Request $request)
     {
-        $proyectos = Vw_servicio::tipo([7])->orderBy('prioridad_servicio')->get(['id_servicio', 'nombre_servicio', 'codigo_servicio', 'prioridad_servicio', 'nombre_subtipo_servicio', 'lider', 'nombre_estado', 'fecha_inicio', 'fecha_limite', 'total_ord', 'total_ord_completa', 'progreso', 'id_activo']);
-        $opcion = 1;
-        return view('Ingenieria.Servicios.Proyectos.index_activos', compact('proyectos', 'opcion'));
+        return view('Ingenieria.Servicios.Proyectos.index_activos');
     }
     
     function reordenarPrioridades(){
@@ -771,120 +872,35 @@ class ProyectoController extends Controller
 
     public function gestionar(Request $request, $id)
     {
-        /* if ($request->input('tipo')) {
-            $tipo = $request->input('tipo');
-        }else{
-            $tipo = 'Servicios';
-        }
-
-        if ($request->input('prefijo')) {
-            $prefijo = $request->input('prefijo');
-        }else{
-            $prefijo = 1;
-        } */
-
-        if ($request->input('opcion')) {
-            $opcion = $request->input('opcion');
-        }else{
-            $opcion = 1;
-        }
-
+        $opcion = (int) $request->input('opcion', 1);
+        abort_unless($opcion >= 1 && $opcion <= 5, 404);
+        $proyecto = Servicio::with(['getSubTipoServicio', 'getResponsabilidad.getEmpleado', 'getActivo',
+            'servicioPadre', 'ultimaActualizacion.getActualizacion.getEstado'])->findOrFail($id);
         $Tipos_servicios = Subtipo_servicio::orderBy('nombre_subtipo_servicio')->pluck('nombre_subtipo_servicio', 'id_subtipo_servicio');
-        $proyecto = Servicio::find($id);
-        $etapas_plk = $proyecto->getEtapas->sortBy('descripcion_etapa')->pluck('descripcion_etapa', 'id_etapa');
+        $etapas_plk = Etapa::where('id_servicio', $id)->orderBy('descripcion_etapa')->pluck('descripcion_etapa', 'id_etapa');
         $empleados = Empleado::orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
         $supervisores_admin = $this->obtenerSupervisoresAdmin();
         $estados = Estado::orderBy('id_estado')->pluck('nombre_estado', 'id_estado');
         $tipo_orden = Tipo_orden_trabajo::orderBy('nombre_tipo_orden_trabajo')->pluck('nombre_tipo_orden_trabajo', 'id_tipo_orden_trabajo');
         $supervisores = $this->obtenerSupervisores();
-        $costo_estimado = DB::select('SELECT TotalCostoEstimadoServicio(?) as costo_estimado;',[$id])[0]->costo_estimado;
-        $horas_estimada = DB::select('SELECT TotalHorasEstimadoServicio(?) as horas_estimada;',[$id])[0]->horas_estimada;
-        $costo_real = DB::select('SELECT TotalCostoRealServicio(?) as costo_real;',[$id])[0]->costo_real;
-        $horas_real = DB::select('SELECT TotalHorasRealServicio(?) as horas_real;',[$id])[0]->horas_real;
-        $etapas = Vw_etapa::where('id_servicio', $id)->get();
-        $ordenes_trabajo = Vw_gest_orden_trabajo::where('id_servicio', $id)->get();
-        $ordenes_manufactura = Vw_gest_orden_manufactura::where('id_servicio', $id)->get();
-        $ordenes_mecanizado = Vw_gest_orden_mecanizado::where('id_servicio', $id)->get();
-
-        $flt_estados = Estado::orderBy('id_estado')->get();
-        $flt_supervisores = $this->obtenerSupervisoresNoPluck();
-        $flt_responsables = Empleado::orderBy('nombre_empleado')->get();
-        $flt_estados_man = Estado_manufactura::orderBy('id_estado_manufactura')->get();
-        $flt_estados_mec = Estado_mecanizado::orderBy('id_estado_mecanizado')->get();
-
-        $filtros = [
-            'responsables_etapa' => Vw_etapa::where('id_servicio', $id)->distinct()->pluck('responsable'),
-            'supervisores_trabajo' => Vw_gest_orden_trabajo::where('id_servicio', $id)->distinct()->pluck('supervisor'),
-            'responsables_trabajo' => Vw_gest_orden_trabajo::where('id_servicio', $id)->distinct()->pluck('responsable'),
-            'supervisores_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('supervisor'),
-            'responsables_manufactura' => [],
-            // 'responsables_manufactura' => Vw_gest_orden_manufactura::where('id_servicio', $id)->distinct()->pluck('responsable'),
-            'supervisores_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('supervisor'),
-            // 'responsables_mecanizado' => Vw_gest_orden_mecanizado::where('id_servicio', $id)->distinct()->pluck('responsable')
-            'responsables_mecanizado' => []
+        $costo_estimado = DB::select('SELECT TotalCostoEstimadoServicio(?) as valor', [$id])[0]->valor;
+        $horas_estimada = DB::select('SELECT TotalHorasEstimadoServicio(?) as valor', [$id])[0]->valor;
+        $costo_real = DB::select('SELECT TotalCostoRealServicio(?) as valor', [$id])[0]->valor;
+        $horas_real = DB::select('SELECT TotalHorasRealServicio(?) as valor', [$id])[0]->valor;
+        $exclusionesGestion = [
+            'etapas' => Estado::where('id_estado', '>=', 9)->pluck('nombre_estado')->all(),
+            'trabajo' => Estado::where('id_estado', '>=', 9)->pluck('nombre_estado')->all(),
+            'manufactura' => Estado_manufactura::where('id_estado_manufactura', '>=', 5)->pluck('nombre_estado_manufactura')->all(),
+            'mecanizado' => Estado_mecanizado::where('id_estado_mecanizado', '>=', 7)->pluck('nombre_estado_mecanizado')->all(),
         ];
+        return view('Ingenieria.Servicios.Proyectos.gestionar', compact('proyecto', 'opcion', 'Tipos_servicios',
+            'etapas_plk', 'empleados', 'supervisores_admin', 'estados', 'tipo_orden', 'supervisores',
+            'costo_estimado', 'costo_real', 'horas_estimada', 'horas_real', 'exclusionesGestion'));
+    }
 
-
-        foreach ($proyecto->getEtapas->sortBy('descripcion_etapa') as $etapa) {
-            foreach ($etapa->getOrden as $orden) {
-                if ($orden->getOrdenDe->getTipoOrden() == 1) {
-                    $eta_ord_trabajo[] = $orden->getEtapa->descripcion_etapa;
-                }
-
-                if ($orden->getOrdenDe->getTipoOrden() == 2) {
-                    $eta_ord_manufactura[] = $orden->getEtapa->descripcion_etapa;
-                }
-
-                if ($orden->getOrdenDe->getTipoOrden() == 3) {
-                    $eta_ord_mecanizado[] = $orden->getEtapa->descripcion_etapa;
-                }
-            }
-        }
-
-        try {
-            $flt_eta_ord_tra = array_unique($eta_ord_trabajo);
-        } catch (\Throwable $th) {
-            $flt_eta_ord_tra = [];
-        }
-    
-        try {
-            $flt_eta_ord_man = array_unique($eta_ord_manufactura);
-        } catch (\Throwable $th) {
-            $flt_eta_ord_man = [];
-        }
-        
-        try {
-            $flt_eta_ord_mec = array_unique($eta_ord_mecanizado);
-        } catch (\Throwable $th) {
-            $flt_eta_ord_mec = [];
-        }
-        
-        return view('Ingenieria.Servicios.Proyectos.gestionar',compact( 'proyecto',
-                                                                        'empleados',
-                                                                        'etapas_plk',
-                                                                        'tipo_orden',
-                                                                        'Tipos_servicios',
-                                                                        'estados',
-                                                                        'supervisores',
-                                                                        'supervisores_admin',
-                                                                        'flt_estados',
-                                                                        'flt_supervisores',
-                                                                        'flt_responsables',
-                                                                        'flt_estados_man',
-                                                                        'flt_estados_mec',
-                                                                        'flt_eta_ord_tra',
-                                                                        'flt_eta_ord_man',
-                                                                        'flt_eta_ord_mec',
-                                                                        'opcion',
-                                                                        'costo_estimado',
-                                                                        'costo_real',
-                                                                        'horas_estimada',
-                                                                        'horas_real',
-                                                                        'etapas',
-                                                                        'ordenes_trabajo',
-                                                                        'ordenes_manufactura',
-                                                                        'ordenes_mecanizado',
-                                                                        'filtros'));
+    public function datosGestion(Request $request, $id)
+    {
+        return app(\App\Services\ProyectoGestionTabla::class)->respuesta($request, $id);
     }
 
     public function costos($id)
