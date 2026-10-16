@@ -54,6 +54,7 @@
                 <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_inspeccion">
             </div>
             <div class="modal-footer">
+                @include('layouts.usuario-conectado')
                 <button id="btnGuardarNuevoParteInspeccion" type="submit" class="btn btn-success">Guardar</button>
                 <button id="btnGuardarCompletarParteInspeccion" type="submit" name="completo" value="1" class="btn btn-success">Guardar y Completar</button>
                 <div id="previewAceptarInspeccionReview" style="width: 90%;">

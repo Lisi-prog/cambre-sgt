@@ -83,6 +83,7 @@
                 <div class="me-auto" id="label_ob_diagnostico">
                     (<span class="obligatorio">*</span>) <strong><i>Obligatorio</i></strong>
                 </div>
+                @include('layouts.usuario-conectado')
                 <button type="button" onclick="aceptarManDiag()" class="btn btn-success" id="btnAceptarManDiag">Finalizar Mantenimiento</button>
                 <button onclick="diagnosticoPreSubmit('G')" id="btnGuardarNuevoParteDiagnostico" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar</button>
                 <button onclick="diagnosticoPreSubmit('C')" id="btnGuardarNuevoParteDiagnosticoCerrar" type="button" class="btn btn-success button-prevent-multiple-submits">Guardar y Completar</button>
