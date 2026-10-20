@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::resource('tarea_mantenimiento', TareaMantenimientoController::class);
     Route::resource('zona_tarea', ZonaTareaController::class);
     Route::get('parte-diagnostico/categorias/{id}', [ParteDiagnosticoController::class, 'categorias_diagnostico'])->name('parte_diagnostico.categorias');
+    Route::get('parte-diagnostico/sintomas/{id}', [ParteDiagnosticoController::class, 'sintomas'])->name('parte_diagnostico.sintomas');
     Route::resource('parte_diagnostico', ParteDiagnosticoController::class);
     Route::get('get-parte-diagnostico/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico'])->name('get_parte_diagnostico');
     Route::get('get-parte-diagnostico-completado/{id_orden}', [ParteDiagnosticoController::class, 'get_parte_diagnostico_completado'])->name('get_parte_diagnostico_completado');

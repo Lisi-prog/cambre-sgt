@@ -1,6 +1,19 @@
 var catalogoDiagnostico = [];
 var secuenciaDiagnostico = 0;
 var peticionCatalogoDiagnostico;
+var peticionSintomasDiagnostico;
+
+function cargarSintomasDiagnostico(id, porParte = false) {
+    if (peticionSintomasDiagnostico) peticionSintomasDiagnostico.abort();
+    $('#sintomas-parte-diagnostico').text('Cargando...');
+    peticionSintomasDiagnostico = $.getJSON('/parte-diagnostico/sintomas/' + id, {por_parte: porParte ? 1 : 0})
+        .done(function (sintomas) {
+            $('#sintomas-parte-diagnostico').text(sintomas.length ? sintomas.join(', ') : 'Sin síntomas registrados');
+        }).fail(function (_, estado) {
+            if (estado !== 'abort') $('#sintomas-parte-diagnostico').text('No se pudieron cargar los síntomas');
+        });
+}
+
 function textoDiagnostico(texto) {
     return $('<div>').text(texto || '').html();
 }

@@ -151,6 +151,7 @@ function checkSendNuevoParteDiagnostico() {
 }
 
 function openModalNuevoParteDiagnostico(id_orden, nombre_activo, proyecto) {
+    cargarSintomasDiagnostico(id_orden);
     cargarCatalogoDiagnostico(id_orden, getTablaDiagnosticos());
     let activoFinal = nombre_activo || $("#activo").val();
     let proyectoFinal = proyecto || $("#nombre_proyecto_i").val();
@@ -178,6 +179,7 @@ function openModalNuevoParteDiagnostico(id_orden, nombre_activo, proyecto) {
 }
 
 function openModalVerParteDiagnostico(id_orden, activo) {
+    cargarSintomasDiagnostico(id_orden);
     let activoFinal = activo || $("#activo").val();
     
     $('#nuevoParteDiagnosticoModal').modal('show');

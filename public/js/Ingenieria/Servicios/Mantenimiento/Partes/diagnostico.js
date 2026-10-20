@@ -53,6 +53,7 @@ function checkSendNuevoParteDiagnostico(){
 
 
 function openModalNuevoParteDiagnostico(id_orden){
+    cargarSintomasDiagnostico(id_orden);
     cargarCatalogoDiagnostico(id_orden, tabla_diagnosticos);
     $("#btnAceptarManDiag").hide();
     $('#nuevoParteDiagnosticoModal').modal('show');
@@ -85,6 +86,7 @@ function openModalNuevoParteDiagnostico(id_orden){
 }
 
 function openModalVerParteDiagnostico(id_orden){
+    cargarSintomasDiagnostico(id_orden);
     $("#btnAceptarManDiag").hide();
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").hide();
@@ -206,6 +208,7 @@ function openModalParteDiagnosticoPendiente(id_orden){
 }
 
 function verParteDeDiagnostico(id_parte, completado){
+    cargarSintomasDiagnostico(id_parte, true);
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").hide();
     $("#fecha").attr('disabled', 'disabled');
@@ -279,6 +282,7 @@ function checkMinutos(input) {
 }
 
 function openModalConfirmarParteDiagnostico(id_orden){
+    cargarSintomasDiagnostico(id_orden);
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").hide();
     $("#fecha").attr('disabled', 'disabled');

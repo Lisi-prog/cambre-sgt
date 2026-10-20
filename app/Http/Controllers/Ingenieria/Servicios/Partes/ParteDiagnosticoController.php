@@ -18,6 +18,19 @@ use App\Models\Cambre\Orden;
 use App\Models\Cambre\Orden_mantenimiento;
 
 class ParteDiagnosticoController extends Controller{
+    public function sintomas(Request $request, $id)
+    {
+        $idOrden = $request->boolean('por_parte') ? Parte::findOrFail($id)->id_orden : $id;
+        $orden = Orden::with('getEtapa.getServicio.getSolicitud')->findOrFail($idOrden);
+        $solicitud = optional(optional($orden->getEtapa)->getServicio)->getSolicitud;
+        $detalle = $solicitud ? ($solicitud->getServicioDeIngenieria ?? $solicitud->getServicioDeMantenimiento) : null;
+        $sintomas = $detalle ? collect($detalle->getSintomasAlt())->flatMap(function ($grupo) {
+            return collect($grupo['sintomas'])->pluck('nombre');
+        })->filter()->unique()->values() : collect();
+
+        return response()->json($sintomas);
+    }
+
     private function categoriasParaOrden($id)
     {
         $orden = Orden::with('getEtapa.getServicio.getActivo.getTipoActivo')->findOrFail($id);

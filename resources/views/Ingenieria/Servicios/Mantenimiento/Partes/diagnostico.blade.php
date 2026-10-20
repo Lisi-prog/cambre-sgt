@@ -5,6 +5,7 @@
                 <div class="d-flex w-100 align-items-center">
                     <div>
                         <h1 class="modal-title fs-5">Parte Diagnóstico</h1>
+                        <span class="d-block"><b>Sintomas</b>: <span id="sintomas-parte-diagnostico"></span></span>
                     </div>
                     <div class="ml-auto d-flex me-4">
                         <div class="form-group mb-0 p-0 d-flex align-items-center">
