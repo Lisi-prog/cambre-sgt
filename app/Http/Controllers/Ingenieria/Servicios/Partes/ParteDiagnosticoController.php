@@ -10,14 +10,36 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_diagnostico;
 use App\Models\Cambre\Parte_inspeccion;
-use App\Models\Cambre\Parte_diag_x_causa;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Validation\Rule;
 use App\Models\Cambre\Responsabilidad;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Orden;
 use App\Models\Cambre\Orden_mantenimiento;
 
 class ParteDiagnosticoController extends Controller{
+    private function categoriasParaOrden($id)
+    {
+        $orden = Orden::with('getEtapa.getServicio.getActivo.getTipoActivo')->findOrFail($id);
+        $tipo = optional(optional(optional($orden->getEtapa)->getServicio)->getActivo)->getTipoActivo;
+        return $tipo ? $tipo->getCategoriasDiagnostico()->orderBy('nombre_diagnostico_categoria')->get() : new Collection();
+    }
+
+    public function categorias_diagnostico($id)
+    {
+        return $this->categoriasParaOrden($id)->load(['getDiagnosticos' => function ($query) {
+            $query->where('en_uso', 1)->orderBy('nombre_diagnostico');
+        }]);
+    }
+
     public function store(Request $request){
+        $categorias = $this->categoriasParaOrden($request->id_orden);
+        $datos = $request->validate([
+            'diagnosticos' => 'required|array|min:1',
+            'diagnosticos.*' => ['required', 'integer', 'distinct', Rule::exists('diagnostico', 'id_diagnostico')->where(function ($query) use ($categorias) {
+                $query->whereIn('id_diagnostico_categoria', $categorias->modelKeys())->where('en_uso', 1);
+            })],
+        ]);
         try {    
             DB::beginTransaction();
             //PARTE
@@ -62,15 +84,7 @@ class ParteDiagnosticoController extends Controller{
                 }
                 $parte_diagnostico->id_parte = $parte->id_parte;
                 $parte_diagnostico->save();
-                //Parte_diag_x_causa
-                if($request->ishikawa_categoria){
-                    for($i=0; $i<count($request->ishikawa_categoria); $i++){
-                        $parte_diag_x_causa = new Parte_diag_x_causa;
-                        $parte_diag_x_causa->id_parte_diagnostico = $parte_diagnostico->id_parte_diagnostico;
-                        $parte_diag_x_causa->id_ishikawa_causa = $request->ishikawa_causa[$i];
-                        $parte_diag_x_causa->save();
-                    }
-                }
+                $parte_diagnostico->getDiagnosticos()->sync($datos['diagnosticos']);
                 if($next == 2 &&  $parte_diagnostico->en_maquina == 0){
                     $orden_vieja = Orden::find($request->id_orden);    
                     $orden_nueva = new Orden;                
@@ -119,7 +133,7 @@ class ParteDiagnosticoController extends Controller{
         ->with(
             'getParte.getResponsable.getEmpleado',
             'getParte.getOrden',
-            'getParteDiagXCausa.getIshikawaCausa.getCategoria'
+            'getDiagnosticos.getCategoria'
         )
         ->orderByDesc('id_parte_diagnostico')
         ->first();
@@ -143,9 +157,11 @@ class ParteDiagnosticoController extends Controller{
         })
         ->with('getParte.getResponsable.getEmpleado',
             'getParte.getOrden',
-            'getParteDiagXCausa.getIshikawaCausa.getCategoria')
+            'getDiagnosticos.getCategoria')
         ->get();
-        $parte_diagnostico[0]->horas = $parte_diagnostico[0]->getParte->getOrden->getHoras();
+        if ($parte_diagnostico->isNotEmpty()) {
+            $parte_diagnostico[0]->horas = $parte_diagnostico[0]->getParte->getOrden->getHoras();
+        }
         return $parte_diagnostico;
     }
 
@@ -153,7 +169,7 @@ class ParteDiagnosticoController extends Controller{
         $parte_diagnostico = Parte_diagnostico::where('id_parte', $id_parte)
         ->with(
             'getParte',
-            'getParteDiagXCausa.getIshikawaCausa.getCategoria'
+            'getDiagnosticos.getCategoria'
         )
         ->orderByDesc('id_parte_diagnostico')
         ->first();

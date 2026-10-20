@@ -31,64 +31,12 @@ $(document).ready(function () {
 var i = 0;
 
 function agregarDiagnostico() {
-    const ishikawa_categoria = document.getElementById('ishikawa_categoria_div');
-    const ishikawa_causa = document.getElementById('ishikawa_causa_div');
-
-    tabla_diagnosticos.row.add([
-        i + 1,
-        `<select required onchange="cambiarIshikawaCategoria(${i})"
-            class="form-select"
-            name="ishikawa_categoria[]"
-            id="ishikawa_categoria_${i}">
-            <option hidden value="">Seleccionar...</option>
-            ${ishikawa_categoria.innerHTML}
-        </select>`,
-        `<div id="prev_ishikawa_cat_${i}">Primero elegir 5M</div>
-         <select required hidden
-            class="form-select"
-            name="ishikawa_causa[]"
-            id="ishikawa_causa_${i}">
-            <option hidden value="">Seleccionar...</option>
-            ${ishikawa_causa.innerHTML}
-         </select>`,
-        `<button type="button" class="btn btn-danger"
-            onclick="eliminarDiagnostico(${i})">Eliminar</button>`
-    ]).node().id = `diagnostico_${i}`;
-
-    tabla_diagnosticos.draw(false);
-    i++;
-    checkSendNuevoParteDiagnostico();
+    agregarFilaDiagnostico(tabla_diagnosticos);
 }
 
-
-function cambiarIshikawaCategoria(indice){
-    ishikawa_categoria = document.getElementById(`ishikawa_categoria_${indice}`).value;
-    ishikawa_causa = document.getElementById(`ishikawa_causa_${indice}`);
-    ishikawa_causa.removeAttribute('hidden');
-    document.getElementById(`prev_ishikawa_cat_${indice}`).setAttribute('hidden', true);
-    for (let j = 0; j < ishikawa_causa.options.length; j++) {
-        if (ishikawa_causa.options[j].dataset.ishikawaCategoria == ishikawa_categoria) {
-            ishikawa_causa.options[j].removeAttribute('hidden');
-        }
-        else{
-            ishikawa_causa.options[j].setAttribute('hidden', true);
-        }
-    }
-}
-
-function eliminarDiagnostico(indice){
-   tabla_diagnosticos.row('#diagnostico_'+indice).remove().draw();
-   //Reordenar indices
-   for (let j = 0; j < tabla_diagnosticos.rows().count(); j++) {
-        const row = tabla_diagnosticos.row(j).node();
-        row.id = `diagnostico_${j}`;
-        row.querySelector('td').innerText = j + 1;
-        row.querySelector('select').setAttribute('id', `ishikawa_categoria_${j}`);
-        row.querySelectorAll('select')[1].setAttribute('id', `ishikawa_causa_${j}`);
-        row.querySelector('button').setAttribute('onclick', `eliminarDiagnostico(${j})`);
-        row.querySelector('select').setAttribute('onchange', `cambiarIshikawaCategoria(${j})`);
-    }
-    i= tabla_diagnosticos.rows().count();
+function eliminarDiagnostico(indice) {
+    const tabla = tabla_diagnosticos;
+    tabla.row('#diagnostico_' + indice).remove().draw(false);
     checkSendNuevoParteDiagnostico();
 }
 
@@ -105,6 +53,7 @@ function checkSendNuevoParteDiagnostico(){
 
 
 function openModalNuevoParteDiagnostico(id_orden){
+    cargarCatalogoDiagnostico(id_orden, tabla_diagnosticos);
     $("#btnAceptarManDiag").hide();
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").show();
@@ -171,11 +120,11 @@ function openModalVerParteDiagnostico(id_orden){
             $("input:radio[name=a_resolver]").attr("disabled", true);
             let i = 1;
             data.forEach(diagnostico => {
-                diagnostico.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+                diagnostico.get_diagnosticos.forEach(diagnosticoGuardado => {
                     tabla_diagnosticos.row.add([
                         i,
-                        parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                        parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                        textoDiagnostico(diagnosticoGuardado.get_categoria.nombre_diagnostico_categoria),
+                        textoDiagnostico(diagnosticoGuardado.nombre_diagnostico),
                         '-'
                     ]);
                     i++;
@@ -191,6 +140,7 @@ function openModalVerParteDiagnostico(id_orden){
 }
 
 function openModalParteDiagnosticoPendiente(id_orden){
+    cargarCatalogoDiagnostico(id_orden, tabla_diagnosticos);
     $("#btnAceptarManDiag").hide();
     $('#nuevoParteDiagnosticoModal').modal('show');
     $("#btnAgregarFilaDiagnostico").show();
@@ -238,11 +188,11 @@ function openModalParteDiagnosticoPendiente(id_orden){
             let i = 0;
             let tabla_already = tabla_diagnosticos.rows().count();
             data.forEach(diagnostico => {
-                diagnostico.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+                diagnostico.get_diagnosticos.forEach(diagnosticoGuardado => {
                     tabla_diagnosticos.row.add([
                         (i + tabla_already + 1),
-                        parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                        parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                        textoDiagnostico(diagnosticoGuardado.get_categoria.nombre_diagnostico_categoria),
+                        textoDiagnostico(diagnosticoGuardado.nombre_diagnostico),
                         '-'
                     ]);
                     i++;
@@ -288,11 +238,11 @@ function verParteDeDiagnostico(id_parte, completado){
             $("input:radio[name=a_resolver]").attr("disabled", true);
             let i = 0;
             let tabla_already = tabla_diagnosticos.rows().count();
-            diag.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+            diag.get_diagnosticos.forEach(diagnosticoGuardado => {
                 tabla_diagnosticos.row.add([
                     (i + tabla_already + 1),
-                    parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                    parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                    textoDiagnostico(diagnosticoGuardado.get_categoria.nombre_diagnostico_categoria),
+                    textoDiagnostico(diagnosticoGuardado.nombre_diagnostico),
                     '-'
                 ]);
                 i++;
@@ -315,7 +265,7 @@ function diagnosticoPreSubmit(tipo){
     else{
         $("#completado_diagnostico").prop('checked', false);
     }
-    $("#formNuevoParteDiagnostico").trigger( "submit" );
+    enviarParteDiagnostico(tabla_diagnosticos);
 }
 
 function checkMinutos(input) {
@@ -364,11 +314,11 @@ function openModalConfirmarParteDiagnostico(id_orden){
             $("input:radio[name=a_resolver]").attr("disabled", true);
             let i = 1;
             data.forEach(diagnostico => {
-                diagnostico.get_parte_diag_x_causa.forEach(parte_diag_x_causa => {
+                diagnostico.get_diagnosticos.forEach(diagnosticoGuardado => {
                     tabla_diagnosticos.row.add([
                         i,
-                        parte_diag_x_causa.get_ishikawa_causa.get_categoria.nombre_categoria,
-                        parte_diag_x_causa.get_ishikawa_causa.nombre_causa,
+                        textoDiagnostico(diagnosticoGuardado.get_categoria.nombre_diagnostico_categoria),
+                        textoDiagnostico(diagnosticoGuardado.nombre_diagnostico),
                         '-'
                     ]);
                     i++;

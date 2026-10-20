@@ -130,61 +130,12 @@ function showSpanAviso() {
 var i_diag = 0;
 
 function agregarDiagnostico() {
-    let tabla = getTablaDiagnosticos();
-    if (!tabla) return;
-
-    const ishikawa_categoria = document.getElementById('ishikawa_categoria_div');
-    const ishikawa_causa = document.getElementById('ishikawa_causa_div');
-
-    tabla.row.add([
-        i_diag + 1,
-        `<select required onchange="cambiarIshikawaCategoria(${i_diag})" class="form-select" name="ishikawa_categoria[]" id="ishikawa_categoria_${i_diag}">
-            <option hidden value="">Seleccionar...</option>
-            ${ishikawa_categoria.innerHTML}
-        </select>`,
-        `<div id="prev_ishikawa_cat_${i_diag}">Primero elegir 5M</div>
-         <select required hidden class="form-select" name="ishikawa_causa[]" id="ishikawa_causa_${i_diag}">
-            <option hidden value="">Seleccionar...</option>
-            ${ishikawa_causa.innerHTML}
-         </select>`,
-        `<button type="button" class="btn btn-danger" onclick="eliminarDiagnostico(${i_diag})">Eliminar</button>`
-    ]).node().id = `diagnostico_${i_diag}`;
-
-    tabla.draw(false);
-    i_diag++;
-    checkSendNuevoParteDiagnostico();
-}
-
-function cambiarIshikawaCategoria(indice) {
-    let ishikawa_categoria = document.getElementById(`ishikawa_categoria_${indice}`).value;
-    let ishikawa_causa = document.getElementById(`ishikawa_causa_${indice}`);
-    ishikawa_causa.removeAttribute('hidden');
-    document.getElementById(`prev_ishikawa_cat_${indice}`).setAttribute('hidden', true);
-
-    for (let j = 0; j < ishikawa_causa.options.length; j++) {
-        if (ishikawa_causa.options[j].dataset.ishikawaCategoria == ishikawa_categoria) {
-            ishikawa_causa.options[j].removeAttribute('hidden');
-        } else {
-            ishikawa_causa.options[j].setAttribute('hidden', true);
-        }
-    }
+    agregarFilaDiagnostico(getTablaDiagnosticos());
 }
 
 function eliminarDiagnostico(indice) {
-    let tabla = getTablaDiagnosticos();
-    if (!tabla) return;
-
-    tabla.row('#diagnostico_' + indice).remove().draw();
-    for (let j = 0; j < tabla.rows().count(); j++) {
-        const row = tabla.row(j).node();
-        row.id = `diagnostico_${j}`;
-        row.querySelector('td').innerText = j + 1;
-        row.querySelector('select').setAttribute('id', `ishikawa_categoria_${j}`);
-        row.querySelectorAll('select')[1].setAttribute('id', `ishikawa_causa_${j}`);
-        row.querySelector('button').setAttribute('onclick', `eliminarDiagnostico(${j})`);
-        row.querySelector('select').setAttribute('onchange', `cambiarIshikawaCategoria(${j})`);
-    }
-    i_diag = tabla.rows().count();
+    const tabla = getTablaDiagnosticos();
+    tabla.row('#diagnostico_' + indice).remove().draw(false);
     checkSendNuevoParteDiagnostico();
 }
 
@@ -200,6 +151,7 @@ function checkSendNuevoParteDiagnostico() {
 }
 
 function openModalNuevoParteDiagnostico(id_orden, nombre_activo, proyecto) {
+    cargarCatalogoDiagnostico(id_orden, getTablaDiagnosticos());
     let activoFinal = nombre_activo || $("#activo").val();
     let proyectoFinal = proyecto || $("#nombre_proyecto_i").val();
 
@@ -262,11 +214,11 @@ function openModalVerParteDiagnostico(id_orden, activo) {
 
             let index = 1;
             data.forEach(diagnostico => {
-                diagnostico.get_parte_diag_x_causa.forEach(parte => {
+                diagnostico.get_diagnosticos.forEach(parte => {
                     tabla.row.add([
                         index,
-                        parte.get_ishikawa_causa.get_categoria.nombre_categoria,
-                        parte.get_ishikawa_causa.nombre_causa,
+                        textoDiagnostico(parte.get_categoria.nombre_diagnostico_categoria),
+                        textoDiagnostico(parte.nombre_diagnostico),
                         '-'
                     ]);
                     index++;
@@ -295,11 +247,11 @@ function openModalParteDiagnosticoPendiente(id_orden, activo, proyecto) {
 
             let index = 0;
             data.forEach(diagnostico => {
-                diagnostico.get_parte_diag_x_causa.forEach(parte => {
+                diagnostico.get_diagnosticos.forEach(parte => {
                     tabla.row.add([
                         index + 1,
-                        parte.get_ishikawa_causa.get_categoria.nombre_categoria,
-                        parte.get_ishikawa_causa.nombre_causa,
+                        textoDiagnostico(parte.get_categoria.nombre_diagnostico_categoria),
+                        textoDiagnostico(parte.nombre_diagnostico),
                         '-'
                     ]);
                     index++;
@@ -312,7 +264,7 @@ function openModalParteDiagnosticoPendiente(id_orden, activo, proyecto) {
 
 function diagnosticoPreSubmit(tipo) {
     $("#completado_diagnostico").prop('checked', tipo === 'C');
-    $("#formNuevoParteDiagnostico").trigger("submit");
+    enviarParteDiagnostico(getTablaDiagnosticos());
 }
 
 
