@@ -94,6 +94,16 @@ class Tipo_activo extends Model
             ->get();
     }
 
+    public function getCategoriasDiagnostico()
+    {
+        return $this->belongsToMany(
+            Diagnostico_categoria::class,
+            'diag_cat_x_tipo_activo',
+            'id_tipo_activo',
+            'id_diagnostico_categoria'
+        )->using(Diag_cat_x_tipo_activo::class);
+    }
+
     public function getZonas()
     {
         return $this->belongsToMany(

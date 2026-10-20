@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ingenieria\Activos\SintomasController;
+use App\Http\Controllers\Ingenieria\Activos\DiagnosticoController;
+use App\Http\Controllers\Ingenieria\Activos\DiagnosticoCategoriaController;
 use App\Http\Controllers\Ingenieria\Activos\TiposSintomasController;
 use App\Http\Controllers\Ingenieria\Activos\ActivoController;
 use App\Http\Controllers\Ingenieria\Solicitud\SSI\ServicioDeIngenieriaController;
@@ -37,6 +39,8 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR|TECNI
     Route::put('activo/set_tareas_mantenimiento_preventiva', [ActivoController::class, 'set_tareas_mantenimiento_preventiva_activo'])->name('activo.set_tareas_mantenimiento_preventiva');
     Route::delete('activo/destroy_tarea_mantenimiento_preventiva/{id_tarea_mant}/{id_activo}', [ActivoController::class, 'destroy_tarea_mantenimiento_preventiva_activo'])->name('activo.destroy_tarea_mantenimiento_preventiva');
     Route::resource('sintoma', SintomasController::class);
+    Route::resource('diagnostico', DiagnosticoController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
+    Route::resource('diagnostico_categoria', DiagnosticoCategoriaController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
     Route::resource('tipo_sintoma', TiposSintomasController::class);
     Route::resource('ishikawa_causa', IshikawaCausaController::class);
     Route::resource('ishikawa_categoria', IshikawaCategoriaController::class);
