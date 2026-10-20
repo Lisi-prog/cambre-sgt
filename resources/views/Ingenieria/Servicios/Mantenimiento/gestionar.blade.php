@@ -98,23 +98,13 @@
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group">
                                                 {!! Form::label('sintoma', "Sintomas:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                                <div class="row">
+                                                <ul class="mb-0">
                                                     @foreach ($solicitud->getServicioDeIngenieria->getSintomasAlt() as $grupo)
-                                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                            <li class="d-flex justify-content-between align-items-start">
-                                                                <div class="ms-2 me-auto">
-                                                                    <div class="fw-bold">{{ $grupo['tipo'] }}</div>
-
-                                                                    <ul class="mb-0">
-                                                                        @foreach ($grupo['sintomas'] as $sintoma)
-                                                                            <li>{{ $sintoma['nombre'] }}</li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                </div>
-                                                            </li>
-                                                        </div>
+                                                        @foreach ($grupo['sintomas'] as $sintoma)
+                                                            <li>{{ $sintoma['nombre'] }}</li>
+                                                        @endforeach
                                                     @endforeach
-                                                </div>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
