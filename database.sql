@@ -1407,8 +1407,8 @@ CREATE TABLE `parte_diag_x_diag` (
 	`id_parte_diagnostico` INT NOT NULL,
 	`id_diagnostico` INT NOT NULL,
 	PRIMARY KEY (`id_parte_diag_x_diag`),
-	CONSTRAINT `FK_pdxc_diagnostico` FOREIGN KEY (`id_diagnostico`) REFERENCES `diagnostico` (`id_diagnostico`),
-	CONSTRAINT `FK_pdxc_parte_diagnostico` FOREIGN KEY (`id_parte_diagnostico`) REFERENCES `parte_diagnostico` (`id_parte_diagnostico`)
+	CONSTRAINT `FK_pdxd_diagnostico` FOREIGN KEY (`id_diagnostico`) REFERENCES `diagnostico` (`id_diagnostico`),
+	CONSTRAINT `FK_pdxd_parte_diagnostico` FOREIGN KEY (`id_parte_diagnostico`) REFERENCES `parte_diagnostico` (`id_parte_diagnostico`)
 );
 
 CREATE TABLE `parte_inspeccion` (
