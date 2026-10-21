@@ -29,7 +29,7 @@ class OrdenMantenimientoController extends Controller
 
 public function index(){
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
-        $orden_mantimiento = Tipo_orden_mantenimiento::where('id_tipo_orden_mantenimiento', '<>', 3)->orderBy('id_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
+        $orden_mantimiento = Tipo_orden_mantenimiento::where('id_tipo_orden_mantenimiento', '<>', 2)->orderBy('id_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
         $flt_operaciones = $flt_operaciones->merge($orden_mantimiento)->sort();
         $flt_operaciones_tec = [];
 

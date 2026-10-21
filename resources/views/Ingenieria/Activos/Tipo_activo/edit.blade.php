@@ -124,7 +124,7 @@
                     <div id="card-correctivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
-                                <h5>Tareas de Mantenimiento Correctivas (INSPECCIÓN)</h5>      
+                                <h5>Tareas de Mantenimiento Correctivas</h5>      
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarTareasMantenimientoModal">
                                     Agregar
                                 </button>                     

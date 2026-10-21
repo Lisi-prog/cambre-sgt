@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Cambre\Parte;
 use App\Models\Cambre\Parte_diagnostico;
-use App\Models\Cambre\Parte_inspeccion;
+use App\Models\Cambre\Parte_ajuste;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use App\Models\Cambre\Responsabilidad;
@@ -101,19 +101,19 @@ class ParteDiagnosticoController extends Controller{
                 if($next == 2 &&  $parte_diagnostico->en_maquina == 0){
                     $orden_vieja = Orden::find($request->id_orden);    
                     $orden_nueva = new Orden;                
-                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-INSPECCIÓN';
+                    $orden_nueva->nombre_orden = $request->nombre_proyecto . '-TAREA MANTENIMIENTO';
                     $orden_nueva->fecha_inicio = Carbon::now();
                     $orden_nueva->duracion_estimada = 0;
                     $orden_nueva->id_etapa = $orden_vieja->id_etapa;
                     $orden_nueva->costo_estimado = 0;   
                     $orden_nueva->save();
                     $orden_mantenimiento = new Orden_mantenimiento;
-                    $orden_mantenimiento->id_tipo_orden_mantenimiento = 2;
+                    $orden_mantenimiento->id_tipo_orden_mantenimiento = 3;
                     $orden_mantenimiento->esta_activo = 1;
                     $orden_mantenimiento->id_orden = $orden_nueva->id_orden;
                     $orden_mantenimiento->save();
                     $parte = new Parte;
-                    $parte->observaciones = "Generacion de orden de mantenimiento de inspección";
+                    $parte->observaciones = "Generacion de orden de tarea de mantenimiento";
                     $parte->fecha = Carbon::now();
                     $parte->fecha_carga = Carbon::now();
                     $parte->horas = 0;
@@ -126,10 +126,10 @@ class ParteDiagnosticoController extends Controller{
                                     ]);
                     $parte->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte->save();
-                    $parte_inspeccion = new Parte_inspeccion;
-                    $parte_inspeccion->id_parte = $parte->id_parte;
-                    $parte_inspeccion->id_estado_mantenimiento = 1;
-                    $parte_inspeccion->save();
+                    $parte_mantenimiento = new Parte_ajuste;
+                    $parte_mantenimiento->id_parte = $parte->id_parte;
+                    $parte_mantenimiento->id_estado_mantenimiento = 1;
+                    $parte_mantenimiento->save();
                 }
             DB::commit();
             return redirect()->back()->with("mensaje","Parte diagnóstico creado exitosamente.");

@@ -945,7 +945,7 @@ function buscarPorFiltrosOLD(){
                         </div>`;
                     }
                 }
-                else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
+                else if(ope.get_tipo_orden_mantenimiento.nombre_tipo_orden_mantenimiento == 'TAREA MANTENIMIENTO'){
                     if(ope.estado_actual == 'Espera'){
                         opciones += `
                         <div class="row my-2" hidden>
@@ -1224,7 +1224,7 @@ function cargarOperacionesPorFiltros(version){
                         </div>`;
                     }
                 }
-                else if(ope.nombre_tipo_orden_mantenimiento == 'AJUSTE'){
+                else if(ope.nombre_tipo_orden_mantenimiento == 'TAREA MANTENIMIENTO'){
                     if(ope.nombre_estado == 'Espera'){
                         opciones += `
                         <div class="row my-2" hidden>
