@@ -75,32 +75,33 @@ export function modificarFormularioConArgumentos(tipo_orden, id_formulario, edit
     // console.log('Id Formulario: ' + id_formulario);
     let formulario = document.getElementById(id_formulario);
     let html;
+    const cargas = [];
     let fecha_de_hoy = new Date(Date.now()).toISOString().split('T')[0];
     switch (Number(tipo_orden)) {
      case 1:
          formulario.innerHTML = '';
          html = editar ? opcion1Edit : opcion1;
          formulario.innerHTML += html;
-         cargarTipoOrdenTrabajo();
-         cargarSupervisores();
-         cargarEmpleados();
-         cargarEstados();
+         cargas.push(cargarTipoOrdenTrabajo());
+         cargas.push(cargarSupervisores());
+         cargas.push(cargarEmpleados());
+         cargas.push(cargarEstados());
          break;
      case 2:
          formulario.innerHTML = '';
          html = editar ? opcion2Edit : opcion2;
          formulario.innerHTML += html;
-         cargarSupervisores();
-         cargarEmpleados();
-         cargarEstadosManufacturas();
+         cargas.push(cargarSupervisores());
+         cargas.push(cargarEmpleados());
+         cargas.push(cargarEstadosManufacturas());
          break;
      case 3:
          formulario.innerHTML = '';
          html = editar ? opcion3Edit : opcion3;
          formulario.innerHTML += html;
-         cargarSupervisores();
-         cargarEmpleados();
-         cargarEstadosMecanizados();
+         cargas.push(cargarSupervisores());
+         cargas.push(cargarEmpleados());
+         cargas.push(cargarEstadosMecanizados());
          break;
      case 4:
          formulario.innerHTML = '';
@@ -112,7 +113,13 @@ export function modificarFormularioConArgumentos(tipo_orden, id_formulario, edit
     
     formulario.getElementsByClassName('form-control').namedItem('fec_ini') ? formulario.getElementsByClassName('form-control').namedItem('fec_ini').value = fecha_de_hoy : '';
     formulario.getElementsByClassName('form-control').namedItem('fec_req') ? formulario.getElementsByClassName('form-control').namedItem('fec_req').value = fecha_de_hoy : '';
-    //console.log(formulario);
+    // Compartir la espera en el formulario, incluso entre instancias del modulo.
+    const carga = $.when(...cargas);
+    if (editar) {
+        formulario.cargaOpcionesEdicion = carga;
+        formulario.solicitudEdicion = null;
+    }
+    return carga;
  }
 
 export function crearCuadrOrdenes(id_etapa){
@@ -290,7 +297,19 @@ export function cargarModalVerOrden(id_orden, tipo){
     }
 }
 
-export function cargarModalEditarOrden(id_orden, nombre_etapa){
+export async function cargarModalEditarOrden(id_orden, nombre_etapa){
+    const formulario = document.getElementById('formulario-editar-orden');
+    const solicitud = {};
+    if (formulario) {
+        formulario.solicitudEdicion = solicitud;
+        try {
+            await formulario.cargaOpcionesEdicion;
+        } catch (error) {
+            console.error('No se pudieron cargar las opciones para editar la orden.', error);
+            return;
+        }
+        if (formulario.solicitudEdicion !== solicitud) return;
+    }
     // console.log('cargarModalEditarOrden');
     // console.log('Id de la orden: ' + id_orden);
     // console.log('Nombre de la etapa: ' + nombre_etapa);
@@ -313,6 +332,8 @@ export function cargarModalEditarOrden(id_orden, nombre_etapa){
             id: id_orden,
         },
     success: function (response) {
+        // Una respuesta anterior no debe modificar otra orden abierta despues.
+        if (formulario && formulario.solicitudEdicion !== solicitud) return;
         // console.log('-------------------');
         // console.log(response);
         // console.log('-------------------');
@@ -714,7 +735,7 @@ function cargarTipoOrdenTrabajo(){
     let c_bx_tipo_orden = document.getElementById("tipo_orden_trabajo") ? document.getElementById("tipo_orden_trabajo") : '';
     let c_bx_tipo_orden_edit = document.getElementById("tipo_orden_trabajo_edit") ? document.getElementById("tipo_orden_trabajo_edit") : '';
     let html_tipo_orden = '';
-    $.when($.ajax({
+    return $.when($.ajax({
         type: "post",
         url: '/orden/obtener-tipo-orden', 
         data: {
@@ -740,7 +761,7 @@ function cargarEmpleados(){
     let c_bx_empleados = document.getElementById("cbx_responsable") ? document.getElementById("cbx_responsable") : '';
     let c_bx_empleados_edit = document.getElementById("cbx_responsable_edit") ? document.getElementById("cbx_responsable_edit") : '';
     let html_empleados = '';
-    $.when($.ajax({
+    return $.when($.ajax({
         type: "post",
         url: '/orden/obtener-empleados', 
         data: {
@@ -766,7 +787,7 @@ function cargarSupervisores(){
     let c_bx_supervisores = document.getElementById("cbx_supervisor") ? document.getElementById("cbx_supervisor") : '';
     let c_bx_supervisores_edit = document.getElementById("cbx_supervisor_edit") ? document.getElementById("cbx_supervisor_edit") : '';
     let html_supervisores = '';
-    $.when($.ajax({
+    return $.when($.ajax({
         type: "post",
         url: '/orden/obtener-supervisores', 
         data: {
@@ -792,7 +813,7 @@ function cargarEstados(){
     let c_bx_estados = document.getElementById("cbx_estado") ? document.getElementById("cbx_estado") : '';
     let c_bx_estados_edit = document.getElementById("cbx_estado_edit") ? document.getElementById("cbx_estado_edit") : '';
     let html_estados = '';
-    $.when($.ajax({
+    return $.when($.ajax({
         type: "post",
         url: '/orden/obtener-estados', 
         data: {
@@ -818,7 +839,7 @@ function cargarEstadosMecanizados(){
     let c_bx_estados_mec =  document.getElementById("cbx_estado_mec") ? document.getElementById("cbx_estado_mec") : '';
     let c_bx_estados_mec_edit =  document.getElementById("cbx_estado_mec_edit") ? document.getElementById("cbx_estado_mec_edit") : '';
     let html_estados_mec = '';
-    $.when($.ajax({
+    return $.when($.ajax({
         type: "post",
         url: '/orden/obtener-estados-mecanizados', 
         data: {
@@ -844,7 +865,7 @@ function cargarEstadosManufacturas(){
     let c_bx_estados_man = document.getElementById("cbx_estado_man") ? document.getElementById("cbx_estado_man") : '';
     let c_bx_estados_man_edit = document.getElementById("cbx_estado_man_edit") ? document.getElementById("cbx_estado_man_edit") : '';
     let html_estados_man = '';
-    $.when($.ajax({
+    return $.when($.ajax({
         type: "post",
         url: '/orden/obtener-estados-manufacturas', 
         data: {

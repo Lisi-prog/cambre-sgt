@@ -182,7 +182,23 @@
                     }
                     $('#alert-act-serv').html(html)
                     actualizarRecuadroAct(id);
-                    if (opcion === 1) $('#example').DataTable().ajax.reload(null, false);
+                    if (opcion === 1) {
+                        const tabla = $('#example').DataTable();
+                        const nodo = tabla.table().node();
+                        const abiertos = new Set(Array.from(nodo.querySelectorAll('.collapse.show'), panel => panel.id));
+                        tabla.ajax.reload(function () {
+                            nodo.querySelectorAll('.collapse').forEach(panel => {
+                                if (!abiertos.has(panel.id)) return;
+                                panel.classList.add('show');
+                                nodo.querySelectorAll('[data-bs-toggle="collapse"]').forEach(boton => {
+                                    if (boton.getAttribute('data-bs-target') !== '#' + panel.id) return;
+                                    boton.setAttribute('aria-expanded', 'true');
+                                    boton.classList.remove('collapsed');
+                                    $(boton).find('.fa-chevron-down').removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                                });
+                            });
+                        }, false);
+                    }
                     setTimeout(function(){document.getElementById('msj-modal').hidden = true;},3000);
                 }
             });

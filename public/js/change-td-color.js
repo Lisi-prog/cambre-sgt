@@ -125,73 +125,54 @@ function changeTdColor22() {
     calcularDiferenciaFechas();
 }
 
-function calcularDiferenciaFechas(){
-    let fecha_hoy = new Date();
-    let mes = fecha_hoy.getMonth() + 1;
-    let str_fechahoy = fecha_hoy.getFullYear()+'-'+mes+'-'+fecha_hoy.getDate();
-    str_fechahoy = str_fechahoy.toString();
-    const values = document.querySelectorAll("tr");
-    var fechaHoy = new Date(str_fechahoy).getTime();
-    var fechaFinalizacion;
-    var estado;
-    var text_fecha_fin = "Fecha finalizacion";
-    var indexColumnaFechaFinalizacion = [];
-    
-    
-    var text_var = "Fecha limite"
-    var elem = $('th').filter(function() {
-        return $(this).text().trim() == text_var;
+function calcularDiferenciaFechas() {
+    const ahora = new Date();
+    const hoy = Date.UTC(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+    const normalizar = texto => texto.trim().toLowerCase().normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ');
+    const fecha = texto => {
+        const valor = texto.trim();
+        let partes = valor.match(/^(\d{4})-(\d{2})-(\d{2})(?:$|[ T])/);
+        if (!partes) {
+            const inversa = valor.match(/^(\d{2})-(\d{2})-(\d{4})(?:$|[ T])/);
+            if (!inversa) return NaN;
+            partes = [inversa[0], inversa[3], inversa[2], inversa[1]];
+        }
+        const anio = Number(partes[1]), mes = Number(partes[2]), dia = Number(partes[3]);
+        const resultado = Date.UTC(anio, mes - 1, dia);
+        const validacion = new Date(resultado);
+        return validacion.getUTCFullYear() === anio && validacion.getUTCMonth() === mes - 1
+            && validacion.getUTCDate() === dia ? resultado : NaN;
+    };
+    document.querySelectorAll('table').forEach(tabla => {
+        const encabezados = Array.from(tabla.querySelectorAll('thead th')).map(celda => {
+            const titulo = (celda.querySelector('.dt-column-title') || celda).cloneNode(true);
+            titulo.querySelectorAll('button, .dt-column-order').forEach(control => control.remove());
+            return normalizar(titulo.textContent);
         });
-    var row_index_first = elem.index();
-    var row_index_first = elem.index();
-    var indexFilaEncabezados = [];
-    var indexColumnaFechaLimite = [];
-    for (let x = 0; x < values.length; x++) {
-        for (let y = 0; y < values[x].cells.length; y++) {
-            if(values[x].cells[y].innerText == text_var){
-                indexFilaEncabezados.push(x);
-            }
-        }
-    }
-    
-    indexFilaEncabezados.push(values.length);
-    indexColumnaFechaLimite = dameIndexColumnas(values, indexFilaEncabezados, text_var);
-    indexColumnaFechaFinalizacion = dameIndexColumnas(values, indexFilaEncabezados, text_fecha_fin);
-    indexColumnaEstados = dameIndexColumnas(values, indexFilaEncabezados, "Estado");
-
-    for (let y = 0; y < indexColumnaFechaLimite.length; y++) {
-        for (let x = indexFilaEncabezados[y]; x < indexFilaEncabezados[y+1]; x++) { // iterate all thorugh td
-            if (values[x].children[indexColumnaFechaLimite[y]]) {
-                values[x].children[indexColumnaFechaLimite[y]].style.color = "#fff";
-                fechaLimite = new Date(values[x].children[indexColumnaFechaLimite[y]].innerHTML).getTime();
-                try {
-                    fechaFinalizacion = new Date(values[x].children[indexColumnaFechaFinalizacion[y]].innerHTML).getTime();                
-                } catch (error) {
-
-                }            
-                estado = values[x].children[indexColumnaEstados[y]].innerHTML
-                diff = fechaLimite - fechaHoy;
-                diasDife = diff/(1000*60*60*24);
-                if(fechaFinalizacion || estado =='Completo'){
-                    values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#bebebe";
-                
-                }else{
-                    if (diasDife >= 10) {
-                        values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#109E09";
-                    }
-
-                    if (diasDife < 10) {
-                        values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E46B11";
-                    }
-
-                    if (diasDife <= 5) {
-                        values[x].children[indexColumnaFechaLimite[y]].style.backgroundColor = "#E41111";
-                    }
-                }
-            }
-        }
-    }
-    //--------------------------------
+        const limite = encabezados.indexOf('fecha limite');
+        if (limite === -1) return;
+        const finalizacion = encabezados.indexOf('fecha finalizacion');
+        const estado = encabezados.indexOf('estado');
+        Array.from(tabla.tBodies).forEach(cuerpo => {
+            Array.from(cuerpo.rows).forEach(fila => {
+                const celda = fila.cells[limite];
+                if (!celda) return;
+                const vencimiento = fecha(celda.textContent);
+                celda.style.backgroundColor = '';
+                celda.style.color = '';
+                if (!Number.isFinite(vencimiento)) return;
+                const terminada = finalizacion !== -1 && fila.cells[finalizacion]
+                    && Number.isFinite(fecha(fila.cells[finalizacion].textContent));
+                const completa = estado !== -1 && fila.cells[estado]
+                    && normalizar(fila.cells[estado].textContent) === 'completo';
+                const dias = (vencimiento - hoy) / 86400000;
+                celda.style.color = '#fff';
+                celda.style.backgroundColor = terminada || completa ? '#bebebe'
+                    : dias >= 10 ? '#109E09' : dias <= 5 ? '#E41111' : '#E46B11';
+            });
+        });
+    });
 }
 
 function castDate(str_fecha){

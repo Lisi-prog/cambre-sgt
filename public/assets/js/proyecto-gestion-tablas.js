@@ -70,8 +70,20 @@
     };
     global.recargarTablasGestion = function () {
         tablas.forEach((tabla, grupo) => {
+            const nodo = tabla.table().node();
+            const opcionesAbiertas = new Set(Array.from(nodo.querySelectorAll('.collapse.show'), panel => panel.id));
             estados.get(grupo).pedirOpciones = true;
-            tabla.ajax.reload(null, false);
+            tabla.ajax.reload(function () {
+                nodo.querySelectorAll('.collapse').forEach(panel => {
+                    if (!opcionesAbiertas.has(panel.id)) return;
+                    panel.classList.add('show');
+                    nodo.querySelectorAll('[data-bs-toggle="collapse"]').forEach(boton => {
+                        if (boton.getAttribute('data-bs-target') !== '#' + panel.id) return;
+                        boton.setAttribute('aria-expanded', 'true');
+                        boton.classList.remove('collapsed');
+                    });
+                });
+            }, false);
         });
     };
 }(window, jQuery));
