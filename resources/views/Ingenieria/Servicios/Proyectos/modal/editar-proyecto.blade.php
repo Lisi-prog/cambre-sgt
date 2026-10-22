@@ -81,7 +81,8 @@
                     <div class="col-12">
                         <div class="form-group">
                             {!! Form::label('editar_id_servicio_padre', 'Proyecto padre (opcional):', ['class' => 'control-label fs-7']) !!}
-                            <select name="id_servicio_padre" id="editar_id_servicio_padre" class="form-select" style="width: 100%">
+                            @php($tieneProyectosHijos = $proyecto->serviciosHijos()->exists())
+                            <select name="id_servicio_padre" id="editar_id_servicio_padre" class="form-select" style="width: 100%" @if($tieneProyectosHijos) disabled @endif>
                                 <option value=""></option>
                                 @if ($proyecto->id_servicio_padre && $proyecto->servicioPadre)
                                     <option value="{{ $proyecto->servicioPadre->id_servicio }}" selected>
@@ -89,6 +90,14 @@
                                     </option>
                                 @endif
                             </select>
+                            @if ($tieneProyectosHijos)
+                                <small class="form-text text-muted d-block">Este proyecto tiene hijos y no puede vincularse a un proyecto padre.</small>
+                            @else
+                                <small class="form-text text-muted d-block">Solo se buscan proyectos que no son hijos de otro.</small>
+                            @endif
+                            @error('id_servicio_padre')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                             <small class="form-text text-muted">
                                 Seleccione otro proyecto para cambiarlo o use la × para quitar el vínculo.
                             </small>

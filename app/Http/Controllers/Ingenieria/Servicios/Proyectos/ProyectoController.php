@@ -282,6 +282,7 @@ class ProyectoController extends Controller
         }
 
         $servicios = Servicio::query()
+            ->whereNull('id_servicio_padre')
             ->when($request->filled('excluir_id'), function ($query) use ($request) {
                 $query->where('id_servicio', '<>', $request->input('excluir_id'));
             })
@@ -304,6 +305,14 @@ class ProyectoController extends Controller
     }
 
     public function guardarProyecto(Request $request){
+        $this->validarProyectoPadre($request->boolean('vincular_servicio_padre') ? $request->input('id_servicio_padre') : null);
+        $etapasDisponibles = ['Investigación', 'Desarrollo', 'Manufactura', 'Puesta a Punto'];
+        $this->validate($request, [
+            'etapas' => 'sometimes|array',
+            'etapas.*' => ['string', 'distinct', \Illuminate\Validation\Rule::in($etapasDisponibles)]
+        ]);
+        $etapasSeleccionadas = $request->input('etapas', []);
+
         $activo = $request->input('id_activo');
         $codigo_proyecto = strtoupper($request->input('codigo_proyecto'));
         $nombre_proyecto = $request->input('nombre_proyecto');
@@ -382,7 +391,7 @@ class ProyectoController extends Controller
             'id_servicio' => $proyecto->id_servicio
         ]);
 
-        $nombres_eta_arr = ['Investigación', 'Desarrollo', 'Manufactura', 'Puesta a Punto'];
+        $nombres_eta_arr = array_intersect($etapasDisponibles, $etapasSeleccionadas);
 
         foreach ($nombres_eta_arr as $nom_eta) {
             $etapa = Etapa::create([
@@ -430,6 +439,7 @@ class ProyectoController extends Controller
     }
 
     public function guardarProyectoServIng(Request $request){
+        $this->validarProyectoPadre($request->boolean('vincular_servicio_padre') ? $request->input('id_servicio_padre') : null);
         $activo = $request->input('id_activo');
         $codigo_proyecto = strtoupper($request->input('codigo_proyecto'));
         $nombre_proyecto = $request->input('nombre_proyecto');
@@ -714,6 +724,7 @@ class ProyectoController extends Controller
         $servicio = Servicio::find($id);
 
         $idServicioPadre = $request->input('id_servicio_padre');
+        $this->validarProyectoPadre($idServicioPadre, $servicio);
         $idsRevisados = [];
         $posiblePadre = $idServicioPadre ? Servicio::find($idServicioPadre) : null;
 
@@ -764,6 +775,26 @@ class ProyectoController extends Controller
         return redirect()->back()->with('mensaje', 'Proyecto editado exitosamente.');                        
     }
     
+    private function validarProyectoPadre($idServicioPadre, $servicio = null)
+    {
+        if (!$idServicioPadre) {
+            return;
+        }
+
+        $padre = Servicio::find($idServicioPadre);
+        if (!$padre || $padre->id_servicio_padre) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'id_servicio_padre' => 'El proyecto padre seleccionado no puede ser hijo de otro proyecto.'
+            ]);
+        }
+
+        if ($servicio && $servicio->serviciosHijos()->exists()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'id_servicio_padre' => 'Un proyecto que tiene proyectos hijos no puede ser hijo de otro proyecto.'
+            ]);
+        }
+    }
+
     public function destroy($id)
     {
                       
