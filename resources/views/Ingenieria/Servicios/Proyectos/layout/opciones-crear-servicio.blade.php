@@ -1,4 +1,4 @@
-<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+<div class="{{ ($opcionesCompactas ?? false) ? 'col-12 col-md-6' : 'col-xs-9 col-sm-9 col-md-9 col-lg-9' }}">
     <div class="form-group">
         {!! Form::label('opt', 'Opciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
         <div class="form-check">
@@ -21,5 +21,7 @@
         </div>
     </div>
 </div>
-<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-</div>
+@unless($opcionesCompactas ?? false)
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    </div>
+@endunless
