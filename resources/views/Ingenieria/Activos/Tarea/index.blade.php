@@ -44,8 +44,8 @@
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">{{ $tarea->id_tarea_mantenimiento ?? '-'}}</td>
                                             <td class="text-start" style="vertical-align: middle;">{{ $tarea->nombre_tarea }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $tarea->getZonaTarea->nombre_zona }}</td>
-                                            <td class="text-start" style="vertical-align: middle;">{{ $tarea->getEjecucion->nombre_ejecucion }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ optional($tarea->getZonaTarea)->nombre_zona }}</td>
+                                            <td class="text-start" style="vertical-align: middle;">{{ optional($tarea->getEjecucion)->nombre_ejecucion }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     <div class="me-1" style="width: 50% !important;">

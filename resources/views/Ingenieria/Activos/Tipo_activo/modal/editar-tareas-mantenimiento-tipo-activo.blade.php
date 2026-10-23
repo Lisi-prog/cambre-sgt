@@ -12,8 +12,6 @@
                     <thead>
                         <th class='text-center' style="color:#fff;">Asignar</th>
                         <th class='text-center' style="color:#fff;">Tarea</th>
-                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                        <th class='text-center' style="color:#fff;">Zona</th>
                     </thead>
                     <tbody>                    
                         @foreach($ta->getTareasMantenimientoSinUsar() as $tarea_mantenimiento_disponible)
@@ -28,8 +26,6 @@
                                         {!! Form::label('tarea_mantenimiento_'.$tarea_mantenimiento_disponible->id_tarea_mantenimiento, $tarea_mantenimiento_disponible->nombre_tarea, ['class' => 'form-check-label']) !!}
                                     </div>
                                 </td>
-                                <td>{{$tarea_mantenimiento_disponible->getEjecucion->nombre_ejecucion}}</td>
-                                <td>{{$tarea_mantenimiento_disponible->getZonaTarea->nombre_zona}}</td>
                             </tr>
                         @endforeach 
                     </tbody>

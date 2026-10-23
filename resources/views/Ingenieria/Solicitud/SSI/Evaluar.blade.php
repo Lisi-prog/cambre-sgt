@@ -96,17 +96,9 @@
                                             {!! Form::label('descrip', "Sintomas sobre Activo:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
                                             <ul class="list-group">
                                                 @foreach ($Ssi->getSintomasAlt() as $grupo)
-                                                    <li class="d-flex justify-content-between align-items-start">
-                                                        <div class="ms-2 me-auto">
-                                                            <div class="fw-bold">{{ $grupo['tipo'] }}</div>
-
-                                                            <ul class="mb-0">
-                                                                @foreach ($grupo['sintomas'] as $sintoma)
-                                                                    <li>{{ $sintoma['nombre'] }}</li>
-                                                                @endforeach
-                                                            </ul>
-                                                        </div>
-                                                    </li>
+                                                    @foreach ($grupo['sintomas'] as $sintoma)
+                                                        <li>{{ $sintoma['nombre'] }}</li>
+                                                    @endforeach
                                                 @endforeach
                                             </ul>
                                         </div>

@@ -15,7 +15,7 @@ $(function () {
             aaSorting: []
         });
     };
-    const descripcionTarea = tarea => [tarea?.nombre_tarea, tarea?.get_ejecucion?.nombre_ejecucion, tarea?.get_zona_tarea?.nombre_zona].filter(Boolean).join(' - ');
+    const descripcionTarea = tarea => tarea?.nombre_tarea ?? '';
     const opciones = (items, valor, nombre) => '<option value="">Seleccionar...</option>' + items.map(item => `<option value="${escapar(valor(item))}">${escapar(nombre(item))}</option>`).join('');
     const campos = prefijo => `<input type="checkbox" class="form-check-input ajuste-tarea-hecha" aria-label="Tarea hecha" name="${prefijo}[hecho]" onchange="checkCompletoAjuste()">`;
     const quitar = '<button type="button" class="btn btn-danger ml-2 quitar-tarea">X</button>';
@@ -44,8 +44,14 @@ $(function () {
         const fila = $('<tr>');
         $('<td>').html(obligatoria
             ? `${escapar(nombre)} <span class="badge bg-info ml-auto">Preventiva obligatoria</span><input type="hidden" name="${prefijo}[tarea_mant]" value="${escapar(tarea.id_tarea_mantenimiento)}">`
-            : `<select required class="form-select" aria-label="Tarea, ejecución y zona" name="${prefijo}[tarea_mant]">${opciones(contexto.generales, t => t.id_tarea_mantenimiento, descripcionTarea)}</select>`).appendTo(fila);
-        if (!obligatoria) fila.find('select').val(tarea.id_tarea_mantenimiento ?? '');
+            : `<select required class="form-select" aria-label="Tarea" name="${prefijo}[tarea_mant]">${opciones(contexto.generales, t => t.id_tarea_mantenimiento, descripcionTarea)}</select>`).appendTo(fila);
+        if (!obligatoria) {
+            const select = fila.find('select').val(tarea.id_tarea_mantenimiento ?? '');
+            const etiqueta = $('<span class="badge bg-info mt-1">Preventiva</span>').appendTo(fila.find('td').first());
+            const actualizarEtiqueta = () => etiqueta.toggle(contexto.generales.some(t => t.id_tarea_mantenimiento == select.val() && t.es_preventiva));
+            select.on('change', actualizarEtiqueta);
+            actualizarEtiqueta();
+        }
         $('<td>').html(`<input maxlength="100" class="form-control" name="${prefijo}[observaciones]" value="${escapar(tarea.observaciones)}">`).appendTo(fila);
         $('<td>').html(campos(prefijo) + (obligatoria ? '' : quitar)).appendTo(fila);
         fila.find(':checkbox').prop('checked', !!tarea.hecho);
@@ -57,7 +63,7 @@ $(function () {
         tareas.forEach(tarea => {
             if (tarea.id_tarea_mantenimiento || tarea.nombre_tarea) {
                 if (editable) tareaGeneral(tarea, contexto.preventivas.some(p => p.id_tarea_mantenimiento == tarea.id_tarea_mantenimiento));
-                else general().row.add([escapar(descripcionTarea(tarea.get_tarea_mantenimiento ?? tarea)), escapar(tarea.observaciones), tarea.hecho ? 'SI' : 'NO']);
+                else general().row.add([escapar(descripcionTarea(tarea.get_tarea_mantenimiento ?? tarea)) + (tarea.es_preventiva ? ' <span class="badge bg-info">Preventiva</span>' : ''), escapar(tarea.observaciones), tarea.hecho ? 'SI' : 'NO']);
             } else if (editable) elemento(tarea);
             else tabla().row.add([escapar(tarea.get_zona_tarea?.nombre_zona), escapar(tarea.get_zona?.nombre_zona), escapar(tarea.get_accion_tarea?.nombre_accion), escapar(tarea.observaciones), tarea.hecho ? 'SI' : 'NO']);
         });

@@ -133,16 +133,12 @@
                                 <table id="tabla_tareas_mantenimiento" class="table table-striped">
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Tarea</th>
-                                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                                        <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($ta->getTareasMantenimiento as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {!! Form::open([
                                                         'method' => 'DELETE',
@@ -174,8 +170,6 @@
                                 <table id="tabla_tareas_mantenimiento_preventivas" class="table table-striped">
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Tarea</th>
-                                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                                        <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Intervalo</th>
                                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
                                         {{-- <th class='text-center' style="color:#fff;">Última Ejecución</th> --}}
@@ -185,8 +179,6 @@
                                         @foreach ($ta->getTareasMantenimientoPreventiva as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {{$tarea->intervalo_dias}}
                                                 </td>

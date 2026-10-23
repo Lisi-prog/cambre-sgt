@@ -58,7 +58,7 @@ class TareaMantenimientoController extends Controller
     {
         $request->validate([
             'nombre_tarea' => 'required|string|max:200',
-            'id_zona_tarea' => 'required|exists:zona_tarea,id_zona_tarea',
+            'id_zona_tarea' => 'nullable|exists:zona_tarea,id_zona_tarea',
             'id_ejecucion' => 'nullable|exists:tarea_ejecucion,id_ejecucion',
         ]);
 

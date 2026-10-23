@@ -31,7 +31,11 @@ class ParteAjusteController extends Controller{
             })->orWhereIn('id_tarea_mantenimiento', function ($asociadas) use ($activo) {
                 $asociadas->select('id_tarea_mantenimiento')->from('tipo_activo_x_tarea_mant')->where('id_tipo_activo', $activo->id_tipo_activo);
             });
-        })->with('getEjecucion', 'getZonaTarea')->orderBy('nombre_tarea')->get();
+        })->orderBy('nombre_tarea')->get();
+        $idsPreventivas = $activo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento');
+        foreach ($generales as $general) {
+            $general->es_preventiva = $idsPreventivas->contains($general->id_tarea_mantenimiento);
+        }
         $elementos = (new ParteInspeccionController)->get_tareas_x_activo($servicio->id_activo)->getData(true);
         $preventivas = Serv_mant_x_tarea_mant::where('id_servicio', $servicio->id_servicio)
             ->with('getTarea.getTareaMantenimiento.getEjecucion', 'getTarea.getTareaMantenimiento.getZonaTarea')->get()->map(function ($seleccion) {
@@ -46,6 +50,13 @@ class ParteAjusteController extends Controller{
     }
 
     public function store(Request $request){
+        // El formulario muestra horas y minutos con ceros a la izquierda.
+        foreach (['horas', 'minutos'] as $campo) {
+            $valor = $request->input($campo);
+            if (is_string($valor) && preg_match('/^[0-9]+$/D', $valor)) {
+                $request->merge([$campo => ltrim($valor, '0') ?: '0']);
+            }
+        }
         $request->validate([
             'id_orden' => 'required|integer|exists:orden,id_orden',
             'fecha' => 'required|date',
@@ -139,11 +150,10 @@ class ParteAjusteController extends Controller{
                             $serv->fecha_hecho = $request->fecha;
                             $serv->save();
                         }
-                        $mant = Tarea_prev_x_activo::where('id_tarea_mantenimiento', $tarea['tarea_mant'])
-                        ->where('id_activo', $parte_revisar->getOrden->getEtapa->getServicio->id_activo)->first();
-                        if($mant && $tarea_nueva->hecho == 1){
-                            $mant->fecha_ultima_ejecucion = $request->fecha;
-                            $mant->save();
+                        if ($tarea_nueva->hecho) {
+                            Tarea_prev_x_activo::where('id_tarea_mantenimiento', $tarea_nueva->id_tarea_mantenimiento)
+                                ->where('id_activo', $orden->getEtapa->getServicio->id_activo)
+                                ->update(['fecha_ultima_ejecucion' => $request->fecha]);
                         }
                     }
                     $tarea_nueva->save();
@@ -176,7 +186,7 @@ class ParteAjusteController extends Controller{
         if($parte_ajuste) {
             $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
         }
-        return response()->json($parte_ajuste);
+        return $this->respuestaParte($parte_ajuste);
     }
 
     public function procesar_parte_ajuste(Request $request){
@@ -298,7 +308,7 @@ class ParteAjusteController extends Controller{
         if($parte_ajuste) {
             $parte_ajuste->horas = $parte_ajuste->getParte->getOrden->getHoras();
         }
-        return response()->json($parte_ajuste);
+        return $this->respuestaParte($parte_ajuste);
     }
 
     public function get_parte_ajuste_porcion($id_parte){
@@ -314,6 +324,18 @@ class ParteAjusteController extends Controller{
         )
         ->orderByDesc('id_parte_ajuste')
         ->first();
-        return response()->json($parte_ajuste);
+        return $this->respuestaParte($parte_ajuste);
     }
+    private function respuestaParte($parte)
+    {
+        if ($parte) {
+            $activo = $parte->getParte->getOrden->getEtapa->getServicio->getActivo;
+            $ids = $activo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento');
+            foreach ($parte->getTareasAjuste as $tarea) {
+                $tarea->es_preventiva = $tarea->id_tarea_mantenimiento && $ids->contains($tarea->id_tarea_mantenimiento);
+            }
+        }
+        return response()->json($parte);
+    }
+
 }
