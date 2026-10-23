@@ -146,6 +146,7 @@
     </div>
 </section>
 @include('Ingenieria.Servicios.Partes.Trabajo.modal.ver-parte-trabajo')
+@include('Ingenieria.Servicios.Partes.Trabajo.modal.editar-parte-trabajo')
 <script>
     let rutaLog = "{{ route('parte.logs', ['id' => ':id']) }}";
 </script>

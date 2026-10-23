@@ -688,6 +688,49 @@ class ParteController extends Controller
         ];
     }
 
+    public function editarParteTrabajo(Request $request)
+    {
+        $datos = $request->validate([
+            'id_parte' => 'required|integer',
+            'observaciones' => 'required|string|max:500',
+            'fecha' => 'required|date_format:Y-m-d',
+            'horas' => ['required', 'regex:/^[0-9]{1,3}:[0-5][0-9]$/'],
+        ]);
+
+        return DB::transaction(function () use ($datos) {
+            $parte = Parte::whereHas('getParteTrabajo')
+                ->where('id_parte', $datos['id_parte'])->lockForUpdate()->firstOrFail();
+            $empleado = Auth::user()->getEmpleado;
+
+            if (!$empleado || ($parte->getResponsable->id_empleado != $empleado->id_empleado
+                && !Auth::user()->hasRole('SUPERVISOR'))) {
+                abort(403, 'No se puede editar un parte del cual no es responsable.');
+            }
+
+            Log_parte::create([
+                'id_parte' => $parte->id_parte,
+                'id_responsabilidad' => $parte->id_responsabilidad,
+                'observaciones' => $parte->observaciones,
+                'fecha' => $parte->fecha,
+                'fecha_limite' => $parte->fecha_limite,
+                'fecha_carga' => Carbon::now()->format('Y-m-d H:i:s'),
+                'horas' => $parte->horas,
+                'estado' => $parte->getParteTrabajo->getNombreEstado(),
+                'responsable_cambio' => $empleado->id_empleado,
+            ]);
+
+            $parte->update(Arr::only($datos, ['observaciones', 'fecha', 'horas']));
+
+            $parte->refresh();
+
+            return response()->json([
+                'resultado' => 2,
+                'message' => 'Parte actualizado correctamente.',
+                'parte' => Arr::only($parte->toArray(), ['id_parte', 'fecha', 'horas']),
+            ]);
+        });
+    }
+
     public function guardarActualizarParte(Request $request)
     {
 
