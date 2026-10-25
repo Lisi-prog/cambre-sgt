@@ -227,7 +227,7 @@
                                                                         </a>
                                                                     </div>
                                                                     @break
-                                                                @case('AJUSTE')
+                                                                @case('TAREA MANTENIMIENTO')
                                                                     {{-- @if ($orden->nombre_estado == 'Espera')
                                                                         <div class="col-12 my-2">
                                                                             <button type="button" class="btn btn-info w-100"

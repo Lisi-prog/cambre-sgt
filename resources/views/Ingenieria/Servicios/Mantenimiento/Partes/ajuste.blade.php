@@ -1,5 +1,5 @@
 <style>
-    #tabla_ajustes .ajuste-tarea-hecha {
+    #modalNuevoParteAjuste .ajuste-tarea-hecha {
         position: static;
         width: 26px;
         height: 26px;
@@ -9,12 +9,12 @@
         cursor: pointer;
     }
 
-    #tabla_ajustes .ajuste-tarea-hecha:checked {
+    #modalNuevoParteAjuste .ajuste-tarea-hecha:checked {
         background-color: #005f7f;
         border-color: #005f7f;
     }
 
-    #tabla_ajustes .ajuste-tarea-hecha:focus-visible {
+    #modalNuevoParteAjuste .ajuste-tarea-hecha:focus-visible {
         outline: 3px solid #005f7f;
         outline-offset: 3px;
     }
@@ -26,12 +26,12 @@
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <div>
-                        <h1 class="modal-title fs-5">Parte Ajuste</h1>
+                        <h1 class="modal-title fs-5">Parte Tarea Mantenimiento</h1>
                     </div>
                     <div class="ml-auto d-flex me-4">
                         <div class="form-group mb-0 p-0 d-flex align-items-center">
-                            <label for="diagnostico_label" class="my-auto">Tipo: <strong>Ajuste</strong></label>
-                            <input id="ajuste_label" disabled class="form-control" value="AJUSTE" hidden>
+                            <label for="diagnostico_label" class="my-auto">Tipo: <strong>Tarea Mantenimiento</strong></label>
+                            <input id="ajuste_label" disabled class="form-control" value="TAREA MANTENIMIENTO" hidden>
                         </div>
                         <div class="form-group mb-0 p-0 ml-4 d-flex align-items-center">
                             <label for="herramental" class="my-auto">Activo: <strong id="nombreActivoAjuste"></strong></label>
@@ -48,10 +48,10 @@
                 <hr>
                 <table class="table table-striped w-100" id="tabla_ajustes">
                     <thead>
+                        <th class="text-center" scope="col" style="color:#fff;">ZONA TAREA</th>
                         <th class="text-center" scope="col" style="color:#fff;">ELEMENTO</th>
                         <th class="text-center" scope="col" style="color:#fff;">ACCIÓN</th>
                         <th class="text-center" scope="col" style="color:#fff;">OBSERVACIONES</th>
-                        <th class="text-center" scope="col" style="color:#fff;">MÁQUINA</th>
                         <th class="text-center" scope="col" style="color:#fff;">HECHO</th>
                     </thead>
                     <tbody id="tabla_ajustes_body">
@@ -59,7 +59,21 @@
                     </tbody>
                 </table>       
                 <div class="d-flex">
-                    <button id="btnRowNuevoAjuste" onclick="agregarNuevoAjusteRow()" type="button" class="btn btn-success ml-auto">Agregar Ajuste</button>
+                    <button id="btnRowNuevoAjuste" onclick="agregarNuevoAjusteRow()" type="button" class="btn btn-success ml-auto">Agregar renglón</button>
+                </div>
+                <h2 class="h5 mt-4">Tareas Generales</h2>
+                <table class="table table-striped w-100" id="tabla_tareas_generales">
+                    <thead>
+                        <tr>
+                            <th class="text-center" scope="col" style="color:#fff;">TAREA</th>
+                            <th class="text-center" scope="col" style="color:#fff;">OBSERVACIONES</th>
+                            <th class="text-center" scope="col" style="color:#fff;">HECHO</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="d-flex">
+                    <button id="btnRowTareaGeneral" type="button" class="btn btn-success ml-auto" onclick="agregarTareaGeneral()">Agregar renglón</button>
                 </div>
                 <input type="text" hidden name="nombre_proyecto" id="nombre_proyecto_ajuste">
                 <input type="text" hidden id="id_orden_ajuste" name="id_orden">         
@@ -89,9 +103,9 @@
                 <button id="btnGuardarNuevoParteAjuste" type="submit" class="btn btn-success">Guardar</button>
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
-                        <span id="mensaje_refabricar" class="text-danger mr-2"><b>No podrá aceptarse el ajuste hasta que se finalize al menos una orden de mecanizado.</b></span>
-                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Ajuste</button>
-                        <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Ajuste</button>
+                        <span id="mensaje_refabricar" class="text-danger mr-2"><b>No podrá aceptarse la tarea de mantenimiento hasta que se finalize al menos una orden de mecanizado.</b></span>
+                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Tarea Mantenimiento</button>
+                        <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Tarea Mantenimiento</button>
                     </div>
                 </div>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
@@ -101,3 +115,5 @@
         </div>
     </div>
 </div>
+
+<script defer src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/tareas-mantenimiento.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/tareas-mantenimiento.js')) }}"></script>

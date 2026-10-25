@@ -17,50 +17,6 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            {{-- Zona --}}
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    {!! Form::label('id_zona_tarea_nueva_m', 'Zona de tarea:', [
-                                        'class' => 'control-label fs-7'
-                                    ]) !!}
-                                    <span class="obligatorio">*</span>
-                                    {!! Form::select(
-                                        'id_zona_tarea_nueva_m',
-                                        $zonas->pluck('nombre_zona', 'id_zona_tarea'),
-                                        null,
-                                        [
-                                            'class' => 'form-control',
-                                            'placeholder' => 'Seleccione una zona',
-                                            'id' => 'id_zona_tarea_nueva'
-                                        ]
-                                    ) !!}
-                                </div>
-                            </div>
-                            {{-- Ejecución --}}
-                            <div class="col-md-6 d-flex justify-content-between">
-                                <div class="form-group" style="90%;">
-                                    {!! Form::label('id_ejecucion_nueva_m', 'Ejecución de tarea:') !!}
-
-                                    {!! Form::select('id_ejecucion_nueva_m', $ejecuciones->pluck('nombre_ejecucion', 'id_ejecucion'), null, [
-                                        'class' => 'form-control',
-                                        'placeholder' => 'Seleccione una ejecución',
-                                        'id' => 'id_ejecucion_nueva_m'
-                                    ]) !!}
-
-                                    {!! Form::text('ejecucion_nueva_m', null, [
-                                        'class' => 'form-control mt-2',
-                                        'placeholder' => 'Nueva ejecución',
-                                        'id' => 'ejecucion_nueva_m',
-                                        'style'=>'display:none;'
-                                    ]) !!}
-                                </div>
-
-                                <div class="ms-2 mt-4">
-                                    <button type="button" class="btn btn-success" onclick="mostrarInputEjecucion()">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
                             {{-- Nombre tarea --}}
                             <div class="col-md-12 mt-3">
                                 {!! Form::label('nombre_tarea_nueva_m', 'Nombre tarea:') !!}
@@ -71,7 +27,7 @@
                                 ]) !!}
                             </div>
                             <div class="col-md-12 mt-3 text-end">
-                                <button type="button" class="btn btn-primary" onclick="guardarNuevaTarea()">
+                                <button type="button" class="btn btn-primary" onclick="guardarNuevaTarea(this)">
                                     Guardar nueva tarea
                                 </button>
                             </div>
@@ -82,8 +38,6 @@
                     <thead>
                         <th class='text-center' style="color:#fff;">Asignar</th>
                         <th class='text-center' style="color:#fff;">Tarea</th>
-                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                        <th class='text-center' style="color:#fff;">Zona</th>
                         <th class='text-center' style="color:   #fff;">Intervalo</th>
                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
                         <th class='text-center' style="color:#fff;">Fecha Última Ejecución</th>
@@ -109,8 +63,6 @@
                                         {!! Form::label('tarea_mantenimiento_'.$tarea_mantenimiento_disponible->id_tarea_mantenimiento, $tarea_mantenimiento_disponible->nombre_tarea, ['class' => 'form-check-label']) !!}
                                     </div>
                                 </td>
-                                <td>{{$tarea_mantenimiento_disponible->getEjecucion->nombre_ejecucion}}</td>
-                                <td>{{$tarea_mantenimiento_disponible->getZonaTarea->nombre_zona}}</td>
                                 <td>
                                     {!! Form::number('duracion_'.$tarea_mantenimiento_disponible->id_tarea_mantenimiento, null, [
                                         'class' => 'form-control input-tarea w-100',

@@ -503,8 +503,6 @@ class MantenimientoDeActivoController extends Controller
     public function gestionar($id){
         $proyecto = Servicio::find($id);
         $solicitud = Sol_solicitud::where('id_servicio', $id)->first();
-        $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
-        $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $ordenes_mantenimiento = Orden::join('orden_mantenimiento as om', 'om.id_orden', '=', 'orden.id_orden')
                                 ->where('orden.id_etapa', $proyecto->getEtapas->first()->id_etapa)->get();
@@ -566,7 +564,7 @@ class MantenimientoDeActivoController extends Controller
                         ->select('emp.id_empleado', 'emp.nombre_empleado') // opcional, podés ajustar
                         ->orderBy('emp.nombre_empleado')
                         ->get();
-        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud', 'ishikawa_categorias', 'ishikawa_causas', 
+        return view('Ingenieria.Servicios.Mantenimiento.gestionar', compact('empleados', 'proyecto', 'solicitud',
         'acciones', 'ordenes_mantenimiento', 'zonas', 'maquinas', 'ordenes_mecanizado', 'estados_mecanizado', 'supervisores', 'tareas_mantenimiento', 'estados',
         'supervisores_admin', 'tareas_preventivas', 'elementos'));
     }

@@ -90,12 +90,8 @@ class Activo extends Model
                 ->toArray()
         );
 
-        $zonasIds = $this->getTipoActivo->getZonas()
-            ->pluck('zona_tarea.id_zona_tarea')
-            ->toArray();
-
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
-            ->whereIn('id_zona_tarea', $zonasIds)
+            ->where('en_uso', 1)
             ->orderBy('nombre_tarea', 'ASC')
             ->get();
     }
@@ -127,12 +123,7 @@ class Activo extends Model
                 ->toArray()
         );
 
-        $zonasIds = $this->getTipoActivo->getZonas()
-            ->pluck('zona_tarea.id_zona_tarea')
-            ->toArray();
-
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
-            ->whereIn('id_zona_tarea', $zonasIds)
             ->orderBy('nombre_tarea', 'ASC')
             ->get();
     }

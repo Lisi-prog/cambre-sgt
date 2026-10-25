@@ -187,7 +187,7 @@
                     <div id="card-correctivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
-                                <h5>Tareas de Mantenimiento Correctivas (INSPECCIÓN)</h5>      
+                                <h5>Tareas de Mantenimiento Correctivas</h5>      
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarTareasMantenimientoModal">
                                     Agregar
                                 </button>                     
@@ -196,16 +196,12 @@
                                 <table id="tabla_tareas_mantenimiento" class="table table-striped">
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Tarea</th>
-                                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                                        <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($activo->getTareasMantenimiento as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {!! Form::open([
                                                         'method' => 'DELETE',
@@ -222,8 +218,6 @@
                                         @foreach ($activo->getTipoActivo->getTareasMantenimiento as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     Esta tarea pertenece al tipo de activo.
                                                 </td>
@@ -246,8 +240,6 @@
                                 <table id="tabla_tareas_mantenimiento_preventivas" class="table table-striped">
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Tarea</th>
-                                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                                        <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Intervalo</th>
                                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
                                         <th class='text-center' style="color:#fff;">Última Ejecución</th>
@@ -257,8 +249,6 @@
                                         @foreach ($activo->getTareasMantenimientoPreventiva as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {{$tarea->intervalo_dias}}
                                                 </td>
@@ -289,8 +279,6 @@
                                         {{-- @foreach ($activo->getTipoActivo->getTareasMantenimientoPreventiva as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {{$tarea->intervalo_dias}}
                                                 </td>
@@ -490,16 +478,15 @@
         $(`#${id}`).toggleClass("d-none");
     }
 
-    function guardarNuevaTarea(){
+    function guardarNuevaTarea(boton){
+        const card = $(boton).closest(".card");
         $.ajax({
             url: '{{ route('tarea_mantenimiento.store') }}',
             type: 'POST',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content'),
 
-                nombre_tarea: $("#nombre_tarea_nueva").val() ?? $("#nombre_tarea_nueva_m").val(),
-                id_zona_tarea: $("#id_zona_tarea_nueva").val() ?? $("#id_zona_tarea_nueva_m").val(),
-                id_ejecucion: $("#id_ejecucion_nueva").val() ?? $("#id_ejecucion_nueva_m").val(),
+                nombre_tarea: card.find("input[name^=nombre_tarea_nueva]").val(),
                 id_activo: $("#id_activo").val() ?? $("#id_activo").val(),
             },
             success:function(response){

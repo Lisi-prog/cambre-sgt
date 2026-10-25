@@ -5,6 +5,7 @@
                 <div class="d-flex w-100 align-items-center">
                     <div>
                         <h1 class="modal-title fs-5">Parte Diagnóstico</h1>
+                        <span class="d-block"><b>Sintomas</b>: <span id="sintomas-parte-diagnostico"></span></span>
                     </div>
                     <div class="ml-auto d-flex me-4">
                         <div class="form-group mb-0 p-0 d-flex align-items-center">
@@ -30,7 +31,7 @@
                         <table class="table table-striped table-sm" id="tabla_diagnosticos" style="width: 100%;">
                             <thead>
                                 <th class='text-center' style="color:#fff;">Nº</th>
-                                <th class='text-center' style="color:#fff; width: 30%;"><span class="obligatorio mr-1">*</span>CATEGORÍA 5M</th>
+                                <th class='text-center' style="color:#fff; width: 30%;"><span class="obligatorio mr-1">*</span>CATEGORÍA DE DIAGNÓSTICO</th>
                                 <th class='text-center' style="color:#fff; width: 30%;"><span class="obligatorio mr-1">*</span>DIAGNÓSTICO</th>
                                 <th class='text-center' style="color:#fff;">BORRAR</th>
                             </thead>
@@ -93,3 +94,5 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/Ingenieria/Servicios/Mantenimiento/Partes/catalogo-diagnostico.js') }}?ver={{ filemtime(public_path('js/Ingenieria/Servicios/Mantenimiento/Partes/catalogo-diagnostico.js')) }}"></script>

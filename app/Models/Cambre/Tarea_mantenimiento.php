@@ -19,7 +19,7 @@ class Tarea_mantenimiento extends Model
     public $incrementing = true;
 
     protected $fillable = [ 
-        'nombre_tarea', 'id_ejecucion', 'id_zona_tarea'
+        'nombre_tarea', 'id_ejecucion', 'id_zona_tarea', 'en_uso'
     ];
 
     public function getEjecucion()
