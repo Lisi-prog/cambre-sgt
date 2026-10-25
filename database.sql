@@ -1271,8 +1271,9 @@ CREATE TABLE `zona_tarea_x_tipo_activo` (
 CREATE TABLE `tarea_mantenimiento` (
 	`id_tarea_mantenimiento` INT NOT NULL AUTO_INCREMENT,
 	`nombre_tarea` VARCHAR(200) NOT NULL,
-	`id_ejecucion` INT NOT NULL,
-	`id_zona_tarea` INT NOT NULL,
+	`id_ejecucion` INT NULL,
+	`id_zona_tarea` INT NULL,
+  `en_uso` boolean DEFAULT 1,
 	PRIMARY KEY (`id_tarea_mantenimiento`),
 	CONSTRAINT `FK_tm_x_ejecucion` FOREIGN KEY (`id_ejecucion`) REFERENCES `tarea_ejecucion` (`id_ejecucion`),
 	CONSTRAINT `FK_tm_x_zona_tarea` FOREIGN KEY (`id_zona_tarea`) REFERENCES `zona_tarea` (`id_zona_tarea`)

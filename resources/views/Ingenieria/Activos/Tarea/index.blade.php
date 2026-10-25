@@ -34,6 +34,7 @@
                                     <th class='text-center' style="color:#fff;">Nombre</th>
                                     <th class='text-center' style="color:#fff;">Zona</th>
                                     <th class='text-center' style="color:#fff;">Ejecución</th>
+                                    <th class='text-center' style="color:#fff;">En uso</th>
                                     <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
                                 <tbody id="tabla_tareas_body">
@@ -46,6 +47,7 @@
                                             <td class="text-start" style="vertical-align: middle;">{{ $tarea->nombre_tarea }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ optional($tarea->getZonaTarea)->nombre_zona }}</td>
                                             <td class="text-start" style="vertical-align: middle;">{{ optional($tarea->getEjecucion)->nombre_ejecucion }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $tarea->en_uso == 1 ? 'SI' : 'NO' }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     <div class="me-1" style="width: 50% !important;">

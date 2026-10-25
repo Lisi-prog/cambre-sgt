@@ -55,6 +55,7 @@ class Tipo_activo extends Model
             ->toArray();
 
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
+            ->where('en_uso', 1)
             ->orderBy('nombre_tarea', 'ASC')
             ->get();
     }

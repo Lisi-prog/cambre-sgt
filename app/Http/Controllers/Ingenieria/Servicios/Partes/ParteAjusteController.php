@@ -31,7 +31,7 @@ class ParteAjusteController extends Controller{
             })->orWhereIn('id_tarea_mantenimiento', function ($asociadas) use ($activo) {
                 $asociadas->select('id_tarea_mantenimiento')->from('tipo_activo_x_tarea_mant')->where('id_tipo_activo', $activo->id_tipo_activo);
             });
-        })->orderBy('nombre_tarea')->get();
+        })->where('en_uso', 1)->orderBy('nombre_tarea')->get();
         $idsPreventivas = $activo->getTareasMantenimientoPreventiva()->pluck('id_tarea_mantenimiento');
         foreach ($generales as $general) {
             $general->es_preventiva = $idsPreventivas->contains($general->id_tarea_mantenimiento);
@@ -133,7 +133,7 @@ class ParteAjusteController extends Controller{
                         $tarea_nueva->id_tarea_mantenimiento = $tarea['tarea_mant'] ?? null;
                     }
                     $tarea_nueva->id_maquinaria = null;
-                    $tarea_nueva->nombre_tarea = $tarea['nombre_tarea'] ?? null;
+                    // $tarea_nueva->nombre_tarea = $tarea['nombre_tarea'] ?? null;
                     if (isset($tarea['observaciones'])) {
                         $tarea_nueva->observaciones = $observaciones;
                     }

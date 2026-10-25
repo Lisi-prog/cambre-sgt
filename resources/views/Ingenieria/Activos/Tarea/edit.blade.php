@@ -65,6 +65,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group form-check">
+                                    {!! Form::hidden('en_uso', 0) !!}
+                                    {!! Form::checkbox('en_uso', 1, null, ['class' => 'form-check-input', 'id' => 'en_uso']) !!}
+                                    {!! Form::label('en_uso', 'En uso', ['class' => 'form-check-label']) !!}
+                                </div>
+                            </div>
+                        </div>
                         <div class="row pt-3">
                             <div class="d-flex">
                                 <div class="me-auto">
