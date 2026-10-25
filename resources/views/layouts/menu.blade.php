@@ -282,6 +282,11 @@
                         </a>
                     </li>
                     <li>
+                        <a class="nav-link" href="{{route('diagnostico.index')}}" title="Diagnostico">
+                            <i class="fas fa-briefcase-medical"></i><span>Diagnotico</span>
+                        </a>
+                    </li>
+                    <li>
                         <a class="nav-link" href="{{route('ishikawa_causa.index')}}" title="Las 5 M">
                             <i class="fas fa-comments"></i><span>Las 5 M's</span>
                         </a>

@@ -104,8 +104,8 @@
                 <div id="previewAceptarAjusteReview" style="width: 90%;">
                     <div class="d-flex justify-content-center">
                         <span id="mensaje_refabricar" class="text-danger mr-2"><b>No podrá aceptarse la tarea de mantenimiento hasta que se finalize al menos una orden de mecanizado.</b></span>
-                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Tarea Mantenimiento</button>
-                        <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Tarea Mantenimiento</button>
+                        <button id="btnAceptarAjusteReview" onclick="procesarAjuste('aceptar')" type="button" style="width: 200px;" class="btn btn-success">Aceptar Tarea Mant.</button>
+                        <button onclick="procesarAjuste('rechazar')" type="button" style="width: 200px;" class="btn btn-danger ml-2">Rechazar Tarea Mant.</button>
                     </div>
                 </div>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
