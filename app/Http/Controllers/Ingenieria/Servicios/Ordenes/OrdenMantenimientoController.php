@@ -29,7 +29,7 @@ class OrdenMantenimientoController extends Controller
 
 public function index(){
         $flt_operaciones = Operacion::orderBy('nombre_operacion')->pluck('nombre_operacion');
-        $orden_mantimiento = Tipo_orden_mantenimiento::where('id_tipo_orden_mantenimiento', '<>', 3)->orderBy('id_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
+        $orden_mantimiento = Tipo_orden_mantenimiento::where('id_tipo_orden_mantenimiento', '<>', 2)->orderBy('id_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
         $flt_operaciones = $flt_operaciones->merge($orden_mantimiento)->sort();
         $flt_operaciones_tec = [];
 
@@ -67,8 +67,6 @@ public function index(){
 
         $flt_tecnicos = $this->obtenerTecnicosDeOperaciones();
 
-        $ishikawa_categorias = Ishikawa_categoria::orderBy('nombre_categoria')->get();
-        $ishikawa_causas = Ishikawa_causa::orderBy('nombre_causa')->get();
         $acciones = Accion_para_tarea::orderBy('nombre_accion')->get();
         $zonas = Zona::orderBy('nombre_zona')->get();
         $tareas_mantenimiento = Tarea_mantenimiento::select('tarea_mantenimiento.*', 'tipo_activo_x_tarea_mant.id_tipo_activo', 'activo_x_tarea_mant.id_activo')
@@ -107,7 +105,7 @@ public function index(){
         $empleados = Empleado::where('esta_activo', 1)->orderBy('nombre_empleado')->get();
  */
         return view('Ingenieria.Servicios.HDR.operaciones.ordenes_mantenimiento', compact('flt_estados', 'flt_maquinas', 'flt_operaciones', 'flt_proyectos', 'flt_operaciones_tec', 'flt_tecnicos',
-        'ishikawa_categorias', 'ishikawa_causas', 'acciones', 'zonas', 'maquinas', 'tareas_mantenimiento', 'elementos'
+        'acciones', 'zonas', 'maquinas', 'tareas_mantenimiento', 'elementos'
         ));
     }
 

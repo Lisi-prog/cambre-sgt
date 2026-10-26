@@ -52,7 +52,7 @@
                 </div>
                 <div class="card">
                     <div><h6 class="p-2">Configuración</h6></div>
-                    <div class="card-body d-flex justify-content-between">
+                    <div class="card-body d-flex flex-wrap justify-content-between">
                         <button class="btn btn-outline-primary btn-config"
                                 data-target="#card-sintomas" style="width: 23%;"> 
                             Síntomas
@@ -71,6 +71,10 @@
                         <button class="btn btn-outline-primary btn-config"
                                 data-target="#card-zonas" style="width: 23%;">
                             Zonas
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-config mt-2 w-100"
+                                data-target="#card-categorias-diagnostico">
+                            Categorías de diagnóstico
                         </button>
                     </div>
                 </div>
@@ -120,7 +124,7 @@
                     <div id="card-correctivas" class="card d-none card-config">
                         <div class="card-body">
                             <div class="d-flex justify-content-between mb-2">
-                                <h5>Tareas de Mantenimiento Correctivas (INSPECCIÓN)</h5>      
+                                <h5>Tareas de Mantenimiento Correctivas</h5>      
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editarTareasMantenimientoModal">
                                     Agregar
                                 </button>                     
@@ -129,16 +133,12 @@
                                 <table id="tabla_tareas_mantenimiento" class="table table-striped">
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Tarea</th>
-                                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                                        <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Acciones</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($ta->getTareasMantenimiento as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {!! Form::open([
                                                         'method' => 'DELETE',
@@ -170,8 +170,6 @@
                                 <table id="tabla_tareas_mantenimiento_preventivas" class="table table-striped">
                                     <thead>
                                         <th class='text-center' style="color:#fff;">Tarea</th>
-                                        <th class='text-center' style="color:#fff;">Ejecución</th>
-                                        <th class='text-center' style="color:#fff;">Zona</th>
                                         <th class='text-center' style="color:#fff;">Intervalo</th>
                                         <th class='text-center' style="color:#fff;">Cantidad de Golpes</th>
                                         {{-- <th class='text-center' style="color:#fff;">Última Ejecución</th> --}}
@@ -181,8 +179,6 @@
                                         @foreach ($ta->getTareasMantenimientoPreventiva as $tarea)
                                             <tr>
                                                 <td>{{$tarea->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$tarea->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
                                                 <td class="text-center">
                                                     {{$tarea->intervalo_dias}}
                                                 </td>
@@ -209,6 +205,44 @@
                                 </table>
                             </div>
                         </div>                        
+                    </div>
+
+                    <div id="card-categorias-diagnostico" class="card card-config d-none">
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('tipo_activo.set_categorias_diagnostico', $ta->id_tipo_activo) }}">
+                                @csrf
+                                @method('PUT')
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 class="mb-0">Categorías de diagnóstico asociadas</h5>
+                                        <small class="text-muted">Seleccione las categorías que corresponden a este tipo de activo.</small>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                </div>
+                                @php
+                                    $categoriasSeleccionadas = old('categorias_diagnostico', $ta->getCategoriasDiagnostico->modelKeys());
+                                @endphp
+                                <div class="row">
+                                    @forelse ($categoriasDiagnostico as $categoria)
+                                        <div class="col-md-6 mb-2">
+                                            <div class="border rounded p-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="categorias_diagnostico[]"
+                                                        value="{{ $categoria->id_diagnostico_categoria }}"
+                                                        id="categoria-diagnostico-{{ $categoria->id_diagnostico_categoria }}"
+                                                        {{ in_array($categoria->id_diagnostico_categoria, $categoriasSeleccionadas) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="categoria-diagnostico-{{ $categoria->id_diagnostico_categoria }}">
+                                                        {{ $categoria->nombre_diagnostico_categoria }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="col-12 text-muted">No hay categorías de diagnóstico disponibles.</div>
+                                    @endforelse
+                                </div>
+                            </form>
+                        </div>
                     </div>
 
                     <div id="card-zonas" class="card card-config d-none">
@@ -286,6 +320,10 @@
     $(document).ready(function () {
         var url = '{{route('activos.index')}}';
         document.getElementById('volver').href = url;
+        var configActiva = @json(session('config_activa', $errors->has('categorias_diagnostico*') ? '#card-categorias-diagnostico' : null));
+        if (configActiva) {
+            $(configActiva).removeClass('d-none');
+        }
 
         $('#tabla_sintomas').DataTable({
             language: {

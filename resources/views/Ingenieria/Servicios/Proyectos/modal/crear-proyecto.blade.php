@@ -112,6 +112,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <fieldset class="form-group">
+                            <legend class="control-label fs-7">Etapas a crear:</legend>
+                            @foreach (['Investigación', 'Desarrollo', 'Manufactura', 'Puesta a Punto'] as $indice => $nombreEtapa)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="etapas[]"
+                                        id="crear_proyecto_etapa_{{ $indice }}" value="{{ $nombreEtapa }}" checked>
+                                    <label class="form-check-label" for="crear_proyecto_etapa_{{ $indice }}">
+                                        {{ $nombreEtapa }}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <small class="form-text text-muted">Se crearán únicamente las etapas seleccionadas.</small>
+                        </fieldset>
+                    </div>
+                    @include('Ingenieria.Servicios.Proyectos.layout.opciones-crear-servicio', ['opcionesCompactas' => true])
+                </div>
                 <div class="row" id="busqServPadre">
                     <div class="col-12">
                         <div class="form-group">
@@ -134,7 +152,6 @@
                 </div>
                 <div class="row">
                     @include('Ingenieria.Servicios.Proyectos.layout.opciones-crear-servicio')
-
                 </div>
             </div>
 

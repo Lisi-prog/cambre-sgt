@@ -248,6 +248,7 @@
             </div>
 
             <div class="modal-footer">
+                @include('layouts.usuario-conectado')
                 {{-- <button type="submit" class="btn btn-success">Guardar</button> --}}
                 <button type="submit" class="btn btn-success button-prevent-multiple-submits-3sec" id="m-ver-parte-orden-btn">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

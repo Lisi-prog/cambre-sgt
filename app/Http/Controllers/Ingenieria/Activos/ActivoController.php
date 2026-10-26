@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Cambre\Activo;
 use App\Models\Cambre\Tipo_activo;
+use App\Models\Cambre\Diagnostico_categoria;
 use App\Models\Cambre\Servicio;
 use App\Models\Cambre\Rol_empleado;
 use App\Models\Cambre\Estado;
@@ -331,9 +332,10 @@ class ActivoController extends Controller
     }
 
     public function tipo_activo_edit($id){
-        $ta = Tipo_activo::find($id);
+        $ta = Tipo_activo::with('getCategoriasDiagnostico')->findOrFail($id);
         $zonas = Zona_tarea::orderBy('nombre_zona')->get();
-        return view('Ingenieria.Activos.Tipo_activo.edit', compact('ta', 'zonas'));
+        $categoriasDiagnostico = Diagnostico_categoria::orderBy('nombre_diagnostico_categoria')->get();
+        return view('Ingenieria.Activos.Tipo_activo.edit', compact('ta', 'zonas', 'categoriasDiagnostico'));
     }
 
     public function tipo_activo_update(Request $request, $id){
@@ -613,6 +615,21 @@ class ActivoController extends Controller
         ]);
 
         return redirect()->back()->with('mensaje', 'Tarea preventiva actualizada exitosamente.');
+    }
+
+    public function set_categorias_diagnostico(Request $request, $id)
+    {
+        $tipo = Tipo_activo::findOrFail($id);
+        $datos = $request->validate([
+            'categorias_diagnostico' => 'sometimes|array',
+            'categorias_diagnostico.*' => 'required|integer|distinct|exists:diagnostico_categoria,id_diagnostico_categoria',
+        ]);
+
+        $tipo->getCategoriasDiagnostico()->sync($datos['categorias_diagnostico'] ?? []);
+
+        return redirect()->route('tipo_activo.edit', $id)
+            ->with('mensaje', 'Categorías de diagnóstico actualizadas correctamente.')
+            ->with('config_activa', '#card-categorias-diagnostico');
     }
 
     public function set_zonas(Request $request, $id)

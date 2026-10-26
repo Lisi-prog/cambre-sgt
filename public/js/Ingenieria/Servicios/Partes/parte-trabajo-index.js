@@ -38,6 +38,43 @@ $(function () {
         cargarPartes();
     });
 
+    $('#editar-parte-trabajo').on('submit', function (event) {
+        event.preventDefault();
+        const formulario = $(this);
+        const boton = $('#btn-guardar-parte-trabajo');
+        if (boton.prop('disabled')) return;
+        $('#ep_mensaje').addClass('d-none').text('');
+        boton.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: formulario.attr('action'),
+            data: formulario.serialize(),
+            headers: { Accept: 'application/json' },
+            success: function (respuesta) {
+                const parte = respuesta.parte;
+                const fila = table.row(function (indice, datos) {
+                    return String(datos[0]) === String(parte.id_parte);
+                });
+                if (fila.any()) {
+                    const datos = fila.data();
+                    datos[4] = parte.fecha ?? '-';
+                    datos[7] = parte.horas ?? '-';
+                    fila.data(datos).draw(false);
+                }
+                mostrarMensajeEditarParte(respuesta.message, 'success');
+            },
+            error: function (xhr) {
+                const respuesta = xhr.responseJSON;
+                mostrarMensajeEditarParte(respuesta?.errors
+                    ? Object.values(respuesta.errors).flat().join('\n')
+                    : respuesta?.message || 'No se pudo actualizar el parte. Intentá nuevamente.', 'danger');
+            },
+            complete: function () {
+                boton.prop('disabled', false);
+            }
+        });
+    });
+
     $('#verParteTrabajoModal').on('hidden.bs.modal', function (e) {
         limpiarModal();
     })
@@ -82,10 +119,13 @@ function cargarPartes(cargaInicial = false){
                     8: e.responsable ?? '-',
                     9: e.supervisor ?? '-',
                     10: `<div class="d-flex">
-                            <div class="me-1" style="width: 50% !important;">
+                            <div class="me-1 flex-fill">
                                 <button title="Ver" type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#verParteTrabajoModal" onclick="cargarModalVerParteTrabajo(${e.id_parte})"><i class="fas fa-eye"></i></button>
                             </div>
-                            <div class="me-1" style="width: 50% !important;">
+                            <div class="me-1 flex-fill">
+                                <button title="Editar" type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#editarParteTrabajoModal" onclick="cargarModalEditarParteTrabajo(${e.id_parte})"><i class="fas fa-edit"></i></button>
+                            </div>
+                            <div class="me-1 flex-fill">
                                 <a href="${urlLog}" class="btn btn-info w-100" title="Logs"><i class="fas fa-clipboard-list"></i></a>
                             </div>
                         </div>`
@@ -129,6 +169,36 @@ function cargarModalVerParteTrabajo(id){
         }
     });
     return ''
+}
+
+function cargarModalEditarParteTrabajo(id){
+    $('#ep_mensaje').addClass('d-none').text('');
+    $('#btn-guardar-parte-trabajo').prop('disabled', true);
+    document.getElementById('ep_cod').value = '';
+    document.getElementById('ep_observaciones').value = '';
+    document.getElementById('ep_fecha').value = '';
+    document.getElementById('ep_horas').value = '';
+
+    $.ajax({
+        type: 'post',
+        url: '/parte-trabajo/obtener-una/' + id,
+        data: { id_parte: id },
+        success: function (res) {
+            document.getElementById('ep_cod').value = res.id_parte;
+            document.getElementById('ep_observaciones').value = res.observaciones ?? '';
+            document.getElementById('ep_fecha').value = res.fecha ?? '';
+            document.getElementById('ep_horas').value = (res.horas ?? '').split(':').slice(0, 2).join(':');
+            $('#btn-guardar-parte-trabajo').prop('disabled', false);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
+function mostrarMensajeEditarParte(mensaje, tipo){
+    $('#ep_mensaje').removeClass('d-none alert-success alert-danger')
+        .addClass('alert-' + tipo).text(mensaje);
 }
 
 function limpiarModal(){

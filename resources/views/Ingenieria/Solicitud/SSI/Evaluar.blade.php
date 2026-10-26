@@ -65,7 +65,6 @@
                                 </div>
                             @endif
 
-
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             </div>
                         </div>
@@ -89,6 +88,20 @@
                                                 </li>
                                             @endforeach
                                         </ul>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <label for="descrip" class="control-label" style="white-space: nowrap; ">Sintomas sobre Activo:</label>
+                                            <ul class="list-group">
+                                                @foreach ($Ssi->getSintomasAlt() as $grupo)
+                                                    @foreach ($grupo['sintomas'] as $sintoma)
+                                                        <li>{{ $sintoma['nombre'] }}</li>
+                                                    @endforeach
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

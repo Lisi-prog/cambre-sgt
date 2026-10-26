@@ -54,12 +54,8 @@ class Tipo_activo extends Model
             ->pluck('id_tarea_mantenimiento')
             ->toArray();
 
-        $zonasIds = $this->getZonas()
-            ->pluck('zona_tarea.id_zona_tarea')
-            ->toArray();
-
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
-            ->whereIn('id_zona_tarea', $zonasIds)
+            ->where('en_uso', 1)
             ->orderBy('nombre_tarea', 'ASC')
             ->get();
     }
@@ -84,14 +80,19 @@ class Tipo_activo extends Model
             ->pluck('id_tarea_mantenimiento')
             ->toArray();
 
-        $zonasIds = $this->getZonas()
-            ->pluck('zona_tarea.id_zona_tarea')
-            ->toArray();
-
         return Tarea_mantenimiento::whereNotIn('id_tarea_mantenimiento', $tareasUsadasIds)
-            ->whereIn('id_zona_tarea', $zonasIds)
             ->orderBy('nombre_tarea', 'ASC')
             ->get();
+    }
+
+    public function getCategoriasDiagnostico()
+    {
+        return $this->belongsToMany(
+            Diagnostico_categoria::class,
+            'diag_cat_x_tipo_activo',
+            'id_tipo_activo',
+            'id_diagnostico_categoria'
+        )->using(Diag_cat_x_tipo_activo::class);
     }
 
     public function getZonas()
