@@ -8,32 +8,7 @@
             {!! Form::open(['route' => 'activo.set_tareas_mantenimiento', 'method' => 'PUT', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <h5>Tareas Disponibles</h5>
-                <button type="button" class="btn btn-success" onclick="mostrarNuevaTarea('card-nueva-tarea-mantenimiento')">
-                    + Nueva tarea
-                </button>
-                <div id="card-nueva-tarea-mantenimiento" class="card mb-3 d-none">
-                    <div class="card-header">
-                        Nueva tarea de mantenimiento preventiva
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            {{-- Nombre tarea --}}
-                            <div class="col-md-12 mt-3">
-                                {!! Form::label('nombre_tarea_nueva', 'Nombre tarea:') !!}
-
-                                {!! Form::text('nombre_tarea_nueva', null, [
-                                    'class'=>'form-control',
-                                    'placeholder'=>'Nombre de la tarea'
-                                ]) !!}
-                            </div>
-                            <div class="col-md-12 mt-3 text-end">
-                                <button type="button" class="btn btn-primary" onclick="guardarNuevaTarea(this)">
-                                    Guardar nueva tarea
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @include('Ingenieria.Activos.modal.nueva-tarea-correctiva')
                 <table id="tabla_set_tareas_mantenimiento" class="table table-striped">
                     <thead>
                         <th class='text-center' style="color:#fff;">Asignar</th>

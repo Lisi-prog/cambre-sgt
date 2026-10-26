@@ -8,6 +8,7 @@
             {!! Form::open(['route' => 'tipo_activo.set_tareas_mantenimiento', 'method' => 'PUT', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <h5>Tareas Disponibles</h5>
+                @include('Ingenieria.Activos.modal.nueva-tarea-correctiva')
                 <table id="tabla_set_tareas_mantenimiento" class="table table-striped">
                     <thead>
                         <th class='text-center' style="color:#fff;">Asignar</th>

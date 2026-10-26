@@ -421,7 +421,7 @@
         let id = $(this).data('id');
         let checked = $(this).is(':checked');
 
-        let inputs = $('.input-tarea[data-id="' + id + '"]');
+        let inputs = $(this).closest('table').find('.input-tarea[data-id="' + id + '"]');
 
         if (checked) {
             inputs.prop('disabled', false);
@@ -474,29 +474,6 @@
             .removeClass('d-none');
     });
 
-    function mostrarNuevaTarea(id){
-        $(`#${id}`).toggleClass("d-none");
-    }
-
-    function guardarNuevaTarea(boton){
-        const card = $(boton).closest(".card");
-        $.ajax({
-            url: '{{ route('tarea_mantenimiento.store') }}',
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-
-                nombre_tarea: card.find("input[name^=nombre_tarea_nueva]").val(),
-                id_activo: $("#id_activo").val() ?? $("#id_activo").val(),
-            },
-            success:function(response){
-                location.reload();
-            },
-            error:function(){                
-                alert('Error al crear la tarea');
-            }
-        });
-
-    }
 </script>
+@include('Ingenieria.Activos.modal.nueva-tarea-script')
 @endsection

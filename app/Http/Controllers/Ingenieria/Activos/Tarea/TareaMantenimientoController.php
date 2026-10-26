@@ -25,6 +25,7 @@ class TareaMantenimientoController extends Controller
 
         $tarea = new Tarea_mantenimiento();
         $tarea->nombre_tarea = $request->nombre_tarea;
+        $tarea->en_uso = 1;
         if($request->ejecucion_nueva){
             $ejecucion = new Tarea_ejecucion();
             $ejecucion->nombre_ejecucion = $request->ejecucion_nueva;
@@ -42,6 +43,15 @@ class TareaMantenimientoController extends Controller
         ]);    }
         $tarea->id_zona_tarea = $request->id_zona_tarea;
         $tarea->save();
+
+        if ($request->expectsJson()) {
+            $filas = [];
+            foreach (['correctiva', 'preventiva_activo', 'preventiva_tipo'] as $tipo) {
+                $filas[$tipo] = view('Ingenieria.Activos.modal.fila-tarea-disponible', compact('tarea', 'tipo'))->render();
+            }
+
+            return response()->json(['tarea' => $tarea, 'filas' => $filas], 201);
+        }
 
         return redirect()->route('tarea_mantenimiento.index')->with('success', 'Tarea creada exitosamente.');
     }
