@@ -317,7 +317,7 @@
                 break;
         
             case 2://Desde ordenes de mecanizado
-                var url = '{{route("ordenes.tipo", 3)}}';
+                var url = '{{route("orden-de-mecanizado")}}';
                 break;
             case 3://Desde operaciones
                 var url = '{{route("ordenes.indexhdr")}}';

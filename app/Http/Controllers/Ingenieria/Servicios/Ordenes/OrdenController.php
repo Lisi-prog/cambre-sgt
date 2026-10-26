@@ -444,7 +444,7 @@ class OrdenController extends Controller
                 $notif = Not_notificacion_cuerpo::create([
                     'titulo' => 'Nueva Orden de trabajo',
                     'mensaje' => $nom_not_cr.' ha creado una nueva orden de trabajo: "'.$nom_orden.'".',
-                    'url' => '/ordenes/1'
+                    'url' => route('orden-de-trabajo')
                 ]);
                 
                 Not_notificacion::create([
@@ -987,7 +987,74 @@ class OrdenController extends Controller
     }
 
     // VISTAS DE ORDENES
+    public function datosTrabajo(Request $request){
+        return app(\App\Services\OrdenTrabajoTabla::class)->respuesta($request);
+    }
+
+    public function ordenesTrabajo(){
+        $tipo = 'Trabajo';
+        $tipo_orden = 1;
+        $estados = $this->listarTodosLosEstadosDe(1);
+        $estadosExcluidos = collect($estados)->filter(function ($estado) {
+            return $estado->id_estado >= 9 || $estado->id_estado == 5;
+        })->pluck('nombre')->values();
+        return view('Ingenieria.Servicios.Ordenes.trabajo.index', compact('tipo', 'tipo_orden', 'estados', 'estadosExcluidos'));
+    }
+
+    public function ordenesManufactura(){
+        $tipo = 'Manufactura';
+        $tipo_orden = 2;
+        $estados = $this->listarTodosLosEstadosDe(2);
+        $estadosExcluidos = collect($estados)->where('id_estado', '>=', 5)->pluck('nombre')->values();
+        $maquinaManual = Maquinaria::where('codigo_maquinaria', 'MANUAL')->firstOrFail()->id_maquinaria;
+        $tecConMan = Emp_x_maq::where('id_maquinaria', $maquinaManual)->pluck('id_empleado');
+        $tecnicosConManual = Empleado::whereIn('id_empleado', $tecConMan)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
+        return view('Ingenieria.Servicios.Ordenes.manufactura.index', compact('tipo', 'tipo_orden', 'estados', 'estadosExcluidos', 'tecnicosConManual'));
+    }
+
+    public function datosManufactura(Request $request){
+        return app(\App\Services\OrdenManufacturaTabla::class)->respuesta($request);
+    }
+
+    public function ordenesMecanizado(Request $request){
+        $tipo = 'Mecanizado';
+        $tipo_orden = 3;
+        $estados = $this->listarTodosLosEstadosDe(3);
+        $estadosExcluidos = collect($estados)->where('id_estado', '>=', 6)->pluck('nombre')->values();
+        $manufacturaInicial = null;
+        if ($request->filled('flt_ord')) {
+            $request->validate(['flt_ord' => 'integer|min:1']);
+            $manufacturaInicial = Orden_manufactura::join('orden', 'orden.id_orden', '=', 'orden_manufactura.id_orden')
+                ->where('id_orden_manufactura', $request->input('flt_ord'))->value('nombre_orden');
+        }
+        return view('Ingenieria.Servicios.Ordenes.mecanizado.index', compact('tipo', 'tipo_orden', 'estados', 'estadosExcluidos', 'manufacturaInicial'));
+    }
+
+    public function datosMecanizado(Request $request){
+        return app(\App\Services\OrdenMecanizadoTabla::class)->respuesta($request);
+    }
+
+    public function ordenesMantenimiento(){
+        return view('Ingenieria.Servicios.Ordenes.mantenimiento.index');
+    }
+
+    public function datosMantenimiento(Request $request){
+        return app(\App\Services\OrdenMantenimientoTabla::class)->respuesta($request);
+    }
+
     public function obtenerOrdenes(Request $request, $tipo_orden){
+        if ((int) $tipo_orden === 4) {
+            return redirect()->route('orden-de-mantenimiento');
+        }
+        if ((int) $tipo_orden === 3) {
+            return redirect()->route('orden-de-mecanizado', $request->only('flt_ord'));
+        }
+        if ((int) $tipo_orden === 2) {
+            return redirect()->route('orden-de-manufactura');
+        }
+        if ((int) $tipo_orden === 1) {
+            return redirect()->route('orden-de-trabajo');
+        }
         $id_empleado = Auth::user()->getEmpleado->id_empleado;
         $supervisores = $this->obtenerSupervisores();
         $responsables = $this->obtenerEmpleados();
@@ -1003,95 +1070,7 @@ class OrdenController extends Controller
        
         //FILTRAMOS LAS ORDENES POR TIP0
         switch ($tipo_orden) {           
-            case 1:
-                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                            $ordenes = Vw_orden_trabajo::orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
-                                                        ->orderByRaw("CASE WHEN prioridad_servicio IS NULL THEN 1 ELSE 0 END")
-                                                        ->orderBy('prioridad_servicio', 'asc')
-                                                        ->get();
-                }else{
-                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                            $ordenes = Vw_orden_trabajo::responsable($id_empleado)->orderByRaw("CASE WHEN nombre_estado = 'Continua' THEN 1 ELSE 0 END")
-                                                                                ->orderByRaw("CASE WHEN prioridad_servicio IS NULL THEN 1 ELSE 0 END")
-                                                                                ->orderBy('prioridad_servicio', 'asc')
-                                                                                ->get();
-                        }
-                        $servicios = Vw_orden_trabajo::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
-                        $tipo = 'Trabajo';
-                        $tipo_orden = 1;
-                        $estados = $this->listarTodosLosEstadosDe(1);
-                        break;
 
-            case 2:
-                //ORDEN DE MANUFACTURA
-                // return redirect()->route('en.desarrollo');
-                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                    $ordenes = Vw_orden_manufactura::get();
-                }else{
-                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    // $ordenes = Vw_orden_manufactura::responsable($id_empleado)->get();
-                    $ordenes = Vw_orden_manufactura::get();
-                }
-                $servicios = Vw_orden_manufactura::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
-                $tipo = 'Manufactura';
-                $tipo_orden = 2;
-                $estados = $this->listarTodosLosEstadosDe(2);
-                $maquinaManual = Maquinaria::where('codigo_maquinaria', 'MANUAL')->first()->id_maquinaria;
-                $tecConMan = Emp_x_maq::where('id_maquinaria', $maquinaManual)->pluck('id_empleado');
-                $tecnicosConManual = Empleado::whereIn('id_empleado', $tecConMan)->orderBy('nombre_empleado')->pluck('nombre_empleado', 'id_empleado');
-                return view('Ingenieria.Servicios.Ordenes.ordenes-manufactura', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'tecnicosConManual'));
-                break;
-
-            case 3:
-                // return redirect()->route('en.desarrollo');
-                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                    $ordenes = Vw_orden_mecanizado::get();
-                }else{
-                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    // $ordenes = Vw_orden_mecanizado::responsable($id_empleado)->get();
-                    $ordenes = Vw_orden_mecanizado::get();
-                }
-                $servicios = Vw_orden_mecanizado::orderBy('codigo_servicio')->get('codigo_servicio')->unique('codigo_servicio');
-                $manufacturas = Vw_orden_mecanizado::whereNotNull('manufactura')->orderBy('manufactura')->get(['manufactura', 'id_orden_manufactura'])->unique('manufactura');
-                $operaciones = Vw_orden_mecanizado::whereNotNull('ope_act')->orderBy('ope_act')->get('ope_act')->unique('ope_act');
-                $responsables = Vw_orden_mecanizado::orderBy('responsable')->get('responsable')->unique('responsable')->pluck('responsable');
-                $tipo = 'Mecanizado';
-                $tipo_orden = 3;
-                $estados = $this->listarTodosLosEstadosDe(3);
-                $flt_ord = $request->input('flt_ord');
-                $ordenesConHdr = Hoja_de_ruta::join('orden_mecanizado as om', 'om.id_orden_mecanizado', '=', 'hoja_de_ruta.id_orden_mecanizado')
-                    ->whereIn('om.id_orden', $ordenes->pluck('id_orden'))
-                    ->distinct()->pluck('om.id_orden')->flip();
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mecanizado', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden', 'manufacturas', 'operaciones', 'flt_ord', 'ordenesConHdr'));
-                break;
-
-            case 4:
-                //ORDEN DE MANTENIMIENTO
-
-                if (Auth::user()->hasRole('SUPERVISOR') || Auth::user()->hasRole('ADMIN')) {
-                    //SI ES SUPERVISOR TRAIGO TODAS LAS ORDENES
-                    $ordenes = Vw_orden_mantenimiento::get();
-                }else{
-                    //SI NO ES SUPERVISOR TRAIGO SOLO LAS DEL EMPLEADO LOGUEADO
-                    $ordenes = Vw_orden_mantenimiento::responsable($id_empleado)->get();
-                }
-
-                foreach($ordenes as $om){
-                    $om->horas = $om->getOrden->getHoras();
-                }
-
-                $tipo = 'Mantenimiento';
-                $flt_tipos = Tipo_orden_mantenimiento::orderBy('nombre_tipo_orden_mantenimiento')->pluck('nombre_tipo_orden_mantenimiento');
-                $flt_activos = Vw_orden_mantenimiento::distinct()->orderBy('codigo_activo')->pluck('codigo_activo');
-                $flt_estados = Estado_mantenimiento::pluck('nombre_estado_mantenimiento');
-                $flt_estados->push('Disponible');
-
-                return view('Ingenieria.Servicios.Ordenes.ordenes-mantenimiento', compact('ordenes', 'flt_tipos', 'flt_activos', 'flt_estados'));
-
-                break;
         }
         
         return view('Ingenieria.Servicios.Ordenes.ordenes', compact('ordenes', 'supervisores', 'responsables', 'estados', 'tipo', 'tipo_orden', 'codigos_servicio', 'servicios', 'tipo_orden'));

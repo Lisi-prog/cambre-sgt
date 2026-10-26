@@ -95,9 +95,9 @@
                                                 </div>
                                                 <div class="row my-2">
                                                     <div class="col-12">
-                                                        {!! Form::open(['method' => 'GET', 'route' => ['orden.partes', $orden_trabajo->id_orden], 'style' => 'display:inline']) !!}
-                                                            {!! Form::submit('Parte', ['class' => 'btn btn-warning w-100']) !!}
-                                                        {!! Form::close() !!}
+                                                        <form method="GET" action="{{ route('orden.partes', $orden_trabajo->id_orden) }}" style="display:inline">
+                                                            <button type="submit" class="btn btn-warning w-100">Parte</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </td>

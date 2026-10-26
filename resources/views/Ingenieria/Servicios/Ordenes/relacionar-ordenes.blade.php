@@ -129,7 +129,8 @@
                         {{-- <div class="pagination justify-content-end">
                                 {!! $CategoriasLaborales->links() !!}
                         </div> --}}
-                        {!! Form::open(['route' => 'ordenes.relacionar', 'method' => 'POST', 'class' => 'formulario']) !!}
+                        <form method="POST" action="{{ route('ordenes.relacionar') }}" class="formulario">
+                            @csrf
                         <div class="table-responsive" id="formulario">
                             <table class="table table-striped mt-2" id="example">
                                 <thead style="height:50px;">
@@ -190,7 +191,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                         <div class="form-group">
-                                                            {!! Form::text('id_orden[]', $orden->id_orden, ['class' => 'text-center form-control', 'id' => 'input_id_orden', 'readonly']) !!}
+                                                            <input type="text" name="id_orden[]" value="{{ $orden->id_orden }}" class="text-center form-control" id="input_id_orden" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -200,13 +201,14 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            {{-- {!! Form::label('relacion', 'Relacion:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!} --}}
+
                                                             {{-- <span class="obligatorio">*</span> --}}
-                                                            {!! Form::select('relacion[]', $relaciones, null, [
-                                                                'placeholder' => 'Seleccionar',
-                                                                'class' => 'form-select form-group',
-                                                                'id' => 'relacion'
-                                                            ]) !!}
+                                                            <select name="relacion[]" class="form-select form-group" id="relacion">
+                                                                <option value="">Seleccionar</option>
+                                                                @foreach ($relaciones as $idRelacion => $nombreRelacion)
+                                                                    <option value="{{ $idRelacion }}" @if ((string) old('relacion.' . $loop->parent->index, '') === (string) $idRelacion) selected @endif>{{ $nombreRelacion }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -216,7 +218,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                         <div class="form-group">
-                                                            {!! Form::text('id_orden_hija[]', null, ['class' => 'text-center form-control', 'id' => 'input_id_orden_hija', 'min' => '0']) !!}
+                                                            <input type="text" name="id_orden_hija[]" value="" class="text-center form-control" id="input_id_orden_hija" min="0">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -230,7 +232,7 @@
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
-                        {!! Form::close() !!}
+                        </form>
                     </div>
                 </div>
             </div>

@@ -113,26 +113,26 @@
                     Ordenes
                 </li>
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                    <a class="nav-link" href="{{route('orden-de-trabajo')}}" title="Trabajo">
                         <i class="fas fa-tasks" style="font-size:1.2em;"></i><span>Trabajo</span>
                     </a>
                 </li>
                 @can(['VER-ORDEN-MANUFACTURA'])
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                    <a class="nav-link" href="{{route('orden-de-manufactura')}}" title="Manufactura">
                         <i class="fas fa-ruler-combined" style="font-size:1.2em;"></i><span>Manufactura</span>
                     </a>
                 </li>
                 @endcan
                 @can(['VER-ORDEN-MECANIZADO'])
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                    <a class="nav-link" href="{{route('orden-de-mecanizado')}}" title="Mecanizado">
                         <i class="fas fa-screwdriver" style="font-size:1.2em;"></i><span>Mecanizado</span>
                     </a>
                 </li>
                 @endcan
                 <li>
-                    <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
+                    <a class="nav-link" href="{{route('orden-de-mantenimiento')}}" title="Mantenimiento">
                         <i class="fas fa-wrench" style="font-size:1.2em;"></i><span>Mantenimiento</span>
                     </a>
                 </li>

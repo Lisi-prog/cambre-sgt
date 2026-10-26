@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    {!! Form::text('opcion_tipo', 2, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
+    <input type="hidden" name="opcion_tipo" value="{{ 2 }}" class="form-control" id="opcion-tipo">
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -213,9 +213,9 @@
                                                             @if ($tipo_orden === 3)
                                                                 <div class="row my-2">
                                                                     <div class="col-12">
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <form method="GET" action="{{ route('ordenes.hdr', [$orden->id_orden]) }}" style="display:inline">
+                                                                            <button type="submit" class="btn btn-info w-100">HDR</button>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
                                                             @endif
@@ -239,10 +239,10 @@
                                                             @if ($orden->tieneMecAsoc())
                                                                 <div class="row my-2 justify-content-center">
                                                                     <div class="col-12">
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.tipo', 3], 'style' => 'display:inline', 'target' => '_blank' ]) !!}
+                                                                        <form method="GET" action="{{ route('ordenes.tipo', [3]) }}" style="display:inline" target="_blank">
                                                                             <input class="input-filter" name="flt_ord" type="text" value="{{$orden->getOrdenManufactura->id_orden_manufactura}}" hidden>
-                                                                        {!! Form::submit('Filtro', ['class' => 'btn btn-info w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <button type="submit" class="btn btn-info w-100">Filtro</button>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
                                                             @endif

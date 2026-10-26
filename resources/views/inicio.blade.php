@@ -122,14 +122,14 @@
                 <div class="menu-section">
                     <h5>Ordenes</h5>
                     <div class="menu-grid">
-                        <a href="{{route('ordenes.tipo', 1)}}" class="menu-tile sombra menu-hover">
+                        <a href="{{route('orden-de-trabajo')}}" class="menu-tile sombra menu-hover">
                             <div class="menu-tile-icon ">
                                 <i class="fas fa-tasks m-auto p-2" style="font-size:1em;"></i>
                             </div>
                             <span>Trabajo</span>
                         </a>
                         @can(['VER-ORDEN-MANUFACTURA'])
-                        <a href="{{route('ordenes.tipo', 2)}}" class="menu-tile sombra menu-hover">
+                        <a href="{{route('orden-de-manufactura')}}" class="menu-tile sombra menu-hover">
                             <div class="menu-tile-icon ic-teal">
                                 <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1em;"></i>
                             </div>
@@ -137,7 +137,7 @@
                         </a>
                         @endcan
                         @can(['VER-ORDEN-MECANIZADO'])
-                        <a href="{{route('ordenes.tipo', 3)}}" class="menu-tile sombra menu-hover">
+                        <a href="{{route('orden-de-mecanizado')}}" class="menu-tile sombra menu-hover">
                             <div class="menu-tile-icon ic-blue">
                                 <i class="fas fa-screwdriver m-auto p-2" style="font-size:1em;"></i>
                             </div>
@@ -145,7 +145,7 @@
                         </a>
                         @endcan
                         @can(['VER-ORDEN-MANTENIMIENTO'])
-                        <a href="{{route('ordenes.tipo', 4)}}" class="menu-tile sombra menu-hover">
+                        <a href="{{route('orden-de-mantenimiento')}}" class="menu-tile sombra menu-hover">
                             <div class="menu-tile-icon ic-blue">
                                 <i class="fas fas fa-wrench m-auto p-2" style="font-size:1em;"></i>
                             </div>

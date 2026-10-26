@@ -21,6 +21,27 @@ use App\Http\Controllers\Ingenieria\Servicios\Proyectos\PrefijoProyectoControlle
 // The data endpoint checks the access rules for each listing mode.
 Route::post('proyectos/datos', [ProyectoController::class, 'datos'])->middleware('auth')->name('proyectos.datos');
 
+Route::get('orden-de-trabajo', [OrdenController::class, 'ordenesTrabajo'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('orden-de-trabajo');
+
+Route::post('orden-de-trabajo/datos', [OrdenController::class, 'datosTrabajo'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('ordenes.trabajo.datos');
+
+Route::get('orden-de-manufactura', [OrdenController::class, 'ordenesManufactura'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('orden-de-manufactura');
+Route::post('orden-de-manufactura/datos', [OrdenController::class, 'datosManufactura'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('ordenes.manufactura.datos');
+
+Route::get('orden-de-mecanizado', [OrdenController::class, 'ordenesMecanizado'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('orden-de-mecanizado');
+Route::post('orden-de-mecanizado/datos', [OrdenController::class, 'datosMecanizado'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('ordenes.mecanizado.datos');
+
+Route::get('orden-de-mantenimiento', [OrdenController::class, 'ordenesMantenimiento'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('orden-de-mantenimiento');
+Route::post('orden-de-mantenimiento/datos', [OrdenController::class, 'datosMantenimiento'])
+    ->middleware(['auth', 'role_or_permission:ADMIN|SUPERVISOR|TECNICO'])->name('ordenes.mantenimiento.datos');
+
 //Gestion de proyectos
 Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], function () {
     // RUTAS PROYECTOS
@@ -54,7 +75,6 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|SUPERVISOR']], f
 
     Route::resource('etapas', EtapaController::class);
     // RUTAS DE ORDENES
-    
     Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
     Route::get('orden/multiple-parte', [OrdenController::class, 'cargaMultipleParte'])->name('ordenes.multipleparte');
     Route::get('ordenes/mec/{id}/hdr', [OrdenController::class, 'ordenHDR'])->name('ordenes.hdr');
@@ -189,7 +209,7 @@ Route::group(['middleware' => ['auth','role_or_permission:ADMIN|TECNICO']], func
      // RUTAS DE ORDENES
      Route::resource('ordenes', OrdenController::class);
      Route::get('orden/multiple-parte', [OrdenController::class, 'cargaMultipleParte'])->name('ordenes.multipleparte');
-     Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
+    Route::get('ordenes/{tipo_orden}', [OrdenController::class, 'obtenerOrdenes'])->name('ordenes.tipo');
      Route::post('orden/crear',[OrdenController::class, 'crearOrden'])->name('ordenes.crear');
      Route::get('orden/eliminar/{id_orden}', [OrdenController::class, 'eliminarOrden'])->name('orden.eliminar');
      Route::post('orden/editar', [OrdenController::class, 'editarOrden'])->name('orden.editar');

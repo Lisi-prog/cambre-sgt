@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    {!! Form::text('opcion_tipo', 3, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
+    <input type="hidden" name="opcion_tipo" value="{{ 3 }}" class="form-control" id="opcion-tipo">
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
@@ -144,7 +144,7 @@
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                         <div class="d-flex flex-row align-items-start justify-content-around">
                                             <div class="card-body d-flex flex-column">
-                                                {!! Form::label('Opciones:') !!}
+                                                <label>Opciones:</label>
                                                 <div class="form-check">
                                                     <input name="snHdr" class="form-check-input" type="checkbox" value="1" id="snHdr">
                                                     <label class="form-check-label" for="snHdr">
@@ -251,10 +251,10 @@
                                                             @if ($tipo_orden === 3)
                                                                 <div class="row my-2">
                                                                     <div class="col-12">
-                                                                        {!! Form::open(['method' => 'GET', 'route' => ['ordenes.hdr', $orden->id_orden], 'style' => 'display:inline']) !!}
-                                                                            {!! Form::text('vieneDesde', 2, ['style' => 'disabled;', 'class' => 'form-control', 'hidden']) !!}
-                                                                            {!! Form::submit('HDR', ['class' => 'btn btn-info w-100']) !!}
-                                                                        {!! Form::close() !!}
+                                                                        <form method="GET" action="{{ route('ordenes.hdr', [$orden->id_orden]) }}" style="display:inline">
+                                                                            <input type="hidden" name="vieneDesde" value="{{ 2 }}" style="disabled;" class="form-control">
+                                                                            <button type="submit" class="btn btn-info w-100">HDR</button>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
                                                             @endif

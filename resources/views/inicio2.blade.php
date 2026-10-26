@@ -80,7 +80,7 @@
                             <h4>Ordenes</h4>
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex;height:150px; width:150px; margin:auto;">
                                 <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 1)}}" title="Trabajo">
+                                    <a class="nav-link" href="{{route('orden-de-trabajo')}}" title="Trabajo">
                                     <div class="row m-auto text-center" style="">
                                         <i class="fas fa-tasks m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>
@@ -93,7 +93,7 @@
                             @can(['VER-ORDEN-MANUFACTURA'])
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto">
                                 <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 2)}}" title="Manufactura">
+                                    <a class="nav-link" href="{{route('orden-de-manufactura')}}" title="Manufactura">
                                     <div class="row m-auto text-center" style="">
                                         <i class="fas fa-ruler-combined m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>
@@ -108,7 +108,7 @@
                             {{-- Iconos del mismo tamaño agregando min-width: 8% a los card --}}
                             <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 3)}}" title="Mecanizado">
+                                    <a class="nav-link" href="{{route('orden-de-mecanizado')}}" title="Mecanizado">
                                     <div class="row m-auto text-center" style="">
                                         <i class="fas fa-screwdriver m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>
@@ -121,7 +121,7 @@
                             @endcan
                             {{-- <li class="menu-hover card rounded-4 mx-2 sombra" style="display: flex; height:150px; width:150px; margin:auto"> 
                                 <div class=" m-auto rounded-4" style="">
-                                    <a class="nav-link" href="{{route('ordenes.tipo', 4)}}" title="Mantenimiento">
+                                    <a class="nav-link" href="{{route('orden-de-mantenimiento')}}" title="Mantenimiento">
                                     <div class="row m-auto text-center" style="">
                                         <i class="fas fa-wrench m-auto p-2" style="font-size:1.2em;"></i>
                                     </div>

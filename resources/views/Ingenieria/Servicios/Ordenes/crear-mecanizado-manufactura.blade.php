@@ -55,7 +55,7 @@
                                 </div>
                                 <div hidden>
                                     {{-- SOLO PARA OBTENER EL ID DE LA ORDEN --}}
-                                    {!! Form::text('id_servicio', $orden_manufactura->getOrden->getEtapa->id_servicio, ['style' => 'disabled;', 'readonly'=> 'true', 'id' => 'id_servicio']) !!}
+                                    <input type="hidden" name="id_servicio" id="id_servicio" value="{{ old('id_servicio', $orden_manufactura->getOrden->getEtapa->id_servicio) }}" readonly>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1">
                                     <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#editarOrdenModal" onclick="cargarModalEditarManufactura({{$orden_manufactura->id_orden}}, '{{$orden_manufactura->getOrden->nombre_orden}}')">
@@ -69,8 +69,8 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                     <div class="form-group">
-                                        {!! Form::label('nom_orden_manuf', 'ID-CONJUNTO:', ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('nom_orden_manuf', $orden_manufactura->getOrden->nombre_orden, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="nom_orden_manuf" class="control-label" style="white-space: nowrap;">ID-CONJUNTO:</label>
+                                        <input type="text" name="nom_orden_manuf" id="nom_orden_manuf" value="{{ old('nom_orden_manuf', $orden_manufactura->getOrden->nombre_orden) }}" class="form-control" readonly>
                                     </div>
                                 </div>
 
@@ -80,41 +80,36 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('supervisor_orden_manuf', "Supervisor de orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('supervisor_manuf', $orden_manufactura->getOrden->getSupervisor(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="supervisor_manuf" class="control-label" style="white-space: nowrap;">Supervisor de orden:</label>
+                                        <input type="text" name="supervisor_manuf" id="supervisor_manuf" value="{{ old('supervisor_manuf', $orden_manufactura->getOrden->getSupervisor()) }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
                                     <div class="form-group">
-                                        {!! Form::label('responsable_orden_manuf', "Responsable de orden:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('responsable_manuf', $orden_manufactura->getOrden->getNombreResponsable(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="responsable_manuf" class="control-label" style="white-space: nowrap;">Responsable de orden:</label>
+                                        <input type="text" name="responsable_manuf" id="responsable_manuf" value="{{ old('responsable_manuf', $orden_manufactura->getOrden->getNombreResponsable()) }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_ini_manuf', "Fecha inicio:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_inicio_manuf',$orden_manufactura->getOrden->fecha_inicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fecha_inicio_manuf" class="control-label" style="white-space: nowrap;">Fecha inicio:</label>
+                                        <input type="text" name="fecha_inicio_manuf" id="fecha_inicio_manuf" value="{{ old('fecha_inicio_manuf', $orden_manufactura->getOrden->fecha_inicio) }}" class="form-control" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('fec_limite_manuf', "Fecha limite:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="fecha_limite_manuf" class="control-label" style="white-space: nowrap;">Fecha limite:</label>
+                                        <input type="text" name="fecha_limite_manuf" id="fecha_limite_manuf" value="{{ old('fecha_limite_manuf', $orden_manufactura->getOrden->getPartes->sortBy('id_parte')->first()->fecha_limite) }}" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                                     <div class="form-group">
-                                        {!! Form::label('estado_manuf', "Estado:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('estado_manuf', $orden_manufactura->getOrden->getEstado(), ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
+                                        <label for="estado_manuf" class="control-label" style="white-space: nowrap;">Estado:</label>
+                                        <input type="text" name="estado_manuf" id="estado_manuf" value="{{ old('estado_manuf', $orden_manufactura->getOrden->getEstado()) }}" class="form-control" readonly>
                                     </div>
                                 </div>
-                                {{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
-                                    <div class="form-group">
-                                        {!! Form::label('prioridad', "Prioridad Nº:", ['class' => 'control-label', 'style' => 'white-space: nowrap; ']) !!}
-                                        {!! Form::text('prioridad', $proyecto->prioridad_servicio, ['style' => 'disabled;', 'class' => 'form-control', 'readonly'=> 'true']) !!}
-                                    </div>
-                                </div> --}}
+                                
                             </div>
                         </div>
                     </div>
@@ -188,16 +183,16 @@
                                                             </div>
                                                             <div class="row my-2 justify-content-center">
                                                                 <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.mec.quitar', $orden_mecanizado->id_orden_mecanizado], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Quitar', ['class' => 'btn btn-danger w-100', "onclick" => "return confirm('¿Está seguro que desea QUITAR la orden de mecanizado de esta orden de manufactura?');"]) !!}
-                                                                    {!! Form::close() !!}
+                                                                    <form method="GET" action="{{ route('orden.mec.quitar', $orden_mecanizado->id_orden_mecanizado) }}" style="display:inline">
+                                                                        <button type="submit" class="btn btn-danger w-100" onclick="return confirm('¿Está seguro que desea QUITAR la orden de mecanizado de esta orden de manufactura?');">Quitar</button>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                             <div class="row my-2 justify-content-center" hidden>
                                                                 <div class="col-12">
-                                                                    {!! Form::open(['method' => 'GET', 'route' => ['orden.eliminar', $orden_mecanizado->getOrden->id_orden], 'style' => 'display:inline']) !!}
-                                                                        {!! Form::submit('Eliminar', ['class' => 'btn btn-danger w-100']) !!}
-                                                                    {!! Form::close() !!}
+                                                                    <form method="GET" action="{{ route('orden.eliminar', $orden_mecanizado->getOrden->id_orden) }}" style="display:inline">
+                                                                        <button type="submit" class="btn btn-danger w-100">Eliminar</button>
+                                                                    </form>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -216,27 +211,7 @@
                     </div>
                 </div>   
 
-                    {{-- <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="d-flex">
-                                        <div class="me-auto">
-                                            
-                                        </div>
-                                        <div class="p-1">
-                                            
-                                        </div>
-                                        <div class="p-1">
-                                            {!! Form::open(['method' => 'GET', 'route' => ['proyectos.gestionar', $orden_manufactura->getOrden->getEtapa->getServicio->id_servicio], 'style' => '']) !!}
-                                            {!! Form::submit('volver', ['class' => 'btn btn-primary']) !!}
-                                            {!! Form::close() !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
+                    
                 
 
         <script type="module" src="{{ asset('js/Ingenieria/Servicios/Proyectos/modal/crear-form.js') }}">

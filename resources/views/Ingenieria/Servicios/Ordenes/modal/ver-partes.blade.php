@@ -21,32 +21,20 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
-                            {!! Form::label('orden', 'Orden:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('orden', null, [
-                                'class' => 'form-control',
-                                'id' => 'mv-orden',
-                                'readonly'
-                            ]) !!}
+                            <label for="orden" class="control-label fs-7" style="white-space: nowrap; ">Orden:</label>
+                            <input type="text" name="orden" value="{{ old('orden', '') }}" class="form-control" id="mv-orden" readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2">
                         <div class="form-group">
-                            {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('estado', null, [
-                                'class' => 'form-control',
-                                'id' => 'mv-estado',
-                                'readonly'
-                            ]) !!}
+                            <label for="estado" class="control-label fs-7" style="white-space: nowrap; ">Estado:</label>
+                            <input type="text" name="estado" value="{{ old('estado', '') }}" class="form-control" id="mv-estado" readonly>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
                         <div class="form-group">
-                            {!! Form::label('etapa', 'Etapa:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
-                            {!! Form::text('etapa', null, [
-                                'class' => 'form-control',
-                                'id' => 'mv-etapa',
-                                'readonly'
-                            ]) !!}
+                            <label for="etapa" class="control-label fs-7" style="white-space: nowrap; ">Etapa:</label>
+                            <input type="text" name="etapa" value="{{ old('etapa', '') }}" class="form-control" id="mv-etapa" readonly>
                         </div>
                     </div>
                 </div>
@@ -66,7 +54,7 @@
                                 <th class="text-center" scope="col" style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody id="body_ver_parte">
-                                
+
                             </tbody>
                         </table>
                     </div>
@@ -74,17 +62,18 @@
                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-2">
                         <button type="button" class="btn btn-warning" onclick="nuevoParte()">Nuevo parte</button>
                     </div>
-                </div>             
+                </div>
                 <div class="row rounded border border-3 border-warning" id="m-ver-parte-div">
                     <h5 class="text-center control-label pt-2" id="titulo-parte">Nuevo parte</h5>
-                    {!! Form::open(['route' => 'partes.guardar.act', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits-3sec nuevo-editar-parte', 'id' => 'form-nuevo-parte']) !!}
-                    {!! Form::text('id_orden', null, ['class' => 'form-control', 'hidden', 'id' => 'm-ver-parte-orden']) !!}
-                    {!! Form::text('id_parte', null, ['class' => 'form-control', 'hidden', 'id' => 'm-id-parte']) !!}
-                    {!! Form::text('editar', 0, ['class' => 'form-control', 'hidden', 'id' => 'm-editar']) !!}
+                    <form method="POST" action="{{ route('partes.guardar.act') }}" class="formulario form-prevent-multiple-submits-3sec nuevo-editar-parte" id="form-nuevo-parte">
+                @csrf
+                    <input type="hidden" name="id_orden" value="{{ old('id_orden', '') }}" class="form-control" id="m-ver-parte-orden">
+                    <input type="hidden" name="id_parte" value="{{ old('id_parte', '') }}" class="form-control" id="m-id-parte">
+                    <input type="hidden" name="editar" value="{{ old('editar', 0) }}" class="form-control" id="m-editar">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                {!! Form::label('observaciones', 'Observaciones:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap; ']) !!}
+                                <label for="observaciones" class="control-label fs-7" style="white-space: nowrap; ">Observaciones:</label>
                                 <span class="obligatorio">*</span>
                                 <textarea name='observaciones' id="observaciones" maxlength="500" class="form-control" rows="54" cols="54" style="resize:none; height: 20vh" required></textarea>
                             </div>
@@ -93,57 +82,46 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
-                                {!! Form::label('estado', 'Estado:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="estado" class="control-label fs-7" style="white-space: nowrap;">Estado:</label>
                                 <span class="obligatorio">*</span>
-                                <select class="form-select" id="m-ver-parte-estado" name="estado" data-estados-precargados="{{ isset($estadosParte) ? '1' : '0' }}">
-                                    <option selected="selected" value="">Seleccionar</option>
-                                    @foreach ($estadosParte ?? [] as $estadoParte)
-                                        <option value="{{ $estadoParte->id_estado }}">{{ $estadoParte->nombre }}</option>
-                                    @endforeach
-                                </select>
+
+                                                                <select class="form-select" id="m-ver-parte-estado" name="estado" data-estados-precargados="{{ isset($estadosParte) ? '1' : '0' }}">
+
+                                                                    <option selected="selected" value="">Seleccionar</option>
+
+                                                                    @foreach ($estadosParte ?? [] as $estadoParte)
+
+                                                                        <option value="{{ $estadoParte->id_estado }}">{{ $estadoParte->nombre }}</option>
+
+                                                                    @endforeach
+
+                                                                </select>
                                 <small id="m-ver-parte-estado-mensaje" class="text-muted" role="status" hidden></small>
                             </div>
                         </div>
-                        
+
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
-                                {!! Form::label('fecha_limite', 'Fecha limite:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="fecha_limite" class="control-label fs-7" style="white-space: nowrap;">Fecha limite:</label>
                                 @role('SUPERVISOR')
-                                    {!! Form::date('fecha_limite', null, [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'm-ver-parte-fecha-limite',
-                                        'class' => 'form-control'
-                                    ]) !!}
+                                    <input type="date" name="fecha_limite" value="{{ old('fecha_limite', '') }}" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12-31' }}" id="m-ver-parte-fecha-limite" class="form-control">
                                 @else
-                                    {!! Form::date('fecha_limite', null, [
-                                        'min' => '2023-01-01',
-                                        'max' => \Carbon\Carbon::now()->year . '-12',
-                                        'id' => 'm-ver-parte-fecha-limite',
-                                        'class' => 'form-control',
-                                        'readonly'
-                                    ]) !!}
+                                    <input type="date" name="fecha_limite" value="{{ old('fecha_limite', '') }}" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12-31' }}" id="m-ver-parte-fecha-limite" class="form-control" readonly>
                                 @endrole
                             </div>
                         </div>
-                       
+
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
-                                {!! Form::label('fecha', 'Fecha:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
+                                <label for="fecha" class="control-label fs-7" style="white-space: nowrap;">Fecha:</label>
                                             <span class="obligatorio">*</span>
-                                {!! Form::date('fecha', \Carbon\Carbon::now(), [
-                                    'min' => '2023-01-01',
-                                    'max' => \Carbon\Carbon::now()->year . '-12',
-                                    'id' => 'fecha',
-                                    'class' => 'form-control',
-                                    'required'
-                                ]) !!}
+                                <input type="date" name="fecha" value="{{ old('fecha', \Carbon\Carbon::now()->format('Y-m-d')) }}" min="2023-01-01" max="{{ \Carbon\Carbon::now()->year . '-12-31' }}" id="fecha" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-                            <div class="form-group"> 
-                                <label for="horas" class="control-label" style="white-space: nowrap; ">Horas hombre:</label> 
-                                <span class="obligatorio">*</span> 
+                            <div class="form-group">
+                                <label for="horas" class="control-label" style="white-space: nowrap; ">Horas hombre:</label>
+                                <span class="obligatorio">*</span>
                                 <div class= "input-group">
                                     <input class="form-control" name="horas" type="number" min="0" value="00" id="horas" required>
                                     <span class="input-group-text">:</span>
@@ -155,20 +133,21 @@
                     <div class="row" id="m-ver-parte-maquinaria">
 
                     </div>
+                </form>
                 </div>
             </div>
 
             <div id="alert" class="mx-3">
-                
+
             </div>
 
             <div class="modal-footer">
-                {{-- <button type="submit" class="btn btn-success">Guardar</button> --}}
-                <button type="submit" class="btn btn-success button-prevent-multiple-submits-3sec" id="m-ver-parte-orden-btn">Guardar</button>
+                {{-- <button type="submit" form="form-nuevo-parte" class="btn btn-success">Guardar</button> --}}
+                <button type="submit" form="form-nuevo-parte" class="btn btn-success button-prevent-multiple-submits-3sec" id="m-ver-parte-orden-btn">Guardar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             </div>
-            {!! Form::close() !!}
-            
+
+
             {{-- <div class="alert alert-success alert-dismissible fade show " role="alert">
                 'Parte creado con exito'
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -197,5 +176,5 @@
                 }
         });
     }); */
-    
+
 </script>

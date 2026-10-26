@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    {!! Form::text('opcion_tipo', 4, ['class' => 'form-control', 'hidden', 'id' => 'opcion-tipo']) !!}
+    <input type="hidden" name="opcion_tipo" value="{{ 4 }}" class="form-control" id="opcion-tipo">
 
     @include('layouts.modal.mensajes', ['modo' => 'Agregar'])
 
