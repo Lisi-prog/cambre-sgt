@@ -565,8 +565,8 @@ class ActivoController extends Controller
                 'tipo' => 'activo',
                 'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
                 'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
-                'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
-                'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+                'ejecucion' => (optional($ta->getTareaMantenimiento->getEjecucion)->nombre_ejecucion ?? '-'),
+                'zona' => (optional($ta->getTareaMantenimiento->getZonaTarea)->nombre_zona ?? '-'),
                 'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
             ]);
         }
@@ -577,8 +577,8 @@ class ActivoController extends Controller
         //         'tipo' => 'tipo_activo',
         //         'fecha_ultima_ejecucion' => $ta->fecha_ultima_ejecucion,
         //         'nombre_tarea' =>$ta->getTareaMantenimiento->nombre_tarea,
-        //         'ejecucion' => $ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion,
-        //         'zona' => $ta->getTareaMantenimiento->getZonaTarea->nombre_zona,
+        //         'ejecucion' => (optional($ta->getTareaMantenimiento->getEjecucion)->nombre_ejecucion ?? '-'),
+        //         'zona' => (optional($ta->getTareaMantenimiento->getZonaTarea)->nombre_zona ?? '-'),
         //         'situacion' => $ta->estaEnProceso() ? 'En Proceso' : 'Disponible',
         //     ]);
         // }
