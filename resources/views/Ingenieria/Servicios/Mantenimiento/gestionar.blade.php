@@ -471,8 +471,8 @@
                                             @foreach($tareas_preventivas as $tarea)
                                                 <tr>
                                                     <td>{{ $tarea->getTarea->getTareaMantenimiento->nombre_tarea }}</td>
-                                                    <td>{{ $tarea->getTarea->getTareaMantenimiento->getEjecucion->nombre_ejecucion }}</td>
-                                                    <td style="color: gray !important;">{{ $tarea->getTarea->getTareaMantenimiento->getZonaTarea->nombre_zona }}</td>
+                                                    <td>{{ (optional($tarea->getTarea->getTareaMantenimiento->getEjecucion)->nombre_ejecucion ?? '-') }}</td>
+                                                    <td style="color: gray !important;">{{ (optional($tarea->getTarea->getTareaMantenimiento->getZonaTarea)->nombre_zona ?? '-') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

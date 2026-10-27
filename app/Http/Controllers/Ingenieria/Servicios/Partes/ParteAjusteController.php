@@ -215,9 +215,16 @@ class ParteAjusteController extends Controller{
                     $parte_nueva->id_responsabilidad = $responsabilidad->id_responsabilidad;
                     $parte_nueva->save();
                     $parte_ajuste_nueva = new Parte_ajuste;
-                    $parte_ajuste_nueva->id_estado_mantenimiento = 5;
+                    // El rechazo devuelve la tarea a ejecución y conserva el parte revisado.
+                    $parte_ajuste_nueva->id_estado_mantenimiento = 2;
                     $parte_ajuste_nueva->id_parte = $parte_nueva->id_parte;
                     $parte_ajuste_nueva->save();
+
+                    foreach ($parte_ajuste->getTareasAjuste as $tarea) {
+                        $tarea_pendiente = $tarea->replicate();
+                        $tarea_pendiente->id_parte_ajuste = $parte_ajuste_nueva->id_parte_ajuste;
+                        $tarea_pendiente->save();
+                    }
                 }
                 else if($request->accion == "aceptar"){
                     $parte_nueva = new Parte;

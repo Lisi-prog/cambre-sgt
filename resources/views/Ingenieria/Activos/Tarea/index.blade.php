@@ -30,10 +30,8 @@
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="tabla_tareas">
                                 <thead>
-                                    <th class='text-center' style="color:#fff;">ID</th>
+                                    <th class='text-center' style="color:#fff;">Código</th>
                                     <th class='text-center' style="color:#fff;">Nombre</th>
-                                    <th class='text-center' style="color:#fff;">Zona</th>
-                                    <th class='text-center' style="color:#fff;">Ejecución</th>
                                     <th class='text-center' style="color:#fff;">En uso</th>
                                     <th class='text-center' style="color: #fff;width:10%">Acciones</th>
                                 </thead>
@@ -45,8 +43,6 @@
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">{{ $tarea->id_tarea_mantenimiento ?? '-'}}</td>
                                             <td class="text-start" style="vertical-align: middle;">{{ $tarea->nombre_tarea }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ optional($tarea->getZonaTarea)->nombre_zona }}</td>
-                                            <td class="text-start" style="vertical-align: middle;">{{ optional($tarea->getEjecucion)->nombre_ejecucion }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $tarea->en_uso == 1 ? 'SI' : 'NO' }}</td>
                                             <td>
                                                 <div class="d-flex">

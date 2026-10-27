@@ -8,6 +8,12 @@
             {!! Form::open(['route' => 'tarea_mantenimiento.store', 'method' => 'POST', 'class' => 'formulario form-prevent-multiple-submits']) !!}
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            {!! Form::label('codigo_tarea', 'Código:', ['class' => 'control-label fs-7']) !!}
+                            {!! Form::text('codigo_tarea', null, ['class' => 'form-control', 'id' => 'codigo_tarea', 'placeholder' => 'Se genera al guardar', 'disabled' => true]) !!}
+                        </div>
+                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                            {!! Form::label('nombre_tarea', 'Nombre tarea:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
@@ -21,53 +27,11 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between">
-                        <div class="form-group" style="width: 90%;">
-                            {!! Form::label('id_zona_tarea', 'Zona de tarea:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            <span class="obligatorio">*</span>
-
-                            {!! Form::select('id_zona_tarea', $zonas->pluck('nombre_zona', 'id_zona_tarea'), null, [
-                                'class' => 'form-control reset-input form-select',
-                                'placeholder' => 'Seleccione una zona',
-                                'required' => 'required',
-                                'id' => 'id_zona_tarea'
-                            ]) !!}
-
-                            {!! Form::text('zona_nueva', null, [
-                                'class' => 'form-control reset-input mt-2',
-                                'placeholder' => 'Nueva zona',
-                                'id' => 'zona_nueva',
-                                'style' => 'display:none;'
-                            ]) !!}
-                        </div>
-
-                        <div class="form-group m-auto ms-3" style="width: 10%;">
-                            <button type="button" class="btn btn-success" onclick="mostrarInputZona()">
-                                +
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between">
-                        <div class="form-group" style="width: 90%;">
-                            {!! Form::label('id_ejecucion', 'Ejecución de tarea:', ['class' => 'control-label fs-7', 'style' => 'white-space: nowrap;']) !!}
-                            <span class="obligatorio">*</span>
-                            {!! Form::select('id_ejecucion', $ejecuciones->pluck('nombre_ejecucion', 'id_ejecucion'), null, [
-                                'class' => 'form-control reset-input form-select',
-                                'placeholder' => 'Seleccione una ejecución',
-                                'required' => 'required',
-                                'id' => 'id_ejecucion'
-                            ]) !!}
-                             {!! Form::text('ejecucion_nueva', null, [
-                                'class' => 'form-control reset-input mt-2',
-                                'placeholder' => 'Nueva ejecución',
-                                'id' => 'ejecucion_nueva',
-                                'style' => 'display:none;'])
-                            !!}
-                        </div>
-                        <div class="form-group m-auto ms-3" style="width: 10%;">
-                            <button type="button" class="btn btn-success" onclick="mostrarInputEjecucion()">
-                                +
-                            </button>
+                    <div class="col-12">
+                        <div class="form-group form-check">
+                            {!! Form::hidden('en_uso', 0) !!}
+                            {!! Form::checkbox('en_uso', 1, true, ['class' => 'form-check-input', 'id' => 'en_uso']) !!}
+                            {!! Form::label('en_uso', 'En uso', ['class' => 'form-check-label']) !!}
                         </div>
                     </div>
                 </div>
@@ -80,35 +44,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function mostrarInputEjecucion() {
-        var selectEjecucion = document.getElementById('id_ejecucion');
-        var inputEjecucionNueva = document.getElementById('ejecucion_nueva');
-
-        if (inputEjecucionNueva.style.display === 'none') {
-            inputEjecucionNueva.style.display = 'block';
-            selectEjecucion.disabled = true;
-            selectEjecucion.value = '';
-            inputEjecucionNueva.setAttribute('required', 'required');
-        } else {
-            inputEjecucionNueva.style.display = 'none';
-            selectEjecucion.disabled = false;
-            inputEjecucionNueva.removeAttribute('required');
-        }
-    }
-
-    function mostrarInputZona() {
-        $("#zona_nueva").toggle();
-
-        if ($("#zona_nueva").is(":visible")) {
-            $("#id_zona_tarea").removeAttr("required");
-            $("#zona_nueva").attr("required", "required");
-            $("#id_zona_tarea").val(null).trigger('change');
-        } else {
-            $("#zona_nueva").removeAttr("required");
-            $("#id_zona_tarea").attr("required", "required");
-            $("#zona_nueva").val('');
-        }
-    }
-</script>

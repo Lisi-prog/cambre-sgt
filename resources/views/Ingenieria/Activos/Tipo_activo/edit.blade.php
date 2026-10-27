@@ -432,7 +432,7 @@
         let id = $(this).data('id');
         let checked = $(this).is(':checked');
 
-        let inputs = $('.input-tarea[data-id="' + id + '"]');
+        let inputs = $(this).closest('table').find('.input-tarea[data-id="' + id + '"]');
 
         if (checked) {
             inputs.prop('disabled', false);
@@ -452,4 +452,5 @@
             .removeClass('d-none');
     });
 </script>
+@include('Ingenieria.Activos.modal.nueva-tarea-script')
 @endsection

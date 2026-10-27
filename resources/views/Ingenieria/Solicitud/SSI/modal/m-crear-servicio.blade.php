@@ -263,8 +263,8 @@
                                                 </td>
 
                                                 <td>{{$ta->getTareaMantenimiento->nombre_tarea}}</td>
-                                                <td>{{$ta->getTareaMantenimiento->getEjecucion->nombre_ejecucion}}</td>
-                                                <td>{{$ta->getTareaMantenimiento->getZonaTarea->nombre_zona}}</td>
+                                                <td>{{(optional($ta->getTareaMantenimiento->getEjecucion)->nombre_ejecucion ?? '-')}}</td>
+                                                <td>{{(optional($ta->getTareaMantenimiento->getZonaTarea)->nombre_zona ?? '-')}}</td>
                                                 <td>{{$ta->fecha_ultima_ejecucion}}</td>
                                                 <td>{{$ta->estaEnProceso() ? 'En Proceso' : 'Disponible'}}</td>
                                             </tr>

@@ -6,42 +6,33 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Cambre\Tarea_mantenimiento;
-use App\Models\Cambre\Zona_tarea;
-use App\Models\Cambre\Tarea_ejecucion;
 
 class TareaMantenimientoController extends Controller
 {
     public function index(){
         $tareas = Tarea_mantenimiento::all();
-        $zonas = Zona_tarea::all();
-        $ejecuciones = Tarea_ejecucion::all();
-        return view('Ingenieria.Activos.Tarea.index', compact('tareas', 'zonas', 'ejecuciones'));
+        return view('Ingenieria.Activos.Tarea.index', compact('tareas'));
     }
 
     public function store(Request $request){
         $request->validate([
             'nombre_tarea' => 'required|string|max:200',
+            'en_uso' => 'sometimes|boolean',
         ]); 
 
         $tarea = new Tarea_mantenimiento();
         $tarea->nombre_tarea = $request->nombre_tarea;
-        if($request->ejecucion_nueva){
-            $ejecucion = new Tarea_ejecucion();
-            $ejecucion->nombre_ejecucion = $request->ejecucion_nueva;
-            $ejecucion->save();
-            $tarea->id_ejecucion = $ejecucion->id_ejecucion;
-        } else {
-            $tarea->id_ejecucion = $request->id_ejecucion;
-        }
-        if ($request->zona_nueva) {
-        $zona = Zona_tarea::create([
-            'nombre_zona' => strtoupper($request->zona_nueva)
-        ]);
-        $request->merge([
-            'id_zona_tarea' => $zona->id_zona_tarea
-        ]);    }
-        $tarea->id_zona_tarea = $request->id_zona_tarea;
+        $tarea->en_uso = (int) $request->input('en_uso', 1);
         $tarea->save();
+
+        if ($request->expectsJson()) {
+            $filas = [];
+            foreach (['correctiva', 'preventiva_activo', 'preventiva_tipo'] as $tipo) {
+                $filas[$tipo] = view('Ingenieria.Activos.modal.fila-tarea-disponible', compact('tarea', 'tipo'))->render();
+            }
+
+            return response()->json(['tarea' => $tarea, 'filas' => $filas], 201);
+        }
 
         return redirect()->route('tarea_mantenimiento.index')->with('success', 'Tarea creada exitosamente.');
     }
@@ -49,32 +40,19 @@ class TareaMantenimientoController extends Controller
     public function edit($id)
     {
         $tarea = Tarea_mantenimiento::find($id);
-        $zonas = Zona_tarea::all();
-        $ejecuciones = Tarea_ejecucion::all();
-        return view('Ingenieria.Activos.Tarea.edit', compact('tarea', 'zonas', 'ejecuciones'));
+        return view('Ingenieria.Activos.Tarea.edit', compact('tarea'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'nombre_tarea' => 'required|string|max:200',
-            'id_zona_tarea' => 'nullable|exists:zona_tarea,id_zona_tarea',
-            'id_ejecucion' => 'nullable|exists:tarea_ejecucion,id_ejecucion',
             'en_uso' => 'required|boolean',
         ]);
 
         $tarea = Tarea_mantenimiento::find($id);
         $tarea->nombre_tarea = $request->nombre_tarea;
         $tarea->en_uso = (int) $request->input('en_uso');
-        if($request->ejecucion_nueva){
-            $ejecucion = new Tarea_ejecucion();
-            $ejecucion->nombre_ejecucion = $request->ejecucion_nueva;
-            $ejecucion->save();
-            $tarea->id_ejecucion = $ejecucion->id_ejecucion;
-        } else {
-            $tarea->id_ejecucion = $request->id_ejecucion;
-        }
-        $tarea->id_zona_tarea = $request->id_zona_tarea;
         $tarea->save();
 
         return redirect()->route('tarea_mantenimiento.index')->with('success', 'Tarea actualizada exitosamente.');
