@@ -227,6 +227,7 @@
                                                                         </a>
                                                                     </div>
                                                                     @break
+                                                                @case('AJUSTE')
                                                                 @case('TAREA MANTENIMIENTO')
                                                                     {{-- @if ($orden->nombre_estado == 'Espera')
                                                                         <div class="col-12 my-2">
@@ -250,7 +251,7 @@
                                                                         </div>
                                                                     @endif --}}
                                                                     <div class="col-12 mt-1">                               
-                                                                        <a target="_blank" href="/s_m_a/gestionar/{{$orden->id_servicio}}}" type="button" class="btn btn-warning w-100">
+                                                                        <a target="_blank" href="/s_m_a/gestionar/{{$orden->id_servicio}}" type="button" class="btn btn-warning w-100">
                                                                             Ir a gestionar
                                                                         </a>
                                                                     </div>
