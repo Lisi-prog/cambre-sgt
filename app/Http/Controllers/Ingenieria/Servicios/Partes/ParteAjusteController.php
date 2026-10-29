@@ -113,6 +113,15 @@ class ParteAjusteController extends Controller{
             $parte_ajuste->id_estado_mantenimiento = $next;
             $parte_ajuste->save();
 
+            if ($completo) {
+                $this->actualizarEstadoServicio(
+                    $orden->getEtapa->id_servicio,
+                    'Revisar',
+                    'Tarea de mantenimiento pendiente de revisión.',
+                    $responsabilidad->id_responsabilidad
+                );
+            }
+
             //TAREAS DE AJUSTE
             if($todas){
                 foreach ($todas as $tarea) {
@@ -220,6 +229,13 @@ class ParteAjusteController extends Controller{
                     $parte_ajuste_nueva->id_parte = $parte_nueva->id_parte;
                     $parte_ajuste_nueva->save();
 
+                    $this->actualizarEstadoServicio(
+                        $parte_ajuste->getParte->getOrden->getEtapa->id_servicio,
+                        'En proceso',
+                        'Tarea de mantenimiento rechazada; continúa en proceso.',
+                        $responsabilidad->id_responsabilidad
+                    );
+
                     foreach ($parte_ajuste->getTareasAjuste as $tarea) {
                         $tarea_pendiente = $tarea->replicate();
                         $tarea_pendiente->id_parte_ajuste = $parte_ajuste_nueva->id_parte_ajuste;
@@ -295,6 +311,26 @@ class ParteAjusteController extends Controller{
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    protected function actualizarEstadoServicio($idServicio, $nombreEstado, $descripcion, $idResponsabilidad)
+    {
+        $estado = Estado::where('nombre_estado', $nombreEstado)->firstOrFail();
+        $ultimaActualizacion = Actualizacion_servicio::where('id_servicio', $idServicio)
+            ->orderByDesc('id_actualizacion_servicio')->first();
+
+        $actualizacion = Actualizacion::create([
+            'descripcion' => $descripcion,
+            'fecha_limite' => $ultimaActualizacion ? $ultimaActualizacion->getActualizacion->fecha_limite : null,
+            'fecha_carga' => Carbon::now(),
+            'id_estado' => $estado->id_estado,
+            'id_responsabilidad' => $idResponsabilidad,
+        ]);
+
+        Actualizacion_servicio::create([
+            'id_actualizacion' => $actualizacion->id_actualizacion,
+            'id_servicio' => $idServicio,
+        ]);
     }
 
     public function get_parte_ajuste_completado($id_orden){
