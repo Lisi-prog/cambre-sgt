@@ -336,6 +336,60 @@ inner join etapa et on et.id_etapa = o.id_etapa
 inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
+CREATE VIEW vw_parte_mantenimiento AS
+WITH PartesUnificadas AS (
+    SELECT id_parte, id_estado AS id_estado_mantenimiento
+    FROM parte_diagnostico
+
+    UNION ALL
+
+    SELECT id_parte, id_estado_mantenimiento
+    FROM parte_inspeccion
+
+    UNION ALL
+
+    SELECT id_parte, id_estado_mantenimiento
+    FROM parte_ajuste
+),
+Res_ord AS (
+    SELECT
+        res_ord.id_orden,
+        emp.nombre_empleado,
+        emp.id_empleado
+    FROM responsabilidad_orden res_ord
+    INNER JOIN responsabilidad res ON res.id_responsabilidad = res_ord.id_responsabilidad
+    INNER JOIN empleado emp ON emp.id_empleado = res.id_empleado
+    WHERE res.id_rol_empleado = 3
+)
+SELECT
+    p.id_parte,
+    o.nombre_orden,
+    p.fecha,
+    p.fecha_limite,
+    p.fecha_carga,
+    e.nombre_estado_mantenimiento AS estado,
+    p.horas,
+    TIME_TO_SEC(p.horas) / 60 AS minutos,
+    p.observaciones,
+    se.id_servicio,
+    se.codigo_servicio,
+    se.nombre_servicio,
+    et.descripcion_etapa,
+    emp.nombre_empleado AS responsable,
+    emp.id_empleado AS id_responsable,
+    ro.nombre_empleado AS supervisor,
+    ro.id_empleado AS id_supervisor
+FROM parte p
+INNER JOIN PartesUnificadas pu ON pu.id_parte = p.id_parte
+INNER JOIN estado_mantenimiento e ON e.id_estado_mantenimiento = pu.id_estado_mantenimiento
+INNER JOIN responsabilidad res ON res.id_responsabilidad = p.id_responsabilidad
+INNER JOIN empleado emp ON emp.id_empleado = res.id_empleado
+INNER JOIN orden o ON o.id_orden = p.id_orden
+INNER JOIN orden_mantenimiento oman ON oman.id_orden = o.id_orden
+INNER JOIN etapa et ON et.id_etapa = o.id_etapa
+INNER JOIN servicio se ON se.id_servicio = et.id_servicio
+LEFT JOIN Res_ord ro ON ro.id_orden = o.id_orden;
+
 CREATE VIEW vw_parte_manufactura AS
 WITH
 Res_ord AS (
