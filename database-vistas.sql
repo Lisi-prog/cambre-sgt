@@ -336,7 +336,7 @@ inner join etapa et on et.id_etapa = o.id_etapa
 inner join servicio se on se.id_servicio = et.id_servicio
 inner join Res_ord as ro on ro.id_orden = o.id_orden and ro.id_rol_empleado = 3;
 
---CREATE VIEW vw_parte_manufactura AS
+CREATE VIEW vw_parte_manufactura AS
 WITH
 Res_ord AS (
 	select 
